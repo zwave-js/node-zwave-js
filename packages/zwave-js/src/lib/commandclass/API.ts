@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Maybe,
@@ -5,9 +6,8 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { Driver } from "../driver/Driver";
+import type { Driver, SendCommandOptions } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import { getCommandClass } from "./CommandClass";
 
@@ -132,6 +132,55 @@ export class CCAPI {
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
+	}
+
+	/** Returns the command options to use for sendCommand calls */
+	protected get commandOptions(): SendCommandOptions {
+		// No default options
+		return {};
+	}
+
+	/** Creates an instance of this API, scoped to use the given options */
+	public withOptions(options: SendCommandOptions): this {
+		const mergedOptions = {
+			...this.commandOptions,
+			...options,
+		};
+		return new Proxy(this, {
+			get: (target, property) => {
+				if (property === "commandOptions") {
+					return mergedOptions;
+				} else {
+					return (target as any)[property];
+				}
+			},
+		});
+	}
+}
+
+/**
+ * Executes the given action and ignores any node timeout errors
+ * Returns whether the execution was successful (`true`) or timed out (`false`)
+ */
+export async function ignoreTimeout<T extends CCAPI>(
+	api: T,
+	action: (api: T) => Promise<void>,
+	onTimeout?: () => void,
+): Promise<boolean> {
+	try {
+		// Inside the action, an API must be used which does not update the node status
+		await action(api.withOptions({ changeNodeStatusOnTimeout: false }));
+		return true;
+	} catch (e: unknown) {
+		if (
+			e instanceof ZWaveError &&
+			e.code === ZWaveErrorCodes.Controller_NodeTimeout
+		) {
+			onTimeout?.();
+			return false;
+		}
+		// We don't want to swallow any other errors
+		throw e;
 	}
 }
 

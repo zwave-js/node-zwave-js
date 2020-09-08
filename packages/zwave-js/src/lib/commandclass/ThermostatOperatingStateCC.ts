@@ -1,10 +1,10 @@
+import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { Maybe } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -76,7 +76,7 @@ export class ThermostatOperatingStateCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ThermostatOperatingStateCCReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.state;
 	}
 }

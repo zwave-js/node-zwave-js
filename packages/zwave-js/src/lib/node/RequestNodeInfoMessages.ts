@@ -10,49 +10,44 @@ import {
 	MessageType,
 } from "../message/Constants";
 import {
+	expectedCallback,
 	expectedResponse,
 	Message,
 	MessageBaseOptions,
 	MessageDeserializationOptions,
 	messageTypes,
 	priority,
-	ResponseRole,
 } from "../message/Message";
+import type { SuccessIndicator } from "../message/SuccessIndicator";
 import type { INodeQuery } from "./INodeQuery";
+
+function testCallbackForRequestNodeInfoRequest(
+	sent: RequestNodeInfoRequest,
+	received: Message,
+) {
+	return (
+		(received instanceof ApplicationUpdateRequestNodeInfoReceived &&
+			received.nodeId === sent.nodeId) ||
+		received instanceof ApplicationUpdateRequestNodeInfoRequestFailed
+	);
+}
 
 interface RequestNodeInfoRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 }
 
-@messageTypes(MessageType.Request, FunctionType.RequestNodeInfo)
-@expectedResponse(testResponseForNodeInfoRequest)
-@priority(MessagePriority.NodeQuery)
-export class RequestNodeInfoRequest extends Message implements INodeQuery {
-	public constructor(driver: Driver, options: RequestNodeInfoRequestOptions) {
-		super(driver, options);
-		this.nodeId = options.nodeId;
-	}
-
-	public nodeId: number;
-
-	public serialize(): Buffer {
-		this.payload = Buffer.from([this.nodeId]);
-		return super.serialize();
-	}
-
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			nodeId: this.nodeId,
-		});
-	}
-}
-
 @messageTypes(MessageType.Response, FunctionType.RequestNodeInfo)
-export class RequestNodeInfoResponse extends Message {
+export class RequestNodeInfoResponse
+	extends Message
+	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this._wasSent = this.payload[0] !== 0;
 		if (!this._wasSent) this._errorCode = this.payload[0];
+	}
+
+	public isOK(): boolean {
+		return this._wasSent;
 	}
 
 	private _wasSent: boolean;
@@ -73,20 +68,31 @@ export class RequestNodeInfoResponse extends Message {
 	}
 }
 
-function testResponseForNodeInfoRequest(
-	sent: RequestNodeInfoRequest,
-	received: Message,
-): ResponseRole {
-	if (received instanceof RequestNodeInfoResponse) {
-		return received.wasSent ? "confirmation" : "fatal_controller";
-	} else if (received instanceof ApplicationUpdateRequestNodeInfoReceived) {
-		// received node info for the correct node
-		if (received.nodeId === sent.nodeId) return "final";
-	} else if (
-		received instanceof ApplicationUpdateRequestNodeInfoRequestFailed
-	) {
-		// requesting node info failed. We cannot check which node that belongs to
-		return "fatal_node";
+@messageTypes(MessageType.Request, FunctionType.RequestNodeInfo)
+@expectedResponse(RequestNodeInfoResponse)
+@expectedCallback(testCallbackForRequestNodeInfoRequest)
+@priority(MessagePriority.NodeQuery)
+export class RequestNodeInfoRequest extends Message implements INodeQuery {
+	public constructor(driver: Driver, options: RequestNodeInfoRequestOptions) {
+		super(driver, options);
+		this.nodeId = options.nodeId;
 	}
-	return "unexpected";
+
+	public nodeId: number;
+
+	public needsCallbackId(): boolean {
+		// Not sure why it is this way, but this message contains no callback id
+		return false;
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([this.nodeId]);
+		return super.serialize();
+	}
+
+	public toJSON(): JSONObject {
+		return super.toJSONInherited({
+			nodeId: this.nodeId,
+		});
+	}
 }

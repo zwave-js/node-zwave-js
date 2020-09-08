@@ -1,4 +1,5 @@
 import { lookupMeter, lookupMeterScale, MeterScale } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	getMinIntegerSize,
@@ -11,7 +12,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -27,7 +27,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -149,7 +148,10 @@ export class MeterCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		const response = (await this.driver.sendCommand<MeterCCReport>(cc))!;
+		const response = (await this.driver.sendCommand<MeterCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			type: response.type,
 			scale: response.scale,
@@ -205,6 +207,7 @@ export class MeterCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<MeterCCSupportedReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			type: response.type,
@@ -222,7 +225,7 @@ export class MeterCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -557,21 +560,14 @@ export class MeterCCReport extends MeterCC {
 	}
 }
 
-const testResponseForMeterGet: CCResponsePredicate = (
-	sent: MeterCCGet,
-	received,
-	isPositiveTransmitReport,
-) => {
+function testResponseForMeterGet(sent: MeterCCGet, received: MeterCCReport) {
 	// We expect a Meter Report that matches the requested scale and rate type
 	// (if they were requested)
-	return received instanceof MeterCCReport &&
+	return (
 		(sent.scale == undefined || sent.scale === received.scale.key) &&
 		(sent.rateType == undefined || sent.rateType == received.rateType)
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
-};
+	);
+}
 
 interface MeterCCGetOptions {
 	scale?: number;
@@ -579,7 +575,7 @@ interface MeterCCGetOptions {
 }
 
 @CCCommand(MeterCommand.Get)
-@expectedCCResponse(testResponseForMeterGet)
+@expectedCCResponse(MeterCCReport, testResponseForMeterGet)
 export class MeterCCGet extends MeterCC {
 	public constructor(
 		driver: Driver,

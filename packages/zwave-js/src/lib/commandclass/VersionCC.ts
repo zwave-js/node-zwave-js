@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Maybe,
@@ -7,7 +8,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
@@ -17,7 +17,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	ccValueMetadata,
 	CommandClass,
@@ -94,7 +93,10 @@ export class VersionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<VersionCCReport>(cc))!;
+		const response = (await this.driver.sendCommand<VersionCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			libraryType: response.libraryType,
 			protocolVersion: response.protocolVersion,
@@ -116,7 +118,7 @@ export class VersionCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			VersionCCCommandClassReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.ccVersion;
 	}
 
@@ -133,7 +135,7 @@ export class VersionCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			VersionCCCapabilitiesReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			supportsZWaveSoftwareGet: response.supportsZWaveSoftwareGet,
 		};
@@ -152,7 +154,7 @@ export class VersionCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			VersionCCZWaveSoftwareReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			sdkVersion: response.sdkVersion,
 			applicationFrameworkAPIVersion:
@@ -426,22 +428,19 @@ interface VersionCCCommandClassGetOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 }
 
-const testResponseForVersionCommandClassGet: CCResponsePredicate = (
+function testResponseForVersionCommandClassGet(
 	sent: VersionCCCommandClassGet,
-	received,
-	isPositiveTransmitReport,
-) => {
+	received: VersionCCCommandClassReport,
+) {
 	// We expect a Version CommandClass Report that matches the requested CC
-	return received instanceof VersionCCCommandClassReport &&
-		sent.requestedCC === received.requestedCC
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
-};
+	return sent.requestedCC === received.requestedCC;
+}
 
 @CCCommand(VersionCommand.CommandClassGet)
-@expectedCCResponse(testResponseForVersionCommandClassGet)
+@expectedCCResponse(
+	VersionCCCommandClassReport,
+	testResponseForVersionCommandClassGet,
+)
 export class VersionCCCommandClassGet extends VersionCC {
 	public constructor(
 		driver: Driver,

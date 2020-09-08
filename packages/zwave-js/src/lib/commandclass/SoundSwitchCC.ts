@@ -96,7 +96,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			SoundSwitchCCTonesNumberReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.toneCount;
 	}
 
@@ -114,7 +114,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			SoundSwitchCCToneInfoReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return pick(response, ["duration", "name"]);
 	}
 
@@ -133,7 +133,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			defaultToneId,
 			defaultVolume,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 
 		// Refresh the current value
 		await this.getConfiguration();
@@ -152,7 +152,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			SoundSwitchCCConfigurationReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return pick(response, ["defaultToneId", "defaultVolume"]);
 	}
 
@@ -175,7 +175,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			toneId,
 			volume,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 
 		// Refresh the current value
 		await this.getPlaying();
@@ -193,7 +193,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 			toneId: 0x00,
 			volume: 0x00,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 
 		// Refresh the current value
 		await this.getPlaying();
@@ -212,7 +212,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			SoundSwitchCCTonePlayReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return pick(response, ["toneId", "volume"]);
 	}
 
@@ -384,17 +384,11 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public readonly name: string;
 }
 
-const testResponseForSoundSwitchToneInfoGet: CCResponsePredicate = (
-	sent: SoundSwitchCCToneInfoGet,
-	received,
-	isPositiveTransmitReport,
-) => {
-	return received instanceof SoundSwitchCCToneInfoReport &&
-		received.toneId === sent.toneId
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+const testResponseForSoundSwitchToneInfoGet: CCResponsePredicate<
+	SoundSwitchCCToneInfoGet,
+	SoundSwitchCCToneInfoReport
+> = (sent, received) => {
+	return received.toneId === sent.toneId;
 };
 
 interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
@@ -402,7 +396,10 @@ interface SoundSwitchCCToneInfoGetOptions extends CCCommandOptions {
 }
 
 @CCCommand(SoundSwitchCommand.ToneInfoGet)
-@expectedCCResponse(testResponseForSoundSwitchToneInfoGet)
+@expectedCCResponse(
+	SoundSwitchCCToneInfoReport,
+	testResponseForSoundSwitchToneInfoGet,
+)
 export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 	public constructor(
 		driver: Driver,

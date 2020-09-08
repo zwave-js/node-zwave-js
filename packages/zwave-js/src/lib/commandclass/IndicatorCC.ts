@@ -1,4 +1,5 @@
 import { lookupIndicator, lookupProperty } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Maybe,
@@ -8,7 +9,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -200,6 +200,7 @@ export class IndicatorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<IndicatorCCReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		if (response.values) return response.values;
 		return response.value!;
@@ -213,7 +214,7 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...(typeof value === "number" ? { value } : { values: value }),
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getSupported(
@@ -235,7 +236,7 @@ export class IndicatorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			IndicatorCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			// Include the actual indicator ID if 0x00 was requested
 			...(indicatorId === 0x00

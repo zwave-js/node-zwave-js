@@ -1,5 +1,5 @@
 {
-	"typescript.tsdk": "node_modules\\typescript\\lib",
+	"typescript.tsdk": "node_modules/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
 	"jest.showCoverageOnLoad": true,
 	"jest.enableCodeLens": true,
@@ -103,5 +103,6 @@
 		72,
 		80,
 		120
-	]
+	],
+	"files.participants.timeout": 10000
 }

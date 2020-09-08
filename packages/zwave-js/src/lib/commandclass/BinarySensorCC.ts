@@ -1,6 +1,5 @@
 import {
 	CommandClasses,
-	ignoreTimeout,
 	Maybe,
 	parseBitMask,
 	validatePayload,
@@ -12,12 +11,11 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -105,6 +103,7 @@ export class BinarySensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<BinarySensorCCReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		// We don't want to repeat the sensor type
 		return response.value;
@@ -123,7 +122,7 @@ export class BinarySensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			BinarySensorCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		// We don't want to repeat the sensor type
 		return response.supportedSensorTypes;
 	}
@@ -174,7 +173,8 @@ export class BinarySensorCC extends CommandClass {
 		// Always query (all of) the sensor's current value(s)
 		if (this.version === 1) {
 			await ignoreTimeout(
-				async () => {
+				api,
+				async (api) => {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying current value...",
@@ -200,7 +200,8 @@ export class BinarySensorCC extends CommandClass {
 			for (const type of supportedSensorTypes) {
 				const sensorName = getEnumMemberName(BinarySensorType, type);
 				await ignoreTimeout(
-					async () => {
+					api,
+					async (api) => {
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying current value for ${sensorName}...`,
@@ -277,28 +278,24 @@ export class BinarySensorCCReport extends BinarySensorCC {
 	}
 }
 
-const testResponseForBinarySensorGet: CCResponsePredicate = (
+function testResponseForBinarySensorGet(
 	sent: BinarySensorCCGet,
-	received,
-	isPositiveTransmitReport,
-) => {
+	received: BinarySensorCCReport,
+) {
 	// We expect a Binary Sensor Report that matches the requested sensor type (if a type was requested)
-	return received instanceof BinarySensorCCReport &&
-		(sent.sensorType == undefined ||
-			sent.sensorType === BinarySensorType.Any ||
-			received.type === sent.sensorType)
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
-};
+	return (
+		sent.sensorType == undefined ||
+		sent.sensorType === BinarySensorType.Any ||
+		received.type === sent.sensorType
+	);
+}
 
 interface BinarySensorCCGetOptions extends CCCommandOptions {
 	sensorType?: BinarySensorType;
 }
 
 @CCCommand(BinarySensorCommand.Get)
-@expectedCCResponse(testResponseForBinarySensorGet)
+@expectedCCResponse(BinarySensorCCReport, testResponseForBinarySensorGet)
 export class BinarySensorCCGet extends BinarySensorCC {
 	public constructor(
 		driver: Driver,

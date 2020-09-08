@@ -3,7 +3,7 @@ import type { Driver } from "../driver/Driver";
 import type { INodeQuery } from "../node/INodeQuery";
 import { createEmptyMockDriver } from "../test/mocks";
 import { FunctionType, MessageType } from "./Constants";
-import { Message, messageTypes, ResponseRole } from "./Message";
+import { Message, messageTypes } from "./Message";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
@@ -320,101 +320,70 @@ describe("lib/message", () => {
 			expect(Message.getConstructor(unknown)).toBe(Message);
 		});
 
-		it(`when expectedResponse is a FunctionType, testResponse() should return "final" or "unexpected"`, () => {
-			const msg = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: 0xff,
-				expectedResponse: FunctionType.ApplicationCommand,
-			});
-			const final = new Message(fakeDriver, {
-				type: MessageType.Response,
-				functionType: FunctionType.ApplicationCommand,
-			});
-			expect(msg.testResponse(final)).toBe("final");
+		// it(`when the expectedResponse is defined, testResponse() should return "final" or "unexpected"`, () => {
+		// 	const msg = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: 0xff,
+		// 		expectedResponse: FunctionType.ApplicationCommand,
+		// 	});
+		// 	const final = new Message(fakeDriver, {
+		// 		type: MessageType.Response,
+		// 		functionType: FunctionType.ApplicationCommand,
+		// 	});
+		// 	expect(msg.testResponse(final)).toBe("final");
 
-			// wrong function type
-			const unexpected1 = new Message(fakeDriver, {
-				type: MessageType.Response,
-				functionType: FunctionType.SendData,
-			});
-			expect(msg.testResponse(unexpected1)).toBe("unexpected");
+		// 	// wrong function type
+		// 	const unexpected1 = new Message(fakeDriver, {
+		// 		type: MessageType.Response,
+		// 		functionType: FunctionType.SendData,
+		// 	});
+		// 	expect(msg.testResponse(unexpected1)).toBe("unexpected");
 
-			// not a response
-			const unexpected2 = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: 0xff,
-			});
-			expect(msg.testResponse(unexpected2)).toBe("unexpected");
-		});
+		// 	// not a response
+		// 	const unexpected2 = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: 0xff,
+		// 	});
+		// 	expect(msg.testResponse(unexpected2)).toBe("unexpected");
+		// });
 
-		it(`when expectedResponse is a predicate, testResponse() should pass its return value through`, () => {
-			const predicate = jest.fn();
-			const msg = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: 0xff,
-				expectedResponse: predicate,
-			});
-			const test = new Message(fakeDriver, {
-				type: MessageType.Response,
-				functionType: 0xff,
-			});
+		// it(`when the message has a callbackId, testResponse() should return "unexpected" for requests that don't match it`, () => {
+		// 	const msg = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: 0xff,
+		// 		expectedCallback: FunctionType.GetSUCNodeId,
+		// 		callbackId: 5,
+		// 	});
+		// 	const final = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: FunctionType.GetSUCNodeId,
+		// 		callbackId: 5,
+		// 	});
+		// 	expect(msg.testResponse(final)).toBe("final");
 
-			const results: ResponseRole[] = [
-				"fatal_controller",
-				"fatal_node",
-				"final",
-				"confirmation",
-				"unexpected",
-			];
-			for (const result of results) {
-				predicate.mockReset();
-				predicate.mockReturnValue(result);
+		// 	// wrong callback id
+		// 	const unexpected1 = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: FunctionType.GetSUCNodeId,
+		// 		callbackId: 4,
+		// 	});
+		// 	expect(msg.testResponse(unexpected1)).toBe("unexpected");
 
-				expect(msg.testResponse(test)).toBe(result);
-				expect(predicate).toHaveBeenCalledWith(msg, test);
-			}
-		});
+		// 	// missing callback id
+		// 	const unexpected2 = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: FunctionType.GetSUCNodeId,
+		// 	});
+		// 	expect(msg.testResponse(unexpected2)).toBe("unexpected");
 
-		it(`when the message has a callbackId, testResponse() should return "unexpected" for requests that don't match it`, () => {
-			const msg = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: 0xff,
-				expectedResponse: (sent, received) =>
-					received.functionType === FunctionType.GetSUCNodeId
-						? "final"
-						: "unexpected",
-				callbackId: 5,
-			});
-			const final = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: FunctionType.GetSUCNodeId,
-				callbackId: 5,
-			});
-			expect(msg.testResponse(final)).toBe("final");
-
-			// wrong callback id
-			const unexpected1 = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: FunctionType.GetSUCNodeId,
-				callbackId: 4,
-			});
-			expect(msg.testResponse(unexpected1)).toBe("unexpected");
-
-			// missing callback id
-			const unexpected2 = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: FunctionType.GetSUCNodeId,
-			});
-			expect(msg.testResponse(unexpected2)).toBe("unexpected");
-
-			// sanity check: the function type should still be checked
-			const unexpected3 = new Message(fakeDriver, {
-				type: MessageType.Request,
-				functionType: FunctionType.RequestNodeInfo, // does not match
-				callbackId: 5, // matches
-			});
-			expect(msg.testResponse(unexpected3)).toBe("unexpected");
-		});
+		// 	// sanity check: the function type should still be checked
+		// 	const unexpected3 = new Message(fakeDriver, {
+		// 		type: MessageType.Request,
+		// 		functionType: FunctionType.RequestNodeInfo, // does not match
+		// 		callbackId: 5, // matches
+		// 	});
+		// 	expect(msg.testResponse(unexpected3)).toBe("unexpected");
+		// });
 
 		it(`the constructor should throw when no message type is specified`, () => {
 			assertZWaveError(

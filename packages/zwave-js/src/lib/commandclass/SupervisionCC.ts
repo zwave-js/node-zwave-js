@@ -1,3 +1,4 @@
+import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -6,7 +7,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { CCAPI } from "./API";
@@ -14,7 +14,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -75,7 +74,7 @@ export class SupervisionCCAPI extends CCAPI {
 			requestStatusUpdates,
 			encapsulated,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -189,21 +188,15 @@ interface SupervisionCCGetOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 }
 
-const testResponseForSupervisionCCGet: CCResponsePredicate = (
+function testResponseForSupervisionCCGet(
 	sent: SupervisionCCGet,
-	received,
-	isPositiveTransmitReport,
-) => {
-	return received instanceof SupervisionCCReport &&
-		received.sessionId === sent.sessionId
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
-};
+	received: SupervisionCCReport,
+) {
+	return received.sessionId === sent.sessionId;
+}
 
 @CCCommand(SupervisionCommand.Get)
-@expectedCCResponse(testResponseForSupervisionCCGet)
+@expectedCCResponse(SupervisionCCReport, testResponseForSupervisionCCGet)
 export class SupervisionCCGet extends SupervisionCC {
 	public constructor(
 		driver: Driver,

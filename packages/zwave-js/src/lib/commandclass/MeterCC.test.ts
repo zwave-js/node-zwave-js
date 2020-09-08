@@ -33,6 +33,10 @@ describe("lib/commandclass/MeterCC => ", () => {
 		await loadMetersInternal();
 	});
 
+	afterAll(() => {
+		node1.destroy();
+	});
+
 	it("the Get command (V1) should serialize correctly", () => {
 		const cc = new MeterCCGet(fakeDriver, { nodeId: 1 });
 		const expected = buildCCBuffer(

@@ -1,3 +1,4 @@
+import type { Maybe, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	MAX_NODES,
@@ -6,7 +7,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe, ValueID } from "@zwave-js/core";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -140,7 +140,7 @@ export class AssociationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			AssociationCCSupportedGroupingsReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.groupCount;
 	}
 
@@ -158,6 +158,7 @@ export class AssociationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<AssociationCCReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			maxNodes: response.maxNodes,
@@ -180,7 +181,7 @@ export class AssociationCCAPI extends CCAPI {
 			groupId,
 			nodeIds,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
@@ -199,7 +200,7 @@ export class AssociationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	/**

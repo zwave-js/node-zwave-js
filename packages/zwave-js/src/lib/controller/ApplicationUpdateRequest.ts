@@ -7,6 +7,7 @@ import {
 	MessageDeserializationOptions,
 	messageTypes,
 } from "../message/Message";
+import type { SuccessIndicator } from "../message/SuccessIndicator";
 
 export enum ApplicationUpdateTypes {
 	NodeInfo_Received = 0x84,
@@ -77,4 +78,10 @@ export class ApplicationUpdateRequestNodeInfoReceived extends ApplicationUpdateR
 	}
 }
 
-export class ApplicationUpdateRequestNodeInfoRequestFailed extends ApplicationUpdateRequest {}
+export class ApplicationUpdateRequestNodeInfoRequestFailed
+	extends ApplicationUpdateRequest
+	implements SuccessIndicator {
+	isOK(): boolean {
+		return false;
+	}
+}

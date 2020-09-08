@@ -7,8 +7,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { MessageHeaders } from "@zwave-js/serial";
-import { num2hex } from "@zwave-js/shared";
 import type { JSONObject } from "@zwave-js/shared";
+import { num2hex, staticExtends } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
@@ -41,7 +41,10 @@ export interface MessageBaseOptions {
 interface MessageCreationOptions extends MessageBaseOptions {
 	type?: MessageType;
 	functionType?: FunctionType;
-	expectedResponse?: FunctionType | ResponsePredicate;
+	// eslint-disable-next-line @typescript-eslint/no-use-before-define
+	expectedResponse?: FunctionType | typeof Message | ResponsePredicate;
+	// eslint-disable-next-line @typescript-eslint/no-use-before-define
+	expectedCallback?: FunctionType | typeof Message | ResponsePredicate;
 	payload?: Buffer;
 }
 
@@ -120,11 +123,11 @@ export class Message {
 			}
 			this.functionType = options.functionType;
 
-			// The expected response may be undefined
+			// Fall back to decorated response/callback types if none is given
 			this.expectedResponse =
-				options.expectedResponse != undefined
-					? options.expectedResponse
-					: getExpectedResponse(this);
+				options.expectedResponse ?? getExpectedResponse(this);
+			this.expectedCallback =
+				options.expectedCallback ?? getExpectedCallback(this);
 
 			this._callbackId = options.callbackId;
 
@@ -134,9 +137,17 @@ export class Message {
 
 	public type: MessageType;
 	public functionType: FunctionType;
-	public expectedResponse: FunctionType | ResponsePredicate | undefined;
+	public expectedResponse:
+		| FunctionType
+		| typeof Message
+		| ResponsePredicate
+		| undefined;
+	public expectedCallback:
+		| FunctionType
+		| typeof Message
+		| ResponsePredicate
+		| undefined;
 	public payload: Buffer; // TODO: Length limit 255
-	public maxSendAttempts: number | undefined;
 
 	private _callbackId: number | undefined;
 	/**
@@ -160,6 +171,13 @@ export class Message {
 	 */
 	public hasCallbackId(): boolean {
 		return this._callbackId != undefined;
+	}
+
+	/**
+	 * Tests whether this message needs a callback ID to match its response
+	 */
+	public needsCallbackId(): boolean {
+		return true;
 	}
 
 	protected _bytesRead: number = 0;
@@ -272,30 +290,43 @@ export class Message {
 		return ret;
 	}
 
+	private testMessage(
+		msg: Message,
+		predicate: Message["expectedResponse"],
+	): boolean {
+		if (predicate == undefined) return false;
+		if (typeof predicate === "number") {
+			return msg.functionType === predicate;
+		}
+		if (staticExtends(predicate, Message)) {
+			// predicate is a Message constructor
+			return msg instanceof predicate;
+		} else {
+			// predicate is a ResponsePredicate
+			return predicate(this, msg);
+		}
+	}
+
 	/** Checks if a message is an expected response for this message */
-	public testResponse(msg: Message): ResponseRole {
+	public isExpectedResponse(msg: Message): boolean {
+		return (
+			msg.type === MessageType.Response &&
+			this.testMessage(msg, this.expectedResponse)
+		);
+	}
+
+	/** Checks if a message is an expected callback for this message */
+	public isExpectedCallback(msg: Message): boolean {
+		if (msg.type !== MessageType.Request) return false;
 		// If a received request included a callback id, enforce that the response contains the same
 		if (
 			this.hasCallbackId() &&
-			msg.type === MessageType.Request &&
 			(!msg.hasCallbackId() || this._callbackId !== msg._callbackId)
 		) {
-			return "unexpected";
+			return false;
 		}
-		const expected = this.expectedResponse;
-		// log("driver", `Message: testing response`, "debug");
-		if (typeof expected === "number" && msg.type === MessageType.Response) {
-			// if only a functionType was configured as expected,
-			// any message with this function type is expected,
-			// every other message is unexpected
-			// log("driver", `  received response with fT ${msg.functionType}`, "debug");
-			return expected === msg.functionType ? "final" : "unexpected";
-		} else if (typeof expected === "function") {
-			// If a predicate was configured, use it to test the message
-			return expected(this, msg);
-		}
-		// nothing was configured, this expects no response
-		return "unexpected";
+
+		return this.testMessage(msg, this.expectedCallback);
 	}
 
 	/** Finds the ID of the target or source node in a message, if it contains that information */
@@ -340,6 +371,7 @@ function computeChecksum(message: Buffer): number {
 const METADATA_messageTypes = Symbol("messageTypes");
 const METADATA_messageTypeMap = Symbol("messageTypeMap");
 const METADATA_expectedResponse = Symbol("expectedResponse");
+const METADATA_expectedCallback = Symbol("expectedCallback");
 const METADATA_priority = Symbol("priority");
 
 type MessageTypeMap = Map<string, Constructable<Message>>;
@@ -360,14 +392,15 @@ export type ResponseRole =
 	| "confirmation" // a confirmation response, e.g. controller reporting that a message was sent
 	| "final" // a final response (leading to a resolved transaction)
 	| "fatal_controller" // a response from the controller that leads to a rejected transaction
-	| "fatal_node"; // a response or (lack thereof) from the node that leads to a rejected transaction
+	| "fatal_node"; // a response or (lack thereof) from the node that leads to a rejected transaction/**
+
 /**
  * A predicate function to test if a received message matches to the sent message
  */
-export type ResponsePredicate = (
-	sentMessage: Message,
+export type ResponsePredicate<TSent extends Message = Message> = (
+	sentMessage: TSent,
 	receivedMessage: Message,
-) => ResponseRole;
+) => boolean;
 
 /**
  * Defines the message and function type associated with a Z-Wave message
@@ -472,14 +505,11 @@ function getMessageConstructor(
 		);
 	}
 }
-
 /**
- * Defines the expected response associated with a Z-Wave message
+ * Defines the expected response function type or message class for a Z-Wave message
  */
-export function expectedResponse(type: FunctionType): ClassDecorator;
-export function expectedResponse(predicate: ResponsePredicate): ClassDecorator;
 export function expectedResponse(
-	typeOrPredicate: FunctionType | ResponsePredicate,
+	typeOrPredicate: FunctionType | typeof Message | ResponsePredicate,
 ): ClassDecorator {
 	return (messageClass) => {
 		Reflect.defineMetadata(
@@ -491,16 +521,17 @@ export function expectedResponse(
 }
 
 /**
- * Retrieves the expected response defined for a Z-Wave message class
+ * Retrieves the expected response function type or message class defined for a Z-Wave message class
  */
 export function getExpectedResponse<T extends Message>(
 	messageClass: T,
-): FunctionType | ResponsePredicate | undefined {
+): FunctionType | typeof Message | ResponsePredicate | undefined {
 	// get the class constructor
 	const constr = messageClass.constructor;
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_expectedResponse, constr) as
 		| FunctionType
+		| typeof Message
 		| ResponsePredicate
 		| undefined;
 	return ret;
@@ -511,12 +542,58 @@ export function getExpectedResponse<T extends Message>(
  */
 export function getExpectedResponseStatic<T extends Constructable<Message>>(
 	classConstructor: T,
-): FunctionType | ResponsePredicate | undefined {
+): FunctionType | typeof Message | ResponsePredicate | undefined {
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(
 		METADATA_expectedResponse,
 		classConstructor,
-	) as FunctionType | ResponsePredicate | undefined;
+	) as FunctionType | typeof Message | ResponsePredicate | undefined;
+	return ret;
+}
+
+/**
+ * Defines the expected callback function type or message class for a Z-Wave message
+ */
+export function expectedCallback<TSent extends Message>(
+	typeOrPredicate: FunctionType | typeof Message | ResponsePredicate<TSent>,
+): ClassDecorator {
+	return (messageClass) => {
+		Reflect.defineMetadata(
+			METADATA_expectedCallback,
+			typeOrPredicate,
+			messageClass,
+		);
+	};
+}
+
+/**
+ * Retrieves the expected callback function type or message class defined for a Z-Wave message class
+ */
+export function getExpectedCallback<T extends Message>(
+	messageClass: T,
+): FunctionType | typeof Message | ResponsePredicate | undefined {
+	// get the class constructor
+	const constr = messageClass.constructor;
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(METADATA_expectedCallback, constr) as
+		| FunctionType
+		| typeof Message
+		| ResponsePredicate
+		| undefined;
+	return ret;
+}
+
+/**
+ * Retrieves the function type defined for a Z-Wave message class
+ */
+export function getExpectedCallbackStatic<T extends Constructable<Message>>(
+	classConstructor: T,
+): FunctionType | typeof Message | ResponsePredicate | undefined {
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(
+		METADATA_expectedCallback,
+		classConstructor,
+	) as FunctionType | typeof Message | ResponsePredicate | undefined;
 	return ret;
 }
 

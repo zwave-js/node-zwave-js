@@ -11,6 +11,7 @@ import {
 	MessageType,
 } from "../message/Constants";
 import {
+	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	Message,
@@ -19,8 +20,8 @@ import {
 	MessageOptions,
 	messageTypes,
 	priority,
-	ResponseRole,
 } from "../message/Message";
+import type { SuccessIndicator } from "../message/SuccessIndicator";
 import type { INodeQuery } from "../node/INodeQuery";
 import { TransmitStatus } from "./SendDataMessages";
 
@@ -38,25 +39,13 @@ export class AssignReturnRouteRequestBase extends Message {
 	}
 }
 
-// Generic handler for all potential responses to AssignReturnRouteRequests
-function testResponseForAssignReturnRouteRequest(
-	sent: AssignReturnRouteRequest,
-	received: Message,
-): ResponseRole {
-	if (received instanceof AssignReturnRouteResponse) {
-		return received.hasStarted ? "confirmation" : "fatal_controller";
-	} else if (received instanceof AssignReturnRouteRequestTransmitReport) {
-		return received.isFailed() ? "fatal_node" : "final";
-	}
-	return "unexpected";
-}
-
 export interface AssignReturnRouteRequestOptions extends MessageBaseOptions {
 	nodeId: number;
 	destinationNodeId: number;
 }
 
-@expectedResponse(testResponseForAssignReturnRouteRequest)
+@expectedResponse(FunctionType.AssignReturnRoute)
+@expectedCallback(FunctionType.AssignReturnRoute)
 export class AssignReturnRouteRequest
 	extends AssignReturnRouteRequestBase
 	implements INodeQuery {
@@ -99,10 +88,16 @@ export class AssignReturnRouteRequest
 }
 
 @messageTypes(MessageType.Response, FunctionType.AssignReturnRoute)
-export class AssignReturnRouteResponse extends Message {
+export class AssignReturnRouteResponse
+	extends Message
+	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 		this.hasStarted = this.payload[0] !== 0;
+	}
+
+	public isOK(): boolean {
+		return this.hasStarted;
 	}
 
 	public readonly hasStarted: boolean;
@@ -121,7 +116,9 @@ export class AssignReturnRouteResponse extends Message {
 	}
 }
 
-export class AssignReturnRouteRequestTransmitReport extends AssignReturnRouteRequestBase {
+export class AssignReturnRouteRequestTransmitReport
+	extends AssignReturnRouteRequestBase
+	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
 
@@ -129,14 +126,13 @@ export class AssignReturnRouteRequestTransmitReport extends AssignReturnRouteReq
 		this._transmitStatus = this.payload[1];
 	}
 
+	public isOK(): boolean {
+		return this._transmitStatus === TransmitStatus.OK;
+	}
+
 	private _transmitStatus: TransmitStatus;
 	public get transmitStatus(): TransmitStatus {
 		return this._transmitStatus;
-	}
-
-	/** Checks if a received AssignReturnRouteRequest indicates that sending failed */
-	public isFailed(): boolean {
-		return this._transmitStatus !== TransmitStatus.OK;
 	}
 
 	public toJSON(): JSONObject {

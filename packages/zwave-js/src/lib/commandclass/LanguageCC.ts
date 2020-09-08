@@ -1,3 +1,4 @@
+import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
@@ -5,7 +6,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { CCAPI } from "./API";
@@ -50,7 +50,10 @@ export class LanguageCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<LanguageCCReport>(cc))!;
+		const response = (await this.driver.sendCommand<LanguageCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			language: response.language,
 			country: response.country,
@@ -66,7 +69,7 @@ export class LanguageCCAPI extends CCAPI {
 			language,
 			country,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 

@@ -1,17 +1,16 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
-	ignoreTimeout,
 	Maybe,
 	parseFloatWithScale,
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
@@ -71,7 +70,10 @@ export class BatteryCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BatteryCCReport>(cc))!;
+		const response = (await this.driver.sendCommand<BatteryCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			level: response.level,
 			isLow: response.isLow,
@@ -95,6 +97,7 @@ export class BatteryCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<BatteryCCHealthReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			maximumCapacity: response.maximumCapacity,
@@ -122,7 +125,8 @@ export class BatteryCC extends CommandClass {
 		});
 
 		await ignoreTimeout(
-			async () => {
+			api,
+			async (api) => {
 				// always query the status
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -170,7 +174,8 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 
 		if (this.version >= 2) {
 			await ignoreTimeout(
-				async () => {
+				api,
+				async (api) => {
 					// always query the health
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,

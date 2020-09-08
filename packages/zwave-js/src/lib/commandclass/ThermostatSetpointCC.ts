@@ -25,7 +25,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
@@ -161,7 +160,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ThermostatSetpointCCReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.type === ThermostatSetpointType["N/A"]
 			? // not supported
 			  undefined
@@ -189,7 +188,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			value,
 			scale,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -206,7 +205,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ThermostatSetpointCCCapabilitiesReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			minValue: response.minValue,
 			maxValue: response.maxValue,
@@ -234,7 +233,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ThermostatSetpointCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.supportedSetpointTypes;
 	}
 }
@@ -620,26 +619,23 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	}
 }
 
-const testResponseForThermostatSetpointGet: CCResponsePredicate = (
+function testResponseForThermostatSetpointGet(
 	sent: ThermostatSetpointCCGet,
-	received,
-	isPositiveTransmitReport,
-) => {
+	received: ThermostatSetpointCCReport,
+) {
 	// We expect a Thermostat Setpoint Report that matches the requested setpoint type
-	return received instanceof ThermostatSetpointCCReport &&
-		received.type === sent.setpointType
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
-};
+	return received.type === sent.setpointType;
+}
 
 interface ThermostatSetpointCCGetOptions extends CCCommandOptions {
 	setpointType: ThermostatSetpointType;
 }
 
 @CCCommand(ThermostatSetpointCommand.Get)
-@expectedCCResponse(testResponseForThermostatSetpointGet)
+@expectedCCResponse(
+	ThermostatSetpointCCReport,
+	testResponseForThermostatSetpointGet,
+)
 export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public constructor(
 		driver: Driver,

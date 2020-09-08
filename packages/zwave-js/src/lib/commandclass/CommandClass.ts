@@ -15,7 +15,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { JSONObject, num2hex } from "@zwave-js/shared";
+import { JSONObject, num2hex, staticExtends } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
@@ -731,6 +731,80 @@ export class CommandClass {
 		// Overwrite this in derived classes, by default do nothing
 	}
 
+	/** Tests whether this CC expects at least one command in return */
+	public expectsCCResponse(): boolean {
+		let expected:
+			| DynamicCCResponse<this>
+			| ReturnType<DynamicCCResponse<this>> = getExpectedCCResponse(this);
+
+		// Evaluate dynamic CC responses
+		if (
+			typeof expected === "function" &&
+			!staticExtends(expected, CommandClass)
+		) {
+			expected = expected(this);
+		}
+		if (expected === undefined) return false;
+		if (isArray(expected)) {
+			return expected.every((cc) => staticExtends(cc, CommandClass));
+		} else {
+			return staticExtends(expected, CommandClass);
+		}
+	}
+
+	public isExpectedCCResponse(received: CommandClass): boolean {
+		if (received.nodeId !== this.nodeId) return false;
+
+		let expected:
+			| DynamicCCResponse<this>
+			| ReturnType<DynamicCCResponse<this>> = getExpectedCCResponse(this);
+
+		// Evaluate dynamic CC responses
+		if (
+			typeof expected === "function" &&
+			!staticExtends(expected, CommandClass)
+		) {
+			expected = expected(this);
+		}
+
+		if (expected == undefined) {
+			// Fallback, should not happen if the expected response is defined correctly
+			return false;
+		} else if (
+			isArray(expected) &&
+			expected.every((cc) => staticExtends(cc, CommandClass))
+		) {
+			// The CC always expects a response from the given list, check if the received
+			// message is in that list
+			if (expected.every((base) => !(received instanceof base))) {
+				return false;
+			}
+		} else if (staticExtends(expected, CommandClass)) {
+			// The CC always expects the same single response, check if this is the one
+			if (!(received instanceof expected)) return false;
+		}
+
+		// If the CC wants to test the response, let it
+		const predicate = getCCResponsePredicate(this);
+		const ret = predicate?.(this, received) ?? true;
+
+		if (ret === "checkEncapsulated") {
+			if (
+				isEncapsulatingCommandClass(this) &&
+				isEncapsulatingCommandClass(received)
+			) {
+				return this.encapsulated.isExpectedCCResponse(
+					received.encapsulated,
+				);
+			} else {
+				// Fallback, should not happen if the expected response is defined correctly
+				return false;
+			}
+		}
+
+		return ret;
+	}
+
 	/**
 	 * Translates a property identifier into a speaking name for use in an external API
 	 * @param property The property identifier that should be translated
@@ -814,15 +888,19 @@ const METADATA_version = Symbol("version");
 const METADATA_API = Symbol("API");
 const METADATA_APIMap = Symbol("APIMap");
 
-export interface Constructable<T extends CommandClass> {
-	new (
-		driver: Driver,
-		options:
-			| CommandClassCreationOptions
-			| CommandClassDeserializationOptions,
-	): T;
-}
+export type Constructable<T extends CommandClass> = typeof CommandClass & {
+	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
+	new (driver: Driver, options: any): T;
+};
 type APIConstructor = new (driver: Driver, endpoint: Endpoint) => CCAPI;
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+type TypedClassDecorator<TTarget extends Object> = <
+	T extends TTarget,
+	TConstructor extends new (...args: any[]) => T
+>(
+	apiClass: TConstructor,
+) => TConstructor | void;
 
 type CommandClassMap = Map<CommandClasses, Constructable<CommandClass>>;
 type CCCommandMap = Map<string, Constructable<CommandClass>>;
@@ -835,41 +913,31 @@ function getCCCommandMapKey(ccId: CommandClasses, ccCommand: number): string {
 /**
  * May be used to define different expected CC responses depending on the sent CC
  */
-export type DynamicCCResponse<T extends CommandClass = CommandClass> = (
-	sentCC?: T,
-) => typeof CommandClass | undefined;
+export type DynamicCCResponse<
+	TSent extends CommandClass,
+	TReceived extends CommandClass = CommandClass
+> = (
+	sentCC: TSent,
+) => Constructable<TReceived> | Constructable<TReceived>[] | undefined;
 
 export type CCResponseRole =
-	| "unexpected" // a CC that does not belong to this transaction
-	| "confirmation" // a confirmation response, e.g. report that a process has started
-	| "checkEncapsulated" // The response role depends on the encapsulated CC
-	| "final"; // a final response (leading to a resolved transaction)
+	| boolean // The response was either expected or unexpected
+	| "checkEncapsulated"; // The response role depends on the encapsulated CC
 
 /**
  * A predicate function to test if a received CC matches the sent CC
  */
-export type CCResponsePredicate<T extends CommandClass = CommandClass> = (
-	sentCommand: T,
-	receivedCommand: CommandClass | undefined,
-	isPositiveTransmitReport: boolean,
-) => CCResponseRole;
-
-export function isDynamicCCResponse(
-	fn: DynamicCCResponse | CCResponsePredicate,
-): fn is DynamicCCResponse {
-	return fn.length <= 1;
-}
-
-export function isCCResponsePredicate(
-	fn: DynamicCCResponse | CCResponsePredicate,
-): fn is CCResponsePredicate {
-	return fn.length === 3;
-}
+export type CCResponsePredicate<
+	TSent extends CommandClass,
+	TReceived extends CommandClass = CommandClass
+> = (sentCommand: TSent, receivedCommand: TReceived) => CCResponseRole;
 
 /**
  * Defines the command class associated with a Z-Wave message
  */
-export function commandClass(cc: CommandClasses): ClassDecorator {
+export function commandClass(
+	cc: CommandClasses,
+): TypedClassDecorator<CommandClass> {
 	return (messageClass) => {
 		Reflect.defineMetadata(METADATA_commandClass, cc, messageClass);
 
@@ -941,7 +1009,9 @@ export function getCCConstructor(
 /**
  * Defines the implemented version of a Z-Wave command class
  */
-export function implementedVersion(version: number): ClassDecorator {
+export function implementedVersion(
+	version: number,
+): TypedClassDecorator<CommandClass> {
 	return (ccClass) => {
 		Reflect.defineMetadata(METADATA_version, version, ccClass);
 	};
@@ -986,7 +1056,7 @@ export function getImplementedVersionStatic<
 /**
  * Defines the CC command a subclass of a CC implements
  */
-export function CCCommand(command: number): ClassDecorator {
+export function CCCommand(command: number): TypedClassDecorator<CommandClass> {
 	return (ccClass) => {
 		Reflect.defineMetadata(METADATA_ccCommand, command, ccClass);
 
@@ -1041,44 +1111,46 @@ function getCCCommandConstructor<TBase extends CommandClass>(
 /**
  * Defines the expected response associated with a Z-Wave message
  */
-export function expectedCCResponse(cc: typeof CommandClass): ClassDecorator;
-export function expectedCCResponse(
-	predicateOrDynamic: CCResponsePredicate | DynamicCCResponse,
-): ClassDecorator;
-export function expectedCCResponse<T extends CommandClass>(
-	ccOrPredicateOrDynamic:
-		| typeof CommandClass
-		| CCResponsePredicate<T>
-		| DynamicCCResponse<T>,
-): ClassDecorator {
+export function expectedCCResponse<
+	TSent extends CommandClass,
+	TReceived extends CommandClass
+>(
+	cc: Constructable<TReceived> | DynamicCCResponse<TSent, TReceived>,
+	predicate?: CCResponsePredicate<TSent, TReceived>,
+): TypedClassDecorator<CommandClass> {
 	return (ccClass) => {
-		Reflect.defineMetadata(
-			METADATA_ccResponse,
-			ccOrPredicateOrDynamic,
-			ccClass,
-		);
+		Reflect.defineMetadata(METADATA_ccResponse, { cc, predicate }, ccClass);
 	};
 }
 
 /**
- * Retrieves the expected response defined for a Z-Wave message class
+ * Retrieves the expected response (static or dynamic) defined for a Z-Wave message class
  */
 export function getExpectedCCResponse<T extends CommandClass>(
 	ccClass: T,
-):
-	| typeof CommandClass
-	| DynamicCCResponse<T>
-	| CCResponsePredicate<T>
-	| undefined {
+): typeof CommandClass | DynamicCCResponse<T> | undefined {
 	// get the class constructor
 	const constr = ccClass.constructor;
 	// retrieve the current metadata
 	const ret = Reflect.getMetadata(METADATA_ccResponse, constr) as
-		| typeof CommandClass
-		| DynamicCCResponse<T>
-		| CCResponsePredicate<T>
+		| { cc: typeof CommandClass | DynamicCCResponse<T> }
 		| undefined;
-	return ret;
+	return ret?.cc;
+}
+
+/**
+ * Retrieves the CC response predicate defined for a Z-Wave message class
+ */
+export function getCCResponsePredicate<T extends CommandClass>(
+	ccClass: T,
+): CCResponsePredicate<T> | undefined {
+	// get the class constructor
+	const constr = ccClass.constructor;
+	// retrieve the current metadata
+	const ret = Reflect.getMetadata(METADATA_ccResponse, constr) as
+		| { predicate: CCResponsePredicate<T> | undefined }
+		| undefined;
+	return ret?.predicate;
 }
 
 export interface CCValueOptions {
@@ -1098,7 +1170,8 @@ export interface CCValueOptions {
  * @param internal Whether the value should be exposed to library users
  */
 export function ccValue(options?: CCValueOptions): PropertyDecorator {
-	return (target: CommandClass, property: string | number | symbol) => {
+	return (target: unknown, property: string | number | symbol) => {
+		if (!target || !(target instanceof CommandClass)) return;
 		// Set default arguments
 		if (!options) options = {};
 		if (options.internal == undefined) options.internal = false;
@@ -1139,7 +1212,8 @@ function getCCValueDefinitions(
  * @param internal Whether the key value pair should be exposed to library users
  */
 export function ccKeyValuePair(options?: CCValueOptions): PropertyDecorator {
-	return (target: CommandClass, property: string | number | symbol) => {
+	return (target: unknown, property: string | number | symbol) => {
+		if (!target || !(target instanceof CommandClass)) return;
 		// Set default arguments
 		if (!options) options = {};
 		if (options.internal == undefined) options.internal = false;
@@ -1183,7 +1257,8 @@ function getCCKeyValuePairDefinitions(
  * Defines additional metadata for the given CC value
  */
 export function ccValueMetadata(meta: ValueMetadata): PropertyDecorator {
-	return (target: CommandClass, property: string | number | symbol) => {
+	return (target: unknown, property: string | number | symbol) => {
+		if (!target || !(target instanceof CommandClass)) return;
 		// get the class constructor
 		const constr = target.constructor as typeof CommandClass;
 		const cc = getCommandClassStatic(constr);
@@ -1218,7 +1293,7 @@ export function getCCValueMetadata(
 /**
  * Defines the simplified API associated with a Z-Wave command class
  */
-export function API(cc: CommandClasses): ClassDecorator {
+export function API(cc: CommandClasses): TypedClassDecorator<CCAPI> {
 	return (apiClass) => {
 		// and store the metadata
 		Reflect.defineMetadata(METADATA_API, cc, apiClass);

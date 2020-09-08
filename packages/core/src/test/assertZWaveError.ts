@@ -3,6 +3,7 @@ import type { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 export interface AssertZWaveErrorOptions {
 	messageMatches?: string | RegExp;
 	errorCode?: ZWaveErrorCodes;
+	context?: unknown;
 }
 
 /**
@@ -14,7 +15,7 @@ export function assertZWaveError<T>(
 	valueOrFactory: T,
 	options: AssertZWaveErrorOptions = {},
 ): T extends () => PromiseLike<any> ? Promise<void> : void {
-	const { messageMatches, errorCode } = options;
+	const { messageMatches, errorCode, context } = options;
 
 	function _assertZWaveError(e: any): asserts e is ZWaveError {
 		expect(e.constructor.name).toBe("ZWaveError");
@@ -26,6 +27,7 @@ export function assertZWaveError<T>(
 		if (messageMatches != undefined)
 			expect(e.message).toMatch(messageMatches);
 		if (errorCode != undefined) expect(e.code).toBe(errorCode);
+		if (context != undefined) expect(e.context).toBe(context);
 	}
 	function fail(): never {
 		// We should not be here

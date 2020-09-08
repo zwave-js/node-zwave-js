@@ -1,3 +1,4 @@
+import type { Maybe, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	parseCCId,
@@ -5,7 +6,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe, ValueID } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -294,7 +294,7 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			AssociationGroupInfoCCNameReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.name;
 	}
 
@@ -313,7 +313,7 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			AssociationGroupInfoCCInfoReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		// SDS13782: If List Mode is set to 0, the Group Count field MUST be set to 1.
 		const { groupId: _, ...info } = response.groups[0];
 		return {
@@ -339,7 +339,7 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			AssociationGroupInfoCCCommandListReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.commands;
 	}
 }

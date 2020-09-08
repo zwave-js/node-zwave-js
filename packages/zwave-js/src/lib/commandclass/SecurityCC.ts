@@ -28,7 +28,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -108,7 +107,7 @@ export class SecurityCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			encapsulated,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getNonce(): Promise<Buffer> {
@@ -121,8 +120,9 @@ export class SecurityCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<SecurityCCNonceReport>(
 			cc,
 			{
+				...this.commandOptions,
 				// Nonce requests must be handled immediately
-				priority: MessagePriority.Handshake,
+				priority: MessagePriority.PreTransmitHandshake,
 				// Only try getting a nonce once
 				maxSendAttempts: 1,
 			},
@@ -195,7 +195,7 @@ export class SecurityCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 		// There is only one scheme, so we hardcode it
 		return [0];
 	}
@@ -210,7 +210,7 @@ export class SecurityCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 		// There is only one scheme, so we don't return anything here
 	}
 
@@ -231,7 +231,7 @@ export class SecurityCCAPI extends CCAPI {
 			encapsulated: keySet,
 			alternativeNetworkKey: Buffer.alloc(16, 0),
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -250,6 +250,7 @@ export class SecurityCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			SecurityCCCommandsSupportedReport
 		>(cc, {
+			...this.commandOptions,
 			// This command doubles as a check if the node is actually included securely
 			// If we're unsure, don't change the node status when this times out,
 			// so a missing response can be detected as "not secure"
@@ -393,24 +394,24 @@ export class SecurityCCNonceReport extends SecurityCC {
 @expectedCCResponse(SecurityCCNonceReport)
 export class SecurityCCNonceGet extends SecurityCC {}
 
-const testResponseForCommandEncapsulation: CCResponsePredicate<SecurityCCCommandEncapsulation> = (
-	sent,
-	received,
-	isPositiveTransmitReport,
-) => {
-	return received instanceof SecurityCCCommandEncapsulation ||
-		isPositiveTransmitReport
-		? "checkEncapsulated"
-		: "unexpected";
-};
-
 interface SecurityCCCommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;
 	alternativeNetworkKey?: Buffer;
 }
 
+function getCCResponseForCommandEncapsulation(
+	sent: SecurityCCCommandEncapsulation,
+) {
+	if (sent.encapsulated.expectsCCResponse()) {
+		return SecurityCCCommandEncapsulation;
+	}
+}
+
 @CCCommand(SecurityCommand.CommandEncapsulation)
-@expectedCCResponse(testResponseForCommandEncapsulation)
+@expectedCCResponse(
+	getCCResponseForCommandEncapsulation,
+	() => "checkEncapsulated",
+)
 export class SecurityCCCommandEncapsulation extends SecurityCC {
 	public constructor(
 		driver: Driver,

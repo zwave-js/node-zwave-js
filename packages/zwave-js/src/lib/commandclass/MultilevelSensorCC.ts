@@ -4,10 +4,10 @@ import {
 	lookupSensorType,
 	Scale,
 } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
-	ignoreTimeout,
 	Maybe,
 	parseBitMask,
 	parseFloatWithScale,
@@ -16,10 +16,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
@@ -85,7 +84,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSensorCCReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 
 		if (sensorType === undefined) {
 			// Overload #1: return the full response
@@ -112,7 +111,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSensorCCSupportedSensorReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.supportedSensorTypes;
 	}
 
@@ -131,7 +130,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			MultilevelSensorCCSupportedScaleReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.sensorSupportedScales;
 	}
 
@@ -152,7 +151,7 @@ export class MultilevelSensorCCAPI extends CCAPI {
 			scale,
 			value,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -263,7 +262,8 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 
 				// Always query the current sensor reading
 				await ignoreTimeout(
-					async () => {
+					api,
+					async (api) => {
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying ${getSensorTypeName(
@@ -378,18 +378,12 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 	}
 }
 
-const testResponseForMultilevelSensorGet: CCResponsePredicate = (
-	sent: MultilevelSensorCCGet,
-	received,
-	isPositiveTransmitReport,
-) => {
+const testResponseForMultilevelSensorGet: CCResponsePredicate<
+	MultilevelSensorCCGet,
+	MultilevelSensorCCReport
+> = (sent, received) => {
 	// We expect a Multilevel Sensor Report that matches the requested sensor type (if a type was requested)
-	return received instanceof MultilevelSensorCCReport &&
-		(sent.sensorType == undefined || received.type === sent.sensorType)
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
+	return sent.sensorType == undefined || received.type === sent.sensorType;
 };
 
 // These options are supported starting in V5
@@ -402,7 +396,10 @@ type MultilevelSensorCCGetOptions =
 	| (CCCommandOptions & MultilevelSensorCCGetSpecificOptions);
 
 @CCCommand(MultilevelSensorCommand.Get)
-@expectedCCResponse(testResponseForMultilevelSensorGet)
+@expectedCCResponse(
+	MultilevelSensorCCReport,
+	testResponseForMultilevelSensorGet,
+)
 export class MultilevelSensorCCGet extends MultilevelSensorCC {
 	public constructor(
 		driver: Driver,

@@ -45,12 +45,14 @@
 		"strictNullChecks": true,
 		"strictPropertyInitialization": true,
 		"strictBindCallApply": true,
+		"strictFunctionTypes": true,
 		"watch": false, // true breaks CI scripts
 		"pretty": true,
 		"types": [
 			"node",
 			"jest-extended"
-		]
+		],
+		"noErrorTruncation": true
 	},
 	"include": [
 		"packages/**/*.ts",

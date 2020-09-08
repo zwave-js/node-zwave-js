@@ -37,6 +37,10 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 		await loadIndicatorsInternal();
 	});
 
+	afterAll(() => {
+		node1.destroy();
+	});
+
 	it("the Get command (V1) should serialize correctly", () => {
 		const cc = new IndicatorCCGet(fakeDriver, { nodeId: 1 });
 		const expected = buildCCBuffer(

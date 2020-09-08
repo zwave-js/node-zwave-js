@@ -1,11 +1,5 @@
 import { loadDeviceIndex } from "@zwave-js/config";
 import { CommandClasses } from "@zwave-js/core";
-import { ApplicationCommandRequest } from "../../controller/ApplicationCommandRequest";
-import {
-	SendDataRequest,
-	SendDataRequestTransmitReport,
-	TransmitStatus,
-} from "../../controller/SendDataMessages";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
 import { createEmptyMockDriver } from "../../test/mocks";
@@ -24,11 +18,20 @@ import {
 	FibaroVenetianBlindCCSet,
 } from "./Fibaro";
 
-const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
-const node2 = new ZWaveNode(2, fakeDriver as any);
-(fakeDriver as any).controller.nodes.set(2, node2);
-
 describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
+	let fakeDriver: Driver;
+	let node2: ZWaveNode;
+
+	beforeAll(() => {
+		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		node2 = new ZWaveNode(2, fakeDriver as any);
+		(fakeDriver.controller.nodes as any).set(node2.id, node2);
+	});
+
+	afterAll(() => {
+		node2.destroy();
+	});
+
 	beforeAll(async () => {
 		const manufacturerId = 0x10f;
 		node2.valueDB.setValue(getManufacturerIdValueId(), manufacturerId);
@@ -65,23 +68,20 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 		expect(cc).toBeInstanceOf(FibaroVenetianBlindCCReport);
 	});
 
-	describe("testResponse() returns the correct ResponseRole", () => {
-		it("FibaroVenetianBlindCCSet => TransmitReport = final", () => {
-			const ccRequest = new FibaroVenetianBlindCCSet(fakeDriver, {
+	describe("responses should be detected correctly", () => {
+		it("FibaroVenetianBlindCCSet should expect no response", () => {
+			const cc = new FibaroVenetianBlindCCSet(fakeDriver, {
 				nodeId: 2,
 				tilt: 7,
 			});
+			expect(cc.expectsCCResponse()).toBeFalse();
+		});
 
-			const msgRequest = new SendDataRequest(fakeDriver, {
-				command: ccRequest,
-				callbackId: 99,
+		it("FibaroVenetianBlindCCGet should expect a response", () => {
+			const cc = new FibaroVenetianBlindCCGet(fakeDriver, {
+				nodeId: 2,
 			});
-			const msgResponse = new SendDataRequestTransmitReport(fakeDriver, {
-				transmitStatus: TransmitStatus.OK,
-				callbackId: msgRequest.callbackId,
-			});
-
-			expect(msgRequest.testResponse(msgResponse)).toBe("final");
+			expect(cc.expectsCCResponse()).toBeTrue();
 		});
 
 		it("FibaroVenetianBlindCCSet => FibaroVenetianBlindCCReport = unexpected", () => {
@@ -103,18 +103,10 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 				]),
 			});
 
-			const msgRequest = new SendDataRequest(fakeDriver, {
-				command: ccRequest,
-				callbackId: 99,
-			});
-			const msgResponse = new ApplicationCommandRequest(fakeDriver, {
-				command: ccResponse,
-			});
-
-			expect(msgRequest.testResponse(msgResponse)).toBe("unexpected");
+			expect(ccRequest.isExpectedCCResponse(ccResponse)).toBeFalse();
 		});
 
-		it("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = final", () => {
+		it("FibaroVenetianBlindCCGet => FibaroVenetianBlindCCReport = expected", () => {
 			const ccRequest = new FibaroVenetianBlindCCGet(fakeDriver, {
 				nodeId: 2,
 			});
@@ -132,15 +124,7 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 				]),
 			});
 
-			const msgRequest = new SendDataRequest(fakeDriver, {
-				command: ccRequest,
-				callbackId: 99,
-			});
-			const msgResponse = new ApplicationCommandRequest(fakeDriver, {
-				command: ccResponse,
-			});
-
-			expect(msgRequest.testResponse(msgResponse)).toBe("final");
+			expect(ccRequest.isExpectedCCResponse(ccResponse)).toBeTrue();
 		});
 	});
 

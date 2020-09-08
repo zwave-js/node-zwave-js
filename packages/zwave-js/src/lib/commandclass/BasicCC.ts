@@ -1,7 +1,6 @@
 import {
 	CommandClasses,
 	Duration,
-	ignoreTimeout,
 	Maybe,
 	parseMaybeNumber,
 	parseNumber,
@@ -13,6 +12,7 @@ import type { Driver } from "../driver/Driver";
 import log from "../log";
 import {
 	CCAPI,
+	ignoreTimeout,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -72,7 +72,10 @@ export class BasicCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BasicCCReport>(cc))!;
+		const response = (await this.driver.sendCommand<BasicCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			currentValue: response.currentValue,
 			targetValue: response.targetValue,
@@ -88,7 +91,7 @@ export class BasicCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			targetValue,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 
 		// Refresh the current value
 		await this.get();
@@ -115,7 +118,8 @@ export class BasicCC extends CommandClass {
 
 		// try to query the current state - the node might not respond to BasicGet
 		await ignoreTimeout(
-			async () => {
+			api,
+			async (api) => {
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "querying Basic CC state...",

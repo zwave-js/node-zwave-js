@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -8,7 +9,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName, JSONObject, keysOf, pick } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { entries } from "alcalzone-shared/objects";
@@ -27,7 +27,6 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	ccValue,
 	commandClass,
 	CommandClass,
@@ -162,7 +161,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ColorSwitchCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.supportedColorComponents;
 	}
 
@@ -177,6 +176,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<ColorSwitchCCReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			currentValue: response.currentValue,
@@ -194,7 +194,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async startLevelChange(
@@ -211,7 +211,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async stopLevelChange(
@@ -228,7 +228,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 			colorComponent,
 		});
 
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -432,21 +432,15 @@ interface ColorSwitchCCGetOptions extends CCCommandOptions {
 	colorComponent: ColorComponent;
 }
 
-const testResponseForColorSwitchGet: CCResponsePredicate = (
+function testResponseForColorSwitchGet(
 	sent: ColorSwitchCCGet,
-	received,
-	isPositiveTransmitReport,
-) => {
-	return received instanceof ColorSwitchCCReport &&
-		sent.colorComponent === received.colorComponent
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
-};
+	received: ColorSwitchCCReport,
+) {
+	return sent.colorComponent === received.colorComponent;
+}
 
 @CCCommand(ColorSwitchCommand.Get)
-@expectedCCResponse(testResponseForColorSwitchGet)
+@expectedCCResponse(ColorSwitchCCReport, testResponseForColorSwitchGet)
 export class ColorSwitchCCGet extends ColorSwitchCC {
 	public constructor(
 		driver: Driver,

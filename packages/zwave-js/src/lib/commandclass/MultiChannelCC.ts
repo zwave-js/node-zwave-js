@@ -8,7 +8,6 @@ import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeBitMask,
-	ignoreTimeout,
 	Maybe,
 	MessageOrCCLogEntry,
 	parseBitMask,
@@ -21,19 +20,17 @@ import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
 	CCCommandOptions,
 	ccKeyValuePair,
-	CCResponsePredicate,
 	ccValue,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
 	CommandClassOptions,
-	DynamicCCResponse,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -131,6 +128,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return {
@@ -157,6 +155,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCCapabilityReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return response.capability;
@@ -180,6 +179,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCEndPointFindReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return response.foundEndpoints;
@@ -201,6 +201,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<
 			MultiChannelCCAggregatedMembersReport
 		>(cc, {
+			...this.commandOptions,
 			priority: MessagePriority.NodeQuery,
 		}))!;
 		return response.members;
@@ -221,7 +222,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			...options,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async getEndpointCountV1(ccId: CommandClasses): Promise<number> {
@@ -237,6 +238,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		const response = (await this.driver.sendCommand<MultiChannelCCV1Report>(
 			cc,
 			{
+				...this.commandOptions,
 				priority: MessagePriority.NodeQuery,
 			},
 		))!;
@@ -253,7 +255,7 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			encapsulated,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }
 
@@ -345,7 +347,8 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		if (api.supportsCommand(MultiChannelCommand.EndPointFind)) {
 			// Step 2a: Find all endpoints
 			await ignoreTimeout(
-				async () => {
+				api,
+				async (api) => {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying all endpoints...",
@@ -891,33 +894,48 @@ interface MultiChannelCCCommandEncapsulationOptions extends CCCommandOptions {
 	destination: MultiChannelCCDestination;
 }
 
-const testResponseForCommandEncapsulation: CCResponsePredicate<MultiChannelCCCommandEncapsulation> = (
-	sent,
-	received,
-	isPositiveTransmitReport,
-) => {
-	// SDS13783: A receiving node MAY respond to a Multi Channel encapsulated command if the Destination
-	// End Point field specifies a single End Point. In that case, the response MUST be Multi Channel
-	// encapsulated.
-	// A receiving node MUST NOT respond to a Multi Channel encapsulated command if the
-	// Destination End Point field specifies multiple End Points via bit mask addressing.
-	if (typeof sent.destination === "number") {
-		return (received instanceof MultiChannelCCCommandEncapsulation ||
-			// Some devices send MultiChannelCCCommandEncapsulation but with V1 CCCommand,
-			// so we need to allow those too
-			received instanceof MultiChannelCCV1CommandEncapsulation) &&
-			sent.destination === received.endpointIndex
-			? "checkEncapsulated"
-			: isPositiveTransmitReport
-			? "checkEncapsulated"
-			: "unexpected";
-	} else {
-		return isPositiveTransmitReport ? "final" : "unexpected";
+// SDS13783: A receiving node MAY respond to a Multi Channel encapsulated command if the Destination
+// End Point field specifies a single End Point. In that case, the response MUST be Multi Channel
+// encapsulated.
+// A receiving node MUST NOT respond to a Multi Channel encapsulated command if the
+// Destination End Point field specifies multiple End Points via bit mask addressing.
+
+function getCCResponseForCommandEncapsulation(
+	sent: MultiChannelCCCommandEncapsulation,
+) {
+	if (
+		typeof sent.destination === "number" &&
+		sent.encapsulated.expectsCCResponse()
+	) {
+		// Allow both versions of the encapsulation command
+		// Our implementation check is a bit too strict, so change the return type
+		return ([
+			MultiChannelCCCommandEncapsulation,
+			MultiChannelCCV1CommandEncapsulation,
+		] as any) as typeof MultiChannelCCCommandEncapsulation[];
 	}
-};
+}
+
+function testResponseForCommandEncapsulation(
+	sent: MultiChannelCCCommandEncapsulation,
+	received:
+		| MultiChannelCCCommandEncapsulation
+		| MultiChannelCCV1CommandEncapsulation,
+) {
+	if (
+		typeof sent.destination === "number" &&
+		sent.destination === received.endpointIndex
+	) {
+		return "checkEncapsulated";
+	}
+	return false;
+}
 
 @CCCommand(MultiChannelCommand.CommandEncapsulation)
-@expectedCCResponse(testResponseForCommandEncapsulation)
+@expectedCCResponse(
+	getCCResponseForCommandEncapsulation,
+	testResponseForCommandEncapsulation,
+)
 export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public constructor(
 		driver: Driver,
@@ -1006,25 +1024,19 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 	public readonly endpointCount: number;
 }
 
-const testResponseForMultiChannelV1Get: CCResponsePredicate = (
+function testResponseForMultiChannelV1Get(
 	sent: MultiChannelCCV1Get,
-	received,
-	isPositiveTransmitReport,
-) => {
-	return received instanceof MultiChannelCCV1Report &&
-		sent.requestedCC === received.requestedCC
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
-};
+	received: MultiChannelCCV1Report,
+) {
+	return sent.requestedCC === received.requestedCC;
+}
 
 interface MultiChannelCCV1GetOptions extends CCCommandOptions {
 	requestedCC: CommandClasses;
 }
 
 @CCCommand(MultiChannelCommand.GetV1)
-@expectedCCResponse(testResponseForMultiChannelV1Get)
+@expectedCCResponse(MultiChannelCCV1Report, testResponseForMultiChannelV1Get)
 export class MultiChannelCCV1Get extends MultiChannelCC {
 	public constructor(
 		driver: Driver,
@@ -1053,8 +1065,9 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 }
 
 // This indirection is necessary to be able to define the same CC as the response
-const getResponseForV1CommandEncapsulation: DynamicCCResponse = () =>
-	MultiChannelCCV1CommandEncapsulation;
+function getResponseForV1CommandEncapsulation() {
+	return MultiChannelCCV1CommandEncapsulation;
+}
 
 interface MultiChannelCCV1CommandEncapsulationOptions extends CCCommandOptions {
 	encapsulated: CommandClass;

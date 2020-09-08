@@ -4,6 +4,7 @@ import {
 	NotificationParameterWithDuration,
 	NotificationParameterWithValue,
 } from "@zwave-js/config";
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -15,7 +16,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { JSONObject, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -78,7 +78,10 @@ export class NotificationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		return (await this.driver.sendCommand<NotificationCCReport>(cc))!;
+		return (await this.driver.sendCommand<NotificationCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 	}
 
 	public async sendReport(
@@ -94,7 +97,7 @@ export class NotificationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -125,7 +128,7 @@ export class NotificationCCAPI extends CCAPI {
 			notificationType,
 			notificationStatus,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -141,7 +144,7 @@ export class NotificationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			NotificationCCSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			supportsV1Alarm: response.supportsV1Alarm,
 			supportedNotificationTypes: response.supportedNotificationTypes,
@@ -162,7 +165,7 @@ export class NotificationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			NotificationCCEventSupportedReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.supportedEvents;
 	}
 }

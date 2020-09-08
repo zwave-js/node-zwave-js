@@ -73,7 +73,8 @@
     "reflect-metadata": "^0.1.13",
     "serialport": "^9.0.1",
     "source-map-support": "^0.5.19",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "xstate": "^4.12.0"
   },
   "scripts": {
     "build": "gulp build",

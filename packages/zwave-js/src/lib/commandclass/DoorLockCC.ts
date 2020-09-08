@@ -1,3 +1,4 @@
+import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -9,7 +10,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { ValueID } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -175,7 +175,7 @@ export class DoorLockCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			DoorLockCCCapabilitiesReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return pick(response, [
 			"autoRelockSupported",
 			"blockToBlockSupported",
@@ -204,7 +204,7 @@ export class DoorLockCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			DoorLockCCOperationReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return pick(response, [
 			"currentMode",
 			"targetMode",
@@ -229,7 +229,7 @@ export class DoorLockCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			mode,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 
 		// Refresh the current value
 		await this.get();
@@ -248,7 +248,7 @@ export class DoorLockCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			...configuration,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 
 		// Refresh the current value
 		await this.getConfiguration();
@@ -267,7 +267,7 @@ export class DoorLockCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			DoorLockCCConfigurationReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return pick(response, [
 			"operationType",
 			"outsideHandlesCanOpenDoorConfiguration",

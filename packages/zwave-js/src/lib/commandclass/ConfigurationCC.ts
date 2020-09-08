@@ -35,12 +35,10 @@ import {
 	API,
 	CCCommand,
 	CCCommandOptions,
-	CCResponsePredicate,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
 	CommandClassOptions,
-	DynamicCCResponse,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -246,7 +244,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		try {
 			const response = (await this.driver.sendCommand<
 				ConfigurationCCReport
-			>(cc))!;
+			>(cc, this.commandOptions))!;
 			// Nodes may respond with a different parameter, e.g. if we
 			// requested a non-existing one
 			if (response.parameter === parameter) {
@@ -305,7 +303,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			valueSize,
 		});
 		try {
-			await this.driver.sendCommand(cc);
+			await this.driver.sendCommand(cc, this.commandOptions);
 			return true;
 		} catch (e: unknown) {
 			if (
@@ -339,7 +337,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			resetToDefault: true,
 		});
 		try {
-			await this.driver.sendCommand(cc);
+			await this.driver.sendCommand(cc, this.commandOptions);
 			return true;
 		} catch (e: unknown) {
 			if (
@@ -365,7 +363,7 @@ export class ConfigurationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -377,7 +375,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ConfigurationCCPropertiesReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			valueSize: response.valueSize,
 			valueFormat: response.valueFormat,
@@ -401,7 +399,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ConfigurationCCNameReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.name;
 	}
 
@@ -414,7 +412,7 @@ export class ConfigurationCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			ConfigurationCCInfoReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return response.info;
 	}
 
@@ -924,19 +922,15 @@ export class ConfigurationCCReport extends ConfigurationCC {
 	}
 }
 
-const testResponseForConfigurationGet: CCResponsePredicate<ConfigurationCCGet> = (
-	sent,
-	received,
-	isPositiveTransmitReport,
-) => {
+function testResponseForConfigurationGet(
+	sent: ConfigurationCCGet,
+	received: ConfigurationCCReport,
+) {
 	// We expect a Configuration Report that matches the requested parameter
-	return received instanceof ConfigurationCCReport &&
-		(sent.parameter === received.parameter || sent.allowUnexpectedResponse)
-		? "final"
-		: isPositiveTransmitReport
-		? "confirmation"
-		: "unexpected";
-};
+	return (
+		sent.parameter === received.parameter || sent.allowUnexpectedResponse
+	);
+}
 
 interface ConfigurationCCGetOptions extends CCCommandOptions {
 	parameter: number;
@@ -948,7 +942,7 @@ interface ConfigurationCCGetOptions extends CCCommandOptions {
 }
 
 @CCCommand(ConfigurationCommand.Get)
-@expectedCCResponse(testResponseForConfigurationGet)
+@expectedCCResponse(ConfigurationCCReport, testResponseForConfigurationGet)
 export class ConfigurationCCGet extends ConfigurationCC {
 	public constructor(
 		driver: Driver,
@@ -1091,11 +1085,9 @@ type ConfigurationCCBulkSetOptions = CCCommandOptions & {
 		  }
 	);
 
-const getResponseForBulkSet: DynamicCCResponse = (
-	cc: ConfigurationCCBulkSet,
-) => {
+function getResponseForBulkSet(cc: ConfigurationCCBulkSet) {
 	return cc.handshake ? ConfigurationCCBulkReport : undefined;
-};
+}
 
 @CCCommand(ConfigurationCommand.BulkSet)
 @expectedCCResponse(getResponseForBulkSet)

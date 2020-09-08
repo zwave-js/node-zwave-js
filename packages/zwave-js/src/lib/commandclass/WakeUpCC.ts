@@ -1,3 +1,4 @@
+import type { Maybe, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
@@ -5,7 +6,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe, ValueID } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -88,6 +88,7 @@ export class WakeUpCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<WakeUpCCIntervalReport>(
 			cc,
+			this.commandOptions,
 		))!;
 		return {
 			wakeUpInterval: response.wakeUpInterval,
@@ -108,7 +109,7 @@ export class WakeUpCCAPI extends CCAPI {
 		});
 		const response = (await this.driver.sendCommand<
 			WakeUpCCIntervalCapabilitiesReport
-		>(cc))!;
+		>(cc, this.commandOptions))!;
 		return {
 			defaultWakeUpInterval: response.defaultWakeUpInterval,
 			minWakeUpInterval: response.minWakeUpInterval,
@@ -129,7 +130,7 @@ export class WakeUpCCAPI extends CCAPI {
 			wakeUpInterval,
 			controllerNodeId,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	public async sendNoMoreInformation(): Promise<void> {
@@ -143,6 +144,7 @@ export class WakeUpCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 		});
 		await this.driver.sendCommand(cc, {
+			...this.commandOptions,
 			// This command must be sent as part of the wake up queue
 			priority: MessagePriority.WakeUp,
 		});
@@ -165,17 +167,10 @@ export class WakeUpCC extends CommandClass {
 				return false;
 			case NodeStatus.Unknown:
 			// We assume all nodes to be awake - we'll find out soon enough if they are
+			case NodeStatus.Alive:
 			case NodeStatus.Awake:
 				return true;
 		}
-	}
-
-	public setAwake(awake: boolean): void {
-		WakeUpCC.setAwake(this.getNode()!, awake);
-	}
-
-	public static setAwake(node: ZWaveNode, awake: boolean): void {
-		node.status = awake ? NodeStatus.Awake : NodeStatus.Asleep;
 	}
 
 	public async interview(complete: boolean = true): Promise<void> {

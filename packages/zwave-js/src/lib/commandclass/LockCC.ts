@@ -1,3 +1,4 @@
+import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
@@ -5,7 +6,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { Maybe } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import {
@@ -54,7 +54,10 @@ export class LockCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<LockCCReport>(cc))!;
+		const response = (await this.driver.sendCommand<LockCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.locked;
 	}
 
@@ -70,7 +73,7 @@ export class LockCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			locked,
 		});
-		await this.driver.sendCommand(cc);
+		await this.driver.sendCommand(cc, this.commandOptions);
 
 		// Refresh the current value
 		await this.get();
