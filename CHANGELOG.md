@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Breaking changes
 * The status `Alive` was added to the `NodeStatus` enumeration. The node status can no longer switch between all states, only between `Dead` and `Alive`, between `Asleep` and `Awake` and from and to `Unknown`.
+* The `status` property on `ZWaveNode` is now readonly. To change the status, use the `markAsAsleep` and similar methods, which only change the status if it is legal to do so.
 
 ### Features
 * A new method `withOptions` was added to `CCAPI`, which controls the used `SendCommandOptions`. For example, this allows changing the priority of each API call for that instance.
@@ -14,11 +15,13 @@
 
 ### Bugfixes
 * Improved performance of reading from the Value DB
+* Retransmission of commands now distinguishes between errors on the controller side and missing responses from nodes
 
 ### Changes under the hood
 * The driver has been completely rewritten with state machines for a well-defined program flow and better testability. This should solve issues where communication may get stuck for unknown reasons.
 * A node's `status` and `ready` properties are now managed by state machines to have better control over how and when the status changes.
-* The TypeScript option `strictFunctionTypes` was enabled and the usage of several decorators is now enforced statically
+* Enabled the TypeScript option `strictFunctionTypes` and the usage of several decorators is now statically enforced
+* Added more fine-grained control over expected responses, and distinguish between responses, callbacks and node updates for sent messages.
 
 ## 4.2.0 (2020-09-04)
 ### Features
