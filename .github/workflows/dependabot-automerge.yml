@@ -1,0 +1,15 @@
+# Automatically merge Dependabot PRs when version comparison is within the range
+# that is configured in .github/auto-merge.yml
+
+name: Auto-Merge Dependabot PRs
+
+on:
+  pull_request:
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ahmadnassri/action-dependabot-auto-merge@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
