@@ -37,7 +37,7 @@
     "@babel/preset-env": "^7.11.5",
     "@babel/preset-typescript": "^7.10.4",
     "@commitlint/cli": "^10.0.0",
-    "@commitlint/config-conventional": "^10.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "@fimbul/mithotyn": "^0.21.0",
     "@fimbul/wotan": "^0.21.1",
     "@types/fs-extra": "^9.0.1",
