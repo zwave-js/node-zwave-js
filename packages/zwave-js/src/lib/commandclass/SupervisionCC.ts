@@ -111,11 +111,6 @@ export class SupervisionCC extends CommandClass {
 			requestStatusUpdates,
 		});
 	}
-
-	/** Unwraps a supervision encapsulated command */
-	public static unwrap(cc: SupervisionCCGet): CommandClass {
-		return cc.encapsulated;
-	}
 }
 
 type SupervisionCCReportOptions = CCCommandOptions & {
@@ -213,6 +208,7 @@ export class SupervisionCCGet extends SupervisionCC {
 			this.sessionId = getNextSessionId();
 			this.requestStatusUpdates = options.requestStatusUpdates;
 			this.encapsulated = options.encapsulated;
+			options.encapsulated.encapsulatingCC = this as any;
 		}
 	}
 

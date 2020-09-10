@@ -282,11 +282,6 @@ export class MultiChannelCC extends CommandClass {
 		});
 	}
 
-	/** Unwraps a multi channel encapsulated command */
-	public static unwrap(cc: MultiChannelCCCommandEncapsulation): CommandClass {
-		return cc.encapsulated;
-	}
-
 	public async interview(complete: boolean = true): Promise<void> {
 		// Special interview procedure for legacy nodes
 		if (this.version === 1) return this.interviewV1(complete);
@@ -950,6 +945,7 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			});
 		} else {
 			this.encapsulated = options.encapsulated;
+			options.encapsulated.encapsulatingCC = this as any;
 			this.destination = options.destination;
 		}
 	}

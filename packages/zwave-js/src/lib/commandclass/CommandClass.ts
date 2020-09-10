@@ -22,14 +22,21 @@ import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage } from "../node/Types";
 import { CCAPI } from "./API";
-import { isEncapsulatingCommandClass } from "./EncapsulatingCommandClass";
+import {
+	EncapsulatingCommandClass,
+	isEncapsulatingCommandClass,
+} from "./EncapsulatingCommandClass";
 
 export type MulticastDestination = [number, number, ...number[]];
 
 export interface CommandClassInfo {
+	/** Whether the endpoint or node can react to this CC */
 	isSupported: boolean;
+	/** Whether the endpoint or node can control other nodes with this CC */
 	isControlled: boolean;
+	/** Whether this CC is ONLY supported securely */
 	secure: boolean;
+	/** The maximum version of the CC that is supported or controlled */
 	version: number;
 }
 
@@ -108,6 +115,8 @@ export class CommandClass {
 				if (!this.endpointIndex && options.encapCC.endpointIndex) {
 					this.endpointIndex = options.encapCC.endpointIndex;
 				}
+				// And remember which CC encapsulates this CC
+				this.encapsulatingCC = options.encapCC as any;
 			} else {
 				this.nodeId = options.nodeId;
 			}
@@ -145,10 +154,11 @@ export class CommandClass {
 				this.version = 1;
 			}
 
-			// If the node is included securely, send secure commands if possible
+			// If the node or endpoint is included securely, send secure commands if possible
+			const endpoint = this.getEndpoint();
 			this.secure =
 				node?.isSecure !== false &&
-				!!node?.isCCSecure(this.ccId) &&
+				!!(endpoint ?? node)?.isCCSecure(this.ccId) &&
 				!!this.driver.securityManager;
 		} else {
 			// For multicast CCs, we just use the highest implemented version to serialize
@@ -185,6 +195,9 @@ export class CommandClass {
 	 * Don't use this directly, but rather use `Driver.sendSupervisedCommand`
 	 */
 	public supervised: boolean;
+
+	/** Contains a reference to the encapsulating CC if this CC is encapsulated */
+	public encapsulatingCC?: EncapsulatingCommandClass;
 
 	/**
 	 * @internal

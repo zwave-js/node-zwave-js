@@ -62,11 +62,6 @@ export class CRC16CC extends CommandClass {
 			encapsulated: cc,
 		});
 	}
-
-	/** Unwraps a CRC-16 encapsulated command */
-	public static unwrap(cc: CRC16CCCommandEncapsulation): CommandClass {
-		return cc.encapsulated;
-	}
 }
 
 interface CRC16CCCommandEncapsulationOptions extends CCCommandOptions {
@@ -108,6 +103,7 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 			});
 		} else {
 			this.encapsulated = options.encapsulated;
+			options.encapsulated.encapsulatingCC = this as any;
 		}
 	}
 

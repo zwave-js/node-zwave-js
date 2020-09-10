@@ -73,13 +73,6 @@ export class MultiCommandCC extends CommandClass {
 			supervised: CCs.some((cc) => cc.supervised),
 		});
 	}
-
-	/** Unwraps a multi Command encapsulated command */
-	public static unwrap(
-		cc: MultiCommandCCCommandEncapsulation,
-	): CommandClass[] {
-		return cc.encapsulated;
-	}
 }
 
 interface MultiCommandCCCommandEncapsulationOptions extends CCCommandOptions {
@@ -119,6 +112,9 @@ export class MultiCommandCCCommandEncapsulation extends MultiCommandCC {
 			}
 		} else {
 			this.encapsulated = options.encapsulated;
+			for (const cc of options.encapsulated) {
+				cc.encapsulatingCC = this as any;
+			}
 		}
 	}
 

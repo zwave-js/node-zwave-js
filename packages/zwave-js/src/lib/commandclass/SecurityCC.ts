@@ -350,11 +350,6 @@ export class SecurityCC extends CommandClass {
 			encapsulated: cc,
 		});
 	}
-
-	/** Unwraps a security encapsulated command */
-	public static unwrap(cc: SecurityCCCommandEncapsulation): CommandClass {
-		return cc.encapsulated;
-	}
 }
 
 interface SecurityCCNonceReportOptions extends CCCommandOptions {
@@ -484,6 +479,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			this.decryptedCCBytes = frameControlAndDecryptedCC.slice(1);
 		} else {
 			this.encapsulated = options.encapsulated;
+			options.encapsulated.encapsulatingCC = this as any;
 			if (options.alternativeNetworkKey) {
 				this.authKey = generateAuthKey(options.alternativeNetworkKey);
 				this.encryptionKey = generateEncryptionKey(

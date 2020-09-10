@@ -10,13 +10,16 @@ export interface EncapsulatingCommandClassStatic {
 	): EncapsulatingCommandClass;
 
 	encapsulate(driver: Driver, cc: CommandClass): EncapsulatingCommandClass;
-	unwrap(cc: EncapsulatingCommandClass): CommandClass;
 }
 
-export interface EncapsulatingCommandClass {
+export type EncapsulatedCommandClass = CommandClass & {
+	encapsulatingCC: EncapsulatingCommandClass;
+};
+
+export type EncapsulatingCommandClass = CommandClass & {
 	constructor: EncapsulatingCommandClassStatic;
-	encapsulated: CommandClass;
-}
+	encapsulated: EncapsulatedCommandClass;
+};
 
 /**
  * Tests if a given CC statically implements the EncapsulatingCommandClassStatic interface
@@ -58,12 +61,11 @@ export interface MultiEncapsulatingCommandClassStatic {
 		driver: Driver,
 		CCs: CommandClass[],
 	): MultiEncapsulatingCommandClass;
-	unwrap(cc: MultiEncapsulatingCommandClass): CommandClass[];
 }
 
 export interface MultiEncapsulatingCommandClass {
 	constructor: MultiEncapsulatingCommandClassStatic;
-	encapsulated: CommandClass[];
+	encapsulated: EncapsulatedCommandClass[];
 }
 
 /**
