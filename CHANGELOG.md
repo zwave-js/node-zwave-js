@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Config changes
+* (Mojito-Joe) Added a configuration file for `ABUS CFA3010`.
+
 ## 4.2.0 (2020-09-04)
 ### Features
 * Invalid `Multi Channel CC::Command Encapsulation` which follow the V2+ format but use a V1 header are now treated like valid commands
