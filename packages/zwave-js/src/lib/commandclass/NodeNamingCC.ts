@@ -5,9 +5,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { MessagePriority } from "zwave-js/src/lib/message/Constants";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	SetValueImplementation,
