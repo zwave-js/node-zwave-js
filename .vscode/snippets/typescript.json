@@ -363,9 +363,7 @@
 	},
 	"Z-Wave CC property": {
 		"prefix": "zwccprop",
-		"body": [
-			"@ccValue() public ${1:property}: ${2:number};${0}"
-		]
+		"body": ["@ccValue() public ${1:property}: ${2:number};${0}"]
 	},
 	"Z-Wave CC API": {
 		"prefix": "zwccapi",
@@ -409,7 +407,10 @@
 		"body": [
 			"public async interview(complete: boolean = true): Promise<void> {",
 			"\tconst node = this.getNode()!;",
-			"\tconst api = this.getEndpoint()!.commandClasses.${1:Basic};",
+			"\tconst endpoint = this.getEndpoint()!;",
+			"\tconst api = endpoint.commandClasses.${1:Basic}.withOptions({",
+			"\t\tpriority: MessagePriority.NodeQuery,",
+			"\t});",
 			"",
 			"\tlog.controller.logNode(node.id, {",
 			"\t\tmessage: `${this.constructor.name}: doing a ${",
