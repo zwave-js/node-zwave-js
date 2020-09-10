@@ -106,7 +106,11 @@ async function lintDevices(): Promise<void> {
 				{ parameter },
 				value,
 			] of config.paramInformation.entries()) {
-				if (!value.allowManualEntry && !value.options?.length) {
+				if (
+					!value.allowManualEntry &&
+					!value.readOnly &&
+					!value.options?.length
+				) {
 					addError(
 						file,
 						`Parameter #${parameter} must allow manual entry if there are no options defined!`,

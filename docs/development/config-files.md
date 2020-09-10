@@ -88,19 +88,19 @@ This property defines all the existing configuration parameters. It looks like t
 
 where each parameter definition has the following properties:
 
-| Parameter property | Type    | Required? | Description                                                                                                                                                              |
-| ------------------ | ------- | :-------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `label`            | string  |    yes    | A short name for the parameter                                                                                                                                           |
-| `description`      | string  |    no     | A longer description what the parameter does                                                                                                                             |
-| `valueSize`        | number  |    yes    | How many bytes the device uses for this value                                                                                                                            |
-| `minValue`         | number  |    yes    | The minimum allowed value for this parameter                                                                                                                             |
-| `maxValue`         | number  |    yes    | The maximum allowed value for this parameter                                                                                                                             |
-| `unsigned`         | boolean |    no     | Whether this parameter is interpreted as an unsigned value by the device (default: `false`). This simplifies usage for the end user.                                     |
-| `defaultValue`     | number  |    yes    | The factory default value of this parameter.                                                                                                                             |
-| `readOnly`         | boolean |    no     | Whether this parameter can only be read                                                                                                                                  |
-| `writeOnly`        | boolean |    no     | Whether this parameter can only be written                                                                                                                               |
-| `allowManualEntry` | boolean |    yes    | Whether this parameter accepts any value between `minValue` and `maxValue`. If `false`, `options` can must be used to specify the allowed values.                        |
-| `options`          | array   |    no     | If `allowManualEntry` is `false`, this property must contain an array of objects of the form `{"label": string, "value": number}`. Each entry defines one allowed value. |
+| Parameter property | Type    | Required? | Description                                                                                                                                                                                        |
+| ------------------ | ------- | :-------: | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`            | string  |    yes    | A short name for the parameter                                                                                                                                                                     |
+| `description`      | string  |    no     | A longer description what the parameter does                                                                                                                                                       |
+| `valueSize`        | number  |    yes    | How many bytes the device uses for this value                                                                                                                                                      |
+| `minValue`         | number  |    yes    | The minimum allowed value for this parameter                                                                                                                                                       |
+| `maxValue`         | number  |    yes    | The maximum allowed value for this parameter                                                                                                                                                       |
+| `unsigned`         | boolean |    no     | Whether this parameter is interpreted as an unsigned value by the device (default: `false`). This simplifies usage for the end user.                                                               |
+| `defaultValue`     | number  |    yes    | The factory default value of this parameter.                                                                                                                                                       |
+| `readOnly`         | boolean |    no     | Whether this parameter can only be read                                                                                                                                                            |
+| `writeOnly`        | boolean |    no     | Whether this parameter can only be written                                                                                                                                                         |
+| `allowManualEntry` | boolean |    yes    | Whether this parameter accepts any value between `minValue` and `maxValue`. If `false`, `options` must be used to specify the allowed values.                                                      |
+| `options`          | array   |    no     | If `allowManualEntry` is `false` and the value is writable, this property must contain an array of objects of the form `{"label": string, "value": number}`. Each entry defines one allowed value. |
 
 ### Partial parameters
 
