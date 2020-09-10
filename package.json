@@ -68,7 +68,7 @@
     "gulp-typescript": "^6.0.0-alpha.1",
     "husky": "^4.2.5",
     "jest": "^26.4.1",
-    "jest-circus": "^26.4.1",
+    "jest-circus": "^26.4.2",
     "jest-extended": "^0.11.5",
     "lerna": "^3.22.1",
     "mockdate": "^3.0.2",
