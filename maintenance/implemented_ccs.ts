@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 require("reflect-metadata");
+import { CommandClasses } from "@zwave-js/core";
+import { num2hex } from "@zwave-js/shared";
 import * as c from "ansi-colors";
 import * as clipboard from "clipboardy";
 import * as fs from "fs-extra";
 import * as path from "path";
 import * as yargs from "yargs";
-import { CommandClasses } from "../packages/core";
-import { num2hex } from "../packages/shared";
 
 const ccRegex = /^@commandClass\(CommandClasses(?:\.|\[")(.+?)(?:"\])?\)/m;
 const versionRegex = /^@implementedVersion\((\d+)\)/m;
