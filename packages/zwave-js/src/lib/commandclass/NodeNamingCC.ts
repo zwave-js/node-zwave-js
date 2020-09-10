@@ -5,7 +5,9 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { MessagePriority } from "zwave-js/src/lib/message/Constants";
 import type { Driver } from "../driver/Driver";
+import log from "../log";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -141,6 +143,46 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 @implementedVersion(1)
 export class NodeNamingAndLocationCC extends CommandClass {
 	declare ccCommand: NodeNamingAndLocationCommand;
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses[
+			"Node Naming and Location"
+		].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		log.controller.logNode(node.id, {
+			message: "retrieving node name...",
+			direction: "outbound",
+		});
+		const name = await api.getName();
+		log.controller.logNode(node.id, {
+			message: `is named "${name}"`,
+			direction: "inbound",
+		});
+
+		log.controller.logNode(node.id, {
+			message: "retrieving node location...",
+			direction: "outbound",
+		});
+		const location = await api.getLocation();
+		log.controller.logNode(node.id, {
+			message: `received location: ${location}`,
+			direction: "inbound",
+		});
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 }
 
 interface NodeNamingAndLocationCCNameSetOptions extends CCCommandOptions {
