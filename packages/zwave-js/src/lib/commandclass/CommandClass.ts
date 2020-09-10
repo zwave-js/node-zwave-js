@@ -155,7 +155,9 @@ export class CommandClass {
 			}
 
 			// If the node or endpoint is included securely, send secure commands if possible
-			const endpoint = this.getEndpoint();
+			const endpoint = this.getNodeUnsafe()?.getEndpoint(
+				this.endpointIndex,
+			);
 			this.secure =
 				node?.isSecure !== false &&
 				!!(endpoint ?? node)?.isCCSecure(this.ccId) &&
@@ -442,8 +444,7 @@ export class CommandClass {
 	}
 
 	public getEndpoint(): Endpoint | undefined {
-		const node = this.getNode()!;
-		return node.getEndpoint(this.endpointIndex);
+		return this.getNode()?.getEndpoint(this.endpointIndex);
 	}
 
 	/** Returns the value DB for this CC's node */

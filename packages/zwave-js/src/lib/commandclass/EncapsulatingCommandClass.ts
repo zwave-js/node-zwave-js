@@ -38,10 +38,7 @@ export function isEncapsulatingCommandClass(
 	// Walk up the static side of the prototype chain to see if it has the required methods
 	let proto: any = Object.getPrototypeOf(cc.constructor);
 	while (proto) {
-		if (
-			typeof proto.encapsulate === "function" &&
-			typeof proto.unwrap === "function"
-		) {
+		if (typeof proto.encapsulate === "function") {
 			return true;
 		}
 		proto = Object.getPrototypeOf(proto);
@@ -92,10 +89,7 @@ export function isMultiEncapsulatingCommandClass(
 	// Walk up the static side of the prototype chain to see if it has the required methods
 	let proto: any = Object.getPrototypeOf(cc.constructor);
 	while (proto) {
-		if (
-			typeof proto.encapsulate === "function" &&
-			typeof proto.unwrap === "function"
-		) {
+		if (typeof proto.encapsulate === "function") {
 			return true;
 		}
 		proto = Object.getPrototypeOf(proto);

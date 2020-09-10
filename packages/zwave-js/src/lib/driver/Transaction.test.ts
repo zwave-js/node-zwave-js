@@ -23,6 +23,7 @@ interface MockNode {
 	isAwake(): boolean;
 	supportsCC: ZWaveNode["supportsCC"];
 	isCCSecure: ZWaveNode["isCCSecure"];
+	getEndpoint: ZWaveNode["getEndpoint"];
 }
 
 describe("lib/driver/Transaction => ", () => {
@@ -55,6 +56,7 @@ describe("lib/driver/Transaction => ", () => {
 			isListening: boolean;
 			isFrequentListening: boolean;
 			isCCSecure: ZWaveNode["isCCSecure"];
+			getEndpoint: ZWaveNode["getEndpoint"];
 		}
 
 		const driverMock = {
@@ -67,6 +69,7 @@ describe("lib/driver/Transaction => ", () => {
 							isListening: false,
 							isFrequentListening: false,
 							isCCSecure: () => false,
+							getEndpoint: () => undefined as any,
 						},
 					],
 					// 2: listening, but not frequent
@@ -76,6 +79,7 @@ describe("lib/driver/Transaction => ", () => {
 							isListening: true,
 							isFrequentListening: false,
 							isCCSecure: () => false,
+							getEndpoint: () => undefined as any,
 						},
 					],
 					// 3: listening, and frequent
@@ -85,6 +89,7 @@ describe("lib/driver/Transaction => ", () => {
 							isListening: true,
 							isFrequentListening: true,
 							isCCSecure: () => false,
+							getEndpoint: () => undefined as any,
 						},
 					],
 					// 4: not listening, but frequent listening
@@ -94,6 +99,7 @@ describe("lib/driver/Transaction => ", () => {
 							isListening: false,
 							isFrequentListening: true,
 							isCCSecure: () => false,
+							getEndpoint: () => undefined as any,
 						},
 					],
 				]),
@@ -198,6 +204,7 @@ describe("lib/driver/Transaction => ", () => {
 							},
 							supportsCC,
 							isCCSecure: () => false,
+							getEndpoint: () => undefined as any,
 						},
 					],
 					// 2: not awake
@@ -210,6 +217,7 @@ describe("lib/driver/Transaction => ", () => {
 							},
 							supportsCC,
 							isCCSecure: () => false,
+							getEndpoint: () => undefined as any,
 						},
 					],
 				]),
@@ -289,6 +297,7 @@ describe("lib/driver/Transaction => ", () => {
 							// non-sleeping
 							supportsCC: () => false,
 							isCCSecure: () => false,
+							getEndpoint: () => undefined as any,
 						},
 					],
 					// 2: not awake
@@ -303,6 +312,7 @@ describe("lib/driver/Transaction => ", () => {
 								return cc === CommandClasses["Wake Up"];
 							},
 							isCCSecure: () => false,
+							getEndpoint: () => undefined as any,
 						},
 					],
 				]),
