@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 4.2.1 (2020-09-10)
 ### Config changes
 * (Mojito-Joe) Added a configuration file for `ABUS CFA3010`.
 
