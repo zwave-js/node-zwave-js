@@ -10,13 +10,16 @@ export interface EncapsulatingCommandClassStatic {
 	): EncapsulatingCommandClass;
 
 	encapsulate(driver: Driver, cc: CommandClass): EncapsulatingCommandClass;
-	unwrap(cc: EncapsulatingCommandClass): CommandClass;
 }
 
-export interface EncapsulatingCommandClass {
+export type EncapsulatedCommandClass = CommandClass & {
+	encapsulatingCC: EncapsulatingCommandClass;
+};
+
+export type EncapsulatingCommandClass = CommandClass & {
 	constructor: EncapsulatingCommandClassStatic;
-	encapsulated: CommandClass;
-}
+	encapsulated: EncapsulatedCommandClass;
+};
 
 /**
  * Tests if a given CC statically implements the EncapsulatingCommandClassStatic interface
@@ -35,10 +38,7 @@ export function isEncapsulatingCommandClass(
 	// Walk up the static side of the prototype chain to see if it has the required methods
 	let proto: any = Object.getPrototypeOf(cc.constructor);
 	while (proto) {
-		if (
-			typeof proto.encapsulate === "function" &&
-			typeof proto.unwrap === "function"
-		) {
+		if (typeof proto.encapsulate === "function") {
 			return true;
 		}
 		proto = Object.getPrototypeOf(proto);
@@ -58,12 +58,11 @@ export interface MultiEncapsulatingCommandClassStatic {
 		driver: Driver,
 		CCs: CommandClass[],
 	): MultiEncapsulatingCommandClass;
-	unwrap(cc: MultiEncapsulatingCommandClass): CommandClass[];
 }
 
 export interface MultiEncapsulatingCommandClass {
 	constructor: MultiEncapsulatingCommandClassStatic;
-	encapsulated: CommandClass[];
+	encapsulated: EncapsulatedCommandClass[];
 }
 
 /**
@@ -90,10 +89,7 @@ export function isMultiEncapsulatingCommandClass(
 	// Walk up the static side of the prototype chain to see if it has the required methods
 	let proto: any = Object.getPrototypeOf(cc.constructor);
 	while (proto) {
-		if (
-			typeof proto.encapsulate === "function" &&
-			typeof proto.unwrap === "function"
-		) {
+		if (typeof proto.encapsulate === "function") {
 			return true;
 		}
 		proto = Object.getPrototypeOf(proto);

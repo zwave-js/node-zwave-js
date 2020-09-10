@@ -393,26 +393,29 @@ describe("lib/driver/Driver => ", () => {
 			const testMsg1 = new SendDataRequest(driver, {
 				command: new SecurityCCCommandEncapsulation(driver, {
 					nodeId: 2,
-					encapsulated: undefined as any,
+					encapsulated: {} as any,
 				}),
 				transmitOptions: TransmitOptions.DEFAULT,
 			});
+			testMsg1.command["encapsulated"] = undefined as any;
 			expect(driver.computeNetCCPayloadSize(testMsg1)).toBe(26);
 
+			const multiChannelCC = new MultiChannelCCCommandEncapsulation(
+				driver,
+				{
+					nodeId: 2,
+					destination: 1,
+					encapsulated: {} as any,
+				},
+			);
 			const testMsg2 = new SendDataRequest(driver, {
 				command: new SecurityCCCommandEncapsulation(driver, {
 					nodeId: 2,
-					encapsulated: new MultiChannelCCCommandEncapsulation(
-						driver,
-						{
-							nodeId: 2,
-							destination: 1,
-							encapsulated: undefined as any,
-						},
-					),
+					encapsulated: multiChannelCC,
 				}),
 				transmitOptions: TransmitOptions.NoRoute,
 			});
+			multiChannelCC["encapsulated"] = undefined as any;
 			expect(driver.computeNetCCPayloadSize(testMsg2)).toBe(54 - 20 - 4);
 
 			const testMsg3 = new FirmwareUpdateMetaDataCC(driver, {
@@ -570,8 +573,9 @@ describe("lib/driver/Driver => ", () => {
 			const cc1 = new BasicCCSet(driver, { nodeId: 2, targetValue: 25 });
 			const cc = new SecurityCCCommandEncapsulation(driver, {
 				nodeId: 2,
-				encapsulated: undefined as any,
+				encapsulated: {} as any,
 			});
+			cc["encapsulated"] = undefined as any;
 			cc["decryptedCCBytes"] = cc1.serialize();
 			const msg = new ApplicationCommandRequest(driver, {
 				command: cc,
@@ -582,8 +586,9 @@ describe("lib/driver/Driver => ", () => {
 		it("supports nested partial/partial CCs (part 1)", async () => {
 			const cc = new SecurityCCCommandEncapsulation(driver, {
 				nodeId: 2,
-				encapsulated: undefined as any,
+				encapsulated: {} as any,
 			});
+			cc["encapsulated"] = undefined as any;
 			cc["decryptedCCBytes"] = Buffer.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
@@ -603,8 +608,9 @@ describe("lib/driver/Driver => ", () => {
 		it("supports nested partial/partial CCs (part 2)", async () => {
 			const cc = new SecurityCCCommandEncapsulation(driver, {
 				nodeId: 2,
-				encapsulated: undefined as any,
+				encapsulated: {} as any,
 			});
+			cc["encapsulated"] = undefined as any;
 			cc["decryptedCCBytes"] = Buffer.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,

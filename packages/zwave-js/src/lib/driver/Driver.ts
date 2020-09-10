@@ -39,7 +39,10 @@ import {
 	getImplementedVersion,
 } from "../commandclass/CommandClass";
 import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
-import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
+import {
+	isEncapsulatingCommandClass,
+	isMultiEncapsulatingCommandClass,
+} from "../commandclass/EncapsulatingCommandClass";
 import {
 	ICommandClassContainer,
 	isCommandClassContainer,
@@ -1363,6 +1366,41 @@ ${handlers.length} left`,
 	}
 
 	/**
+	 * Checks whether a CC may be handled or should be ignored.
+	 * This method expects `cc` to be unwrapped.
+	 */
+	private mayHandleUnsolicitedCommand(cc: CommandClass): boolean {
+		// This should only be necessary for unsolicited commands, since the response matching
+		// is pretty strict and looks at the encapsulation order
+
+		// From SDS11847:
+		// A controlling node MUST discard a received Report/Notification type command if it is
+		// not received using S0 encapsulation and the corresponding Command Class is supported securely only
+
+		if (cc.secure) {
+			const commandName = cc.constructor.name;
+			if (
+				commandName.endsWith("Report") ||
+				commandName.endsWith("Notification")
+			) {
+				// Check whether there was a S0 encapsulation
+				while (cc.encapsulatingCC) {
+					cc = cc.encapsulatingCC;
+					if (cc.ccId === CommandClasses.Security) return true;
+				}
+				// none found, don't accept the CC
+				log.controller.logNode(
+					cc.nodeId as number,
+					`command must be encrypted but was received without Security encapsulation - discarding it...`,
+					"warn",
+				);
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Is called when a Request-type message was received
 	 */
 	private async handleRequest(msg: Message): Promise<void> {
@@ -1377,6 +1415,14 @@ ${handlers.length} left`,
 				// We have received a message from a dead node, bring it back to life
 				node.markAsAlive();
 			}
+		}
+
+		// Check if we may even handle the command
+		if (
+			isCommandClassContainer(msg) &&
+			!this.mayHandleUnsolicitedCommand(msg.command)
+		) {
+			return;
 		}
 
 		if (msg instanceof ApplicationCommandRequest) {
@@ -1560,11 +1606,12 @@ ${handlers.length} left`,
 	}
 
 	private unwrapCommands(msg: Message & ICommandClassContainer): void {
-		// TODO: Remember the command encapsulation order in case we need to respond
-
 		// Unwrap encapsulating CCs until we get to the core
-		while (isEncapsulatingCommandClass(msg.command)) {
-			const unwrapped = msg.command.constructor.unwrap(msg.command);
+		while (
+			isEncapsulatingCommandClass(msg.command) ||
+			isMultiEncapsulatingCommandClass(msg.command)
+		) {
+			const unwrapped = msg.command.encapsulated;
 			if (isArray(unwrapped)) {
 				log.driver.print(
 					`Received a command that contains multiple CommandClasses. This is not supported yet! Discarding the message...`,
