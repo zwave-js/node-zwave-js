@@ -751,16 +751,26 @@ export class Driver extends EventEmitter {
 	}
 
 	/** Is called when a node wakes up */
-	private onNodeWakeUp(node: ZWaveNode): void {
-		log.controller.logNode(node.id, "The node is now awake.");
+	private onNodeWakeUp(node: ZWaveNode, oldStatus: NodeStatus): void {
+		log.controller.logNode(
+			node.id,
+			`The node is ${
+				oldStatus === NodeStatus.Unknown ? "" : "now "
+			}awake.`,
+		);
 
 		// Make sure to handle the pending messages as quickly as possible
-		this.sortSendQueue();
+		if (oldStatus === NodeStatus.Asleep) this.sortSendQueue();
 	}
 
 	/** Is called when a node goes to sleep */
-	private onNodeSleep(node: ZWaveNode): void {
-		log.controller.logNode(node.id, "The node is now asleep.");
+	private onNodeSleep(node: ZWaveNode, oldStatus: NodeStatus): void {
+		log.controller.logNode(
+			node.id,
+			`The node is ${
+				oldStatus === NodeStatus.Unknown ? "" : "now "
+			}asleep.`,
+		);
 
 		// Move all its pending messages to the WakeupQueue
 		// This clears the current transaction and continues sending the next messages
@@ -768,16 +778,29 @@ export class Driver extends EventEmitter {
 	}
 
 	/** Is called when a previously dead node starts communicating again */
-	private onNodeAlive(node: ZWaveNode): void {
-		log.controller.logNode(node.id, "The node is now alive.");
-		if (node.interviewStage !== InterviewStage.Complete) {
+	private onNodeAlive(node: ZWaveNode, oldStatus: NodeStatus): void {
+		log.controller.logNode(
+			node.id,
+			`The node is ${
+				oldStatus === NodeStatus.Unknown ? "" : "now "
+			}alive.`,
+		);
+		if (
+			oldStatus === NodeStatus.Dead &&
+			node.interviewStage !== InterviewStage.Complete
+		) {
 			void this.interviewNode(node);
 		}
 	}
 
 	/** Is called when a node is marked as dead */
-	private onNodeDead(node: ZWaveNode): void {
-		log.controller.logNode(node.id, "The node is now dead.");
+	private onNodeDead(node: ZWaveNode, oldStatus: NodeStatus): void {
+		log.controller.logNode(
+			node.id,
+			`The node is ${
+				oldStatus === NodeStatus.Unknown ? "" : "now "
+			}dead.`,
+		);
 
 		// This could mean that we need to ignore it in the all nodes ready check,
 		// so perform the check again
@@ -1412,7 +1435,7 @@ ${handlers.length} left`,
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			const node = msg.getNodeUnsafe();
 			if (node?.status === NodeStatus.Dead) {
-				// We have received a message from a dead node, bring it back to life
+				// We have received an unsolicited message from a dead node, bring it back to life
 				node.markAsAlive();
 			}
 		}
@@ -1711,8 +1734,15 @@ ${handlers.length} left`,
 
 		try {
 			const ret = await promise;
-			// If a node responded refresh its awake timer
-			node?.refreshAwakeTimer();
+			if (node) {
+				if (node.supportsCC(CommandClasses["Wake Up"])) {
+					// The node responded, refresh its awake timer
+					node.refreshAwakeTimer();
+				} else if (node.status !== NodeStatus.Alive) {
+					// The node status was unknown or dead - in either case it must be alive because it answered
+					node.markAsAlive();
+				}
+			}
 			return ret;
 		} catch (e) {
 			// If the node does not respond, it is either asleep or dead

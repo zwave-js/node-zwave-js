@@ -5,7 +5,6 @@ import type {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "@zwave-js/core";
-import type { Overwrite } from "alcalzone-shared/types";
 import type { FirmwareUpdateStatus } from "../commandclass";
 import type { NotificationCCReport } from "../commandclass/NotificationCC";
 import type { ZWaveNode } from "./Node";
@@ -56,30 +55,30 @@ export type ZWaveNodeFirmwareUpdateFinishedCallback = (
 	status: FirmwareUpdateStatus,
 	waitTime?: number,
 ) => void;
+export type ZWaveNodeStatusChangeCallback = (
+	node: ZWaveNode,
+	oldStatus: NodeStatus,
+) => void;
 
 export interface ZWaveNodeValueEventCallbacks {
 	"value added": ZWaveNodeValueAddedCallback;
 	"value updated": ZWaveNodeValueUpdatedCallback;
 	"value removed": ZWaveNodeValueRemovedCallback;
 	"metadata updated": ZWaveNodeMetadataUpdatedCallback;
+}
+
+export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {
 	notification: ZWaveNotificationCallback;
 	"interview failed": ZWaveInterviewFailedCallback;
 	"firmware update progress": ZWaveNodeFirmwareUpdateProgressCallback;
 	"firmware update finished": ZWaveNodeFirmwareUpdateFinishedCallback;
+	"wake up": ZWaveNodeStatusChangeCallback;
+	sleep: ZWaveNodeStatusChangeCallback;
+	dead: ZWaveNodeStatusChangeCallback;
+	alive: ZWaveNodeStatusChangeCallback;
+	"interview completed": (node: ZWaveNode) => void;
+	ready: (node: ZWaveNode) => void;
 }
-
-export type ZWaveNodeEventCallbacks = Overwrite<
-	{
-		[K in
-			| "wake up"
-			| "sleep"
-			| "interview completed"
-			| "ready"
-			| "dead"
-			| "alive"]: (node: ZWaveNode) => void;
-	},
-	ZWaveNodeValueEventCallbacks
->;
 
 export type ZWaveNodeEvents = Extract<keyof ZWaveNodeEventCallbacks, string>;
 
