@@ -394,6 +394,13 @@ export class Driver extends EventEmitter {
 			},
 		});
 		this.sendThread = interpret(sendThreadMachine);
+		this.sendThread.onTransition((state) => {
+			if (state.changed)
+				log.driver.print(
+					`send thread state: ${state.toStrings().join(", ")}`,
+					"verbose",
+				);
+		});
 	}
 
 	/** Enumerates all existing serial ports */
