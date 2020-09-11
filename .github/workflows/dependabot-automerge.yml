@@ -10,8 +10,12 @@ jobs:
   auto-merge:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ahmadnassri/action-dependabot-auto-merge@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check if PR should be auto-merged
+        uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
           github-token: ${{ secrets.AUTO_MERGE_TOKEN }}
+          # By default, squash and merge, so Github chooses nice commit messages
           command: squash and merge

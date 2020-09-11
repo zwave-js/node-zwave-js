@@ -339,18 +339,23 @@ export class ZWaveNode extends Endpoint {
 	private _status: NodeStatus = NodeStatus.Unknown;
 
 	private onStatusChange(newStatus: NodeStatus) {
+		log.controller.logNode(
+			this.nodeId,
+			`onStatusChange: ${getEnumMemberName(NodeStatus, newStatus)}`,
+		);
 		// Ignore duplicate events
 		if (newStatus === this._status) return;
 
+		const oldStatus = this._status;
 		this._status = newStatus;
 		if (this._status === NodeStatus.Asleep) {
-			this.emit("sleep", this);
+			this.emit("sleep", this, oldStatus);
 		} else if (this._status === NodeStatus.Awake) {
-			this.emit("wake up", this);
+			this.emit("wake up", this, oldStatus);
 		} else if (this._status === NodeStatus.Dead) {
-			this.emit("dead", this);
+			this.emit("dead", this, oldStatus);
 		} else if (this._status === NodeStatus.Alive) {
-			this.emit("alive", this);
+			this.emit("alive", this, oldStatus);
 		}
 
 		// To be marked ready, a node must be known to be not dead.
