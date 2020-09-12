@@ -1206,8 +1206,10 @@ version:               ${this.version}`;
 					this,
 					CommandClasses.Security,
 				);
-				if (action === false || action === "continue") {
-					// Either the CC is not supported or we got no response to the interview question
+				if (this._isSecure === true && action === false) {
+					// The node is definitely included securely, but we got no response to the interview question
+					return false;
+				} else if (action === false || action === "continue") {
 					// Assume that the node is not actually included securely
 					log.controller.logNode(
 						this.nodeId,
