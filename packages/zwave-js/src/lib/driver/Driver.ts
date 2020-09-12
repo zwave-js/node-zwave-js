@@ -1414,10 +1414,7 @@ ${handlers.length} left`,
 				commandName.endsWith("Notification")
 			) {
 				// Check whether there was a S0 encapsulation
-				while (cc.encapsulatingCC) {
-					cc = cc.encapsulatingCC;
-					if (cc.ccId === CommandClasses.Security) return true;
-				}
+				if (cc.isEncapsulatedWith(CommandClasses.Security)) return true;
 				// none found, don't accept the CC
 				log.controller.logNode(
 					cc.nodeId as number,
@@ -1441,18 +1438,29 @@ ${handlers.length} left`,
 
 		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			const node = msg.getNodeUnsafe();
-			if (node?.status === NodeStatus.Dead) {
+			if (node) {
 				// We have received an unsolicited message from a dead node, bring it back to life
-				node.markAsAlive();
+				if (node.status === NodeStatus.Dead) {
+					node.markAsAlive();
+				}
 			}
 		}
 
-		// Check if we may even handle the command
-		if (
-			isCommandClassContainer(msg) &&
-			!this.mayHandleUnsolicitedCommand(msg.command)
-		) {
-			return;
+		if (isCommandClassContainer(msg)) {
+			const node = msg.getNodeUnsafe();
+			// If we receive an encrypted message but assume the node is insecure, change our assumption
+			if (
+				node?.isSecure === false &&
+				(msg.command.ccId === CommandClasses.Security ||
+					msg.command.isEncapsulatedWith(CommandClasses.Security))
+			) {
+				node.isSecure = true;
+				// Force a new interview
+				void node.refreshInfo();
+			}
+
+			// Check if we may even handle the command
+			if (!this.mayHandleUnsolicitedCommand(msg.command)) return;
 		}
 
 		if (msg instanceof ApplicationCommandRequest) {

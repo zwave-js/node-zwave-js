@@ -877,6 +877,25 @@ export class CommandClass {
 		}
 		return ret;
 	}
+
+	/** Checks whether this CC is encapsulated with one that has the given CC id and (optionally) CC Command */
+	public isEncapsulatedWith(
+		ccId: CommandClasses,
+		ccCommand?: number,
+	): boolean {
+		let cc: CommandClass = this;
+		// Check whether there was a S0 encapsulation
+		while (cc.encapsulatingCC) {
+			cc = cc.encapsulatingCC;
+			if (
+				cc.ccId === ccId &&
+				(ccCommand === undefined || cc.ccCommand === ccCommand)
+			) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
 
 export type SinglecastCC<T extends CommandClass = CommandClass> = T & {

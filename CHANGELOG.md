@@ -15,10 +15,13 @@
 * All interview messages now automatically have a lower priority than most other messages, e.g. the ones created by user interaction. This should make the network feel much more responsive while an interview process is active.
 * (Mojito-Joe) Added a configuration file for `ABUS CFA3010`.
 * The node events `asleep`, `awake`, `alive` and `dead` now include the previous status aswell.
+* Added the method `isEncapsulatedWith` to `CommandClass` to perform checks on the encapsulation stack.
 
 ### Bugfixes
 * Improved performance of reading from the Value DB
 * Retransmission of commands now distinguishes between errors on the controller side and missing responses from nodes
+* If a node that is known to be included securely does not respond to the `Security CC` interview, it is no longer assumed to be non-secure
+* If a node that is assumed to be included non-securely sends secure commands, it is now marked as secure and the interview will be restarted
 
 ### Changes under the hood
 * The driver has been completely rewritten with state machines for a well-defined program flow and better testability. This should solve issues where communication may get stuck for unknown reasons.
