@@ -7,6 +7,11 @@
 			"path": "../core/tsconfig.build.json"
 		}
 	],
-	"include": ["**/*.ts"],
-	"exclude": ["build/**", "node_modules/**"]
+	"include": [
+		"src/**/*.ts"
+	],
+	"exclude": [
+		"build/**",
+		"node_modules/**"
+	]
 }

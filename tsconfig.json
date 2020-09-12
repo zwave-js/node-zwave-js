@@ -55,7 +55,9 @@
 		"noErrorTruncation": true
 	},
 	"include": [
-		"packages/**/*.ts",
+		"packages/**/src/**/*.ts",
+		"packages/**/maintenance/**/*.ts",
+		"packages/*/gulpfile.ts",
 		"maintenance/**/*.ts",
 		"test/**/*.ts"
 	],

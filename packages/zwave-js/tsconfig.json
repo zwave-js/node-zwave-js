@@ -17,7 +17,9 @@
 		},
 	],
 	"include": [
-		"**/*.ts"
+		"gulpfile.ts",
+		"maintenance/**/*.ts",
+		"src/**/*.ts"
 	],
 	"exclude": [
 		"build/**",
