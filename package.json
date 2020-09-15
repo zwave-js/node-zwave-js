@@ -105,7 +105,7 @@
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
     "commit": "git-cz",
     "prerelease": "npm install && lerna run build",
-    "release": "lerna version",
+    "release": "lerna version --no-commit-hooks",
     "preversion": "release-script --lerna-check",
     "version": "release-script --lerna",
     "postversion": "git push && git push --tags"
