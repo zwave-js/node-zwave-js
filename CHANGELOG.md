@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 4.2.2 (2020-09-15)
 ### Config changes
 * Removed parameter #5 from `Aeon Labs ZW130` because it doesn't seem to be supported in any firmware version
 
