@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* A node is no longer marked as dead or asleep if it fails to respond to a `Configuration CC::Get` request. This can happen if the parameter is not supported.
+
 ## 4.2.1 (2020-09-10)
 ### Config changes
 * (Mojito-Joe) Added a configuration file for `ABUS CFA3010`.
