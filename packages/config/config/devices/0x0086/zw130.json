@@ -22,7 +22,7 @@
 	],
 	"firmwareVersion": {
 		"min": "0.0",
-		"max": "1.5"
+		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
@@ -110,6 +110,21 @@
 				}
 			]
 		},
+		// It is not clear when this config parameter was added
+		// My device with did not have it in v1.5 and v1.8, which is currently the latest version
+		// It is also not present in v2.3 (new hardware revision)
+		// 	"5": {
+		// 	"label": "Color",
+		// 	"description": "Configure which color will be displayed when a button is pressed",
+		// 	"valueSize": 4,
+		// 	"minValue": 0,
+		// 	"maxValue": 4294967040,
+		// 	"defaultValue": 65280,
+		// 	"unsigned": true,
+		// 	"readOnly": false,
+		// 	"writeOnly": false,
+		// 	"allowManualEntry": true
+		// },
 		"39": {
 			"label": "Low battery value",
 			"description": "Set the low battery value",

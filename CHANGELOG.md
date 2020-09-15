@@ -5,6 +5,9 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Config changes
+* Removed parameter #5 from `Aeon Labs ZW130` because it doesn't seem to be supported in any firmware version
+
 ### Bugfixes
 * A node is no longer marked as dead or asleep if it fails to respond to a `Configuration CC::Get` request. This can happen if the parameter is not supported.
 
