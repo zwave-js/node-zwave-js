@@ -16,7 +16,6 @@
 * (Mojito-Joe) Added a configuration file for `ABUS CFA3010`.
 * The node events `asleep`, `awake`, `alive` and `dead` now include the previous status aswell.
 * Added the method `isEncapsulatedWith` to `CommandClass` to perform checks on the encapsulation stack.
-* A node is no longer marked as dead or asleep if it fails to respond to a `Configuration CC::Get` request. This can happen if the parameter is not supported.
 
 ### Bugfixes
 * Improved performance of reading from the Value DB
@@ -24,14 +23,22 @@
 * If a node that is known to be included securely does not respond to the `Security CC` interview, it is no longer assumed to be non-secure
 * If a node that is assumed to be included non-securely sends secure commands, it is now marked as secure and the interview will be restarted
 
-### Config changes
-* Removed parameter #5 from `Aeon Labs ZW130` because it doesn't seem to be supported in any firmware version
-
 ### Changes under the hood
 * The driver has been completely rewritten with state machines for a well-defined program flow and better testability. This should solve issues where communication may get stuck for unknown reasons.
 * A node's `status` and `ready` properties are now managed by state machines to have better control over how and when the status changes.
 * Enabled the TypeScript option `strictFunctionTypes` and the usage of several decorators is now statically enforced
 * Added more fine-grained control over expected responses, and distinguish between responses, callbacks and node updates for sent messages.
+
+## 4.2.2 (2020-09-15)
+### Config changes
+* Removed parameter #5 from `Aeon Labs ZW130` because it doesn't seem to be supported in any firmware version
+
+### Bugfixes
+* A node is no longer marked as dead or asleep if it fails to respond to a `Configuration CC::Get` request. This can happen if the parameter is not supported.
+
+## 4.2.1 (2020-09-10)
+### Config changes
+* (Mojito-Joe) Added a configuration file for `ABUS CFA3010`.
 
 ## 4.2.0 (2020-09-04)
 ### Features
