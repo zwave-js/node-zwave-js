@@ -246,7 +246,10 @@ export class ConfigurationCCAPI extends CCAPI {
 		try {
 			const response = (await this.driver.sendCommand<
 				ConfigurationCCReport
-			>(cc))!;
+			>(cc, {
+				// Explicitly allow the node to send no response without marking it as dead or asleep
+				changeNodeStatusOnTimeout: false,
+			}))!;
 			// Nodes may respond with a different parameter, e.g. if we
 			// requested a non-existing one
 			if (response.parameter === parameter) {
