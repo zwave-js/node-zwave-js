@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable @typescript-eslint/no-empty-function */
+import { assign, Machine, spawn, StateMachine } from "xstate";
 import type { Message } from "../message/Message";
 
 export const createSendDataResolvesNever = () =>
@@ -43,3 +44,23 @@ export const dummyMessageNoResponseWithCallback = ({
 // 	expectedResponse: true,
 // 	expectedCallback: true,
 // } as any) as Message;
+
+export function createWrapperMachine(testMachine: StateMachine<any, any, any>) {
+	return Machine<any, any, any>({
+		context: {
+			ref: undefined,
+		},
+		initial: "main",
+		states: {
+			main: {
+				entry: assign({
+					ref: () =>
+						spawn(testMachine, {
+							name: "child",
+							autoForward: true,
+						}),
+				}),
+			},
+		},
+	});
+}
