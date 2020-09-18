@@ -67,7 +67,7 @@
             "unit": "°C",
             "minValue": 5,
             "maxValue": 35,
-            "defaultValue": 35,
+            "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
