@@ -18,7 +18,7 @@
     },
     "associations": {
         "1": {
-            "label": "Reports",
+            "label": "Lifeline",
             "maxNodes": 1,
             "isLifeline": true
         }
@@ -39,6 +39,7 @@
             "label": "Temperature offset for internal sensor",
             "description": "Temperature offset for internal sensor (-80~+80 Offsets the measured temperature by -8.0°C~+8.0°C)",
             "valueSize": 1,
+            "unit": "1/10 °C",
             "minValue": -80,
             "maxValue": 80,
             "defaultValue": 0,
@@ -50,6 +51,7 @@
             "label": "Maximum Set point value",
             "description": "Maximum Set point value",
             "valueSize": 1,
+            "unit": "°C",
             "minValue": 5,
             "maxValue": 35,
             "defaultValue": 35,
@@ -61,6 +63,7 @@
             "label": "Minimum Set point value",
             "description": "Minimum Set point value",
             "valueSize": 1,
+            "unit": "°C",
             "minValue": 5,
             "maxValue": 35,
             "defaultValue": 35,
@@ -72,6 +75,7 @@
             "label": "Frost protection temperature",
             "description": "Frost protection temperature",
             "valueSize": 1,
+            "unit": "°C",
             "minValue": 5,
             "maxValue": 15,
             "defaultValue": 5,
@@ -113,7 +117,6 @@
         },
         "8": {
             "label": "Open window detect temperature drop setting",
-            "description": "Open window detect temperature drop setting (4=2°C , 5=2.5°C, 6= 3°C, 7=3.5°C, 8=4°C)",
             "valueSize": 1,
             "minValue": 4,
             "maxValue": 8,
@@ -123,23 +126,23 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "2°C",
+                    "label": "2 °C",
                     "value": 4
                 },
                 {
-                    "label": "2.5°C",
+                    "label": "2.5 °C",
                     "value": 5
                 },
                 {
-                    "label": "3°C",
+                    "label": "3 °C",
                     "value": 6
                 },
                 {
-                    "label": "3.5°C",
+                    "label": "3.5 °C",
                     "value": 7
                 },
                 {
-                    "label": "4°C",
+                    "label": "4 °C",
                     "value": 8
                 }
             ]
