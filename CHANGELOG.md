@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 4.2.3 (2020-09-18)
 ### Config changes
 * (slangstrom) Add support for `Everspring AC301`
 
