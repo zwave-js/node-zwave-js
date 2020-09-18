@@ -112,7 +112,7 @@
             "allowManualEntry": true
         },
         "8": {
-            "label": "OOpen window detect temperature drop setting",
+            "label": "Open window detect temperature drop setting",
             "description": "Open window detect temperature drop setting (4=2°C , 5=2.5°C, 6= 3°C, 7=3.5°C, 8=4°C)",
             "valueSize": 1,
             "minValue": 4,
