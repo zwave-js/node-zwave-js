@@ -27,6 +27,7 @@
         "1": {
             "label": "Temperature Auto Report period setting",
             "description": "Temperature Auto Report period setting",
+            "unit": "minutes",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -107,6 +108,7 @@
         "7": {
             "label": "Open window detect time period",
             "description": "Open window detect time period",
+            "unit": "minutes",
             "valueSize": 1,
             "minValue": 2,
             "maxValue": 30,
@@ -150,6 +152,7 @@
         "9": {
             "label": "Open window detect delay time select",
             "description": "Open window detect delay time select",
+            "unit": "minutes",
             "valueSize": 1,
             "minValue": 10,
             "maxValue": 60,
