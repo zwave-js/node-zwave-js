@@ -29,6 +29,10 @@
 * Enabled the TypeScript option `strictFunctionTypes` and the usage of several decorators is now statically enforced
 * Added more fine-grained control over expected responses, and distinguish between responses, callbacks and node updates for sent messages.
 
+## 4.2.3 (2020-09-18)
+### Config changes
+* (slangstrom) Add support for `Everspring AC301`
+
 ## 4.2.2 (2020-09-15)
 ### Config changes
 * Removed parameter #5 from `Aeon Labs ZW130` because it doesn't seem to be supported in any firmware version
