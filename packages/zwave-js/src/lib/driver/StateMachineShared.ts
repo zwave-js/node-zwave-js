@@ -15,6 +15,7 @@ import type { SendDataErrorData } from "./SendThreadMachine";
 import type { SerialAPICommandEvent } from "./SerialAPICommandMachine";
 
 export interface ServiceImplementations {
+	timestamp: () => number;
 	sendData: (data: Buffer) => Promise<void>;
 	createSendDataAbort: () => SendDataAbort;
 	notifyRetry?: (

@@ -5,6 +5,7 @@ import {
 	AssignAction,
 	Interpreter,
 	Machine,
+	spawn,
 	StateMachine,
 } from "xstate";
 import { raise, send } from "xstate/lib/actions";
@@ -17,6 +18,10 @@ import {
 } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
+import {
+	CommandQueueInterpreter,
+	createCommandQueueMachine,
+} from "./CommandQueueMachine";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,
@@ -37,6 +42,7 @@ export const waitForHandshakeResponseStateId =
 /* eslint-disable @typescript-eslint/ban-types */
 export interface SendThreadStateSchema {
 	states: {
+		init: {};
 		idle: {};
 		sending: {
 			states: {
@@ -105,6 +111,7 @@ export type SendDataErrorData =
 
 export interface SendThreadContext {
 	queue: SortedList<Transaction>;
+	commandQueue?: CommandQueueInterpreter;
 	currentTransaction?: Transaction;
 	preTransmitHandshakeTransaction?: Transaction;
 	handshakeResponseTransaction?: Transaction;
@@ -373,7 +380,7 @@ export function createSendThreadMachine(
 	>(
 		{
 			id: "SendThread",
-			initial: "idle",
+			initial: "init",
 			context: {
 				queue: new SortedList(),
 				// currentTransaction: undefined,
@@ -446,6 +453,26 @@ export function createSendThreadMachine(
 				},
 			},
 			states: {
+				init: {
+					always: [
+						{
+							actions: [
+								assign<SendThreadContext, any>({
+									commandQueue: () =>
+										spawn(
+											createCommandQueueMachine(
+												implementations,
+											),
+											{
+												name: "commandQueue",
+											},
+										),
+								}),
+							],
+							target: "idle",
+						},
+					],
+				},
 				idle: {
 					always: [
 						{ cond: "maySendFirstMessage", target: "sending" },

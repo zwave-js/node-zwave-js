@@ -307,6 +307,24 @@ export class Message {
 		}
 	}
 
+	/** Tests whether this message expects a response from the controller */
+	public expectsResponse(): boolean {
+		return !!this.expectedResponse;
+	}
+
+	/** Tests whether this message expects a callback from the controller */
+	public expectsCallback(): boolean {
+		// A message expects a callback...
+		return (
+			// ...when it has a callback id that is not 0 (no callback)
+			((this.hasCallbackId() && this.callbackId !== 0) ||
+				// or the message type does not need a callback id to match the response
+				!this.needsCallbackId()) &&
+			// and the expected callback is defined
+			!!this.expectedCallback
+		);
+	}
+
 	/** Checks if a message is an expected response for this message */
 	public isExpectedResponse(msg: Message): boolean {
 		return (

@@ -6,7 +6,7 @@ import {
 } from "@zwave-js/core";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
-import { interpret, Interpreter } from "xstate";
+import { interpret, Interpreter, Machine } from "xstate";
 import { SimulatedClock } from "xstate/lib/SimulatedClock";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
@@ -36,12 +36,22 @@ import {
 	createSendDataResolvesImmediately,
 	createSendDataResolvesNever,
 	dummyMessageNoResponseNoCallback,
-} from "./testUtils";
+} from "../test/messages";
 import { Transaction } from "./Transaction";
 
 jest.mock("./SerialAPICommandMachine");
 const mockSerialAPIMachine = jest.requireMock("./SerialAPICommandMachine")
 	.createSerialAPICommandMachine as jest.Mock;
+
+jest.mock("./CommandQueueMachine");
+const mockCommandQueueMachine = jest.requireMock("./CommandQueueMachine")
+	.createCommandQueueMachine as jest.Mock;
+
+const emptyMachine = Machine<any, any, any>({
+	initial: "empty",
+	states: { empty: {} },
+});
+mockCommandQueueMachine.mockReturnValue(emptyMachine);
 
 describe("lib/driver/SendThreadMachine", () => {
 	jest.setTimeout(100);
@@ -137,7 +147,8 @@ describe("lib/driver/SendThreadMachine", () => {
 	}
 
 	beforeEach(() => {
-		mockSerialAPIMachine.mockReset();
+		mockSerialAPIMachine.mockClear();
+		mockCommandQueueMachine.mockClear();
 		(sendDataBasicSetSecure.command
 			.preTransmitHandshake as jest.Mock).mockClear();
 	});
@@ -149,10 +160,18 @@ describe("lib/driver/SendThreadMachine", () => {
 		node4.destroy();
 	});
 
-	it(`should start in the idle state`, () => {
-		const testMachine = createSendThreadMachine(defaultImplementations);
-		service = interpret(testMachine).start();
-		expect(service.state.value).toBe("idle");
+	describe(`when the machine is started, ...`, () => {
+		it(`it should be in the idle state`, () => {
+			const testMachine = createSendThreadMachine(defaultImplementations);
+			service = interpret(testMachine).start();
+			expect(service.state.value).toBe("idle");
+		});
+
+		it("should start a CommandQueueMachine", () => {
+			const testMachine = createSendThreadMachine(defaultImplementations);
+			service = interpret(testMachine).start();
+			expect(mockCommandQueueMachine).toBeCalledTimes(1);
+		});
 	});
 
 	describe(`when the machine is idle, ...`, () => {

@@ -18,7 +18,7 @@ import {
 	createSendDataResolvesNever,
 	createWrapperMachine,
 	dummyMessageNoResponseNoCallback,
-} from "./testUtils";
+} from "../test/messages";
 import { Transaction } from "./Transaction";
 
 jest.mock("@zwave-js/core");
