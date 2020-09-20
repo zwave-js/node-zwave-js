@@ -96,7 +96,7 @@ interface TestContext {
 
 jest.useFakeTimers();
 
-describe("lib/driver/SerialAPICommandMachineV2", () => {
+describe("lib/driver/SerialAPICommandMachine", () => {
 	const testMachine = Machine<
 		TestMachineContext,
 		TestMachineStateSchema,
