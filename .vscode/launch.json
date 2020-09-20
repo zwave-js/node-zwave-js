@@ -10,7 +10,7 @@
 			"request": "launch",
 			"program": "${workspaceFolder}/node_modules/jest/bin/jest",
 			"args": [
-				"--runInBand",
+				"--runInBand"
 			],
 			"cwd": "${workspaceFolder}",
 			"console": "integratedTerminal",

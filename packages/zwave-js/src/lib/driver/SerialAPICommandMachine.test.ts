@@ -11,6 +11,7 @@ import {
 	dummyCallbackPartial,
 	dummyMessageNoResponseNoCallback,
 	dummyMessageNoResponseWithCallback,
+	dummyMessageUnrelated,
 	dummyMessageWithResponseNoCallback,
 	dummyMessageWithResponseWithCallback,
 	dummyResponseNOK,
@@ -30,6 +31,7 @@ interface TestMachineStateSchema {
 		waitForACK: {};
 		waitForResponse: {};
 		waitForCallback: {};
+		unsolicited: {};
 		success: {};
 		failure: {};
 	};
@@ -89,6 +91,7 @@ interface TestContext {
 		type: "failure";
 	})["reason"];
 	expectedResult?: Message;
+	respondedUnexpected?: boolean;
 }
 
 jest.useFakeTimers();
@@ -129,6 +132,7 @@ describe("lib/driver/SerialAPICommandMachineV2", () => {
 							{ target: "sending", cond: "maySendAgain" },
 							{ target: "failure" },
 						],
+						UNSOLICITED: "unsolicited",
 					},
 					meta: {
 						test: async (
@@ -182,6 +186,7 @@ describe("lib/driver/SerialAPICommandMachineV2", () => {
 							{ target: "sending", cond: "maySendAgain" },
 							{ target: "failure" },
 						],
+						UNSOLICITED: "unsolicited",
 					},
 				},
 				waitForResponse: {
@@ -201,6 +206,7 @@ describe("lib/driver/SerialAPICommandMachineV2", () => {
 							{ target: "sending", cond: "maySendAgain" },
 							{ target: "failure" },
 						],
+						UNSOLICITED: "unsolicited",
 					},
 				},
 				waitForCallback: {
@@ -214,6 +220,14 @@ describe("lib/driver/SerialAPICommandMachineV2", () => {
 						CALLBACK_OK: "success",
 						CALLBACK_NOK: "failure",
 						CALLBACK_TIMEOUT: "failure",
+						UNSOLICITED: "unsolicited",
+					},
+				},
+				unsolicited: {
+					meta: {
+						test: ({ respondedUnexpected }: TestContext) => {
+							expect(respondedUnexpected).toBeTrue();
+						},
 					},
 				},
 				success: {
@@ -317,6 +331,12 @@ describe("lib/driver/SerialAPICommandMachineV2", () => {
 				message: dummyCallbackPartial,
 			});
 		},
+		UNSOLICITED: ({ interpreter }) => {
+			interpreter.send({
+				type: "message",
+				message: dummyMessageUnrelated,
+			});
+		},
 		ACK_TIMEOUT: () => {
 			jest.advanceTimersByTime(1600);
 		},
@@ -332,7 +352,6 @@ describe("lib/driver/SerialAPICommandMachineV2", () => {
 
 	testPlans.forEach((plan) => {
 		if (plan.state.value === "idle") return;
-		// if (plan.state.value !== "failure") return;
 
 		const planDescription = plan.description.replace(
 			` (${JSON.stringify(plan.state.context)})`,
@@ -340,14 +359,6 @@ describe("lib/driver/SerialAPICommandMachineV2", () => {
 		);
 		describe(planDescription, () => {
 			plan.paths.forEach((path) => {
-				// if (
-				// 	!path.description.endsWith(
-				// 		`CREATE ({"resp":true,"cb":true}) → SEND_FAILURE → SEND_SUCCESS → ACK → RESPONSE_OK → CALLBACK_NOK → SEND_SUCCESS → CAN`,
-				// 	)
-				// ) {
-				// 	return;
-				// }
-
 				it(path.description, () => {
 					// eslint-disable-next-line prefer-const
 					let context: TestContext;
@@ -382,9 +393,15 @@ describe("lib/driver/SerialAPICommandMachineV2", () => {
 						interpreter: interpret(machine),
 						implementations,
 					};
-					context.interpreter.onDone((evt) => {
-						context.machineResult = evt.data;
-					});
+					context.interpreter
+						.onEvent((evt) => {
+							if (evt.type === "serialAPIUnexpected") {
+								context.respondedUnexpected = true;
+							}
+						})
+						.onDone((evt) => {
+							context.machineResult = evt.data;
+						});
 					// context.interpreter.onTransition((state) => {
 					// 	if (state.changed) console.log(state.value);
 					// });

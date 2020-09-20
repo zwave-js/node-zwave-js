@@ -1,7 +1,7 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { SendAction } from "xstate";
 import { respond } from "xstate/lib/actions";
+import type { SendAction } from "xstate/lib/types";
 import {
 	SendDataAbort,
 	SendDataMulticastRequest,
@@ -139,3 +139,22 @@ export function isSerialCommandError(error: unknown): boolean {
 	}
 	return false;
 }
+
+// /** Creates an auto-forwarding wrapper state machine that can be used to test machines that respond to events */
+// export function createWrapperMachine(
+// 	testMachine: StateMachine<any, any, any>,
+// ): StateMachine<any, any, any> {
+// 	return Machine<any, any, any>({
+// 		context: {
+// 			child: undefined,
+// 		},
+// 		initial: "main",
+// 		states: {
+// 			main: {
+// 				entry: assign({
+// 					child: () => spawn(testMachine, "child"),
+// 				}),
+// 			},
+// 		},
+// 	});
+// }
