@@ -4,10 +4,8 @@
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
 import { PassThrough } from "stream";
-import {
-	ZWaveSerialPort,
-	ZWaveSerialPortEventCallbacks,
-} from "./ZWaveSerialPort";
+import { ZWaveSerialPort } from "./ZWaveSerialPort";
+import type { ZWaveSerialPortEventCallbacks } from "./ZWaveSerialPortBase";
 
 const instances = new Map<string, MockSerialPort>();
 
@@ -59,21 +57,21 @@ export class MockSerialPort extends ZWaveSerialPort {
 		return instances.get(port);
 	}
 
-	private _isOpen: boolean = false;
+	private __isOpen: boolean = false;
 	public get isOpen(): boolean {
-		return this._isOpen;
+		return this.__isOpen;
 	}
 
 	public open(): Promise<void> {
 		return this.openStub().then(() => {
-			this._isOpen = true;
+			this.__isOpen = true;
 		});
 	}
 	public readonly openStub: jest.Mock = jest.fn(() => Promise.resolve());
 
 	public close(): Promise<void> {
 		return this.closeStub().then(() => {
-			this._isOpen = false;
+			this.__isOpen = false;
 		});
 	}
 	public readonly closeStub: jest.Mock = jest.fn(() => Promise.resolve());
