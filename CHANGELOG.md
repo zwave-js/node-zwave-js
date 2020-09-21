@@ -17,6 +17,7 @@
 * (Mojito-Joe) Added a configuration file for `ABUS CFA3010`.
 * The node events `asleep`, `awake`, `alive` and `dead` now include the previous status aswell.
 * Added the method `isEncapsulatedWith` to `CommandClass` to perform checks on the encapsulation stack.
+* In addition to serial ports, serial-over-tcp connections (e.g. by using `ser2net`) are now supported. You can connect to such a host using a connection string of the form `tcp://hostname:port`. Use these `ser2net` settings to host a serial port: `<external-port>:raw:0:<path-to-serial>:115200 8DATABITS NONE 1STOPBIT`
 
 ### Bugfixes
 * Improved performance of reading from the Value DB
