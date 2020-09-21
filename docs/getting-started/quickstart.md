@@ -19,6 +19,11 @@
     ```ts
     // Tell the driver which serial port to use
     const driver = new Driver("COM3");
+    // You must add a handler for the error event before starting the driver
+    driver.on("error", (e) => {
+        // Do something with it
+        console.error(e);
+    });
     // Listen for the driver ready event before doing anything with the driver
     driver.once("driver ready", () => {
         /*
