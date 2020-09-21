@@ -420,15 +420,21 @@ export class Driver extends EventEmitter {
 	public async start(): Promise<void> {
 		// avoid starting twice
 		if (this._wasDestroyed) {
-			return Promise.reject(
-				new ZWaveError(
-					"The driver was destroyed. Create a new instance and start that one.",
-					ZWaveErrorCodes.Driver_Destroyed,
-				),
+			throw new ZWaveError(
+				"The driver was destroyed. Create a new instance and start that one.",
+				ZWaveErrorCodes.Driver_Destroyed,
 			);
 		}
 		if (this._wasStarted) return Promise.resolve();
 		this._wasStarted = true;
+
+		// Enforce that an error handler is attached
+		if ((this as EventEmitter).listenerCount("error") === 0) {
+			throw new ZWaveError(
+				`Before starting the driver, a handler for the "error" event must be attached.`,
+				ZWaveErrorCodes.Driver_NoErrorHandler,
+			);
+		}
 
 		const spOpenPromise = createDeferredPromise();
 

@@ -4,11 +4,12 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 5.0.0-alpha.3 (2020-09-11)
+## __WORK IN PROGRESS__
 ### Breaking changes
 * The status `Alive` was added to the `NodeStatus` enumeration. The node status can no longer switch between all states, only between `Dead` and `Alive`, between `Asleep` and `Awake` and from and to `Unknown`.
 * The `status` property on `ZWaveNode` is now readonly. To change the status, use the `markAsAsleep` and similar methods, which only change the status if it is legal to do so.
 * Unsolicited commands are now discarded in accordance with the Z-Wave specs if they are unencrypted but the CC is supported secure only
+* `driver.start()` now throws if no handler for the `"error"` is attached
 
 ### Features
 * A new method `withOptions` was added to `CCAPI`, which controls the used `SendCommandOptions`. For example, this allows changing the priority of each API call for that instance.
