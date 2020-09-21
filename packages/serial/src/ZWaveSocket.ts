@@ -1,28 +1,17 @@
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
-import type SerialPort from "serialport";
-import { PassThrough, Readable, Writable } from "stream";
+import * as net from "net";
+import { PassThrough, Readable } from "stream";
 import log from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 import { SerialAPIParser } from "./SerialAPIParser";
+import type {
+	ZWaveSerialChunk,
+	ZWaveSerialPortEventCallbacks,
+	ZWaveSerialPortEvents,
+} from "./ZWaveSerialPort";
 
-export type ZWaveSerialChunk =
-	| MessageHeaders.ACK
-	| MessageHeaders.NAK
-	| MessageHeaders.CAN
-	| Buffer;
-
-export interface ZWaveSerialPortEventCallbacks {
-	error: (e: Error) => void;
-	data: (data: ZWaveSerialChunk) => void;
-}
-
-export type ZWaveSerialPortEvents = Extract<
-	keyof ZWaveSerialPortEventCallbacks,
-	string
->;
-
-export interface ZWaveSerialPort {
+export interface ZWaveSocket {
 	on<TEvent extends ZWaveSerialPortEvents>(
 		event: TEvent,
 		callback: ZWaveSerialPortEventCallbacks[TEvent],
@@ -51,17 +40,21 @@ export interface ZWaveSerialPort {
 	): boolean;
 }
 
-// This serial port wrapper is basically a duplex transform stream
+// This socket wrapper is basically a duplex transform stream (just like ZWaveSerialPort)
 // 0 ┌─────────────────┐ ┌─────────────────┐ ┌──
 // 1 <--               <--   PassThrough   <-- write
-// 1 │ node-serialport │ │ ZWaveSerialPort │ │
+// 1 │  TCP/IPC socket │ │   ZWaveSocket   │ │
 // 0 -->               --> SerialAPIParser --> read
 // 1 └─────────────────┘ └─────────────────┘ └──
 // The implementation idea is based on https://stackoverflow.com/a/17476600/10179833
 
+export type ZWaveSocketOptions =
+	| Omit<net.TcpSocketConnectOpts, "onread">
+	| Omit<net.IpcSocketConnectOpts, "onread">;
+
 @Mixin([EventEmitter])
-export class ZWaveSerialPort extends PassThrough {
-	private serial: SerialPort;
+export class ZWaveSocket extends PassThrough {
+	private socket: net.Socket;
 	private parser: SerialAPIParser;
 
 	// Allow strongly-typed async iteration
@@ -69,12 +62,7 @@ export class ZWaveSerialPort extends PassThrough {
 		ZWaveSerialChunk
 	>;
 
-	constructor(port: string);
-	/** @internal */ constructor(port: string, Binding: typeof SerialPort);
-	constructor(
-		port: string,
-		Binding: typeof SerialPort = require("serialport"),
-	) {
+	constructor(private socketOptions: ZWaveSocketOptions) {
 		super({ readableObjectMode: true });
 
 		// Route the data event handlers to the parser and handle everything else ourselves
@@ -98,20 +86,14 @@ export class ZWaveSerialPort extends PassThrough {
 			};
 		}
 
-		this.serial = new Binding(port, {
-			autoOpen: false,
-			baudRate: 115200,
-			dataBits: 8,
-			stopBits: 1,
-			parity: "none",
-		}).on("error", (e) => {
+		this.socket = new net.Socket().on("error", (e) => {
 			// Pass errors through
 			this.emit("error", e);
 		});
 
 		// Hook up a parser to the serial port
 		this.parser = new SerialAPIParser();
-		this.serial.pipe(this.parser);
+		this.socket.pipe(this.parser);
 		// When the wrapper is piped to a stream, pipe the parser instead
 		this.pipe = this.parser.pipe.bind(this.parser);
 		this.unpipe = (destination) => {
@@ -120,12 +102,12 @@ export class ZWaveSerialPort extends PassThrough {
 		};
 
 		// When something is piped to us, pipe it to the serial port instead
-		// Also pass all written data to the serialport unchanged
+		// Also pass all written data to the socket unchanged
 		// wotan-disable-next-line
 		this.on("pipe" as any, (source: Readable) => {
 			source.unpipe(this as any);
-			// Pass all written data to the serialport unchanged
-			source.pipe((this.serial as unknown) as Writable, { end: false });
+			// Pass all written data to the socket unchanged
+			source.pipe(this.socket, { end: false });
 		});
 
 		// Delegate iterating to the parser stream
@@ -134,18 +116,23 @@ export class ZWaveSerialPort extends PassThrough {
 
 	public open(): Promise<void> {
 		return new Promise((resolve) => {
-			this.serial.once("open", resolve).open();
+			this.socket.connect(this.socketOptions, () => {
+				this._isOpen = true;
+				resolve();
+			});
 		});
 	}
 
 	public close(): Promise<void> {
 		return new Promise((resolve) => {
-			this.serial.once("close", resolve).close();
+			this._isOpen = false;
+			this.socket.once("close", () => resolve()).destroy();
 		});
 	}
 
+	private _isOpen: boolean = false;
 	public get isOpen(): boolean {
-		return this.serial.isOpen;
+		return this._isOpen;
 	}
 
 	public async writeAsync(data: Buffer): Promise<void> {
@@ -169,7 +156,7 @@ export class ZWaveSerialPort extends PassThrough {
 		}
 
 		return new Promise((resolve, reject) => {
-			this.serial.write(data, (err) => {
+			this.socket.write(data, (err) => {
 				if (err) reject(err);
 				else resolve();
 			});
