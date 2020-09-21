@@ -19,7 +19,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { MessageHeaders, ZWaveSerialPort } from "@zwave-js/serial";
+import {
+	MessageHeaders,
+	ZWaveSerialPort,
+	ZWaveSerialPortBase,
+	ZWaveSocket,
+} from "@zwave-js/serial";
 import { DeepPartial, num2hex } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
@@ -32,6 +37,7 @@ import { EventEmitter } from "events";
 import fsExtra from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
+import { URL } from "url";
 import { interpret } from "xstate";
 import { FirmwareUpdateStatus } from "../commandclass";
 import {
@@ -307,7 +313,7 @@ export interface Driver {
  */
 export class Driver extends EventEmitter {
 	/** The serial port instance */
-	private serial: ZWaveSerialPort | undefined;
+	private serial: ZWaveSerialPortBase | undefined;
 	/** An instance of the Send Thread state machine */
 	private sendThread: SendThreadInterpreter;
 
@@ -447,8 +453,18 @@ export class Driver extends EventEmitter {
 		this.sendThread.start();
 
 		// Open the serial port
-		log.driver.print(`opening serial port ${this.port}`);
-		this.serial = new ZWaveSerialPort(this.port)
+		if (this.port.startsWith("tcp://")) {
+			const url = new URL(this.port);
+			log.driver.print(`opening serial port ${this.port}`);
+			this.serial = new ZWaveSocket({
+				host: url.hostname,
+				port: parseInt(url.port),
+			});
+		} else {
+			log.driver.print(`opening serial port ${this.port}`);
+			this.serial = new ZWaveSerialPort(this.port);
+		}
+		this.serial
 			.on("data", this.serialport_onData.bind(this))
 			.on("error", (err) => {
 				log.driver.print(
