@@ -1,6 +1,7 @@
 import {
 	assertZWaveError,
 	CommandClasses,
+	highResTimestamp,
 	SecurityManager,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -24,6 +25,11 @@ import {
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import { ZWaveNode } from "../node/Node";
+import {
+	createSendDataResolvesImmediately,
+	createSendDataResolvesNever,
+	dummyMessageNoResponseNoCallback,
+} from "../test/messages";
 import { createEmptyMockDriver } from "../test/mocks";
 import type { Driver } from "./Driver";
 import {
@@ -32,11 +38,6 @@ import {
 	SendThreadEvent,
 	SendThreadStateSchema,
 } from "./SendThreadMachine";
-import {
-	createSendDataResolvesImmediately,
-	createSendDataResolvesNever,
-	dummyMessageNoResponseNoCallback,
-} from "../test/messages";
 import { Transaction } from "./Transaction";
 
 jest.mock("./SerialAPICommandMachine");
@@ -126,6 +127,7 @@ describe("lib/driver/SendThreadMachine", () => {
 		sendData: createSendDataResolvesNever(),
 		createSendDataAbort: () => new SendDataAbort(fakeDriver),
 		notifyUnsolicited: () => {},
+		timestamp: highResTimestamp,
 	};
 
 	let service:
