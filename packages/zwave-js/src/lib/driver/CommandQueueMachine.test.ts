@@ -1,34 +1,72 @@
+import { createModel } from "@xstate/test";
 import { SecurityManager } from "@zwave-js/core";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
-import { SortedList } from "alcalzone-shared/sorted-list";
-import { Actor, interpret, Interpreter } from "xstate";
-import { BasicCCSet } from "../commandclass/BasicCC";
+import { assign, interpret, Machine, State } from "xstate";
+import {
+	dummyCallbackNOK,
+	dummyResponseNOK,
+} from "zwave-js/src/lib/test/messages";
+import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import { SendDataAbort, SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import { createEmptyMockDriver } from "../test/mocks";
 import {
-	CommandQueueContext,
-	CommandQueueEvent,
-	CommandQueueStateSchema,
+	CommandQueueInterpreter,
 	createCommandQueueMachine,
 } from "./CommandQueueMachine";
 import type { Driver } from "./Driver";
-import {
-	createSendDataResolvesNever,
-	createWrapperMachine,
-	dummyMessageNoResponseNoCallback,
-} from "../test/messages";
+import type {
+	SerialAPICommandDoneData,
+	SerialAPICommandError,
+} from "./SerialAPICommandMachine";
 import { Transaction } from "./Transaction";
 
-jest.mock("@zwave-js/core");
+/* eslint-disable @typescript-eslint/ban-types */
+interface TestMachineStateSchema {
+	states: {
+		idle: {};
+		sending: {};
+		aborting: {};
+		maybeDone: {};
+		done: {};
+	};
+}
+/* eslint-enable @typescript-eslint/ban-types */
+
+interface TestMachineContext {
+	transactions?: Transaction[];
+	index: number;
+	expectedCalls: number;
+}
+
+type TestMachineEvents =
+	| {
+			type: "ADD";
+			transaction: Transaction;
+	  }
+	| {
+			type: "API_FAILED" | "ABORT_FAILED";
+			reason: (SerialAPICommandDoneData & {
+				type: "failure";
+			})["reason"];
+	  }
+	| { type: "API_SUCCESS" | "ABORT_SUCCESS"; result: Message };
+
+interface TestContext {
+	interpreter: CommandQueueInterpreter;
+	expectedTransactions: Transaction[];
+	expectedResults: Message[];
+	actualResults: Message[];
+	expectedReasons: SerialAPICommandError[];
+	actualReasons: SerialAPICommandError[];
+}
+
 jest.mock("./SerialAPICommandMachine");
 const mockSerialAPIMachine = jest.requireMock("./SerialAPICommandMachine")
 	.createSerialAPICommandMachine as jest.Mock;
 
-describe("lib/driver/CommandQueueMachine", () => {
-	jest.setTimeout(100);
-
+describe("lib/driver/CommandQueueMaschineV2", () => {
 	const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 	const sm = new SecurityManager({
 		ownNodeId: 1,
@@ -37,276 +75,332 @@ describe("lib/driver/CommandQueueMachine", () => {
 	});
 	(fakeDriver as any).securityManager = sm;
 
-	const sendDataBasicSet = new SendDataRequest(fakeDriver, {
-		command: new BasicCCSet(fakeDriver, {
+	const sendDataBasicGet = new SendDataRequest(fakeDriver, {
+		command: new BasicCCGet(fakeDriver, {
 			nodeId: 2,
-			targetValue: 1,
 		}),
 	});
 
-	const defaultImplementations = {
-		sendData: createSendDataResolvesNever(),
-		createSendDataAbort: () => new SendDataAbort(fakeDriver),
-		notifyUnsolicited: () => {},
-	};
+	const sendDataBasicReport = new SendDataRequest(fakeDriver, {
+		command: new BasicCCReport(fakeDriver, {
+			nodeId: 2,
+			currentValue: 50,
+		}),
+	});
 
-	let service:
-		| undefined
-		| Interpreter<
-				CommandQueueContext,
-				CommandQueueStateSchema,
-				CommandQueueEvent,
-				any
-		  >;
+	const sendDataBasicSet = new SendDataRequest(fakeDriver, {
+		command: new BasicCCSet(fakeDriver, {
+			nodeId: 2,
+			targetValue: 22,
+		}),
+	});
 
 	function createTransaction(msg: Message) {
-		return new Transaction(
+		const ret = new Transaction(
 			fakeDriver,
 			msg,
 			createDeferredPromise(),
 			MessagePriority.Normal,
 		);
+		(ret as any).toJSON = () => ({
+			message: msg.constructor.name,
+		});
+		return ret;
 	}
+
+	const testTransactions = {
+		BasicSet: createTransaction(sendDataBasicSet),
+		BasicGet: createTransaction(sendDataBasicGet),
+		BasicReport: createTransaction(sendDataBasicReport),
+		"response NOK": createTransaction(dummyResponseNOK),
+		"callback NOK": createTransaction(dummyCallbackNOK),
+	};
 
 	beforeEach(() => {
 		mockSerialAPIMachine.mockReset();
 	});
 
-	afterEach(() => {
-		service?.stop();
-		service = undefined;
-	});
-
-	it(`The machine should start in the idle state`, () => {
-		const testMachine = createCommandQueueMachine(defaultImplementations);
-
-		service = interpret(testMachine).start();
-		expect(service.state.value).toBe("idle");
-	});
-
-	describe(`when the machine is idle, ...`, () => {
-		it(`should go into "execute" state when a message is queued and execute the serial API command machine`, () => {
-			const testMachine = createCommandQueueMachine(
-				defaultImplementations,
-			);
-			service = interpret(testMachine).start();
-
-			const transaction = createTransaction(
-				dummyMessageNoResponseNoCallback,
-			);
-			service.send({ type: "add", transaction });
-			expect(service.state.value).toEqual("execute");
-			expect(service.state.context.currentTransaction).toBe(transaction);
-			expect(mockSerialAPIMachine).toBeCalledTimes(1);
-		});
-
-		it(`should go into "execute" state immediately if the queue is not empty`, () => {
-			const transaction = createTransaction(
-				dummyMessageNoResponseNoCallback,
-			);
-			const testMachine = createCommandQueueMachine(
-				defaultImplementations,
-				{
-					queue: new SortedList([transaction]),
+	const testMachine = Machine<
+		TestMachineContext,
+		TestMachineStateSchema,
+		TestMachineEvents
+	>(
+		{
+			id: "CommandQueueTest",
+			initial: "idle",
+			context: {
+				index: -1,
+				expectedCalls: 0,
+			},
+			states: {
+				idle: {
+					on: {
+						ADD: {
+							target: "sending",
+							actions: assign<TestMachineContext, any>({
+								transactions: (_, evt) =>
+									evt.commands.map(
+										// @ts-expect-error
+										(cmd) => testTransactions[cmd],
+									),
+							}),
+						},
+					},
 				},
-			);
-			service = interpret(testMachine).start();
+				sending: {
+					entry: assign<TestMachineContext, any>({
+						index: (ctx) => ctx.index + 1,
+						expectedCalls: (ctx) => ctx.expectedCalls + 1,
+					}),
+					on: {
+						API_SUCCESS: "maybeDone",
+						API_FAILED: [
+							{ cond: "isCbTimeout", target: "aborting" },
+							{ target: "maybeDone" },
+						],
+					},
+					meta: {
+						test: async (
+							{ expectedTransactions }: TestContext,
+							state: State<TestMachineContext>,
+						) => {
+							expect(mockSerialAPIMachine).toBeCalledTimes(
+								state.context.expectedCalls,
+							);
+							expect(
+								mockSerialAPIMachine.mock.calls[
+									state.context.expectedCalls - 1
+								][0],
+							).toBe(
+								expectedTransactions[state.context.index]
+									.message,
+							);
+						},
+					},
+				},
+				aborting: {
+					entry: assign<TestMachineContext, any>({
+						expectedCalls: (ctx) => ctx.expectedCalls + 1,
+					}),
+					on: {
+						ABORT_SUCCESS: "maybeDone",
+						ABORT_FAILED: "maybeDone",
+					},
+					meta: {
+						test: async (
+							_: TestContext,
+							state: State<TestMachineContext>,
+						) => {
+							expect(mockSerialAPIMachine).toBeCalledTimes(
+								state.context.expectedCalls,
+							);
+							expect(
+								mockSerialAPIMachine.mock.calls[
+									state.context.expectedCalls - 1
+								][0],
+							).toBeInstanceOf(SendDataAbort);
+						},
+					},
+				},
+				maybeDone: {
+					always: [
+						{ cond: "queueEmpty", target: "done" },
+						{ target: "sending" },
+					],
+				},
+				done: {
+					meta: {
+						test: async ({
+							interpreter,
+							actualResults,
+							expectedResults,
+							actualReasons,
+							expectedReasons,
+						}: TestContext) => {
+							expect(interpreter.state.value).toBe("idle");
+							expect(actualResults).toContainAllValues(
+								expectedResults,
+							);
+							expect(actualReasons).toContainAllValues(
+								expectedReasons,
+							);
+						},
+					},
+				},
+			},
+		},
+		{
+			guards: {
+				queueEmpty: (ctx) => {
+					// index is increased in the next step, so we need to add +1 here
+					return ctx.index + 1 >= (ctx.transactions?.length ?? 0);
+				},
+				isCbTimeout: (_, evt: any) => evt.reason === "callback timeout",
+			},
+		},
+	);
 
-			expect(service.state.value).toEqual("execute");
-			expect(service.state.context.currentTransaction).toBe(transaction);
-			expect(mockSerialAPIMachine).toBeCalledTimes(1);
-		});
+	const testModel = createModel<TestContext, TestMachineContext>(
+		testMachine,
+	).withEvents({
+		ADD: {
+			exec: ({ interpreter }, event) => {
+				const cmds = (event as any).commands as string[];
+				for (const cmd of cmds) {
+					interpreter.send({
+						type: "add",
+						// @ts-expect-error
+						transaction: testTransactions[cmd],
+					});
+				}
+			},
+			cases: [
+				{ commands: ["BasicGet"] },
+				{ commands: ["BasicSet", "BasicGet"] },
+			],
+		},
+		API_SUCCESS: {
+			exec: ({ interpreter }, event) => {
+				interpreter.send({
+					type: "done.invoke.execute",
+					data: {
+						type: "success",
+						// @ts-expect-error
+						result: testTransactions[event.command].message,
+					},
+				} as any);
+			},
+			cases: [{ command: "BasicReport" }],
+		},
+		API_FAILED: {
+			exec: ({ interpreter }, event) => {
+				interpreter.send({
+					type: "done.invoke.execute",
+					data: {
+						type: "failure",
+						// @ts-expect-error
+						reason: event.reason,
+						// @ts-expect-error
+						message: testTransactions[event.reason]?.message,
+					},
+				} as any);
+			},
+			cases: [
+				{ reason: "send failure" },
+				{ reason: "CAN" },
+				{ reason: "NAK" },
+				{ reason: "ACK timeout" },
+				{ reason: "response timeout" },
+				{ reason: "callback timeout" },
+				{ reason: "response NOK" },
+				{ reason: "callback NOK" },
+			],
+		},
+		ABORT_SUCCESS: {
+			exec: ({ interpreter }) => {
+				interpreter.send({
+					type: "done.invoke.executeSendDataAbort",
+					data: {
+						type: "success",
+					},
+				} as any);
+			},
+		},
+		ABORT_FAILED: {
+			exec: ({ interpreter }, event) => {
+				interpreter.send({
+					type: "done.invoke.executeSendDataAbort",
+					data: {
+						type: "failure",
+						// @ts-expect-error
+						reason: event.reason,
+						// @ts-expect-error
+						message: testTransactions[event.reason]?.message,
+					},
+				} as any);
+			},
+			cases: [
+				{ reason: "send failure" },
+				{ reason: "CAN" },
+				{ reason: "NAK" },
+				{ reason: "ACK timeout" },
+				{ reason: "response timeout" },
+				{ reason: "callback timeout" },
+				{ reason: "response NOK" },
+				{ reason: "callback NOK" },
+			],
+		},
+	});
 
-		it(`if multiple messages are queued, it should only start the serial API machine once`, () => {
-			const testMachine = createCommandQueueMachine(
-				defaultImplementations,
-			);
-			service = interpret(testMachine).start();
+	const testPlans = testModel.getSimplePathPlans();
 
-			for (let i = 1; i <= 3; i++) {
-				service.send({
-					type: "add",
-					transaction: createTransaction(
-						dummyMessageNoResponseNoCallback,
-					),
+	testPlans.forEach((plan) => {
+		if (plan.state.value === "idle") return;
+
+		const planDescription = plan.description.replace(
+			` (${JSON.stringify(plan.state.context)})`,
+			"",
+		);
+		describe(planDescription, () => {
+			plan.paths.forEach((path) => {
+				it(path.description, () => {
+					const machine = createCommandQueueMachine({
+						createSendDataAbort: () =>
+							new SendDataAbort(fakeDriver),
+					} as any);
+
+					const expectedResults = path.segments
+						.filter((s) => s.event.type === "API_SUCCESS")
+						.map((s) => s.event)
+						// @ts-expect-error
+						.map((evt) => testTransactions[evt.command].message);
+
+					const expectedReasons = path.segments
+						.filter((s) => s.event.type === "API_FAILED")
+						.map((s) => (s.event as any).reason);
+
+					const expectedTransactions = path.segments
+						.filter((s) => s.event.type === "ADD")
+						.map((s) => (s.event as any).commands)
+						.reduce((acc, cur) => [...acc, ...cur], [])
+						// @ts-expect-error
+						.map((cmd) => testTransactions[cmd]);
+
+					const context: TestContext = {
+						interpreter: interpret(machine),
+						actualResults: [],
+						expectedResults,
+						actualReasons: [],
+						expectedReasons,
+						expectedTransactions,
+					};
+					context.interpreter.onEvent((evt) => {
+						if (evt.type === "command_success") {
+							context.actualResults.push((evt as any).result);
+						} else if (evt.type === "command_failure") {
+							context.actualReasons.push((evt as any).reason);
+						}
+					});
+					// context.interpreter.onTransition((state, evt) => {
+					// 	console.log(
+					// 		`in state ${state.value} b/c of ${JSON.stringify(
+					// 			evt,
+					// 		)}`,
+					// 	);
+					// });
+					context.interpreter.start();
+
+					return path.test(context);
 				});
-				expect(service.state.value).toEqual("execute");
-				expect(mockSerialAPIMachine).toBeCalledTimes(1);
-			}
+			});
 		});
 	});
 
-	describe(`executing a command`, () => {
-		it("when it succeeds, it should go back to idle state, reset the current transaction and send its parent a success message with the result", (done) => {
-			const transaction = createTransaction(
-				dummyMessageNoResponseNoCallback,
-			);
-			const testMachine = createCommandQueueMachine(
-				defaultImplementations,
-				{
-					queue: new SortedList([transaction]),
-				},
-			);
-			testMachine.initial = "execute";
-			// Wrap the test machine in a small wrapper machine to test sendParent
-			const wrapper = createWrapperMachine(testMachine);
-			service = interpret(wrapper).start();
-			const childService = service.children.get("child") as Actor<
-				CommandQueueContext,
-				CommandQueueEvent
-			>;
-
-			service.onEvent((evt: any) => {
-				if (evt.type === "success") {
-					expect(evt.result).toBe("FOO");
-					expect(evt.transaction).toBe(transaction);
-
-					// no more messages
-					expect(childService.state.value).toBe("idle");
-					expect(
-						childService.state.context.currentTransaction,
-					).toBeUndefined();
-					done();
-				}
-			});
-
-			// Immediately resolve the command
-			service.send({
-				type: "done.invoke.execute",
-				data: {
-					type: "success",
-					result: "FOO",
-				},
-			} as any);
-		});
-
-		it("should call sendDataAbort and notify the parent machine if the callback of a SendData command times out", (done) => {
-			const transaction = createTransaction(sendDataBasicSet);
-			const testMachine = createCommandQueueMachine(
-				defaultImplementations,
-				{
-					queue: new SortedList([transaction]),
-				},
-			);
-			testMachine.initial = "execute";
-
-			// Wrap the test machine in a small wrapper machine to test sendParent
-			const wrapper = createWrapperMachine(testMachine);
-			service = interpret(wrapper).start();
-			const childService = service.children.get("child") as Actor<
-				CommandQueueContext,
-				CommandQueueEvent
-			>;
-
-			let ok = false;
-			service.onEvent((evt: any) => {
-				if (evt.type === "failure") {
-					expect(evt.reason).toBe("callback timeout");
-					expect(evt.transaction).toBe(transaction);
-					if (ok) done();
-					else ok = true;
-				}
-			});
-
-			// Immediately resolve the command
-			service.send({
-				type: "done.invoke.execute",
-				data: {
-					type: "failure",
-					reason: "callback timeout",
-				},
-			} as any);
-
-			expect(childService.state.value).toEqual("abortSendData");
-			expect(mockSerialAPIMachine).toBeCalledTimes(2);
-			expect(mockSerialAPIMachine.mock.calls[1][0]).toBeInstanceOf(
-				SendDataAbort,
-			);
-
-			service.send({
-				type: "done.invoke.executeSendDataAbort",
-				data: {
-					type: "success",
-				},
-			} as any);
-
-			expect(childService.state.value).toBe("idle");
-			expect(
-				childService.state.context.currentTransaction,
-			).toBeUndefined();
-
-			if (ok) done();
-			else ok = true;
-		});
-
-		it("when it fails, it should go back to idle state, reset the current transaction and send its parent a failure message with the reason", (done) => {
-			const transaction = createTransaction(
-				dummyMessageNoResponseNoCallback,
-			);
-			const testMachine = createCommandQueueMachine(
-				defaultImplementations,
-				{
-					queue: new SortedList([transaction]),
-				},
-			);
-			testMachine.initial = "execute";
-			// Wrap the test machine in a small wrapper machine to test sendParent
-			const wrapper = createWrapperMachine(testMachine);
-			service = interpret(wrapper).start();
-			const childService = service.children.get("child") as Actor<
-				CommandQueueContext,
-				CommandQueueEvent
-			>;
-
-			service.onEvent((evt: any) => {
-				if (evt.type === "failure") {
-					expect(evt.reason).toBe("ACK timeout");
-					expect(evt.transaction).toBe(transaction);
-
-					// no more messages
-					expect(childService.state.value).toBe("idle");
-					expect(
-						childService.state.context.currentTransaction,
-					).toBeUndefined();
-					done();
-				}
-			});
-
-			// Immediately resolve the command
-			service.send({
-				type: "done.invoke.execute",
-				data: {
-					type: "failure",
-					reason: "ACK timeout",
-				},
-			} as any);
-		});
-	});
-
-	describe("aborting a SendData command", () => {
-		it("when aborting fails, it should still go into idle state", async () => {
-			const testMachine = createCommandQueueMachine(
-				defaultImplementations,
-			);
-			testMachine.initial = "abortSendData";
-
-			// Wrap the test machine in a small wrapper machine to test sendParent
-			const wrapper = createWrapperMachine(testMachine);
-			service = interpret(wrapper).start();
-			const childService = service.children.get("child") as Actor<
-				CommandQueueContext,
-				CommandQueueEvent
-			>;
-
-			service.send({
-				type: "done.invoke.executeSendDataAbort",
-				data: {
-					type: "failure",
-					reason: "callback timeout",
-				},
-			} as any);
-
-			expect(childService.state.value).toBe("idle");
+	it("coverage", () => {
+		testModel.testCoverage({
+			filter: (stateNode) => {
+				return !!stateNode.meta;
+			},
 		});
 	});
 });

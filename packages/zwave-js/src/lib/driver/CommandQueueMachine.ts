@@ -2,12 +2,12 @@ import { SortedList } from "alcalzone-shared/sorted-list";
 import {
 	assign,
 	AssignAction,
+	EventObject,
 	Interpreter,
 	Machine,
-	SendAction,
 	StateMachine,
 } from "xstate";
-import { raise, sendParent } from "xstate/lib/actions";
+import { raise, respond } from "xstate/lib/actions";
 import {
 	SendDataMulticastRequest,
 	SendDataRequest,
@@ -43,7 +43,15 @@ export interface CommandQueueContext {
 
 export type CommandQueueEvent =
 	| { type: "trigger" } // Used internally to trigger sending from the idle state
-	| { type: "add"; transaction: Transaction }; // Adds a transaction to the command queue
+	| { type: "add"; transaction: Transaction } // Adds a transaction to the command queue
+	| ({ type: "command_success" } & Omit<
+			CommandQueueDoneData & { type: "success" },
+			"type"
+	  >)
+	| ({ type: "command_failure" } & Omit<
+			CommandQueueDoneData & { type: "failure" },
+			"type"
+	  >);
 
 // Success and errors are passed through from the API command machine
 export type CommandQueueDoneData = SerialAPICommandDoneData & {
@@ -75,12 +83,13 @@ const deleteCurrentTransaction: AssignAction<CommandQueueContext, any> = assign(
 	}),
 );
 
-const notifyParent: SendAction<
+const notifyResult = respond<
 	CommandQueueContext,
-	any,
-	CommandQueueDoneData
-> = sendParent((ctx, evt) => ({
+	EventObject & { data: SerialAPICommandDoneData },
+	CommandQueueEvent
+>((ctx, evt: any) => ({
 	...evt.data,
+	type: evt.data.type === "success" ? "command_success" : "command_failure",
 	transaction: ctx.currentTransaction,
 }));
 
@@ -135,19 +144,19 @@ export function createCommandQueueMachine(
 							// On success, forward the response to our parent machine
 							{
 								cond: "executeSuccessful",
-								actions: notifyParent,
+								actions: notifyResult,
 								target: "executeDone",
 							},
 							// On failure, abort timed out send attempts
 							{
 								cond: "isSendDataWithCallbackTimeout",
 								target: "abortSendData",
-								actions: notifyParent,
+								actions: notifyResult,
 							},
 							// And just notify the parent about other failures
 							{
 								target: "executeDone",
-								actions: notifyParent,
+								actions: notifyResult,
 							},
 						],
 					},
