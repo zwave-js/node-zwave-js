@@ -8,6 +8,7 @@ on:
 
 jobs:
   auto-merge:
+    if: contains( ['dependabot[bot]', 'dependabot-preview[bot]'], github.actor )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
