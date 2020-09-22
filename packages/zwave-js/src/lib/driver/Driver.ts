@@ -13,6 +13,7 @@ import {
 	CommandClasses,
 	deserializeCacheValue,
 	Duration,
+	highResTimestamp,
 	SecurityManager,
 	serializeCacheValue,
 	ValueMetadata,
@@ -398,6 +399,7 @@ export class Driver extends EventEmitter {
 					);
 				}
 			},
+			timestamp: highResTimestamp,
 		});
 		this.sendThread = interpret(sendThreadMachine);
 		this.sendThread.onTransition((state) => {
