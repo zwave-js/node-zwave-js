@@ -12,7 +12,7 @@ import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
@@ -173,23 +173,35 @@ export class AlarmSensorCC extends CommandClass {
 		});
 
 		// Find out which sensor types this sensor supports
-		let supportedSensorTypes: readonly AlarmSensorType[];
+		let supportedSensorTypes: readonly AlarmSensorType[] | undefined;
 		if (complete) {
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "querying supported sensor types...",
-				direction: "outbound",
-			});
-			supportedSensorTypes = await api.getSupportedSensorTypes();
-			const logMessage = `received supported sensor types: ${supportedSensorTypes
-				.map((type) => getEnumMemberName(AlarmSensorType, type))
-				.map((name) => `\n· ${name}`)
-				.join("")}`;
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
+			if (
+				!(await ignoreTimeout(api, async (api) => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: "querying supported sensor types...",
+						direction: "outbound",
+					});
+					supportedSensorTypes = await api.getSupportedSensorTypes();
+					const logMessage = `received supported sensor types: ${supportedSensorTypes
+						.map((type) => getEnumMemberName(AlarmSensorType, type))
+						.map((name) => `\n· ${name}`)
+						.join("")}`;
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				}))
+			) {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying supported sensor types timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
 		} else {
 			supportedSensorTypes =
 				this.getValueDB().getValue(
@@ -198,30 +210,45 @@ export class AlarmSensorCC extends CommandClass {
 		}
 
 		// Always query (all of) the sensor's current value(s)
-		for (const type of supportedSensorTypes) {
-			const sensorName = getEnumMemberName(AlarmSensorType, type);
+		if (supportedSensorTypes) {
+			for (const type of supportedSensorTypes) {
+				const sensorName = getEnumMemberName(AlarmSensorType, type);
 
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `querying current value for ${sensorName}...`,
-				direction: "outbound",
-			});
-			const currentValue = await api.get(type);
-			let message = `received current value for ${sensorName}: 
-state:   ${currentValue.state}`;
-			if (currentValue.severity != undefined) {
-				message += `
+				await ignoreTimeout(
+					api,
+					async (api) => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `querying current value for ${sensorName}...`,
+							direction: "outbound",
+						});
+						const currentValue = await api.get(type);
+						let message = `received current value for ${sensorName}: 
+state:    ${currentValue.state}`;
+						if (currentValue.severity != undefined) {
+							message += `
 severity: ${currentValue.severity}`;
-			}
-			if (currentValue.duration != undefined) {
-				message += `
+						}
+						if (currentValue.duration != undefined) {
+							message += `
 duration: ${currentValue.duration}`;
+						}
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message,
+							direction: "inbound",
+						});
+					},
+					() => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message:
+								"Current value query timed out - skipping because it is not critical...",
+							level: "warn",
+						});
+					},
+				);
 			}
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message,
-				direction: "inbound",
-			});
 		}
 
 		// Remember that the interview is complete

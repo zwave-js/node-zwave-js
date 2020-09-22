@@ -18,6 +18,7 @@ import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	ignoreTimeout,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -294,34 +295,46 @@ export class MeterCC extends CommandClass {
 			);
 
 			if (complete || storedType == undefined) {
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "querying meter support...",
-					direction: "outbound",
-				});
+				if (
+					!(await ignoreTimeout(api, async (api) => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: "querying meter support...",
+							direction: "outbound",
+						});
 
-				({
-					type,
-					supportsReset,
-					supportedScales,
-					supportedRateTypes,
-				} = await api.getSupported());
-				const logMessage = `received meter support:
+						({
+							type,
+							supportsReset,
+							supportedScales,
+							supportedRateTypes,
+						} = await api.getSupported());
+						const logMessage = `received meter support:
 type:                 ${getMeterTypeName(type)}
 supported scales:     ${supportedScales
-					.map((s) => lookupMeterScale(type, s).label)
-					.map((label) => `\n· ${label}`)
-					.join("")}
+							.map((s) => lookupMeterScale(type, s).label)
+							.map((label) => `\n· ${label}`)
+							.join("")}
 supported rate types: ${supportedRateTypes
-					.map((rt) => getEnumMemberName(RateType, rt))
-					.map((label) => `\n· ${label}`)
-					.join("")}
+							.map((rt) => getEnumMemberName(RateType, rt))
+							.map((label) => `\n· ${label}`)
+							.join("")}
 supports reset:       ${supportsReset}`;
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: logMessage,
+							direction: "inbound",
+						});
+					}))
+				) {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Querying meter support timed out, skipping interview...",
+						level: "warn",
+					});
+					return;
+				}
 			} else {
 				type = storedType;
 				// supportsReset =
@@ -338,29 +351,58 @@ supports reset:       ${supportsReset}`;
 					) ?? [];
 			}
 
+			if (
+				type! == undefined ||
+				supportedRateTypes! == undefined ||
+				supportedScales! == undefined
+			) {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Cannot continue meter interview - the information is incomplete!",
+					level: "warn",
+				});
+				return;
+			}
+
 			const rateTypes = supportedRateTypes.length
 				? supportedRateTypes
 				: [undefined];
 			for (const rateType of rateTypes) {
 				for (const scale of supportedScales) {
-					log.controller.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `querying meter value (type = ${getMeterTypeName(
-							type,
-						)}, scale = ${lookupMeterScale(type, scale).label}${
-							rateType != undefined
-								? `, rate type = ${getEnumMemberName(
-										RateType,
-										rateType,
-								  )}`
-								: ""
-						})...`,
-						direction: "outbound",
-					});
-					await api.get({
-						scale,
-						rateType,
-					});
+					await ignoreTimeout(
+						api,
+						async (api) => {
+							log.controller.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message: `querying meter value (type = ${getMeterTypeName(
+									type,
+								)}, scale = ${
+									lookupMeterScale(type, scale).label
+								}${
+									rateType != undefined
+										? `, rate type = ${getEnumMemberName(
+												RateType,
+												rateType,
+										  )}`
+										: ""
+								})...`,
+								direction: "outbound",
+							});
+							await api.get({
+								scale,
+								rateType,
+							});
+						},
+						() => {
+							log.controller.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message:
+									"Meter query timed out - skipping because it is not critical...",
+								level: "warn",
+							});
+						},
+					);
 				}
 			}
 		} else {
@@ -369,7 +411,20 @@ supports reset:       ${supportsReset}`;
 				message: `querying default meter value...`,
 				direction: "outbound",
 			});
-			await api.get();
+			await ignoreTimeout(
+				api,
+				async (api) => {
+					await api.get();
+				},
+				() => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Default meter query timed out - skipping because it is not critical...",
+						level: "warn",
+					});
+				},
+			);
 		}
 
 		// Remember that the interview is complete

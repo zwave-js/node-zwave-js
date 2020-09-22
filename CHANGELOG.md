@@ -24,6 +24,7 @@
 * Retransmission of commands now distinguishes between errors on the controller side and missing responses from nodes
 * If a node that is known to be included securely does not respond to the `Security CC` interview, it is no longer assumed to be non-secure
 * If a node that is assumed to be included non-securely sends secure commands, it is now marked as secure and the interview will be restarted
+* The interview for sensor-type CCs is now skipped if a timeout occurs waiting for a response. Previously the whole interview was aborted.
 
 ### Changes under the hood
 * The driver has been completely rewritten with state machines for a well-defined program flow and better testability. This should solve issues where communication may get stuck for unknown reasons.

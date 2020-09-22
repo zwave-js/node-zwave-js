@@ -152,21 +152,35 @@ export class BinarySensorCC extends CommandClass {
 		// Find out which sensor types this sensor supports
 		let supportedSensorTypes: readonly BinarySensorType[] | undefined;
 		if (complete && this.version >= 2) {
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "querying supported sensor types...",
-				direction: "outbound",
-			});
-			supportedSensorTypes = await api.getSupportedSensorTypes();
-			const logMessage = `received supported sensor types: ${supportedSensorTypes
-				.map((type) => getEnumMemberName(BinarySensorType, type))
-				.map((name) => `\n· ${name}`)
-				.join("")}`;
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
+			if (
+				!(await ignoreTimeout(api, async (api) => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: "querying supported sensor types...",
+						direction: "outbound",
+					});
+					supportedSensorTypes = await api.getSupportedSensorTypes();
+					const logMessage = `received supported sensor types: ${supportedSensorTypes
+						.map((type) =>
+							getEnumMemberName(BinarySensorType, type),
+						)
+						.map((name) => `\n· ${name}`)
+						.join("")}`;
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				}))
+			) {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying supported sensor types timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
 		} else {
 			supportedSensorTypes = this.getValueDB().getValue(
 				getSupportedSensorTypesValueId(this.endpointIndex),
