@@ -86,7 +86,6 @@ export type SendThreadEvent =
 			type: "handshakeResponse";
 			result: ApplicationCommandRequest;
 	  }
-	| { type: "handshakeDone" }
 	| { type: "unsolicited"; message: Message }
 	| { type: "sortQueue" }
 	| { type: "NIF"; nodeId: number }
@@ -693,13 +692,14 @@ export function createSendThreadMachine(
 							invoke: {
 								id: "preTransmitHandshake",
 								src: "preTransmitHandshake",
-								onDone: {
-									actions: raise<SendThreadContext, any>(
-										"handshakeDone",
-									),
-								},
+								onDone: "#sending.execute",
 							},
 							initial: "waitForCommandResult",
+							on: {
+								handshakeResponse: {
+									actions: resolveHandshakeTransaction,
+								},
+							},
 							states: {
 								// After kicking off the command, wait until it is completed
 								waitForCommandResult: {
@@ -726,12 +726,6 @@ export function createSendThreadMachine(
 									},
 								},
 								waitForHandshakeResponse: {
-									on: {
-										handshakeResponse: {
-											actions: resolveHandshakeTransaction,
-										},
-										handshakeDone: "#sending.execute",
-									},
 									after: {
 										// If an update times out, retry if possible - otherwise reject the entire transaction
 										1600: [
