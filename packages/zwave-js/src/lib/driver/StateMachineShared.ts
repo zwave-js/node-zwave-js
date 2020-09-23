@@ -1,6 +1,6 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { Transaction } from "zwave-js/src/lib/driver/Transaction";
+import { assign, Machine, spawn, StateMachine } from "xstate";
 import {
 	SendDataAbort,
 	SendDataMulticastRequest,
@@ -11,6 +11,7 @@ import {
 } from "../controller/SendDataMessages";
 import type { Message } from "../message/Message";
 import type { SendDataErrorData } from "./SendThreadMachine";
+import type { Transaction } from "./Transaction";
 
 export interface ServiceImplementations {
 	timestamp: () => number;
@@ -131,21 +132,25 @@ export function isSerialCommandError(error: unknown): boolean {
 	return false;
 }
 
-// /** Creates an auto-forwarding wrapper state machine that can be used to test machines that respond to events */
-// export function createWrapperMachine(
-// 	testMachine: StateMachine<any, any, any>,
-// ): StateMachine<any, any, any> {
-// 	return Machine<any, any, any>({
-// 		context: {
-// 			child: undefined,
-// 		},
-// 		initial: "main",
-// 		states: {
-// 			main: {
-// 				entry: assign({
-// 					child: () => spawn(testMachine, "child"),
-// 				}),
-// 			},
-// 		},
-// 	});
-// }
+/** Creates an auto-forwarding wrapper state machine that can be used to test machines that use sendParent */
+export function createWrapperMachine(
+	testMachine: StateMachine<any, any, any>,
+): StateMachine<any, any, any> {
+	return Machine<any, any, any>({
+		context: {
+			child: undefined,
+		},
+		initial: "main",
+		states: {
+			main: {
+				entry: assign({
+					child: () =>
+						spawn(testMachine, {
+							name: "child",
+							autoForward: true,
+						}),
+				}),
+			},
+		},
+	});
+}

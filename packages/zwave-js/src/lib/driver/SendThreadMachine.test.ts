@@ -6,13 +6,13 @@ import {
 } from "@zwave-js/core";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { assign, interpret, Machine, State } from "xstate";
+import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import {
 	SecurityCCCommandEncapsulation,
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
-} from "zwave-js/src/lib/commandclass/SecurityCC";
-import { ApplicationCommandRequest } from "zwave-js/src/lib/controller/ApplicationCommandRequest";
-import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
+} from "../commandclass/SecurityCC";
+import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	GetControllerIdRequest,
 	GetControllerIdResponse,

@@ -7,7 +7,7 @@ import {
 	Machine,
 	StateMachine,
 } from "xstate";
-import { raise, respond } from "xstate/lib/actions";
+import { raise, sendParent } from "xstate/lib/actions";
 import {
 	SendDataMulticastRequest,
 	SendDataRequest,
@@ -83,7 +83,7 @@ const deleteCurrentTransaction: AssignAction<CommandQueueContext, any> = assign(
 	}),
 );
 
-const notifyResult = respond<
+const notifyResult = sendParent<
 	CommandQueueContext,
 	EventObject & { data: SerialAPICommandDoneData },
 	CommandQueueEvent

@@ -11,7 +11,7 @@ import {
 	spawn,
 	StateMachine,
 } from "xstate";
-import { pure, raise } from "xstate/lib/actions";
+import { pure, raise, send } from "xstate/lib/actions";
 import type { CommandClass } from "../commandclass/CommandClass";
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
@@ -175,23 +175,35 @@ const currentTransactionIsSendData = (ctx: SendThreadContext) => {
 	);
 };
 
-const forwardNodeUpdate = pure<SendThreadContext, SendThreadEvent>(
-	(ctx, evt) => {
-		return raise({
-			type: "nodeUpdate",
-			result: (evt as any).message,
-		});
-	},
+const forwardNodeUpdate = pure<SendThreadContext, any>((ctx, evt) => {
+	return raise({
+		type: "nodeUpdate",
+		result: evt.message,
+	});
+});
+
+const forwardHandshakeResponse = pure<SendThreadContext, any>((ctx, evt) => {
+	return raise({
+		type: "handshakeResponse",
+		result: evt.message,
+	});
+});
+
+const sendCurrentTransactionToCommandQueue = send<SendThreadContext, any>(
+	(ctx) => ({
+		type: "add",
+		transaction: ctx.currentTransaction,
+	}),
+	{ to: (ctx) => ctx.commandQueue as any },
 );
 
-const forwardHandshakeResponse = pure<SendThreadContext, SendThreadEvent>(
-	(ctx, evt) => {
-		return raise({
-			type: "handshakeResponse",
-			result: (evt as any).message,
-		});
-	},
-);
+// const sendHandshakeTransactionToCommandQueue = send<SendThreadContext, any>(
+// 	(ctx) => ({
+// 		type: "add",
+// 		transaction: ctx.handshakeTransaction,
+// 	}),
+// 	{ to: (ctx) => ctx.commandQueue as any },
+// );
 
 const sortQueue: AssignAction<SendThreadContext, any> = assign({
 	queue: (ctx) => {
@@ -591,7 +603,9 @@ export function createSendThreadMachine(
 				init: {
 					entry: assign<SendThreadContext, any>({
 						commandQueue: () =>
-							spawn(createCommandQueueMachine(implementations)),
+							spawn(createCommandQueueMachine(implementations), {
+								name: "commandQueue",
+							}),
 					}),
 					// Spawn the command queue when starting the send thread
 					always: "idle",
@@ -697,7 +711,10 @@ export function createSendThreadMachine(
 							},
 						},
 						execute: {
-							entry: deleteHandshakeTransaction,
+							entry: [
+								deleteHandshakeTransaction,
+								sendCurrentTransactionToCommandQueue,
+							],
 							on: {
 								command_success: [
 									// On success, start waiting for an update

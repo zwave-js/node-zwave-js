@@ -2,14 +2,11 @@ import { createModel } from "@xstate/test";
 import { SecurityManager } from "@zwave-js/core";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { assign, interpret, Machine, State } from "xstate";
-import {
-	dummyCallbackNOK,
-	dummyResponseNOK,
-} from "zwave-js/src/lib/test/messages";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import { SendDataAbort, SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
+import { dummyCallbackNOK, dummyResponseNOK } from "../test/messages";
 import { createEmptyMockDriver } from "../test/mocks";
 import {
 	CommandQueueInterpreter,
@@ -20,6 +17,7 @@ import type {
 	SerialAPICommandDoneData,
 	SerialAPICommandError,
 } from "./SerialAPICommandMachine";
+import { createWrapperMachine } from "./StateMachineShared";
 import { Transaction } from "./Transaction";
 
 /* eslint-disable @typescript-eslint/ban-types */
@@ -217,7 +215,9 @@ describe("lib/driver/CommandQueueMachine", () => {
 							actualReasons,
 							expectedReasons,
 						}: TestContext) => {
-							expect(interpreter.state.value).toBe("idle");
+							expect(
+								interpreter.children.get("child")!.state.value,
+							).toBe("idle");
 							expect(actualResults).toContainAllValues(
 								expectedResults,
 							);
@@ -366,8 +366,10 @@ describe("lib/driver/CommandQueueMachine", () => {
 						// @ts-expect-error
 						.map((cmd) => testTransactions[cmd]);
 
+					const wrapper = createWrapperMachine(machine);
+
 					const context: TestContext = {
-						interpreter: interpret(machine),
+						interpreter: interpret(wrapper),
 						actualResults: [],
 						expectedResults,
 						actualReasons: [],
