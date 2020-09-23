@@ -29,7 +29,7 @@ import {
 } from "./SerialAPICommandMachine";
 import {
 	isSerialCommandError,
-	serialAPIOrSendDataErrorToZWaveError,
+	sendDataErrorToZWaveError,
 	ServiceImplementations,
 } from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
@@ -116,7 +116,6 @@ export interface SendThreadContext {
 	preTransmitHandshakeTransaction?: Transaction;
 	handshakeResponseTransaction?: Transaction;
 	sendDataAttempts: number;
-	sendDataErrorData?: SendDataErrorData;
 }
 
 export type TransactionReducerResult =
@@ -206,7 +205,7 @@ const rejectCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
 	(ctx, evt) => {
 		const data = evt.data ?? ctx.sendDataErrorData;
 		ctx.currentTransaction!.promise.reject(
-			serialAPIOrSendDataErrorToZWaveError(
+			sendDataErrorToZWaveError(
 				data.reason,
 				ctx.currentTransaction!.message,
 				data.result,
@@ -230,7 +229,7 @@ const rejectHandshakeResponseTransaction: AssignAction<
 > = assign((ctx, evt) => {
 	const data = evt.data ?? ctx.sendDataErrorData;
 	ctx.handshakeResponseTransaction!.promise.reject(
-		serialAPIOrSendDataErrorToZWaveError(
+		sendDataErrorToZWaveError(
 			data.reason,
 			ctx.currentTransaction!.message,
 			data.result,

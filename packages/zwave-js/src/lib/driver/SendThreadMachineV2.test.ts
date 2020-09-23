@@ -1,7 +1,16 @@
 import { createModel } from "@xstate/test";
-import { assertZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	assertZWaveError,
+	SecurityManager,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { assign, interpret, Machine, State } from "xstate";
+import {
+	SecurityCCCommandEncapsulation,
+	SecurityCCNonceGet,
+	SecurityCCNonceReport,
+} from "zwave-js/src/lib/commandclass/SecurityCC";
 import { ApplicationCommandRequest } from "zwave-js/src/lib/controller/ApplicationCommandRequest";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import {
@@ -37,6 +46,14 @@ interface TestMachineStateSchema {
 		wait_senddata: {};
 		retry_senddata: {};
 		done_senddata: {};
+		// The "secure" path tests a one-way SendData transaction
+		// with a handshake
+		handshake_secure: {};
+		handshake_execute_secure: {};
+		handshake_wait_secure: {};
+		execute_secure: {};
+		retry_secure: {};
+		done_secure: {};
 	};
 }
 /* eslint-enable @typescript-eslint/ban-types */
@@ -44,6 +61,7 @@ interface TestMachineStateSchema {
 interface TestMachineContext {
 	expectsUpdate?: boolean;
 	sendDataAttempts: number;
+	retryCount: number;
 }
 
 type TestMachineEvents =
@@ -55,7 +73,20 @@ type TestMachineEvents =
 	| { type: "SUCCESS_SENDDATA" }
 	| { type: "RETRY_TIMEOUT" }
 	| { type: "UPDATE_SENDDATA" }
-	| { type: "WAIT_TIMEOUT" };
+	| { type: "WAIT_TIMEOUT" }
+	| { type: "ADD_SECURE" }
+	| { type: "HANDSHAKE_ADD_SECURE" }
+	| { type: "HANDSHAKE_FAILURE_SECURE" }
+	| { type: "HANDSHAKE_SUCCESS_SECURE" }
+	| { type: "HANDSHAKE_UPDATE_SECURE" }
+	| { type: "SUCCESS_SECURE" }
+	| { type: "FAILURE_SECURE" };
+
+interface MockImplementations {
+	notifyRetry: jest.Mock;
+	resolveTransaction: jest.Mock;
+	rejectTransaction: jest.Mock;
+}
 
 interface TestContext {
 	fakeDriver: Driver;
@@ -65,6 +96,7 @@ interface TestContext {
 	sendDataResponse?: Message;
 	expectedResult?: Message;
 	expectedReason?: string;
+	implementations: MockImplementations;
 }
 
 jest.useFakeTimers();
@@ -95,6 +127,7 @@ describe("lib/driver/SendThreadMachineV2", () => {
 			initial: "idle",
 			context: {
 				sendDataAttempts: 0,
+				retryCount: 0,
 			},
 			states: {
 				idle: {
@@ -107,6 +140,7 @@ describe("lib/driver/SendThreadMachineV2", () => {
 									evt.command === "BasicGet",
 							}),
 						},
+						ADD_SECURE: "handshake_secure",
 					},
 					meta: {
 						test: async ({ interpreter }: TestContext) => {
@@ -131,8 +165,7 @@ describe("lib/driver/SendThreadMachineV2", () => {
 								sending: "execute",
 							});
 							expect(
-								interpreter.state.context
-									.preTransmitHandshakeTransaction,
+								interpreter.state.context.handshakeTransaction,
 							).toBeUndefined();
 							expect(
 								interpreter.state.context.currentTransaction,
@@ -144,17 +177,29 @@ describe("lib/driver/SendThreadMachineV2", () => {
 					meta: {
 						test: async ({
 							interpreter,
+							implementations,
 							sentTransaction,
 							expectedResult,
 						}: TestContext) => {
 							expect(interpreter.state.value).toBe("idle");
 							if (expectedResult) {
-								await expect(
-									sentTransaction!.promise,
-								).resolves.toBe(expectedResult);
+								expect(
+									implementations.resolveTransaction,
+								).toBeCalledWith(
+									sentTransaction,
+									expectedResult,
+								);
 							} else {
-								await assertZWaveError(
-									() => sentTransaction!.promise,
+								expect(
+									implementations.rejectTransaction,
+								).toBeCalled();
+								expect(
+									implementations.rejectTransaction.mock
+										.calls[0][0],
+								).toBe(sentTransaction);
+								assertZWaveError(
+									implementations.rejectTransaction.mock
+										.calls[0][1],
 									{
 										errorCode:
 											ZWaveErrorCodes.Controller_MessageDropped,
@@ -178,12 +223,6 @@ describe("lib/driver/SendThreadMachineV2", () => {
 							{ target: "done_senddata" },
 						],
 					},
-					// meta: {
-					// 	test: async (
-					// 		{ interpreter }: TestContext,
-					// 		state: State<TestMachineContext>,
-					// 	) => {},
-					// },
 				},
 				wait_senddata: {
 					on: {
@@ -194,10 +233,7 @@ describe("lib/driver/SendThreadMachineV2", () => {
 						],
 					},
 					meta: {
-						test: async (
-							{ interpreter }: TestContext,
-							state: State<TestMachineContext>,
-						) => {
+						test: ({ interpreter }: TestContext) => {
 							expect(interpreter.state.value).toEqual({
 								sending: "waitForUpdate",
 							});
@@ -205,14 +241,14 @@ describe("lib/driver/SendThreadMachineV2", () => {
 					},
 				},
 				retry_senddata: {
+					entry: assign({
+						retryCount: (ctx) => ctx.retryCount + 1,
+					}),
 					on: {
 						RETRY_TIMEOUT: "execute_senddata",
 					},
 					meta: {
-						test: async (
-							{ interpreter }: TestContext,
-							state: State<TestMachineContext>,
-						) => {
+						test: ({ interpreter }: TestContext) => {
 							expect(interpreter.state.value).toEqual({
 								sending: "retryWait",
 							});
@@ -221,21 +257,140 @@ describe("lib/driver/SendThreadMachineV2", () => {
 				},
 				done_senddata: {
 					meta: {
-						test: async ({
-							interpreter,
-							sentTransaction,
-							expectedResult,
-						}: TestContext) => {
+						test: (
+							{
+								interpreter,
+								implementations,
+								sentTransaction,
+								expectedResult,
+							}: TestContext,
+							state: State<TestMachineContext>,
+						) => {
 							expect(interpreter.state.value).toBe("idle");
+							expect(
+								implementations.notifyRetry,
+							).toHaveBeenCalledTimes(state.context.retryCount);
+							expect(
+								interpreter.state.context.sendDataAttempts,
+							).toBe(0);
+							expect(
+								interpreter.state.context.currentTransaction,
+							).toBeUndefined();
+
 							if (expectedResult) {
-								await expect(
-									sentTransaction!.promise,
-								).resolves.toBe(expectedResult);
+								expect(
+									implementations.resolveTransaction,
+								).toBeCalledWith(
+									sentTransaction,
+									expectedResult,
+								);
 							} else {
-								await assertZWaveError(
-									() => sentTransaction!.promise,
+								expect(
+									implementations.rejectTransaction,
+								).toBeCalled();
+								expect(
+									implementations.rejectTransaction.mock
+										.calls[0][0],
+								).toBe(sentTransaction);
+								assertZWaveError(
+									implementations.rejectTransaction.mock
+										.calls[0][1],
 								);
 							}
+						},
+					},
+				},
+
+				handshake_secure: {
+					entry: assign({
+						sendDataAttempts: (ctx) => ctx.sendDataAttempts + 1,
+					}),
+					on: {
+						HANDSHAKE_ADD_SECURE: "handshake_execute_secure",
+					},
+					meta: {
+						test: async ({
+							interpreter,
+							testTransactions,
+						}: TestContext) => {
+							// waiting for the handshake transaction to be added
+							expect(interpreter.state.value).toEqual({
+								sending: "handshake",
+							});
+							expect(
+								(testTransactions.BasicSetSecure
+									.message as SendDataRequest).command
+									.preTransmitHandshake,
+							).toBeCalled();
+						},
+					},
+				},
+				handshake_execute_secure: {
+					on: {
+						HANDSHAKE_SUCCESS_SECURE: "handshake_wait_secure",
+						HANDSHAKE_FAILURE_SECURE: [
+							{ cond: "mayRetry", target: "retry_secure" },
+							{ target: "done_secure" },
+						],
+					},
+					meta: {
+						test: async ({ interpreter }: TestContext) => {
+							// waiting for the handshake transaction to be executed
+							expect(interpreter.state.value).toEqual({
+								sending: "handshake",
+							});
+						},
+					},
+				},
+				handshake_wait_secure: {
+					on: {
+						HANDSHAKE_UPDATE_SECURE: "execute_secure",
+					},
+					meta: {
+						test: async ({ interpreter }: TestContext) => {
+							// waiting for a response to the handshake transaction
+							expect(interpreter.state.value).toEqual({
+								sending: "waitForUpdate",
+							});
+						},
+					},
+				},
+				execute_secure: {
+					on: {
+						SUCCESS_SECURE: "done_secure",
+						FAILURE_SECURE: [
+							{ cond: "mayRetry", target: "retry_secure" },
+							{ target: "done_secure" },
+						],
+					},
+					meta: {
+						test: async ({ interpreter }: TestContext) => {
+							// executing the actual transaction
+							expect(interpreter.state.value).toEqual({
+								sending: "execute",
+							});
+						},
+					},
+				},
+				retry_secure: {
+					entry: assign({
+						retryCount: (ctx) => ctx.retryCount + 1,
+					}),
+					on: {
+						RETRY_TIMEOUT: "handshake_secure",
+					},
+					meta: {
+						test: ({ interpreter }: TestContext) => {
+							expect(interpreter.state.value).toEqual({
+								sending: "retryWait",
+							});
+						},
+					},
+				},
+				done_secure: {
+					meta: {
+						test: async ({ interpreter }: TestContext) => {
+							expect(interpreter.state.value).toBe("idle");
 						},
 					},
 				},
@@ -310,7 +465,9 @@ describe("lib/driver/SendThreadMachineV2", () => {
 			},
 		},
 		FAILURE_SENDDATA: {
-			exec: ({ interpreter, sentTransaction }) => {
+			exec: (context) => {
+				const { interpreter, sentTransaction } = context;
+				context.expectedResult = undefined;
 				interpreter.send({
 					type: "command_failure",
 					transaction: sentTransaction,
@@ -341,6 +498,92 @@ describe("lib/driver/SendThreadMachineV2", () => {
 		// 		} as any);
 		// 	},
 		// },
+
+		ADD_SECURE: {
+			exec: ({ interpreter, testTransactions }) => {
+				interpreter.send({
+					type: "add",
+					transaction: testTransactions.BasicSetSecure,
+				});
+			},
+		},
+		HANDSHAKE_ADD_SECURE: {
+			exec: (context) => {
+				const { interpreter, testTransactions } = context;
+				context.sentTransaction = testTransactions.NonceRequest;
+				interpreter.send({
+					type: "add",
+					transaction: context.sentTransaction,
+				});
+			},
+		},
+		HANDSHAKE_SUCCESS_SECURE: {
+			exec: (context) => {
+				const { interpreter, sentTransaction, fakeDriver } = context;
+				const result = new SendDataRequestTransmitReport(fakeDriver, {
+					callbackId: sentTransaction!.message.callbackId,
+					transmitStatus: TransmitStatus.OK,
+				});
+				context.expectedResult = result;
+				interpreter.send({
+					type: "command_success",
+					transaction: sentTransaction,
+					result,
+				} as any);
+			},
+		},
+		HANDSHAKE_FAILURE_SECURE: {
+			exec: (context) => {
+				const { interpreter, sentTransaction } = context;
+				context.expectedResult = undefined;
+				interpreter.send({
+					type: "command_failure",
+					transaction: sentTransaction,
+					reason: "CAN",
+				} as any);
+			},
+		},
+		HANDSHAKE_UPDATE_SECURE: {
+			exec: ({ interpreter, testTransactions }) => {
+				interpreter.send({
+					type: "message",
+					message: testTransactions.NonceResponse.message,
+				});
+			},
+		},
+
+		SUCCESS_SECURE: {
+			exec: (context) => {
+				const {
+					interpreter,
+					sentTransaction,
+					fakeDriver,
+					testTransactions,
+				} = context;
+				const result = new SendDataRequestTransmitReport(fakeDriver, {
+					callbackId: sentTransaction!.message.callbackId,
+					transmitStatus: TransmitStatus.OK,
+				});
+				context.expectedResult = result;
+				interpreter.send({
+					type: "command_success",
+					transaction: testTransactions.BasicSetSecure,
+					result,
+				} as any);
+			},
+		},
+		FAILURE_SECURE: {
+			exec: (context) => {
+				const { interpreter, testTransactions } = context;
+				context.expectedResult = undefined;
+				interpreter.send({
+					type: "command_failure",
+					transaction: testTransactions.BasicSetSecure,
+					reason: "response NOK",
+				} as any);
+			},
+		},
+
 		RETRY_TIMEOUT: {
 			exec: () => {
 				jest.advanceTimersByTime(500);
@@ -359,6 +602,13 @@ describe("lib/driver/SendThreadMachineV2", () => {
 
 	testPlans.forEach((plan) => {
 		// if (plan.state.value === "idle") return;
+		if (
+			typeof plan.state.value !== "string" ||
+			(plan.state.value !== "idle" &&
+				!plan.state.value.startsWith("done_"))
+		) {
+			return;
+		}
 
 		const planDescription = plan.description.replace(
 			` (${JSON.stringify(plan.state.context)})`,
@@ -368,7 +618,7 @@ describe("lib/driver/SendThreadMachineV2", () => {
 			plan.paths.forEach((path) => {
 				// if (
 				// 	!path.description.endsWith(
-				// 		`ADD_SENDDATA ({"command":"BasicGet"}) → FAILURE_SENDDATA → RETRY_TIMEOUT → FAILURE_SENDDATA → RETRY_TIMEOUT → FAILURE_SENDDATA`,
+				// 		`ADD_SECURE → HANDSHAKE_ADD_SECURE → HANDSHAKE_SUCCESS_SECURE → HANDSHAKE_UPDATE_SECURE → SUCCESS_SECURE`,
 				// 	)
 				// ) {
 				// 	return;
@@ -376,12 +626,12 @@ describe("lib/driver/SendThreadMachineV2", () => {
 
 				it(path.description, () => {
 					const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
-					// const sm = new SecurityManager({
-					// 	ownNodeId: 1,
-					// 	nonceTimeout: 500,
-					// 	networkKey: Buffer.alloc(16, 1),
-					// });
-					// (fakeDriver as any).securityManager = sm;
+					const sm = new SecurityManager({
+						ownNodeId: 1,
+						nonceTimeout: 500,
+						networkKey: Buffer.alloc(16, 1),
+					});
+					(fakeDriver as any).securityManager = sm;
 
 					const ctrlrIdRequest = new GetControllerIdRequest(
 						fakeDriver,
@@ -416,12 +666,52 @@ describe("lib/driver/SendThreadMachineV2", () => {
 						}),
 					});
 
-					function createTransaction(msg: Message) {
+					const sendDataBasicSetSecure = new SendDataRequest(
+						fakeDriver,
+						{
+							command: new SecurityCCCommandEncapsulation(
+								fakeDriver,
+								{
+									nodeId: 2,
+									encapsulated: new BasicCCSet(fakeDriver, {
+										nodeId: 2,
+										targetValue: 1,
+									}),
+								},
+							),
+						},
+					);
+					sendDataBasicSetSecure.command.preTransmitHandshake = jest
+						.fn()
+						.mockResolvedValue(undefined);
+
+					const sendDataNonceRequest = new SendDataRequest(
+						fakeDriver,
+						{
+							command: new SecurityCCNonceGet(fakeDriver, {
+								nodeId: 2,
+							}),
+						},
+					);
+
+					const sendDataNonceResponse = new ApplicationCommandRequest(
+						fakeDriver,
+						{
+							command: new SecurityCCNonceReport(fakeDriver, {
+								nodeId: 2,
+								nonce: Buffer.allocUnsafe(8),
+							}),
+						},
+					);
+					function createTransaction(
+						msg: Message,
+						priority: MessagePriority = MessagePriority.Normal,
+					) {
 						const ret = new Transaction(
 							fakeDriver,
 							msg,
 							createDeferredPromise(),
-							MessagePriority.Normal,
+							priority,
 						);
 						(ret as any).toJSON = () => ({
 							message: msg.constructor.name,
@@ -439,29 +729,28 @@ describe("lib/driver/SendThreadMachineV2", () => {
 						BasicSet: createTransaction(sendDataBasicSet),
 						BasicGet: createTransaction(sendDataBasicGet),
 						BasicReport: createTransaction(sendDataBasicReport),
+						BasicSetSecure: createTransaction(
+							sendDataBasicSetSecure,
+						),
+						NonceRequest: createTransaction(
+							sendDataNonceRequest,
+							MessagePriority.PreTransmitHandshake,
+						),
+						NonceResponse: createTransaction(sendDataNonceResponse),
 					};
 
-					const machine = createSendThreadMachine({} as any);
-
-					// const expectedResults = path.segments
-					// 	.filter((s) => s.event.type === "API_SUCCESS")
-					// 	.map((s) => s.event)
-					// 	// @ts-expect-error
-					// 	.map((evt) => testTransactions[evt.command].message);
-
-					// const expectedReasons = path.segments
-					// 	.filter((s) => s.event.type === "API_FAILED")
-					// 	.map((s) => (s.event as any).reason);
-
-					// const expectedTransactions = path.segments
-					// 	.filter((s) => s.event.type === "ADD")
-					// 	.map((s) => (s.event as any).commands)
-					// 	.reduce((acc, cur) => [...acc, ...cur], [])
-					// 	// @ts-expect-error
-					// 	.map((cmd) => testTransactions[cmd]);
+					const implementations: MockImplementations = {
+						notifyRetry: jest.fn(),
+						resolveTransaction: jest.fn(),
+						rejectTransaction: jest.fn(),
+					};
+					const machine = createSendThreadMachine(
+						implementations as any,
+					);
 
 					const context: TestContext = {
 						interpreter: interpret(machine),
+						implementations,
 						fakeDriver,
 						testTransactions,
 					};
@@ -474,7 +763,7 @@ describe("lib/driver/SendThreadMachineV2", () => {
 						];
 					}
 
-					context.interpreter.onEvent((evt) => {
+					context.interpreter.onEvent((_evt) => {
 						// if (evt.type === "command_success") {
 						// 	context.actualResults.push((evt as any).result);
 						// } else if (evt.type === "command_failure") {

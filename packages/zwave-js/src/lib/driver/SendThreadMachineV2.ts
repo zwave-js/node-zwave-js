@@ -27,7 +27,7 @@ import {
 import { TransactionReducer } from "./SendThreadMachine";
 import type { SerialAPICommandDoneData } from "./SerialAPICommandMachine";
 import {
-	serialAPIOrSendDataErrorToZWaveError,
+	sendDataErrorToZWaveError,
 	ServiceImplementations,
 } from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
@@ -44,6 +44,7 @@ export interface SendThreadStateSchema {
 				execute: {};
 				waitForUpdate: {};
 				retryWait: {};
+				done: {};
 			};
 		};
 	};
@@ -64,14 +65,13 @@ export interface SendThreadContext {
 	commandQueue: CommandQueueInterpreter;
 	queue: SortedList<Transaction>;
 	currentTransaction?: Transaction;
-	preTransmitHandshakeTransaction?: Transaction;
+	handshakeTransaction?: Transaction;
 	sendDataAttempts: number;
-	sendDataErrorData?: SendDataErrorData;
 }
 
 export type SendThreadEvent =
 	| { type: "add"; transaction: Transaction }
-	| { type: "trigger" | "preTransmitHandshake" }
+	| { type: "trigger" }
 	| {
 			type: "nodeUpdate";
 			result: ApplicationCommandRequest;
@@ -122,55 +122,12 @@ const deleteCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
 	}),
 );
 
-const resolveCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
-	(ctx, evt) => {
-		ctx.currentTransaction!.promise.resolve(evt.result);
-		return ctx;
-	},
+const deleteHandshakeTransaction: AssignAction<SendThreadContext, any> = assign(
+	(ctx) => ({
+		...ctx,
+		handshakeTransaction: undefined,
+	}),
 );
-
-// const resolveCurrentTransactionWithMessage: AssignAction<
-// 	SendThreadContext,
-// 	any
-// > = assign((ctx, evt) => {
-// 	ctx.currentTransaction!.promise.resolve(evt.message);
-// 	return ctx;
-// });
-
-// const resolveCurrentTransactionWithoutMessage: AssignAction<
-// 	SendThreadContext,
-// 	any
-// > = assign((ctx) => {
-// 	ctx.currentTransaction!.promise.resolve();
-// 	return ctx;
-// });
-
-const rejectCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
-	(ctx, evt) => {
-		ctx.currentTransaction!.promise.reject(
-			serialAPIOrSendDataErrorToZWaveError(
-				evt.reason,
-				ctx.currentTransaction!.message,
-				evt.result,
-			),
-		);
-		return ctx;
-	},
-);
-
-const rejectCurrentTransactionWithNodeTimeout: AssignAction<
-	SendThreadContext,
-	any
-> = assign((ctx) => {
-	ctx.currentTransaction!.promise.reject(
-		serialAPIOrSendDataErrorToZWaveError(
-			"node timeout",
-			ctx.currentTransaction!.message,
-			undefined,
-		),
-	);
-	return ctx;
-});
 
 const resetSendDataAttempts: AssignAction<SendThreadContext, any> = assign({
 	sendDataAttempts: (_) => 0,
@@ -194,6 +151,15 @@ const forwardNodeUpdate = pure<SendThreadContext, SendThreadEvent>(
 	(ctx, evt) => {
 		return raise({
 			type: "nodeUpdate",
+			result: (evt as any).message,
+		});
+	},
+);
+
+const forwardHandshakeResponse = pure<SendThreadContext, SendThreadEvent>(
+	(ctx, evt) => {
+		return raise({
+			type: "handshakeResponse",
 			result: (evt as any).message,
 		});
 	},
@@ -232,7 +198,13 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		}
 		return !(msg.command as CommandClass).requiresPreTransmitHandshake();
 	},
-	// executeSuccessful: (_, evt: any) => evt.data.type === "success",
+	isNotForActiveCurrentTransaction: (ctx, evt: any) =>
+		!!ctx.currentTransaction && evt.transaction !== ctx.currentTransaction,
+	isNotForActiveHandshakeTransaction: (ctx, evt: any, meta) =>
+		// while in the handshake state, the handshake transaction has a priority
+		(meta.state.matches("sending.handshake") ||
+			!!ctx.handshakeTransaction) &&
+		evt.transaction !== ctx.handshakeTransaction,
 	expectsNodeUpdate: (ctx) =>
 		ctx.currentTransaction?.message instanceof SendDataRequest &&
 		(ctx.currentTransaction
@@ -247,12 +219,12 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		);
 	},
 	currentTransactionIsSendData,
-	mayRetry: (ctx) => {
+	mayRetry: (ctx, evt: any) => {
 		const msg = ctx.currentTransaction!.message;
 		if (msg instanceof SendDataMulticastRequest) {
 			// Don't try to resend multicast messages if they were already transmitted.
 			// One or more nodes might have already reacted
-			if (ctx.sendDataErrorData!.reason === "callback NOK") {
+			if (evt.reason === "callback NOK") {
 				return false;
 			}
 		}
@@ -266,43 +238,42 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	// 	const msg = ctx.currentTransaction?.message;
 	// 	return msg instanceof SendDataRequest;
 	// },
-	// isPreTransmitHandshakeForCurrentTransaction: (
-	// 	ctx,
-	// 	evt,
-	// 	meta,
-	// ) => {
-	// 	if (!meta.state.matches(waitForTriggerStateId))
-	// 		return false;
+	/** Whether the message is an outgoing pre-transmit handshake */
+	isPreTransmitHandshakeForCurrentTransaction: (ctx, evt, meta) => {
+		if (!meta.state.matches("sending.handshake")) return false;
 
-	// 	const transaction = (evt as any).transaction as Transaction;
-	// 	if (
-	// 		transaction.priority !==
-	// 		MessagePriority.PreTransmitHandshake
-	// 	)
-	// 		return false;
-	// 	if (!(transaction.message instanceof SendDataRequest))
-	// 		return false;
-	// 	const curCommand = (ctx.currentTransaction!
-	// 		.message as SendDataRequest).command;
-	// 	const newCommand = (transaction.message as SendDataRequest)
-	// 		.command;
-	// 	// require the handshake to be for the same node
-	// 	return newCommand.nodeId === curCommand.nodeId;
-	// },
-	// isExpectedHandshakeResponse: (ctx, evt, meta) => {
-	// 	if (!meta.state.matches(waitForHandshakeResponseStateId))
-	// 		return false;
-	// 	const sentMsg = ctx.preTransmitHandshakeTransaction!
-	// 		.message as SendDataRequest;
-
-	// 	const receivedMsg = (evt as any).message;
-	// 	return (
-	// 		receivedMsg instanceof ApplicationCommandRequest &&
-	// 		sentMsg.command.isExpectedCCResponse(
-	// 			receivedMsg.command,
-	// 		)
-	// 	);
-	// },
+		const transaction = (evt as any).transaction as Transaction;
+		if (transaction.priority !== MessagePriority.PreTransmitHandshake)
+			return false;
+		if (!(transaction.message instanceof SendDataRequest)) return false;
+		const curCommand = (ctx.currentTransaction!.message as SendDataRequest)
+			.command;
+		const newCommand = (transaction.message as SendDataRequest).command;
+		// require the handshake to be for the same node
+		return newCommand.nodeId === curCommand.nodeId;
+	},
+	isExpectedHandshakeResponse: (ctx, evt, meta) => {
+		if (!ctx.handshakeTransaction) return false;
+		if (!meta.state.matches("sending.waitForUpdate")) return false;
+		const sentMsg = ctx.handshakeTransaction.message as SendDataRequest;
+		const receivedMsg = (evt as any).message;
+		return (
+			receivedMsg instanceof ApplicationCommandRequest &&
+			sentMsg.command.isExpectedCCResponse(receivedMsg.command)
+		);
+	},
+	/** Whether the message is an outgoing handshake response to the current node*/
+	isHandshakeForCurrentTransaction: (ctx, evt) => {
+		if (!ctx.currentTransaction) return false;
+		const transaction = (evt as any).transaction as Transaction;
+		if (transaction.priority !== MessagePriority.Handshake) return false;
+		if (!(transaction.message instanceof SendDataRequest)) return false;
+		const curCommand = (ctx.currentTransaction.message as SendDataRequest)
+			.command;
+		const newCommand = transaction.message.command;
+		// require the handshake to be for the same node
+		return newCommand.nodeId === curCommand.nodeId;
+	},
 	// queueContainsResponseToHandshakeRequest: (ctx) => {
 	// 	const next = ctx.queue.peekStart();
 	// 	return next?.priority === MessagePriority.Handshake;
@@ -314,20 +285,6 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	// 			msg instanceof SendDataMulticastRequest) &&
 	// 		evt.data?.type === "failure" &&
 	// 		evt.data?.reason === "callback timeout"
-	// 	);
-	// },
-	// mayRetry: (ctx) => {
-	// 	const msg = ctx.currentTransaction!.message;
-	// 	if (msg instanceof SendDataMulticastRequest) {
-	// 		// Don't try to resend multicast messages if they were already transmitted.
-	// 		// One or more nodes might have already reacted
-	// 		if (ctx.sendDataErrorData!.reason === "callback NOK") {
-	// 			return false;
-	// 		}
-	// 	}
-	// 	return (
-	// 		(msg as SendDataRequest | SendDataMulticastRequest)
-	// 			.maxSendAttempts > ctx.sendDataAttempts
 	// 	);
 	// },
 	// currentTransactionIsPingForNode: (ctx, evt) => {
@@ -351,6 +308,107 @@ export function createSendThreadMachine(
 	implementations: ServiceImplementations,
 	initialContext: Partial<SendThreadContext> = {},
 ): SendThreadMachine {
+	const resolveCurrentTransaction: AssignAction<
+		SendThreadContext,
+		any
+	> = assign((ctx, evt) => {
+		implementations.resolveTransaction(ctx.currentTransaction!, evt.result);
+		return ctx;
+	});
+
+	const rejectCurrentTransaction: AssignAction<
+		SendThreadContext,
+		any
+	> = assign((ctx, evt) => {
+		implementations.rejectTransaction(
+			ctx.currentTransaction!,
+			sendDataErrorToZWaveError(
+				evt.reason,
+				ctx.currentTransaction!.message,
+				evt.result,
+			),
+		);
+		return ctx;
+	});
+
+	const rejectCurrentTransactionWithNodeTimeout: AssignAction<
+		SendThreadContext,
+		any
+	> = assign((ctx) => {
+		implementations.rejectTransaction(
+			ctx.currentTransaction!,
+			sendDataErrorToZWaveError(
+				"node timeout",
+				ctx.currentTransaction!.message,
+				undefined,
+			),
+		);
+		return ctx;
+	});
+
+	const resolveHandshakeTransaction: AssignAction<
+		SendThreadContext,
+		any
+	> = assign((ctx, evt) => {
+		implementations.resolveTransaction(
+			ctx.handshakeTransaction!,
+			evt.result,
+		);
+		return ctx;
+	});
+
+	const rejectHandshakeTransaction: AssignAction<
+		SendThreadContext,
+		any
+	> = assign((ctx, evt) => {
+		implementations.rejectTransaction(
+			ctx.handshakeTransaction!,
+			sendDataErrorToZWaveError(
+				evt.reason,
+				ctx.handshakeTransaction!.message,
+				evt.result,
+			),
+		);
+		return ctx;
+	});
+
+	const rejectHandshakeTransactionWithNodeTimeout: AssignAction<
+		SendThreadContext,
+		any
+	> = assign((ctx) => {
+		implementations.rejectTransaction(
+			ctx.handshakeTransaction!,
+			sendDataErrorToZWaveError(
+				"node timeout",
+				ctx.handshakeTransaction!.message,
+				undefined,
+			),
+		);
+		return ctx;
+	});
+
+	const resolveEventTransaction: AssignAction<
+		SendThreadContext,
+		any
+	> = assign((ctx, evt) => {
+		implementations.resolveTransaction(evt.transaction, evt.result);
+		return ctx;
+	});
+
+	const rejectEventTransaction: AssignAction<SendThreadContext, any> = assign(
+		(ctx, evt) => {
+			implementations.rejectTransaction(
+				evt.transaction,
+				sendDataErrorToZWaveError(
+					evt.reason,
+					evt.transaction.message,
+					evt.result,
+				),
+			);
+			return ctx;
+		},
+	);
+
 	const ret = Machine<
 		SendThreadContext,
 		SendThreadStateSchema,
@@ -367,26 +425,61 @@ export function createSendThreadMachine(
 			},
 			on: {
 				// Forward low-level events to the command queue
-				ACK: {
-					actions: forwardToCommandQueue,
-				},
-				CAN: {
-					actions: forwardToCommandQueue,
-				},
-				NAK: {
-					actions: forwardToCommandQueue,
-				},
+				ACK: { actions: forwardToCommandQueue },
+				CAN: { actions: forwardToCommandQueue },
+				NAK: { actions: forwardToCommandQueue },
 				message: [
+					// For messages, check first if we expect them
+					{
+						cond: "isExpectedHandshakeResponse",
+						actions: forwardHandshakeResponse,
+					},
 					{
 						cond: "isExpectedUpdate",
 						actions: forwardNodeUpdate,
 					},
+					// else forward to the command queue aswell
+					{ actions: forwardToCommandQueue },
+				],
+				// resolve/reject any un-interesting transactions if they are done
+				command_success: [
 					{
-						actions: forwardToCommandQueue,
+						cond: "isNotForActiveHandshakeTransaction",
+						actions: resolveEventTransaction,
+					},
+					{
+						cond: "isNotForActiveCurrentTransaction",
+						actions: resolveEventTransaction,
+					},
+				],
+				command_failure: [
+					{
+						cond: "isNotForActiveHandshakeTransaction",
+						actions: rejectEventTransaction,
+					},
+					{
+						cond: "isNotForActiveCurrentTransaction",
+						actions: rejectEventTransaction,
 					},
 				],
 				// handle newly added messages
 				add: [
+					// Trigger outgoing handshakes immediately without queueing
+					{
+						cond: "isPreTransmitHandshakeForCurrentTransaction",
+						actions: [
+							forwardToCommandQueue,
+							// and inform the state machine when it is the one we've waited for
+							assign({
+								handshakeTransaction: (_, evt) =>
+									evt.transaction,
+							}),
+						],
+					},
+					{
+						cond: "isHandshakeForCurrentTransaction",
+						actions: forwardToCommandQueue,
+					},
 					{
 						actions: [
 							assign({
@@ -395,14 +488,14 @@ export function createSendThreadMachine(
 									return ctx.queue;
 								},
 							}),
-							raise("trigger") as any,
+							raise<SendThreadContext, any>("trigger"),
 						],
 					},
 				],
 			},
 			states: {
 				init: {
-					entry: assign({
+					entry: assign<SendThreadContext, any>({
 						commandQueue: () =>
 							spawn(createCommandQueueMachine(implementations)),
 					}),
@@ -411,6 +504,7 @@ export function createSendThreadMachine(
 				},
 				idle: {
 					id: "idle",
+					entry: [deleteCurrentTransaction, resetSendDataAttempts],
 					always: [
 						{ cond: "maySendFirstMessage", target: "sending" },
 					],
@@ -429,11 +523,14 @@ export function createSendThreadMachine(
 					initial: "beforeSend",
 					states: {
 						beforeSend: {
-							entry: pure((ctx) =>
-								currentTransactionIsSendData(ctx)
-									? incrementSendDataAttempts
-									: undefined,
-							),
+							entry: [
+								pure((ctx) =>
+									currentTransactionIsSendData(ctx)
+										? incrementSendDataAttempts
+										: undefined,
+								),
+								deleteHandshakeTransaction,
+							],
 							always: [
 								// Skip this step if no handshake is required
 								{
@@ -446,8 +543,35 @@ export function createSendThreadMachine(
 								},
 							],
 						},
-						handshake: {},
+						handshake: {
+							// Just send the handshake as a side effect
+							invoke: {
+								id: "kickOffPreTransmitHandshake",
+								src: "kickOffPreTransmitHandshake",
+							},
+							on: {
+								// On success, start waiting for the handshake response
+								command_success: "waitForUpdate",
+								command_failure: [
+									// On failure, retry SendData commands if possible
+									{
+										cond: "mayRetry",
+										actions: rejectHandshakeTransaction,
+										target: "retryWait",
+									},
+									// Otherwise reject the transaction
+									{
+										actions: [
+											rejectHandshakeTransaction,
+											rejectCurrentTransaction,
+										],
+										target: "done",
+									},
+								],
+							},
+						},
 						execute: {
+							entry: deleteHandshakeTransaction,
 							on: {
 								command_success: [
 									// On success, start waiting for an update
@@ -458,7 +582,7 @@ export function createSendThreadMachine(
 									// or resolve the current transaction if none is required
 									{
 										actions: resolveCurrentTransaction,
-										target: "#idle",
+										target: "done",
 									},
 								],
 								command_failure: [
@@ -470,28 +594,54 @@ export function createSendThreadMachine(
 										),
 										target: "retryWait",
 									},
-									// Reject simple API commands immediately with a matching error
+									// Otherwise reject the transaction
 									{
 										actions: rejectCurrentTransaction,
-										target: "#idle",
+										target: "done",
 									},
 								],
 							},
 						},
 						waitForUpdate: {
 							on: {
+								handshakeResponse: {
+									actions: resolveHandshakeTransaction,
+									target: "execute",
+								},
 								nodeUpdate: {
 									actions: resolveCurrentTransaction,
-									target: "#idle",
+									target: "done",
 								},
 							},
 							after: {
 								// If an update times out, retry if possible - otherwise reject the transaction
 								1600: [
-									{ cond: "mayRetry", target: "retryWait" },
 									{
-										actions: rejectCurrentTransactionWithNodeTimeout,
-										target: "#idle",
+										cond: "mayRetry",
+										target: "retryWait",
+										actions: pure((ctx) =>
+											!!ctx.handshakeTransaction
+												? rejectHandshakeTransactionWithNodeTimeout
+												: undefined,
+										),
+									},
+									{
+										actions: pure<SendThreadContext, any>(
+											(ctx) => {
+												const ret = [
+													rejectCurrentTransactionWithNodeTimeout,
+												];
+												if (
+													!!ctx.handshakeTransaction
+												) {
+													ret.unshift(
+														rejectHandshakeTransactionWithNodeTimeout,
+													);
+												}
+												return ret;
+											},
+										),
+										target: "done",
 									},
 								],
 							},
@@ -505,23 +655,32 @@ export function createSendThreadMachine(
 								500: "beforeSend",
 							},
 						},
+						done: {
+							// Clean up the context after sending
+							always: {
+								target: "#idle",
+								actions: [
+									deleteCurrentTransaction,
+									deleteHandshakeTransaction,
+									resetSendDataAttempts,
+								],
+							},
+						},
 					},
 				},
 			},
 		},
 		{
 			services: {
-				// kickOffPreTransmitHandshake: async (ctx) => {
-				// 	// Execute the pre transmit handshake and swallow all errors caused by
-				// 	// not being able to send the message
-				// 	try {
-				// 		await (ctx.currentTransaction!
-				// 			.message as SendDataRequest).command.preTransmitHandshake();
-				// 	} catch (e) {
-				// 		if (isSerialCommandError(e)) return;
-				// 		throw e;
-				// 	}
-				// },
+				kickOffPreTransmitHandshake: (ctx) => {
+					// Execute the pre transmit handshake and swallow all errors
+					(ctx.currentTransaction!.message as SendDataRequest).command
+						.preTransmitHandshake()
+						.catch(() => {
+							// ignore
+						});
+					return Promise.resolve();
+				},
 				notifyRetry: (ctx) => {
 					implementations.notifyRetry?.(
 						"SendData",
@@ -539,7 +698,7 @@ export function createSendThreadMachine(
 				every: (ctx, event, { cond }) => {
 					const keys = (cond as any).guards as string[];
 					return keys.every((guardKey: string) =>
-						guards[guardKey](ctx, event, undefined as any),
+						guards[guardKey](ctx, event as any, undefined as any),
 					);
 				},
 			},
@@ -547,66 +706,3 @@ export function createSendThreadMachine(
 	);
 	return ret;
 }
-
-// states: {
-// 	idle: {
-// 	  id: "idle",
-// 	  on: {
-// 		TRIGGER: 'beforeSend'
-// 	  }
-// 	},
-// 	beforeSend: {
-// 	  on: {
-// 		"": "handshake"
-// 	  }
-// 	},
-// 	handshake: {
-// 	  initial: 'required',
-// 	  states: {
-// 		required: {
-// 		  on: {
-// 			YES: "invoke",
-// 			NO: "#execute",
-// 		  }
-// 		},
-// 		invoke: {
-// 		  on: {
-// 			SUCCESS: "#waitForUpdate",
-// 			FAILURE: "#retry"
-// 		  }
-// 		},
-// 	  }
-// 	},
-// 	execute: {
-// 	  id: "execute",
-// 	  on: {
-// 		SUCCESS: "#waitForUpdate",
-// 		FAILURE: "#retry"
-// 	  }
-// 	},
-// 	waitForUpdate: {
-// 	  id: "waitForUpdate",
-// 	  on: {
-// 		TIMEOUT: "#retry",
-// 		UPDATE_HANDSHAKE: "#execute",
-// 		UPDATE_EXECUTE: "#idle",
-// 	  }
-// 	},
-// 	retry: {
-// 	  id: "retry",
-// 	  initial: "init",
-// 	  states: {
-// 		init: {
-// 		  on: {
-// 			YES: "retryWait",
-// 			NO: "#idle",
-// 		  },
-// 		},
-// 		retryWait: {
-// 		  after: {
-// 			500: "beforeSend"
-// 		  }
-// 		},
-// 	  }
-// 	},
-//   }

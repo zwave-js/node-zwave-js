@@ -2,6 +2,7 @@ import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { respond } from "xstate/lib/actions";
 import type { SendAction } from "xstate/lib/types";
+import type { Transaction } from "zwave-js/src/lib/driver/Transaction";
 import {
 	SendDataAbort,
 	SendDataMulticastRequest,
@@ -26,6 +27,8 @@ export interface ServiceImplementations {
 		delay: number,
 	) => void;
 	notifyUnsolicited: (message: Message) => void;
+	rejectTransaction: (transaction: Transaction, error: ZWaveError) => void;
+	resolveTransaction: (transaction: Transaction, result: Message) => void;
 }
 
 export function respondUnexpected(type: string): SendAction<any, any, any> {
@@ -37,7 +40,7 @@ export function respondUnexpected(type: string): SendAction<any, any, any> {
 	);
 }
 
-export function serialAPIOrSendDataErrorToZWaveError(
+export function sendDataErrorToZWaveError(
 	error: SendDataErrorData["reason"],
 	sentMessage: Message,
 	receivedMessage: Message | undefined,
