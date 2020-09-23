@@ -578,6 +578,8 @@ describe("lib/driver/SendThreadMachine", () => {
 					message: testTransactions.NonceResponse.message,
 				});
 				preTransmitHandshakePromise.resolve();
+				// little hack because the event queue seems to work differently on Node.js 10
+				return new Promise((resolve) => setImmediate(resolve));
 			},
 		},
 
@@ -648,7 +650,7 @@ describe("lib/driver/SendThreadMachine", () => {
 			plan.paths.forEach((path) => {
 				// if (
 				// 	!path.description.endsWith(
-				// 		`ADD_SENDDATA ({"command":"BasicGet"}) → SUCCESS_SENDDATA → WAIT_TIMEOUT → RETRY_TIMEOUT → SUCCESS_SENDDATA → WAIT_TIMEOUT → RETRY_TIMEOUT → SUCCESS_SENDDATA → UNSOLICITED_SENDDATA`,
+				// 		`ADD_SECURE → HANDSHAKE_ADD_SECURE → HANDSHAKE_FAILURE_SECURE → RETRY_TIMEOUT → HANDSHAKE_ADD_SECURE → HANDSHAKE_FAILURE_SECURE → RETRY_TIMEOUT → HANDSHAKE_ADD_SECURE → HANDSHAKE_SUCCESS_SECURE → HANDSHAKE_UPDATE_SECURE → FAILURE_SECURE`,
 				// 	)
 				// ) {
 				// 	return;
