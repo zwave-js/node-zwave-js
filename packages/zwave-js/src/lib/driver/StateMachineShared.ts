@@ -25,7 +25,7 @@ export interface ServiceImplementations {
 	) => void;
 	notifyUnsolicited: (message: Message) => void;
 	rejectTransaction: (transaction: Transaction, error: ZWaveError) => void;
-	resolveTransaction: (transaction: Transaction, result: Message) => void;
+	resolveTransaction: (transaction: Transaction, result?: Message) => void;
 }
 
 export function sendDataErrorToZWaveError(

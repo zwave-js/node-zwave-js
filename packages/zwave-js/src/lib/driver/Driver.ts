@@ -400,6 +400,12 @@ export class Driver extends EventEmitter {
 				}
 			},
 			timestamp: highResTimestamp,
+			rejectTransaction: (transaction, error) => {
+				transaction.promise.reject(error);
+			},
+			resolveTransaction: (transaction, result) => {
+				transaction.promise.resolve(result);
+			},
 		});
 		this.sendThread = interpret(sendThreadMachine);
 		this.sendThread.onTransition((state) => {
