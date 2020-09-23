@@ -1,4 +1,4 @@
-import type { Maybe } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
@@ -157,6 +157,13 @@ export class LockCCSet extends LockCC {
 		this.payload = Buffer.from([this.locked ? 1 : 0]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `locked: ${this.locked}`,
+		};
+	}
 }
 
 @CCCommand(LockCommand.Report)
@@ -178,6 +185,13 @@ export class LockCCReport extends LockCC {
 		description: "Whether the lock is locked",
 	})
 	public readonly locked: boolean;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `locked: ${this.locked}`,
+		};
+	}
 }
 
 @CCCommand(LockCommand.Get)
