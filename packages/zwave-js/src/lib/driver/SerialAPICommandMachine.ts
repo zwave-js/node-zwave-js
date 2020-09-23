@@ -6,9 +6,10 @@ import {
 	Machine,
 	MachineConfig,
 	MachineOptions,
+	SendAction,
 	StateMachine,
 } from "xstate";
-import { send } from "xstate/lib/actions";
+import { respond, send } from "xstate/lib/actions";
 import log from "../log";
 import { MessageType } from "../message/Constants";
 import type { Message } from "../message/Message";
@@ -16,10 +17,7 @@ import {
 	isMultiStageCallback,
 	isSuccessIndicator,
 } from "../message/SuccessIndicator";
-import {
-	respondUnexpected,
-	ServiceImplementations,
-} from "./StateMachineShared";
+import type { ServiceImplementations } from "./StateMachineShared";
 
 /* eslint-disable @typescript-eslint/ban-types */
 export interface SerialAPICommandStateSchema {
@@ -64,7 +62,7 @@ export type SerialAPICommandEvent =
 	| { type: "message"; message: Message } // A message that might or might not be expected
 	| { type: "response"; message: Message } // Gets forwarded when a response-type message is expected
 	| { type: "callback"; message: Message } // Gets forwarded when a callback-type message is expected
-	| { type: "serialAPIUnexpected"; message: Message }; // A message that IS unexpected on the Serial API level
+	| { type: "unsolicited"; message: Message }; // A message that IS unexpected on the Serial API level
 
 export type SerialAPICommandDoneData =
 	| {
@@ -102,6 +100,13 @@ const forwardMessage = send((_, evt: SerialAPICommandEvent) => {
 		message: msg,
 	} as SerialAPICommandEvent;
 });
+
+const respondUnsolicited: SendAction<any, any, any> = respond(
+	(_: any, evt: SerialAPICommandEvent & { type: "message" }) => ({
+		type: "unsolicited",
+		message: evt.message,
+	}),
+);
 
 function logOutgoingMessage(ctx: SerialAPICommandContext) {
 	log.driver.logMessage(ctx.msg, {
@@ -153,7 +158,7 @@ export function getSerialAPICommandMachineConfig(
 					actions: forwardMessage as any,
 				},
 				{
-					actions: respondUnexpected("serialAPIUnexpected"),
+					actions: respondUnsolicited,
 				},
 			],
 		},

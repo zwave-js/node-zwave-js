@@ -1,7 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import { respond } from "xstate/lib/actions";
-import type { SendAction } from "xstate/lib/types";
 import type { Transaction } from "zwave-js/src/lib/driver/Transaction";
 import {
 	SendDataAbort,
@@ -13,7 +11,6 @@ import {
 } from "../controller/SendDataMessages";
 import type { Message } from "../message/Message";
 import type { SendDataErrorData } from "./SendThreadMachine";
-import type { SerialAPICommandEvent } from "./SerialAPICommandMachine";
 
 export interface ServiceImplementations {
 	timestamp: () => number;
@@ -29,15 +26,6 @@ export interface ServiceImplementations {
 	notifyUnsolicited: (message: Message) => void;
 	rejectTransaction: (transaction: Transaction, error: ZWaveError) => void;
 	resolveTransaction: (transaction: Transaction, result: Message) => void;
-}
-
-export function respondUnexpected(type: string): SendAction<any, any, any> {
-	return respond(
-		(_: any, evt: SerialAPICommandEvent & { type: "message" }) => ({
-			type,
-			message: evt.message,
-		}),
-	);
 }
 
 export function sendDataErrorToZWaveError(

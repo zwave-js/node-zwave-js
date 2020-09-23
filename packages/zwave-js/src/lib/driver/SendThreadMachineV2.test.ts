@@ -46,6 +46,7 @@ interface TestMachineStateSchema {
 		wait_senddata: {};
 		retry_senddata: {};
 		done_senddata: {};
+		unsolicited_senddata: {};
 		// The "secure" path tests a one-way SendData transaction
 		// with a handshake
 		handshake_secure: {};
@@ -71,9 +72,12 @@ type TestMachineEvents =
 	| { type: "ADD_SENDDATA" }
 	| { type: "FAILURE_SENDDATA" }
 	| { type: "SUCCESS_SENDDATA" }
-	| { type: "RETRY_TIMEOUT" }
+	| { type: "UNSOLICITED_SENDDATA" }
 	| { type: "UPDATE_SENDDATA" }
+	//
+	| { type: "RETRY_TIMEOUT" }
 	| { type: "WAIT_TIMEOUT" }
+	//
 	| { type: "ADD_SECURE" }
 	| { type: "HANDSHAKE_ADD_SECURE" }
 	| { type: "HANDSHAKE_FAILURE_SECURE" }
@@ -84,6 +88,7 @@ type TestMachineEvents =
 
 interface MockImplementations {
 	notifyRetry: jest.Mock;
+	notifyUnsolicited: jest.Mock;
 	resolveTransaction: jest.Mock;
 	rejectTransaction: jest.Mock;
 }
@@ -231,6 +236,7 @@ describe("lib/driver/SendThreadMachineV2", () => {
 							{ cond: "mayRetry", target: "retry_senddata" },
 							{ target: "done_senddata" },
 						],
+						UNSOLICITED_SENDDATA: "unsolicited_senddata",
 					},
 					meta: {
 						test: ({ interpreter }: TestContext) => {
@@ -297,6 +303,18 @@ describe("lib/driver/SendThreadMachineV2", () => {
 										.calls[0][1],
 								);
 							}
+						},
+					},
+				},
+				unsolicited_senddata: {
+					meta: {
+						test: ({
+							implementations,
+							expectedResult,
+						}: TestContext) => {
+							expect(
+								implementations.notifyUnsolicited,
+							).toBeCalledWith(expectedResult);
 						},
 					},
 				},
@@ -487,17 +505,17 @@ describe("lib/driver/SendThreadMachineV2", () => {
 				} as any);
 			},
 		},
-		// UNSOLICITED_SENDDATA: {
-		// 	exec: (context) => {
-		// 		const { interpreter, testTransactions } = context;
-		// 		const message = testTransactions.BasicReport.message;
-		// 		context.expectedResult = message;
-		// 		interpreter.send({
-		// 			type: "serialAPIUnexpected",
-		// 			message,
-		// 		} as any);
-		// 	},
-		// },
+		UNSOLICITED_SENDDATA: {
+			exec: (context) => {
+				const { interpreter, testTransactions } = context;
+				const message = testTransactions.BasicSet.message;
+				context.expectedResult = message;
+				interpreter.send({
+					type: "unsolicited",
+					message,
+				} as any);
+			},
+		},
 
 		ADD_SECURE: {
 			exec: ({ interpreter, testTransactions }) => {
@@ -605,7 +623,8 @@ describe("lib/driver/SendThreadMachineV2", () => {
 		if (
 			typeof plan.state.value !== "string" ||
 			(plan.state.value !== "idle" &&
-				!plan.state.value.startsWith("done_"))
+				!plan.state.value.startsWith("done_") &&
+				!plan.state.value.startsWith("unsolicited_"))
 		) {
 			return;
 		}
@@ -618,7 +637,7 @@ describe("lib/driver/SendThreadMachineV2", () => {
 			plan.paths.forEach((path) => {
 				// if (
 				// 	!path.description.endsWith(
-				// 		`ADD_SECURE → HANDSHAKE_ADD_SECURE → HANDSHAKE_SUCCESS_SECURE → HANDSHAKE_UPDATE_SECURE → SUCCESS_SECURE`,
+				// 		`ADD_SENDDATA ({"command":"BasicGet"}) → SUCCESS_SENDDATA → WAIT_TIMEOUT → RETRY_TIMEOUT → SUCCESS_SENDDATA → WAIT_TIMEOUT → RETRY_TIMEOUT → SUCCESS_SENDDATA → UNSOLICITED_SENDDATA`,
 				// 	)
 				// ) {
 				// 	return;
@@ -741,6 +760,7 @@ describe("lib/driver/SendThreadMachineV2", () => {
 
 					const implementations: MockImplementations = {
 						notifyRetry: jest.fn(),
+						notifyUnsolicited: jest.fn(),
 						resolveTransaction: jest.fn(),
 						rejectTransaction: jest.fn(),
 					};

@@ -1,5 +1,6 @@
 import { SortedList } from "alcalzone-shared/sorted-list";
 import {
+	Action,
 	assign,
 	AssignAction,
 	forwardTo,
@@ -409,6 +410,13 @@ export function createSendThreadMachine(
 		},
 	);
 
+	const notifyUnsolicited: Action<SendThreadContext, any> = (
+		_: any,
+		evt: any,
+	) => {
+		implementations.notifyUnsolicited(evt.message);
+	};
+
 	const ret = Machine<
 		SendThreadContext,
 		SendThreadStateSchema,
@@ -424,6 +432,8 @@ export function createSendThreadMachine(
 				...initialContext,
 			},
 			on: {
+				// Return unsolicited messages to the driver
+				unsolicited: { actions: notifyUnsolicited },
 				// Forward low-level events to the command queue
 				ACK: { actions: forwardToCommandQueue },
 				CAN: { actions: forwardToCommandQueue },
@@ -619,10 +629,11 @@ export function createSendThreadMachine(
 									{
 										cond: "mayRetry",
 										target: "retryWait",
-										actions: pure((ctx) =>
-											!!ctx.handshakeTransaction
-												? rejectHandshakeTransactionWithNodeTimeout
-												: undefined,
+										actions: pure<SendThreadContext, any>(
+											(ctx) =>
+												!!ctx.handshakeTransaction
+													? rejectHandshakeTransactionWithNodeTimeout
+													: undefined,
 										),
 									},
 									{
