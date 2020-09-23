@@ -95,6 +95,8 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 						// Or failed inclusion processes:
 						case ZWaveErrorCodes.Controller_InclusionFailed:
 						case ZWaveErrorCodes.Controller_ExclusionFailed:
+						// Or users that don't read the changelog:
+						case ZWaveErrorCodes.Driver_NoErrorHandler:
 							ignore = true;
 							break;
 					}
