@@ -800,20 +800,6 @@ describe("lib/driver/SendThreadMachine", () => {
 						];
 					}
 
-					context.interpreter.onEvent((_evt) => {
-						// if (evt.type === "command_success") {
-						// 	context.actualResults.push((evt as any).result);
-						// } else if (evt.type === "command_failure") {
-						// 	context.actualReasons.push((evt as any).reason);
-						// }
-					});
-					// context.interpreter.onTransition((state, evt) => {
-					// 	console.log(
-					// 		`in state ${state.value} b/c of ${JSON.stringify(
-					// 			evt,
-					// 		)}`,
-					// 	);
-					// });
 					context.interpreter.start();
 
 					return path.test(context);

@@ -291,10 +291,6 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		);
 	},
 
-	// isSendDataSinglecast: (ctx) => {
-	// 	const msg = ctx.currentTransaction?.message;
-	// 	return msg instanceof SendDataRequest;
-	// },
 	/** Whether the message is an outgoing pre-transmit handshake */
 	isPreTransmitHandshakeForCurrentTransaction: (ctx, evt, meta) => {
 		if (!meta.state.matches("sending.handshake")) return false;
@@ -583,6 +579,7 @@ export function createSendThreadMachine(
 							}),
 						],
 					},
+					// Forward all handshake messages that could have to do with the current transaction
 					{
 						cond: "isHandshakeForCurrentTransaction",
 						actions: forwardToCommandQueue,
