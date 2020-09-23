@@ -1,7 +1,8 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import type { SendAction } from "xstate";
+import { assign, Machine, SendAction, spawn, StateMachine } from "xstate";
 import { respond } from "xstate/lib/actions";
+import type { SerialAPICommandEvent } from "zwave-js/src/lib/driver/SerialAPICommandMachine";
 import {
 	SendDataAbort,
 	SendDataMulticastRequest,
@@ -12,9 +13,10 @@ import {
 } from "../controller/SendDataMessages";
 import type { Message } from "../message/Message";
 import type { SendDataErrorData } from "./SendThreadMachine";
-import type { SerialAPICommandEvent } from "./SerialAPICommandMachine";
+import type { Transaction } from "./Transaction";
 
 export interface ServiceImplementations {
+	timestamp: () => number;
 	sendData: (data: Buffer) => Promise<void>;
 	createSendDataAbort: () => SendDataAbort;
 	notifyRetry?: (
@@ -25,18 +27,11 @@ export interface ServiceImplementations {
 		delay: number,
 	) => void;
 	notifyUnsolicited: (message: Message) => void;
+	rejectTransaction: (transaction: Transaction, error: ZWaveError) => void;
+	resolveTransaction: (transaction: Transaction, result?: Message) => void;
 }
 
-export function respondUnexpected(type: string): SendAction<any, any, any> {
-	return respond(
-		(_: any, evt: SerialAPICommandEvent & { type: "message" }) => ({
-			type,
-			message: evt.message,
-		}),
-	);
-}
-
-export function serialAPIOrSendDataErrorToZWaveError(
+export function sendDataErrorToZWaveError(
 	error: SendDataErrorData["reason"],
 	sentMessage: Message,
 	receivedMessage: Message | undefined,
@@ -137,4 +132,34 @@ export function isSerialCommandError(error: unknown): boolean {
 			return true;
 	}
 	return false;
+}
+
+export const respondUnsolicited: SendAction<any, any, any> = respond(
+	(_: any, evt: SerialAPICommandEvent & { type: "message" }) => ({
+		type: "unsolicited",
+		message: evt.message,
+	}),
+);
+
+/** Creates an auto-forwarding wrapper state machine that can be used to test machines that use sendParent */
+export function createWrapperMachine(
+	testMachine: StateMachine<any, any, any>,
+): StateMachine<any, any, any> {
+	return Machine<any, any, any>({
+		context: {
+			child: undefined,
+		},
+		initial: "main",
+		states: {
+			main: {
+				entry: assign({
+					child: () =>
+						spawn(testMachine, {
+							name: "child",
+							autoForward: true,
+						}),
+				}),
+			},
+		},
+	});
 }

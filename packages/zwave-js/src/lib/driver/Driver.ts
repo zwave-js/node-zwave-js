@@ -13,6 +13,7 @@ import {
 	CommandClasses,
 	deserializeCacheValue,
 	Duration,
+	highResTimestamp,
 	SecurityManager,
 	serializeCacheValue,
 	ValueMetadata,
@@ -398,12 +399,19 @@ export class Driver extends EventEmitter {
 					);
 				}
 			},
+			timestamp: highResTimestamp,
+			rejectTransaction: (transaction, error) => {
+				transaction.promise.reject(error);
+			},
+			resolveTransaction: (transaction, result) => {
+				transaction.promise.resolve(result);
+			},
 		});
 		this.sendThread = interpret(sendThreadMachine);
 		this.sendThread.onTransition((state) => {
 			if (state.changed)
 				log.driver.print(
-					`send thread state: ${state.toStrings().join(", ")}`,
+					`send thread state: ${state.toStrings().slice(-1)[0]}`,
 					"verbose",
 				);
 		});
@@ -1429,7 +1437,7 @@ ${handlers.length} left`,
 		// A controlling node MUST discard a received Report/Notification type command if it is
 		// not received using S0 encapsulation and the corresponding Command Class is supported securely only
 
-		if (cc.secure) {
+		if (cc.secure && cc.ccId !== CommandClasses.Security) {
 			const commandName = cc.constructor.name;
 			if (
 				commandName.endsWith("Report") ||
