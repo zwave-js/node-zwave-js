@@ -91,7 +91,7 @@ interface TestContext {
 		type: "failure";
 	})["reason"];
 	expectedResult?: Message;
-	respondedUnexpected?: boolean;
+	respondedUnsolicited?: boolean;
 }
 
 jest.useFakeTimers();
@@ -225,8 +225,8 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 				},
 				unsolicited: {
 					meta: {
-						test: ({ respondedUnexpected }: TestContext) => {
-							expect(respondedUnexpected).toBeTrue();
+						test: ({ respondedUnsolicited }: TestContext) => {
+							expect(respondedUnsolicited).toBeTrue();
 						},
 					},
 				},
@@ -395,8 +395,8 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 					};
 					context.interpreter
 						.onEvent((evt) => {
-							if (evt.type === "serialAPIUnexpected") {
-								context.respondedUnexpected = true;
+							if (evt.type === "unsolicited") {
+								context.respondedUnsolicited = true;
 							}
 						})
 						.onDone((evt) => {

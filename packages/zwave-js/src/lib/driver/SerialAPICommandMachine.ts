@@ -146,7 +146,7 @@ export function getSerialAPICommandMachineConfig(
 		on: {
 			// The state machine accepts any message. If it is expected
 			// it will be forwarded to the correct states. If not, it
-			// will be returned with the "serialAPIUnexpected" event.
+			// will be returned with the "unsolicited" event.
 			message: [
 				{
 					cond: "isExpectedMessage",
