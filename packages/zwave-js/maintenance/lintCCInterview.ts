@@ -12,9 +12,8 @@ import ts from "typescript";
 import {
 	expressionToCommandClass,
 	getCommandClassFromDecorator,
-	loadTSConfig,
-	projectRoot,
 } from "./shared";
+import { loadTSConfig, projectRoot } from "./tsTools";
 
 function getRequiredInterviewCCsFromMethod(
 	sourceFile: ts.SourceFile,

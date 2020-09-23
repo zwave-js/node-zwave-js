@@ -8,11 +8,8 @@ import { applicationCCs, CommandClasses } from "@zwave-js/core";
 import { blue, green, red, yellow } from "ansi-colors";
 import * as path from "path";
 import ts from "typescript";
-import {
-	getCommandClassFromDecorator,
-	loadTSConfig,
-	projectRoot,
-} from "./shared";
+import { getCommandClassFromDecorator } from "./shared";
+import { loadTSConfig, projectRoot } from "./tsTools";
 
 // Configure which CCs are excluded from this check
 const whitelistedCCs: CommandClasses[] = [

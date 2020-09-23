@@ -104,6 +104,7 @@
     "lint": "npm run lint:ts",
     "implemented_ccs": "ts-node maintenance/implemented_ccs.ts",
     "gh-cc-table": "npm run implemented_ccs -- --flavor=github --only-incomplete",
+    "toLogEntryOverview": "ts-node packages/zwave-js/maintenance/checkCCToLogEntry.ts",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
     "commit": "git-cz",
     "prerelease": "npm install && lerna run build",

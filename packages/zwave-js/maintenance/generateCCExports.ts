@@ -10,7 +10,7 @@ import {
 	formatWithPrettier,
 	loadTSConfig,
 	projectRoot,
-} from "./shared";
+} from "./tsTools";
 
 // Define where the CC index file is located
 const ccIndexFile = path.join(projectRoot, "src/lib/commandclass/index.ts");
