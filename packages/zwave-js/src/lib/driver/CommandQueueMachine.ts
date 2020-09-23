@@ -8,6 +8,7 @@ import {
 	StateMachine,
 } from "xstate";
 import { raise, sendParent } from "xstate/lib/actions";
+import type { Message } from "zwave-js/src/lib/message/Message";
 import {
 	SendDataMulticastRequest,
 	SendDataRequest,
@@ -16,7 +17,10 @@ import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,
 } from "./SerialAPICommandMachine";
-import type { ServiceImplementations } from "./StateMachineShared";
+import {
+	respondUnsolicited,
+	ServiceImplementations,
+} from "./StateMachineShared";
 import type { Transaction } from "./Transaction";
 
 /*
@@ -44,6 +48,7 @@ export interface CommandQueueContext {
 export type CommandQueueEvent =
 	| { type: "trigger" } // Used internally to trigger sending from the idle state
 	| { type: "add"; transaction: Transaction } // Adds a transaction to the command queue
+	| { type: "message"; message: Message } // Used for received messages. The message will be returned as unsolicited when it is not expected
 	| ({ type: "command_success" } & Omit<
 			CommandQueueDoneData & { type: "success" },
 			"type"
@@ -122,6 +127,8 @@ export function createCommandQueueMachine(
 						raise("trigger") as any,
 					],
 				},
+				// By default, return all messages as unsolicited. The only exception is an active serial API machine
+				message: { actions: respondUnsolicited },
 			},
 			states: {
 				idle: {
@@ -136,6 +143,8 @@ export function createCommandQueueMachine(
 				},
 				execute: {
 					entry: setCurrentTransaction,
+					// Now the message event gets auto-forwarded to the serial API machine
+					on: { message: undefined },
 					invoke: {
 						id: "execute",
 						src: "executeSerialAPICommand",

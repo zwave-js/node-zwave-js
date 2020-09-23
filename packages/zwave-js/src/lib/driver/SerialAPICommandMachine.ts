@@ -6,10 +6,9 @@ import {
 	Machine,
 	MachineConfig,
 	MachineOptions,
-	SendAction,
 	StateMachine,
 } from "xstate";
-import { respond, send } from "xstate/lib/actions";
+import { send } from "xstate/lib/actions";
 import log from "../log";
 import { MessageType } from "../message/Constants";
 import type { Message } from "../message/Message";
@@ -17,7 +16,10 @@ import {
 	isMultiStageCallback,
 	isSuccessIndicator,
 } from "../message/SuccessIndicator";
-import type { ServiceImplementations } from "./StateMachineShared";
+import {
+	respondUnsolicited,
+	ServiceImplementations,
+} from "./StateMachineShared";
 
 /* eslint-disable @typescript-eslint/ban-types */
 export interface SerialAPICommandStateSchema {
@@ -100,13 +102,6 @@ const forwardMessage = send((_, evt: SerialAPICommandEvent) => {
 		message: msg,
 	} as SerialAPICommandEvent;
 });
-
-const respondUnsolicited: SendAction<any, any, any> = respond(
-	(_: any, evt: SerialAPICommandEvent & { type: "message" }) => ({
-		type: "unsolicited",
-		message: evt.message,
-	}),
-);
 
 function logOutgoingMessage(ctx: SerialAPICommandContext) {
 	log.driver.logMessage(ctx.msg, {

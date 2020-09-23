@@ -411,7 +411,7 @@ export class Driver extends EventEmitter {
 		this.sendThread.onTransition((state) => {
 			if (state.changed)
 				log.driver.print(
-					`send thread state: ${state.toStrings().join(", ")}`,
+					`send thread state: ${state.toStrings().slice(-1)[0]}`,
 					"verbose",
 				);
 		});
@@ -1437,7 +1437,7 @@ ${handlers.length} left`,
 		// A controlling node MUST discard a received Report/Notification type command if it is
 		// not received using S0 encapsulation and the corresponding Command Class is supported securely only
 
-		if (cc.secure) {
+		if (cc.secure && cc.ccId !== CommandClasses.Security) {
 			const commandName = cc.constructor.name;
 			if (
 				commandName.endsWith("Report") ||

@@ -4,7 +4,10 @@ import {
 	SecurityManager,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
+import {
+	createDeferredPromise,
+	DeferredPromise,
+} from "alcalzone-shared/deferred-promise";
 import { assign, interpret, Machine, State } from "xstate";
 import { BasicCCGet, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import {
@@ -102,6 +105,7 @@ interface TestContext {
 	expectedResult?: Message;
 	expectedReason?: string;
 	implementations: MockImplementations;
+	preTransmitHandshakePromise: DeferredPromise<void>;
 }
 
 jest.useFakeTimers();
@@ -332,9 +336,9 @@ describe("lib/driver/SendThreadMachine", () => {
 							testTransactions,
 						}: TestContext) => {
 							// waiting for the handshake transaction to be added
-							expect(interpreter.state.value).toEqual({
-								sending: "handshake",
-							});
+							expect(
+								interpreter.state.matches("sending.handshake"),
+							).toBeTrue();
 							expect(
 								(testTransactions.BasicSetSecure
 									.message as SendDataRequest).command
@@ -354,9 +358,9 @@ describe("lib/driver/SendThreadMachine", () => {
 					meta: {
 						test: async ({ interpreter }: TestContext) => {
 							// waiting for the handshake transaction to be executed
-							expect(interpreter.state.value).toEqual({
-								sending: "handshake",
-							});
+							expect(
+								interpreter.state.matches("sending.handshake"),
+							).toBeTrue();
 						},
 					},
 				},
@@ -367,9 +371,11 @@ describe("lib/driver/SendThreadMachine", () => {
 					meta: {
 						test: async ({ interpreter }: TestContext) => {
 							// waiting for a response to the handshake transaction
-							expect(interpreter.state.value).toEqual({
-								sending: "waitForUpdate",
-							});
+							expect(
+								interpreter.state.matches(
+									"sending.handshake.waitForHandshakeResponse",
+								),
+							).toBeTrue();
 						},
 					},
 				},
@@ -562,11 +568,16 @@ describe("lib/driver/SendThreadMachine", () => {
 			},
 		},
 		HANDSHAKE_UPDATE_SECURE: {
-			exec: ({ interpreter, testTransactions }) => {
+			exec: ({
+				interpreter,
+				testTransactions,
+				preTransmitHandshakePromise,
+			}) => {
 				interpreter.send({
 					type: "message",
 					message: testTransactions.NonceResponse.message,
 				});
+				preTransmitHandshakePromise.resolve();
 			},
 		},
 
@@ -700,9 +711,6 @@ describe("lib/driver/SendThreadMachine", () => {
 							),
 						},
 					);
-					sendDataBasicSetSecure.command.preTransmitHandshake = jest
-						.fn()
-						.mockResolvedValue(undefined);
 
 					const sendDataNonceRequest = new SendDataRequest(
 						fakeDriver,
@@ -773,7 +781,16 @@ describe("lib/driver/SendThreadMachine", () => {
 						implementations,
 						fakeDriver,
 						testTransactions,
+						preTransmitHandshakePromise: undefined as any,
 					};
+
+					sendDataBasicSetSecure.command.preTransmitHandshake = jest
+						.fn()
+						.mockImplementation(() => {
+							context.preTransmitHandshakePromise = createDeferredPromise();
+							return context.preTransmitHandshakePromise;
+						});
+
 					const sentCommand = (path.segments.find(
 						(s) => s.event.type === "ADD_SENDDATA",
 					)?.event as any)?.command;

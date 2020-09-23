@@ -41,7 +41,12 @@ export interface SendThreadStateSchema {
 		sending: {
 			states: {
 				beforeSend: {};
-				handshake: {};
+				handshake: {
+					states: {
+						waitForCommandResult: {};
+						waitForHandshakeResponse: {};
+					};
+				};
 				execute: {};
 				waitForUpdate: {};
 				retryWait: {};
@@ -81,6 +86,7 @@ export type SendThreadEvent =
 			type: "handshakeResponse";
 			result: ApplicationCommandRequest;
 	  }
+	| { type: "handshakeDone" }
 	| { type: "unsolicited"; message: Message }
 	| { type: "sortQueue" }
 	| { type: "NIF"; nodeId: number }
@@ -305,7 +311,8 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	},
 	isExpectedHandshakeResponse: (ctx, evt, meta) => {
 		if (!ctx.handshakeTransaction) return false;
-		if (!meta.state.matches("sending.waitForUpdate")) return false;
+		if (!meta.state.matches("sending.handshake.waitForHandshakeResponse"))
+			return false;
 		const sentMsg = ctx.handshakeTransaction.message as SendDataRequest;
 		const receivedMsg = (evt as any).message;
 		return (
@@ -588,7 +595,7 @@ export function createSendThreadMachine(
 									return ctx.queue;
 								},
 							}),
-							raise<SendThreadContext, any>("trigger"),
+							raise("trigger") as any,
 						],
 					},
 				],
@@ -633,6 +640,7 @@ export function createSendThreadMachine(
 					},
 				},
 				sending: {
+					id: "sending",
 					// Use the first transaction in the queue as the current one
 					entry: setCurrentTransaction,
 					initial: "beforeSend",
@@ -686,28 +694,65 @@ export function createSendThreadMachine(
 						handshake: {
 							// Just send the handshake as a side effect
 							invoke: {
-								id: "kickOffPreTransmitHandshake",
-								src: "kickOffPreTransmitHandshake",
+								id: "preTransmitHandshake",
+								src: "preTransmitHandshake",
+								onDone: {
+									actions: raise<SendThreadContext, any>(
+										"handshakeDone",
+									),
+								},
 							},
-							on: {
-								// On success, start waiting for the handshake response
-								command_success: "waitForUpdate",
-								command_failure: [
-									// On failure, retry SendData commands if possible
-									{
-										cond: "mayRetry",
-										actions: rejectHandshakeTransaction,
-										target: "retryWait",
-									},
-									// Otherwise reject the transaction
-									{
-										actions: [
-											rejectHandshakeTransaction,
-											rejectCurrentTransaction,
+							initial: "waitForCommandResult",
+							states: {
+								// After kicking off the command, wait until it is completed
+								waitForCommandResult: {
+									on: {
+										// On success, start waiting for the handshake response
+										command_success:
+											"waitForHandshakeResponse",
+										command_failure: [
+											// On failure, retry SendData commands if possible
+											{
+												cond: "mayRetry",
+												actions: rejectHandshakeTransaction,
+												target: "#sending.retryWait",
+											},
+											// Otherwise reject the transaction
+											{
+												actions: [
+													rejectHandshakeTransaction,
+													rejectCurrentTransaction,
+												],
+												target: "#sending.done",
+											},
 										],
-										target: "done",
 									},
-								],
+								},
+								waitForHandshakeResponse: {
+									on: {
+										handshakeResponse: {
+											actions: resolveHandshakeTransaction,
+										},
+										handshakeDone: "#sending.execute",
+									},
+									after: {
+										// If an update times out, retry if possible - otherwise reject the entire transaction
+										1600: [
+											{
+												cond: "mayRetry",
+												target: "#sending.retryWait",
+												actions: rejectHandshakeTransactionWithNodeTimeout,
+											},
+											{
+												actions: [
+													rejectHandshakeTransactionWithNodeTimeout,
+													rejectCurrentTransactionWithNodeTimeout,
+												],
+												target: "#sending.done",
+											},
+										],
+									},
+								},
 							},
 						},
 						execute: {
@@ -747,10 +792,6 @@ export function createSendThreadMachine(
 						},
 						waitForUpdate: {
 							on: {
-								handshakeResponse: {
-									actions: resolveHandshakeTransaction,
-									target: "execute",
-								},
 								nodeUpdate: {
 									actions: resolveCurrentTransaction,
 									target: "done",
@@ -762,29 +803,9 @@ export function createSendThreadMachine(
 									{
 										cond: "mayRetry",
 										target: "retryWait",
-										actions: pure<SendThreadContext, any>(
-											(ctx) =>
-												!!ctx.handshakeTransaction
-													? rejectHandshakeTransactionWithNodeTimeout
-													: undefined,
-										),
 									},
 									{
-										actions: pure<SendThreadContext, any>(
-											(ctx) => {
-												const ret = [
-													rejectCurrentTransactionWithNodeTimeout,
-												];
-												if (
-													!!ctx.handshakeTransaction
-												) {
-													ret.unshift(
-														rejectHandshakeTransactionWithNodeTimeout,
-													);
-												}
-												return ret;
-											},
-										),
+										actions: rejectCurrentTransactionWithNodeTimeout,
 										target: "done",
 									},
 								],
@@ -816,14 +837,12 @@ export function createSendThreadMachine(
 		},
 		{
 			services: {
-				kickOffPreTransmitHandshake: (ctx) => {
+				preTransmitHandshake: async (ctx) => {
 					// Execute the pre transmit handshake and swallow all errors
-					(ctx.currentTransaction!.message as SendDataRequest).command
-						.preTransmitHandshake()
-						.catch(() => {
-							// ignore
-						});
-					return Promise.resolve();
+					try {
+						await (ctx.currentTransaction!
+							.message as SendDataRequest).command.preTransmitHandshake();
+					} catch (e) {}
 				},
 				notifyRetry: (ctx) => {
 					implementations.notifyRetry?.(

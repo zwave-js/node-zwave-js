@@ -1,6 +1,8 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import { assign, Machine, spawn, StateMachine } from "xstate";
+import { assign, Machine, SendAction, spawn, StateMachine } from "xstate";
+import { respond } from "xstate/lib/actions";
+import type { SerialAPICommandEvent } from "zwave-js/src/lib/driver/SerialAPICommandMachine";
 import {
 	SendDataAbort,
 	SendDataMulticastRequest,
@@ -131,6 +133,13 @@ export function isSerialCommandError(error: unknown): boolean {
 	}
 	return false;
 }
+
+export const respondUnsolicited: SendAction<any, any, any> = respond(
+	(_: any, evt: SerialAPICommandEvent & { type: "message" }) => ({
+		type: "unsolicited",
+		message: evt.message,
+	}),
+);
 
 /** Creates an auto-forwarding wrapper state machine that can be used to test machines that use sendParent */
 export function createWrapperMachine(
