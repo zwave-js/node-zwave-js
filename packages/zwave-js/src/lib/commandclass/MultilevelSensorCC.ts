@@ -502,14 +502,7 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 
 @CCCommand(MultilevelSensorCommand.GetSupportedSensor)
 @expectedCCResponse(MultilevelSensorCCSupportedSensorReport)
-export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class MultilevelSensorCCGetSupportedSensor extends MultilevelSensorCC {}
 
 @CCCommand(MultilevelSensorCommand.SupportedScaleReport)
 export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {

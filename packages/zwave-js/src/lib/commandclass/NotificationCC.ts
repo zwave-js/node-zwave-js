@@ -706,14 +706,7 @@ export class NotificationCCSupportedReport extends NotificationCC {
 
 @CCCommand(NotificationCommand.SupportedGet)
 @expectedCCResponse(NotificationCCSupportedReport)
-export class NotificationCCSupportedGet extends NotificationCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class NotificationCCSupportedGet extends NotificationCC {}
 
 @CCCommand(NotificationCommand.EventSupportedReport)
 export class NotificationCCEventSupportedReport extends NotificationCC {

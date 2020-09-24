@@ -289,11 +289,4 @@ export class BasicCCReport extends BasicCC {
 
 @CCCommand(BasicCommand.Get)
 @expectedCCResponse(BasicCCReport)
-export class BasicCCGet extends BasicCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class BasicCCGet extends BasicCC {}

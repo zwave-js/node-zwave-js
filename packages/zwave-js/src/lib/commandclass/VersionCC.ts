@@ -392,14 +392,7 @@ export class VersionCCReport extends VersionCC {
 
 @CCCommand(VersionCommand.Get)
 @expectedCCResponse(VersionCCReport)
-export class VersionCCGet extends VersionCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class VersionCCGet extends VersionCC {}
 
 @CCCommand(VersionCommand.CommandClassReport)
 export class VersionCCCommandClassReport extends VersionCC {
@@ -497,14 +490,7 @@ export class VersionCCCapabilitiesReport extends VersionCC {
 
 @CCCommand(VersionCommand.CapabilitiesGet)
 @expectedCCResponse(VersionCCCapabilitiesReport)
-export class VersionCCCapabilitiesGet extends VersionCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class VersionCCCapabilitiesGet extends VersionCC {}
 
 @CCCommand(VersionCommand.ZWaveSoftwareReport)
 export class VersionCCZWaveSoftwareReport extends VersionCC {
@@ -596,11 +582,4 @@ export class VersionCCZWaveSoftwareReport extends VersionCC {
 
 @CCCommand(VersionCommand.ZWaveSoftwareGet)
 @expectedCCResponse(VersionCCZWaveSoftwareReport)
-export class VersionCCZWaveSoftwareGet extends VersionCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class VersionCCZWaveSoftwareGet extends VersionCC {}

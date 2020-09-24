@@ -286,11 +286,4 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 
 @CCCommand(BinarySwitchCommand.Get)
 @expectedCCResponse(BinarySwitchCCReport)
-export class BinarySwitchCCGet extends BinarySwitchCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class BinarySwitchCCGet extends BinarySwitchCC {}

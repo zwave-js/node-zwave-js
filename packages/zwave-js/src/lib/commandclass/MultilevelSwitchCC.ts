@@ -482,14 +482,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 
 @CCCommand(MultilevelSwitchCommand.Get)
 @expectedCCResponse(MultilevelSwitchCCReport)
-export class MultilevelSwitchCCGet extends MultilevelSwitchCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class MultilevelSwitchCCGet extends MultilevelSwitchCC {}
 
 type MultilevelSwitchCCStartLevelChangeOptions = {
 	direction: keyof typeof LevelChangeDirection;
@@ -565,14 +558,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 }
 
 @CCCommand(MultilevelSwitchCommand.StopLevelChange)
-export class MultilevelSwitchCCStopLevelChange extends MultilevelSwitchCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class MultilevelSwitchCCStopLevelChange extends MultilevelSwitchCC {}
 
 @CCCommand(MultilevelSwitchCommand.SupportedReport)
 export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
@@ -630,11 +616,4 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 
 @CCCommand(MultilevelSwitchCommand.SupportedGet)
 @expectedCCResponse(MultilevelSwitchCCSupportedReport)
-export class MultilevelSwitchCCSupportedGet extends MultilevelSwitchCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class MultilevelSwitchCCSupportedGet extends MultilevelSwitchCC {}

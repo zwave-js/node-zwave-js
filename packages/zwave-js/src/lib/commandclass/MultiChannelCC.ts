@@ -579,14 +579,7 @@ identical capabilities:      ${this.identicalCapabilities}`,
 
 @CCCommand(MultiChannelCommand.EndPointGet)
 @expectedCCResponse(MultiChannelCCEndPointReport)
-export class MultiChannelCCEndPointGet extends MultiChannelCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class MultiChannelCCEndPointGet extends MultiChannelCC {}
 
 @CCCommand(MultiChannelCommand.CapabilityReport)
 export class MultiChannelCCCapabilityReport extends MultiChannelCC {

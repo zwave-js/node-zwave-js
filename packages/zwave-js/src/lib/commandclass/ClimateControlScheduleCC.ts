@@ -297,14 +297,7 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 
 @CCCommand(ClimateControlScheduleCommand.ChangedGet)
 @expectedCCResponse(ClimateControlScheduleCCChangedReport)
-export class ClimateControlScheduleCCChangedGet extends ClimateControlScheduleCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class ClimateControlScheduleCCChangedGet extends ClimateControlScheduleCC {}
 
 @CCCommand(ClimateControlScheduleCommand.OverrideReport)
 export class ClimateControlScheduleCCOverrideReport extends ClimateControlScheduleCC {
@@ -334,14 +327,7 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 
 @CCCommand(ClimateControlScheduleCommand.OverrideGet)
 @expectedCCResponse(ClimateControlScheduleCCOverrideReport)
-export class ClimateControlScheduleCCOverrideGet extends ClimateControlScheduleCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class ClimateControlScheduleCCOverrideGet extends ClimateControlScheduleCC {}
 
 interface ClimateControlScheduleCCOverrideSetOptions extends CCCommandOptions {
 	overrideType: ScheduleOverrideType;

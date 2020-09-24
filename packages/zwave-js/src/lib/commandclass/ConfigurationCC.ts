@@ -1651,14 +1651,7 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 }
 
 @CCCommand(ConfigurationCommand.DefaultReset)
-export class ConfigurationCCDefaultReset extends ConfigurationCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class ConfigurationCCDefaultReset extends ConfigurationCC {}
 
 function isSafeValue(
 	value: number,

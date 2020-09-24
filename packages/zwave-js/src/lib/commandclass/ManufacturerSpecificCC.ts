@@ -236,14 +236,7 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 
 @CCCommand(ManufacturerSpecificCommand.Get)
 @expectedCCResponse(ManufacturerSpecificCCReport)
-export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class ManufacturerSpecificCCGet extends ManufacturerSpecificCC {}
 
 @CCCommand(ManufacturerSpecificCommand.DeviceSpecificReport)
 export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpecificCC {

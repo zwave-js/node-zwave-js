@@ -8,7 +8,6 @@ import { CCAPI } from "./API";
 import {
 	API,
 	CCCommand,
-	CCCommandOptions,
 	ccValue,
 	ccValueMetadata,
 	CommandClass,
@@ -228,11 +227,4 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 
 @CCCommand(ZWavePlusCommand.Get)
 @expectedCCResponse(ZWavePlusCCReport)
-export class ZWavePlusCCGet extends ZWavePlusCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class ZWavePlusCCGet extends ZWavePlusCC {}

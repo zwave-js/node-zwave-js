@@ -343,14 +343,7 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 
 @CCCommand(WakeUpCommand.IntervalGet)
 @expectedCCResponse(WakeUpCCIntervalReport)
-export class WakeUpCCIntervalGet extends WakeUpCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class WakeUpCCIntervalGet extends WakeUpCC {}
 
 @CCCommand(WakeUpCommand.WakeUpNotification)
 export class WakeUpCCWakeUpNotification extends WakeUpCC {
@@ -363,14 +356,7 @@ export class WakeUpCCWakeUpNotification extends WakeUpCC {
 }
 
 @CCCommand(WakeUpCommand.NoMoreInformation)
-export class WakeUpCCNoMoreInformation extends WakeUpCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class WakeUpCCNoMoreInformation extends WakeUpCC {}
 
 @CCCommand(WakeUpCommand.IntervalCapabilitiesReport)
 export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
@@ -428,11 +414,4 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 
 @CCCommand(WakeUpCommand.IntervalCapabilitiesGet)
 @expectedCCResponse(WakeUpCCIntervalCapabilitiesReport)
-export class WakeUpCCIntervalCapabilitiesGet extends WakeUpCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class WakeUpCCIntervalCapabilitiesGet extends WakeUpCC {}

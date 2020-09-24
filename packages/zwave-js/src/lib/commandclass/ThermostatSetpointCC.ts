@@ -814,11 +814,4 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
  * Issues a SupportedGet command to the node. Due to inconsistencies in interpretation,
  * this command should not be used for nodes with CC versions 1 or 2
  */
-export class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class ThermostatSetpointCCSupportedGet extends ThermostatSetpointCC {}

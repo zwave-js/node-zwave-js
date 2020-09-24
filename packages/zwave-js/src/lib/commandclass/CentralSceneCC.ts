@@ -405,14 +405,7 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 
 @CCCommand(CentralSceneCommand.SupportedGet)
 @expectedCCResponse(CentralSceneCCSupportedReport)
-export class CentralSceneCCSupportedGet extends CentralSceneCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class CentralSceneCCSupportedGet extends CentralSceneCC {}
 
 @CCCommand(CentralSceneCommand.ConfigurationReport)
 export class CentralSceneCCConfigurationReport extends CentralSceneCC {
@@ -443,14 +436,7 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 
 @CCCommand(CentralSceneCommand.ConfigurationGet)
 @expectedCCResponse(CentralSceneCCConfigurationReport)
-export class CentralSceneCCConfigurationGet extends CentralSceneCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class CentralSceneCCConfigurationGet extends CentralSceneCC {}
 
 interface CentralSceneCCConfigurationSetOptions extends CCCommandOptions {
 	slowRefresh: boolean;

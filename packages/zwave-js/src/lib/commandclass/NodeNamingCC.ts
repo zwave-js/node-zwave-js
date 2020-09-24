@@ -260,14 +260,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 
 @CCCommand(NodeNamingAndLocationCommand.NameGet)
 @expectedCCResponse(NodeNamingAndLocationCCNameReport)
-export class NodeNamingAndLocationCCNameGet extends NodeNamingAndLocationCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class NodeNamingAndLocationCCNameGet extends NodeNamingAndLocationCC {}
 
 interface NodeNamingAndLocationCCLocationSetOptions extends CCCommandOptions {
 	location: string;
@@ -344,11 +337,4 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 
 @CCCommand(NodeNamingAndLocationCommand.LocationGet)
 @expectedCCResponse(NodeNamingAndLocationCCLocationReport)
-export class NodeNamingAndLocationCCLocationGet extends NodeNamingAndLocationCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class NodeNamingAndLocationCCLocationGet extends NodeNamingAndLocationCC {}

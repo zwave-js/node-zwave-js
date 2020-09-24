@@ -361,11 +361,4 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 
 @CCCommand(BinarySensorCommand.SupportedGet)
 @expectedCCResponse(BinarySensorCCSupportedReport)
-export class BinarySensorCCSupportedGet extends BinarySensorCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class BinarySensorCCSupportedGet extends BinarySensorCC {}

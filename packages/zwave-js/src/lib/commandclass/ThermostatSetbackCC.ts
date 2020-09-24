@@ -221,11 +221,4 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 
 @CCCommand(ThermostatSetbackCommand.Get)
 @expectedCCResponse(ThermostatSetbackCCReport)
-export class ThermostatSetbackCCGet extends ThermostatSetbackCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class ThermostatSetbackCCGet extends ThermostatSetbackCC {}

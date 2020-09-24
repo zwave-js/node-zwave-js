@@ -230,11 +230,4 @@ export class LanguageCCReport extends LanguageCC {
 
 @CCCommand(LanguageCommand.Get)
 @expectedCCResponse(LanguageCCReport)
-export class LanguageCCGet extends LanguageCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions | CCCommandOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class LanguageCCGet extends LanguageCC {}
