@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	Maybe,
+	MessageOrCCLogEntry,
 	parseBitMask,
 	validatePayload,
 	ValueID,
@@ -293,6 +294,16 @@ export class BinarySensorCCReport extends BinarySensorCC {
 	public get value(): boolean {
 		return this._value;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`type:  ${getEnumMemberName(BinarySensorType, this._type)}`,
+				`value: ${this._value}`,
+			],
+		};
+	}
 }
 
 function testResponseForBinarySensorGet(
@@ -337,6 +348,16 @@ export class BinarySensorCCGet extends BinarySensorCC {
 		}
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `type: ${getEnumMemberName(
+				BinarySensorType,
+				this.sensorType ?? BinarySensorType.Any,
+			)}`,
+		};
+	}
 }
 
 @CCCommand(BinarySensorCommand.SupportedReport)
@@ -356,6 +377,15 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	@ccValue({ internal: true })
 	public get supportedSensorTypes(): readonly BinarySensorType[] {
 		return this._supportedSensorTypes;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `supported types: ${this._supportedSensorTypes
+				.map((type) => getEnumMemberName(BinarySensorType, type))
+				.join(", ")}`,
+		};
 	}
 }
 
