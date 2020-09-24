@@ -517,6 +517,29 @@ export class IndicatorCCSet extends IndicatorCC {
 		}
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [];
+		if (this.indicator0Value != undefined) {
+			messages.push(`indicator 0 value: ${this.indicator0Value}`);
+		}
+		if (this.values != undefined) {
+			messages.push(
+				`values: ${this.values
+					.map(
+						(v) => `
+· indicatorId: ${v.indicatorId}
+  propertyId:  ${v.propertyId}
+  value:       ${v.value}`,
+					)
+					.join("")}`,
+			);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 @CCCommand(IndicatorCommand.Report)
@@ -626,6 +649,29 @@ export class IndicatorCCReport extends IndicatorCC {
 		);
 		valueDB.setMetadata(valueId, metadata);
 		valueDB.setValue(valueId, value.value);
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [];
+		if (this.value != undefined) {
+			messages.push(`indicator 0 value: ${this.value}`);
+		}
+		if (this.values != undefined) {
+			messages.push(
+				`values: ${this.values
+					.map(
+						(v) => `
+· indicatorId: ${v.indicatorId}
+  propertyId:  ${v.propertyId}
+  value:       ${v.value}`,
+					)
+					.join("")}`,
+			);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
 	}
 }
 
