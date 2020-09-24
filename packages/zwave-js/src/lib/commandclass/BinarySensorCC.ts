@@ -250,7 +250,7 @@ export class BinarySensorCC extends CommandClass {
 	public setMappedBasicValue(value: number): boolean {
 		this.getValueDB().setValue(
 			getBinarySensorValueId(this.endpointIndex, BinarySensorType.Any),
-			value === 0xff,
+			value > 0,
 		);
 		return true;
 	}

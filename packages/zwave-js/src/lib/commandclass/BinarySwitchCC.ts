@@ -167,7 +167,7 @@ remaining duration: ${
 				endpoint: this.endpointIndex,
 				property: "currentValue",
 			},
-			value === 0xff,
+			value > 0,
 		);
 		return true;
 	}

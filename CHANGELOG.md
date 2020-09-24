@@ -14,7 +14,6 @@
 ### Features
 * A new method `withOptions` was added to `CCAPI`, which controls the used `SendCommandOptions`. For example, this allows changing the priority of each API call for that instance.
 * All interview messages now automatically have a lower priority than most other messages, e.g. the ones created by user interaction. This should make the network feel much more responsive while an interview process is active.
-* (Mojito-Joe) Added a configuration file for `ABUS CFA3010`.
 * The node events `asleep`, `awake`, `alive` and `dead` now include the previous status aswell.
 * Added the method `isEncapsulatedWith` to `CommandClass` to perform checks on the encapsulation stack.
 * In addition to serial ports, serial-over-tcp connections (e.g. by using `ser2net`) are now supported. You can connect to such a host using a connection string of the form `tcp://hostname:port`. Use these `ser2net` settings to host a serial port: `<external-port>:raw:0:<path-to-serial>:115200 8DATABITS NONE 1STOPBIT`
@@ -25,6 +24,7 @@
 * If a node that is known to be included securely does not respond to the `Security CC` interview, it is no longer assumed to be non-secure
 * If a node that is assumed to be included non-securely sends secure commands, it is now marked as secure and the interview will be restarted
 * The interview for sensor-type CCs is now skipped if a timeout occurs waiting for a response. Previously the whole interview was aborted.
+* `Basic CC` values that are mapped to `Binary Switch` or `Binary Sensor` are now interpreted correctly.
 
 ### Changes under the hood
 * The driver has been completely rewritten with state machines for a well-defined program flow and better testability. This should solve issues where communication may get stuck for unknown reasons.
