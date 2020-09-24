@@ -1,5 +1,5 @@
 import { lookupManufacturer } from "@zwave-js/config";
-import type { Maybe, ValueID } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
@@ -7,7 +7,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -232,6 +232,17 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public get productId(): number {
 		return this._productId;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`manufacturer id: ${num2hex(this._manufacturerId)}`,
+				`product type:    ${num2hex(this._productType)}`,
+				`product id:      ${num2hex(this._productId)}`,
+			],
+		};
+	}
 }
 
 @CCCommand(ManufacturerSpecificCommand.Get)
@@ -277,6 +288,16 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 
 	public readonly type: DeviceIdType;
 	public readonly deviceId: string;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`device id type: ${getEnumMemberName(DeviceIdType, this.type)}`,
+				`device id:      ${this.deviceId}`,
+			],
+		};
+	}
 }
 
 interface ManufacturerSpecificCCDeviceSpecificGetOptions
@@ -309,5 +330,15 @@ export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecifi
 	public serialize(): Buffer {
 		this.payload = Buffer.from([(this.deviceIdType || 0) & 0b111]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `device id type: ${getEnumMemberName(
+				DeviceIdType,
+				this.deviceIdType,
+			)}`,
+		};
 	}
 }
