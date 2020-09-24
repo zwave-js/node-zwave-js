@@ -447,6 +447,19 @@ export class AssociationCCSet extends AssociationCC {
 		this.payload = Buffer.from([this.groupId, ...this.nodeIds]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`group id: ${this.groupId || "all groups"}`,
+			`node ids: ${
+				this.nodeIds.length ? this.nodeIds.join(", ") : "all nodes"
+			}`,
+		];
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 interface AssociationCCRemoveOptions {
@@ -509,6 +522,21 @@ export class AssociationCCRemove extends AssociationCC {
 			...(this.nodeIds || []),
 		]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`group id: ${this.groupId || "all groups"}`,
+			`node ids: ${
+				this.nodeIds && this.nodeIds.length
+					? this.nodeIds.join(", ")
+					: "all nodes"
+			}`,
+		];
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
 	}
 }
 
@@ -579,10 +607,10 @@ export class AssociationCCReport extends AssociationCC {
 		return {
 			...super.toLogEntry(),
 			message: `
-groupId:         ${this.groupId}
-maxNodes:        ${this.maxNodes}
-nodeIds:         ${this.nodeIds.join(", ")}
-reportsToFollow: ${this.reportsToFollow}`.trimLeft(),
+group id:          ${this.groupId}
+max # of nodes:    ${this.maxNodes}
+node IDs:          ${this.nodeIds.join(", ")}
+reports to follow: ${this.reportsToFollow}`.trimLeft(),
 		};
 	}
 }
@@ -626,7 +654,7 @@ export class AssociationCCGet extends AssociationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `groupId: ${this.groupId}`,
+			message: `group id: ${this.groupId}`,
 		};
 	}
 }
@@ -654,7 +682,7 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `groupCount: ${this.groupCount}`,
+			message: `group count: ${this.groupCount}`,
 		};
 	}
 }

@@ -1,5 +1,5 @@
 import { lookupIndicator, lookupProperty } from "@zwave-js/config";
-import type { ValueID } from "@zwave-js/core";
+import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Maybe,
@@ -114,6 +114,16 @@ function getIndicatorMetadata(
 			};
 		}
 	}
+}
+
+function getIndicatorName(indicatorId: number | undefined): string {
+	let indicatorName = "0 (default)";
+	if (indicatorId) {
+		indicatorName = `${num2hex(indicatorId)} (${
+			lookupIndicator(indicatorId) ?? `Unknown`
+		})`;
+	}
+	return indicatorName;
 }
 
 // All the supported commands
@@ -650,6 +660,13 @@ export class IndicatorCCGet extends IndicatorCC {
 		}
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `indicator: ${getIndicatorName(this.indicatorId)}`,
+		};
+	}
 }
 
 @CCCommand(IndicatorCommand.SupportedReport)
@@ -695,6 +712,25 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	public readonly indicatorId: number;
 	public readonly nextIndicatorId: number;
 	public readonly supportedProperties: readonly number[];
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`indicator:            ${getIndicatorName(this.indicatorId)}`,
+				`supported properties: ${this.supportedProperties
+					.map(
+						(id) =>
+							lookupProperty(id)?.label ??
+							`Unknown (${num2hex(id)})`,
+					)
+					.join(", ")}`,
+				`next indicator:       ${getIndicatorName(
+					this.nextIndicatorId,
+				)}`,
+			],
+		};
+	}
 }
 
 interface IndicatorCCSupportedGetOptions extends CCCommandOptions {
@@ -727,5 +763,12 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.indicatorId]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `indicator: ${getIndicatorName(this.indicatorId)}`,
+		};
 	}
 }

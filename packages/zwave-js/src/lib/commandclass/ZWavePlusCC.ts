@@ -1,6 +1,6 @@
-import type { Maybe, ValueID } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import { CommandClasses, validatePayload, ValueMetadata } from "@zwave-js/core";
-import { num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -204,6 +204,25 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 	})
 	public get userIcon(): number {
 		return this._userIcon;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`Version:      ${this._zwavePlusVersion}`,
+				`Node type:    ${getEnumMemberName(
+					ZWavePlusNodeType,
+					this._nodeType,
+				)}`,
+				`Role type:    ${getEnumMemberName(
+					ZWavePlusRoleType,
+					this._roleType,
+				)}`,
+				`Icon (mgmt.): ${num2hex(this._installerIcon)}`,
+				`Icon (User):  ${num2hex(this._userIcon)}`,
+			],
+		};
 	}
 }
 

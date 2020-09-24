@@ -2,12 +2,13 @@ import {
 	CommandClasses,
 	Duration,
 	Maybe,
+	MessageOrCCLogEntry,
 	parseMaybeNumber,
 	parseNumber,
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { AllOrNone, JSONObject } from "@zwave-js/shared";
+import type { AllOrNone } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -186,6 +187,13 @@ export class BasicCCSet extends BasicCC {
 		this.payload = Buffer.from([this.targetValue]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `target value: ${this.targetValue}`,
+		};
+	}
 }
 
 type BasicCCReportOptions = CCCommandOptions & {
@@ -264,12 +272,18 @@ export class BasicCCReport extends BasicCC {
 		return super.serialize();
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			currentValue: this.currentValue,
-			targetValue: this.targetValue,
-			duration: this.duration,
-		});
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [`current value: ${this.currentValue}`];
+		if (this.targetValue != undefined) {
+			messages.push(`target value:  ${this.targetValue}`);
+		}
+		if (this.duration != undefined) {
+			messages.push(`duration:      ${this.duration.toString()}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
 	}
 }
 

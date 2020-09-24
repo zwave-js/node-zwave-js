@@ -1,10 +1,12 @@
-import type { Maybe } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { getEnumMemberName } from "@zwave-js/shared";
+import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -173,6 +175,20 @@ export class ClockCCSet extends ClockCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `clock setting: ${getEnumMemberName(
+				Weekday,
+				this.weekday,
+			)}, ${padStart(this.hour.toString(), 2, "0")}:${padStart(
+				this.minute.toString(),
+				2,
+				"0",
+			)}`,
+		};
+	}
 }
 
 @CCCommand(ClockCommand.Report)
@@ -199,6 +215,20 @@ export class ClockCCReport extends ClockCC {
 	public readonly weekday: Weekday;
 	public readonly hour: number;
 	public readonly minute: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `clock setting: ${getEnumMemberName(
+				Weekday,
+				this.weekday,
+			)}, ${padStart(this.hour.toString(), 2, "0")}:${padStart(
+				this.minute.toString(),
+				2,
+				"0",
+			)}`,
+		};
+	}
 }
 
 @CCCommand(ClockCommand.Get)

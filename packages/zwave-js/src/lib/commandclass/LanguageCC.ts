@@ -1,4 +1,4 @@
-import type { Maybe } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
@@ -171,6 +171,17 @@ export class LanguageCCSet extends LanguageCC {
 		if (!!this._country) this.payload.write(this._country, 3, "ascii");
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [`language: ${this.language}`];
+		if (this._country != undefined) {
+			messages.push(`country:  ${this._country}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 @CCCommand(LanguageCommand.Report)
@@ -204,6 +215,17 @@ export class LanguageCCReport extends LanguageCC {
 		label: "Country code",
 	})
 	public readonly country: string | undefined;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [`language: ${this.language}`];
+		if (this.country != undefined) {
+			messages.push(`country:  ${this.country}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 @CCCommand(LanguageCommand.Get)

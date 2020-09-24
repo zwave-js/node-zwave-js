@@ -1,12 +1,15 @@
-import type { Maybe, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
+	getCCName,
+	Maybe,
+	MessageOrCCLogEntry,
 	parseCCId,
 	validatePayload,
+	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -539,6 +542,13 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 
 	public readonly groupId: number;
 	public readonly name: string;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [`group id: ${this.groupId}`, `name:     ${this.name}`],
+		};
+	}
 }
 
 interface AssociationGroupInfoCCNameGetOptions extends CCCommandOptions {
@@ -571,6 +581,13 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.groupId]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `group id: ${this.groupId}`,
+		};
 	}
 }
 
@@ -630,6 +647,25 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public readonly hasDynamicInfo: boolean;
 
 	public readonly groups: readonly AssociationGroupInfo[];
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`is list mode:     ${this.isListMode}`,
+				`has dynamic info: ${this.hasDynamicInfo}`,
+				`groups: ${this.groups
+					.map(
+						(g) => `
+· Group #${g.groupId}
+  mode:       ${g.mode}
+  profile:    ${g.profile}
+  event code: ${g.eventCode}`,
+					)
+					.join("")}`,
+			],
+		};
+	}
 }
 
 type AssociationGroupInfoCCInfoGetOptions = CCCommandOptions & {
@@ -681,6 +717,21 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [];
+		if (this.groupId != undefined) {
+			messages.push(`group id:      ${this.groupId}`);
+		}
+		if (this.listMode != undefined) {
+			messages.push(`list mode:     ${this.listMode}`);
+		}
+		messages.push(`refresh cache: ${this.refreshCache}`);
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 @CCCommand(AssociationGroupInfoCommand.CommandListReport)
@@ -720,6 +771,22 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 	public get commands(): ReadonlyMap<CommandClasses, readonly number[]> {
 		return this.issuedCommands[1];
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`group id: ${this.groupId}`,
+				`commands: ${[...this.commands]
+					.map(([cc, cmds]) => {
+						return `\n· ${getCCName(cc)}: ${cmds
+							.map((cmd) => num2hex(cmd))
+							.join(", ")}`;
+					})
+					.join("")}`,
+			],
+		};
+	}
 }
 
 interface AssociationGroupInfoCCCommandListGetOptions extends CCCommandOptions {
@@ -758,5 +825,15 @@ export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC
 			this.groupId,
 		]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`group id:    ${this.groupId}`,
+				`allow cache: ${this.allowCache}`,
+			],
+		};
 	}
 }

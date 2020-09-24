@@ -2,6 +2,7 @@ import {
 	CommandClasses,
 	Duration,
 	Maybe,
+	MessageOrCCLogEntry,
 	parseBoolean,
 	parseMaybeBoolean,
 	validatePayload,
@@ -9,7 +10,6 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { JSONObject } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -207,6 +207,17 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 		this.payload = Buffer.from(payload);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [`target value: ${this.targetValue}`];
+		if (this.duration != undefined) {
+			messages.push(`duration:     ${this.duration.toString()}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 @CCCommand(BinarySwitchCommand.Report)
@@ -258,12 +269,18 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 		return this._duration;
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			currentValue: this.currentValue,
-			targetValue: this.targetValue,
-			duration: this.duration,
-		});
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [`current value: ${this.currentValue}`];
+		if (this.targetValue != undefined) {
+			messages.push(`target value:  ${this.targetValue}`);
+		}
+		if (this.duration != undefined) {
+			messages.push(`duration:      ${this.duration.toString()}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
 	}
 }
 
