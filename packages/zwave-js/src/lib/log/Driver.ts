@@ -142,49 +142,54 @@ export function logMessage(
 		);
 	}
 
-	// If possible, include information about the CCs
-	if (isCommandClassContainer(message)) {
-		// Remove the default payload message and draw a bracket
-		msg = msg.filter((line) => !line.startsWith("│ payload:"));
+	try {
+		// If possible, include information about the CCs
+		if (isCommandClassContainer(message)) {
+			// Remove the default payload message and draw a bracket
+			msg = msg.filter((line) => !line.startsWith("│ payload:"));
 
-		let indent = 0;
-		let cc: CommandClass = message.command;
-		while (true) {
-			const isEncapCC = isEncapsulatingCommandClass(cc);
-			const loggedCC = cc.toLogEntry();
-			msg.push(" ".repeat(indent * 2) + "└─" + tagify(loggedCC.tags));
+			let indent = 0;
+			let cc: CommandClass = message.command;
+			while (true) {
+				const isEncapCC = isEncapsulatingCommandClass(cc);
+				const loggedCC = cc.toLogEntry();
+				msg.push(" ".repeat(indent * 2) + "└─" + tagify(loggedCC.tags));
 
-			indent++;
-			if (loggedCC.message) {
-				msg.push(
-					...messageToLines(loggedCC.message).map(
-						(line) =>
-							`${" ".repeat(indent * 2)}${
-								isEncapCC ? "│ " : "  "
-							}${line}`,
-					),
-				);
-			}
-			// If this is an encap CC, continue
-			if (isEncapsulatingCommandClass(cc)) {
-				cc = cc.encapsulated;
-			} else {
-				break;
+				indent++;
+				if (loggedCC.message) {
+					msg.push(
+						...messageToLines(loggedCC.message).map(
+							(line) =>
+								`${" ".repeat(indent * 2)}${
+									isEncapCC ? "│ " : "  "
+								}${line}`,
+						),
+					);
+				}
+				// If this is an encap CC, continue
+				if (isEncapsulatingCommandClass(cc)) {
+					cc = cc.encapsulated;
+				} else {
+					break;
+				}
 			}
 		}
-	}
 
-	getLogger().log({
-		level: DRIVER_LOGLEVEL,
-		secondaryTags:
-			secondaryTags && secondaryTags.length > 0
-				? tagify(secondaryTags)
-				: undefined,
-		message: msg,
-		// Since we are programming a controller, responses are always inbound
-		// (not to confuse with the message type, which may be Request or Response)
-		direction: getDirectionPrefix(direction),
-	});
+		getLogger().log({
+			level: DRIVER_LOGLEVEL,
+			secondaryTags:
+				secondaryTags && secondaryTags.length > 0
+					? tagify(secondaryTags)
+					: undefined,
+			message: msg,
+			// Since we are programming a controller, responses are always inbound
+			// (not to confuse with the message type, which may be Request or Response)
+			direction: getDirectionPrefix(direction),
+		});
+	} catch (e) {
+		// Don't crash the entire program when logging fails
+		print(`An error occured while logging: ${e}`, "error");
+	}
 }
 
 /** Logs whats currently in the driver's send queue */
