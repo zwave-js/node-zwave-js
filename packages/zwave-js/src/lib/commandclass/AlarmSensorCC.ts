@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	Maybe,
+	MessageOrCCLogEntry,
 	parseBitMask,
 	validatePayload,
 	ValueID,
@@ -283,6 +284,26 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 	public readonly severity: number | undefined;
 	public readonly duration: number | undefined;
 
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`sensor type: ${getEnumMemberName(
+				AlarmSensorType,
+				this.sensorType,
+			)}`,
+			`alarm state: ${this.state}`,
+		];
+		if (this.severity != undefined) {
+			messages.push(`severity:    ${this.severity}`);
+		}
+		if (this.duration != undefined) {
+			messages.push(`duration:    ${this.duration} seconds`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
+
 	public persistValues(): boolean {
 		const stateValueId = getAlarmSensorStateValueId(
 			this.endpointIndex,
@@ -373,6 +394,16 @@ export class AlarmSensorCCGet extends AlarmSensorCC {
 		this.payload = Buffer.from([this.sensorType]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `sensor type: ${getEnumMemberName(
+				AlarmSensorType,
+				this.sensorType,
+			)}`,
+		};
+	}
 }
 
 @CCCommand(AlarmSensorCommand.SupportedReport)
@@ -397,6 +428,15 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 	@ccValue({ internal: true })
 	public get supportedSensorTypes(): readonly AlarmSensorType[] {
 		return this._supportedSensorTypes;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `supported sensor types: ${this._supportedSensorTypes
+				.map((t) => getEnumMemberName(AlarmSensorType, t))
+				.join(", ")}`,
+		};
 	}
 }
 
