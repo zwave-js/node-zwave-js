@@ -1,4 +1,4 @@
-import type { ValueID } from "@zwave-js/core";
+import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -9,7 +9,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import type { JSONObject } from "@zwave-js/shared";
+import { getEnumMemberName } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
@@ -297,13 +297,22 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 		return this._slowRefresh;
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			sequenceNumber: this.sequenceNumber,
-			keyAttribute: CentralSceneKeys[this.keyAttribute],
-			sceneNumber: this.sceneNumber,
-			slowRefresh: this.slowRefresh,
-		});
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`sequence number: ${this.sequenceNumber}`,
+			`key attribute:   ${getEnumMemberName(
+				CentralSceneKeys,
+				this.keyAttribute,
+			)}`,
+			`scene number:    ${this.sceneNumber}`,
+		];
+		if (this.slowRefresh != undefined) {
+			messages.push(`slow refresh:     ${this.slowRefresh}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
 	}
 }
 
@@ -432,6 +441,13 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	public get slowRefresh(): boolean {
 		return this._slowRefresh;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `slow refresh: ${this._slowRefresh}`,
+		};
+	}
 }
 
 @CCCommand(CentralSceneCommand.ConfigurationGet)
@@ -466,5 +482,12 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.slowRefresh ? 0b1000_0000 : 0]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `slow refresh: ${this.slowRefresh}`,
+		};
 	}
 }

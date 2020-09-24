@@ -1,4 +1,4 @@
-import type { ValueID } from "@zwave-js/core";
+import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -7,7 +7,7 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { JSONObject } from "@zwave-js/shared";
+import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -341,18 +341,46 @@ export class BatteryCCReport extends BatteryCC {
 		return this._disconnected;
 	}
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			level: this.level,
-			isLow: this.isLow,
-			chargingStatus: this.chargingStatus,
-			rechargeable: this.rechargeable,
-			backup: this.backup,
-			overheating: this.overheating,
-			lowFluid: this.lowFluid,
-			rechargeOrReplace: this.rechargeOrReplace,
-			disconnected: this.disconnected,
-		});
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`level:               ${this._level}`,
+			`is low:              ${this._isLow}`,
+		];
+		if (this.chargingStatus != undefined) {
+			messages.push(
+				`charging status:     ${getEnumMemberName(
+					BatteryChargingStatus,
+					this.chargingStatus,
+				)}`,
+			);
+		}
+		if (this.rechargeable != undefined) {
+			messages.push(`rechargeable:        ${this.rechargeable}`);
+		}
+		if (this.backup != undefined) {
+			messages.push(`backup:              ${this.backup}`);
+		}
+		if (this.overheating != undefined) {
+			messages.push(`overheating:         ${this.overheating}`);
+		}
+		if (this.lowFluid != undefined) {
+			messages.push(`low fluid:           ${this.lowFluid}`);
+		}
+		if (this.rechargeOrReplace != undefined) {
+			messages.push(
+				`recharge or replace: ${getEnumMemberName(
+					BatteryReplacementStatus,
+					this.rechargeOrReplace,
+				)}`,
+			);
+		}
+		if (this.disconnected != undefined) {
+			messages.push(`disconnected:        ${this.disconnected}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
 	}
 }
 
@@ -409,6 +437,16 @@ export class BatteryCCHealthReport extends BatteryCC {
 	})
 	public get temperature(): number {
 		return this._temperature;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`temperature:  ${this.temperature}`,
+				`max capacity: ${this.maximumCapacity} %`,
+			],
+		};
 	}
 }
 

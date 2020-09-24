@@ -31,6 +31,7 @@
 * A node's `status` and `ready` properties are now managed by state machines to have better control over how and when the status changes.
 * Enabled the TypeScript option `strictFunctionTypes` and the usage of several decorators is now statically enforced
 * Added more fine-grained control over expected responses, and distinguish between responses, callbacks and node updates for sent messages.
+* Many CCs had their log representation improved. If an error occurs during this conversion, this error is now caught and logged.
 
 ## 4.2.3 (2020-09-18)
 ### Config changes

@@ -564,15 +564,20 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`endpoint count (individual): ${this.individualCount}`,
+			`count is dynamic:            ${this.countIsDynamic}`,
+			`identical capabilities:      ${this.identicalCapabilities}`,
+		];
+		if (this.aggregatedCount != undefined) {
+			messages.push(
+				`endpoint count (aggregated): ${this.aggregatedCount}`,
+			);
+		}
 		const ret = {
 			...super.toLogEntry(),
-			message: `endpoint count (individual): ${this.individualCount}
-count is dynamic:            ${this.countIsDynamic}
-identical capabilities:      ${this.identicalCapabilities}`,
+			message: messages,
 		};
-		if (this.aggregatedCount != undefined) {
-			ret.message += `\nendpoint count (aggregated): ${this.aggregatedCount}`;
-		}
 		return ret;
 	}
 }
@@ -745,6 +750,25 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 			.map((report) => report._foundEndpoints)
 			.reduce((prev, cur) => prev.concat(...cur), []);
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`generic device class:   ${
+					lookupGenericDeviceClass(this.genericClass).label
+				}`,
+				`specific device class:  ${
+					lookupSpecificDeviceClass(
+						this.genericClass,
+						this.specificClass,
+					).label
+				}`,
+				`found endpoints:        ${this._foundEndpoints.join(", ")}`,
+				`# of reports to follow: ${this._reportsToFollow}`,
+			],
+		};
+	}
 }
 
 interface MultiChannelCCEndPointFindOptions extends CCCommandOptions {
@@ -780,6 +804,23 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.genericClass, this.specificClass]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`generic device class:  ${
+					lookupGenericDeviceClass(this.genericClass).label
+				}`,
+				`specific device class: ${
+					lookupSpecificDeviceClass(
+						this.genericClass,
+						this.specificClass,
+					).label
+				}`,
+			],
+		};
 	}
 }
 
