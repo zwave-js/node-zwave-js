@@ -13,7 +13,7 @@ export function checkCCToLogEntry(): void {
 	const tsConfig = loadTSConfig();
 	const program = ts.createProgram(tsConfig.fileNames, tsConfig.options);
 
-	const results = new Map<string, boolean>();
+	const results = new Map<string, boolean | "empty">();
 
 	// Scan all source files
 	for (const sourceFile of program.getSourceFiles()) {
@@ -47,20 +47,29 @@ export function checkCCToLogEntry(): void {
 				!node.name.text.endsWith("API")
 			) {
 				// Only look at implementations of toLogEntry
-				const hasToLogEntry = node.members.some(
-					(member) =>
-						ts.isMethodDeclaration(member) &&
-						member.name.getText(sourceFile) === "toLogEntry",
-				);
-				results.set(node.name.text, hasToLogEntry);
+				if (node.members.length === 0) {
+					// ignore empty classes
+					results.set(node.name.text, "empty");
+				} else {
+					const hasToLogEntry = node.members.some(
+						(member) =>
+							ts.isMethodDeclaration(member) &&
+							member.name.getText(sourceFile) === "toLogEntry",
+					);
+					results.set(node.name.text, hasToLogEntry);
+				}
 			}
 		});
 	}
 
 	const sortedCCs = [...results.keys()].sort();
 	for (const cc of sortedCCs) {
-		const has = results.get(cc)!;
-		console.error(`- [${has ? "x" : " "}] ${cc}`);
+		const checkResult = results.get(cc)!;
+		console.error(
+			`- [${checkResult !== false ? "x" : " "}] ${cc}${
+				checkResult === "empty" ? " _(empty CC)_" : ""
+			}`,
+		);
 	}
 }
 
