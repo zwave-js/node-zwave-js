@@ -13,7 +13,7 @@ export function checkCCToLogEntry(): void {
 	const tsConfig = loadTSConfig();
 	const program = ts.createProgram(tsConfig.fileNames, tsConfig.options);
 
-	const results = new Map<string, boolean | "empty">();
+	const results = new Map<string, boolean | "empty" | "constructor">();
 
 	// Scan all source files
 	for (const sourceFile of program.getSourceFiles()) {
@@ -50,6 +50,13 @@ export function checkCCToLogEntry(): void {
 				if (node.members.length === 0) {
 					// ignore empty classes
 					results.set(node.name.text, "empty");
+				} else if (
+					node.members.length === 1 &&
+					node.members[0].kind === ts.SyntaxKind.Constructor
+				) {
+					// TODO: move this check into lintCCConstructor
+					// highlight constructor only
+					results.set(node.name.text, "constructor");
 				} else {
 					const hasToLogEntry = node.members.some(
 						(member) =>
@@ -67,7 +74,11 @@ export function checkCCToLogEntry(): void {
 		const checkResult = results.get(cc)!;
 		console.error(
 			`- [${checkResult !== false ? "x" : " "}] ${cc}${
-				checkResult === "empty" ? " _(empty CC)_" : ""
+				checkResult === "empty"
+					? " _(empty CC)_"
+					: checkResult === "constructor"
+					? " **(constructor only)**"
+					: ""
 			}`,
 		);
 	}
