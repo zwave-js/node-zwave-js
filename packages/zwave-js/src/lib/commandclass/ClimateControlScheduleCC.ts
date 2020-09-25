@@ -1,10 +1,12 @@
-import type { Maybe } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { getEnumMemberName } from "@zwave-js/shared";
+import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import {
 	decodeSetbackState,
@@ -17,7 +19,7 @@ import {
 	Switchpoint,
 } from "../values/Switchpoint";
 import { CCAPI } from "./API";
-import type { Weekday } from "./ClockCC";
+import { Weekday } from "./ClockCC";
 import {
 	API,
 	CCCommand,
@@ -206,6 +208,25 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`weekday:      ${getEnumMemberName(Weekday, this.weekday)}`,
+				`switchpoints: ${this.switchPoints
+					.map(
+						(sp) => `
+· ${padStart(sp.hour.toString(), 2, "0")}:${padStart(
+							sp.minute.toString(),
+							2,
+							"0",
+						)} --> ${sp.state}`,
+					)
+					.join("")}`,
+			],
+		};
+	}
 }
 
 @CCCommand(ClimateControlScheduleCommand.Report)
@@ -242,6 +263,25 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	public get weekday(): Weekday {
 		return this.schedule[0];
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`weekday:      ${getEnumMemberName(Weekday, this.weekday)}`,
+				`switchpoints: ${this.switchPoints
+					.map(
+						(sp) => `
+· ${padStart(sp.hour.toString(), 2, "0")}:${padStart(
+							sp.minute.toString(),
+							2,
+							"0",
+						)} --> ${sp.state}`,
+					)
+					.join("")}`,
+			],
+		};
+	}
 }
 
 interface ClimateControlScheduleCCGetOptions extends CCCommandOptions {
@@ -274,6 +314,13 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 		this.payload = Buffer.from([this.weekday & 0b111]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `weekday: ${getEnumMemberName(Weekday, this.weekday)}`,
+		};
+	}
 }
 
 @CCCommand(ClimateControlScheduleCommand.ChangedReport)
@@ -292,6 +339,13 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 	private _changeCounter: number;
 	@ccValue() public get changeCounter(): number {
 		return this._changeCounter;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `change counter: ${this.changeCounter}`,
+		};
 	}
 }
 
@@ -322,6 +376,19 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 	private _overrideState: SetbackState;
 	@ccValue() public get overrideState(): SetbackState {
 		return this._overrideState;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`override type:  ${getEnumMemberName(
+					ScheduleOverrideType,
+					this._overrideType,
+				)}`,
+				`override state: ${this._overrideState}`,
+			],
+		};
 	}
 }
 
@@ -363,5 +430,18 @@ export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleC
 			encodeSetbackState(this.overrideState),
 		]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`override type:  ${getEnumMemberName(
+					ScheduleOverrideType,
+					this.overrideType,
+				)}`,
+				`override state: ${this.overrideState}`,
+			],
+		};
 	}
 }

@@ -1,5 +1,5 @@
 import type { ParamInfoMap } from "@zwave-js/config";
-import type { ValueID } from "@zwave-js/core";
+import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CacheMetadata,
 	CacheValue,
@@ -93,6 +93,11 @@ export interface ConfigurationMetadata extends ValueMetadataBase {
  * @publicAPI
  */
 export type ConfigValue = number | Set<number>;
+
+function configValueToString(value: ConfigValue): string {
+	if (typeof value === "number") return value.toString();
+	else return [...value].join(", ");
+}
 
 export class ConfigurationCCError extends ZWaveError {
 	public constructor(
@@ -928,6 +933,17 @@ export class ConfigurationCCReport extends ConfigurationCC {
 	public get valueSize(): number {
 		return this._valueSize;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`parameter #: ${this.parameter}`,
+				`value size:  ${this.valueSize}`,
+				`value:       ${configValueToString(this.value)}`,
+			],
+		};
+	}
 }
 
 function testResponseForConfigurationGet(
@@ -976,6 +992,13 @@ export class ConfigurationCCGet extends ConfigurationCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.parameter]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `parameter #: ${this.parameter}`,
+		};
 	}
 }
 
@@ -1076,6 +1099,25 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			}
 		}
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`parameter #:      ${this.parameter}`,
+			`reset to default: ${this.resetToDefault}`,
+		];
+		if (this.valueSize != undefined) {
+			messages.push(`value size:        ${this.valueSize}`);
+		}
+		if (this.value != undefined) {
+			messages.push(
+				`value:             ${configValueToString(this.value)}`,
+			);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
 	}
 }
 
@@ -1209,6 +1251,26 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 		}
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`handshake:        ${this.handshake}`,
+			`reset to default: ${this.resetToDefault}`,
+			`value size:       ${this.valueSize}`,
+		];
+		if (this._values.length > 0) {
+			let valuesMessage = "values:";
+			for (let i = 0; i < this._values.length; i++) {
+				valuesMessage += `
+· #${this._parameters[i]}: ${configValueToString(this._values[i])}`;
+			}
+			messages.push(valuesMessage);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 @CCCommand(ConfigurationCommand.BulkReport)
@@ -1287,6 +1349,29 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 	public get values(): ReadonlyMap<number, ConfigValue> {
 		return this._values;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`handshake response: ${this._isHandshakeResponse}`,
+			`default values: ${this._defaultValues}`,
+			`value size:       ${this._valueSize}`,
+			`reports to follow:  ${this.reportsToFollow}`,
+		];
+		if (this._values.size > 0) {
+			messages.push(
+				`values:${[...this._values]
+					.map(
+						([param, value]) => `
+· #${param}: ${configValueToString(value)}`,
+					)
+					.join("")}`,
+			);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 interface ConfigurationCCBulkGetOptions extends CCCommandOptions {
@@ -1330,6 +1415,13 @@ export class ConfigurationCCBulkGet extends ConfigurationCC {
 		this.payload.writeUInt16BE(this.parameters[0], 0);
 		this.payload[2] = this.parameters.length;
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `parameters: ${this.parameters.join(", ")}`,
+		};
 	}
 }
 
@@ -1380,6 +1472,17 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 			name: this.name,
 		});
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`parameter #:       ${this.parameter}`,
+				`name:              ${this.name}`,
+				`reports to follow: ${this.reportsToFollow}`,
+			],
+		};
+	}
 }
 
 @CCCommand(ConfigurationCommand.NameGet)
@@ -1407,6 +1510,13 @@ export class ConfigurationCCNameGet extends ConfigurationCC {
 		this.payload = Buffer.allocUnsafe(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `parameter #: ${this.parameter}`,
+		};
 	}
 }
 
@@ -1457,6 +1567,17 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 			info: this._info,
 		});
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`parameter #:       ${this.parameter}`,
+				`info:              ${this.info}`,
+				`reports to follow: ${this.reportsToFollow}`,
+			],
+		};
+	}
 }
 
 @CCCommand(ConfigurationCommand.InfoGet)
@@ -1484,6 +1605,13 @@ export class ConfigurationCCInfoGet extends ConfigurationCC {
 		this.payload = Buffer.allocUnsafe(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `parameter #: ${this.parameter}`,
+		};
 	}
 }
 
@@ -1620,6 +1748,51 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public get noBulkSupport(): boolean | undefined {
 		return this._noBulkSupport;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`parameter #:         ${this._parameter}`,
+			`next param #:        ${this._parameter}`,
+			`value size:          ${this._valueSize}`,
+			`value format:        ${getEnumMemberName(
+				ValueFormat,
+				this._valueFormat,
+			)}`,
+		];
+		if (this._minValue != undefined) {
+			messages.push(
+				`min value:           ${configValueToString(this._minValue)}`,
+			);
+		}
+		if (this._maxValue != undefined) {
+			messages.push(
+				`max value:           ${configValueToString(this._maxValue)}`,
+			);
+		}
+		if (this._defaultValue != undefined) {
+			messages.push(
+				`default value:       ${configValueToString(
+					this._defaultValue,
+				)}`,
+			);
+		}
+		if (this._altersCapabilities != undefined) {
+			messages.push(`alters capabilities: ${this._altersCapabilities}`);
+		}
+		if (this._isReadonly != undefined) {
+			messages.push(`readonly:            ${this._isReadonly}`);
+		}
+		if (this._isAdvanced != undefined) {
+			messages.push(`advanced:            ${this._isAdvanced}`);
+		}
+		if (this._noBulkSupport != undefined) {
+			messages.push(`bulk support:        ${!this._noBulkSupport}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 @CCCommand(ConfigurationCommand.PropertiesGet)
@@ -1647,6 +1820,13 @@ export class ConfigurationCCPropertiesGet extends ConfigurationCC {
 		this.payload = Buffer.allocUnsafe(2);
 		this.payload.writeUInt16BE(this.parameter, 0);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `parameter #: ${this.parameter}`,
+		};
 	}
 }
 

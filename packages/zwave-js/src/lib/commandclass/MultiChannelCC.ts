@@ -4,19 +4,20 @@ import {
 	lookupSpecificDeviceClass,
 	SpecificDeviceClass,
 } from "@zwave-js/config";
-import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeBitMask,
+	getCCName,
 	Maybe,
 	MessageOrCCLogEntry,
 	parseBitMask,
 	parseNodeInformationFrame,
 	validatePayload,
+	ValueID,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -467,8 +468,7 @@ supported CCs:`;
 			const endpointCounts = new Map<CommandClasses, number>();
 			for (const ccId of supportedCCs) {
 				log.controller.logNode(node.id, {
-					message: `Querying endpoint count for CommandClass ${getEnumMemberName(
-						CommandClasses,
+					message: `Querying endpoint count for CommandClass ${getCCName(
 						ccId,
 					)}...`,
 					direction: "outbound",
@@ -477,8 +477,7 @@ supported CCs:`;
 				endpointCounts.set(ccId, endpointCount);
 
 				log.controller.logNode(node.id, {
-					message: `CommandClass ${getEnumMemberName(
-						CommandClasses,
+					message: `CommandClass ${getCCName(
 						ccId,
 					)} has ${endpointCount} endpoints`,
 					direction: "inbound",
@@ -1038,6 +1037,16 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 
 	public readonly requestedCC: CommandClasses;
 	public readonly endpointCount: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: [
+				`CC:             ${getCCName(this.requestedCC)}`,
+				`# of endpoints: ${this.endpointCount}`,
+			],
+		};
+	}
 }
 
 function testResponseForMultiChannelV1Get(
@@ -1077,6 +1086,13 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.requestedCC]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `CC: ${getCCName(this.requestedCC)}`,
+		};
 	}
 }
 
@@ -1134,5 +1150,12 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 	protected computeEncapsulationOverhead(): number {
 		// Multi Channel CC V1 adds one byte for the endpoint index
 		return super.computeEncapsulationOverhead() + 1;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `source: ${this.endpointIndex}`,
+		};
 	}
 }
