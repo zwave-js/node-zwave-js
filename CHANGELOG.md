@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 5.0.0-alpha.6 (2020-09-25)
+## __WORK IN PROGRESS__
 ### Breaking changes
 * The status `Alive` was added to the `NodeStatus` enumeration. The node status can no longer switch between all states, only between `Dead` and `Alive`, between `Asleep` and `Awake` and from and to `Unknown`.
 * The `status` property on `ZWaveNode` is now readonly. To change the status, use the `markAsAsleep` and similar methods, which only change the status if it is legal to do so.
@@ -25,6 +25,7 @@
 * If a node that is assumed to be included non-securely sends secure commands, it is now marked as secure and the interview will be restarted
 * The interview for sensor-type CCs is now skipped if a timeout occurs waiting for a response. Previously the whole interview was aborted.
 * `Basic CC` values that are mapped to `Binary Switch` or `Binary Sensor` are now interpreted correctly.
+* Fixed a crash that could occur when assembling a partial message while the driver is not ready yet.
 
 ### Changes under the hood
 * The driver has been completely rewritten with state machines for a well-defined program flow and better testability. This should solve issues where communication may get stuck for unknown reasons.

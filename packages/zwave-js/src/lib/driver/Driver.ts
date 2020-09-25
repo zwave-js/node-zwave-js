@@ -1321,6 +1321,14 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 									);
 									// Don't continue handling this message
 									return false;
+
+								case ZWaveErrorCodes.Driver_NotReady:
+									log.driver.print(
+										`Could not assemble partial CCs because the driver is not ready yet. Dropping them`,
+										"warn",
+									);
+									// Don't continue handling this message
+									return false;
 							}
 						}
 						throw e;
