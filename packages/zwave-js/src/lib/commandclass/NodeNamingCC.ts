@@ -1,4 +1,4 @@
-import type { Maybe } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import {
 	CommandClasses,
 	ValueMetadata,
@@ -231,6 +231,13 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 		);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `name: ${this.name}`,
+		};
+	}
 }
 
 @CCCommand(NodeNamingAndLocationCommand.NameReport)
@@ -256,6 +263,13 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 		label: "Node name",
 	})
 	public readonly name: string;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `name: ${this.name}`,
+		};
+	}
 }
 
 @CCCommand(NodeNamingAndLocationCommand.NameGet)
@@ -308,6 +322,13 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
 		);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `location: ${this.location}`,
+		};
+	}
 }
 
 @CCCommand(NodeNamingAndLocationCommand.LocationReport)
@@ -333,6 +354,13 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 		label: "Node location",
 	})
 	public readonly location: string;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `location: ${this.location}`,
+		};
+	}
 }
 
 @CCCommand(NodeNamingAndLocationCommand.LocationGet)
