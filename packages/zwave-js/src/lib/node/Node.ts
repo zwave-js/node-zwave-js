@@ -184,7 +184,13 @@ export class ZWaveNode extends Endpoint {
 		for (const cc of supportedCCs) this.addCC(cc, { isSupported: true });
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
 
-		// Create and hook up the status machine
+		// Create and hook up the status and ready machine
+		this.initStateMachines();
+	}
+
+	private initStateMachines(): void {
+		// reset if necessary
+		if (this.statusMachine) this.statusMachine.stop();
 		this.statusMachine = interpret(
 			createNodeStatusMachine(
 				{
@@ -207,7 +213,8 @@ export class ZWaveNode extends Endpoint {
 		});
 		this.statusMachine.start();
 
-		// Create and hook up the ready machine
+		// reset if necessary
+		if (this.readyMachine) this.readyMachine.stop();
 		this.readyMachine = interpret(createNodeReadyMachine());
 		this.readyMachine.onTransition((state) => {
 			if (state.changed) {
@@ -335,14 +342,10 @@ export class ZWaveNode extends Endpoint {
 		this.emit(eventName, this, outArg as any);
 	}
 
-	private statusMachine: NodeStatusInterpreter;
+	private statusMachine!: NodeStatusInterpreter;
 	private _status: NodeStatus = NodeStatus.Unknown;
 
 	private onStatusChange(newStatus: NodeStatus) {
-		log.controller.logNode(
-			this.nodeId,
-			`onStatusChange: ${getEnumMemberName(NodeStatus, newStatus)}`,
-		);
 		// Ignore duplicate events
 		if (newStatus === this._status) return;
 
@@ -419,7 +422,7 @@ export class ZWaveNode extends Endpoint {
 	// The node is only ready when the interview has been completed
 	// to a certain degree
 
-	private readyMachine: NodeReadyInterpreter;
+	private readyMachine!: NodeReadyInterpreter;
 	private _ready: boolean = false;
 
 	private onReadyChange(ready: boolean) {
@@ -806,8 +809,7 @@ export class ZWaveNode extends Endpoint {
 		super.reset();
 
 		// Restart all state machines
-		this.statusMachine.start();
-		this.readyMachine.start();
+		this.initStateMachines();
 
 		// Also remove the information from the cache
 		await this.driver.saveNetworkToCache();
