@@ -628,10 +628,7 @@ export function createSendThreadMachine(
 						],
 						reduce: {
 							// Reducing may reorder the queue, so raise a trigger afterwards
-							actions: [
-								reduce,
-								raise<SendThreadContext, any>("trigger"),
-							],
+							actions: [reduce, raise("trigger") as any],
 						},
 					},
 				},

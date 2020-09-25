@@ -1,6 +1,18 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
-import { assign, Machine, SendAction, spawn, StateMachine } from "xstate";
+import {
+	assign,
+	DefaultContext,
+	EventObject,
+	Interpreter,
+	InterpreterOptions,
+	Machine,
+	SendAction,
+	spawn,
+	StateMachine,
+	StateSchema,
+	Typestate,
+} from "xstate";
 import { respond } from "xstate/lib/actions";
 import type { SerialAPICommandEvent } from "zwave-js/src/lib/driver/SerialAPICommandMachine";
 import {
@@ -160,6 +172,84 @@ export function createWrapperMachine(
 						}),
 				}),
 			},
+		},
+	});
+}
+
+export type ExtendedInterpreter<
+	TContext = DefaultContext,
+	TStateSchema extends StateSchema = any,
+	TEvent extends EventObject = EventObject,
+	TTypestate extends Typestate<TContext> = { value: any; context: TContext }
+> = Interpreter<TContext, TStateSchema, TEvent, TTypestate> & {
+	restart(): Interpreter<TContext, TStateSchema, TEvent, TTypestate>;
+};
+export type Extended<
+	TInterpreter extends Interpreter<any, any, any, any>
+> = TInterpreter extends Interpreter<infer A, infer B, infer C, infer D>
+	? ExtendedInterpreter<A, B, C, D>
+	: never;
+
+/** Extends the default xstate interpreter with a restart function that re-attaches all event handlers */
+export function interpretEx<
+	TContext = DefaultContext,
+	TStateSchema extends StateSchema = any,
+	TEvent extends EventObject = EventObject,
+	TTypestate extends Typestate<TContext> = { value: any; context: TContext }
+>(
+	machine: StateMachine<TContext, TStateSchema, TEvent, TTypestate>,
+	options?: Partial<InterpreterOptions>,
+): ExtendedInterpreter<TContext, TStateSchema, TEvent, TTypestate> {
+	const interpreter = new Interpreter<
+		TContext,
+		TStateSchema,
+		TEvent,
+		TTypestate
+	>(machine, options) as ExtendedInterpreter<
+		TContext,
+		TStateSchema,
+		TEvent,
+		TTypestate
+	>;
+
+	return new Proxy(interpreter, {
+		get(target, key) {
+			if (key === "restart") {
+				return () => {
+					const listeners = [...(target["listeners"] as Set<any>)];
+					const contextListeners = [
+						...(target["contextListeners"] as Set<any>),
+					];
+					const stopListeners = [
+						...(target["stopListeners"] as Set<any>),
+					];
+					const doneListeners = [
+						...(target["doneListeners"] as Set<any>),
+					];
+					const eventListeners = [
+						...(target["eventListeners"] as Set<any>),
+					];
+					const sendListeners = [
+						...(target["sendListeners"] as Set<any>),
+					];
+					target.stop();
+					for (const listener of listeners)
+						target.onTransition(listener);
+					for (const listener of contextListeners)
+						target.onChange(listener);
+					for (const listener of stopListeners)
+						target.onStop(listener);
+					for (const listener of doneListeners)
+						target.onDone(listener);
+					for (const listener of eventListeners)
+						target.onEvent(listener);
+					for (const listener of sendListeners)
+						target.onSend(listener);
+					return target.start();
+				};
+			} else {
+				return (target as any)[key];
+			}
 		},
 	});
 }

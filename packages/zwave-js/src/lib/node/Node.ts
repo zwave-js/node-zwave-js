@@ -39,7 +39,6 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
-import { interpret } from "xstate";
 import type { CCAPI } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
@@ -95,6 +94,7 @@ import {
 	GetRoutingInfoResponse,
 } from "../controller/GetRoutingInfoMessages";
 import type { Driver } from "../driver/Driver";
+import { Extended, interpretEx } from "../driver/StateMachineShared";
 import log from "../log";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
@@ -184,14 +184,8 @@ export class ZWaveNode extends Endpoint {
 		for (const cc of supportedCCs) this.addCC(cc, { isSupported: true });
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
 
-		// Create and hook up the status and ready machine
-		this.initStateMachines();
-	}
-
-	private initStateMachines(): void {
-		// reset if necessary
-		if (this.statusMachine) this.statusMachine.stop();
-		this.statusMachine = interpret(
+		// Create and hook up the status machine
+		this.statusMachine = interpretEx(
 			createNodeStatusMachine(
 				{
 					notifyAwakeTimeoutElapsed: () => {
@@ -213,9 +207,7 @@ export class ZWaveNode extends Endpoint {
 		});
 		this.statusMachine.start();
 
-		// reset if necessary
-		if (this.readyMachine) this.readyMachine.stop();
-		this.readyMachine = interpret(createNodeReadyMachine());
+		this.readyMachine = interpretEx(createNodeReadyMachine());
 		this.readyMachine.onTransition((state) => {
 			if (state.changed) {
 				this.onReadyChange(state.value === "ready");
@@ -342,7 +334,7 @@ export class ZWaveNode extends Endpoint {
 		this.emit(eventName, this, outArg as any);
 	}
 
-	private statusMachine!: NodeStatusInterpreter;
+	private statusMachine: Extended<NodeStatusInterpreter>;
 	private _status: NodeStatus = NodeStatus.Unknown;
 
 	private onStatusChange(newStatus: NodeStatus) {
@@ -422,7 +414,7 @@ export class ZWaveNode extends Endpoint {
 	// The node is only ready when the interview has been completed
 	// to a certain degree
 
-	private readyMachine!: NodeReadyInterpreter;
+	private readyMachine: Extended<NodeReadyInterpreter>;
 	private _ready: boolean = false;
 
 	private onReadyChange(ready: boolean) {
@@ -809,7 +801,8 @@ export class ZWaveNode extends Endpoint {
 		super.reset();
 
 		// Restart all state machines
-		this.initStateMachines();
+		this.readyMachine.restart();
+		this.statusMachine.restart();
 
 		// Also remove the information from the cache
 		await this.driver.saveNetworkToCache();
