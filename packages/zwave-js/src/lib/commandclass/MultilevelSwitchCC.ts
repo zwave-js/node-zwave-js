@@ -612,6 +612,16 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 		}
 		return true;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: `switch type: ${getEnumMemberName(
+				SwitchType,
+				this.switchType,
+			)}`,
+		};
+	}
 }
 
 @CCCommand(MultilevelSwitchCommand.SupportedGet)
