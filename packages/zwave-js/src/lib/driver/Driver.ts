@@ -1794,7 +1794,9 @@ ${handlers.length} left`,
 			if (
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout &&
-				transaction.message instanceof SendDataRequest
+				transaction.message instanceof SendDataRequest &&
+				// Ignore pre-transmit handshakes because the actual transaction will be retried
+				transaction.priority !== MessagePriority.PreTransmitHandshake
 			) {
 				// TODO: Handle callback NOK
 				this.handleNodeTimeout(

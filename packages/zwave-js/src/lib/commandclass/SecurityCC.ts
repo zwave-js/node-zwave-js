@@ -125,6 +125,8 @@ export class SecurityCCAPI extends CCAPI {
 				priority: MessagePriority.PreTransmitHandshake,
 				// Only try getting a nonce once
 				maxSendAttempts: 1,
+				// We don't want failures causing us to treat the node as asleep
+				changeNodeStatusOnTimeout: false,
 			},
 		))!;
 		return response.nonce;
