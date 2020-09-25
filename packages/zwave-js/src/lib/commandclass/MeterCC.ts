@@ -1,5 +1,5 @@
 import { lookupMeter, lookupMeterScale, MeterScale } from "@zwave-js/config";
-import type { ValueID } from "@zwave-js/core";
+import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	getMinIntegerSize,
@@ -616,6 +616,28 @@ export class MeterCCReport extends MeterCC {
 	public get deltaTime(): Maybe<number> {
 		return this._deltaTime;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`type:       ${
+				lookupMeter(this.type)?.name ??
+				`Unknown (${num2hex(this._type)})`
+			}`,
+			`scale:      ${this._scale.label}`,
+			`rate type:  ${getEnumMemberName(RateType, this._rateType)}`,
+			`value:      ${this.value}`,
+		];
+		if (this._deltaTime !== "unknown") {
+			messages.push(`time delta:  ${this.deltaTime} seconds`);
+		}
+		if (this._previousValue != undefined) {
+			messages.push(`prev. value: ${this._previousValue}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 function testResponseForMeterGet(sent: MeterCCGet, received: MeterCCReport) {
@@ -689,6 +711,30 @@ export class MeterCCGet extends MeterCC {
 		if (scale2) this.payload[1] = scale2;
 
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [];
+		if (this.rateType != undefined) {
+			messages.push(
+				`rate type: ${getEnumMemberName(RateType, this.rateType)}`,
+			);
+		}
+		if (this.scale != undefined) {
+			// Try to lookup the meter type to translate the scale
+			const type = this.getValueDB().getValue<number>(
+				getTypeValueId(this.endpointIndex),
+			);
+			if (type != undefined) {
+				messages.push(
+					`duration:  ${lookupMeterScale(type, this.scale).label}`,
+				);
+			}
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
 	}
 }
 
@@ -787,6 +833,29 @@ export class MeterCCSupportedReport extends MeterCC {
 		}
 		return true;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [
+			`type:                 ${
+				lookupMeter(this.type)?.name ??
+				`Unknown (${num2hex(this.type)})`
+			}`,
+			`supports reset:       ${this._supportsReset}`,
+			`supported scales:     ${this._supportedScales
+				.map(
+					(scale) => `
+· ${lookupMeterScale(this.type, scale).label}`,
+				)
+				.join("")}`,
+			`supported rate types: ${this._supportedRateTypes
+				.map((rt) => getEnumMemberName(RateType, rt))
+				.join(", ")}`,
+		];
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
+	}
 }
 
 @CCCommand(MeterCommand.SupportedGet)
@@ -850,5 +919,24 @@ export class MeterCCReset extends MeterCC {
 			}
 		}
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const messages: string[] = [];
+		if (this.type != undefined) {
+			messages.push(
+				`type:         ${
+					lookupMeter(this.type)?.name ??
+					`Unknown (${num2hex(this.type)})`
+				}`,
+			);
+		}
+		if (this.targetValue != undefined) {
+			messages.push(`target value: ${this.targetValue}`);
+		}
+		return {
+			...super.toLogEntry(),
+			message: messages,
+		};
 	}
 }
