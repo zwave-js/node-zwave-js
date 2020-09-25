@@ -4,8 +4,7 @@
  * the interview for application CCs on the root endpoint is deferred
  */
 
-import { applicationCCs, CommandClasses } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { applicationCCs, CommandClasses, getCCName } from "@zwave-js/core";
 import { red, yellow } from "ansi-colors";
 import * as path from "path";
 import ts from "typescript";
@@ -139,20 +138,14 @@ export function lintCCInterview(): Promise<void> {
 								if (requiredApplicationCCs.length > 0) {
 									// that depends on an application CC
 									throw new Error(
-										`Interview procedure of the non-application CC ${getEnumMemberName(
-											CommandClasses,
+										`Interview procedure of the non-application CC ${getCCName(
 											ccId,
 										)} must not depend on application CCs, but depends on the CC${
 											requiredApplicationCCs.length > 1
 												? "s"
 												: ""
 										} ${requiredApplicationCCs
-											.map((cc) =>
-												getEnumMemberName(
-													CommandClasses,
-													cc,
-												),
-											)
+											.map((cc) => getCCName(cc))
 											.join(", ")}!`,
 									);
 								}

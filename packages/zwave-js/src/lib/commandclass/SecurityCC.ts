@@ -1,4 +1,3 @@
-import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	computeMAC,
@@ -6,6 +5,8 @@ import {
 	encryptAES128OFB,
 	generateAuthKey,
 	generateEncryptionKey,
+	getCCName,
+	Maybe,
 	MessageOrCCLogEntry,
 	parseCCList,
 	SecurityManager,
@@ -13,7 +14,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
 import type { ZWaveController } from "../controller/Controller";
 import {
@@ -297,11 +298,11 @@ export class SecurityCC extends CommandClass {
 				"supported CCs:",
 			];
 			for (const cc of resp.supportedCCs) {
-				logLines.push(`· ${getEnumMemberName(CommandClasses, cc)}`);
+				logLines.push(`· ${getCCName(cc)}`);
 			}
 			logLines.push("controlled CCs:");
 			for (const cc of resp.controlledCCs) {
-				logLines.push(`· ${getEnumMemberName(CommandClasses, cc)}`);
+				logLines.push(`· ${getCCName(cc)}`);
 			}
 			log.controller.logNode(node.id, {
 				message: logLines.join("\n"),
@@ -771,11 +772,11 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 			...super.toLogEntry(),
 			message: `reportsToFollow: ${this.reportsToFollow}
 supportedCCs: ${this._supportedCCs
-				.map((cc) => getEnumMemberName(CommandClasses, cc))
+				.map((cc) => getCCName(cc))
 				.map((cc) => `\n· ${cc}`)
 				.join("")}
 controlledCCs: ${this._controlledCCs
-				.map((cc) => getEnumMemberName(CommandClasses, cc))
+				.map((cc) => getCCName(cc))
 				.map((cc) => `\n· ${cc}`)
 				.join("")}`,
 		};

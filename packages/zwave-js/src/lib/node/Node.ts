@@ -251,8 +251,7 @@ export class ZWaveNode extends Endpoint {
 		const ccInstance = this.createCCInstanceInternal(valueId.commandClass);
 		if (!ccInstance) {
 			throw new ZWaveError(
-				`Cannot translate a value ID for the non-implemented CC ${getEnumMemberName(
-					CommandClasses,
+				`Cannot translate a value ID for the non-implemented CC ${getCCName(
 					valueId.commandClass,
 				)}`,
 				ZWaveErrorCodes.CC_NotImplemented,
@@ -1133,8 +1132,7 @@ version:               ${this.version}`;
 				// Skip the CC
 				log.controller.logNode(
 					this.id,
-					`Skipping interview for secure CC ${getEnumMemberName(
-						CommandClasses,
+					`Skipping interview for secure CC ${getCCName(
 						cc,
 					)} because no network key is configured!`,
 					"error",
@@ -1166,10 +1164,7 @@ version:               ${this.version}`;
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
 				log.controller.print(
-					`${getEnumMemberName(
-						CommandClasses,
-						cc,
-					)}: Error after interview:\n${e.message}`,
+					`${getCCName(cc)}: Error after interview:\n${e.message}`,
 					"error",
 				);
 			}
@@ -1447,8 +1442,7 @@ version:               ${this.version}`;
 				} catch (e) {
 					log.controller.logNode(
 						this.id,
-						`failed to refresh values for ${getEnumMemberName(
-							CommandClasses,
+						`failed to refresh values for ${getCCName(
 							cc,
 						)}, endpoint ${endpoint.index}: ${e.message}`,
 						"error",
@@ -1478,8 +1472,7 @@ version:               ${this.version}`;
 				} catch (e) {
 					log.controller.logNode(
 						this.id,
-						`failed to refresh values for ${getEnumMemberName(
-							CommandClasses,
+						`failed to refresh values for ${getCCName(
 							cc.ccId,
 						)}, endpoint ${endpoint.index}: ${e.message}`,
 						"error",

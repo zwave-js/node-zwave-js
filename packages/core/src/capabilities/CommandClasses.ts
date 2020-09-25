@@ -1,4 +1,4 @@
-import { num2hex } from "@zwave-js/shared";
+import { getEnumMemberName } from "@zwave-js/shared";
 
 /**
  * @publicAPI
@@ -130,8 +130,7 @@ export enum CommandClasses {
 }
 
 export function getCCName(cc: number): string {
-	if (cc in CommandClasses) return CommandClasses[cc];
-	return `UNKNOWN (${num2hex(cc)})`;
+	return getEnumMemberName(CommandClasses, cc);
 }
 
 /**
