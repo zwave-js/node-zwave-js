@@ -121,15 +121,15 @@ interface CCInfo {
 		const implementedVersion = versionColor(
 			version > 0 ? version.toString() : "-",
 		);
-		const hasInterview = interview ? c.green(" ✓ ") : c.red(" ✗ ");
-		const hasAPI = API ? c.green(" ✓ ") : c.red(" ✗ ");
-		const hasSetValue = setValue ? c.green(" ✓ ") : c.red(" ✗ ");
+		const hasInterview = interview ? c.green(" ✔ ") : c.red(" ❌ ");
+		const hasAPI = API ? c.green(" ✔ ") : c.red(" ❌ ");
+		const hasSetValue = setValue ? c.green(" ✔ ") : c.red(" ❌ ");
 		const prefix =
 			implementationStatus === "done"
-				? "✓"
+				? "✔"
 				: implementationStatus === "in progress"
-				? "✍"
-				: "✗";
+				? "✍🏻"
+				: "❌";
 		const postfix = deprecated ? " " + c.reset("(deprecated)") : "";
 		if (implementationStatus !== "done" || !onlyIncomplete) {
 			rows.push([
