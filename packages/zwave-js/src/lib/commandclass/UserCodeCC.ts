@@ -4,6 +4,7 @@ import {
 	Maybe,
 	MessageOrCCLogEntry,
 	parseBitMask,
+	unknownBoolean,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
@@ -101,6 +102,76 @@ export function getUserCodeValueID(
 	};
 }
 
+export function getSupportsMasterCodeValueID(
+	endpoint: number | undefined,
+): ValueID {
+	return {
+		commandClass: CommandClasses["User Code"],
+		endpoint,
+		property: "masterCode",
+	};
+}
+
+export function getSupportsMasterCodeDeactivationValueID(
+	endpoint: number | undefined,
+): ValueID {
+	return {
+		commandClass: CommandClasses["User Code"],
+		endpoint,
+		property: "masterCodeDeactivation",
+	};
+}
+
+export function getSupportsUserCodeChecksumValueID(
+	endpoint: number | undefined,
+): ValueID {
+	return {
+		commandClass: CommandClasses["User Code"],
+		endpoint,
+		property: "userCodeChecksum",
+	};
+}
+
+export function getSupportedUserIDStatusesValueID(
+	endpoint: number | undefined,
+): ValueID {
+	return {
+		commandClass: CommandClasses["User Code"],
+		endpoint,
+		property: "supportedUserIDStatuses",
+	};
+}
+
+export function getSupportedKeypadModesValueID(
+	endpoint: number | undefined,
+): ValueID {
+	return {
+		commandClass: CommandClasses["User Code"],
+		endpoint,
+		property: "supportedKeypadModes",
+	};
+}
+
+export function getSupportedASCIICharsValueID(
+	endpoint: number | undefined,
+): ValueID {
+	return {
+		commandClass: CommandClasses["User Code"],
+		endpoint,
+		property: "supportedASCIIChars",
+	};
+}
+
+export function getSupportsMultipleUserCodeSetValueID(
+	endpoint: number | undefined,
+): ValueID {
+	return {
+		commandClass: CommandClasses["User Code"],
+		endpoint,
+		property: "multipleUserCodeSet",
+	};
+}
+
 function parseExtendedUserCode(
 	payload: Buffer,
 ): { code: UserCode; bytesRead: number } {
@@ -120,6 +191,11 @@ function parseExtendedUserCode(
 	};
 }
 
+function validateCode(code: string, supportedChars: string): boolean {
+	if (code.length < 4 || code.length > 10) return false;
+	return [...code].every((char) => supportedChars.includes(char));
+}
+
 @API(CommandClasses["User Code"])
 export class UserCodeCCAPI extends CCAPI {
 	public supportsCommand(cmd: UserCodeCommand): Maybe<boolean> {
@@ -129,16 +205,33 @@ export class UserCodeCCAPI extends CCAPI {
 			case UserCodeCommand.UsersNumberGet:
 				return true; // This is mandatory
 
-			case UserCodeCommand.UsersNumberGet:
 			case UserCodeCommand.CapabilitiesGet:
 			case UserCodeCommand.KeypadModeSet:
 			case UserCodeCommand.KeypadModeGet:
 			case UserCodeCommand.ExtendedUserCodeSet:
 			case UserCodeCommand.ExtendedUserCodeGet:
-			case UserCodeCommand.MasterCodeSet:
-			case UserCodeCommand.MasterCodeGet:
-			case UserCodeCommand.UserCodeChecksumGet:
 				return this.version >= 2;
+
+			case UserCodeCommand.MasterCodeSet:
+			case UserCodeCommand.MasterCodeGet: {
+				if (this.version < 2) return false;
+				const node = this.endpoint.getNodeUnsafe()!;
+				const ret =
+					node.getValue<Maybe<boolean>>(
+						getSupportsMasterCodeValueID(this.endpoint.index),
+					) ?? unknownBoolean;
+				return ret;
+			}
+
+			case UserCodeCommand.UserCodeChecksumGet: {
+				if (this.version < 2) return false;
+				const node = this.endpoint.getNodeUnsafe()!;
+				const ret =
+					node.getValue<Maybe<boolean>>(
+						getSupportsUserCodeChecksumValueID(this.endpoint.index),
+					) ?? unknownBoolean;
+				return ret;
+			}
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -239,11 +332,20 @@ export class UserCodeCCSet extends UserCodeCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
+			const numUsers =
+				this.getNode()?.getValue<number>(
+					getSupportedUsersValueID(this.endpointIndex),
+				) ?? 0;
 			this.userId = options.userId;
 			this.userIdStatus = options.userIdStatus;
 
 			// Validate options
-			if (
+			if (this.userId < 0 || this.userId > numUsers) {
+				throw new ZWaveError(
+					`${this.constructor.name}: The user ID must be between 0 and the number of supported users ${numUsers}.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			} else if (
 				this.userId === 0 &&
 				this.userIdStatus !== UserIDStatus.Available
 			) {
@@ -450,7 +552,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		validatePayload(
 			this.payload.length >= offset + statusBitMaskLength + 1,
 		);
-		this.supportedUserIDStati = parseBitMask(
+		this.supportedUserIDStatuses = parseBitMask(
 			this.payload.slice(offset, offset + statusBitMaskLength),
 			UserIDStatus.Available,
 		);
@@ -496,7 +598,7 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	@ccValue({ internal: true })
 	public readonly multipleUserCodeSet: boolean;
 	@ccValue({ internal: true })
-	public readonly supportedUserIDStati: readonly UserIDStatus[];
+	public readonly supportedUserIDStatuses: readonly UserIDStatus[];
 	@ccValue({ internal: true })
 	public readonly supportedKeypadModes: readonly KeypadMode[];
 	@ccValue({ internal: true })
@@ -596,12 +698,23 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
+			if (!this.interviewComplete) {
+				throw new ZWaveError(
+					`${this.constructor.name}: This CC can only be used after the interview is complete!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
+			const supportedAsciiChars =
+				this.getNode()?.getValue<string>(
+					getSupportedASCIICharsValueID(this.endpointIndex),
+				) ?? "";
+
 			this.masterCode = options.masterCode;
 
 			// Validate the code
-			if (this.masterCode.length < 4 || this.masterCode.length > 10) {
+			if (!validateCode(this.masterCode, supportedAsciiChars)) {
 				throw new ZWaveError(
-					`${this.constructor.name}: The master code must have a length from 4 to 10`,
+					`${this.constructor.name}: The master code must consist of 4 to 10 of the following characters: ${supportedAsciiChars}`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			}
@@ -714,10 +827,42 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
+			if (!this.interviewComplete) {
+				throw new ZWaveError(
+					`${this.constructor.name}: This CC can only be used after the interview is complete!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
 			this.userCodes = options.userCodes as any;
+
+			const numUsers =
+				this.getNode()?.getValue<number>(
+					getSupportedUsersValueID(this.endpointIndex),
+				) ?? 0;
+			const supportedStatuses =
+				this.getNode()?.getValue<number[]>(
+					getSupportedUserIDStatusesValueID(this.endpointIndex),
+				) ?? [];
+			const supportedAsciiChars =
+				this.getNode()?.getValue<string>(
+					getSupportedASCIICharsValueID(this.endpointIndex),
+				) ?? "";
+			const supportsMultipleUserCodeSet =
+				this.getNode()?.getValue<boolean>(
+					getSupportsMultipleUserCodeSetValueID(this.endpointIndex),
+				) ?? false;
 
 			// Validate options
 			if (
+				this.userCodes.some(
+					(code) => code.userId < 0 || code.userId > numUsers,
+				)
+			) {
+				throw new ZWaveError(
+					`${this.constructor.name}: The user ID must be between 0 and the number of supported users ${numUsers}.`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			} else if (
 				this.userCodes.some((code) => code.userId === 0) &&
 				this.userCodes.length > 1
 			) {
@@ -736,15 +881,33 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 					`${this.constructor.name}: User ID 0 may only be used to clear all user codes`,
 					ZWaveErrorCodes.Argument_Invalid,
 				);
+			} else if (
+				this.userCodes.length > 1 &&
+				!supportsMultipleUserCodeSet
+			) {
+				throw new ZWaveError(
+					`${this.constructor.name}: The node does not support setting multiple user codes at once`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
 			}
 
 			for (const code of this.userCodes) {
-				if (code.userIdStatus === UserIDStatus.Available) {
+				if (!supportedStatuses.includes(code.userIdStatus)) {
+					throw new ZWaveError(
+						`${
+							this.constructor.name
+						}: The user ID status ${getEnumMemberName(
+							UserIDStatus,
+							code.userIdStatus,
+						)} is not supported by the node`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				} else if (code.userIdStatus === UserIDStatus.Available) {
 					code.userCode = "";
 				} else {
-					if (!/^[0-9]{4,10}$/.test(code.userCode)) {
+					if (!validateCode(code.userCode, supportedAsciiChars)) {
 						throw new ZWaveError(
-							`${this.constructor.name}: The user code must consist of 4 to 10 numeric digits in ASCII representation.`,
+							`${this.constructor.name}: The user code must consist of 4 to 10 of the following characters: ${supportedAsciiChars}`,
 							ZWaveErrorCodes.Argument_Invalid,
 						);
 					}
