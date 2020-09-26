@@ -236,20 +236,69 @@ export class UserCodeCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async get(userId: number) {
-		this.assertSupportsCommand(UserCodeCommand, UserCodeCommand.Get);
+	public async getUsersCount(): Promise<number> {
+		this.assertSupportsCommand(
+			UserCodeCommand,
+			UserCodeCommand.UsersNumberGet,
+		);
 
-		const cc = new UserCodeCCGet(this.driver, {
+		const cc = new UserCodeCCUsersNumberGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			userId,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCReport>(
-			cc,
-			this.commandOptions,
-		))!;
-		return pick(response, ["userIdStatus", "userCode"]);
+		const response = (await this.driver.sendCommand<
+			UserCodeCCUsersNumberReport
+		>(cc, this.commandOptions))!;
+		return response.supportedUsers;
+	}
+
+	public async get(
+		userId: number,
+		multiple?: false,
+	): Promise<Pick<UserCode, "userIdStatus" | "userCode">>;
+	public async get(
+		userId: number,
+		multiple: true,
+	): Promise<readonly UserCode[]>;
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async get(userId: number, multiple: boolean = false) {
+		if (userId > 255 || multiple) {
+			this.assertSupportsCommand(
+				UserCodeCommand,
+				UserCodeCommand.ExtendedUserCodeGet,
+			);
+
+			const cc = new UserCodeCCExtendedUserCodeGet(this.driver, {
+				nodeId: this.endpoint.nodeId,
+				endpoint: this.endpoint.index,
+				userId,
+				reportMore: multiple,
+			});
+			const response = (await this.driver.sendCommand<
+				UserCodeCCExtendedUserCodeReport
+			>(cc, this.commandOptions))!;
+			if (multiple) {
+				return response.userCodes;
+			} else {
+				return pick(response.userCodes[0], [
+					"userIdStatus",
+					"userCode",
+				]);
+			}
+		} else {
+			this.assertSupportsCommand(UserCodeCommand, UserCodeCommand.Get);
+
+			const cc = new UserCodeCCGet(this.driver, {
+				nodeId: this.endpoint.nodeId,
+				endpoint: this.endpoint.index,
+				userId,
+			});
+			const response = (await this.driver.sendCommand<UserCodeCCReport>(
+				cc,
+				this.commandOptions,
+			))!;
+			return pick(response, ["userIdStatus", "userCode"]);
+		}
 	}
 
 	/** Configures a single user code */
@@ -313,6 +362,110 @@ export class UserCodeCCAPI extends CCAPI {
 			userIdStatus: UserIDStatus.Available,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getCapabilities() {
+		this.assertSupportsCommand(
+			UserCodeCommand,
+			UserCodeCommand.CapabilitiesGet,
+		);
+
+		const cc = new UserCodeCCCapabilitiesGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			UserCodeCCCapabilitiesReport
+		>(cc, this.commandOptions))!;
+		return pick(response, [
+			"masterCode",
+			"masterCodeDeactivation",
+			"userCodeChecksum",
+			"multipleUserCodeReport",
+			"multipleUserCodeSet",
+			"supportedUserIDStatuses",
+			"supportedKeypadModes",
+			"supportedASCIIChars",
+		]);
+	}
+
+	public async getKeypadMode(): Promise<KeypadMode> {
+		this.assertSupportsCommand(
+			UserCodeCommand,
+			UserCodeCommand.KeypadModeGet,
+		);
+
+		const cc = new UserCodeCCKeypadModeGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			UserCodeCCKeypadModeReport
+		>(cc, this.commandOptions))!;
+		return response.keypadMode;
+	}
+
+	public async setKeypadMode(keypadMode: KeypadMode): Promise<void> {
+		this.assertSupportsCommand(
+			UserCodeCommand,
+			UserCodeCommand.KeypadModeSet,
+		);
+
+		const cc = new UserCodeCCKeypadModeSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			keypadMode,
+		});
+
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	public async getMasterCode(): Promise<string> {
+		this.assertSupportsCommand(
+			UserCodeCommand,
+			UserCodeCommand.MasterCodeGet,
+		);
+
+		const cc = new UserCodeCCMasterCodeGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			UserCodeCCMasterCodeReport
+		>(cc, this.commandOptions))!;
+		return response.masterCode;
+	}
+
+	public async setMasterCode(masterCode: string): Promise<void> {
+		this.assertSupportsCommand(
+			UserCodeCommand,
+			UserCodeCommand.MasterCodeSet,
+		);
+
+		const cc = new UserCodeCCMasterCodeSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			masterCode,
+		});
+
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	public async getUserCodeChecksum(): Promise<number> {
+		this.assertSupportsCommand(
+			UserCodeCommand,
+			UserCodeCommand.UserCodeChecksumGet,
+		);
+
+		const cc = new UserCodeCCUserCodeChecksumGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<
+			UserCodeCCUserCodeChecksumReport
+		>(cc, this.commandOptions))!;
+		return response.userCodeChecksum;
 	}
 }
 
@@ -655,7 +808,30 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
+			if (!this.interviewComplete) {
+				throw new ZWaveError(
+					`${this.constructor.name}: This CC can only be used after the interview is complete!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
 			this.keypadMode = options.keypadMode;
+
+			const supportedModes =
+				this.getNode()?.getValue<KeypadMode[]>(
+					getSupportedKeypadModesValueID(this.endpointIndex),
+				) ?? [];
+
+			if (!supportedModes.includes(this.keypadMode)) {
+				throw new ZWaveError(
+					`${
+						this.constructor.name
+					}: The keypad mode ${getEnumMemberName(
+						KeypadMode,
+						this.keypadMode,
+					)} is not supported by the node!`,
+					ZWaveErrorCodes.Argument_Invalid,
+				);
+			}
 		}
 	}
 
@@ -738,7 +914,20 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 			this.masterCode = options.masterCode;
 
 			// Validate the code
-			if (!validateCode(this.masterCode, supportedAsciiChars)) {
+			if (!this.masterCode) {
+				const supportsDeactivation =
+					this.getNode()?.getValue<boolean>(
+						getSupportsMasterCodeDeactivationValueID(
+							this.endpointIndex,
+						),
+					) ?? false;
+				if (!supportsDeactivation) {
+					throw new ZWaveError(
+						`${this.constructor.name}: The node does not support deactivating the master code!`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+			} else if (!validateCode(this.masterCode, supportedAsciiChars)) {
 				throw new ZWaveError(
 					`${this.constructor.name}: The master code must consist of 4 to 10 of the following characters: ${supportedAsciiChars}`,
 					ZWaveErrorCodes.Argument_Invalid,
