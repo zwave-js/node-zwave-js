@@ -230,6 +230,7 @@ export interface CCAPIs {
 	"Thermostat Setpoint": import("./ThermostatSetpointCC").ThermostatSetpointCCAPI;
 	Time: import("./TimeCC").TimeCCAPI;
 	"Time Parameters": import("./TimeParametersCC").TimeParametersCCAPI;
+	"User Code": import("./UserCodeCC").UserCodeCCAPI;
 	Version: import("./VersionCC").VersionCCAPI;
 	"Wake Up": import("./WakeUpCC").WakeUpCCAPI;
 	"Z-Wave Plus Info": import("./ZWavePlusCC").ZWavePlusCCAPI;

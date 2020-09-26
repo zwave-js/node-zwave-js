@@ -196,6 +196,45 @@ function validateCode(code: string, supportedChars: string): boolean {
 	return [...code].every((char) => supportedChars.includes(char));
 }
 
+function persistUserCode(
+	this: UserCodeCC,
+	userId: number,
+	userIdStatus: UserIDStatus,
+	userCode: string,
+) {
+	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
+	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
+	const valueDB = this.getValueDB();
+
+	// Always create metadata if it does not exist
+	if (!valueDB.hasMetadata(statusValueId)) {
+		valueDB.setMetadata(statusValueId, {
+			...ValueMetadata.Number,
+			label: `User ID status (${userId})`,
+			states: enumValuesToMetadataStates(UserIDStatus, [
+				UserIDStatus.Available,
+				UserIDStatus.Enabled,
+				UserIDStatus.Disabled,
+				UserIDStatus.Messaging,
+				UserIDStatus.PassageMode,
+			]),
+		});
+	}
+	if (!valueDB.hasMetadata(codeValueId)) {
+		valueDB.setMetadata(codeValueId, {
+			...ValueMetadata.String,
+			minLength: 4,
+			maxLength: 10,
+			label: `User Code (${userId})`,
+		});
+	}
+
+	valueDB.setValue(statusValueId, userIdStatus);
+	valueDB.setValue(codeValueId, userCode);
+
+	return true;
+}
+
 @API(CommandClasses["User Code"])
 export class UserCodeCCAPI extends CCAPI {
 	public supportsCommand(cmd: UserCodeCommand): Maybe<boolean> {
@@ -592,41 +631,15 @@ export class UserCodeCCReport extends UserCodeCC {
 	public readonly userCode: string;
 
 	public persistValues(): boolean {
-		const statusValueId = getUserIdStatusValueID(
-			this.endpointIndex,
+		persistUserCode.call(
+			this,
 			this.userId,
+			this.userIdStatus,
+			this.userCode,
 		);
-		const codeValueId = getUserCodeValueID(this.endpointIndex, this.userId);
-		const valueDB = this.getValueDB();
-
-		// Always create metadata if it does not exist
-		if (!valueDB.hasMetadata(statusValueId)) {
-			valueDB.setMetadata(statusValueId, {
-				...ValueMetadata.Number,
-				label: `User ID status (${this.userId})`,
-				states: enumValuesToMetadataStates(UserIDStatus, [
-					UserIDStatus.Available,
-					UserIDStatus.Enabled,
-					UserIDStatus.Disabled,
-					UserIDStatus.Messaging,
-					UserIDStatus.PassageMode,
-				]),
-			});
-		}
-		if (!valueDB.hasMetadata(codeValueId)) {
-			valueDB.setMetadata(codeValueId, {
-				...ValueMetadata.String,
-				minLength: 4,
-				maxLength: 10,
-				label: `User Code (${this.userId})`,
-			});
-		}
-
-		valueDB.setValue(statusValueId, this.userIdStatus);
-		valueDB.setValue(codeValueId, this.userCode);
-
 		return true;
 	}
+
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
@@ -1173,6 +1186,15 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 
 		validatePayload(this.payload.length >= offset + 2);
 		this.nextUserId = this.payload.readUInt16BE(offset);
+
+		this.persistValues();
+	}
+
+	public persistValues(): boolean {
+		for (const { userId, userIdStatus, userCode } of this.userCodes) {
+			persistUserCode.call(this, userId, userIdStatus, userCode);
+		}
+		return true;
 	}
 
 	public readonly userCodes: readonly UserCode[];
