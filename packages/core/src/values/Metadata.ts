@@ -74,10 +74,21 @@ export interface ValueMetadataBoolean extends ValueMetadataBase {
 	default?: number;
 }
 
+export interface ValueMetadataString extends ValueMetadataBase {
+	type: "string";
+	/** The minimum length this string must have (optional) */
+	minLength?: number;
+	/** The maximum length this string may have (optional) */
+	maxLength?: number;
+	/** The default value */
+	default?: string;
+}
+
 export type ValueMetadata =
 	| ValueMetadataAny
 	| ValueMetadataNumeric
-	| ValueMetadataBoolean;
+	| ValueMetadataBoolean
+	| ValueMetadataString;
 
 // TODO: lists of allowed values, etc...
 
@@ -137,13 +148,13 @@ const Number: ValueMetadataNumeric = {
 	type: "number",
 };
 
-/** Unsigned 8-bit integer (readonly) */
+/** Unsigned number (readonly) */
 const ReadOnlyNumber: ValueMetadataNumeric = {
 	...Number,
 	..._readonly,
 };
 
-/** Unsigned 8-bit integer (writeonly) */
+/** Unsigned number (writeonly) */
 const WriteOnlyNumber: ValueMetadataNumeric = {
 	...Number,
 	..._writeonly,
@@ -301,6 +312,24 @@ const WriteOnlyInt32: ValueMetadataNumeric = {
 	..._writeonly,
 };
 
+/** Any string */
+const String: ValueMetadataString = {
+	..._default,
+	type: "string",
+};
+
+/** Unsigned string (readonly) */
+const ReadOnlyString: ValueMetadataString = {
+	...String,
+	..._readonly,
+};
+
+/** Unsigned string (writeonly) */
+const WriteOnlyString: ValueMetadataString = {
+	...String,
+	..._writeonly,
+};
+
 // Some predefined CC-specific metadata
 
 /** The level of a Switch */
@@ -401,4 +430,11 @@ export const ValueMetadata = {
 	ReadOnlyBoolean: Object.freeze(ReadOnlyBoolean),
 	/** A boolean value (writeonly) */
 	WriteOnlyBoolean: Object.freeze(WriteOnlyBoolean),
+
+	/** A string */
+	String: Object.freeze(String),
+	/** A string (readonly) */
+	ReadOnlyString: Object.freeze(ReadOnlyString),
+	/** A string (writeonly) */
+	WriteOnlyString: Object.freeze(WriteOnlyString),
 };
