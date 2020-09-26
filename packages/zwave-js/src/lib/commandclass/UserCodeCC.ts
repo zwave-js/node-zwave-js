@@ -252,7 +252,7 @@ export class UserCodeCCAPI extends CCAPI {
 		return pick(response, ["userIdStatus", "userCode"]);
 	}
 
-	/** Sets a user code and ID status */
+	/** Configures a single user code */
 	public async set(
 		userId: number,
 		userIdStatus: Exclude<
@@ -261,6 +261,10 @@ export class UserCodeCCAPI extends CCAPI {
 		>,
 		userCode: string,
 	): Promise<void> {
+		if (this.version > 1 || userId > 255) {
+			return this.setMany([{ userId, userIdStatus, userCode }]);
+		}
+
 		this.assertSupportsCommand(UserCodeCommand, UserCodeCommand.Set);
 
 		const cc = new UserCodeCCSet(this.driver, {
@@ -270,6 +274,22 @@ export class UserCodeCCAPI extends CCAPI {
 			userIdStatus,
 			userCode,
 		});
+
+		await this.driver.sendCommand(cc, this.commandOptions);
+	}
+
+	/** Configures multiple user codes */
+	public async setMany(codes: UserCodeCCSetOptions[]): Promise<void> {
+		this.assertSupportsCommand(
+			UserCodeCommand,
+			UserCodeCommand.ExtendedUserCodeSet,
+		);
+
+		const cc = new UserCodeCCExtendedUserCodeSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			userCodes: codes,
+		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
@@ -278,6 +298,12 @@ export class UserCodeCCAPI extends CCAPI {
 	 * @param userId The user code to clear. If none or 0 is given, all codes are cleared
 	 */
 	public async clear(userId: number = 0): Promise<void> {
+		if (this.version > 1 || userId > 255) {
+			return this.setMany([
+				{ userId, userIdStatus: UserIDStatus.Available },
+			]);
+		}
+
 		this.assertSupportsCommand(UserCodeCommand, UserCodeCommand.Set);
 
 		const cc = new UserCodeCCSet(this.driver, {
