@@ -45,4 +45,5 @@ export { ThermostatMode } from "./ThermostatModeCC";
 export { ThermostatOperatingState } from "./ThermostatOperatingStateCC";
 export { SetbackType } from "./ThermostatSetbackCC";
 export { ThermostatSetpointType } from "./ThermostatSetpointCC";
+export { KeypadMode, UserIDStatus } from "./UserCodeCC";
 export { ZWavePlusNodeType, ZWavePlusRoleType } from "./ZWavePlusCC";

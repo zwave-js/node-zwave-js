@@ -61,9 +61,6 @@ export class BasicCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.set(value);
-
-		// Refresh the current value
-		await this.get();
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
