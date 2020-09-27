@@ -8,7 +8,8 @@ The driver is the core of this library. It controls the serial interface, handle
 new (port: string, options?: ZWaveOptions) => Driver
 ```
 
-The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar).
+The first constructor argument is the address of the serial port. On Windows, this is similar to `"COM3"`. On Linux this has the form `/dev/ttyAMA0` (or similar). Alternatively, you can connect to a serial port that is hosted over TCP (for example with the `ser2net` utility). In this case, use `tcp://<hostname>:<portnumber>` as the connection string. If you're using `ser2net`, use these settings to host the port: `<portnumber>:raw:0:<path-to-serial>:115200 8DATABITS NONE 1STOPBIT`.
+
 For more control, the constructor accepts an optional options object as the second argument. See [`ZWaveOptions`](#ZWaveOptions) for a detailed desription.
 
 ## Driver methods
@@ -23,32 +24,34 @@ This starts the driver and opens the underlying serial port and performs an inte
 
 The following table gives you an overview of what happens during the startup process. Note that the promise resolves before the interview process is completed:
 
-| Step | What happens behind the scenes                                          | Library response                                        |
-| :--: | ----------------------------------------------------------------------- | ------------------------------------------------------- |
-|  1   | Serial port is opened                                                   | `start()` Promise resolves                              |
-|  2   | Controller interview is performed                                       | `"driver ready"` event is emitted                       |
-|  3   | Every node is interviewed in the background (This may take a long time) | `"interview completed"` event is emitted for every node |
-|  4   | -                                                                       | `"interview completed"` event is emitted for the driver |
+| Step | What happens behind the scenes                                          | Library response                                                                                                          |
+| :--: | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+|  1   | Serial port is opened                                                   | `start()` Promise resolves                                                                                                |
+|  2   | Controller interview is performed                                       | `"driver ready"` event is emitted                                                                                         |
+|  3   | Every node is interviewed in the background (This may take a long time) | `"ready"` event is emitted for every node as soon as it can be used                                                       |
+|  4   | -                                                                       | `"all nodes ready"` event is emitted for the driver when all nodes can be used                                            |
+|  5   | -                                                                       | `"interview completed"` event is emitted for every node when its interview is completed and all its values are up to date |
 
-### `getSupportedCCVersionForNode`
+### `getSupportedCCVersionForEndpoint`
 
 ```ts
-getSupportedCCVersionForNode(nodeId: number, cc: CommandClasses): number
+getSupportedCCVersionForEndpoint(cc: CommandClasses, nodeId: number, endpointIndex?: number): number
 ```
 
 Nodes in a Z-Wave network are very likely support different versions of a Command Class (CC) and frequently support older versions than the driver software.  
-This method helps determine which version of a CC can be used to control a node. It takes two arguments:
+This method helps determine which version of a CC can be used to control a node. It takes three arguments:
 
--   `nodeId: number` - The ID that identifies a node in the network
 -   `cc: CommandClasses` - The command class whose version should be retrieved
+-   `nodeId: number` - The ID that identifies a node in the network
+-   `endpointIndex: number` - **(optional)** The node's endpoint that should be queried. Falls back to the root endpoint if no index was given or the endpoint does not exist.
 
 This method
 
--   returns `0` if the node does not support the given CC
--   also returns `0` if the node interview was not completed yet
--   otherwise returns the version the node claims to support
+-   returns `0` if the node/endpoint does not support the given CC
+-   also returns `0` if the node/endpoint interview was not completed yet
+-   otherwise returns the version the node/endpoint claims to support
 
-**Note:** This only provides reliable information **after** the node interview was completed.
+**Note:** This only provides reliable information **after** the node/endpoint interview was completed.
 
 ### `getSafeCCVersionForNode`
 
@@ -56,7 +59,7 @@ This method
 getSafeCCVersionForNode(nodeId: number, cc: CommandClasses): number
 ```
 
-Since it might be necessary to control a node **before** its supported CC versions are known, this method helps determine which CC version to use. It takes the same arguments as `getSupportedCCVersionForNode`, but behaves differently. It
+Since it might be necessary to control a node **before** its supported CC versions are known, this method helps determine which CC version to use. It takes the same arguments as `getSupportedCCVersionForEndpoint`, but behaves differently. It
 
 -   returns `1` if the node claims not to support the CC or no information is known
 -   **throws (!)** if the requested CC is not implemented in this library
@@ -111,11 +114,39 @@ async sendCommand<TResponse?>(command: CommandClass, options?: SendMessageOption
 This method sends a command to a Z-Wave node. It takes two arguments:
 
 -   `command` - An instance of the command class that should be sent
--   `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendMessageOptions`](#SendMessageOptions) for a detailed description.
+-   `options` _(optional)_ - Additional options to influence the behavior of the method. See [`SendCommandOptions`](#SendCommandOptions) for a detailed description.
 
 If it is known in advance which type the response will have, you can optionally pass the desired return type.
 
 Internally, it wraps the command in a `SendDataRequest` and calls `sendMessage` with it. Anything that applies to `sendMethod` is therefore true for `sendCommand`.
+
+### `sendSupervisedCommand / trySendCommandSupervised`
+
+```ts
+async sendSupervisedCommand(command: CommandClass, options?: SendSupervisedCommandOptions): Promise<SupervisionResult>
+```
+
+Sends a supervised command to a Z-Wave node. When status updates are requested (default: `false`), the passed callback will be executed for every non-final update.
+Internally, it wraps the command in a `Supervision CC` and calls `sendCommand` with it.
+
+For convenience you can use `trySendCommandSupervised` if you don't want to check if `Supervision CC` is supported before each command. It has the following signature:
+
+```ts
+trySendCommandSupervised(command: CommandClass, options?: SendSupervisedCommandOptions): Promise<SupervisionResult | undefined>
+```
+
+If `Supervision CC` is not supported, the returned promise resolves to `undefined`.
+
+### `waitForCommand`
+
+```ts
+waitForCommand<T extends CommandClass>(predicate: (cc: CommandClass) => boolean, timeout: number): Promise<T>
+```
+
+Waits until an unsolicited command is received which matches the given predicate or a timeout has elapsed. Resolves the received command. This method takes two arguments:
+
+-   `predicate` - A predicate function that will be called for every received command. If the function returns true, the returned promise will be resolved with the command.
+-   `timeout` - The timeout in milliseconds after which the returned promise will be rejected if no matching command has been received.
 
 ### `saveNetworkToCache`
 
@@ -135,6 +166,24 @@ async restoreNetworkFromCache(): Promise<void>
 ```
 
 This method restores the network information a previously saved cache file if one exists. Like `saveNetworkToCache` you shouldn't have to use it yourself.
+
+### `registerRequestHandler`
+
+```ts
+registerRequestHandler<T extends Message>(fnType: FunctionType, handler: RequestHandler<T>, oneTime: boolean = false): void
+```
+
+Registers a handler for messages that are not handled by the driver as part of a message exchange. The handler function needs to return a boolean indicating if the message has been handled. Registered handlers are called in sequence until a handler returns `true`.
+
+**Note:** For most use cases, it should not be necessary to use this method.
+
+### `unregisterRequestHandler`
+
+```ts
+unregisterRequestHandler(fnType: FunctionType, handler: RequestHandler): void
+```
+
+Unregisters a message handler that has been added with `registerRequestHandler`
 
 ## Driver properties
 
@@ -196,6 +245,8 @@ interface SendMessageOptions {
 	priority?: MessagePriority;
 	/** If an exception should be thrown when the message to send is not supported. Setting this to false is is useful if the capabilities haven't been determined yet. Default: true */
 	supportCheck?: boolean;
+	/** Whether the driver should update the node status to asleep or dead when a transaction is not acknowledged (repeatedly). Setting this to false will cause the simply transaction to be rejected on failure. Default: true */
+	changeNodeStatusOnMissingACK?: boolean;
 }
 ```
 
@@ -225,6 +276,41 @@ enum MessagePriority {
 	// Some devices need their state to be polled at regular intervals. Only do that when
 	// nothing else needs to be done
 	Poll = 7,
+}
+```
+
+### `SendCommandOptions`
+
+Influences the behavior of `driver.sendCommand`. Has all the properties of [`SendMessageOptions`](#SendMessageOptions) plus the following:
+
+-   `maxSendAttempts: number` - _(optional)_ How many times the driver should try to send the message. Defaults to 3.
+
+### `SendSupervisedCommandOptions`
+
+Influences the behavior of `driver.sendSupervisedCommand`. Has all the properties of [`SendCommandOptions`](#SendCommandOptions) plus the following:
+
+-   `requestStatusUpdates: boolean` - Whether status updates should be requested.
+-   `onUpdate: SupervisionUpdateHandler` - _(required when `requestStatusUpdates` is `true`)_ The handler to call when an update is received.
+
+The `onUpdate` has the signature `(status: SupervisionStatus, remainingDuration?: Duration) => void` where `SupervisionStatus` is defined as follows:
+
+```ts
+enum SupervisionStatus {
+	NoSupport = 0x00,
+	Working = 0x01,
+	Fail = 0x02,
+	Success = 0xff,
+}
+```
+
+### `SupervisionResult`
+
+Is used to report the status of a supervised command execution.
+
+```ts
+interface SupervisionResult {
+	status: SupervisionStatus;
+	remainingDuration?: Duration;
 }
 ```
 
