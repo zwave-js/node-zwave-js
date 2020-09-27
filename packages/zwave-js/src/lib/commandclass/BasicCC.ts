@@ -119,8 +119,7 @@ export class BasicCC extends CommandClass {
 
 		// try to query the current state - the node might not respond to BasicGet
 		await ignoreTimeout(
-			api,
-			async (api) => {
+			async () => {
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "querying Basic CC state...",

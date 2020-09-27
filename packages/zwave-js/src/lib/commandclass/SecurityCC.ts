@@ -126,8 +126,9 @@ export class SecurityCCAPI extends CCAPI {
 				priority: MessagePriority.PreTransmitHandshake,
 				// Only try getting a nonce once
 				maxSendAttempts: 1,
-				// We don't want failures causing us to treat the node as asleep
-				changeNodeStatusOnTimeout: false,
+				// We don't want failures causing us to treat the node as asleep or dead
+				// The "real" transaction will do that for us
+				changeNodeStatusOnMissingACK: false,
 			},
 		))!;
 		return response.nonce;
@@ -170,8 +171,6 @@ export class SecurityCCAPI extends CCAPI {
 			await this.driver.sendMessage(msg, {
 				...this.commandOptions,
 				priority: MessagePriority.Handshake,
-				// We don't want failures causing us to treat the node as asleep
-				changeNodeStatusOnTimeout: false,
 			});
 		} catch (e) {
 			if (
@@ -245,21 +244,13 @@ export class SecurityCCAPI extends CCAPI {
 			SecurityCommand.CommandsSupportedGet,
 		);
 
-		const nodeIsSecure = this.endpoint.getNodeUnsafe()?.isSecure;
-
 		const cc = new SecurityCCCommandsSupportedGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
 		const response = (await this.driver.sendCommand<
 			SecurityCCCommandsSupportedReport
-		>(cc, {
-			...this.commandOptions,
-			// This command doubles as a check if the node is actually included securely
-			// If we're unsure, don't change the node status when this times out,
-			// so a missing response can be detected as "not secure"
-			changeNodeStatusOnTimeout: nodeIsSecure !== "unknown",
-		}))!;
+		>(cc, this.commandOptions))!;
 		return pick(response, ["supportedCCs", "controlledCCs"]);
 	}
 }

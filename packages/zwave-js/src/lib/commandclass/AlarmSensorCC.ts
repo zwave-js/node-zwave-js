@@ -177,7 +177,7 @@ export class AlarmSensorCC extends CommandClass {
 		let supportedSensorTypes: readonly AlarmSensorType[] | undefined;
 		if (complete) {
 			if (
-				!(await ignoreTimeout(api, async (api) => {
+				!(await ignoreTimeout(async () => {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying supported sensor types...",
@@ -216,8 +216,7 @@ export class AlarmSensorCC extends CommandClass {
 				const sensorName = getEnumMemberName(AlarmSensorType, type);
 
 				await ignoreTimeout(
-					api,
-					async (api) => {
+					async () => {
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying current value for ${sensorName}...`,

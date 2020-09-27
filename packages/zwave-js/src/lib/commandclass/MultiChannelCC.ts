@@ -329,8 +329,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		if (api.supportsCommand(MultiChannelCommand.EndPointFind)) {
 			// Step 2a: Find all endpoints
 			await ignoreTimeout(
-				api,
-				async (api) => {
+				async () => {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying all endpoints...",

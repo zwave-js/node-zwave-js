@@ -296,7 +296,7 @@ export class MeterCC extends CommandClass {
 
 			if (complete || storedType == undefined) {
 				if (
-					!(await ignoreTimeout(api, async (api) => {
+					!(await ignoreTimeout(async () => {
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: "querying meter support...",
@@ -371,8 +371,7 @@ supports reset:       ${supportsReset}`;
 			for (const rateType of rateTypes) {
 				for (const scale of supportedScales) {
 					await ignoreTimeout(
-						api,
-						async (api) => {
+						async () => {
 							log.controller.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message: `querying meter value (type = ${getMeterTypeName(
@@ -412,8 +411,7 @@ supports reset:       ${supportsReset}`;
 				direction: "outbound",
 			});
 			await ignoreTimeout(
-				api,
-				async (api) => {
+				async () => {
 					await api.get();
 				},
 				() => {

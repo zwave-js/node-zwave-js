@@ -162,14 +162,12 @@ export class CCAPI {
  * Executes the given action and ignores any node timeout errors
  * Returns whether the execution was successful (`true`) or timed out (`false`)
  */
-export async function ignoreTimeout<T extends CCAPI>(
-	api: T,
-	action: (api: T) => Promise<void>,
+export async function ignoreTimeout(
+	action: () => Promise<void>,
 	onTimeout?: () => void,
 ): Promise<boolean> {
 	try {
-		// Inside the action, an API must be used which does not update the node status
-		await action(api.withOptions({ changeNodeStatusOnTimeout: false }));
+		await action();
 		return true;
 	} catch (e: unknown) {
 		if (

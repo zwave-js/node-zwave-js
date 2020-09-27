@@ -243,11 +243,11 @@ export interface SendMessageOptions {
 	/** If an exception should be thrown when the message to send is not supported. Setting this to false is is useful if the capabilities haven't been determined yet. Default: true */
 	supportCheck?: boolean;
 	/**
-	 * Whether the driver should update the node status to asleep or dead when the transactions times out (repeatedly).
+	 * Whether the driver should update the node status to asleep or dead when a transaction is not acknowledged (repeatedly).
 	 * Setting this to false will cause the simply transaction to be rejected on failure.
 	 * Default: true
 	 */
-	changeNodeStatusOnTimeout?: boolean;
+	changeNodeStatusOnMissingACK?: boolean;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
@@ -1777,9 +1777,9 @@ ${handlers.length} left`,
 			options.priority,
 		);
 
-		if (options.changeNodeStatusOnTimeout != undefined) {
+		if (options.changeNodeStatusOnMissingACK != undefined) {
 			transaction.changeNodeStatusOnTimeout =
-				options.changeNodeStatusOnTimeout;
+				options.changeNodeStatusOnMissingACK;
 		}
 
 		// start sending now (maybe)
