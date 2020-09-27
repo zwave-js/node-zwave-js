@@ -260,7 +260,7 @@ export type SupervisionUpdateHandler = (
 	remainingDuration?: Duration,
 ) => void;
 
-export type SendSupervisedCommandOptions = SendMessageOptions &
+export type SendSupervisedCommandOptions = SendCommandOptions &
 	(
 		| {
 				requestStatusUpdates: false;
@@ -941,11 +941,13 @@ export class Driver extends EventEmitter {
 	}
 
 	/**
-	 * Retrieves the maximum version of a command class the given node supports.
+	 * Retrieves the maximum version of a command class the given endpoint supports.
 	 * Returns 0 when the CC is not supported. Also returns 0 when the node was not found.
+	 * Falls back to querying the root endpoint if an endpoint was not found on the node
 	 *
 	 * @param cc The command class whose version should be retrieved
 	 * @param nodeId The node for which the CC version should be retrieved
+	 * @param endpointIndex The endpoint in question
 	 */
 	public getSupportedCCVersionForEndpoint(
 		cc: CommandClasses,

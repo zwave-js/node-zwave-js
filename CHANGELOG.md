@@ -10,6 +10,7 @@
 
 ### Bugfixes
 * Nodes are now only marked as dead or asleep if the controller receives no ACK for the sent messages. Missing responses to potentially unsupported requests no longer change the node status.
+* `SendSupervisedCommandOptions` now correctly extends `CommandOptions`
 
 ## 5.0.0 (2020-09-25)
 ### Breaking changes
