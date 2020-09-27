@@ -128,8 +128,7 @@ export class BatteryCC extends CommandClass {
 		});
 
 		await ignoreTimeout(
-			api,
-			async (api) => {
+			async () => {
 				// always query the status
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
@@ -177,8 +176,7 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 
 		if (this.version >= 2) {
 			await ignoreTimeout(
-				api,
-				async (api) => {
+				async () => {
 					// always query the health
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,

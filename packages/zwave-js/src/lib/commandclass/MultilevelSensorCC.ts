@@ -180,7 +180,7 @@ export class MultilevelSensorCC extends CommandClass {
 			// Sensors up to V4 only support a single value
 			// This is to be requested every time
 			if (
-				!(await ignoreTimeout(api, async (api) => {
+				!(await ignoreTimeout(async () => {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying current sensor reading...",
@@ -216,7 +216,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 			let sensorTypes: readonly number[];
 			if (complete) {
 				if (
-					!(await ignoreTimeout(api, async (api) => {
+					!(await ignoreTimeout(async () => {
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: "retrieving supported sensor types...",
@@ -258,7 +258,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				let sensorScales: readonly number[];
 				if (complete) {
 					if (
-						!(await ignoreTimeout(api, async (api) => {
+						!(await ignoreTimeout(async () => {
 							log.controller.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message: `querying supported scales for ${getSensorTypeName(
@@ -302,8 +302,7 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 
 				// Always query the current sensor reading
 				await ignoreTimeout(
-					api,
-					async (api) => {
+					async () => {
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying ${getSensorTypeName(

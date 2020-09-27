@@ -154,7 +154,7 @@ export class BinarySensorCC extends CommandClass {
 		let supportedSensorTypes: readonly BinarySensorType[] | undefined;
 		if (complete && this.version >= 2) {
 			if (
-				!(await ignoreTimeout(api, async (api) => {
+				!(await ignoreTimeout(async () => {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying supported sensor types...",
@@ -191,8 +191,7 @@ export class BinarySensorCC extends CommandClass {
 		// Always query (all of) the sensor's current value(s)
 		if (this.version === 1) {
 			await ignoreTimeout(
-				api,
-				async (api) => {
+				async () => {
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying current value...",
@@ -218,8 +217,7 @@ export class BinarySensorCC extends CommandClass {
 			for (const type of supportedSensorTypes) {
 				const sensorName = getEnumMemberName(BinarySensorType, type);
 				await ignoreTimeout(
-					api,
-					async (api) => {
+					async () => {
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying current value for ${sensorName}...`,
