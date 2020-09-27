@@ -223,32 +223,55 @@ function persistUserCode(
 	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
 	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
 	const valueDB = this.getValueDB();
+	const supportedUserIDStatuses =
+		valueDB.getValue<UserIDStatus[]>(
+			getSupportedUserIDStatusesValueID(this.endpointIndex),
+		) ??
+		(this.version === 1
+			? [
+					UserIDStatus.Available,
+					UserIDStatus.Enabled,
+					UserIDStatus.Disabled,
+			  ]
+			: [
+					UserIDStatus.Available,
+					UserIDStatus.Enabled,
+					UserIDStatus.Disabled,
+					UserIDStatus.Messaging,
+					UserIDStatus.PassageMode,
+			  ]);
 
-	// Always create metadata if it does not exist
-	if (!valueDB.hasMetadata(statusValueId)) {
-		valueDB.setMetadata(statusValueId, {
-			...ValueMetadata.Number,
-			label: `User ID status (${userId})`,
-			states: enumValuesToMetadataStates(UserIDStatus, [
-				UserIDStatus.Available,
-				UserIDStatus.Enabled,
-				UserIDStatus.Disabled,
-				UserIDStatus.Messaging,
-				UserIDStatus.PassageMode,
-			]),
-		});
-	}
-	if (!valueDB.hasMetadata(codeValueId)) {
-		valueDB.setMetadata(codeValueId, {
-			...ValueMetadata.String,
-			minLength: 4,
-			maxLength: 10,
-			label: `User Code (${userId})`,
-		});
-	}
+	// Check if this code is supported
+	if (userIdStatus === UserIDStatus.StatusNotAvailable) {
+		// It is not, remove all values if any exist
+		valueDB.removeValue(statusValueId);
+		valueDB.removeValue(codeValueId);
+		valueDB.setMetadata(statusValueId, undefined);
+		valueDB.setMetadata(codeValueId, undefined);
+	} else {
+		// Always create metadata if it does not exist
+		if (!valueDB.hasMetadata(statusValueId)) {
+			valueDB.setMetadata(statusValueId, {
+				...ValueMetadata.Number,
+				label: `User ID status (${userId})`,
+				states: enumValuesToMetadataStates(
+					UserIDStatus,
+					supportedUserIDStatuses,
+				),
+			});
+		}
+		if (!valueDB.hasMetadata(codeValueId)) {
+			valueDB.setMetadata(codeValueId, {
+				...ValueMetadata.String,
+				minLength: 4,
+				maxLength: 10,
+				label: `User Code (${userId})`,
+			});
+		}
 
-	valueDB.setValue(statusValueId, userIdStatus);
-	valueDB.setValue(codeValueId, userCode);
+		valueDB.setValue(statusValueId, userIdStatus);
+		valueDB.setValue(codeValueId, userCode);
+	}
 
 	return true;
 }
