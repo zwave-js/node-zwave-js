@@ -16,7 +16,9 @@ import {
 	CCAPI,
 	SetValueImplementation,
 	SET_VALUE,
+	throwMissingPropertyKey,
 	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
 	throwWrongValueType,
 } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
@@ -317,10 +319,9 @@ export class UserCodeCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property },
+		{ property, propertyKey },
 		value,
 	): Promise<void> => {
-		// TODO: Address user codes
 		if (property === "keypadMode") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -341,6 +342,59 @@ export class UserCodeCCAPI extends CCAPI {
 				);
 			}
 			await this.setMasterCode(value);
+		} else if (property === "userIdStatus") {
+			if (propertyKey == undefined) {
+				throwMissingPropertyKey(this.ccId, property);
+			} else if (typeof propertyKey !== "number") {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+			}
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+
+			if (value === UserIDStatus.Available) {
+				// Clear Code
+				await this.clear(propertyKey);
+			} else {
+				// We need to set the user code along with the status
+				const node = this.endpoint.getNodeUnsafe()!;
+				const userCode = node.getValue<string>(
+					getUserCodeValueID(this.endpoint.index, propertyKey),
+				);
+				await this.set(propertyKey, value, userCode!);
+			}
+		} else if (property === "userCode") {
+			if (propertyKey == undefined) {
+				throwMissingPropertyKey(this.ccId, property);
+			} else if (typeof propertyKey !== "number") {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+			}
+			if (typeof value !== "string") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"string",
+					typeof value,
+				);
+			}
+
+			// We need to set the user id status along with the code
+			const node = this.endpoint.getNodeUnsafe()!;
+			let userIdStatus = node.getValue<UserIDStatus>(
+				getUserIdStatusValueID(this.endpoint.index, propertyKey),
+			);
+			if (
+				userIdStatus === UserIDStatus.Available ||
+				userIdStatus == undefined
+			) {
+				userIdStatus = UserIDStatus.Enabled;
+			}
+			await this.set(propertyKey, userIdStatus as any, value);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
