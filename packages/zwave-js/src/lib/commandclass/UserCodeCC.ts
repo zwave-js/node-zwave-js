@@ -29,6 +29,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -169,6 +170,14 @@ export function getSupportedKeypadModesValueID(
 		commandClass: CommandClasses["User Code"],
 		endpoint,
 		property: "supportedKeypadModes",
+	};
+}
+
+export function getKeypadModeValueID(endpoint: number | undefined): ValueID {
+	return {
+		commandClass: CommandClasses["User Code"],
+		endpoint,
+		property: "keypadMode",
 	};
 }
 
@@ -1129,7 +1138,27 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 		this.persistValues();
 	}
 
-	@ccValue()
+	public persistValues(): boolean {
+		if (!super.persistValues()) return false;
+		// Update the keypad modes metadata
+		const supportedKeypadModes = this.getValueDB().getValue<KeypadMode[]>(
+			getSupportedKeypadModesValueID(this.endpointIndex),
+		) ?? [this.keypadMode];
+
+		const valueId = getKeypadModeValueID(this.endpointIndex);
+		this.getValueDB().setMetadata(valueId, {
+			...ValueMetadata.ReadOnlyNumber,
+			label: "Keypad Mode",
+			states: enumValuesToMetadataStates(
+				KeypadMode,
+				supportedKeypadModes,
+			),
+		});
+
+		return true;
+	}
+
+	@ccValue({ minVersion: 2 })
 	public readonly keypadMode: KeypadMode;
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -1237,7 +1266,13 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 		this.persistValues();
 	}
 
-	@ccValue()
+	@ccValue({ minVersion: 2 })
+	@ccValueMetadata({
+		...ValueMetadata.String,
+		label: "Master Code",
+		minLength: 4,
+		maxLength: 10,
+	})
 	public readonly masterCode: string;
 
 	public toLogEntry(): MessageOrCCLogEntry {
