@@ -1232,7 +1232,7 @@ export class Driver extends EventEmitter {
 	/**
 	 * Handles the case that a node failed to respond in time
 	 */
-	private handleNodeTimeout(
+	private handleMissingNodeACK(
 		transaction: Transaction & {
 			message: SendDataRequest;
 		},
@@ -1798,16 +1798,15 @@ ${handlers.length} left`,
 			}
 			return ret;
 		} catch (e) {
-			// If the node does not respond, it is either asleep or dead
+			// If the node does not acknowledge our request, it is either asleep or dead
 			if (
 				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Controller_NodeTimeout &&
+				e.code === ZWaveErrorCodes.Controller_CallbackNOK &&
 				transaction.message instanceof SendDataRequest &&
 				// Ignore pre-transmit handshakes because the actual transaction will be retried
 				transaction.priority !== MessagePriority.PreTransmitHandshake
 			) {
-				// TODO: Handle callback NOK
-				this.handleNodeTimeout(
+				this.handleMissingNodeACK(
 					transaction as Transaction & { message: CommandClass },
 				);
 			}
