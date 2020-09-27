@@ -12,8 +12,16 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
-import { CCAPI } from "../commandclass/API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwUnsupportedProperty,
+	throwWrongValueType,
+} from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
+import log from "../log";
+import { MessagePriority } from "../message/Constants";
 import {
 	API,
 	CCCommand,
@@ -102,13 +110,23 @@ export function getUserCodeValueID(
 	};
 }
 
+export function getUserCodeChecksumValueID(
+	endpoint: number | undefined,
+): ValueID {
+	return {
+		commandClass: CommandClasses["User Code"],
+		endpoint,
+		property: "userCodeChecksum",
+	};
+}
+
 export function getSupportsMasterCodeValueID(
 	endpoint: number | undefined,
 ): ValueID {
 	return {
 		commandClass: CommandClasses["User Code"],
 		endpoint,
-		property: "masterCode",
+		property: "supportsMasterCode",
 	};
 }
 
@@ -118,7 +136,7 @@ export function getSupportsMasterCodeDeactivationValueID(
 	return {
 		commandClass: CommandClasses["User Code"],
 		endpoint,
-		property: "masterCodeDeactivation",
+		property: "supportsMasterCodeDeactivation",
 	};
 }
 
@@ -128,7 +146,7 @@ export function getSupportsUserCodeChecksumValueID(
 	return {
 		commandClass: CommandClasses["User Code"],
 		endpoint,
-		property: "userCodeChecksum",
+		property: "supportsUserCodeChecksum",
 	};
 }
 
@@ -168,7 +186,7 @@ export function getSupportsMultipleUserCodeSetValueID(
 	return {
 		commandClass: CommandClasses["User Code"],
 		endpoint,
-		property: "multipleUserCodeSet",
+		property: "supportsMultipleUserCodeSet",
 	};
 }
 
@@ -275,6 +293,36 @@ export class UserCodeCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property },
+		value,
+	): Promise<void> => {
+		// TODO: Address user codes
+		if (property === "keypadMode") {
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+			await this.setKeypadMode(value);
+		} else if (property === "masterCode") {
+			if (typeof value !== "string") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"string",
+					typeof value,
+				);
+			}
+			await this.setMasterCode(value);
+		} else {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
 	public async getUsersCount(): Promise<number> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
@@ -298,7 +346,7 @@ export class UserCodeCCAPI extends CCAPI {
 	public async get(
 		userId: number,
 		multiple: true,
-	): Promise<readonly UserCode[]>;
+	): Promise<{ userCodes: readonly UserCode[]; nextUserId: number }>;
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(userId: number, multiple: boolean = false) {
 		if (userId > 255 || multiple) {
@@ -317,7 +365,7 @@ export class UserCodeCCAPI extends CCAPI {
 				UserCodeCCExtendedUserCodeReport
 			>(cc, this.commandOptions))!;
 			if (multiple) {
-				return response.userCodes;
+				return pick(response, ["userCodes", "nextUserId"]);
 			} else {
 				return pick(response.userCodes[0], [
 					"userIdStatus",
@@ -364,6 +412,9 @@ export class UserCodeCCAPI extends CCAPI {
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		// Refresh the current value
+		await this.get(userId);
 	}
 
 	/** Configures multiple user codes */
@@ -387,20 +438,23 @@ export class UserCodeCCAPI extends CCAPI {
 	 */
 	public async clear(userId: number = 0): Promise<void> {
 		if (this.version > 1 || userId > 255) {
-			return this.setMany([
+			await this.setMany([
 				{ userId, userIdStatus: UserIDStatus.Available },
 			]);
+		} else {
+			this.assertSupportsCommand(UserCodeCommand, UserCodeCommand.Set);
+
+			const cc = new UserCodeCCSet(this.driver, {
+				nodeId: this.endpoint.nodeId,
+				endpoint: this.endpoint.index,
+				userId,
+				userIdStatus: UserIDStatus.Available,
+			});
+			await this.driver.sendCommand(cc, this.commandOptions);
 		}
 
-		this.assertSupportsCommand(UserCodeCommand, UserCodeCommand.Set);
-
-		const cc = new UserCodeCCSet(this.driver, {
-			nodeId: this.endpoint.nodeId,
-			endpoint: this.endpoint.index,
-			userId,
-			userIdStatus: UserIDStatus.Available,
-		});
-		await this.driver.sendCommand(cc, this.commandOptions);
+		// Refresh the current value
+		await this.get(userId);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -418,11 +472,11 @@ export class UserCodeCCAPI extends CCAPI {
 			UserCodeCCCapabilitiesReport
 		>(cc, this.commandOptions))!;
 		return pick(response, [
-			"masterCode",
-			"masterCodeDeactivation",
-			"userCodeChecksum",
-			"multipleUserCodeReport",
-			"multipleUserCodeSet",
+			"supportsMasterCode",
+			"supportsMasterCodeDeactivation",
+			"supportsUserCodeChecksum",
+			"supportsMultipleUserCodeReport",
+			"supportsMultipleUserCodeSet",
 			"supportedUserIDStatuses",
 			"supportedKeypadModes",
 			"supportedASCIIChars",
@@ -458,6 +512,9 @@ export class UserCodeCCAPI extends CCAPI {
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		// Refresh the current value
+		await this.getKeypadMode();
 	}
 
 	public async getMasterCode(): Promise<string> {
@@ -489,6 +546,9 @@ export class UserCodeCCAPI extends CCAPI {
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		// Refresh the current value
+		await this.getMasterCode();
 	}
 
 	public async getUserCodeChecksum(): Promise<number> {
@@ -512,6 +572,117 @@ export class UserCodeCCAPI extends CCAPI {
 @implementedVersion(2)
 export class UserCodeCC extends CommandClass {
 	declare ccCommand: UserCodeCommand;
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["User Code"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		log.controller.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		// Query capabilities first because they determine the next steps
+		let supportsMasterCode: boolean;
+		let supportsUserCodeChecksum: boolean;
+		let supportedKeypadModes: readonly KeypadMode[];
+		let supportedUsers: number;
+		if (complete) {
+			log.controller.logNode(node.id, {
+				message: "querying capabilities...",
+				direction: "outbound",
+			});
+			({
+				supportsMasterCode,
+				supportsUserCodeChecksum,
+				supportedKeypadModes,
+			} = await api.getCapabilities());
+
+			log.controller.logNode(node.id, {
+				message: "querying number of user codes...",
+				direction: "outbound",
+			});
+			supportedUsers = await api.getUsersCount();
+		} else {
+			supportsMasterCode =
+				node.getValue<boolean>(
+					getSupportsMasterCodeValueID(this.endpointIndex),
+				) ?? false;
+			supportsUserCodeChecksum =
+				node.getValue<boolean>(
+					getSupportsUserCodeChecksumValueID(this.endpointIndex),
+				) ?? false;
+			supportedKeypadModes =
+				node.getValue<readonly KeypadMode[]>(
+					getSupportedKeypadModesValueID(this.endpointIndex),
+				) ?? [];
+			supportedUsers =
+				node.getValue<number>(
+					getSupportedUsersValueID(this.endpointIndex),
+				) ?? 0;
+		}
+
+		// Now check for changed values and codes
+		if (this.version >= 2) {
+			if (supportsMasterCode) {
+				log.controller.logNode(node.id, {
+					message: "querying master code...",
+					direction: "outbound",
+				});
+				await api.getMasterCode();
+			}
+			if (supportedKeypadModes.length > 1) {
+				log.controller.logNode(node.id, {
+					message: "querying active keypad mode...",
+					direction: "outbound",
+				});
+				await api.getKeypadMode();
+			}
+			const storedUserCodeChecksum =
+				node.getValue<number>(
+					getUserCodeChecksumValueID(this.endpointIndex),
+				) ?? 0;
+			let currentUserCodeChecksum = 0;
+			if (supportsUserCodeChecksum) {
+				log.controller.logNode(node.id, {
+					message: "retrieving current user code checksum...",
+					direction: "outbound",
+				});
+				currentUserCodeChecksum = await api.getUserCodeChecksum();
+			}
+			if (
+				!supportsUserCodeChecksum ||
+				currentUserCodeChecksum !== storedUserCodeChecksum
+			) {
+				log.controller.logNode(node.id, {
+					message:
+						"checksum changed or is not supported, querying all user codes...",
+					direction: "outbound",
+				});
+				let nextUserId = 1;
+				while (nextUserId > 0 && nextUserId <= supportedUsers) {
+					({ nextUserId } = await api.get(nextUserId, true));
+				}
+			}
+		} else {
+			// V1
+			log.controller.logNode(node.id, {
+				message: "querying all user codes...",
+				direction: "outbound",
+			});
+			for (let userId = 1; userId <= supportedUsers; userId++) {
+				await api.get(userId);
+			}
+		}
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 }
 
 type UserCodeCCSetOptions =
@@ -736,8 +907,10 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		let offset = 0;
 
 		validatePayload(this.payload.length >= offset + 1);
-		this.masterCode = !!(this.payload[offset] & 0b100_00000);
-		this.masterCodeDeactivation = !!(this.payload[offset] & 0b010_00000);
+		this.supportsMasterCode = !!(this.payload[offset] & 0b100_00000);
+		this.supportsMasterCodeDeactivation = !!(
+			this.payload[offset] & 0b010_00000
+		);
 		const statusBitMaskLength = this.payload[offset] & 0b000_11111;
 		offset += 1;
 
@@ -750,9 +923,13 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 		);
 		offset += statusBitMaskLength;
 
-		this.userCodeChecksum = !!(this.payload[offset] & 0b100_00000);
-		this.multipleUserCodeReport = !!(this.payload[offset] & 0b010_00000);
-		this.multipleUserCodeSet = !!(this.payload[offset] & 0b001_00000);
+		this.supportsUserCodeChecksum = !!(this.payload[offset] & 0b100_00000);
+		this.supportsMultipleUserCodeReport = !!(
+			this.payload[offset] & 0b010_00000
+		);
+		this.supportsMultipleUserCodeSet = !!(
+			this.payload[offset] & 0b001_00000
+		);
 		const keypadModesBitMaskLength = this.payload[offset] & 0b000_11111;
 		offset += 1;
 
@@ -780,15 +957,15 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	}
 
 	@ccValue({ internal: true })
-	public readonly masterCode: boolean;
+	public readonly supportsMasterCode: boolean;
 	@ccValue({ internal: true })
-	public readonly masterCodeDeactivation: boolean;
+	public readonly supportsMasterCodeDeactivation: boolean;
 	@ccValue({ internal: true })
-	public readonly userCodeChecksum: boolean;
+	public readonly supportsUserCodeChecksum: boolean;
 	@ccValue({ internal: true })
-	public readonly multipleUserCodeReport: boolean;
+	public readonly supportsMultipleUserCodeReport: boolean;
 	@ccValue({ internal: true })
-	public readonly multipleUserCodeSet: boolean;
+	public readonly supportsMultipleUserCodeSet: boolean;
 	@ccValue({ internal: true })
 	public readonly supportedUserIDStatuses: readonly UserIDStatus[];
 	@ccValue({ internal: true })
@@ -1010,7 +1187,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 		this.persistValues();
 	}
 
-	@ccValue()
+	@ccValue({ internal: true })
 	public readonly userCodeChecksum: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
