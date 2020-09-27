@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Nodes are now only marked as dead or asleep if the controller receives no ACK for the sent messages. Missing responses to potentially unsupported requests no longer change the node status.
+
 ## 5.0.0 (2020-09-25)
 ### Breaking changes
 * The status `Alive` was added to the `NodeStatus` enumeration. The node status can no longer switch between all states, only between `Dead` and `Alive`, between `Asleep` and `Awake` and from and to `Unknown`.
