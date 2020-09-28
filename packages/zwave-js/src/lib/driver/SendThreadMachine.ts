@@ -12,7 +12,6 @@ import {
 	StateMachine,
 } from "xstate";
 import { pure, raise, send } from "xstate/lib/actions";
-import type { ZWaveOptions } from "zwave-js/src";
 import type { CommandClass } from "../commandclass/CommandClass";
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
@@ -27,6 +26,7 @@ import {
 	CommandQueueInterpreter,
 	createCommandQueueMachine,
 } from "./CommandQueueMachine";
+import type { ZWaveOptions } from "./Driver";
 import type {
 	SerialAPICommandDoneData,
 	SerialAPICommandMachineParams,
