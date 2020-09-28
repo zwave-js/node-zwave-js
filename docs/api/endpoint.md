@@ -20,6 +20,14 @@ controlsCC(cc: CommandClasses): boolean
 
 This method tests if the current endpoint can control the given command class in other devices. It takes the command class ID as a single argument.
 
+### `isCCSecure`
+
+```ts
+isCCSecure(cc: CommandClasses): boolean
+```
+
+Tests if this endpoint supports or controls the given CC only securely. It takes the command class ID as a single argument.
+
 ### `getCCVersion`
 
 ```ts
@@ -38,6 +46,22 @@ Creates an instance of the given command class. The instance is linked to the cu
 The method takes the command class ID as a single argument. You may optionally pass the expected return type as a type parameter.
 
 **Note:** You should make sure that the requested command class is implemented by the node. If it neither supported nor controlled, this method will throw.
+
+### `createCCInstanceUnsafe`
+
+```ts
+createCCInstanceUnsafe<T>(cc: CommandClasses): T | undefined
+```
+
+Like [`createCCInstance`](#createCCInstance) but returns `undefined` instead of throwing when a CC is not supported.
+
+### `getNodeUnsafe`
+
+```ts
+getNodeUnsafe(): ZWaveNode | undefined
+```
+
+Returns the node this endpoint belongs to (or undefined if the node doesn't exist).
 
 ## Endpoint properties
 

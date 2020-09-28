@@ -41,7 +41,7 @@ This method is guaranteed to return at least some very basic metadata, even if t
 ### `getDefinedValueIDs`
 
 ```ts
-getDefinedValueIDs(): ValueID[]
+getDefinedValueIDs(): TranslatedValueID[]
 ```
 
 When building a user interface for a Z-Wave application, you might need to know all possible values in advance. This method returns an array of all ValueIDs that are available for this node.
@@ -76,6 +76,14 @@ getEndpoint(index: number): Endpoint | undefined;
 
 In Z-Wave, a single node may provide different functionality under different end points, for example single sockets of a switchable plug strip. This method allows you to access a specific end point of the current node. It takes a single argument denoting the endpoint's index and returns the corresponding endpoint instance if one exists at that index. Calling `getEndpoint` with the index `0` always returns the node itself, which is the "root" endpoint of the device.
 
+### `getEndpointCount`
+
+```ts
+getEndpointCount(): number
+```
+
+Returns the current endpoint count of this node.
+
 ### `getAllEndpoints`
 
 ```ts
@@ -99,6 +107,60 @@ isAwake(): boolean
 ```
 
 Returns whether the node is currently assumed awake.
+
+### `refreshInfo`
+
+```ts
+refreshInfo(): Promise<void>
+```
+
+Resets all information about this node and forces a fresh interview.
+
+**WARNING:** Take care NOT to call this method when the node is already being interviewed. Otherwise the node information may become inconsistent.
+
+### `beginFirmwareUpdate`
+
+```ts
+beginFirmwareUpdate(data: Buffer, target?: number): Promise<void>
+```
+
+**WARNING: Use at your own risk! We don't take any responsibility if your devices don't work after an update.**
+
+Starts an OTA firmware update process for this node. This method takes two arguments:
+
+-   `data` - A buffer containing the firmware image in a format supported by the device
+-   `target` - _(optional)_ The firmware target (i.e. chip) to upgrade. 0 updates the Z-Wave chip, >=1 updates others if they exist
+
+The library includes a helper method (exported from `zwave-js/Utils`) to extract the raw firmware image from some common file types:
+
+```ts
+function extractFirmware(data: Buffer, format: FirmwareFileFormat): Firmware
+```
+
+`data` is the raw file data, `format` describes which kind of file that is. The following formats are available:
+
+-   -   `"aeotec"` - A Windows executable (`.exe` or `.ex_`) that contains Aeotec's upload tool
+-   -   `"otz"` - A compressed firmware file in Intel HEX format
+-   -   `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
+
+If successful, `extractFirmware` returns an object of the following form, whose properties can be passed to `beginFirmwareUpdate`:
+
+```ts
+interface Firmware {
+	data: Buffer;
+	firmwareTarget?: number;
+}
+```
+
+If no firmware data can be extracted, the method will throw.
+
+### `abortFirmwareUpdate`
+
+```ts
+abortFirmwareUpdate(): Promise<void>
+```
+
+Aborts an active firmware update process.
 
 ## ZWaveNode properties
 
@@ -251,6 +313,14 @@ readonly productType: number
 ```
 
 These three properties together identify the actual device this node is.
+
+### `deviceConfig`
+
+```ts
+readonly deviceConfig: DeviceConfig | undefined
+```
+
+Contains additional information about this node, loaded from a [config file](../development/config-files.md).
 
 ### `neighbors`
 
