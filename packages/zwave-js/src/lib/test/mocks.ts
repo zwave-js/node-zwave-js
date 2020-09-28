@@ -81,6 +81,21 @@ export function createEmptyMockDriver() {
 		},
 		valueDB: new Map(),
 		metadataDB: new Map(),
+		options: {
+			timeouts: {
+				ack: 1000,
+				byte: 150,
+				response: 1600,
+				report: 1600,
+				nonce: 5000,
+				sendDataCallback: 65000,
+				nodeAwake: 10000,
+			},
+			attempts: {
+				sendData: 3,
+				controller: 3,
+			},
+		},
 	};
 	ret.sendCommand.mockImplementation(async (command, options) => {
 		const msg = new SendDataRequest((ret as unknown) as Driver, {

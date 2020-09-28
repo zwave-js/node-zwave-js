@@ -187,6 +187,7 @@ export class ZWaveNode extends Endpoint {
 		// Create and hook up the status machine
 		this.statusMachine = interpretEx(
 			createNodeStatusMachine(
+				this,
 				{
 					notifyAwakeTimeoutElapsed: () => {
 						log.driver.print(
@@ -195,7 +196,7 @@ export class ZWaveNode extends Endpoint {
 						);
 					},
 				},
-				this,
+				driver.options.timeouts,
 			),
 		);
 		this.statusMachine.onTransition((state) => {

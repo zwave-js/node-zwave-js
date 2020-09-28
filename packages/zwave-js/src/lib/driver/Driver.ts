@@ -26,7 +26,7 @@ import {
 	ZWaveSerialPortBase,
 	ZWaveSocket,
 } from "@zwave-js/serial";
-import { DeepPartial, num2hex } from "@zwave-js/shared";
+import { DeepPartial, num2hex, pick } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
@@ -74,6 +74,7 @@ import {
 } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
+	MAX_SEND_ATTEMPTS,
 	SendDataAbort,
 	SendDataMulticastRequest,
 	SendDataRequest,
@@ -109,18 +110,38 @@ const libNameString = `
 `;
 
 export interface ZWaveOptions {
+	/** Specify timeouts in milliseconds */
 	timeouts: {
 		/** how long to wait for an ACK */
 		ack: number;
 		/** not sure */
 		byte: number;
-		/** How much time a node gets to process a request */
+		/**
+		 * How long to wait for a controller response. Usually this timeout should never elapse,
+		 * so this is merely a safeguard against the driver stalling
+		 */
+		response: number;
+		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
+		sendDataCallback: number;
+		/** How much time a node gets to process a request and send a response */
 		report: number;
 		/** How long generated nonces are valid */
 		nonce: number;
-		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
-		sendDataCallback: number;
+		/** How long a node is assumed to be awake after the last communication with it */
+		nodeAwake: number;
 	};
+
+	attempts: {
+		/** How often the driver should try communication with the controller before giving up */
+		controller: number;
+		/** How often the driver should try sending SendData commands before giving up */
+		sendData: number;
+		/**
+		 * How many attempts should be made for each node interview before giving up
+		 */
+		nodeInterview: number;
+	};
+
 	/**
 	 * @internal
 	 * Set this to true to skip the controller interview. Useful for testing purposes
@@ -128,8 +149,9 @@ export interface ZWaveOptions {
 	skipInterview?: boolean;
 	/**
 	 * How many attempts should be made for each node interview before giving up
+	 * @deprecated Use `attempts.nodeInterview` instead.
 	 */
-	nodeInterviewAttempts: number;
+	nodeInterviewAttempts?: number;
 	/**
 	 * Allows you to replace the default file system driver used to store and read the cache
 	 */
@@ -145,12 +167,18 @@ const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
-		report: 1000,
+		response: 1600,
+		report: 1600,
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
+		nodeAwake: 10000,
+	},
+	attempts: {
+		controller: 3,
+		sendData: 3,
+		nodeInterview: 5,
 	},
 	skipInterview: false,
-	nodeInterviewAttempts: 5,
 	fs: fsExtra,
 	cacheDir: path.resolve(__dirname, "../../..", "cache"),
 };
@@ -193,9 +221,15 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.report < 1) {
+	if (options.timeouts.response < 500 || options.timeouts.response > 5000) {
 		throw new ZWaveError(
-			`The Report timeout must be positive!`,
+			`The Response timeout must be between 500 and 5000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.timeouts.report < 1000 || options.timeouts.report > 40000) {
+		throw new ZWaveError(
+			`The Report timeout must be between 1000 and 40000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -207,13 +241,46 @@ function checkOptions(options: ZWaveOptions): void {
 	}
 	if (options.timeouts.sendDataCallback < 10000) {
 		throw new ZWaveError(
-			`The Send Data Callback timeout must be at least 10 seconds!`,
+			`The Send Data Callback timeout must be at least 10000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.timeouts.nodeAwake < 1000 ||
+		options.timeouts.nodeAwake > 30000
+	) {
+		throw new ZWaveError(
+			`The Node awake timeout must be between 1000 and 30000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
 	if (options.networkKey != undefined && options.networkKey.length !== 16) {
 		throw new ZWaveError(
 			`The network key must be a buffer with length 16!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.attempts.controller < 1 || options.attempts.controller > 3) {
+		throw new ZWaveError(
+			`The Controller attempts must be between 1 and 3!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.attempts.sendData < 1 ||
+		options.attempts.sendData > MAX_SEND_ATTEMPTS
+	) {
+		throw new ZWaveError(
+			`The SendData attempts must be between 1 and ${MAX_SEND_ATTEMPTS}!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) < 1 ||
+		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) > 10
+	) {
+		throw new ZWaveError(
+			`The Node interview attempts must be between 1 and 10!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -251,7 +318,7 @@ export interface SendMessageOptions {
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
-	/** How many times the driver should try to send the message. Defaults to `MAX_SEND_ATTEMPTS` */
+	/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 	maxSendAttempts?: number;
 }
 
@@ -379,34 +446,43 @@ export class Driver extends EventEmitter {
 		process.on("uncaughtException", this._cleanupHandler);
 
 		// And initialize but don't start the send thread machine
-		const sendThreadMachine = createSendThreadMachine({
-			sendData: this.writeSerial.bind(this),
-			createSendDataAbort: () => new SendDataAbort(this),
-			notifyUnsolicited: (msg) => {
-				void this.handleUnsolicitedMessage(msg);
+		const sendThreadMachine = createSendThreadMachine(
+			{
+				sendData: this.writeSerial.bind(this),
+				createSendDataAbort: () => new SendDataAbort(this),
+				notifyUnsolicited: (msg) => {
+					void this.handleUnsolicitedMessage(msg);
+				},
+				notifyRetry: (
+					command,
+					message,
+					attempts,
+					maxAttempts,
+					delay,
+				) => {
+					if (command === "SendData") {
+						log.controller.logNode(
+							message.getNodeId() ?? 255,
+							`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+							"warn",
+						);
+					} else {
+						log.controller.print(
+							`No response from controller after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+							"warn",
+						);
+					}
+				},
+				timestamp: highResTimestamp,
+				rejectTransaction: (transaction, error) => {
+					transaction.promise.reject(error);
+				},
+				resolveTransaction: (transaction, result) => {
+					transaction.promise.resolve(result);
+				},
 			},
-			notifyRetry: (command, message, attempts, maxAttempts, delay) => {
-				if (command === "SendData") {
-					log.controller.logNode(
-						message.getNodeId() ?? 255,
-						`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-						"warn",
-					);
-				} else {
-					log.controller.print(
-						`No response from controller after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-						"warn",
-					);
-				}
-			},
-			timestamp: highResTimestamp,
-			rejectTransaction: (transaction, error) => {
-				transaction.promise.reject(error);
-			},
-			resolveTransaction: (transaction, result) => {
-				transaction.promise.resolve(result);
-			},
-		});
+			pick(this.options, ["timeouts", "attempts"]),
+		);
 		this.sendThread = interpret(sendThreadMachine);
 		// this.sendThread.onTransition((state) => {
 		// 	if (state.changed)
@@ -693,19 +769,21 @@ export class Driver extends EventEmitter {
 			this.retryNodeInterviewTimeouts.delete(node.id);
 		}
 
+		const maxInterviewAttempts =
+			this.options.nodeInterviewAttempts ??
+			this.options.attempts.nodeInterview;
+
 		try {
 			if (!(await node.interview())) {
 				// Find out if we may retry the interview
 				if (node.status === NodeStatus.Dead) {
 					log.controller.logNode(
 						node.id,
-						`Interview attempt (${node.interviewAttempts}/${this.options.nodeInterviewAttempts}) failed, node is dead.`,
+						`Interview attempt (${node.interviewAttempts}/${maxInterviewAttempts}) failed, node is dead.`,
 						"warn",
 					);
 					node.emit("interview failed", node, "The node is dead");
-				} else if (
-					node.interviewAttempts < this.options.nodeInterviewAttempts
-				) {
+				} else if (node.interviewAttempts < maxInterviewAttempts) {
 					// This is most likely because the node is unable to handle our load of requests now. Give it some time
 					const retryTimeout = Math.min(
 						30000,
@@ -713,13 +791,13 @@ export class Driver extends EventEmitter {
 					);
 					log.controller.logNode(
 						node.id,
-						`Interview attempt ${node.interviewAttempts}/${this.options.nodeInterviewAttempts} failed, retrying in ${retryTimeout} ms...`,
+						`Interview attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed, retrying in ${retryTimeout} ms...`,
 						"warn",
 					);
 					node.emit(
 						"interview failed",
 						node,
-						`Attempt ${node.interviewAttempts}/${this.options.nodeInterviewAttempts} failed`,
+						`Attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed`,
 					);
 					// Schedule the retry and remember the timeout instance
 					this.retryNodeInterviewTimeouts.set(

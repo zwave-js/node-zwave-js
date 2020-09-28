@@ -14,7 +14,6 @@ import {
 	Typestate,
 } from "xstate";
 import { respond } from "xstate/lib/actions";
-import type { SerialAPICommandEvent } from "zwave-js/src/lib/driver/SerialAPICommandMachine";
 import {
 	SendDataAbort,
 	SendDataMulticastRequest,
@@ -25,6 +24,7 @@ import {
 } from "../controller/SendDataMessages";
 import type { Message } from "../message/Message";
 import type { SendDataErrorData } from "./SendThreadMachine";
+import type { SerialAPICommandEvent } from "./SerialAPICommandMachine";
 import type { Transaction } from "./Transaction";
 
 export interface ServiceImplementations {

@@ -331,16 +331,35 @@ interface ZWaveOptions {
 	/** Specify timeouts in milliseconds */
 	timeouts: {
 		/** how long to wait for an ACK */
-		ack: number; // default: 1000 ms
+		ack: number; // >=1, default: 1000 ms
 		/** not sure */
-		byte: number; // default: 150 ms
-		/** How much time a node gets to process a request */
-		report: number; // default: 1000 ms
+		byte: number; // >=1, default: 150 ms
+		/**
+		 * How long to wait for a controller response. Usually this timeout should never elapse,
+		 * so this is merely a safeguard against the driver stalling
+		 */
+		response: number; // [500...5000], default: 1600 ms
+		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
+		sendDataCallback: number; // >=10000, default: 65000 ms
+		/** How much time a node gets to process a request and send a response */
+		report: number; // [1000...40000], default: 1600 ms
+		/** How long generated nonces are valid */
+		nonce: number; // [3000...20000], default: 5000 ms
+		/** How long a node is assumed to be awake after the last communication with it */
+		nodeAwake: number; // [1000...30000], default: 10000 ms
 	};
-	/**
-	 * How many attempts should be made for each node interview before giving up
-	 */
-	nodeInterviewAttempts: number; // default: 5
+
+	attempts: {
+		/** How often the driver should try communication with the controller before giving up */
+		controller: number; // [1...3], default: 3
+		/** How often the driver should try sending SendData commands before giving up */
+		sendData: number; // [1...5], default: 3
+		/**
+		 * How many attempts should be made for each node interview before giving up
+		 */
+		nodeInterview: number; // [1...10], default: 5
+	};
+
 	/**
 	 * Allows you to replace the default file system driver used to store and read the cache
 	 */

@@ -105,6 +105,9 @@ describe("lib/driver/Transaction => ", () => {
 				]),
 			},
 			getSafeCCVersionForNode() {},
+			options: {
+				attempts: {},
+			},
 		};
 
 		function createTransactionForNode(
@@ -223,6 +226,9 @@ describe("lib/driver/Transaction => ", () => {
 				]),
 			},
 			getSafeCCVersionForNode() {},
+			options: {
+				attempts: {},
+			},
 		} as unknown) as Driver;
 
 		function createTransaction(nodeId: number, priority: MessagePriority) {
@@ -318,6 +324,9 @@ describe("lib/driver/Transaction => ", () => {
 				]),
 			},
 			getSafeCCVersionForNode() {},
+			options: {
+				attempts: {},
+			},
 		} as unknown) as Driver;
 
 		let creationTimestamp = 0;

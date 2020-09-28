@@ -7,10 +7,12 @@
 ## __WORK IN PROGRESS__
 ### Features
 * Added support for `User Code CC V2`
+* All timeouts and the number of retry attempts are now configurable through the `Driver` options.
 
 ### Bugfixes
 * Nodes are now only marked as dead or asleep if the controller receives no ACK for the sent messages. Missing responses to potentially unsupported requests no longer change the node status.
 * `SendSupervisedCommandOptions` now correctly extends `CommandOptions`
+* Timeouts configured through `Driver` options are now respected correctly
 
 ## 5.0.0 (2020-09-25)
 ### Breaking changes

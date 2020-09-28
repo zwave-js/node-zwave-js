@@ -12,6 +12,7 @@ import {
 	StateMachine,
 } from "xstate";
 import { pure, raise, send } from "xstate/lib/actions";
+import type { ZWaveOptions } from "zwave-js/src";
 import type { CommandClass } from "../commandclass/CommandClass";
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
@@ -26,7 +27,10 @@ import {
 	CommandQueueInterpreter,
 	createCommandQueueMachine,
 } from "./CommandQueueMachine";
-import type { SerialAPICommandDoneData } from "./SerialAPICommandMachine";
+import type {
+	SerialAPICommandDoneData,
+	SerialAPICommandMachineParams,
+} from "./SerialAPICommandMachine";
 import {
 	sendDataErrorToZWaveError,
 	ServiceImplementations,
@@ -138,6 +142,12 @@ export type TransactionReducer = (
 	transaction: Transaction,
 	source: "queue" | "current",
 ) => TransactionReducerResult;
+
+export type SendThreadMachineParams = {
+	timeouts: SerialAPICommandMachineParams["timeouts"] &
+		Pick<ZWaveOptions["timeouts"], "report">;
+	attempts: SerialAPICommandMachineParams["attempts"];
+};
 
 // These actions must be assign actions or they will be executed out of order
 
@@ -343,7 +353,7 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 
 export function createSendThreadMachine(
 	implementations: ServiceImplementations,
-	initialContext: Partial<SendThreadContext> = {},
+	params: SendThreadMachineParams,
 ): SendThreadMachine {
 	const resolveCurrentTransaction: AssignAction<
 		SendThreadContext,
@@ -523,7 +533,6 @@ export function createSendThreadMachine(
 				commandQueue: undefined as any,
 				queue: new SortedList(),
 				sendDataAttempts: 0,
-				...initialContext,
 			},
 			on: {
 				// Forward low-level events to the command queue
@@ -606,9 +615,15 @@ export function createSendThreadMachine(
 				init: {
 					entry: assign<SendThreadContext, any>({
 						commandQueue: () =>
-							spawn(createCommandQueueMachine(implementations), {
-								name: "commandQueue",
-							}),
+							spawn(
+								createCommandQueueMachine(
+									implementations,
+									params,
+								),
+								{
+									name: "commandQueue",
+								},
+							),
 					}),
 					// Spawn the command queue when starting the send thread
 					always: "idle",
@@ -725,7 +740,7 @@ export function createSendThreadMachine(
 								waitForHandshakeResponse: {
 									after: {
 										// If an update times out, retry if possible - otherwise reject the entire transaction
-										1600: [
+										REPORT_TIMEOUT: [
 											{
 												cond: "mayRetry",
 												target: "#sending.retryWait",
@@ -787,7 +802,7 @@ export function createSendThreadMachine(
 							},
 							after: {
 								// If an update times out, retry if possible - otherwise reject the transaction
-								1600: [
+								REPORT_TIMEOUT: [
 									{
 										cond: "mayRetry",
 										target: "retryWait",
@@ -852,6 +867,9 @@ export function createSendThreadMachine(
 						guards[guardKey](ctx, event as any, undefined as any),
 					);
 				},
+			},
+			delays: {
+				REPORT_TIMEOUT: params.timeouts.report,
 			},
 		},
 	);

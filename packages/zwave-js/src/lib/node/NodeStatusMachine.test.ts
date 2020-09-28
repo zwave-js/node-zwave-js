@@ -26,6 +26,8 @@ const defaultImplementations = {
 	notifyAwakeTimeoutElapsed() {},
 };
 
+const timeoutConfig = { nodeAwake: 10000 };
+
 describe("lib/driver/NodeStatusMachine", () => {
 	let service:
 		| undefined
@@ -38,8 +40,9 @@ describe("lib/driver/NodeStatusMachine", () => {
 	describe("default status changes", () => {
 		it(`The node should start in the unknown state`, () => {
 			const testMachine = createNodeStatusMachine(
-				defaultImplementations,
 				undefined as any,
+				defaultImplementations,
+				timeoutConfig,
 			);
 
 			service = interpret(testMachine).start();
@@ -167,8 +170,9 @@ describe("lib/driver/NodeStatusMachine", () => {
 						: testNodeNoWakeup;
 
 				const testMachine = createNodeStatusMachine(
-					defaultImplementations,
 					testNode,
+					defaultImplementations,
+					timeoutConfig,
 				);
 				testMachine.initial = test.start;
 
@@ -182,8 +186,9 @@ describe("lib/driver/NodeStatusMachine", () => {
 	describe("Asleep timeouts", () => {
 		it(`The node should go into the asleep state when the awake timer elapses`, () => {
 			const testMachine = createNodeStatusMachine(
-				defaultImplementations,
 				testNodeWakeup,
+				defaultImplementations,
+				timeoutConfig,
 			);
 			const clock = new SimulatedClock();
 			service = interpret(testMachine, { clock }).start();
@@ -195,8 +200,9 @@ describe("lib/driver/NodeStatusMachine", () => {
 
 		it(`The awake timer should be refreshed when a transaction is completed`, () => {
 			const testMachine = createNodeStatusMachine(
-				defaultImplementations,
 				testNodeWakeup,
+				defaultImplementations,
+				timeoutConfig,
 			);
 			const clock = new SimulatedClock();
 			service = interpret(testMachine, { clock }).start();
@@ -215,8 +221,9 @@ describe("lib/driver/NodeStatusMachine", () => {
 	describe("WakeUp CC support", () => {
 		it("A transition from unknown to awake should not happen if the node does not support the Wake Up CC", () => {
 			const testMachine = createNodeStatusMachine(
-				defaultImplementations,
 				testNodeNoWakeup,
+				defaultImplementations,
+				timeoutConfig,
 			);
 
 			service = interpret(testMachine).start();
@@ -226,8 +233,9 @@ describe("lib/driver/NodeStatusMachine", () => {
 
 		it("A transition from unknown to asleep should not happen if the node does not support the Wake Up CC", () => {
 			const testMachine = createNodeStatusMachine(
-				defaultImplementations,
 				testNodeNoWakeup,
+				defaultImplementations,
+				timeoutConfig,
 			);
 
 			service = interpret(testMachine).start();
@@ -237,8 +245,9 @@ describe("lib/driver/NodeStatusMachine", () => {
 
 		it("A transition from unknown to alive should not happen if the node supports the Wake Up CC", () => {
 			const testMachine = createNodeStatusMachine(
-				defaultImplementations,
 				testNodeWakeup,
+				defaultImplementations,
+				timeoutConfig,
 			);
 
 			service = interpret(testMachine).start();
@@ -248,8 +257,9 @@ describe("lib/driver/NodeStatusMachine", () => {
 
 		it("A transition from unknown to dead should not happen if the node supports the Wake Up CC", () => {
 			const testMachine = createNodeStatusMachine(
-				defaultImplementations,
 				testNodeWakeup,
+				defaultImplementations,
+				timeoutConfig,
 			);
 
 			service = interpret(testMachine).start();

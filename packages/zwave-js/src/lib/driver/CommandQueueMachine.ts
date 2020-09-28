@@ -8,14 +8,15 @@ import {
 	StateMachine,
 } from "xstate";
 import { raise, sendParent } from "xstate/lib/actions";
-import type { Message } from "zwave-js/src/lib/message/Message";
 import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
+import type { Message } from "../message/Message";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,
+	SerialAPICommandMachineParams,
 } from "./SerialAPICommandMachine";
 import {
 	respondUnsolicited,
@@ -100,7 +101,7 @@ const notifyResult = sendParent<
 
 export function createCommandQueueMachine(
 	implementations: ServiceImplementations,
-	initialContext: Partial<CommandQueueContext> = {},
+	params: SerialAPICommandMachineParams,
 ): CommandQueueMachine {
 	return Machine<
 		CommandQueueContext,
@@ -113,7 +114,6 @@ export function createCommandQueueMachine(
 			context: {
 				queue: new SortedList(),
 				// currentTransaction: undefined,
-				...initialContext,
 			},
 			on: {
 				add: {
@@ -195,11 +195,13 @@ export function createCommandQueueMachine(
 					createSerialAPICommandMachine(
 						ctx.currentTransaction!.message,
 						implementations,
+						params,
 					),
 				executeSendDataAbort: (_) =>
 					createSerialAPICommandMachine(
 						implementations.createSendDataAbort(),
 						implementations,
+						params,
 					),
 			},
 			guards: {

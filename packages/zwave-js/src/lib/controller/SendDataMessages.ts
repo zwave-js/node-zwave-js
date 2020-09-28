@@ -13,7 +13,6 @@ import type {
 } from "../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
-import { MAX_SEND_ATTEMPTS } from "../driver/Transaction";
 import {
 	FunctionType,
 	MessagePriority,
@@ -52,6 +51,8 @@ export enum TransmitStatus {
 	NotIdle = 0x03, // Transmission failed, network busy
 	NoRoute = 0x04, // Transmission complete, no return route
 }
+
+export const MAX_SEND_ATTEMPTS = 5;
 
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @priority(MessagePriority.Normal)
@@ -95,7 +96,8 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this._maxSendAttempts = options.maxSendAttempts ?? MAX_SEND_ATTEMPTS;
+		this.maxSendAttempts =
+			options.maxSendAttempts ?? driver.options.attempts.sendData;
 	}
 
 	/** The command this message contains */
@@ -103,7 +105,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
 
-	private _maxSendAttempts: number = MAX_SEND_ATTEMPTS;
+	private _maxSendAttempts: number = 1;
 	/** The number of times the driver may try to send this message */
 	public get maxSendAttempts(): number {
 		return this._maxSendAttempts;
@@ -298,7 +300,8 @@ export class SendDataMulticastRequest<
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this._maxSendAttempts = options.maxSendAttempts ?? MAX_SEND_ATTEMPTS;
+		this.maxSendAttempts =
+			options.maxSendAttempts ?? driver.options.attempts.sendData;
 	}
 
 	/** The command this message contains */
@@ -306,7 +309,7 @@ export class SendDataMulticastRequest<
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
 
-	private _maxSendAttempts: number;
+	private _maxSendAttempts: number = 1;
 	/** The number of times the driver may try to send this message */
 	public get maxSendAttempts(): number {
 		return this._maxSendAttempts;
