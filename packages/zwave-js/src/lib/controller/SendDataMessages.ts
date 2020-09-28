@@ -95,7 +95,8 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this._maxSendAttempts = options.maxSendAttempts ?? MAX_SEND_ATTEMPTS;
+		this.maxSendAttempts =
+			options.maxSendAttempts ?? driver.options.attempts.sendData;
 	}
 
 	/** The command this message contains */
@@ -103,7 +104,7 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
 
-	private _maxSendAttempts: number = MAX_SEND_ATTEMPTS;
+	private _maxSendAttempts: number = 1;
 	/** The number of times the driver may try to send this message */
 	public get maxSendAttempts(): number {
 		return this._maxSendAttempts;
@@ -298,7 +299,8 @@ export class SendDataMulticastRequest<
 		this.command = options.command;
 		this.transmitOptions =
 			options.transmitOptions ?? TransmitOptions.DEFAULT;
-		this._maxSendAttempts = options.maxSendAttempts ?? MAX_SEND_ATTEMPTS;
+		this.maxSendAttempts =
+			options.maxSendAttempts ?? driver.options.attempts.sendData;
 	}
 
 	/** The command this message contains */
@@ -306,7 +308,7 @@ export class SendDataMulticastRequest<
 	/** Options regarding the transmission of the message */
 	public transmitOptions: TransmitOptions;
 
-	private _maxSendAttempts: number;
+	private _maxSendAttempts: number = 1;
 	/** The number of times the driver may try to send this message */
 	public get maxSendAttempts(): number {
 		return this._maxSendAttempts;

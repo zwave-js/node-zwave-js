@@ -16,7 +16,7 @@ import type { Message } from "../message/Message";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,
-	SerialAPICommandMachineTimeouts,
+	SerialAPICommandMachineParams,
 } from "./SerialAPICommandMachine";
 import {
 	respondUnsolicited,
@@ -101,7 +101,7 @@ const notifyResult = sendParent<
 
 export function createCommandQueueMachine(
 	implementations: ServiceImplementations,
-	timeoutConfig: SerialAPICommandMachineTimeouts,
+	params: SerialAPICommandMachineParams,
 ): CommandQueueMachine {
 	return Machine<
 		CommandQueueContext,
@@ -195,13 +195,13 @@ export function createCommandQueueMachine(
 					createSerialAPICommandMachine(
 						ctx.currentTransaction!.message,
 						implementations,
-						timeoutConfig,
+						params,
 					),
 				executeSendDataAbort: (_) =>
 					createSerialAPICommandMachine(
 						implementations.createSendDataAbort(),
 						implementations,
-						timeoutConfig,
+						params,
 					),
 			},
 			guards: {

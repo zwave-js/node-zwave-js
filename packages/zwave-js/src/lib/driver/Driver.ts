@@ -26,7 +26,7 @@ import {
 	ZWaveSerialPortBase,
 	ZWaveSocket,
 } from "@zwave-js/serial";
-import { DeepPartial, num2hex } from "@zwave-js/shared";
+import { DeepPartial, num2hex, pick } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
@@ -128,6 +128,18 @@ export interface ZWaveOptions {
 		/** How long a node is assumed to be awake after the last communication with it */
 		nodeAwake: number;
 	};
+
+	attempts: {
+		/** How often the driver should try communication with the controller before giving up */
+		controller: number;
+		/** How often the driver should try sending SendData commands before giving up */
+		sendData: number;
+		/**
+		 * How many attempts should be made for each node interview before giving up
+		 */
+		nodeInterview: number;
+	};
+
 	/**
 	 * @internal
 	 * Set this to true to skip the controller interview. Useful for testing purposes
@@ -135,8 +147,9 @@ export interface ZWaveOptions {
 	skipInterview?: boolean;
 	/**
 	 * How many attempts should be made for each node interview before giving up
+	 * @deprecated Use `attempts.nodeInterview` instead.
 	 */
-	nodeInterviewAttempts: number;
+	nodeInterviewAttempts?: number;
 	/**
 	 * Allows you to replace the default file system driver used to store and read the cache
 	 */
@@ -158,8 +171,12 @@ const defaultOptions: ZWaveOptions = {
 		sendDataCallback: 65000, // as defined in INS13954
 		nodeAwake: 10000,
 	},
+	attempts: {
+		controller: 3,
+		sendData: 3,
+		nodeInterview: 5,
+	},
 	skipInterview: false,
-	nodeInterviewAttempts: 5,
 	fs: fsExtra,
 	cacheDir: path.resolve(__dirname, "../../..", "cache"),
 };
@@ -260,7 +277,7 @@ export interface SendMessageOptions {
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
-	/** How many times the driver should try to send the message. Defaults to `MAX_SEND_ATTEMPTS` */
+	/** How many times the driver should try to send the message. Defaults to the configured Driver option */
 	maxSendAttempts?: number;
 }
 
@@ -423,7 +440,7 @@ export class Driver extends EventEmitter {
 					transaction.promise.resolve(result);
 				},
 			},
-			this.options.timeouts,
+			pick(this.options, ["timeouts", "attempts"]),
 		);
 		this.sendThread = interpret(sendThreadMachine);
 		// this.sendThread.onTransition((state) => {
@@ -722,7 +739,9 @@ export class Driver extends EventEmitter {
 					);
 					node.emit("interview failed", node, "The node is dead");
 				} else if (
-					node.interviewAttempts < this.options.nodeInterviewAttempts
+					node.interviewAttempts <
+					(this.options.nodeInterviewAttempts ??
+						this.options.attempts.nodeInterview)
 				) {
 					// This is most likely because the node is unable to handle our load of requests now. Give it some time
 					const retryTimeout = Math.min(

@@ -32,7 +32,7 @@ import type { Driver } from "./Driver";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
-	SendThreadMachineTimeouts,
+	SendThreadMachineParams,
 } from "./SendThreadMachine";
 import { Transaction } from "./Transaction";
 
@@ -122,11 +122,18 @@ mockCommandQueueMachine.mockReturnValue(
 	}),
 );
 
-const timeoutConfig: SendThreadMachineTimeouts = {
-	ack: 1000,
-	response: 1600,
-	report: 1600,
-	sendDataCallback: 65000,
+const machineParams: SendThreadMachineParams = {
+	timeouts: {
+		ack: 1000,
+		response: 1600,
+		report: 1600,
+		sendDataCallback: 65000,
+	},
+	attempts: {
+		controller: 3,
+		// @ts-expect-error this property is not defined, we just use it to deduplicate test code
+		sendData: 3,
+	},
 };
 
 describe("lib/driver/SendThreadMachine", () => {
@@ -431,7 +438,9 @@ describe("lib/driver/SendThreadMachine", () => {
 		{
 			guards: {
 				expectsUpdate: (ctx) => !!ctx.expectsUpdate,
-				mayRetry: (ctx) => ctx.sendDataAttempts < 3,
+				mayRetry: (ctx) =>
+					ctx.sendDataAttempts <
+					(machineParams.attempts as any).sendData,
 			},
 		},
 	);
@@ -666,6 +675,7 @@ describe("lib/driver/SendThreadMachine", () => {
 
 				it(path.description, () => {
 					const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+					fakeDriver.options.attempts.sendData = (machineParams.attempts as any).sendData;
 					const sm = new SecurityManager({
 						ownNodeId: 1,
 						nonceTimeout: 500,
@@ -784,7 +794,7 @@ describe("lib/driver/SendThreadMachine", () => {
 					};
 					const machine = createSendThreadMachine(
 						implementations as any,
-						timeoutConfig,
+						machineParams,
 					);
 
 					const context: TestContext = {

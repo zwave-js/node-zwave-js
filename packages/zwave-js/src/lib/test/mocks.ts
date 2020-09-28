@@ -91,6 +91,10 @@ export function createEmptyMockDriver() {
 				sendDataCallback: 65000,
 				nodeAwake: 10000,
 			},
+			attempts: {
+				sendData: 3,
+				controller: 3,
+			},
 		},
 	};
 	ret.sendCommand.mockImplementation(async (command, options) => {

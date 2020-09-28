@@ -1,6 +1,5 @@
 // wotan-disable no-uninferred-type-parameter
 
-import type { Simplify } from "alcalzone-shared/types";
 import {
 	assign,
 	Interpreter,
@@ -130,13 +129,18 @@ export type SerialAPICommandMachineOptions = Partial<
 	MachineOptions<SerialAPICommandContext, SerialAPICommandEvent>
 >;
 
-export type SerialAPICommandMachineTimeouts = Simplify<
-	Pick<ZWaveOptions["timeouts"], "ack" | "response" | "sendDataCallback">
->;
+export type SerialAPICommandMachineParams = {
+	timeouts: Pick<
+		ZWaveOptions["timeouts"],
+		"ack" | "response" | "sendDataCallback"
+	>;
+	attempts: Pick<ZWaveOptions["attempts"], "controller">;
+};
 
 export function getSerialAPICommandMachineConfig(
 	message: Message,
 	{ timestamp }: Pick<ServiceImplementations, "timestamp">,
+	attemptsConfig: SerialAPICommandMachineParams["attempts"],
 ): SerialAPICommandMachineConfig {
 	return {
 		id: "serialAPICommand",
@@ -145,7 +149,7 @@ export function getSerialAPICommandMachineConfig(
 			msg: message,
 			data: Buffer.from([]),
 			attempts: 0,
-			maxAttempts: 3,
+			maxAttempts: attemptsConfig.controller,
 		},
 		on: {
 			// The state machine accepts any message. If it is expected
@@ -327,7 +331,7 @@ export function getSerialAPICommandMachineOptions(
 		sendData,
 		notifyRetry,
 	}: Pick<ServiceImplementations, "sendData" | "notifyRetry">,
-	timeoutConfig: SerialAPICommandMachineTimeouts,
+	timeoutConfig: SerialAPICommandMachineParams["timeouts"],
 ): SerialAPICommandMachineOptions {
 	return {
 		services: {
@@ -382,10 +386,14 @@ export function getSerialAPICommandMachineOptions(
 export function createSerialAPICommandMachine(
 	message: Message,
 	implementations: ServiceImplementations,
-	timeoutConfig: SerialAPICommandMachineTimeouts,
+	params: SerialAPICommandMachineParams,
 ): SerialAPICommandMachine {
 	return Machine(
-		getSerialAPICommandMachineConfig(message, implementations),
-		getSerialAPICommandMachineOptions(implementations, timeoutConfig),
+		getSerialAPICommandMachineConfig(
+			message,
+			implementations,
+			params.attempts,
+		),
+		getSerialAPICommandMachineOptions(implementations, params.timeouts),
 	);
 }

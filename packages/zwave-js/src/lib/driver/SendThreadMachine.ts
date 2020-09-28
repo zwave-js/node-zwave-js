@@ -1,6 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { SortedList } from "alcalzone-shared/sorted-list";
-import type { Simplify } from "alcalzone-shared/types";
 import {
 	Action,
 	assign,
@@ -30,7 +29,7 @@ import {
 } from "./CommandQueueMachine";
 import type {
 	SerialAPICommandDoneData,
-	SerialAPICommandMachineTimeouts,
+	SerialAPICommandMachineParams,
 } from "./SerialAPICommandMachine";
 import {
 	sendDataErrorToZWaveError,
@@ -144,9 +143,11 @@ export type TransactionReducer = (
 	source: "queue" | "current",
 ) => TransactionReducerResult;
 
-export type SendThreadMachineTimeouts = Simplify<
-	SerialAPICommandMachineTimeouts & Pick<ZWaveOptions["timeouts"], "report">
->;
+export type SendThreadMachineParams = {
+	timeouts: SerialAPICommandMachineParams["timeouts"] &
+		Pick<ZWaveOptions["timeouts"], "report">;
+	attempts: SerialAPICommandMachineParams["attempts"];
+};
 
 // These actions must be assign actions or they will be executed out of order
 
@@ -352,7 +353,7 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 
 export function createSendThreadMachine(
 	implementations: ServiceImplementations,
-	timeoutConfig: SendThreadMachineTimeouts,
+	params: SendThreadMachineParams,
 ): SendThreadMachine {
 	const resolveCurrentTransaction: AssignAction<
 		SendThreadContext,
@@ -617,7 +618,7 @@ export function createSendThreadMachine(
 							spawn(
 								createCommandQueueMachine(
 									implementations,
-									timeoutConfig,
+									params,
 								),
 								{
 									name: "commandQueue",
@@ -868,7 +869,7 @@ export function createSendThreadMachine(
 				},
 			},
 			delays: {
-				REPORT_TIMEOUT: timeoutConfig.report,
+				REPORT_TIMEOUT: params.timeouts.report,
 			},
 		},
 	);
