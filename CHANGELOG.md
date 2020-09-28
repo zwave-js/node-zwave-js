@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.1.0 (2020-09-28)
 ### Features
 * Added support for `User Code CC V2`
 * All timeouts and the number of retry attempts are now configurable through the `Driver` options.
