@@ -250,32 +250,40 @@ interface SendMessageOptions {
 }
 ```
 
-The message priority must one of the following enum values. Consuming applications typically don't need to overwrite this.
+The message priority must one of the following enum values. Consuming applications typically don't need to overwrite the priority.
+
+**Note:** DO NOT rely on the numeric values of the enum if you're using it in your application.
+The ordinal values are likely to change in future updates. Instead, refer to the enum values directly.
 
 ```ts
 /** The priority of messages, sorted from high (0) to low (>0) */
 enum MessagePriority {
-	// Controller commands are not to be interrupted and usually finish quickly
-	Controller = 0,
-	// The security queue is the highest actual priority because secured messages
-	// require an encryption handshake before sending new messages
-	Security = 1,
+	// Handshake messages have the highest priority because they are part of other transactions
+	// which have already started when the handshakes are needed (e.g. Security Nonce exchange)
+	//
+	// We distinguish between responses to handshake requests from nodes that must be handled first.
+	// Some nodes don't respond to our requests if they are waiting for a nonce.
+	Handshake = 0,
+	// Our handshake requests must be prioritized over all other messages
+	PreTransmitHandshake = 1,
+	// Controller commands usually finish quickly and should be preferred over node queries
+	Controller = 2,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
-	Ping = 2,
+	Ping = 3,
 	// Multistep controller commands typically require user interaction but still
 	// should happen at a higher priority than any node data exchange
-	MultistepController = 3,
+	MultistepController = 4,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly
 	// because they want to go to sleep soon. So prioritize them over non-sleeping devices
-	WakeUp = 4,
+	WakeUp = 5,
 	// Normal operation and node data exchange
-	Normal = 5,
+	Normal = 6,
 	// Node querying is expensive and happens whenever a new node is discovered.
 	// In order to keep the system responsive, give them a lower priority
-	NodeQuery = 6,
+	NodeQuery = 7,
 	// Some devices need their state to be polled at regular intervals. Only do that when
 	// nothing else needs to be done
-	Poll = 7,
+	Poll = 8,
 }
 ```
 
