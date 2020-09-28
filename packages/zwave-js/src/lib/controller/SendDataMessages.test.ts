@@ -1,7 +1,6 @@
 import { BasicCCGet } from "../commandclass/BasicCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import type { Driver } from "../driver/Driver";
-import { MAX_SEND_ATTEMPTS } from "../driver/Transaction";
 import { FunctionType, MessageType } from "../message/Constants";
 import {
 	getExpectedCallback,
@@ -12,6 +11,7 @@ import {
 } from "../message/Message";
 import { createEmptyMockDriver } from "../test/mocks";
 import {
+	MAX_SEND_ATTEMPTS,
 	SendDataRequest,
 	SendDataResponse,
 	TransmitOptions,
@@ -49,8 +49,10 @@ describe("lib/controller/SendDataRequest => ", () => {
 			});
 		});
 
-		it("should default to the maximum", () => {
-			expect(test.maxSendAttempts).toBe(MAX_SEND_ATTEMPTS);
+		it("should default to the number configured on the driver", () => {
+			expect(test.maxSendAttempts).toBe(
+				fakeDriver.options.attempts.sendData,
+			);
 		});
 
 		it("should not exceed the defined maximum", () => {

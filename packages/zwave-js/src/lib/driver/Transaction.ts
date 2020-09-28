@@ -9,9 +9,6 @@ import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import type { Driver } from "./Driver";
 
-// The Z-Wave spec declare that maximum 3 send attempts may be performed
-export const MAX_SEND_ATTEMPTS = 3;
-
 /**
  * Transactions are used to track and correllate messages with their responses.
  */

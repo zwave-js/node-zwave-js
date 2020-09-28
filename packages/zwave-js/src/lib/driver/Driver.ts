@@ -74,6 +74,7 @@ import {
 } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
+	MAX_SEND_ATTEMPTS,
 	SendDataAbort,
 	SendDataMulticastRequest,
 	SendDataRequest,
@@ -109,6 +110,7 @@ const libNameString = `
 `;
 
 export interface ZWaveOptions {
+	/** Specify timeouts in milliseconds */
 	timeouts: {
 		/** how long to wait for an ACK */
 		ack: number;
@@ -219,9 +221,15 @@ function checkOptions(options: ZWaveOptions): void {
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
-	if (options.timeouts.report < 1) {
+	if (options.timeouts.response < 500 || options.timeouts.response > 5000) {
 		throw new ZWaveError(
-			`The Report timeout must be positive!`,
+			`The Response timeout must be between 500 and 5000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.timeouts.report < 1000 || options.timeouts.report > 40000) {
+		throw new ZWaveError(
+			`The Report timeout must be between 1000 and 40000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -233,13 +241,46 @@ function checkOptions(options: ZWaveOptions): void {
 	}
 	if (options.timeouts.sendDataCallback < 10000) {
 		throw new ZWaveError(
-			`The Send Data Callback timeout must be at least 10 seconds!`,
+			`The Send Data Callback timeout must be at least 10000 milliseconds!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.timeouts.nodeAwake < 1000 ||
+		options.timeouts.nodeAwake > 30000
+	) {
+		throw new ZWaveError(
+			`The Node awake timeout must be between 1000 and 30000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
 	if (options.networkKey != undefined && options.networkKey.length !== 16) {
 		throw new ZWaveError(
 			`The network key must be a buffer with length 16!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (options.attempts.controller < 1 || options.attempts.controller > 3) {
+		throw new ZWaveError(
+			`The Controller attempts must be between 1 and 3!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		options.attempts.sendData < 1 ||
+		options.attempts.sendData > MAX_SEND_ATTEMPTS
+	) {
+		throw new ZWaveError(
+			`The SendData attempts must be between 1 and ${MAX_SEND_ATTEMPTS}!`,
+			ZWaveErrorCodes.Driver_InvalidOptions,
+		);
+	}
+	if (
+		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) < 1 ||
+		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) > 10
+	) {
+		throw new ZWaveError(
+			`The Node interview attempts must be between 1 and 10!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -728,21 +769,21 @@ export class Driver extends EventEmitter {
 			this.retryNodeInterviewTimeouts.delete(node.id);
 		}
 
+		const maxInterviewAttempts =
+			this.options.nodeInterviewAttempts ??
+			this.options.attempts.nodeInterview;
+
 		try {
 			if (!(await node.interview())) {
 				// Find out if we may retry the interview
 				if (node.status === NodeStatus.Dead) {
 					log.controller.logNode(
 						node.id,
-						`Interview attempt (${node.interviewAttempts}/${this.options.nodeInterviewAttempts}) failed, node is dead.`,
+						`Interview attempt (${node.interviewAttempts}/${maxInterviewAttempts}) failed, node is dead.`,
 						"warn",
 					);
 					node.emit("interview failed", node, "The node is dead");
-				} else if (
-					node.interviewAttempts <
-					(this.options.nodeInterviewAttempts ??
-						this.options.attempts.nodeInterview)
-				) {
+				} else if (node.interviewAttempts < maxInterviewAttempts) {
 					// This is most likely because the node is unable to handle our load of requests now. Give it some time
 					const retryTimeout = Math.min(
 						30000,
@@ -750,13 +791,13 @@ export class Driver extends EventEmitter {
 					);
 					log.controller.logNode(
 						node.id,
-						`Interview attempt ${node.interviewAttempts}/${this.options.nodeInterviewAttempts} failed, retrying in ${retryTimeout} ms...`,
+						`Interview attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed, retrying in ${retryTimeout} ms...`,
 						"warn",
 					);
 					node.emit(
 						"interview failed",
 						node,
-						`Attempt ${node.interviewAttempts}/${this.options.nodeInterviewAttempts} failed`,
+						`Attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed`,
 					);
 					// Schedule the retry and remember the timeout instance
 					this.retryNodeInterviewTimeouts.set(

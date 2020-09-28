@@ -13,7 +13,6 @@ import type {
 } from "../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
-import { MAX_SEND_ATTEMPTS } from "../driver/Transaction";
 import {
 	FunctionType,
 	MessagePriority,
@@ -52,6 +51,8 @@ export enum TransmitStatus {
 	NotIdle = 0x03, // Transmission failed, network busy
 	NoRoute = 0x04, // Transmission complete, no return route
 }
+
+export const MAX_SEND_ATTEMPTS = 5;
 
 @messageTypes(MessageType.Request, FunctionType.SendData)
 @priority(MessagePriority.Normal)
