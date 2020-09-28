@@ -100,7 +100,7 @@ export function sendDataErrorToZWaveError(
 						status,
 					)})`,
 					status === TransmitStatus.NoAck
-						? ZWaveErrorCodes.Controller_NodeTimeout
+						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
 					receivedMessage,
 				);
@@ -113,7 +113,7 @@ export function sendDataErrorToZWaveError(
 						status,
 					)})`,
 					status === TransmitStatus.NoAck
-						? ZWaveErrorCodes.Controller_NodeTimeout
+						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
 					receivedMessage,
 				);
