@@ -8,11 +8,11 @@ import {
 	StateMachine,
 } from "xstate";
 import { raise, sendParent } from "xstate/lib/actions";
-import type { Message } from "zwave-js/src/lib/message/Message";
 import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
+import type { Message } from "../message/Message";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,

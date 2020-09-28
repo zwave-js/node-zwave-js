@@ -344,10 +344,13 @@ describe("lib/driver/CommandQueueMachine", () => {
 		describe(planDescription, () => {
 			plan.paths.forEach((path) => {
 				it(path.description, () => {
-					const machine = createCommandQueueMachine({
-						createSendDataAbort: () =>
-							new SendDataAbort(fakeDriver),
-					} as any);
+					const machine = createCommandQueueMachine(
+						{
+							createSendDataAbort: () =>
+								new SendDataAbort(fakeDriver),
+						} as any,
+						{} as any,
+					);
 
 					const expectedResults = path.segments
 						.filter((s) => s.event.type === "API_SUCCESS")

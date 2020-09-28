@@ -1,6 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
 import { Interpreter, Machine, StateMachine } from "xstate";
-import type { ZWaveOptions } from "zwave-js/src/lib/driver/Driver";
+import type { ZWaveOptions } from "../driver/Driver";
 import type { ZWaveNode } from "./Node";
 import { NodeStatus } from "./Types";
 

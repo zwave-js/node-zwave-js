@@ -32,6 +32,7 @@ import type { Driver } from "./Driver";
 import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
+	SendThreadMachineTimeouts,
 } from "./SendThreadMachine";
 import { Transaction } from "./Transaction";
 
@@ -120,6 +121,13 @@ mockCommandQueueMachine.mockReturnValue(
 		},
 	}),
 );
+
+const timeoutConfig: SendThreadMachineTimeouts = {
+	ack: 1000,
+	response: 1600,
+	report: 1600,
+	sendDataCallback: 65000,
+};
 
 describe("lib/driver/SendThreadMachine", () => {
 	beforeEach(() => {
@@ -776,6 +784,7 @@ describe("lib/driver/SendThreadMachine", () => {
 					};
 					const machine = createSendThreadMachine(
 						implementations as any,
+						timeoutConfig,
 					);
 
 					const context: TestContext = {

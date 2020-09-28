@@ -1,5 +1,6 @@
 // wotan-disable no-uninferred-type-parameter
 
+import type { Simplify } from "alcalzone-shared/types";
 import {
 	assign,
 	Interpreter,
@@ -9,7 +10,6 @@ import {
 	StateMachine,
 } from "xstate";
 import { send } from "xstate/lib/actions";
-import type { ZWaveOptions } from "zwave-js/src/lib/driver/Driver";
 import log from "../log";
 import { MessageType } from "../message/Constants";
 import type { Message } from "../message/Message";
@@ -17,6 +17,7 @@ import {
 	isMultiStageCallback,
 	isSuccessIndicator,
 } from "../message/SuccessIndicator";
+import type { ZWaveOptions } from "./Driver";
 import {
 	respondUnsolicited,
 	ServiceImplementations,
@@ -129,9 +130,8 @@ export type SerialAPICommandMachineOptions = Partial<
 	MachineOptions<SerialAPICommandContext, SerialAPICommandEvent>
 >;
 
-export type SerialAPICommandMachineTimeouts = Pick<
-	ZWaveOptions["timeouts"],
-	"ack" | "response" | "sendDataCallback"
+export type SerialAPICommandMachineTimeouts = Simplify<
+	Pick<ZWaveOptions["timeouts"], "ack" | "response" | "sendDataCallback">
 >;
 
 export function getSerialAPICommandMachineConfig(

@@ -21,6 +21,7 @@ import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,
 	SerialAPICommandInterpreter,
+	SerialAPICommandMachineTimeouts,
 } from "./SerialAPICommandMachine";
 
 /* eslint-disable @typescript-eslint/ban-types */
@@ -95,6 +96,12 @@ interface TestContext {
 }
 
 jest.useFakeTimers();
+
+const timeoutConfig: SerialAPICommandMachineTimeouts = {
+	ack: 1000,
+	response: 1600,
+	sendDataCallback: 65000,
+};
 
 describe("lib/driver/SerialAPICommandMachine", () => {
 	const testMachine = Machine<
@@ -338,13 +345,13 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 			});
 		},
 		ACK_TIMEOUT: () => {
-			jest.advanceTimersByTime(1600);
+			jest.advanceTimersByTime(timeoutConfig.ack);
 		},
 		RESPONSE_TIMEOUT: () => {
-			jest.advanceTimersByTime(1600);
+			jest.advanceTimersByTime(timeoutConfig.response);
 		},
 		CALLBACK_TIMEOUT: () => {
-			jest.advanceTimersByTime(65000);
+			jest.advanceTimersByTime(timeoutConfig.sendDataCallback);
 		},
 	});
 
@@ -387,6 +394,7 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 						// @ts-ignore
 						messages[msg.resp][msg.cb],
 						implementations as any,
+						timeoutConfig,
 					);
 
 					context = {
