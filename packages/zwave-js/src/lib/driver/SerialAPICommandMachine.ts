@@ -9,6 +9,7 @@ import {
 	StateMachine,
 } from "xstate";
 import { send } from "xstate/lib/actions";
+import type { ZWaveOptions } from "zwave-js/src/lib/driver/Driver";
 import log from "../log";
 import { MessageType } from "../message/Constants";
 import type { Message } from "../message/Message";
@@ -128,10 +129,14 @@ export type SerialAPICommandMachineOptions = Partial<
 	MachineOptions<SerialAPICommandContext, SerialAPICommandEvent>
 >;
 
+export type SerialAPICommandMachineTimeouts = Pick<
+	ZWaveOptions["timeouts"],
+	"ack" | "response" | "sendDataCallback"
+>;
+
 export function getSerialAPICommandMachineConfig(
 	message: Message,
 	{ timestamp }: Pick<ServiceImplementations, "timestamp">,
-	initialContext: Partial<SerialAPICommandContext> = {},
 ): SerialAPICommandMachineConfig {
 	return {
 		id: "serialAPICommand",
@@ -141,7 +146,6 @@ export function getSerialAPICommandMachineConfig(
 			data: Buffer.from([]),
 			attempts: 0,
 			maxAttempts: 3,
-			...initialContext,
 		},
 		on: {
 			// The state machine accepts any message. If it is expected
@@ -209,7 +213,7 @@ export function getSerialAPICommandMachineConfig(
 					],
 				},
 				after: {
-					1600: {
+					ACK_TIMEOUT: {
 						target: "retry",
 						actions: assign({
 							lastError: (_) => "ACK timeout",
@@ -243,7 +247,7 @@ export function getSerialAPICommandMachineConfig(
 					],
 				},
 				after: {
-					1600: {
+					RESPONSE_TIMEOUT: {
 						target: "retry",
 						actions: assign({
 							lastError: (_) => "response timeout",
@@ -274,7 +278,7 @@ export function getSerialAPICommandMachineConfig(
 					],
 				},
 				after: {
-					65000: {
+					SENDDATA_CALLBACK_TIMEOUT: {
 						target: "failure",
 						actions: assign({
 							lastError: (_) => "callback timeout",
@@ -318,13 +322,13 @@ export function getSerialAPICommandMachineConfig(
 	};
 }
 
-export function getSerialAPICommandMachineOptions({
-	sendData,
-	notifyRetry,
-}: Pick<
-	ServiceImplementations,
-	"sendData" | "notifyRetry"
->): SerialAPICommandMachineOptions {
+export function getSerialAPICommandMachineOptions(
+	{
+		sendData,
+		notifyRetry,
+	}: Pick<ServiceImplementations, "sendData" | "notifyRetry">,
+	timeoutConfig: SerialAPICommandMachineTimeouts,
+): SerialAPICommandMachineOptions {
 	return {
 		services: {
 			send: (ctx) => sendData(ctx.data),
@@ -368,6 +372,9 @@ export function getSerialAPICommandMachineOptions({
 		},
 		delays: {
 			RETRY_DELAY: (ctx) => computeRetryDelay(ctx),
+			RESPONSE_TIMEOUT: timeoutConfig.response,
+			SENDDATA_CALLBACK_TIMEOUT: timeoutConfig.sendDataCallback,
+			ACK_TIMEOUT: timeoutConfig.ack,
 		},
 	};
 }
@@ -375,14 +382,10 @@ export function getSerialAPICommandMachineOptions({
 export function createSerialAPICommandMachine(
 	message: Message,
 	implementations: ServiceImplementations,
-	initialContext: Partial<SerialAPICommandContext> = {},
+	timeoutConfig: SerialAPICommandMachineTimeouts,
 ): SerialAPICommandMachine {
 	return Machine(
-		getSerialAPICommandMachineConfig(
-			message,
-			implementations,
-			initialContext,
-		),
-		getSerialAPICommandMachineOptions(implementations),
+		getSerialAPICommandMachineConfig(message, implementations),
+		getSerialAPICommandMachineOptions(implementations, timeoutConfig),
 	);
 }

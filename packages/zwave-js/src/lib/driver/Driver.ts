@@ -114,12 +114,19 @@ export interface ZWaveOptions {
 		ack: number;
 		/** not sure */
 		byte: number;
-		/** How much time a node gets to process a request */
+		/**
+		 * How long to wait for a controller response. Usually this timeout should never elapse,
+		 * so this is merely a safeguard against the driver stalling
+		 */
+		response: number;
+		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
+		sendDataCallback: number;
+		/** How much time a node gets to process a request and send a response */
 		report: number;
 		/** How long generated nonces are valid */
 		nonce: number;
-		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
-		sendDataCallback: number;
+		/** How long a node is assumed to be awake after the last communication with it */
+		nodeAwake: number;
 	};
 	/**
 	 * @internal
@@ -145,9 +152,11 @@ const defaultOptions: ZWaveOptions = {
 	timeouts: {
 		ack: 1000,
 		byte: 150,
-		report: 1000,
+		response: 1600,
+		report: 1600,
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
+		nodeAwake: 10000,
 	},
 	skipInterview: false,
 	nodeInterviewAttempts: 5,
@@ -379,34 +388,43 @@ export class Driver extends EventEmitter {
 		process.on("uncaughtException", this._cleanupHandler);
 
 		// And initialize but don't start the send thread machine
-		const sendThreadMachine = createSendThreadMachine({
-			sendData: this.writeSerial.bind(this),
-			createSendDataAbort: () => new SendDataAbort(this),
-			notifyUnsolicited: (msg) => {
-				void this.handleUnsolicitedMessage(msg);
+		const sendThreadMachine = createSendThreadMachine(
+			{
+				sendData: this.writeSerial.bind(this),
+				createSendDataAbort: () => new SendDataAbort(this),
+				notifyUnsolicited: (msg) => {
+					void this.handleUnsolicitedMessage(msg);
+				},
+				notifyRetry: (
+					command,
+					message,
+					attempts,
+					maxAttempts,
+					delay,
+				) => {
+					if (command === "SendData") {
+						log.controller.logNode(
+							message.getNodeId() ?? 255,
+							`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+							"warn",
+						);
+					} else {
+						log.controller.print(
+							`No response from controller after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+							"warn",
+						);
+					}
+				},
+				timestamp: highResTimestamp,
+				rejectTransaction: (transaction, error) => {
+					transaction.promise.reject(error);
+				},
+				resolveTransaction: (transaction, result) => {
+					transaction.promise.resolve(result);
+				},
 			},
-			notifyRetry: (command, message, attempts, maxAttempts, delay) => {
-				if (command === "SendData") {
-					log.controller.logNode(
-						message.getNodeId() ?? 255,
-						`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-						"warn",
-					);
-				} else {
-					log.controller.print(
-						`No response from controller after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
-						"warn",
-					);
-				}
-			},
-			timestamp: highResTimestamp,
-			rejectTransaction: (transaction, error) => {
-				transaction.promise.reject(error);
-			},
-			resolveTransaction: (transaction, result) => {
-				transaction.promise.resolve(result);
-			},
-		});
+			this.options.timeouts,
+		);
 		this.sendThread = interpret(sendThreadMachine);
 		// this.sendThread.onTransition((state) => {
 		// 	if (state.changed)

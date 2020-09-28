@@ -1,5 +1,6 @@
 import { CommandClasses } from "@zwave-js/core";
 import { Interpreter, Machine, StateMachine } from "xstate";
+import type { ZWaveOptions } from "zwave-js/src/lib/driver/Driver";
 import type { ZWaveNode } from "./Node";
 import { NodeStatus } from "./Types";
 
@@ -52,9 +53,12 @@ export interface NodeStatusServiceImplementations {
 	notifyAwakeTimeoutElapsed: () => void;
 }
 
+export type NodeStatusTimeouts = Pick<ZWaveOptions["timeouts"], "nodeAwake">;
+
 export function createNodeStatusMachine(
-	implementations: NodeStatusServiceImplementations,
 	node: ZWaveNode,
+	implementations: NodeStatusServiceImplementations,
+	timeoutConfig: NodeStatusTimeouts,
 ): NodeStatusMachine {
 	return Machine<any, NodeStatusStateSchema, NodeStatusEvent>(
 		{
@@ -102,7 +106,7 @@ export function createNodeStatusMachine(
 						TRANSACTION_COMPLETE: "awake",
 					},
 					after: {
-						10000: {
+						AWAKE_TIMEOUT: {
 							target: "asleep",
 							actions: () => {
 								implementations.notifyAwakeTimeoutElapsed();
@@ -124,7 +128,7 @@ export function createNodeStatusMachine(
 				// mayRetry: (ctx) => ctx.attempts < ctx.maxAttempts,
 			},
 			delays: {
-				// RETRY_DELAY: (ctx) => computeRetryDelay(ctx),
+				AWAKE_TIMEOUT: timeoutConfig.nodeAwake,
 			},
 		},
 	);
