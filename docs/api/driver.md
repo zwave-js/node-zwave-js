@@ -247,6 +247,8 @@ interface SendMessageOptions {
 	supportCheck?: boolean;
 	/** Whether the driver should update the node status to asleep or dead when a transaction is not acknowledged (repeatedly). Setting this to false will cause the simply transaction to be rejected on failure. Default: true */
 	changeNodeStatusOnMissingACK?: boolean;
+	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
+	expire?: number;
 }
 ```
 

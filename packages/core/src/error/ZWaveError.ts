@@ -39,6 +39,9 @@ export enum ZWaveErrorCodes {
 	/** The node was removed from the network */
 	Controller_NodeRemoved,
 
+	/** The message has expired (the given timeout has elapsed) */
+	Controller_MessageExpired,
+
 	CC_Invalid,
 	CC_NoNodeID,
 	CC_NotSupported,

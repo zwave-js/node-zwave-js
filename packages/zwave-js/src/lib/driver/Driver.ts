@@ -315,6 +315,8 @@ export interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
+	/** Sets the number of milliseconds after which a transaction expires. When the expiration timer elapses, the transaction promise is rejected. */
+	expire?: number;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
@@ -1865,8 +1867,28 @@ ${handlers.length} left`,
 		// start sending now (maybe)
 		this.sendThread.send({ type: "add", transaction });
 
+		// If the transaction should expire, start the timeout
+		let expirationTimeout: NodeJS.Timeout | undefined;
+		if (options.expire) {
+			expirationTimeout = setTimeout(() => {
+				this.sendThread.send({
+					type: "reduce",
+					reducer: (t: Transaction) => {
+						if (t === transaction)
+							return {
+								type: "reject",
+								message: `The message has expired`,
+								code: ZWaveErrorCodes.Controller_MessageExpired,
+							};
+						return { type: "keep" };
+					},
+				});
+			}, options.expire).unref();
+		}
+
 		try {
 			const ret = await promise;
+			if (expirationTimeout) clearTimeout(expirationTimeout);
 			if (node) {
 				if (node.supportsCC(CommandClasses["Wake Up"])) {
 					// The node responded, refresh its awake timer
