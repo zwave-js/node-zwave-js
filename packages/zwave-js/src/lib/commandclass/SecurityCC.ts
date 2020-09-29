@@ -114,10 +114,18 @@ export class SecurityCCAPI extends CCAPI {
 
 	/**
 	 * Requests a new nonce for Security CC encapsulation
-	 * @param standalone Whether the command should be sent as a standalone transaction
 	 */
-	public async getNonce(standalone: boolean = false): Promise<Buffer> {
+	public async getNonce(
+		options: {
+			/** Whether the command should be sent as a standalone transaction. Default: false */
+			standalone?: boolean;
+			/** Whether the received nonce should be stored as "free". Default: false */
+			storeAsFreeNonce?: boolean;
+		} = {},
+	): Promise<Buffer> {
 		this.assertSupportsCommand(SecurityCommand, SecurityCommand.NonceGet);
+
+		const { standalone = false, storeAsFreeNonce = false } = options;
 
 		const cc = new SecurityCCNonceGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -138,7 +146,21 @@ export class SecurityCCAPI extends CCAPI {
 				changeNodeStatusOnMissingACK: standalone,
 			},
 		))!;
-		return response.nonce;
+
+		const nonce = response.nonce;
+
+		if (storeAsFreeNonce) {
+			const secMan = this.driver.securityManager!;
+			secMan.setNonce(
+				{
+					nodeId: this.endpoint.nodeId,
+					nonceId: secMan.getNonceId(nonce),
+				},
+				nonce,
+				true,
+			);
+		}
+		return nonce;
 	}
 
 	/**
