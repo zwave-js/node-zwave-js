@@ -1,4 +1,4 @@
-import type { Maybe, ValueID } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
@@ -304,6 +304,16 @@ export class WakeUpCCIntervalSet extends WakeUpCC {
 		this.payload.writeUIntBE(this.wakeUpInterval, 0, 3);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"wake-up interval": `${this.wakeUpInterval} seconds`,
+				"controller node id": this.controllerNodeId,
+			},
+		};
+	}
 }
 
 @CCCommand(WakeUpCommand.IntervalReport)
@@ -339,6 +349,16 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 	public get controllerNodeId(): number {
 		return this._controllerNodeId;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"wake-up interval": `${this.wakeUpInterval} seconds`,
+				"controller node id": this._controllerNodeId,
+			},
+		};
+	}
 }
 
 @CCCommand(WakeUpCommand.IntervalGet)
@@ -346,14 +366,7 @@ export class WakeUpCCIntervalReport extends WakeUpCC {
 export class WakeUpCCIntervalGet extends WakeUpCC {}
 
 @CCCommand(WakeUpCommand.WakeUpNotification)
-export class WakeUpCCWakeUpNotification extends WakeUpCC {
-	public constructor(
-		driver: Driver,
-		options: CommandClassDeserializationOptions,
-	) {
-		super(driver, options);
-	}
-}
+export class WakeUpCCWakeUpNotification extends WakeUpCC {}
 
 @CCCommand(WakeUpCommand.NoMoreInformation)
 export class WakeUpCCNoMoreInformation extends WakeUpCC {}
@@ -409,6 +422,18 @@ export class WakeUpCCIntervalCapabilitiesReport extends WakeUpCC {
 	private _wakeUpIntervalSteps: number;
 	public get wakeUpIntervalSteps(): number {
 		return this._wakeUpIntervalSteps;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"default interval": `${this._defaultWakeUpInterval} seconds`,
+				"minimum interval": `${this._minWakeUpInterval} seconds`,
+				"maximum interval": `${this._maxWakeUpInterval} seconds`,
+				"interval steps": `${this._wakeUpIntervalSteps} seconds`,
+			},
+		};
 	}
 }
 

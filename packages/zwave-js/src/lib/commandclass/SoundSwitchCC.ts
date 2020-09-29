@@ -1,6 +1,8 @@
 import {
 	CommandClasses,
 	Maybe,
+	MessageOrCCLogEntry,
+	MessageRecord,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
@@ -359,6 +361,13 @@ export class SoundSwitchCCTonesNumberReport extends SoundSwitchCC {
 	// @noCCValues We persist this as metadata during the interview
 
 	public readonly toneCount: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "# of tones": this.toneCount },
+		};
+	}
 }
 
 @CCCommand(SoundSwitchCommand.TonesNumberGet)
@@ -385,6 +394,17 @@ export class SoundSwitchCCToneInfoReport extends SoundSwitchCC {
 	public readonly toneId: number;
 	public readonly duration: number;
 	public readonly name: string;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"tone id": this.toneId,
+				duration: `${this.duration} seconds`,
+				name: this.name,
+			},
+		};
+	}
 }
 
 const testResponseForSoundSwitchToneInfoGet: CCResponsePredicate<
@@ -428,6 +448,13 @@ export class SoundSwitchCCToneInfoGet extends SoundSwitchCC {
 		this.payload = Buffer.from([this.toneId]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "tone id": this.toneId },
+		};
+	}
 }
 
 interface SoundSwitchCCConfigurationSetOptions extends CCCommandOptions {
@@ -463,6 +490,16 @@ export class SoundSwitchCCConfigurationSet extends SoundSwitchCC {
 		this.payload = Buffer.from([this.defaultVolume, this.defaultToneId]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"default volume": `${this.defaultVolume} %`,
+				"default tone id": this.defaultToneId,
+			},
+		};
+	}
 }
 
 @CCCommand(SoundSwitchCommand.ConfigurationReport)
@@ -497,6 +534,16 @@ export class SoundSwitchCCConfigurationReport extends SoundSwitchCC {
 		label: "Default tone ID",
 	})
 	public readonly defaultToneId: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"default volume": `${this.defaultVolume} %`,
+				"default tone id": this.defaultToneId,
+			},
+		};
+	}
 }
 
 @CCCommand(SoundSwitchCommand.ConfigurationGet)
@@ -543,6 +590,19 @@ export class SoundSwitchCCTonePlaySet extends SoundSwitchCC {
 		}
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"tone id": this.toneId,
+		};
+		if (this.volume != undefined) {
+			message.volume = this.volume === 0 ? "default" : `${this.volume} %`;
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(SoundSwitchCommand.TonePlayReport)
@@ -577,6 +637,19 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 		},
 	})
 	public volume?: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"tone id": this.toneId,
+		};
+		if (this.volume != undefined) {
+			message.volume = this.volume === 0 ? "default" : `${this.volume} %`;
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(SoundSwitchCommand.TonePlayGet)

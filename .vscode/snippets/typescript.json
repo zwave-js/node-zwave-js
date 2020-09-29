@@ -227,6 +227,18 @@
 			"}"
 		]
 	},
+	"Z-Wave Command Class log override (empty)": {
+		"prefix": "zwcclogempty",
+		"body": [
+			"public toLogEntry(): MessageOrCCLogEntry {",
+			"\treturn {",
+			"\t\t...super.toLogEntry(),",
+			"\t\t// Hide the default payload line",
+			"\t\tmessage: undefined,",
+			"\t};",
+			"}"
+		]
+	},
 	"Z-Wave Command Class implementation": {
 		"prefix": "zwcc",
 		"body": [

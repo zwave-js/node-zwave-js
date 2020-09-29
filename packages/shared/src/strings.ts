@@ -19,3 +19,10 @@ export function num2hex(
 export function stringify(arg: unknown): string {
 	return JSON.stringify(arg, null, 4);
 }
+
+export function buffer2hex(buffer: Buffer, uppercase: boolean = false): string {
+	if (buffer.length === 0) return "(empty)";
+	let ret = `0x${buffer.toString("hex")}`;
+	if (uppercase) ret = ret.toUpperCase();
+	return ret;
+}

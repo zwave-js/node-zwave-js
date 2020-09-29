@@ -1,5 +1,10 @@
-import type { Maybe } from "@zwave-js/core";
-import { CommandClasses, validatePayload } from "@zwave-js/core";
+import {
+	CommandClasses,
+	formatDate,
+	Maybe,
+	MessageOrCCLogEntry,
+	validatePayload,
+} from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -215,6 +220,18 @@ export class TimeParametersCCReport extends TimeParametersCC {
 
 	@ccValue()
 	public readonly dateAndTime: Date;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"date and time": formatDate(
+					this.dateAndTime,
+					"YYYY-MM-DD HH:mm:ss",
+				),
+			},
+		};
+	}
 }
 
 @CCCommand(TimeParametersCommand.Get)
@@ -284,5 +301,17 @@ export class TimeParametersCCSet extends TimeParametersCC {
 		]);
 		this.payload.writeUInt16BE(dateSegments.year, 0);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"date and time": formatDate(
+					this.dateAndTime,
+					"YYYY-MM-DD HH:mm:ss",
+				),
+			},
+		};
 	}
 }

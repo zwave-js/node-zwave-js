@@ -15,7 +15,12 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { JSONObject, num2hex, staticExtends } from "@zwave-js/shared";
+import {
+	buffer2hex,
+	JSONObject,
+	num2hex,
+	staticExtends,
+} from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
@@ -337,7 +342,7 @@ export class CommandClass {
 			tags: [this.constructor.name],
 			message:
 				this.payload.length > 0
-					? { payload: `0x${this.payload.toString("hex")}` }
+					? { payload: buffer2hex(this.payload) }
 					: undefined,
 		};
 	}

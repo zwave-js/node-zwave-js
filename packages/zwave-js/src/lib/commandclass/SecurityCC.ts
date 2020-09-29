@@ -14,7 +14,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { pick } from "@zwave-js/shared";
+import { buffer2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
 import type { ZWaveController } from "../controller/Controller";
 import {
@@ -380,6 +380,13 @@ export class SecurityCCNonceReport extends SecurityCC {
 		this.payload = this.nonce;
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { nonce: buffer2hex(this.nonce) },
+		};
+	}
 }
 
 @CCCommand(SecurityCommand.NonceGet)
@@ -431,7 +438,6 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 				this.payload.length >= HALF_NONCE_SIZE + 1 + 2 + 1 + 8,
 			);
 			const iv = this.payload.slice(0, HALF_NONCE_SIZE);
-			// TODO: frame control
 			const encryptedPayload = this.payload.slice(HALF_NONCE_SIZE, -9);
 			const nonceId = this.payload[this.payload.length - 9];
 			const authCode = this.payload.slice(-8);
@@ -610,6 +616,18 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		// Supervision CC adds 8 bytes IV, 1 byte frame control, 1 byte nonce ID, 8 bytes MAC
 		return super.computeEncapsulationOverhead() + 18;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"nonce id": this.nonceId,
+				sequenced: this.sequenced,
+				"second frame": this.secondFrame,
+				"sequence counter": this.sequenceCounter,
+			},
+		};
+	}
 }
 
 // This is the same message, but with another CC command
@@ -649,6 +667,14 @@ export class SecurityCCSchemeGet extends SecurityCC {
 		this.payload = Buffer.from([0]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			// Hide the default payload line
+			message: undefined,
+		};
+	}
 }
 
 @CCCommand(SecurityCommand.SchemeInherit)
@@ -666,6 +692,14 @@ export class SecurityCCSchemeInherit extends SecurityCC {
 		// Since it is unlikely that any more schemes will be added to S0, we hardcode the default scheme here (bit 0 = 0)
 		this.payload = Buffer.from([0]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			// Hide the default payload line
+			message: undefined,
+		};
 	}
 }
 
@@ -708,6 +742,13 @@ export class SecurityCCNetworkKeySet extends SecurityCC {
 	public serialize(): Buffer {
 		this.payload = this.networkKey;
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "network key": buffer2hex(this.networkKey) },
+		};
 	}
 }
 
