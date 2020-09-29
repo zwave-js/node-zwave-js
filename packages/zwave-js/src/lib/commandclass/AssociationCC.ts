@@ -450,10 +450,10 @@ export class AssociationCCSet extends AssociationCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"group id": `${this.groupId || "all groups"}`,
-			"node ids": `${
-				this.nodeIds.length ? this.nodeIds.join(", ") : "all nodes"
-			}`,
+			"group id": this.groupId || "all groups",
+			"node ids": this.nodeIds.length
+				? this.nodeIds.join(", ")
+				: "all nodes",
 		};
 		return {
 			...super.toLogEntry(),
@@ -526,12 +526,11 @@ export class AssociationCCRemove extends AssociationCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"group id": `${this.groupId || "all groups"}`,
-			"node ids": `${
+			"group id": this.groupId || "all groups",
+			"node ids":
 				this.nodeIds && this.nodeIds.length
 					? this.nodeIds.join(", ")
-					: "all nodes"
-			}`,
+					: "all nodes",
 		};
 		return {
 			...super.toLogEntry(),

@@ -284,17 +284,17 @@ export class FirmwareUpdateMetaDataCCMetaDataReport extends FirmwareUpdateMetaDa
 		return {
 			...super.toLogEntry(),
 			message: {
-				"manufacturer id": `${this.manufacturerId}`,
-				"firmware id": `${this.firmwareId}`,
-				checksum: `${this.checksum}`,
-				"firmware upgradable": `${this.firmwareUpgradable}`,
-				"max fragment size": `${this.maxFragmentSize}`,
+				"manufacturer id": this.manufacturerId,
+				"firmware id": this.firmwareId,
+				checksum: this.checksum,
+				"firmware upgradable": this.firmwareUpgradable,
+				"max fragment size": this.maxFragmentSize,
 				"additional firmware IDs": JSON.stringify(
 					this.additionalFirmwareIDs,
 				),
-				"hardware version": `${this.hardwareVersion}`,
-				"continues to function": `${this.continuesToFunction}`,
-				"supports activation": `${this.supportsActivation}`,
+				"hardware version": this.hardwareVersion,
+				"continues to function": this.continuesToFunction,
+				"supports activation": this.supportsActivation,
 			},
 		};
 	}
@@ -416,16 +416,16 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
 			checksum: num2hex(this.checksum),
 		};
 		if (this.firmwareTarget != undefined) {
-			message["firmware target"] = `${this.firmwareTarget}`;
+			message["firmware target"] = this.firmwareTarget;
 		}
 		if (this.fragmentSize != undefined) {
-			message["fragment size"] = `${this.fragmentSize}`;
+			message["fragment size"] = this.fragmentSize;
 		}
 		if (this.activation != undefined) {
-			message.activation = `${this.activation}`;
+			message.activation = this.activation;
 		}
 		if (this.hardwareVersion != undefined) {
-			message["hardware version"] = `${this.hardwareVersion}`;
+			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
 			...super.toLogEntry(),
@@ -454,8 +454,8 @@ export class FirmwareUpdateMetaDataCCGet extends FirmwareUpdateMetaDataCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"total # of reports": `${this.numReports}`,
-				"report number": `${this.reportNumber}`,
+				"total # of reports": this.numReports,
+				"report number": this.reportNumber,
 			},
 		};
 	}
@@ -525,8 +525,8 @@ export class FirmwareUpdateMetaDataCCReport extends FirmwareUpdateMetaDataCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"report #": `${this.reportNumber}`,
-				"is last": `${this.isLast}`,
+				"report #": this.reportNumber,
+				"is last": this.isLast,
 			},
 		};
 	}
@@ -552,7 +552,7 @@ export class FirmwareUpdateMetaDataCCStatusReport extends FirmwareUpdateMetaData
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			status: `${getEnumMemberName(FirmwareUpdateStatus, this.status)}`,
+			status: getEnumMemberName(FirmwareUpdateStatus, this.status),
 		};
 		if (this.waitTime != undefined) {
 			message["wait time"] = `${this.waitTime} seconds`;
@@ -591,17 +591,17 @@ export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMeta
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"manufacturer id": `${num2hex(this.manufacturerId)}`,
-			"firmware id": `${num2hex(this.firmwareId)}`,
-			checksum: `${num2hex(this.checksum)}`,
-			"firmware target": `${this.firmwareTarget}`,
-			"activation status": `${getEnumMemberName(
+			"manufacturer id": num2hex(this.manufacturerId),
+			"firmware id": num2hex(this.firmwareId),
+			checksum: num2hex(this.checksum),
+			"firmware target": this.firmwareTarget,
+			"activation status": getEnumMemberName(
 				FirmwareUpdateActivationStatus,
 				this.activationStatus,
-			)}`,
+			),
 		};
 		if (this.hardwareVersion != undefined) {
-			message.hardwareVersion = `${this.hardwareVersion}`;
+			message.hardwareVersion = this.hardwareVersion;
 		}
 		return {
 			...super.toLogEntry(),
@@ -666,13 +666,13 @@ export class FirmwareUpdateMetaDataCCActivationSet extends FirmwareUpdateMetaDat
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"manufacturer id": `${num2hex(this.manufacturerId)}`,
-			"firmware id": `${num2hex(this.firmwareId)}`,
-			checksum: `${num2hex(this.checksum)}`,
-			"firmware target": `${this.firmwareTarget}`,
+			"manufacturer id": num2hex(this.manufacturerId),
+			"firmware id": num2hex(this.firmwareId),
+			checksum: num2hex(this.checksum),
+			"firmware target": this.firmwareTarget,
 		};
 		if (this.hardwareVersion != undefined) {
-			message["hardware version"] = `${this.hardwareVersion}`;
+			message["hardware version"] = this.hardwareVersion;
 		}
 		return {
 			...super.toLogEntry(),
@@ -700,11 +700,8 @@ export class FirmwareUpdateMetaDataCCPrepareReport extends FirmwareUpdateMetaDat
 		return {
 			...super.toLogEntry(),
 			message: {
-				status: `${getEnumMemberName(
-					FirmwareDownloadStatus,
-					this.status,
-				)}`,
-				checksum: `${num2hex(this.checksum)}`,
+				status: getEnumMemberName(FirmwareDownloadStatus, this.status),
+				checksum: num2hex(this.checksum),
 			},
 		};
 	}
@@ -763,11 +760,11 @@ export class FirmwareUpdateMetaDataCCPrepareGet extends FirmwareUpdateMetaDataCC
 		return {
 			...super.toLogEntry(),
 			message: {
-				"manufacturer id": `${num2hex(this.manufacturerId)}`,
-				"firmware id": `${num2hex(this.firmwareId)}`,
-				"firmware target": `${this.firmwareTarget}`,
-				"fragment size": `${this.fragmentSize}`,
-				"hardware version": `${this.hardwareVersion}`,
+				"manufacturer id": num2hex(this.manufacturerId),
+				"firmware id": num2hex(this.firmwareId),
+				"firmware target": this.firmwareTarget,
+				"fragment size": this.fragmentSize,
+				"hardware version": this.hardwareVersion,
 			},
 		};
 	}

@@ -345,35 +345,35 @@ export class BatteryCCReport extends BatteryCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			level: `${this._level}`,
-			"is low": `${this._isLow}`,
+			level: this._level,
+			"is low": this._isLow,
 		};
 		if (this.chargingStatus != undefined) {
-			message["charging status"] = `${getEnumMemberName(
+			message["charging status"] = getEnumMemberName(
 				BatteryChargingStatus,
 				this.chargingStatus,
-			)}`;
+			);
 		}
 		if (this.rechargeable != undefined) {
-			message.rechargeable = `${this.rechargeable}`;
+			message.rechargeable = this.rechargeable;
 		}
 		if (this.backup != undefined) {
-			message.backup = `${this.backup}`;
+			message.backup = this.backup;
 		}
 		if (this.overheating != undefined) {
-			message.overheating = `${this.overheating}`;
+			message.overheating = this.overheating;
 		}
 		if (this.lowFluid != undefined) {
-			message["low fluid"] = `${this.lowFluid}`;
+			message["low fluid"] = this.lowFluid;
 		}
 		if (this.rechargeOrReplace != undefined) {
-			message["recharge or replace"] = `${getEnumMemberName(
+			message["recharge or replace"] = getEnumMemberName(
 				BatteryReplacementStatus,
 				this.rechargeOrReplace,
-			)}`;
+			);
 		}
 		if (this.disconnected != undefined) {
-			message.disconnected = `${this.disconnected}`;
+			message.disconnected = this.disconnected;
 		}
 		return {
 			...super.toLogEntry(),
@@ -441,7 +441,7 @@ export class BatteryCCHealthReport extends BatteryCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				temperature: `${this.temperature}`,
+				temperature: this.temperature,
 				"max capacity": `${this.maximumCapacity} %`,
 			},
 		};

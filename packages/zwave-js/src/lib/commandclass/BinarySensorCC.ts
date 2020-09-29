@@ -297,8 +297,8 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				type: `${getEnumMemberName(BinarySensorType, this._type)}`,
-				value: `${this._value}`,
+				type: getEnumMemberName(BinarySensorType, this._type),
+				value: this._value,
 			},
 		};
 	}

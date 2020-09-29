@@ -938,9 +938,9 @@ export class ConfigurationCCReport extends ConfigurationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"parameter #": `${this.parameter}`,
-				"value size": `${this.valueSize}`,
-				value: `${configValueToString(this.value)}`,
+				"parameter #": this.parameter,
+				"value size": this.valueSize,
+				value: configValueToString(this.value),
 			},
 		};
 	}
@@ -1103,14 +1103,14 @@ export class ConfigurationCCSet extends ConfigurationCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"parameter #": `${this.parameter}`,
-			"reset to default": `${this.resetToDefault}`,
+			"parameter #": this.parameter,
+			"reset to default": this.resetToDefault,
 		};
 		if (this.valueSize != undefined) {
-			message["value size"] = `${this.valueSize}`;
+			message["value size"] = this.valueSize;
 		}
 		if (this.value != undefined) {
-			message.value = `${configValueToString(this.value)}`;
+			message.value = configValueToString(this.value);
 		}
 		return {
 			...super.toLogEntry(),
@@ -1252,9 +1252,9 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			handshake: `${this.handshake}`,
-			"reset to default": `${this.resetToDefault}`,
-			"value size": `${this.valueSize}`,
+			handshake: this.handshake,
+			"reset to default": this.resetToDefault,
+			"value size": this.valueSize,
 		};
 		if (this._values.length > 0) {
 			message.values = this._values
@@ -1352,10 +1352,10 @@ export class ConfigurationCCBulkReport extends ConfigurationCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"handshake response": `${this._isHandshakeResponse}`,
-			"default values": `${this._defaultValues}`,
-			"value size": `${this._valueSize}`,
-			"reports to follow": `${this.reportsToFollow}`,
+			"handshake response": this._isHandshakeResponse,
+			"default values": this._defaultValues,
+			"value size": this._valueSize,
+			"reports to follow": this.reportsToFollow,
 		};
 		if (this._values.size > 0) {
 			message.values = [...this._values]
@@ -1475,9 +1475,9 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"parameter #": `${this.parameter}`,
-				name: `${this.name}`,
-				"reports to follow": `${this.reportsToFollow}`,
+				"parameter #": this.parameter,
+				name: this.name,
+				"reports to follow": this.reportsToFollow,
 			},
 		};
 	}
@@ -1570,9 +1570,9 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"parameter #": `${this.parameter}`,
-				info: `${this.info}`,
-				"reports to follow": `${this.reportsToFollow}`,
+				"parameter #": this.parameter,
+				info: this.info,
+				"reports to follow": this.reportsToFollow,
 			},
 		};
 	}
@@ -1749,36 +1749,31 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"parameter #": `${this._parameter}`,
-			"next param #": `${this._parameter}`,
-			"value size": `${this._valueSize}`,
-			"value format": `${getEnumMemberName(
-				ValueFormat,
-				this._valueFormat,
-			)}`,
+			"parameter #": this._parameter,
+			"next param #": this._parameter,
+			"value size": this._valueSize,
+			"value format": getEnumMemberName(ValueFormat, this._valueFormat),
 		};
 		if (this._minValue != undefined) {
-			message["min value"] = `${configValueToString(this._minValue)}`;
+			message["min value"] = configValueToString(this._minValue);
 		}
 		if (this._maxValue != undefined) {
-			message["max value"] = `${configValueToString(this._maxValue)}`;
+			message["max value"] = configValueToString(this._maxValue);
 		}
 		if (this._defaultValue != undefined) {
-			message["default value"] = `${configValueToString(
-				this._defaultValue,
-			)}`;
+			message["default value"] = configValueToString(this._defaultValue);
 		}
 		if (this._altersCapabilities != undefined) {
-			message["alters capabilities"] = `${this._altersCapabilities}`;
+			message["alters capabilities"] = this._altersCapabilities;
 		}
 		if (this._isReadonly != undefined) {
-			message.readonly = `${this._isReadonly}`;
+			message.readonly = this._isReadonly;
 		}
 		if (this._isAdvanced != undefined) {
-			message.advanced = `${this._isAdvanced}`;
+			message.advanced = this._isAdvanced;
 		}
 		if (this._noBulkSupport != undefined) {
-			message["bulk support"] = `${!this._noBulkSupport}`;
+			message["bulk support"] = !this._noBulkSupport;
 		}
 		return {
 			...super.toLogEntry(),

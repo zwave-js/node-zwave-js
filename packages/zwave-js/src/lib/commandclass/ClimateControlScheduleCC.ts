@@ -213,7 +213,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				weekday: `${getEnumMemberName(Weekday, this.weekday)}`,
+				weekday: getEnumMemberName(Weekday, this.weekday),
 				switchpoints: `${this.switchPoints
 					.map(
 						(sp) => `
@@ -268,7 +268,7 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				weekday: `${getEnumMemberName(Weekday, this.weekday)}`,
+				weekday: getEnumMemberName(Weekday, this.weekday),
 				switchpoints: `${this.switchPoints
 					.map(
 						(sp) => `
@@ -382,11 +382,11 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 		return {
 			...super.toLogEntry(),
 			message: {
-				"override type": `${getEnumMemberName(
+				"override type": getEnumMemberName(
 					ScheduleOverrideType,
 					this._overrideType,
-				)}`,
-				"override state": `${this._overrideState}`,
+				),
+				"override state": this._overrideState,
 			},
 		};
 	}
@@ -436,11 +436,11 @@ export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleC
 		return {
 			...super.toLogEntry(),
 			message: {
-				"override type": `${getEnumMemberName(
+				"override type": getEnumMemberName(
 					ScheduleOverrideType,
 					this.overrideType,
-				)}`,
-				"override state": `${this.overrideState}`,
+				),
+				"override state": this.overrideState,
 			},
 		};
 	}

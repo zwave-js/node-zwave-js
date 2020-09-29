@@ -680,9 +680,9 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"group id": `${this.groupId}`,
-				"node ids": `${this.nodeIds.join(", ")}`,
-				endpoints: `${endpointAddressesToString(this.endpoints)}`,
+				"group id": this.groupId,
+				"node ids": this.nodeIds.join(", "),
+				endpoints: endpointAddressesToString(this.endpoints),
 			},
 		};
 	}
@@ -760,7 +760,7 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = { "group id": this.groupId };
 		if (this.nodeIds) {
-			message["node ids"] = `${this.nodeIds.join(", ")}`;
+			message["node ids"] = this.nodeIds.join(", ");
 		}
 		if (this.endpoints) {
 			message.endpoints = endpointAddressesToString(this.endpoints);
@@ -855,10 +855,10 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"group id": `${this.groupId}`,
-				"maximum # of nodes": `${this.maxNodes}`,
-				"node ids": `${this.nodeIds.join(", ")}`,
-				endpoints: `${endpointAddressesToString(this.endpoints)}`,
+				"group id": this.groupId,
+				"maximum # of nodes": this.maxNodes,
+				"node ids": this.nodeIds.join(", "),
+				endpoints: endpointAddressesToString(this.endpoints),
 			},
 		};
 	}

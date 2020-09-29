@@ -632,7 +632,7 @@ export class MeterCCReport extends MeterCC {
 			message["time delta"] = `${this.deltaTime} seconds`;
 		}
 		if (this._previousValue != undefined) {
-			message["prev. value"] = `${this._previousValue}`;
+			message["prev. value"] = this._previousValue;
 		}
 		return {
 			...super.toLogEntry(),
@@ -717,10 +717,7 @@ export class MeterCCGet extends MeterCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.rateType != undefined) {
-			message["rate type"] = `${getEnumMemberName(
-				RateType,
-				this.rateType,
-			)}`;
+			message["rate type"] = getEnumMemberName(RateType, this.rateType);
 		}
 		if (this.scale != undefined) {
 			// Try to lookup the meter type to translate the scale
@@ -728,9 +725,7 @@ export class MeterCCGet extends MeterCC {
 				getTypeValueId(this.endpointIndex),
 			);
 			if (type != undefined) {
-				message.duration = `${
-					lookupMeterScale(type, this.scale).label
-				}`;
+				message.duration = lookupMeterScale(type, this.scale).label;
 			}
 		}
 		return {
@@ -842,16 +837,16 @@ export class MeterCCSupportedReport extends MeterCC {
 				lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`,
-			"supports reset": `${this._supportsReset}`,
+			"supports reset": this._supportsReset,
 			"supported scales": `${this._supportedScales
 				.map(
 					(scale) => `
 · ${lookupMeterScale(this.type, scale).label}`,
 				)
 				.join("")}`,
-			"supported rate types": `${this._supportedRateTypes
+			"supported rate types": this._supportedRateTypes
 				.map((rt) => getEnumMemberName(RateType, rt))
-				.join(", ")}`,
+				.join(", "),
 		};
 		return {
 			...super.toLogEntry(),
@@ -932,7 +927,7 @@ export class MeterCCReset extends MeterCC {
 			}`;
 		}
 		if (this.targetValue != undefined) {
-			message["target value"] = `${this.targetValue}`;
+			message["target value"] = this.targetValue;
 		}
 		return {
 			...super.toLogEntry(),

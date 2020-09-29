@@ -237,9 +237,9 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"manufacturer id": `${num2hex(this._manufacturerId)}`,
-				"product type": `${num2hex(this._productType)}`,
-				"product id": `${num2hex(this._productId)}`,
+				"manufacturer id": num2hex(this._manufacturerId),
+				"product type": num2hex(this._productType),
+				"product id": num2hex(this._productId),
 			},
 		};
 	}
@@ -293,11 +293,8 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 		return {
 			...super.toLogEntry(),
 			message: {
-				"device id type": `${getEnumMemberName(
-					DeviceIdType,
-					this.type,
-				)}`,
-				"device id": `${this.deviceId}`,
+				"device id type": getEnumMemberName(DeviceIdType, this.type),
+				"device id": this.deviceId,
 			},
 		};
 	}

@@ -303,15 +303,15 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"sequence number": `${this.sequenceNumber}`,
-			"key attribute": `${getEnumMemberName(
+			"sequence number": this.sequenceNumber,
+			"key attribute": getEnumMemberName(
 				CentralSceneKeys,
 				this.keyAttribute,
-			)}`,
-			"scene number": `${this.sceneNumber}`,
+			),
+			"scene number": this.sceneNumber,
 		};
 		if (this.slowRefresh != undefined) {
-			message["slow refresh"] = `${this.slowRefresh}`;
+			message["slow refresh"] = this.slowRefresh;
 		}
 		return {
 			...super.toLogEntry(),

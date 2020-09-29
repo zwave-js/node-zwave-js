@@ -238,8 +238,8 @@ export class SupervisionCCGet extends SupervisionCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"session id": `${this.sessionId}`,
-				"request updates": `${this.requestStatusUpdates}`,
+				"session id": this.sessionId,
+				"request updates": this.requestStatusUpdates,
 			},
 		};
 	}

@@ -150,9 +150,9 @@ export class SceneActivationCCSet extends SceneActivationCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const message: MessageRecord = { "scene id": `${this.sceneId}` };
+		const message: MessageRecord = { "scene id": this.sceneId };
 		if (this.dimmingDuration != undefined) {
-			message["dimming duration"] = `${this.dimmingDuration.toString()}`;
+			message["dimming duration"] = this.dimmingDuration.toString();
 		}
 		return {
 			...super.toLogEntry(),

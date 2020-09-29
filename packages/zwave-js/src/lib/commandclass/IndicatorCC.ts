@@ -525,7 +525,7 @@ export class IndicatorCCSet extends IndicatorCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.indicator0Value != undefined) {
-			message["indicator 0 value"] = `${this.indicator0Value}`;
+			message["indicator 0 value"] = this.indicator0Value;
 		}
 		if (this.values != undefined) {
 			message.values = `${this.values
@@ -656,7 +656,7 @@ export class IndicatorCCReport extends IndicatorCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.value != undefined) {
-			message["indicator 0 value"] = `${this.value}`;
+			message["indicator 0 value"] = this.value;
 		}
 		if (this.values != undefined) {
 			message.values = `${this.values
@@ -763,7 +763,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				indicator: `${getIndicatorName(this.indicatorId)}`,
+				indicator: getIndicatorName(this.indicatorId),
 				"supported properties": `${this.supportedProperties
 					.map(
 						(id) =>
@@ -771,7 +771,7 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 							`Unknown (${num2hex(id)})`,
 					)
 					.join(", ")}`,
-				"next indicator": `${getIndicatorName(this.nextIndicatorId)}`,
+				"next indicator": getIndicatorName(this.nextIndicatorId),
 			},
 		};
 	}

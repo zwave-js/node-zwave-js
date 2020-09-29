@@ -211,10 +211,10 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"target value": `${this.targetValue}`,
+			"target value": this.targetValue,
 		};
 		if (this.duration != undefined) {
-			message.duration = `${this.duration.toString()}`;
+			message.duration = this.duration.toString();
 		}
 		return {
 			...super.toLogEntry(),
@@ -274,13 +274,13 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"current value": `${this.currentValue}`,
+			"current value": this.currentValue,
 		};
 		if (this.targetValue != undefined) {
-			message["target value"] = `${this.targetValue}`;
+			message["target value"] = this.targetValue;
 		}
 		if (this.duration != undefined) {
-			message.duration = `${this.duration.toString()}`;
+			message.duration = this.duration.toString();
 		}
 		return {
 			...super.toLogEntry(),

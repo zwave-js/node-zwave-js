@@ -286,14 +286,11 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"sensor type": `${getEnumMemberName(
-				AlarmSensorType,
-				this.sensorType,
-			)}`,
-			"alarm state": `${this.state}`,
+			"sensor type": getEnumMemberName(AlarmSensorType, this.sensorType),
+			"alarm state": this.state,
 		};
 		if (this.severity != undefined) {
-			message.severity = `${this.severity}`;
+			message.severity = this.severity;
 		}
 		if (this.duration != undefined) {
 			message.duration = `${this.duration} seconds`;

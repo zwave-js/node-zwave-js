@@ -656,8 +656,8 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"is list mode": `${this.isListMode}`,
-				"has dynamic info": `${this.hasDynamicInfo}`,
+				"is list mode": this.isListMode,
+				"has dynamic info": this.hasDynamicInfo,
 				groups: `${this.groups
 					.map(
 						(g) => `
@@ -725,12 +725,12 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.groupId != undefined) {
-			message["group id"] = `${this.groupId}`;
+			message["group id"] = this.groupId;
 		}
 		if (this.listMode != undefined) {
-			message["list mode"] = `${this.listMode}`;
+			message["list mode"] = this.listMode;
 		}
-		message["refresh cache"] = `${this.refreshCache}`;
+		message["refresh cache"] = this.refreshCache;
 		return {
 			...super.toLogEntry(),
 			message,
@@ -780,7 +780,7 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 		return {
 			...super.toLogEntry(),
 			message: {
-				"group id": `${this.groupId}`,
+				"group id": this.groupId,
 				commands: `${[...this.commands]
 					.map(([cc, cmds]) => {
 						return `\n· ${getCCName(cc)}: ${cmds
@@ -835,8 +835,8 @@ export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC
 		return {
 			...super.toLogEntry(),
 			message: {
-				"group id": `${this.groupId}`,
-				"allow cache": `${this.allowCache}`,
+				"group id": this.groupId,
+				"allow cache": this.allowCache,
 			},
 		};
 	}

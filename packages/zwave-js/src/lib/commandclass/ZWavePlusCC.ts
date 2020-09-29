@@ -209,17 +209,17 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				version: `${this._zwavePlusVersion}`,
-				"node type": `${getEnumMemberName(
+				version: this._zwavePlusVersion,
+				"node type": getEnumMemberName(
 					ZWavePlusNodeType,
 					this._nodeType,
-				)}`,
-				"role type": `${getEnumMemberName(
+				),
+				"role type": getEnumMemberName(
 					ZWavePlusRoleType,
 					this._roleType,
-				)}`,
-				"icon (mgmt.)": `${num2hex(this._installerIcon)}`,
-				"icon (user)": `${num2hex(this._userIcon)}`,
+				),
+				"icon (mgmt.)": num2hex(this._installerIcon),
+				"icon (user)": num2hex(this._userIcon),
 			},
 		};
 	}

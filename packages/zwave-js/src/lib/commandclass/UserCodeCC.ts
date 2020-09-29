@@ -858,12 +858,9 @@ export class UserCodeCCSet extends UserCodeCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"user id": `${this.userId}`,
-				"id status": `${getEnumMemberName(
-					UserIDStatus,
-					this.userIdStatus,
-				)}`,
-				"user code": `${this.userCode}`,
+				"user id": this.userId,
+				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
+				"user code": this.userCode,
 			},
 		};
 	}
@@ -901,12 +898,9 @@ export class UserCodeCCReport extends UserCodeCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"user id": `${this.userId}`,
-				"id status": `${getEnumMemberName(
-					UserIDStatus,
-					this.userIdStatus,
-				)}`,
-				"user code": `${this.userCode}`,
+				"user id": this.userId,
+				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
+				"user code": this.userCode,
 			},
 		};
 	}
@@ -1529,8 +1523,8 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"user id": `${this.userId}`,
-				"report more": `${this.reportMore}`,
+				"user id": this.userId,
+				"report more": this.reportMore,
 			},
 		};
 	}

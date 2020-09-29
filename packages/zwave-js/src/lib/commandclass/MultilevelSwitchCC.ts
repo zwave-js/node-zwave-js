@@ -405,10 +405,10 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"target value": `${this.targetValue}`,
+			"target value": this.targetValue,
 		};
 		if (this.duration) {
-			message.duration = `${this.duration.toString()}`;
+			message.duration = this.duration.toString();
 		}
 		return {
 			...super.toLogEntry(),
@@ -469,7 +469,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
-			"current value": `${this._currentValue}`,
+			"current value": this._currentValue,
 		};
 		if (this._targetValue != undefined && this._duration) {
 			message["target value"] = this._targetValue;
@@ -547,10 +547,10 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			startLevel: `${this.startLevel}${
 				this.ignoreStartLevel ? " (ignored)" : ""
 			}`,
-			direction: `${this.direction}`,
+			direction: this.direction,
 		};
 		if (this.duration) {
-			message.duration = `${this.duration.toString()}`;
+			message.duration = this.duration.toString();
 		}
 		return {
 			...super.toLogEntry(),
