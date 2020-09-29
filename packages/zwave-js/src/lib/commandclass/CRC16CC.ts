@@ -1,4 +1,4 @@
-import type { Maybe } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import { CommandClasses, CRC16_CCITT, validatePayload } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { CCAPI } from "./API";
@@ -127,5 +127,13 @@ export class CRC16CCCommandEncapsulation extends CRC16CC {
 	protected computeEncapsulationOverhead(): number {
 		// CRC16 adds two bytes CRC to the default overhead
 		return super.computeEncapsulationOverhead() + 2;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			// Hide the default payload line
+			message: undefined,
+		};
 	}
 }
