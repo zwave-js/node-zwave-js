@@ -1,3 +1,4 @@
+import moment from "moment";
 import { tz } from "moment-timezone";
 
 export interface DSTInfo {
@@ -90,3 +91,7 @@ export const timespan = Object.freeze({
 	hours: (num: number) => timespan.minutes(num * 60),
 	days: (num: number) => timespan.hours(num * 24),
 });
+
+export function formatDate(date: Date, format: string): string {
+	return moment(date).format(format);
+}
