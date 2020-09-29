@@ -3,6 +3,7 @@ import {
 	Duration,
 	Maybe,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	parseMaybeNumber,
 	parseNumber,
 	validatePayload,
@@ -187,7 +188,7 @@ export class BasicCCSet extends BasicCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `target value: ${this.targetValue}`,
+			message: { "target value": this.targetValue },
 		};
 	}
 }
@@ -269,16 +270,18 @@ export class BasicCCReport extends BasicCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [`current value: ${this.currentValue}`];
+		const message: MessageRecord = {
+			"current value": `${this.currentValue}`,
+		};
 		if (this.targetValue != undefined) {
-			messages.push(`target value:  ${this.targetValue}`);
+			message["target value"] = `${this.targetValue}`;
 		}
 		if (this.duration != undefined) {
-			messages.push(`duration:      ${this.duration.toString()}`);
+			message["duration"] = `${this.duration.toString()}`;
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }

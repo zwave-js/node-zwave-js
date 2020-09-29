@@ -1,4 +1,4 @@
-import type { Maybe } from "@zwave-js/core";
+import type { Maybe, MessageRecord } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -163,17 +163,17 @@ export class SupervisionCCReport extends SupervisionCC {
 	public readonly duration: Duration | undefined;
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		let message = `
-session id:          ${this.sessionId}
-more updates follow: ${this.moreUpdatesFollow}
-status:              ${getEnumMemberName(SupervisionStatus, this.status)}`;
+		const message: MessageRecord = {
+			"session id": this.sessionId,
+			"more updates follow": this.moreUpdatesFollow,
+			status: getEnumMemberName(SupervisionStatus, this.status),
+		};
 		if (this.duration) {
-			message += `
-duration:            ${this.duration.toString()}`;
+			message.duration = this.duration.toString();
 		}
 		return {
 			...super.toLogEntry(),
-			message: message.trim(),
+			message,
 		};
 	}
 }
@@ -235,13 +235,12 @@ export class SupervisionCCGet extends SupervisionCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const message = [
-			`session id:      ${this.sessionId}`,
-			`request updates: ${this.requestStatusUpdates}`,
-		];
 		return {
 			...super.toLogEntry(),
-			message,
+			message: {
+				"session id": `${this.sessionId}`,
+				"request updates": `${this.requestStatusUpdates}`,
+			},
 		};
 	}
 }

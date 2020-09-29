@@ -212,9 +212,9 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`weekday:      ${getEnumMemberName(Weekday, this.weekday)}`,
-				`switchpoints: ${this.switchPoints
+			message: {
+				weekday: `${getEnumMemberName(Weekday, this.weekday)}`,
+				switchpoints: `${this.switchPoints
 					.map(
 						(sp) => `
 · ${padStart(sp.hour.toString(), 2, "0")}:${padStart(
@@ -224,7 +224,7 @@ export class ClimateControlScheduleCCSet extends ClimateControlScheduleCC {
 						)} --> ${sp.state}`,
 					)
 					.join("")}`,
-			],
+			},
 		};
 	}
 }
@@ -267,9 +267,9 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`weekday:      ${getEnumMemberName(Weekday, this.weekday)}`,
-				`switchpoints: ${this.switchPoints
+			message: {
+				weekday: `${getEnumMemberName(Weekday, this.weekday)}`,
+				switchpoints: `${this.switchPoints
 					.map(
 						(sp) => `
 · ${padStart(sp.hour.toString(), 2, "0")}:${padStart(
@@ -279,7 +279,7 @@ export class ClimateControlScheduleCCReport extends ClimateControlScheduleCC {
 						)} --> ${sp.state}`,
 					)
 					.join("")}`,
-			],
+			},
 		};
 	}
 }
@@ -318,7 +318,7 @@ export class ClimateControlScheduleCCGet extends ClimateControlScheduleCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `weekday: ${getEnumMemberName(Weekday, this.weekday)}`,
+			message: { weekday: getEnumMemberName(Weekday, this.weekday) },
 		};
 	}
 }
@@ -344,7 +344,7 @@ export class ClimateControlScheduleCCChangedReport extends ClimateControlSchedul
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `change counter: ${this.changeCounter}`,
+			message: { "change counter": this.changeCounter },
 		};
 	}
 }
@@ -381,13 +381,13 @@ export class ClimateControlScheduleCCOverrideReport extends ClimateControlSchedu
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`override type:  ${getEnumMemberName(
+			message: {
+				"override type": `${getEnumMemberName(
 					ScheduleOverrideType,
 					this._overrideType,
 				)}`,
-				`override state: ${this._overrideState}`,
-			],
+				"override state": `${this._overrideState}`,
+			},
 		};
 	}
 }
@@ -435,13 +435,13 @@ export class ClimateControlScheduleCCOverrideSet extends ClimateControlScheduleC
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`override type:  ${getEnumMemberName(
+			message: {
+				"override type": `${getEnumMemberName(
 					ScheduleOverrideType,
 					this.overrideType,
 				)}`,
-				`override state: ${this.overrideState}`,
-			],
+				"override state": `${this.overrideState}`,
+			},
 		};
 	}
 }

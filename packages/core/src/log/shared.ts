@@ -70,9 +70,14 @@ export interface ZWaveLogInfo extends Omit<TransformableInfo, "message"> {
 	message: string | string[];
 }
 
+export type MessageRecord = Record<
+	string,
+	string | number | boolean | null | undefined
+>;
+
 export interface MessageOrCCLogEntry {
 	tags: string[];
-	message?: Record<string, string | number | boolean | null | undefined>;
+	message?: MessageRecord;
 }
 
 /** Returns the tag used to log node related messages */
@@ -136,9 +141,7 @@ export function messageToLines(message: string | string[]): string[] {
 }
 
 /** Splits a message record into multiple lines and auto-aligns key-value pairs */
-export function messageRecordToLines(
-	message: Record<string, string | number | boolean | null | undefined>,
-): string[] {
+export function messageRecordToLines(message: MessageRecord): string[] {
 	const entries = Object.entries(message);
 	if (!entries.length) return [];
 

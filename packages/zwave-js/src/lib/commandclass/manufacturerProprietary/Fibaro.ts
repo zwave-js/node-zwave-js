@@ -1,6 +1,7 @@
 import {
 	CommandClasses,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	validatePayload,
 	ValueID,
 	ValueMetadata,
@@ -209,16 +210,16 @@ export class FibaroVenetianBlindCCSet extends FibaroVenetianBlindCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [];
+		const message: MessageRecord = {};
 		if (this.position != undefined) {
-			messages.push(`position:  ${this.position}`);
+			message.position = this.position;
 		}
 		if (this.tilt != undefined) {
-			messages.push(`tilt:      ${this.tilt}`);
+			message.tilt = this.tilt;
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }
@@ -264,16 +265,16 @@ export class FibaroVenetianBlindCCReport extends FibaroVenetianBlindCC {
 	public readonly tilt?: number;
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [];
+		const message: MessageRecord = {};
 		if (this.position != undefined) {
-			messages.push(`position:  ${this.position}`);
+			message.position = this.position;
 		}
 		if (this.tilt != undefined) {
-			messages.push(`tilt:      ${this.tilt}`);
+			message.tilt = this.tilt;
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }

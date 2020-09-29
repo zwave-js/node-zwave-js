@@ -179,14 +179,16 @@ export class ClockCCSet extends ClockCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `clock setting: ${getEnumMemberName(
-				Weekday,
-				this.weekday,
-			)}, ${padStart(this.hour.toString(), 2, "0")}:${padStart(
-				this.minute.toString(),
-				2,
-				"0",
-			)}`,
+			message: {
+				"clock setting": `${getEnumMemberName(
+					Weekday,
+					this.weekday,
+				)}, ${padStart(this.hour.toString(), 2, "0")}:${padStart(
+					this.minute.toString(),
+					2,
+					"0",
+				)}`,
+			},
 		};
 	}
 }
@@ -219,14 +221,16 @@ export class ClockCCReport extends ClockCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `clock setting: ${getEnumMemberName(
-				Weekday,
-				this.weekday,
-			)}, ${padStart(this.hour.toString(), 2, "0")}:${padStart(
-				this.minute.toString(),
-				2,
-				"0",
-			)}`,
+			message: {
+				"clock setting": `${getEnumMemberName(
+					Weekday,
+					this.weekday,
+				)}, ${padStart(this.hour.toString(), 2, "0")}:${padStart(
+					this.minute.toString(),
+					2,
+					"0",
+				)}`,
+			},
 		};
 	}
 }

@@ -1,4 +1,4 @@
-import type { ValueID } from "@zwave-js/core";
+import type { MessageRecord, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeBitMask,
@@ -679,11 +679,11 @@ export class MultiChannelAssociationCCSet extends MultiChannelAssociationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`group id:  ${this.groupId}`,
-				`node ids:  ${this.nodeIds.join(", ")}`,
-				`endpoints: ${endpointAddressesToString(this.endpoints)}`,
-			],
+			message: {
+				"group id": `${this.groupId}`,
+				"node ids": `${this.nodeIds.join(", ")}`,
+				endpoints: `${endpointAddressesToString(this.endpoints)}`,
+			},
 		};
 	}
 }
@@ -758,14 +758,12 @@ export class MultiChannelAssociationCCRemove extends MultiChannelAssociationCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const message: string[] = [`group id:  ${this.groupId}`];
+		const message: MessageRecord = { "group id": this.groupId };
 		if (this.nodeIds) {
-			message.push(`node ids:  ${this.nodeIds.join(", ")}`);
+			message["node ids"] = `${this.nodeIds.join(", ")}`;
 		}
 		if (this.endpoints) {
-			message.push(
-				`endpoints: ${endpointAddressesToString(this.endpoints)}`,
-			);
+			message.endpoints = endpointAddressesToString(this.endpoints);
 		}
 		return {
 			...super.toLogEntry(),
@@ -856,14 +854,12 @@ export class MultiChannelAssociationCCReport extends MultiChannelAssociationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`group id:           ${this.groupId}`,
-				`maximum # of nodes: ${this.maxNodes}`,
-				`node ids:           ${this.nodeIds.join(", ")}`,
-				`endpoints:          ${endpointAddressesToString(
-					this.endpoints,
-				)}`,
-			],
+			message: {
+				"group id": `${this.groupId}`,
+				"maximum # of nodes": `${this.maxNodes}`,
+				"node ids": `${this.nodeIds.join(", ")}`,
+				endpoints: `${endpointAddressesToString(this.endpoints)}`,
+			},
 		};
 	}
 }
@@ -909,7 +905,7 @@ export class MultiChannelAssociationCCGet extends MultiChannelAssociationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `group id: ${this.groupId}`,
+			message: { "group id": this.groupId },
 		};
 	}
 }
@@ -937,7 +933,7 @@ export class MultiChannelAssociationCCSupportedGroupingsReport extends MultiChan
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `group count: ${this.groupCount}`,
+			message: { "group count": this.groupCount },
 		};
 	}
 }

@@ -161,7 +161,7 @@ export class LockCCSet extends LockCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `locked: ${this.locked}`,
+			message: { locked: this.locked },
 		};
 	}
 }
@@ -189,7 +189,7 @@ export class LockCCReport extends LockCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `locked: ${this.locked}`,
+			message: { locked: this.locked },
 		};
 	}
 }

@@ -236,11 +236,11 @@ export class ManufacturerSpecificCCReport extends ManufacturerSpecificCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`manufacturer id: ${num2hex(this._manufacturerId)}`,
-				`product type:    ${num2hex(this._productType)}`,
-				`product id:      ${num2hex(this._productId)}`,
-			],
+			message: {
+				"manufacturer id": `${num2hex(this._manufacturerId)}`,
+				"product type": `${num2hex(this._productType)}`,
+				"product id": `${num2hex(this._productId)}`,
+			},
 		};
 	}
 }
@@ -292,10 +292,13 @@ export class ManufacturerSpecificCCDeviceSpecificReport extends ManufacturerSpec
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`device id type: ${getEnumMemberName(DeviceIdType, this.type)}`,
-				`device id:      ${this.deviceId}`,
-			],
+			message: {
+				"device id type": `${getEnumMemberName(
+					DeviceIdType,
+					this.type,
+				)}`,
+				"device id": `${this.deviceId}`,
+			},
 		};
 	}
 }
@@ -335,10 +338,12 @@ export class ManufacturerSpecificCCDeviceSpecificGet extends ManufacturerSpecifi
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `device id type: ${getEnumMemberName(
-				DeviceIdType,
-				this.deviceIdType,
-			)}`,
+			message: {
+				"device id type": getEnumMemberName(
+					DeviceIdType,
+					this.deviceIdType,
+				),
+			},
 		};
 	}
 }

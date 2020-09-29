@@ -1,4 +1,4 @@
-import type { Maybe, ValueID } from "@zwave-js/core";
+import type { Maybe, MessageRecord, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	MAX_NODES,
@@ -449,15 +449,15 @@ export class AssociationCCSet extends AssociationCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [
-			`group id: ${this.groupId || "all groups"}`,
-			`node ids: ${
+		const message: MessageRecord = {
+			"group id": `${this.groupId || "all groups"}`,
+			"node ids": `${
 				this.nodeIds.length ? this.nodeIds.join(", ") : "all nodes"
 			}`,
-		];
+		};
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }
@@ -525,17 +525,17 @@ export class AssociationCCRemove extends AssociationCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [
-			`group id: ${this.groupId || "all groups"}`,
-			`node ids: ${
+		const message: MessageRecord = {
+			"group id": `${this.groupId || "all groups"}`,
+			"node ids": `${
 				this.nodeIds && this.nodeIds.length
 					? this.nodeIds.join(", ")
 					: "all nodes"
 			}`,
-		];
+		};
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }
@@ -606,11 +606,12 @@ export class AssociationCCReport extends AssociationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `
-group id:          ${this.groupId}
-max # of nodes:    ${this.maxNodes}
-node IDs:          ${this.nodeIds.join(", ")}
-reports to follow: ${this.reportsToFollow}`.trimLeft(),
+			message: {
+				"group id": this.groupId,
+				"max # of nodes": this.maxNodes,
+				"node IDs": this.nodeIds.join(", "),
+				"reports to follow": this.reportsToFollow,
+			},
 		};
 	}
 }
@@ -654,7 +655,7 @@ export class AssociationCCGet extends AssociationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `group id: ${this.groupId}`,
+			message: { "group id": this.groupId },
 		};
 	}
 }
@@ -682,7 +683,7 @@ export class AssociationCCSupportedGroupingsReport extends AssociationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `group count: ${this.groupCount}`,
+			message: { "group count": this.groupCount },
 		};
 	}
 }
