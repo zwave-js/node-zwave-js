@@ -174,7 +174,7 @@
 			"\tpublic toLogEntry(): MessageOrCCLogEntry {",
 			"\t\treturn {",
 			"\t\t\t...super.toLogEntry(),",
-			"\t\t\tmessage: `wasSent: ${this.wasSent}`,",
+			"\t\t\tmessage: {\"was sent\": this.wasSent},",
 			"\t\t};",
 			"\t}",
 			"}",
@@ -207,8 +207,10 @@
 			"\tpublic toLogEntry(): MessageOrCCLogEntry {",
 			"\t\treturn {",
 			"\t\t\t...super.toLogEntry(),",
-			"\t\t\tmessage: `callbackId:     ${this.callbackId}",
-			"transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,",
+			"\t\t\tmessage: {",
+			"\t\t\t\t\"callback id\": this.callbackId",
+			"\t\t\t\t\"transmit status\": getEnumMemberName(TransmitStatus, this.transmitStatus),",
+			"\t\t\t}",
 			"\t\t};",
 			"\t}",
 			"}"
@@ -220,7 +222,7 @@
 			"public toLogEntry(): MessageOrCCLogEntry {",
 			"\treturn {",
 			"\t\t...super.toLogEntry(),",
-			"\t\tmessage: `${1:someProp}: ${this.${1}}`,",
+			"\t\tmessage: { ${1:someProp}: this.${1} },",
 			"\t};",
 			"}"
 		]
