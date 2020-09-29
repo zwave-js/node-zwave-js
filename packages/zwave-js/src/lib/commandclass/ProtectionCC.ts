@@ -503,8 +503,14 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 		validatePayload(this.payload.length >= 5);
 		this.supportsTimeout = !!(this.payload[0] & 0b1);
 		this.supportsExclusiveControl = !!(this.payload[0] & 0b10);
-		this.supportedLocalStates = parseBitMask(this.payload.slice(1, 3));
-		this.supportedRFStates = parseBitMask(this.payload.slice(2, 5));
+		this.supportedLocalStates = parseBitMask(
+			this.payload.slice(1, 3),
+			LocalProtectionState.Unprotected,
+		);
+		this.supportedRFStates = parseBitMask(
+			this.payload.slice(3, 5),
+			RFProtectionState.Unprotected,
+		);
 
 		this.persistValues();
 	}
