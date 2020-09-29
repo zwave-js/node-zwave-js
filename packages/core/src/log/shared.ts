@@ -147,7 +147,9 @@ export function messageRecordToLines(message: MessageRecord): string[] {
 
 	const maxKeyLength = Math.max(...entries.map(([key]) => key.length));
 	return flatMap(entries, ([key, value]) =>
-		`${key}:${" ".repeat(key.length - maxKeyLength + 1)}${value}`
+		`${key}:${" ".repeat(
+			Math.max(maxKeyLength - key.length + 1, 1),
+		)}${value}`
 			.split("\n")
 			.map((line) => line.trimRight()),
 	);
