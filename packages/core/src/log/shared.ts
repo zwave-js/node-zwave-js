@@ -1,3 +1,4 @@
+import { flatMap } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Format, TransformableInfo, TransformFunction } from "logform";
 import * as path from "path";
@@ -71,7 +72,7 @@ export interface ZWaveLogInfo extends Omit<TransformableInfo, "message"> {
 
 export interface MessageOrCCLogEntry {
 	tags: string[];
-	message?: string | string[];
+	message?: Record<string, string | number | boolean | null | undefined>;
 }
 
 /** Returns the tag used to log node related messages */
@@ -132,6 +133,21 @@ export function messageToLines(message: string | string[]): string[] {
 	} else {
 		return [""];
 	}
+}
+
+/** Splits a message record into multiple lines and auto-aligns key-value pairs */
+export function messageRecordToLines(
+	message: Record<string, string | number | boolean | null | undefined>,
+): string[] {
+	const entries = Object.entries(message);
+	if (!entries.length) return [];
+
+	const maxKeyLength = Math.max(...entries.map(([key]) => key.length));
+	return flatMap(entries, ([key, value]) =>
+		`${key}:${" ".repeat(key.length - maxKeyLength + 1)}${value}`
+			.split("\n")
+			.map((line) => line.trimRight()),
+	);
 }
 
 /** Formats the log message and calculates the necessary paddings */
