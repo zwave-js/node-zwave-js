@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Changes under the hood
+* Formatting log messages has been simplified. Log messages are now defined as objects and the log formatter auto-aligns the values
+* Many CCs had their log representation improved. If an error occurs during this conversion, this error is now caught.
+
 ## 5.1.0 (2020-09-28)
 ### Features
 * Added support for `User Code CC V2`
