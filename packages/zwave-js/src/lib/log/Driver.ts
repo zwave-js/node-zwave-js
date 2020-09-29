@@ -187,8 +187,12 @@ export function logMessage(
 			direction: getDirectionPrefix(direction),
 		});
 	} catch (e) {
-		// Don't crash the entire program when logging fails
-		print(`An error occured while logging: ${e}`, "error");
+		// When logging fails, send the message to Sentry
+		try {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			const Sentry: typeof import("@sentry/node") = require("@sentry/node");
+			Sentry.captureException(e);
+		} catch {}
 	}
 }
 
