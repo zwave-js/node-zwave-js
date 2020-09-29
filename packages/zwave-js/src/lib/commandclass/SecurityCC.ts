@@ -8,6 +8,7 @@ import {
 	getCCName,
 	Maybe,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	parseCCList,
 	SecurityManager,
 	validatePayload,
@@ -618,14 +619,24 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {};
+		if (this.nonceId != undefined) {
+			message["nonce id"] = this.nonceId;
+		}
+		if (this.sequenced != undefined) {
+			message.sequenced = this.sequenced;
+			if (this.sequenced) {
+				if (this.secondFrame != undefined) {
+					message["second frame"] = this.secondFrame;
+				}
+				if (this.sequenceCounter != undefined) {
+					message["sequence counter"] = this.sequenceCounter;
+				}
+			}
+		}
 		return {
 			...super.toLogEntry(),
-			message: {
-				"nonce id": this.nonceId,
-				sequenced: this.sequenced,
-				"second frame": this.secondFrame,
-				"sequence counter": this.sequenceCounter,
-			},
+			message,
 		};
 	}
 }
