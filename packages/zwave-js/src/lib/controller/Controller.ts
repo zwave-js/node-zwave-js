@@ -813,16 +813,27 @@ export class ZWaveController extends EventEmitter {
 					) {
 						// Only try once, otherwise the node stays unsecure
 						try {
-							const API = newNode.commandClasses.Security;
+							// SDS13783 - impose a 10s timeout on each message
+							const api = newNode.commandClasses.Security.withOptions(
+								{
+									expire: 10000,
+								},
+							);
 							// Request security scheme, because it is required by the specs
-							await API.getSecurityScheme(); // ignore the result
+							await api.getSecurityScheme(); // ignore the result
+
+							// Request nonce separately, so we can impose a timeout
+							await api.getNonce({
+								standalone: true,
+								storeAsFreeNonce: true,
+							});
 
 							// send the network key
-							await API.setNetworkKey(
+							await api.setNetworkKey(
 								this.driver.securityManager.networkKey,
 							);
 							// TODO: support including controllers (when to do this?)
-							// await API.inheritSecurityScheme();
+							// await api.inheritSecurityScheme();
 
 							// Remember that the node is secure
 							newNode.isSecure = true;
@@ -830,6 +841,12 @@ export class ZWaveController extends EventEmitter {
 							let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
 							if (!(e instanceof ZWaveError)) {
 								errorMessage += `: ${e as any}`;
+							} else if (
+								e.code ===
+								ZWaveErrorCodes.Controller_MessageExpired
+							) {
+								errorMessage +=
+									": a secure inclusion timer has elapsed.";
 							} else if (
 								e.code !==
 									ZWaveErrorCodes.Controller_MessageDropped &&
