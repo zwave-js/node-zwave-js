@@ -13,6 +13,7 @@ import {
 } from "xstate";
 import { pure, raise, send } from "xstate/lib/actions";
 import type { CommandClass } from "../commandclass/CommandClass";
+import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
@@ -303,16 +304,18 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	/** Whether the message is an outgoing pre-transmit handshake */
 	isPreTransmitHandshakeForCurrentTransaction: (ctx, evt, meta) => {
 		if (!meta.state.matches("sending.handshake")) return false;
+		// Ensure that the current transaction is SendData
+		if (!currentTransactionIsSendData(ctx)) return false;
 
 		const transaction = (evt as any).transaction as Transaction;
 		if (transaction.priority !== MessagePriority.PreTransmitHandshake)
 			return false;
 		if (!(transaction.message instanceof SendDataRequest)) return false;
-		const curCommand = (ctx.currentTransaction!.message as SendDataRequest)
-			.command;
-		const newCommand = (transaction.message as SendDataRequest).command;
 		// require the handshake to be for the same node
-		return newCommand.nodeId === curCommand.nodeId;
+		return (
+			transaction.message.command.nodeId ===
+			(ctx.currentTransaction!.message as SendDataRequest).command.nodeId
+		);
 	},
 	isExpectedHandshakeResponse: (ctx, evt, meta) => {
 		if (!ctx.handshakeTransaction) return false;
@@ -320,6 +323,7 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 			return false;
 		const sentMsg = ctx.handshakeTransaction.message as SendDataRequest;
 		const receivedMsg = (evt as any).message;
+		if (!isCommandClassContainer(receivedMsg)) return false;
 		return (
 			receivedMsg instanceof ApplicationCommandRequest &&
 			sentMsg.command.isExpectedCCResponse(receivedMsg.command)
@@ -327,15 +331,17 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	},
 	/** Whether the message is an outgoing handshake response to the current node*/
 	isHandshakeForCurrentTransaction: (ctx, evt) => {
-		if (!ctx.currentTransaction) return false;
+		// First ensure that the current transaction is SendData
+		if (!currentTransactionIsSendData(ctx)) return false;
+		// Then ensure that the event transaction is also SendData
 		const transaction = (evt as any).transaction as Transaction;
 		if (transaction.priority !== MessagePriority.Handshake) return false;
 		if (!(transaction.message instanceof SendDataRequest)) return false;
-		const curCommand = (ctx.currentTransaction.message as SendDataRequest)
-			.command;
-		const newCommand = transaction.message.command;
 		// require the handshake to be for the same node
-		return newCommand.nodeId === curCommand.nodeId;
+		return (
+			transaction.message.command.nodeId ===
+			(ctx.currentTransaction!.message as SendDataRequest).command.nodeId
+		);
 	},
 	shouldNotKeepCurrentTransaction: (ctx, evt) => {
 		const reducer = (evt as any).reducer;
