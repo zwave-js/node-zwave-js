@@ -1,13 +1,16 @@
-import type { Maybe } from "@zwave-js/core";
 import {
 	CommandClasses,
 	DSTInfo,
+	formatDate,
 	getDefaultDSTInfo,
 	getDSTInfo,
+	Maybe,
+	MessageOrCCLogEntry,
 	validatePayload,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -203,6 +206,19 @@ export class TimeCCTimeReport extends TimeCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				time: `${padStart(this.hour.toString(), 2, "0")}:${padStart(
+					this.minute.toString(),
+					2,
+					"0",
+				)}:${padStart(this.second.toString(), 2, "0")}`,
+			},
+		};
+	}
 }
 
 @CCCommand(TimeCommand.TimeGet)
@@ -250,6 +266,19 @@ export class TimeCCDateReport extends TimeCC {
 		]);
 		this.payload.writeUInt16BE(this.year, 0);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				date: `${padStart(this.year.toString(), 4, "0")}-${padStart(
+					this.month.toString(),
+					2,
+					"0",
+				)}-${padStart(this.day.toString(), 2, "0")}`,
+			},
+		};
 	}
 }
 
@@ -316,6 +345,18 @@ export class TimeCCTimeOffsetSet extends TimeCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"standard time offset": `${this.standardOffset} minutes`,
+				"DST offset": `${this.dstOffset} minutes`,
+				"DST start date": formatDate(this.dstStartDate, "YYYY-MM-DD"),
+				"DST end date": formatDate(this.dstEndDate, "YYYY-MM-DD"),
+			},
+		};
+	}
 }
 
 @CCCommand(TimeCommand.TimeOffsetReport)
@@ -372,6 +413,18 @@ export class TimeCCTimeOffsetReport extends TimeCC {
 	private _dstEndDate: Date;
 	public get dstEndDate(): Date {
 		return this._dstEndDate;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"standard time offset": `${this._standardOffset} minutes`,
+				"DST offset": `${this._dstOffset} minutes`,
+				"DST start date": formatDate(this._dstStartDate, "YYYY-MM-DD"),
+				"DST end date": formatDate(this._dstEndDate, "YYYY-MM-DD"),
+			},
+		};
 	}
 }
 
