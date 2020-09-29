@@ -1047,6 +1047,9 @@ export class ZWaveController extends EventEmitter {
 			this._healNetworkActive = false;
 		})();
 
+		// And update the progress once at the start
+		this.emit("heal network progress", new Map(this._healNetworkProgress));
+
 		return true;
 	}
 
