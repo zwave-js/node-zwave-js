@@ -10,6 +10,7 @@ import {
 	getCCName,
 	Maybe,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	parseBitMask,
 	parseNodeInformationFrame,
 	validatePayload,
@@ -562,19 +563,17 @@ export class MultiChannelCCEndPointReport extends MultiChannelCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [
-			`endpoint count (individual): ${this.individualCount}`,
-			`count is dynamic:            ${this.countIsDynamic}`,
-			`identical capabilities:      ${this.identicalCapabilities}`,
-		];
+		const message: MessageRecord = {
+			"endpoint count (individual)": this.individualCount,
+			"count is dynamic": this.countIsDynamic,
+			"identical capabilities": this.identicalCapabilities,
+		};
 		if (this.aggregatedCount != undefined) {
-			messages.push(
-				`endpoint count (aggregated): ${this.aggregatedCount}`,
-			);
+			message["endpoint count (aggregated)"] = this.aggregatedCount;
 		}
 		const ret = {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 		return ret;
 	}
@@ -634,19 +633,17 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 	public readonly capability: EndpointCapability;
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		let message = `endpoint index:        ${this.endpointIndex}
-generic device class:  ${this.capability.generic.label}
-specific device class: ${this.capability.specific.label}
-is dynamic end point:  ${this.capability.isDynamic}
-supported CCs:`;
-		for (const cc of this.capability.supportedCCs) {
-			const ccName = CommandClasses[cc];
-			message += `\n· ${ccName ? ccName : num2hex(cc)}`;
-		}
-
 		return {
 			...super.toLogEntry(),
-			message,
+			message: {
+				"endpoint index": this.endpointIndex,
+				"generic device class": this.capability.generic.label,
+				"specific device class": this.capability.specific.label,
+				"is dynamic end point": this.capability.isDynamic,
+				"supported CCs": this.capability.supportedCCs
+					.map((cc) => `\n· ${getCCName(cc)}`)
+					.join(""),
+			},
 		};
 	}
 }
@@ -686,7 +683,7 @@ export class MultiChannelCCCapabilityGet extends MultiChannelCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `endpoint: ${this.requestedEndpoint}`,
+			message: { endpoint: this.requestedEndpoint },
 		};
 	}
 }
@@ -752,19 +749,17 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`generic device class:   ${
-					lookupGenericDeviceClass(this.genericClass).label
-				}`,
-				`specific device class:  ${
-					lookupSpecificDeviceClass(
-						this.genericClass,
-						this.specificClass,
-					).label
-				}`,
-				`found endpoints:        ${this._foundEndpoints.join(", ")}`,
-				`# of reports to follow: ${this._reportsToFollow}`,
-			],
+			message: {
+				"generic device class": lookupGenericDeviceClass(
+					this.genericClass,
+				).label,
+				"specific device class": lookupSpecificDeviceClass(
+					this.genericClass,
+					this.specificClass,
+				).label,
+				"found endpoints": this._foundEndpoints.join(", "),
+				"# of reports to follow": this._reportsToFollow,
+			},
 		};
 	}
 }
@@ -807,17 +802,15 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`generic device class:  ${
-					lookupGenericDeviceClass(this.genericClass).label
-				}`,
-				`specific device class: ${
-					lookupSpecificDeviceClass(
-						this.genericClass,
-						this.specificClass,
-					).label
-				}`,
-			],
+			message: {
+				"generic device class": lookupGenericDeviceClass(
+					this.genericClass,
+				).label,
+				"specific device class": lookupSpecificDeviceClass(
+					this.genericClass,
+					this.specificClass,
+				).label,
+			},
 		};
 	}
 }
@@ -854,8 +847,10 @@ export class MultiChannelCCAggregatedMembersReport extends MultiChannelCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `endpoint: ${this.endpointIndex}
-members:  ${this.members.join(", ")}`,
+			message: {
+				endpoint: this.endpointIndex,
+				members: this.members.join(", "),
+			},
 		};
 	}
 }
@@ -895,7 +890,7 @@ export class MultiChannelCCAggregatedMembersGet extends MultiChannelCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `endpoint: ${this.requestedEndpoint}`,
+			message: { endpoint: this.requestedEndpoint },
 		};
 	}
 }
@@ -1003,13 +998,13 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `
-source:      ${this.endpointIndex}
-destination: ${
-				typeof this.destination === "number"
-					? this.destination
-					: this.destination.join(", ")
-			}`.trim(),
+			message: {
+				source: this.endpointIndex,
+				destination:
+					typeof this.destination === "number"
+						? this.destination
+						: this.destination.join(", "),
+			},
 		};
 	}
 
@@ -1040,10 +1035,10 @@ export class MultiChannelCCV1Report extends MultiChannelCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`CC:             ${getCCName(this.requestedCC)}`,
-				`# of endpoints: ${this.endpointCount}`,
-			],
+			message: {
+				CC: getCCName(this.requestedCC),
+				"# of endpoints": this.endpointCount,
+			},
 		};
 	}
 }
@@ -1090,7 +1085,7 @@ export class MultiChannelCCV1Get extends MultiChannelCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `CC: ${getCCName(this.requestedCC)}`,
+			message: { CC: getCCName(this.requestedCC) },
 		};
 	}
 }
@@ -1154,7 +1149,7 @@ export class MultiChannelCCV1CommandEncapsulation extends MultiChannelCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `source: ${this.endpointIndex}`,
+			message: { source: this.endpointIndex },
 		};
 	}
 }

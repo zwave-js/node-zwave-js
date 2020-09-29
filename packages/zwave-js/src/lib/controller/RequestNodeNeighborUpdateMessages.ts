@@ -66,7 +66,7 @@ export class RequestNodeNeighborUpdateRequest extends RequestNodeNeighborUpdateR
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `callbackId: ${this.callbackId}`,
+			message: { "callback id": this.callbackId },
 		};
 	}
 }
@@ -97,11 +97,13 @@ export class RequestNodeNeighborUpdateReport
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `callbackId:    ${this.callbackId},
-update status: ${getEnumMemberName(
-				NodeNeighborUpdateStatus,
-				this._updateStatus,
-			)}`,
+			message: {
+				"callback id": this.callbackId,
+				"update status": getEnumMemberName(
+					NodeNeighborUpdateStatus,
+					this._updateStatus,
+				),
+			},
 		};
 	}
 }

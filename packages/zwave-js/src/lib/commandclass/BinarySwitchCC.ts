@@ -3,6 +3,7 @@ import {
 	Duration,
 	Maybe,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	parseBoolean,
 	parseMaybeBoolean,
 	validatePayload,
@@ -209,13 +210,15 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [`target value: ${this.targetValue}`];
+		const message: MessageRecord = {
+			"target value": `${this.targetValue}`,
+		};
 		if (this.duration != undefined) {
-			messages.push(`duration:     ${this.duration.toString()}`);
+			message.duration = `${this.duration.toString()}`;
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }
@@ -270,16 +273,18 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [`current value: ${this.currentValue}`];
+		const message: MessageRecord = {
+			"current value": `${this.currentValue}`,
+		};
 		if (this.targetValue != undefined) {
-			messages.push(`target value:  ${this.targetValue}`);
+			message["target value"] = `${this.targetValue}`;
 		}
 		if (this.duration != undefined) {
-			messages.push(`duration:      ${this.duration.toString()}`);
+			message.duration = `${this.duration.toString()}`;
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }

@@ -58,8 +58,10 @@ export class GetRoutingInfoRequest extends Message {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `removeNonRepeaters: ${this.removeNonRepeaters}
-removeBadLinks:     ${this.removeBadLinks}`,
+			message: {
+				"remove non-repeaters": this.removeNonRepeaters,
+				"remove bad links": this.removeBadLinks,
+			},
 		};
 	}
 }
@@ -85,7 +87,7 @@ export class GetRoutingInfoResponse extends Message {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `node ids: ${this._nodeIds.join(", ")}`,
+			message: { "node ids": `${this._nodeIds.join(", ")}` },
 		};
 	}
 }

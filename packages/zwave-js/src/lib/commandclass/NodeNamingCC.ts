@@ -235,7 +235,7 @@ export class NodeNamingAndLocationCCNameSet extends NodeNamingAndLocationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `name: ${this.name}`,
+			message: { name: this.name },
 		};
 	}
 }
@@ -267,7 +267,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `name: ${this.name}`,
+			message: { name: this.name },
 		};
 	}
 }
@@ -326,7 +326,7 @@ export class NodeNamingAndLocationCCLocationSet extends NodeNamingAndLocationCC 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `location: ${this.location}`,
+			message: { location: this.location },
 		};
 	}
 }
@@ -358,7 +358,7 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `location: ${this.location}`,
+			message: { location: this.location },
 		};
 	}
 }

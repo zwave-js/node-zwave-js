@@ -1,5 +1,9 @@
 import { lookupIndicator, lookupProperty } from "@zwave-js/config";
-import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	ValueID,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	Maybe,
@@ -519,25 +523,23 @@ export class IndicatorCCSet extends IndicatorCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [];
+		const message: MessageRecord = {};
 		if (this.indicator0Value != undefined) {
-			messages.push(`indicator 0 value: ${this.indicator0Value}`);
+			message["indicator 0 value"] = `${this.indicator0Value}`;
 		}
 		if (this.values != undefined) {
-			messages.push(
-				`values: ${this.values
-					.map(
-						(v) => `
+			message.values = `${this.values
+				.map(
+					(v) => `
 · indicatorId: ${v.indicatorId}
   propertyId:  ${v.propertyId}
   value:       ${v.value}`,
-					)
-					.join("")}`,
-			);
+				)
+				.join("")}`;
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }
@@ -652,25 +654,23 @@ export class IndicatorCCReport extends IndicatorCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [];
+		const message: MessageRecord = {};
 		if (this.value != undefined) {
-			messages.push(`indicator 0 value: ${this.value}`);
+			message["indicator 0 value"] = `${this.value}`;
 		}
 		if (this.values != undefined) {
-			messages.push(
-				`values: ${this.values
-					.map(
-						(v) => `
+			message.values = `${this.values
+				.map(
+					(v) => `
 · indicatorId: ${v.indicatorId}
   propertyId:  ${v.propertyId}
   value:       ${v.value}`,
-					)
-					.join("")}`,
-			);
+				)
+				.join("")}`;
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }
@@ -710,7 +710,7 @@ export class IndicatorCCGet extends IndicatorCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `indicator: ${getIndicatorName(this.indicatorId)}`,
+			message: { indicator: getIndicatorName(this.indicatorId) },
 		};
 	}
 }
@@ -762,19 +762,17 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`indicator:            ${getIndicatorName(this.indicatorId)}`,
-				`supported properties: ${this.supportedProperties
+			message: {
+				indicator: `${getIndicatorName(this.indicatorId)}`,
+				"supported properties": `${this.supportedProperties
 					.map(
 						(id) =>
 							lookupProperty(id)?.label ??
 							`Unknown (${num2hex(id)})`,
 					)
 					.join(", ")}`,
-				`next indicator:       ${getIndicatorName(
-					this.nextIndicatorId,
-				)}`,
-			],
+				"next indicator": `${getIndicatorName(this.nextIndicatorId)}`,
+			},
 		};
 	}
 }
@@ -814,7 +812,7 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `indicator: ${getIndicatorName(this.indicatorId)}`,
+			message: { indicator: getIndicatorName(this.indicatorId) },
 		};
 	}
 }

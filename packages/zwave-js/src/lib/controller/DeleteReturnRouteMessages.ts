@@ -98,7 +98,7 @@ export class DeleteReturnRouteResponse
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `hasStarted: ${this.hasStarted}`,
+			message: { "has started": this.hasStarted },
 		};
 	}
 }
@@ -132,8 +132,13 @@ export class DeleteReturnRouteRequestTransmitReport
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `callbackId:     ${this.callbackId}
-transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
+			message: {
+				"callback id": this.callbackId,
+				"transmit status": getEnumMemberName(
+					TransmitStatus,
+					this.transmitStatus,
+				),
+			},
 		};
 	}
 }

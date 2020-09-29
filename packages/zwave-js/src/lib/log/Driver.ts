@@ -4,7 +4,7 @@ import {
 	DataDirection,
 	getDirectionPrefix,
 	isLoglevelVisible,
-	messageToLines,
+	messageRecordToLines,
 	shouldLogNode,
 	tagify,
 	ZWaveLogger,
@@ -136,7 +136,7 @@ export function logMessage(
 	let msg: string[] = [tagify(logEntry.tags)];
 	if (logEntry.message) {
 		msg.push(
-			...messageToLines(logEntry.message).map(
+			...messageRecordToLines(logEntry.message).map(
 				(line) => (isCCContainer ? "│ " : "  ") + line,
 			),
 		);
@@ -158,7 +158,7 @@ export function logMessage(
 				indent++;
 				if (loggedCC.message) {
 					msg.push(
-						...messageToLines(loggedCC.message).map(
+						...messageRecordToLines(loggedCC.message).map(
 							(line) =>
 								`${" ".repeat(indent * 2)}${
 									isEncapCC ? "│ " : "  "

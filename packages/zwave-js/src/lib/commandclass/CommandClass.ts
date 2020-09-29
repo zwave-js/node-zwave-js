@@ -337,7 +337,7 @@ export class CommandClass {
 			tags: [this.constructor.name],
 			message:
 				this.payload.length > 0
-					? "payload: 0x" + this.payload.toString("hex")
+					? { payload: `0x${this.payload.toString("hex")}` }
 					: undefined,
 		};
 	}

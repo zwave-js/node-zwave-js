@@ -1,4 +1,9 @@
-import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
+import type {
+	Maybe,
+	MessageOrCCLogEntry,
+	MessageRecord,
+	ValueID,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -145,15 +150,13 @@ export class SceneActivationCCSet extends SceneActivationCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [`scene id:         ${this.sceneId}`];
+		const message: MessageRecord = { "scene id": `${this.sceneId}` };
 		if (this.dimmingDuration != undefined) {
-			messages.push(
-				`dimming duration: ${this.dimmingDuration.toString()}`,
-			);
+			message["dimming duration"] = `${this.dimmingDuration.toString()}`;
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }

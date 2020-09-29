@@ -1,4 +1,4 @@
-import type { ValueID } from "@zwave-js/core";
+import type { MessageRecord, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -404,9 +404,11 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const message = [`target value: ${this.targetValue}`];
+		const message: MessageRecord = {
+			"target value": `${this.targetValue}`,
+		};
 		if (this.duration) {
-			message.push(`duration:     ${this.duration.toString()}`);
+			message.duration = `${this.duration.toString()}`;
 		}
 		return {
 			...super.toLogEntry(),
@@ -466,12 +468,12 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const message = [`current value: ${this._currentValue}`];
+		const message: MessageRecord = {
+			"current value": `${this._currentValue}`,
+		};
 		if (this._targetValue != undefined && this._duration) {
-			message.push(
-				`target value:  ${this._targetValue}`,
-				`duration:      ${this._duration.toString()}`,
-			);
+			message["target value"] = this._targetValue;
+			message.duration = this._duration.toString();
 		}
 		return {
 			...super.toLogEntry(),
@@ -541,14 +543,14 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const message = [
-			`startLevel: ${this.startLevel}${
+		const message: MessageRecord = {
+			startLevel: `${this.startLevel}${
 				this.ignoreStartLevel ? " (ignored)" : ""
 			}`,
-			`direction:  ${this.direction}`,
-		];
+			direction: `${this.direction}`,
+		};
 		if (this.duration) {
-			message.push(`duration:   ${this.duration.toString()}`);
+			message.duration = `${this.duration.toString()}`;
 		}
 		return {
 			...super.toLogEntry(),
@@ -616,10 +618,9 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `switch type: ${getEnumMemberName(
-				SwitchType,
-				this.switchType,
-			)}`,
+			message: {
+				"switch type": getEnumMemberName(SwitchType, this.switchType),
+			},
 		};
 	}
 }

@@ -136,8 +136,10 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `transmitOptions: ${num2hex(this.transmitOptions)}
-callbackId:      ${this.callbackId}`,
+			message: {
+				"transmit options": num2hex(this.transmitOptions),
+				"callback id": this.callbackId,
+			},
 		};
 	}
 
@@ -203,8 +205,13 @@ export class SendDataRequestTransmitReport
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `callbackId:     ${this.callbackId}
-transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
+			message: {
+				"callback id": this.callbackId,
+				"transmit status": getEnumMemberName(
+					TransmitStatus,
+					this.transmitStatus,
+				),
+			},
 		};
 	}
 }
@@ -241,7 +248,7 @@ export class SendDataResponse extends Message implements SuccessIndicator {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `wasSent: ${this.wasSent}`,
+			message: { "was sent": this.wasSent },
 		};
 	}
 }
@@ -347,8 +354,10 @@ export class SendDataMulticastRequest<
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `transmitOptions: ${num2hex(this.transmitOptions)}
-callbackId:      ${this.callbackId}`,
+			message: {
+				"transmit options": num2hex(this.transmitOptions),
+				"callback id": this.callbackId,
+			},
 		};
 	}
 
@@ -407,8 +416,13 @@ export class SendDataMulticastRequestTransmitReport
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `callbackId:     ${this.callbackId}
-transmitStatus: ${getEnumMemberName(TransmitStatus, this.transmitStatus)}`,
+			message: {
+				"callback id": this.callbackId,
+				"transmit status": getEnumMemberName(
+					TransmitStatus,
+					this.transmitStatus,
+				),
+			},
 		};
 	}
 }
@@ -441,7 +455,7 @@ export class SendDataMulticastResponse
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `wasSent: ${this.wasSent}`,
+			message: { "was sent": this.wasSent },
 		};
 	}
 }

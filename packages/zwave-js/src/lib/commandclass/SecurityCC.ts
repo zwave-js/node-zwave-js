@@ -761,15 +761,17 @@ export class SecurityCCCommandsSupportedReport extends SecurityCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `reportsToFollow: ${this.reportsToFollow}
-supportedCCs: ${this._supportedCCs
-				.map((cc) => getCCName(cc))
-				.map((cc) => `\n· ${cc}`)
-				.join("")}
-controlledCCs: ${this._controlledCCs
-				.map((cc) => getCCName(cc))
-				.map((cc) => `\n· ${cc}`)
-				.join("")}`,
+			message: {
+				reportsToFollow: this.reportsToFollow,
+				supportedCCs: this._supportedCCs
+					.map((cc) => getCCName(cc))
+					.map((cc) => `\n· ${cc}`)
+					.join(""),
+				controlledCCs: this._controlledCCs
+					.map((cc) => getCCName(cc))
+					.map((cc) => `\n· ${cc}`)
+					.join(""),
+			},
 		};
 	}
 }

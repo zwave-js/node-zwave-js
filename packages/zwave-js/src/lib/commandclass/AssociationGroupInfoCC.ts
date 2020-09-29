@@ -3,6 +3,7 @@ import {
 	getCCName,
 	Maybe,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	parseCCId,
 	validatePayload,
 	ValueID,
@@ -546,7 +547,10 @@ export class AssociationGroupInfoCCNameReport extends AssociationGroupInfoCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [`group id: ${this.groupId}`, `name:     ${this.name}`],
+			message: {
+				"group id": this.groupId,
+				name: this.name,
+			},
 		};
 	}
 }
@@ -586,7 +590,7 @@ export class AssociationGroupInfoCCNameGet extends AssociationGroupInfoCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `group id: ${this.groupId}`,
+			message: { "group id": this.groupId },
 		};
 	}
 }
@@ -651,10 +655,10 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`is list mode:     ${this.isListMode}`,
-				`has dynamic info: ${this.hasDynamicInfo}`,
-				`groups: ${this.groups
+			message: {
+				"is list mode": `${this.isListMode}`,
+				"has dynamic info": `${this.hasDynamicInfo}`,
+				groups: `${this.groups
 					.map(
 						(g) => `
 · Group #${g.groupId}
@@ -663,7 +667,7 @@ export class AssociationGroupInfoCCInfoReport extends AssociationGroupInfoCC {
   event code: ${g.eventCode}`,
 					)
 					.join("")}`,
-			],
+			},
 		};
 	}
 }
@@ -719,17 +723,17 @@ export class AssociationGroupInfoCCInfoGet extends AssociationGroupInfoCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [];
+		const message: MessageRecord = {};
 		if (this.groupId != undefined) {
-			messages.push(`group id:      ${this.groupId}`);
+			message["group id"] = `${this.groupId}`;
 		}
 		if (this.listMode != undefined) {
-			messages.push(`list mode:     ${this.listMode}`);
+			message["list mode"] = `${this.listMode}`;
 		}
-		messages.push(`refresh cache: ${this.refreshCache}`);
+		message["refresh cache"] = `${this.refreshCache}`;
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }
@@ -775,16 +779,16 @@ export class AssociationGroupInfoCCCommandListReport extends AssociationGroupInf
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`group id: ${this.groupId}`,
-				`commands: ${[...this.commands]
+			message: {
+				"group id": `${this.groupId}`,
+				commands: `${[...this.commands]
 					.map(([cc, cmds]) => {
 						return `\n· ${getCCName(cc)}: ${cmds
 							.map((cmd) => num2hex(cmd))
 							.join(", ")}`;
 					})
 					.join("")}`,
-			],
+			},
 		};
 	}
 }
@@ -830,10 +834,10 @@ export class AssociationGroupInfoCCCommandListGet extends AssociationGroupInfoCC
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`group id:    ${this.groupId}`,
-				`allow cache: ${this.allowCache}`,
-			],
+			message: {
+				"group id": `${this.groupId}`,
+				"allow cache": `${this.allowCache}`,
+			},
 		};
 	}
 }

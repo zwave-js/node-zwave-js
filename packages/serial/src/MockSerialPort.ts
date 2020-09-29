@@ -78,7 +78,7 @@ export class MockSerialPort extends ZWaveSerialPort {
 
 	public async receiveData(data: Buffer): Promise<void> {
 		return new Promise((resolve, reject) => {
-			this["serial"].write(data, (err) => {
+			this.serial.write(data, (err) => {
 				if (err) reject(err);
 				else resolve();
 			});

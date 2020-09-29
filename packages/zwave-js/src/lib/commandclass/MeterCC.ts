@@ -1,5 +1,9 @@
 import { lookupMeter, lookupMeterScale, MeterScale } from "@zwave-js/config";
-import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	ValueID,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	getMinIntegerSize,
@@ -616,24 +620,23 @@ export class MeterCCReport extends MeterCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [
-			`type:       ${
+		const message: MessageRecord = {
+			type:
 				lookupMeter(this.type)?.name ??
-				`Unknown (${num2hex(this._type)})`
-			}`,
-			`scale:      ${this._scale.label}`,
-			`rate type:  ${getEnumMemberName(RateType, this._rateType)}`,
-			`value:      ${this.value}`,
-		];
+				`Unknown (${num2hex(this._type)})`,
+			scale: this._scale.label,
+			"rate type": getEnumMemberName(RateType, this._rateType),
+			value: this.value,
+		};
 		if (this._deltaTime !== "unknown") {
-			messages.push(`time delta:  ${this.deltaTime} seconds`);
+			message["time delta"] = `${this.deltaTime} seconds`;
 		}
 		if (this._previousValue != undefined) {
-			messages.push(`prev. value: ${this._previousValue}`);
+			message["prev. value"] = `${this._previousValue}`;
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }
@@ -712,11 +715,12 @@ export class MeterCCGet extends MeterCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [];
+		const message: MessageRecord = {};
 		if (this.rateType != undefined) {
-			messages.push(
-				`rate type: ${getEnumMemberName(RateType, this.rateType)}`,
-			);
+			message["rate type"] = `${getEnumMemberName(
+				RateType,
+				this.rateType,
+			)}`;
 		}
 		if (this.scale != undefined) {
 			// Try to lookup the meter type to translate the scale
@@ -724,14 +728,14 @@ export class MeterCCGet extends MeterCC {
 				getTypeValueId(this.endpointIndex),
 			);
 			if (type != undefined) {
-				messages.push(
-					`duration:  ${lookupMeterScale(type, this.scale).label}`,
-				);
+				message.duration = `${
+					lookupMeterScale(type, this.scale).label
+				}`;
 			}
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }
@@ -833,25 +837,25 @@ export class MeterCCSupportedReport extends MeterCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [
-			`type:                 ${
+		const message: MessageRecord = {
+			type: `${
 				lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`,
-			`supports reset:       ${this._supportsReset}`,
-			`supported scales:     ${this._supportedScales
+			"supports reset": `${this._supportsReset}`,
+			"supported scales": `${this._supportedScales
 				.map(
 					(scale) => `
 · ${lookupMeterScale(this.type, scale).label}`,
 				)
 				.join("")}`,
-			`supported rate types: ${this._supportedRateTypes
+			"supported rate types": `${this._supportedRateTypes
 				.map((rt) => getEnumMemberName(RateType, rt))
 				.join(", ")}`,
-		];
+		};
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }
@@ -920,21 +924,19 @@ export class MeterCCReset extends MeterCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [];
+		const message: MessageRecord = {};
 		if (this.type != undefined) {
-			messages.push(
-				`type:         ${
-					lookupMeter(this.type)?.name ??
-					`Unknown (${num2hex(this.type)})`
-				}`,
-			);
+			message.type = `${
+				lookupMeter(this.type)?.name ??
+				`Unknown (${num2hex(this.type)})`
+			}`;
 		}
 		if (this.targetValue != undefined) {
-			messages.push(`target value: ${this.targetValue}`);
+			message["target value"] = `${this.targetValue}`;
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }

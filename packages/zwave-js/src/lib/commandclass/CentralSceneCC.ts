@@ -1,4 +1,8 @@
-import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	ValueID,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -298,20 +302,20 @@ export class CentralSceneCCNotification extends CentralSceneCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const messages: string[] = [
-			`sequence number: ${this.sequenceNumber}`,
-			`key attribute:   ${getEnumMemberName(
+		const message: MessageRecord = {
+			"sequence number": `${this.sequenceNumber}`,
+			"key attribute": `${getEnumMemberName(
 				CentralSceneKeys,
 				this.keyAttribute,
 			)}`,
-			`scene number:    ${this.sceneNumber}`,
-		];
+			"scene number": `${this.sceneNumber}`,
+		};
 		if (this.slowRefresh != undefined) {
-			messages.push(`slow refresh:     ${this.slowRefresh}`);
+			message["slow refresh"] = `${this.slowRefresh}`;
 		}
 		return {
 			...super.toLogEntry(),
-			message: messages,
+			message,
 		};
 	}
 }
@@ -445,7 +449,7 @@ export class CentralSceneCCConfigurationReport extends CentralSceneCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `slow refresh: ${this._slowRefresh}`,
+			message: { "slow refresh": this._slowRefresh },
 		};
 	}
 }
@@ -487,7 +491,7 @@ export class CentralSceneCCConfigurationSet extends CentralSceneCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `slow refresh: ${this.slowRefresh}`,
+			message: { "slow refresh": this.slowRefresh },
 		};
 	}
 }

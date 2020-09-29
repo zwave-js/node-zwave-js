@@ -857,14 +857,14 @@ export class UserCodeCCSet extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`user id:   ${this.userId}`,
-				`id status: ${getEnumMemberName(
+			message: {
+				"user id": `${this.userId}`,
+				"id status": `${getEnumMemberName(
 					UserIDStatus,
 					this.userIdStatus,
 				)}`,
-				`user code: ${this.userCode}`,
-			],
+				"user code": `${this.userCode}`,
+			},
 		};
 	}
 }
@@ -900,14 +900,14 @@ export class UserCodeCCReport extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`user id:   ${this.userId}`,
-				`id status: ${getEnumMemberName(
+			message: {
+				"user id": `${this.userId}`,
+				"id status": `${getEnumMemberName(
 					UserIDStatus,
 					this.userIdStatus,
 				)}`,
-				`user code: ${this.userCode}`,
-			],
+				"user code": `${this.userCode}`,
+			},
 		};
 	}
 }
@@ -945,7 +945,7 @@ export class UserCodeCCGet extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `user id: ${this.userId}`,
+			message: { "user id": this.userId },
 		};
 	}
 }
@@ -974,7 +974,7 @@ export class UserCodeCCUsersNumberReport extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `supported users: ${this.supportedUsers}`,
+			message: { "supported users": this.supportedUsers },
 		};
 	}
 }
@@ -1121,7 +1121,7 @@ export class UserCodeCCKeypadModeSet extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `mode: ${getEnumMemberName(KeypadMode, this.keypadMode)}`,
+			message: { mode: getEnumMemberName(KeypadMode, this.keypadMode) },
 		};
 	}
 }
@@ -1164,10 +1164,9 @@ export class UserCodeCCKeypadModeReport extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `keypadMode: ${getEnumMemberName(
-				KeypadMode,
-				this.keypadMode,
-			)}`,
+			message: {
+				keypadMode: getEnumMemberName(KeypadMode, this.keypadMode),
+			},
 		};
 	}
 }
@@ -1245,7 +1244,7 @@ export class UserCodeCCMasterCodeSet extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `master code: ${this.masterCode}`,
+			message: { "master code": this.masterCode },
 		};
 	}
 }
@@ -1278,7 +1277,7 @@ export class UserCodeCCMasterCodeReport extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `master code: ${this.masterCode}`,
+			message: { "master code": this.masterCode },
 		};
 	}
 }
@@ -1305,7 +1304,7 @@ export class UserCodeCCUserCodeChecksumReport extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `user code checksum: ${num2hex(this.userCodeChecksum)}`,
+			message: { "user code checksum": num2hex(this.userCodeChecksum) },
 		};
 	}
 }
@@ -1529,10 +1528,10 @@ export class UserCodeCCExtendedUserCodeGet extends UserCodeCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`user id:     ${this.userId}`,
-				`report more: ${this.reportMore}`,
-			],
+			message: {
+				"user id": `${this.userId}`,
+				"report more": `${this.reportMore}`,
+			},
 		};
 	}
 }

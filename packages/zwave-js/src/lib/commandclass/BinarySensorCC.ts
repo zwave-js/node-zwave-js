@@ -296,10 +296,10 @@ export class BinarySensorCCReport extends BinarySensorCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: [
-				`type:  ${getEnumMemberName(BinarySensorType, this._type)}`,
-				`value: ${this._value}`,
-			],
+			message: {
+				type: `${getEnumMemberName(BinarySensorType, this._type)}`,
+				value: `${this._value}`,
+			},
 		};
 	}
 }
@@ -350,10 +350,12 @@ export class BinarySensorCCGet extends BinarySensorCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `type: ${getEnumMemberName(
-				BinarySensorType,
-				this.sensorType ?? BinarySensorType.Any,
-			)}`,
+			message: {
+				type: getEnumMemberName(
+					BinarySensorType,
+					this.sensorType ?? BinarySensorType.Any,
+				),
+			},
 		};
 	}
 }
@@ -380,9 +382,11 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: `supported types: ${this._supportedSensorTypes
-				.map((type) => getEnumMemberName(BinarySensorType, type))
-				.join(", ")}`,
+			message: {
+				"supported types": this._supportedSensorTypes
+					.map((type) => getEnumMemberName(BinarySensorType, type))
+					.join(", "),
+			},
 		};
 	}
 }
