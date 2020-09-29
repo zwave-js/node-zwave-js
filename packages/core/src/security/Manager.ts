@@ -61,6 +61,7 @@ export class SecurityManager {
 	}
 
 	private _nonceStore = new Map<string, Buffer>();
+	private _freeNonceIDs = new Set<string>();
 	private _nonceTimers = new Map<string, NodeJS.Timeout>();
 
 	private normalizeId(id: number | NonceKey): string {
@@ -88,7 +89,7 @@ export class SecurityManager {
 			nonceId = this.getNonceId(ret);
 		} while (this.hasNonce(nonceId));
 
-		this.setNonce(nonceId, ret);
+		this.setNonce(nonceId, ret, false);
 		return ret;
 	}
 
@@ -96,12 +97,17 @@ export class SecurityManager {
 		return nonce[0];
 	}
 
-	public setNonce(id: number | NonceKey, nonce: Buffer): void {
+	public setNonce(
+		id: number | NonceKey,
+		nonce: Buffer,
+		free: boolean = true,
+	): void {
 		const key = this.normalizeId(id);
 		if (this._nonceTimers.has(key)) {
 			clearTimeout(this._nonceTimers.get(key)!);
 		}
 		this._nonceStore.set(key, nonce);
+		if (free) this._freeNonceIDs.add(key);
 		this._nonceTimers.set(
 			key,
 			setTimeout(() => {
@@ -117,11 +123,13 @@ export class SecurityManager {
 		}
 		this._nonceStore.delete(key);
 		this._nonceTimers.delete(key);
+		this._freeNonceIDs.delete(key);
 	}
 
 	private expireNonce(key: string): void {
 		this._nonceStore.delete(key);
 		this._nonceTimers.delete(key);
+		this._freeNonceIDs.delete(key);
 	}
 
 	public getNonce(id: number | NonceKey): Buffer | undefined {
@@ -130,5 +138,16 @@ export class SecurityManager {
 
 	public hasNonce(id: number | NonceKey): boolean {
 		return this._nonceStore.has(this.normalizeId(id));
+	}
+
+	public getFreeNonce(nodeId: number): Buffer | undefined {
+		// Iterate through the known free nonce IDs to find one for the given node
+		for (const key of this._freeNonceIDs) {
+			const nonceKey = JSON.parse(key) as NonceKey;
+			if (nonceKey.nodeId === nodeId) {
+				this._freeNonceIDs.delete(key);
+				return this._nonceStore.get(key);
+			}
+		}
 	}
 }
