@@ -293,10 +293,10 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 			"alarm state": `${this.state}`,
 		};
 		if (this.severity != undefined) {
-			message["severity"] = `${this.severity}`;
+			message.severity = `${this.severity}`;
 		}
 		if (this.duration != undefined) {
-			message["duration"] = `${this.duration} seconds`;
+			message.duration = `${this.duration} seconds`;
 		}
 		return {
 			...super.toLogEntry(),

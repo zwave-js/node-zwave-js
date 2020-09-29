@@ -175,7 +175,7 @@ export class LanguageCCSet extends LanguageCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: `${this.language}` };
 		if (this._country != undefined) {
-			message["country"] = `${this._country}`;
+			message.country = `${this._country}`;
 		}
 		return {
 			...super.toLogEntry(),
@@ -219,7 +219,7 @@ export class LanguageCCReport extends LanguageCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = { language: `${this.language}` };
 		if (this.country != undefined) {
-			message["country"] = `${this.country}`;
+			message.country = `${this.country}`;
 		}
 		return {
 			...super.toLogEntry(),

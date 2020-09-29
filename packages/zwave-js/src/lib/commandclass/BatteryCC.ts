@@ -355,13 +355,13 @@ export class BatteryCCReport extends BatteryCC {
 			)}`;
 		}
 		if (this.rechargeable != undefined) {
-			message["rechargeable"] = `${this.rechargeable}`;
+			message.rechargeable = `${this.rechargeable}`;
 		}
 		if (this.backup != undefined) {
-			message["backup"] = `${this.backup}`;
+			message.backup = `${this.backup}`;
 		}
 		if (this.overheating != undefined) {
-			message["overheating"] = `${this.overheating}`;
+			message.overheating = `${this.overheating}`;
 		}
 		if (this.lowFluid != undefined) {
 			message["low fluid"] = `${this.lowFluid}`;
@@ -373,7 +373,7 @@ export class BatteryCCReport extends BatteryCC {
 			)}`;
 		}
 		if (this.disconnected != undefined) {
-			message["disconnected"] = `${this.disconnected}`;
+			message.disconnected = `${this.disconnected}`;
 		}
 		return {
 			...super.toLogEntry(),

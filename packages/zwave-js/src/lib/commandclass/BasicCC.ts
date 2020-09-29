@@ -277,7 +277,7 @@ export class BasicCCReport extends BasicCC {
 			message["target value"] = `${this.targetValue}`;
 		}
 		if (this.duration != undefined) {
-			message["duration"] = `${this.duration.toString()}`;
+			message.duration = `${this.duration.toString()}`;
 		}
 		return {
 			...super.toLogEntry(),

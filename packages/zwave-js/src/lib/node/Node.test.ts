@@ -923,7 +923,7 @@ describe("lib/node/Node", () => {
 				"0x25": {
 					name: "Binary Switch",
 					endpoints: {
-						"0": {
+						0: {
 							isSupported: false,
 							isControlled: true,
 							secure: false,
@@ -934,7 +934,7 @@ describe("lib/node/Node", () => {
 				"0x26": {
 					name: "Multilevel Switch",
 					endpoints: {
-						"0": {
+						0: {
 							isSupported: false,
 							isControlled: true,
 							secure: false,

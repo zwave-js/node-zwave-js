@@ -421,7 +421,7 @@ describe("lib/driver/Driver => ", () => {
 				}),
 				transmitOptions: TransmitOptions.DEFAULT,
 			});
-			testMsg1.command["encapsulated"] = undefined as any;
+			testMsg1.command.encapsulated = undefined as any;
 			expect(driver.computeNetCCPayloadSize(testMsg1)).toBe(26);
 
 			const multiChannelCC = new MultiChannelCCCommandEncapsulation(
@@ -439,7 +439,7 @@ describe("lib/driver/Driver => ", () => {
 				}),
 				transmitOptions: TransmitOptions.NoRoute,
 			});
-			multiChannelCC["encapsulated"] = undefined as any;
+			multiChannelCC.encapsulated = undefined as any;
 			expect(driver.computeNetCCPayloadSize(testMsg2)).toBe(54 - 20 - 4);
 
 			const testMsg3 = new FirmwareUpdateMetaDataCC(driver, {
@@ -599,7 +599,7 @@ describe("lib/driver/Driver => ", () => {
 				nodeId: 2,
 				encapsulated: {} as any,
 			});
-			cc["encapsulated"] = undefined as any;
+			cc.encapsulated = undefined as any;
 			cc["decryptedCCBytes"] = cc1.serialize();
 			const msg = new ApplicationCommandRequest(driver, {
 				command: cc,
@@ -612,7 +612,7 @@ describe("lib/driver/Driver => ", () => {
 				nodeId: 2,
 				encapsulated: {} as any,
 			});
-			cc["encapsulated"] = undefined as any;
+			cc.encapsulated = undefined as any;
 			cc["decryptedCCBytes"] = Buffer.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
@@ -634,7 +634,7 @@ describe("lib/driver/Driver => ", () => {
 				nodeId: 2,
 				encapsulated: {} as any,
 			});
-			cc["encapsulated"] = undefined as any;
+			cc.encapsulated = undefined as any;
 			cc["decryptedCCBytes"] = Buffer.from([
 				CommandClasses.Association,
 				AssociationCommand.Report,
@@ -665,7 +665,7 @@ describe("lib/driver/Driver => ", () => {
 					3,
 				]),
 			});
-			cc["mergePartialCCs"] = () => {
+			cc.mergePartialCCs = () => {
 				throw new ZWaveError(
 					"not implemented",
 					ZWaveErrorCodes.Deserialization_NotImplemented,
@@ -691,7 +691,7 @@ describe("lib/driver/Driver => ", () => {
 					3,
 				]),
 			});
-			cc["mergePartialCCs"] = () => {
+			cc.mergePartialCCs = () => {
 				throw new ZWaveError(
 					"not implemented",
 					ZWaveErrorCodes.CC_NotImplemented,
@@ -717,7 +717,7 @@ describe("lib/driver/Driver => ", () => {
 					3,
 				]),
 			});
-			cc["mergePartialCCs"] = () => {
+			cc.mergePartialCCs = () => {
 				throw new ZWaveError(
 					"not implemented",
 					ZWaveErrorCodes.PacketFormat_InvalidPayload,
@@ -743,7 +743,7 @@ describe("lib/driver/Driver => ", () => {
 					3,
 				]),
 			});
-			cc["mergePartialCCs"] = () => {
+			cc.mergePartialCCs = () => {
 				throw new ZWaveError(
 					"invalid",
 					ZWaveErrorCodes.Argument_Invalid,

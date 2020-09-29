@@ -52,7 +52,7 @@ describe("lib/node/Endpoint", () => {
 		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 		it("throws when trying to access a non-implemented CC", () => {
 			const endpoint = new Endpoint(1, fakeDriver, 1);
-			assertZWaveError(() => (endpoint.commandClasses as any)["FOOBAR"], {
+			assertZWaveError(() => (endpoint.commandClasses as any).FOOBAR, {
 				errorCode: ZWaveErrorCodes.CC_NotImplemented,
 				messageMatches: "FOOBAR is not implemented",
 			});

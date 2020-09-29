@@ -728,7 +728,7 @@ export class MeterCCGet extends MeterCC {
 				getTypeValueId(this.endpointIndex),
 			);
 			if (type != undefined) {
-				message["duration"] = `${
+				message.duration = `${
 					lookupMeterScale(type, this.scale).label
 				}`;
 			}
@@ -926,7 +926,7 @@ export class MeterCCReset extends MeterCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {};
 		if (this.type != undefined) {
-			message["type"] = `${
+			message.type = `${
 				lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`;

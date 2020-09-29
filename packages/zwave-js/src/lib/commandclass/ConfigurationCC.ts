@@ -1110,7 +1110,7 @@ export class ConfigurationCCSet extends ConfigurationCC {
 			message["value size"] = `${this.valueSize}`;
 		}
 		if (this.value != undefined) {
-			message["value"] = `${configValueToString(this.value)}`;
+			message.value = `${configValueToString(this.value)}`;
 		}
 		return {
 			...super.toLogEntry(),
@@ -1257,7 +1257,7 @@ export class ConfigurationCCBulkSet extends ConfigurationCC {
 			"value size": `${this.valueSize}`,
 		};
 		if (this._values.length > 0) {
-			message["values"] = this._values
+			message.values = this._values
 				.map(
 					(value, i) =>
 						`\n· #${this._parameters[i]}: ${configValueToString(
@@ -1772,10 +1772,10 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 			message["alters capabilities"] = `${this._altersCapabilities}`;
 		}
 		if (this._isReadonly != undefined) {
-			message["readonly"] = `${this._isReadonly}`;
+			message.readonly = `${this._isReadonly}`;
 		}
 		if (this._isAdvanced != undefined) {
-			message["advanced"] = `${this._isAdvanced}`;
+			message.advanced = `${this._isAdvanced}`;
 		}
 		if (this._noBulkSupport != undefined) {
 			message["bulk support"] = `${!this._noBulkSupport}`;

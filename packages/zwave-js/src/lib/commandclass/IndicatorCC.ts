@@ -528,7 +528,7 @@ export class IndicatorCCSet extends IndicatorCC {
 			message["indicator 0 value"] = `${this.indicator0Value}`;
 		}
 		if (this.values != undefined) {
-			message["values"] = `${this.values
+			message.values = `${this.values
 				.map(
 					(v) => `
 · indicatorId: ${v.indicatorId}
@@ -659,7 +659,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			message["indicator 0 value"] = `${this.value}`;
 		}
 		if (this.values != undefined) {
-			message["values"] = `${this.values
+			message.values = `${this.values
 				.map(
 					(v) => `
 · indicatorId: ${v.indicatorId}

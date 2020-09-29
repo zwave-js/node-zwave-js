@@ -408,7 +408,7 @@ export class MultilevelSwitchCCSet extends MultilevelSwitchCC {
 			"target value": `${this.targetValue}`,
 		};
 		if (this.duration) {
-			message["duration"] = `${this.duration.toString()}`;
+			message.duration = `${this.duration.toString()}`;
 		}
 		return {
 			...super.toLogEntry(),
@@ -550,7 +550,7 @@ export class MultilevelSwitchCCStartLevelChange extends MultilevelSwitchCC {
 			direction: `${this.direction}`,
 		};
 		if (this.duration) {
-			message["duration"] = `${this.duration.toString()}`;
+			message.duration = `${this.duration.toString()}`;
 		}
 		return {
 			...super.toLogEntry(),

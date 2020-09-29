@@ -100,6 +100,16 @@ module.exports = {
 			{ allowArgumentsExplicitlyTypedAsAny: true },
 		],
 		"@typescript-eslint/no-this-alias": "off",
+
+		// Prefer simple property access and declaration without quotes
+		"dot-notation": "off",
+		"@typescript-eslint/dot-notation": [
+			"error",
+			{
+				allowPrivateClassPropertyAccess: true,
+			},
+		],
+		"quote-props": ["error", "as-needed"],
 	},
 	overrides: [
 		{

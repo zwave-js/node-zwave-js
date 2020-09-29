@@ -422,7 +422,7 @@ export class FirmwareUpdateMetaDataCCRequestGet extends FirmwareUpdateMetaDataCC
 			message["fragment size"] = `${this.fragmentSize}`;
 		}
 		if (this.activation != undefined) {
-			message["activation"] = `${this.activation}`;
+			message.activation = `${this.activation}`;
 		}
 		if (this.hardwareVersion != undefined) {
 			message["hardware version"] = `${this.hardwareVersion}`;
@@ -601,7 +601,7 @@ export class FirmwareUpdateMetaDataCCActivationReport extends FirmwareUpdateMeta
 			)}`,
 		};
 		if (this.hardwareVersion != undefined) {
-			message["hardwareVersion"] = `${this.hardwareVersion}`;
+			message.hardwareVersion = `${this.hardwareVersion}`;
 		}
 		return {
 			...super.toLogEntry(),

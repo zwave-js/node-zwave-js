@@ -214,7 +214,7 @@ export class BinarySwitchCCSet extends BinarySwitchCC {
 			"target value": `${this.targetValue}`,
 		};
 		if (this.duration != undefined) {
-			message["duration"] = `${this.duration.toString()}`;
+			message.duration = `${this.duration.toString()}`;
 		}
 		return {
 			...super.toLogEntry(),
@@ -280,7 +280,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 			message["target value"] = `${this.targetValue}`;
 		}
 		if (this.duration != undefined) {
-			message["duration"] = `${this.duration.toString()}`;
+			message.duration = `${this.duration.toString()}`;
 		}
 		return {
 			...super.toLogEntry(),
