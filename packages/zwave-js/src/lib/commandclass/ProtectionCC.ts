@@ -1,4 +1,4 @@
-import type { ValueID } from "@zwave-js/core";
+import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -548,6 +548,26 @@ export class ProtectionCCSupportedReport extends ProtectionCC {
 
 	@ccValue({ internal: true })
 	public readonly supportedRFStates: RFProtectionState[];
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"supports exclusive control": this.supportsExclusiveControl,
+				"supports timeout": this.supportsTimeout,
+				"local protection states": this.supportedLocalStates
+					.map((local) =>
+						getEnumMemberName(LocalProtectionState, local),
+					)
+					.map((str) => `\n· ${str}`)
+					.join(""),
+				"RF protection states": this.supportedRFStates
+					.map((rf) => getEnumMemberName(RFProtectionState, rf))
+					.map((str) => `\n· ${str}`)
+					.join(""),
+			},
+		};
+	}
 }
 
 @CCCommand(ProtectionCommand.SupportedGet)
@@ -568,6 +588,15 @@ export class ProtectionCCExclusiveControlReport extends ProtectionCC {
 
 	@ccValue({ minVersion: 2 })
 	public readonly exclusiveControlNodeId: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"exclusive control node id": this.exclusiveControlNodeId,
+			},
+		};
+	}
 }
 
 @CCCommand(ProtectionCommand.ExclusiveControlGet)
@@ -605,6 +634,15 @@ export class ProtectionCCExclusiveControlSet extends ProtectionCC {
 		this.payload = Buffer.from([this.exclusiveControlNodeId]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"exclusive control node id": this.exclusiveControlNodeId,
+			},
+		};
+	}
 }
 
 @CCCommand(ProtectionCommand.TimeoutReport)
@@ -621,6 +659,13 @@ export class ProtectionCCTimeoutReport extends ProtectionCC {
 
 	@ccValue({ minVersion: 2 })
 	public readonly timeout: Timeout;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { timeout: this.timeout.toString() },
+		};
+	}
 }
 
 @CCCommand(ProtectionCommand.TimeoutGet)
@@ -657,5 +702,12 @@ export class ProtectionCCTimeoutSet extends ProtectionCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.timeout.serialize()]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { timeout: this.timeout.toString() },
+		};
 	}
 }
