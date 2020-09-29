@@ -72,7 +72,10 @@ import {
 	getSceneIdValueID,
 	SceneActivationCCSet,
 } from "../commandclass/SceneActivationCC";
-import { SecurityCCNonceGet } from "../commandclass/SecurityCC";
+import {
+	SecurityCCNonceGet,
+	SecurityCCNonceReport,
+} from "../commandclass/SecurityCC";
 import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
 import {
 	getWakeUpIntervalValueId,
@@ -1566,6 +1569,8 @@ version:               ${this.version}`;
 			return this.handleClockReport(command);
 		} else if (command instanceof SecurityCCNonceGet) {
 			return this.handleSecurityNonceGet();
+		} else if (command instanceof SecurityCCNonceReport) {
+			return this.handleSecurityNonceReport(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
 			return this.handleFirmwareUpdateGet(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCStatusReport) {
@@ -1622,6 +1627,24 @@ version:               ${this.version}`;
 				direction: "inbound",
 			});
 		}
+	}
+
+	/**
+	 * Is called when a nonce report is received that does not belong to any transaction.
+	 * The received nonce reports are stored as "free" nonces
+	 */
+	private handleSecurityNonceReport(command: SecurityCCNonceReport): void {
+		const secMan = this.driver.securityManager;
+		if (!secMan) return;
+
+		secMan.setNonce(
+			{
+				nodeId: this.id,
+				nonceId: secMan.getNonceId(command.nonce),
+			},
+			command.nonce,
+			true,
+		);
 	}
 
 	/** Stores information about a currently held down key */

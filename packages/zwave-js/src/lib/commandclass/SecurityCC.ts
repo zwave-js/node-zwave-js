@@ -112,8 +112,20 @@ export class SecurityCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getNonce(): Promise<Buffer> {
+	/**
+	 * Requests a new nonce for Security CC encapsulation
+	 */
+	public async getNonce(
+		options: {
+			/** Whether the command should be sent as a standalone transaction. Default: false */
+			standalone?: boolean;
+			/** Whether the received nonce should be stored as "free". Default: false */
+			storeAsFreeNonce?: boolean;
+		} = {},
+	): Promise<Buffer> {
 		this.assertSupportsCommand(SecurityCommand, SecurityCommand.NonceGet);
+
+		const { standalone = false, storeAsFreeNonce = false } = options;
 
 		const cc = new SecurityCCNonceGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -123,16 +135,32 @@ export class SecurityCCAPI extends CCAPI {
 			cc,
 			{
 				...this.commandOptions,
-				// Nonce requests must be handled immediately
-				priority: MessagePriority.PreTransmitHandshake,
+				// Standalone nonce requests must be handled immediately
+				priority: standalone
+					? MessagePriority.Normal
+					: MessagePriority.PreTransmitHandshake,
 				// Only try getting a nonce once
 				maxSendAttempts: 1,
 				// We don't want failures causing us to treat the node as asleep or dead
 				// The "real" transaction will do that for us
-				changeNodeStatusOnMissingACK: false,
+				changeNodeStatusOnMissingACK: standalone,
 			},
 		))!;
-		return response.nonce;
+
+		const nonce = response.nonce;
+
+		if (storeAsFreeNonce) {
+			const secMan = this.driver.securityManager!;
+			secMan.setNonce(
+				{
+					nodeId: this.endpoint.nodeId,
+					nonceId: secMan.getNonceId(nonce),
+				},
+				nonce,
+				true,
+			);
+		}
+		return nonce;
 	}
 
 	/**
@@ -537,15 +565,29 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 	}
 
 	public requiresPreTransmitHandshake(): boolean {
-		// We require a new nonce if we don't have one yet
-		// or if the old one has expired
-		return (
-			this.nonceId == undefined ||
-			!this.driver.securityManager.hasNonce({
+		// We require a new nonce if there is no free one,
+		// we don't have one yet or if the old one has expired
+		const secMan = this.driver.securityManager;
+
+		// If the nonce is already known we don't need a handshake
+		if (
+			this.nonceId != undefined &&
+			secMan.hasNonce({
 				nodeId: this.nodeId,
 				nonceId: this.nonceId,
 			})
-		);
+		) {
+			return false;
+		}
+
+		// Try to get a free nonce before requesting a new one
+		const freeNonce = secMan.getFreeNonce(this.nodeId);
+		if (freeNonce) {
+			this.nonceId = secMan.getNonceId(freeNonce);
+			return false;
+		}
+
+		return true;
 	}
 
 	public async preTransmitHandshake(): Promise<void> {
@@ -560,6 +602,8 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 				nonceId: this.nonceId,
 			},
 			nonce,
+			// The nonce is reserved for this command
+			false,
 		);
 	}
 

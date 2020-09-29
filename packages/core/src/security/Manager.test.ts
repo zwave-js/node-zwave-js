@@ -118,6 +118,12 @@ describe("lib/security/Manager", () => {
 			jest.advanceTimersByTime(options.nonceTimeout + 50);
 			expect(man.getNonce(nonceId)).toBeUndefined();
 		});
+
+		it(`the nonce should be marked as "reserved"`, () => {
+			const man = new SecurityManager(options);
+			man.generateNonce(8);
+			expect(man.getFreeNonce(ownNodeId)).toBeUndefined();
+		});
 	});
 
 	describe("getNonceId", () => {
@@ -175,6 +181,37 @@ describe("lib/security/Manager", () => {
 
 			expect(man.getNonce(nonceId)).toBeUndefined();
 		});
+
+		it("should mark the nonce as free", () => {
+			const man = new SecurityManager(options);
+			const nonce: Buffer = randomBytes(8);
+			nonce[0] = 1;
+			man.setNonce(
+				{
+					nodeId: 2,
+					nonceId: 1,
+				},
+				nonce,
+			);
+			// Wrong node
+			expect(man.getFreeNonce(1)).toBeUndefined();
+			expect(man.getFreeNonce(2)).toEqual(nonce);
+		});
+
+		it("when a free nonce expires, it should no longer be free", () => {
+			const man = new SecurityManager(options);
+			const nonce: Buffer = randomBytes(8);
+			man.setNonce(
+				{
+					nodeId: 2,
+					nonceId: 1,
+				},
+				nonce,
+			);
+
+			jest.advanceTimersByTime(options.nonceTimeout + 50);
+			expect(man.getFreeNonce(2)).toBeUndefined();
+		});
 	});
 
 	describe("hasNonce", () => {
@@ -205,6 +242,23 @@ describe("lib/security/Manager", () => {
 			man.deleteNonce(nonceId);
 			expect(man.getNonce(nonceId)).toBeUndefined();
 			expect(man.hasNonce(nonceId)).toBeFalse();
+		});
+	});
+
+	describe("getFreeNonce", () => {
+		it("should reserve the nonce", () => {
+			const man = new SecurityManager(options);
+			const nonce: Buffer = randomBytes(8);
+			nonce[0] = 1;
+			man.setNonce(
+				{
+					nodeId: 2,
+					nonceId: 1,
+				},
+				nonce,
+			);
+			expect(man.getFreeNonce(2)).toEqual(nonce);
+			expect(man.getFreeNonce(2)).toBeUndefined();
 		});
 	});
 

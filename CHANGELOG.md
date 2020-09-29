@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Features
 * It is now possible to add an expiration timeout to sent messages by using the `expire` option for `sendMessage`.
+* `Security CC` now stores unsolicited nonces as "free" and tries to use free nonces instead of requesting a new one if possible.
 
 ### Changes under the hood
 * Formatting log messages has been simplified. Log messages are now defined as objects and the log formatter auto-aligns the values.

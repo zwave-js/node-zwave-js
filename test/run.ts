@@ -1,5 +1,6 @@
 require("reflect-metadata");
 
+import { ConfigurationCCGet } from "zwave-js/src/lib/commandclass/ConfigurationCC";
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { Driver } from "../packages/zwave-js/src";
 
@@ -7,15 +8,35 @@ const driver = new Driver("COM4", {
 	// prettier-ignore
 	networkKey: Buffer.from([
 		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
-	])
+	]),
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
-		// 		// const node = driver.controller.nodes.get(16)!;
-		// 		// node.keepAwake = true;
-		// 		// node.once("interview completed", async () => {
-		// 		// 	// console.dir("16 ready");
-		// 		// 	// await require("alcalzone-shared/async").wait(5000);
+		const node = driver.controller.nodes.get(20)!;
+		node.keepAwake = true;
+		node.once("interview completed", async () => {
+			console.error(`
+			
+			20 ready
+			
+			`);
+			await require("alcalzone-shared/async").wait(2000);
+
+			await node.commandClasses.Security.getNonce({
+				standalone: true,
+				storeAsFreeNonce: true,
+			});
+			let bg = new ConfigurationCCGet(driver, {
+				nodeId: 20,
+				parameter: 4,
+			});
+			await node.commandClasses.Security.sendEncapsulated(bg, true);
+			bg = new ConfigurationCCGet(driver, {
+				nodeId: 20,
+				parameter: 4,
+			});
+			await node.commandClasses.Security.sendEncapsulated(bg);
+		});
 		// 		// 	// const updater = await fs.readFile(
 		// 		// 	// 	"C:\\Repositories\\node-zwave-js\\firmwares\\MultiSensor_OTA_Security_ZW050x_EU_V1_11_hex__TargetZwave__.hex",
 		// 		// 	// );
