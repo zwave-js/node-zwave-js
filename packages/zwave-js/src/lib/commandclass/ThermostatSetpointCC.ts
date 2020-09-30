@@ -105,6 +105,27 @@ function getSetpointTypesInterpretationValueID(endpoint: number): ValueID {
 	};
 }
 
+function getSetpointValueID(endpoint: number, setpointType: number): ValueID {
+	return {
+		commandClass: CommandClasses["Thermostat Setpoint"],
+		endpoint,
+		property: "setpoint",
+		propertyKey: setpointType,
+	};
+}
+
+function getSetpointScaleValueID(
+	endpoint: number,
+	setpointType: number,
+): ValueID {
+	return {
+		commandClass: CommandClasses["Thermostat Setpoint"],
+		endpoint,
+		property: "setpointScale",
+		propertyKey: setpointType,
+	};
+}
+
 @API(CommandClasses["Thermostat Setpoint"])
 export class ThermostatSetpointCCAPI extends CCAPI {
 	public supportsCommand(cmd: ThermostatSetpointCommand): Maybe<boolean> {
@@ -138,10 +159,14 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 
-		// TODO: GH#323 retrieve the actual scale the thermostat is using
 		// SDS14223: The Scale field value MUST be identical to the value received in the Thermostat Setpoint Report for the
-		// actual Setpoint Type during the node interview.
-		await this.set(propertyKey, value, 0);
+		// actual Setpoint Type during the node interview. Fall back to the first scale if none is known
+		const preferredScale = this.endpoint
+			.getNodeUnsafe()!
+			.getValue<number>(
+				getSetpointScaleValueID(this.endpoint.index, propertyKey),
+			);
+		await this.set(propertyKey, value, preferredScale ?? 0);
 
 		// Refresh the current value
 		await this.get(propertyKey);
@@ -250,6 +275,8 @@ export class ThermostatSetpointCC extends CommandClass {
 			getSetpointTypesInterpretationValueID(0).property,
 			true,
 		);
+		// The setpoint scale is only used internally
+		this.registerValue(getSetpointScaleValueID(0, 0).property, true);
 	}
 
 	public translatePropertyKey(
@@ -604,19 +631,24 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	}
 
 	public persistValues(): boolean {
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: "setpoint",
-			propertyKey: this._type,
-		};
-		if (!this.getValueDB().hasMetadata(valueId)) {
-			this.getValueDB().setMetadata(valueId, {
+		const setpointValueId = getSetpointValueID(
+			this.endpointIndex,
+			this._type,
+		);
+		if (!this.getValueDB().hasMetadata(setpointValueId)) {
+			this.getValueDB().setMetadata(setpointValueId, {
 				...ValueMetadata.Number,
 				unit: this._scale.unit,
 			});
 		}
-		this.getValueDB().setValue(valueId, this._value);
+		this.getValueDB().setValue(setpointValueId, this._value);
+
+		// Remember the device-preferred setpoint scale so it can be used in SET commands
+		const scaleValueId = getSetpointScaleValueID(
+			this.endpointIndex,
+			this._type,
+		);
+		this.getValueDB().setValue(scaleValueId, this._scale.key);
 		return true;
 	}
 
