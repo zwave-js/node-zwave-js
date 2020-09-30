@@ -111,6 +111,13 @@ export function lookupNotification(
 	return notifications.get(notificationType);
 }
 
+export function getNotificationName(notificationType: number): string {
+	return (
+		lookupNotification(notificationType)?.name ??
+		`Unknown (${num2hex(notificationType)})`
+	);
+}
+
 export class Notification {
 	public constructor(id: number, definition: JSONObject) {
 		this.id = id;

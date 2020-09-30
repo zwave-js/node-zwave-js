@@ -1,4 +1,4 @@
-import type { Maybe } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -147,6 +147,15 @@ export class ThermostatOperatingStateCCReport extends ThermostatOperatingStateCC
 	})
 	public get state(): ThermostatOperatingState {
 		return this._state;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				state: getEnumMemberName(ThermostatOperatingState, this.state),
+			},
+		};
 	}
 }
 

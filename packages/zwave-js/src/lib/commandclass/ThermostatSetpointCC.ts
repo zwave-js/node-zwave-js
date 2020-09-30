@@ -1,5 +1,5 @@
 import { lookupNamedScale, Scale } from "@zwave-js/config";
-import type { ValueID } from "@zwave-js/core";
+import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
@@ -562,6 +562,20 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const scale = getScale(this.scale);
+		return {
+			...super.toLogEntry(),
+			message: {
+				"setpoint type": getEnumMemberName(
+					ThermostatSetpointType,
+					this.setpointType,
+				),
+				value: `${this.value} ${scale.unit}`,
+			},
+		};
+	}
 }
 
 @CCCommand(ThermostatSetpointCommand.Report)
@@ -620,6 +634,19 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 	public get value(): number {
 		return this._value;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"setpoint type": getEnumMemberName(
+					ThermostatSetpointType,
+					this.type,
+				),
+				value: `${this.value} ${this.scale.unit}`,
+			},
+		};
+	}
 }
 
 function testResponseForThermostatSetpointGet(
@@ -663,6 +690,18 @@ export class ThermostatSetpointCCGet extends ThermostatSetpointCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.setpointType & 0b1111]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"setpoint type": getEnumMemberName(
+					ThermostatSetpointType,
+					this.setpointType,
+				),
+			},
+		};
 	}
 }
 
@@ -731,6 +770,22 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 	public get maxValueScale(): number {
 		return this._maxValueScale;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const minValueScale = getScale(this.minValueScale);
+		const maxValueScale = getScale(this.maxValueScale);
+		return {
+			...super.toLogEntry(),
+			message: {
+				"setpoint type": getEnumMemberName(
+					ThermostatSetpointType,
+					this._type,
+				),
+				"min value": `${this.minValue} ${minValueScale.unit}`,
+				"max value": `${this.maxValue} ${maxValueScale.unit}`,
+			},
+		};
+	}
 }
 
 interface ThermostatSetpointCCCapabilitiesGetOptions extends CCCommandOptions {
@@ -763,6 +818,18 @@ export class ThermostatSetpointCCCapabilitiesGet extends ThermostatSetpointCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.setpointType & 0b1111]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"setpoint type": getEnumMemberName(
+					ThermostatSetpointType,
+					this.setpointType,
+				),
+			},
+		};
 	}
 }
 
@@ -805,6 +872,23 @@ export class ThermostatSetpointCCSupportedReport extends ThermostatSetpointCC {
 	@ccValue({ internal: true })
 	public get supportedSetpointTypes(): readonly ThermostatSetpointType[] {
 		return this._supportedSetpointTypes;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"supported setpoint types": this.supportedSetpointTypes
+					.map(
+						(t) =>
+							`\n· ${getEnumMemberName(
+								ThermostatSetpointType,
+								t,
+							)}`,
+					)
+					.join(""),
+			},
+		};
 	}
 }
 

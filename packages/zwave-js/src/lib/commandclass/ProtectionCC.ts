@@ -1,4 +1,8 @@
-import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	ValueID,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -453,6 +457,19 @@ export class ProtectionCCSet extends ProtectionCC {
 		this.payload = Buffer.from(payload);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			local: getEnumMemberName(LocalProtectionState, this.local),
+		};
+		if (this.rf != undefined) {
+			message.rf = getEnumMemberName(RFProtectionState, this.rf);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(ProtectionCommand.Report)
@@ -487,6 +504,19 @@ export class ProtectionCCReport extends ProtectionCC {
 		states: enumValuesToMetadataStates(RFProtectionState),
 	})
 	public readonly rf?: RFProtectionState;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			local: getEnumMemberName(LocalProtectionState, this.local),
+		};
+		if (this.rf != undefined) {
+			message.rf = getEnumMemberName(RFProtectionState, this.rf);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(ProtectionCommand.Get)

@@ -4,7 +4,11 @@ import {
 	lookupSensorType,
 	Scale,
 } from "@zwave-js/config";
-import type { ValueID } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	ValueID,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	encodeFloatWithScale,
@@ -415,6 +419,17 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				type: getSensorTypeName(this.type),
+				scale: this.scale.label,
+				value: this.value,
+			},
+		};
+	}
 }
 
 const testResponseForMultilevelSensorGet: CCResponsePredicate<
@@ -477,6 +492,24 @@ export class MultilevelSensorCCGet extends MultilevelSensorCC {
 		}
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		let message: MessageRecord = {};
+		if (
+			this.version >= 5 &&
+			this.sensorType != undefined &&
+			this.scale != undefined
+		) {
+			message = {
+				"sensor type": getSensorTypeName(this.sensorType),
+				scale: lookupSensorScale(this.sensorType, this.scale).label,
+			};
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(MultilevelSensorCommand.SupportedSensorReport)
@@ -496,6 +529,17 @@ export class MultilevelSensorCCSupportedSensorReport extends MultilevelSensorCC 
 	@ccValue({ internal: true })
 	public get supportedSensorTypes(): readonly number[] {
 		return this._supportedSensorTypes;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"supported sensor types": this.supportedSensorTypes
+					.map((t) => `\n· ${getSensorTypeName(t)}`)
+					.join(""),
+			},
+		};
 	}
 }
 
@@ -531,6 +575,23 @@ export class MultilevelSensorCCSupportedScaleReport extends MultilevelSensorCC {
 	public get sensorSupportedScales(): readonly number[] {
 		return this.supportedScales[1];
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"sensor type": getSensorTypeName(this.sensorType),
+				"supported scales": this.sensorSupportedScales
+					.map(
+						(s) =>
+							`\n· ${
+								lookupSensorScale(this.sensorType, s).label
+							}`,
+					)
+					.join(""),
+			},
+		};
+	}
 }
 
 interface MultilevelSensorCCGetSupportedScaleOptions extends CCCommandOptions {
@@ -563,5 +624,12 @@ export class MultilevelSensorCCGetSupportedScale extends MultilevelSensorCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.sensorType]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: { "sensor type": getSensorTypeName(this.sensorType) },
+		};
 	}
 }

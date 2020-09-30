@@ -1,4 +1,4 @@
-import type { Maybe } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import {
 	CommandClasses,
 	validatePayload,
@@ -176,6 +176,19 @@ export class ThermostatSetbackCCSet extends ThermostatSetbackCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"setback type": getEnumMemberName(
+					SetbackType,
+					this.setbackType,
+				),
+				"setback state": this.setbackState,
+			},
+		};
+	}
 }
 
 @CCCommand(ThermostatSetbackCommand.Report)
@@ -216,6 +229,19 @@ export class ThermostatSetbackCCReport extends ThermostatSetbackCC {
 	})
 	public get setbackState(): SetbackState {
 		return this._setbackState;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"setback type": getEnumMemberName(
+					SetbackType,
+					this.setbackType,
+				),
+				"setback state": this.setbackState,
+			},
+		};
 	}
 }
 

@@ -1,10 +1,15 @@
 import {
+	getNotificationName,
 	lookupNotification,
 	NotificationParameterWithCommandClass,
 	NotificationParameterWithDuration,
 	NotificationParameterWithValue,
 } from "@zwave-js/config";
-import type { ValueID } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	ValueID,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -391,6 +396,16 @@ export class NotificationCCSet extends NotificationCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"notification type": getNotificationName(this.notificationType),
+				status: this.notificationStatus,
+			},
+		};
+	}
 }
 
 export type NotificationCCReportOptions =
@@ -489,6 +504,40 @@ export class NotificationCCReport extends NotificationCC {
 		| undefined;
 
 	public sequenceNumber: number | undefined;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		let message: MessageRecord;
+		if (this.alarmType) {
+			message = {
+				"V1 alarm type": this.alarmType,
+				"V1 alarm level": this.alarmLevel,
+			};
+		} else {
+			message = {
+				"notification type": getNotificationName(
+					this.notificationType!,
+				),
+				"notification status": this.notificationStatus,
+				"notification event":
+					lookupNotification(this.notificationType!)?.events.get(
+						this.notificationEvent!,
+					)?.label ?? `Unknown (${num2hex(this.notificationEvent)})`,
+			};
+		}
+		if (this.zensorNetSourceNodeId) {
+			message["zensor net source node id"] = this.zensorNetSourceNodeId;
+		}
+		if (this.sequenceNumber != undefined) {
+			message["sequence number"] = this.sequenceNumber;
+		}
+		if (this.eventParameters != undefined) {
+			message["event parameters"] = String(this.eventParameters);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 
 	public toJSON(): JSONObject {
 		return super.toJSONInherited({
@@ -666,6 +715,27 @@ export class NotificationCCGet extends NotificationCC {
 		this.payload = Buffer.from(payload);
 		return super.serialize();
 	}
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {};
+		if (this.alarmType != undefined) {
+			message["V1 alarm type"] = this.alarmType;
+		}
+		if (this.notificationType != undefined) {
+			message["notification type"] = getNotificationName(
+				this.notificationType,
+			);
+			if (this.notificationEvent != undefined) {
+				message["notification event"] =
+					lookupNotification(this.notificationType)?.events.get(
+						this.notificationEvent,
+					)?.label ?? `Unknown (${num2hex(this.notificationEvent)})`;
+			}
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(NotificationCommand.SupportedReport)
@@ -701,6 +771,18 @@ export class NotificationCCSupportedReport extends NotificationCC {
 	@ccValue({ internal: true })
 	public get supportedNotificationTypes(): readonly number[] {
 		return this._supportedNotificationTypes;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"supports V1 alarm": this.supportsV1Alarm,
+				"supported notification types": this.supportedNotificationTypes
+					.map((t) => `\n· ${getNotificationName(t)}`)
+					.join(""),
+			},
+		};
 	}
 }
 
@@ -747,6 +829,25 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 	public get supportedEvents(): readonly number[] {
 		return this._supportedEvents;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const notification = lookupNotification(this.notificationType);
+		return {
+			...super.toLogEntry(),
+			message: {
+				"notification type": getNotificationName(this.notificationType),
+				"supported events": this.supportedEvents
+					.map(
+						(e) =>
+							`\n· ${
+								notification?.events.get(e)?.label ??
+								`Unknown (${num2hex(e)})`
+							}`,
+					)
+					.join(""),
+			},
+		};
+	}
 }
 
 interface NotificationCCEventSupportedGetOptions extends CCCommandOptions {
@@ -779,5 +880,14 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.notificationType]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"notification type": getNotificationName(this.notificationType),
+			},
+		};
 	}
 }
