@@ -1,4 +1,8 @@
-import type { ValueID } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	ValueID,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -9,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, JSONObject, keysOf, pick } from "@zwave-js/shared";
+import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { entries } from "alcalzone-shared/objects";
 import type { Driver } from "../driver/Driver";
@@ -373,12 +377,15 @@ export class ColorSwitchCCSupportedReport extends ColorSwitchCC {
 	@ccValue({ internal: true })
 	public readonly supportedColorComponents: readonly ColorComponent[];
 
-	public toJSON(): JSONObject {
-		return super.toJSONInherited({
-			supportedColorComponents: this.supportedColorComponents.map((c) =>
-				getEnumMemberName(ColorComponent, c),
-			),
-		});
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"supported color components": this.supportedColorComponents
+					.map((c) => `\n· ${getEnumMemberName(ColorComponent, c)}`)
+					.join(""),
+			},
+		};
 	}
 }
 
@@ -429,6 +436,26 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 
 	@ccValue()
 	public readonly duration: Duration | undefined;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"color component": getEnumMemberName(
+				ColorComponent,
+				this.colorComponent,
+			),
+			"current value": this.currentValue,
+		};
+		if (this.targetValue != undefined) {
+			message["target value"] = this.targetValue;
+		}
+		if (this.duration != undefined) {
+			message.duration = this.duration.toString();
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 interface ColorSwitchCCGetOptions extends CCCommandOptions {
@@ -479,6 +506,18 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 		this.payload = Buffer.from([this._colorComponent]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"color component": getEnumMemberName(
+					ColorComponent,
+					this.colorComponent,
+				),
+			},
+		};
+	}
 }
 
 export type ColorSwitchCCSetOptions = ColorTable & {
@@ -527,6 +566,25 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			this.payload[i] = this.duration.serializeSet();
 		}
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {};
+		for (const [key, value] of Object.entries(this.colorTable)) {
+			if (value == undefined) continue;
+			const realKey: string =
+				key in ColorComponentMap
+					? (ColorComponent as any)[(ColorComponentMap as any)[key]]
+					: (ColorComponent as any)[key];
+			message[realKey] = value;
+		}
+		if (this.duration != undefined) {
+			message.duration = this.duration.toString();
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
 	}
 }
 
@@ -589,6 +647,26 @@ export class ColorSwitchCCStartLevelChange extends ColorSwitchCC {
 		this.payload = Buffer.from(payload);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"color component": getEnumMemberName(
+				ColorComponent,
+				this.colorComponent,
+			),
+			"start level": `${this.startLevel}${
+				this.ignoreStartLevel ? " (ignored)" : ""
+			}`,
+			direction: this.direction,
+		};
+		if (this.duration != undefined) {
+			message.duration = this.duration.toString();
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 export interface ColorSwitchCCStopLevelChangeOptions extends CCCommandOptions {
@@ -620,5 +698,17 @@ export class ColorSwitchCCStopLevelChange extends ColorSwitchCC {
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.colorComponent]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"color component": getEnumMemberName(
+					ColorComponent,
+					this.colorComponent,
+				),
+			},
+		};
 	}
 }
