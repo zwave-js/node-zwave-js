@@ -35,6 +35,8 @@ ${result}`;
 			...context.repo,
 			issue_number: 54,
 			body: newBody,
+			// Auto-close or open the issue when everything is done (or not)
+			state: result.trim().endsWith(":)") ? "closed" : "open"
 		});
 		console.error(c.green("The implementation status was updated!"));
 	} else {

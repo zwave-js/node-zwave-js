@@ -82,6 +82,11 @@ export function checkCCToLogEntry(): void {
 			}`,
 		);
 	}
+
+	if ([...results.values()].every((v) => v !== false)) {
+		console.error();
+		console.error("All CCs have a toLogEntry implementation :)");
+	}
 }
 
 if (!module.parent) {
