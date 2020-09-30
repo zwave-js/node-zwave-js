@@ -1,4 +1,8 @@
-import type { ValueID } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	ValueID,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -9,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -275,6 +279,19 @@ export class ThermostatModeCCSet extends ThermostatModeCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			mode: getEnumMemberName(ThermostatMode, this.mode),
+		};
+		if (this.manufacturerData != undefined) {
+			message["manufacturer data"] = buffer2hex(this.manufacturerData);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(ThermostatModeCommand.Report)
@@ -319,6 +336,19 @@ export class ThermostatModeCCReport extends ThermostatModeCC {
 	public get manufacturerData(): Buffer | undefined {
 		return this._manufacturerData;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			mode: getEnumMemberName(ThermostatMode, this.mode),
+		};
+		if (this.manufacturerData != undefined) {
+			message["manufacturer data"] = buffer2hex(this.manufacturerData);
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(ThermostatModeCommand.Get)
@@ -355,6 +385,20 @@ export class ThermostatModeCCSupportedReport extends ThermostatModeCC {
 	@ccValue({ internal: true })
 	public get supportedModes(): readonly ThermostatMode[] {
 		return this._supportedModes;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"supported modes": this.supportedModes
+					.map(
+						(mode) =>
+							`\n· ${getEnumMemberName(ThermostatMode, mode)}`,
+					)
+					.join(""),
+			},
+		};
 	}
 }
 
