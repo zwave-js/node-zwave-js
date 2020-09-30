@@ -397,6 +397,22 @@ export class CentralSceneCCSupportedReport extends CentralSceneCC {
 		return this._supportedKeyAttributes;
 	}
 
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"scene count": this.sceneCount,
+			"supports slow refresh": this.supportsSlowRefresh,
+		};
+		for (const [scene, keys] of this.supportedKeyAttributes) {
+			message[`supported attributes (scene #${scene})`] = keys
+				.map((k) => `\n· ${getEnumMemberName(CentralSceneKeys, k)}`)
+				.join("");
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
+
 	// private _keyAttributesHaveIdenticalSupport: boolean;
 	// @ccValue({ internal: true })
 	// public get keyAttributesHaveIdenticalSupport(): boolean {

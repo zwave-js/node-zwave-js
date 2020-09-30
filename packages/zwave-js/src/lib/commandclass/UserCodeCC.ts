@@ -3,6 +3,7 @@ import {
 	enumValuesToMetadataStates,
 	Maybe,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	parseBitMask,
 	unknownBoolean,
 	validatePayload,
@@ -1052,6 +1053,32 @@ export class UserCodeCCCapabilitiesReport extends UserCodeCC {
 	public readonly supportedKeypadModes: readonly KeypadMode[];
 	@ccValue({ internal: true })
 	public readonly supportedASCIIChars: string;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"supports master code": this.supportsMasterCode,
+				"supports master code deactivation": this
+					.supportsMasterCodeDeactivation,
+				"supports user code checksum": this.supportsUserCodeChecksum,
+				"supports multiple codes in report": this
+					.supportsMultipleUserCodeReport,
+				"supports multiple codes in set": this
+					.supportsMultipleUserCodeSet,
+				"supported user id statuses": this.supportedUserIDStatuses
+					.map(
+						(status) =>
+							`\n· ${getEnumMemberName(UserIDStatus, status)}`,
+					)
+					.join(""),
+				"supported keypad modes": this.supportedKeypadModes
+					.map((mode) => `\n· ${getEnumMemberName(KeypadMode, mode)}`)
+					.join(""),
+				"supported ASCII chars": this.supportedASCIIChars,
+			},
+		};
+	}
 }
 
 @CCCommand(UserCodeCommand.CapabilitiesGet)
@@ -1443,6 +1470,22 @@ export class UserCodeCCExtendedUserCodeSet extends UserCodeCC {
 		]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {};
+		for (const { userId, userIdStatus, userCode } of this.userCodes) {
+			message[
+				`code #${userId}`
+			] = `${userCode} (status: ${getEnumMemberName(
+				UserIDStatus,
+				userIdStatus,
+			)})`;
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(UserCodeCommand.ExtendedUserCodeReport)
@@ -1481,6 +1524,23 @@ export class UserCodeCCExtendedUserCodeReport extends UserCodeCC {
 
 	public readonly userCodes: readonly UserCode[];
 	public readonly nextUserId: number;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {};
+		for (const { userId, userIdStatus, userCode } of this.userCodes) {
+			message[
+				`code #${userId}`
+			] = `${userCode} (status: ${getEnumMemberName(
+				UserIDStatus,
+				userIdStatus,
+			)})`;
+		}
+		message["next user id"] = this.nextUserId;
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 interface UserCodeCCExtendedUserCodeGetOptions extends CCCommandOptions {
