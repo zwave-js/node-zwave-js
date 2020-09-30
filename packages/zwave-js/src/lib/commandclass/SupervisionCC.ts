@@ -46,7 +46,7 @@ export interface SupervisionResult {
 let sessionId = 0;
 /** Returns the next session ID to be used for supervision */
 export function getNextSessionId(): number {
-	// TODO: Check if this needs to be on the driver for Security
+	// TODO: Check if this needs to be on the driver for Security 2
 	sessionId = (sessionId + 1) & 0b111111;
 	if (sessionId === 0) sessionId++;
 	return sessionId;

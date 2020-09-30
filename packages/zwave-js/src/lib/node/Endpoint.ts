@@ -42,21 +42,8 @@ export class Endpoint {
 		supportedCCs?: CommandClasses[],
 	) {
 		if (supportedCCs != undefined) {
-			// TODO: Remove try-catch. Debug for https://sentry.io/share/issue/0f1ffdb8da064a3aa1dabfb8b92a7fc1/
-			try {
-				for (const cc of supportedCCs) {
-					this.addCC(cc, { isSupported: true });
-				}
-			} catch (e) {
-				if (e.message.includes("supportedCCs is not iterable")) {
-					throw new Error(
-						`TypeError: supportedCCs is not iterable. supportedCCs = ${JSON.stringify(
-							supportedCCs,
-						)}, typeof supportedCCs = ${typeof supportedCCs}`,
-					);
-				} else {
-					throw e;
-				}
+			for (const cc of supportedCCs) {
+				this.addCC(cc, { isSupported: true });
 			}
 		}
 	}

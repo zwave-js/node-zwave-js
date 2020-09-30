@@ -838,7 +838,6 @@ export class ZWaveNode extends Endpoint {
 
 		// Wrapper around interview methods to return false in case of a timeout error
 		// This way the single methods don't all need to have the same error handler
-		// TODO: We could do this in `interviewCCs` aswell, but the refactor is too large right now
 		const tryInterviewStage = async (
 			method: () => Promise<void>,
 		): Promise<boolean> => {
@@ -1328,8 +1327,6 @@ version:               ${this.version}`;
 			if (action === "continue") continue;
 			else if (typeof action === "boolean") return action;
 		}
-
-		// TODO: Overwrite the reported config with configuration files (like OZW does)
 
 		return true;
 	}
@@ -1924,7 +1921,6 @@ version:               ${this.version}`;
 		} else if (command instanceof BasicCCSet) {
 			// Some devices send their current state using `BasicCCSet`s to their associations
 			// instead of using reports. We still interpret them like reports
-			// TODO: find out if that breaks other devices
 			log.controller.logNode(this.id, {
 				message: "treating BasicCC Set as a report",
 			});
@@ -2782,8 +2778,6 @@ version:               ${this.version}`;
 				// In pre-3.0 cache files, the metadata and values array must be deserialized before creating endpoints
 				// Post 3.0, the driver takes care of loading them before deserializing nodes
 				// In order to understand pre-3.0 cache files, leave this deserialization code in
-
-				// TODO: Remove this code in the next major version
 
 				// Metadata must be deserialized before values since that may be necessary to correctly translate value IDs
 				if (isArray(metadata) && metadata.length > 0) {

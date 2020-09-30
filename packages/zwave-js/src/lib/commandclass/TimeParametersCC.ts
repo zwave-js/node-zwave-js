@@ -275,7 +275,6 @@ export class TimeParametersCCSet extends TimeParametersCC {
 				),
 			);
 		} else {
-			// TODO: enforce limits
 			this.dateAndTime = options.dateAndTime;
 		}
 	}
