@@ -1,4 +1,8 @@
-import type { ValueID } from "@zwave-js/core";
+import type {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	ValueID,
+} from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
@@ -454,6 +458,15 @@ export class DoorLockCCOperationSet extends DoorLockCC {
 		this.payload = Buffer.from([this.mode]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"target mode": getEnumMemberName(DoorLockMode, this.mode),
+			},
+		};
+	}
 }
 
 @CCCommand(DoorLockCommand.OperationReport)
@@ -525,6 +538,7 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		label: "Which outside handles can open the door (actual status)",
 	})
 	public readonly outsideHandlesCanOpenDoor: DoorHandleStatus;
+
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnly,
@@ -559,6 +573,33 @@ export class DoorLockCCOperationReport extends DoorLockCC {
 		label: "Seconds until lock mode times out",
 	})
 	public readonly lockTimeout?: number; // in seconds
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"current mode": getEnumMemberName(DoorLockMode, this.currentMode),
+			"active outside handles": this.outsideHandlesCanOpenDoor.join(", "),
+			"active inside handles": this.insideHandlesCanOpenDoor.join(", "),
+			"latch status": this.latchStatus,
+			"bolt status": this.boltStatus,
+			"door status": this.doorStatus,
+		};
+		if (this.targetMode != undefined) {
+			message["target mode"] = getEnumMemberName(
+				DoorLockMode,
+				this.targetMode,
+			);
+		}
+		if (this.duration != undefined) {
+			message["remaining duration"] = this.duration.toString();
+		}
+		if (this.lockTimeout != undefined) {
+			message["lock timeout"] = `${this.lockTimeout} seconds`;
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(DoorLockCommand.OperationGet)
@@ -663,6 +704,44 @@ export class DoorLockCCConfigurationReport extends DoorLockCC {
 		label: "Block-to-block functionality enabled",
 	})
 	public readonly blockToBlock?: boolean;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"operation type": getEnumMemberName(
+				DoorLockOperationType,
+				this.operationType,
+			),
+			"outside handle configuration": this.outsideHandlesCanOpenDoorConfiguration.join(
+				", ",
+			),
+			"inside handle configuration": this.insideHandlesCanOpenDoorConfiguration.join(
+				", ",
+			),
+		};
+		if (this.lockTimeoutConfiguration != undefined) {
+			message[
+				"timed mode duration"
+			] = `${this.lockTimeoutConfiguration} seconds`;
+		}
+		if (this.autoRelockTime != undefined) {
+			message["auto-relock time"] = `${this.autoRelockTime} seconds`;
+		}
+		if (this.holdAndReleaseTime != undefined) {
+			message[
+				"hold-and-release time"
+			] = `${this.holdAndReleaseTime} seconds`;
+		}
+		if (this.twistAssist != undefined) {
+			message["twist assist enabled"] = this.twistAssist;
+		}
+		if (this.blockToBlock != undefined) {
+			message["block-to-block enabled"] = this.blockToBlock;
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(DoorLockCommand.ConfigurationGet)
@@ -780,6 +859,44 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 		}
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {
+			"operation type": getEnumMemberName(
+				DoorLockOperationType,
+				this.operationType,
+			),
+			"outside handle configuration": this.outsideHandlesCanOpenDoorConfiguration.join(
+				", ",
+			),
+			"inside handle configuration": this.insideHandlesCanOpenDoorConfiguration.join(
+				", ",
+			),
+		};
+		if (this.lockTimeoutConfiguration != undefined) {
+			message[
+				"timed mode duration"
+			] = `${this.lockTimeoutConfiguration} seconds`;
+		}
+		if (this.autoRelockTime != undefined) {
+			message["auto-relock time"] = `${this.autoRelockTime} seconds`;
+		}
+		if (this.holdAndReleaseTime != undefined) {
+			message[
+				"hold-and-release time"
+			] = `${this.holdAndReleaseTime} seconds`;
+		}
+		if (this.twistAssist != undefined) {
+			message["enable twist assist"] = this.twistAssist;
+		}
+		if (this.blockToBlock != undefined) {
+			message["enable block-to-block"] = this.blockToBlock;
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
 
 @CCCommand(DoorLockCommand.CapabilitiesReport)
@@ -866,6 +983,35 @@ export class DoorLockCCCapabilitiesReport extends DoorLockCC {
 
 	@ccValue({ internal: true, minVersion: 4 })
 	public readonly blockToBlockSupported: boolean;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				door: this.doorSupported,
+				bolt: this.boltSupported,
+				latch: this.latchSupported,
+				"block-to-block feature": this.blockToBlockSupported,
+				"twist assist feature": this.twistAssistSupported,
+				"hold-and-release feature": this.holdAndReleaseSupported,
+				"auto-relock feature": this.autoRelockSupported,
+				"operation types": this.supportedOperationTypes
+					.map(
+						(t) =>
+							`\n· ${getEnumMemberName(
+								DoorLockOperationType,
+								t,
+							)}`,
+					)
+					.join(""),
+				"door lock modes": this.supportedDoorLockModes
+					.map((t) => `\n· ${getEnumMemberName(DoorLockMode, t)}`)
+					.join(""),
+				"outside handles": this.supportedOutsideHandles.join(", "),
+				"inside handles": this.supportedInsideHandles.join(", "),
+			},
+		};
+	}
 }
 
 @CCCommand(DoorLockCommand.CapabilitiesGet)
