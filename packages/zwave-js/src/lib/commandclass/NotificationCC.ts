@@ -5,17 +5,15 @@ import {
 	NotificationParameterWithDuration,
 	NotificationParameterWithValue,
 } from "@zwave-js/config";
-import type {
-	MessageOrCCLogEntry,
-	MessageRecord,
-	ValueID,
-} from "@zwave-js/core";
 import {
 	CommandClasses,
 	Duration,
 	Maybe,
+	MessageOrCCLogEntry,
+	MessageRecord,
 	parseBitMask,
 	validatePayload,
+	ValueID,
 	ValueMetadata,
 	ValueMetadataNumeric,
 	ZWaveError,
@@ -34,6 +32,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -48,6 +47,31 @@ export enum NotificationCommand {
 	Set = 0x06,
 	SupportedGet = 0x07,
 	SupportedReport = 0x08,
+}
+
+/** Returns the ValueID used to store the supported notification types of a node */
+export function getSupportedNotificationTypesValueId(): ValueID {
+	return {
+		commandClass: CommandClasses.Notification,
+		property: "supportedNotificationTypes",
+	};
+}
+
+/** Returns the ValueID used to store the supported notification events of a node */
+export function getSupportedNotificationEventsValueId(type: number): ValueID {
+	return {
+		commandClass: CommandClasses.Notification,
+		property: "supportedNotificationEvents",
+		propertyKey: type,
+	};
+}
+
+/** Returns the ValueID used to store whether a node supports push or pull */
+export function getNotificationModeValueId(): ValueID {
+	return {
+		commandClass: CommandClasses.Notification,
+		property: "notificationMode",
+	};
 }
 
 @API(CommandClasses.Notification)
@@ -214,9 +238,13 @@ function defineMetadataForNotificationEvents(
 			const metadata: ValueMetadataNumeric = ret.get(dictKey) || {
 				...ValueMetadata.ReadOnlyUInt8,
 				label: valueConfig.variableName,
-				states: {
-					0: "idle",
-				},
+				...(valueConfig.idle
+					? {
+							states: {
+								0: "idle",
+							},
+					  }
+					: {}),
 			};
 			metadata.states![value] = valueConfig.label;
 			ret.set(dictKey, metadata);
@@ -232,6 +260,20 @@ export class NotificationCC extends CommandClass {
 
 	// former AlarmCC (v1..v2)
 
+	public constructor(driver: Driver, options: CommandClassOptions) {
+		super(driver, options);
+		// mark some value IDs as internal
+		this.registerValue(getNotificationModeValueId().property, true);
+		this.registerValue(
+			getSupportedNotificationTypesValueId().property,
+			true,
+		);
+		this.registerValue(
+			getSupportedNotificationEventsValueId(0).property,
+			true,
+		);
+	}
+
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		return [
 			...super.determineRequiredCCInterviews(),
@@ -241,12 +283,70 @@ export class NotificationCC extends CommandClass {
 		];
 	}
 
+	private async determineNotificationMode(
+		api: NotificationCCAPI,
+		supportedNotificationEvents: ReadonlyMap<number, readonly number[]>,
+	): Promise<"push" | "pull"> {
+		const node = this.getNode()!;
+
+		// SDS14223: If the supporting node does not support the Association Command Class,
+		// it may be concluded that the supporting node implements Pull Mode and discovery may be aborted.
+		if (!node.supportsCC(CommandClasses.Association)) return "pull";
+
+		if (node.supportsCC(CommandClasses["Association Group Information"])) {
+			const assocGroups = this.driver.controller.getAssociationGroups(
+				node.id,
+			);
+			for (const group of assocGroups.values()) {
+				// Check if this group sends Notification Reports
+				if (
+					group.issuedCommands
+						?.get(CommandClasses.Notification)
+						?.includes(NotificationCommand.Report)
+				) {
+					return "push";
+				}
+			}
+			return "pull";
+		}
+
+		log.controller.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: `determining whether this node is pull or push...`,
+			direction: "outbound",
+		});
+		// Find a notification type with at least one supported event
+		for (const [type, events] of supportedNotificationEvents) {
+			if (events.length === 0) continue;
+			// Enable the event and request the status
+			await api.set(type, true);
+			try {
+				const { notificationStatus } = await api.get({
+					notificationType: type,
+					notificationEvent: events[0],
+				});
+				switch (notificationStatus) {
+					case 0xff:
+						return "push";
+					case 0xfe:
+					case 0x00:
+						return "pull";
+				}
+			} catch {
+				/* ignore */
+			}
+		}
+		// If everything failed, fall back to "pull"
+		return "pull";
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
 		const api = endpoint.commandClasses.Notification.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB();
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -259,6 +359,10 @@ export class NotificationCC extends CommandClass {
 		if (this.version >= 2) {
 			let supportedNotificationTypes: readonly number[];
 			let supportedNotificationNames: string[];
+			const supportedNotificationEvents = new Map<
+				number,
+				readonly number[]
+			>();
 
 			function lookupNotificationNames(): string[] {
 				return supportedNotificationTypes
@@ -308,6 +412,7 @@ export class NotificationCC extends CommandClass {
 						const supportedEvents = await api.getSupportedEvents(
 							type,
 						);
+						supportedNotificationEvents.set(type, supportedEvents);
 						log.controller.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `received supported notification events for ${name}: ${supportedEvents
@@ -315,51 +420,115 @@ export class NotificationCC extends CommandClass {
 								.join(", ")}`,
 							direction: "inbound",
 						});
-
-						// For each event, predefine the value metadata
-						const metadataMap = defineMetadataForNotificationEvents(
-							node.index,
-							type,
-							supportedEvents,
-						);
-						for (const [key, metadata] of metadataMap.entries()) {
-							const valueId = JSON.parse(key) as ValueID;
-							node.valueDB.setMetadata(valueId, metadata);
-						}
 					}
 				}
 			} else {
-				// Load supported notification types from cache
+				// Load supported notification types and events from cache
 				supportedNotificationTypes =
-					this.getValueDB().getValue<readonly number[]>({
-						commandClass: this.ccId,
-						property: "supportedNotificationTypes",
-					}) ?? [];
+					valueDB.getValue<readonly number[]>(
+						getSupportedNotificationTypesValueId(),
+					) ?? [];
 				supportedNotificationNames = lookupNotificationNames();
+				for (const type of supportedNotificationTypes) {
+					supportedNotificationEvents.set(
+						type,
+						valueDB.getValue<readonly number[]>(
+							getSupportedNotificationEventsValueId(type),
+						) ?? [],
+					);
+				}
 			}
 
-			// Always query each notification for its current status
+			// Determine whether the node is a push or pull node
+			const notificationMode =
+				valueDB.getValue<"push" | "pull">(
+					getNotificationModeValueId(),
+				) ??
+				(await this.determineNotificationMode(
+					api,
+					supportedNotificationEvents,
+				));
+			// And remember the information
+			valueDB.setValue(getNotificationModeValueId(), notificationMode);
+
 			for (let i = 0; i < supportedNotificationTypes.length; i++) {
 				const type = supportedNotificationTypes[i];
 				const name = supportedNotificationNames[i];
+				const notificationConfig = lookupNotification(type);
 
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `querying notification status for ${name}...`,
-					direction: "outbound",
-				});
-				const response = await api.getInternal({
-					notificationType: type,
-				});
-				// NotificationReports don't store their values themselves,
-				// because the behaviour is too complex and spans the lifetime
-				// of several reports. Thus we handle it in the Node instance
-				await node.handleCommand(response);
+				if (notificationMode === "pull") {
+					// Always query each notification for its current status
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `querying notification status for ${name}...`,
+						direction: "outbound",
+					});
+					const response = await api.getInternal({
+						notificationType: type,
+					});
+					// NotificationReports don't store their values themselves,
+					// because the behaviour is too complex and spans the lifetime
+					// of several reports. Thus we handle it in the Node instance
+					await node.handleCommand(response);
+				} else {
+					// Enable reports for each notification type
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `enabling notifications for ${name}...`,
+						direction: "outbound",
+					});
+					await api.set(type, true);
+
+					// And set the value to idle if possible and there is no value yet
+					if (notificationConfig) {
+						const property = notificationConfig.name;
+						const events = supportedNotificationEvents.get(type);
+						if (events) {
+							// Find all variables that are supported by this node and have an idle state
+							for (const variable of notificationConfig.variables.filter(
+								(v) => !!v.idle,
+							)) {
+								if (
+									[...variable.states.keys()].some((key) =>
+										events.includes(key),
+									)
+								) {
+									const propertyKey = variable.name;
+									const valueId: ValueID = {
+										commandClass:
+											CommandClasses.Notification,
+										endpoint: endpoint.index,
+										property,
+										propertyKey,
+									};
+									// Set the value to idle if it has no value yet
+									// TODO: GH#1028
+									// * do this only if the last update was more than 5 minutes ago
+									// * schedule an auto-idle if the last update was less than 5 minutes ago but before the current driver start
+									if (
+										valueDB.getValue(valueId) == undefined
+									) {
+										valueDB.setValue(valueId, 0 /* idle */);
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
+	}
+
+	/** Whether the node implements push or pull notifications */
+	public get notificationMode(): Maybe<"push" | "pull"> {
+		return (
+			this.getValueDB().getValue<"push" | "pull">(
+				getNotificationModeValueId(),
+			) ?? ("unknown" as any)
+		);
 	}
 }
 
@@ -449,7 +618,7 @@ export class NotificationCCReport extends NotificationCC {
 				this.alarmLevel === 0 &&
 				this.payload.length >= 7
 			) {
-				this.notificationStatus = this.payload[3] === 0xff;
+				this.notificationStatus = this.payload[3];
 				this.notificationType = this.payload[4];
 				this.notificationEvent = this.payload[5];
 				const containsSeqNum = !!(this.payload[6] & 0b1000_0000);
@@ -492,7 +661,7 @@ export class NotificationCCReport extends NotificationCC {
 	public alarmType: number | undefined;
 	public alarmLevel: number | undefined;
 	public notificationType: number | undefined;
-	public notificationStatus: boolean | undefined;
+	public notificationStatus: boolean | number | undefined;
 	public notificationEvent: number | undefined;
 
 	public readonly zensorNetSourceNodeId: number | undefined;
@@ -809,16 +978,37 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 
 		validatePayload(this.payload.length >= 2 + numBitMaskBytes);
 		const eventBitMask = this.payload.slice(2, 2 + numBitMaskBytes);
-		// In this bit mask, bit 0 is ignored and counting starts at bit 1
-		// Therefore shift the result by 1.
 		this._supportedEvents = parseBitMask(
 			eventBitMask,
-			// bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
+			// In this mask, bit 0 is ignored, but counting still starts at 1, so the first bit must have the value 0
 			0,
 		);
+
+		this.persistValues();
 	}
 
-	// @noCCValues We store the supported events in the form of value metadata during the node interview
+	public persistValues(): boolean {
+		if (!super.persistValues()) return false;
+		const valueDB = this.getValueDB();
+
+		// Store which events this notification supports
+		valueDB.setValue(
+			getSupportedNotificationEventsValueId(this._notificationType),
+			this._supportedEvents,
+		);
+
+		// For each event, predefine the value metadata
+		const metadataMap = defineMetadataForNotificationEvents(
+			this.endpointIndex,
+			this._notificationType,
+			this._supportedEvents,
+		);
+		for (const [key, metadata] of metadataMap.entries()) {
+			const valueId = JSON.parse(key) as ValueID;
+			valueDB.setMetadata(valueId, metadata);
+		}
+		return true;
+	}
 
 	private _notificationType: number;
 	public get notificationType(): number {

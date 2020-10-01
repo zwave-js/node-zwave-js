@@ -78,6 +78,7 @@
 			},
 			{
 				"name": "Test status",
+				"idle": false,
 				"states": {
 					"0x03": {
 						"label": "Carbon monoxide test",
@@ -142,6 +143,7 @@
 			},
 			{
 				"name": "Test status",
+				"idle": false,
 				"states": {
 					"0x03": {
 						"label": "Carbon dioxide test",
@@ -539,12 +541,16 @@
 			"0x05": {
 				"label": "Keypad lock operation",
 				// parameters contain User Code Report
-				"params": { "type": "commandclass" }
+				"params": {
+					"type": "commandclass"
+				}
 			},
 			"0x06": {
 				"label": "Keypad unlock operation",
 				// parameters contain User Code Report
-				"params": { "type": "commandclass" }
+				"params": {
+					"type": "commandclass"
+				}
 			},
 			"0x07": {
 				"label": "Manual not fully locked operation"
@@ -1209,6 +1215,7 @@
 		"variables": [
 			{
 				"name": "Schedule (id) status",
+				"idle": false,
 				"states": {
 					"0x01": {
 						"label": "Schedule started",
@@ -1230,6 +1237,7 @@
 			},
 			{
 				"name": "Valve (id) run status",
+				"idle": false,
 				"states": {
 					"0x03": {
 						"label": "Valve table run started",
