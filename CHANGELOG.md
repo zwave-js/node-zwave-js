@@ -8,17 +8,23 @@
 ### Features
 * It is now possible to add an expiration timeout to sent messages by using the `expire` option for `sendMessage`.
 * `Security CC` now stores unsolicited nonces as "free" and tries to use free nonces instead of requesting a new one if possible.
+* Several improvements to `Notification CC`:
+  * The interview now detects whether a node is push or pull
+  * Push nodes now have their supporting values set to idle if no value is yet known
+  * Pull nodes are now auto-refreshed every 6 hours and on wakeup
 
 ### Bugfixes
 * During secure inclusion, the timeouts required by the Z-Wave specs are now correctly enforced
 * When starting a network heal, the `"heal network progress"` event is now emitted immediately with the initial progress.
 * Fixed a crash that could when queueing handshake messages while controller messages are pending
 * `Thermostat Setpoint Set` commands now use the device-preferred scale instead of defaulting to the first one.
+* A couple of `Notification CC` variables were changed to not have an idle state
 
 ### Changes under the hood
 * Formatting log messages has been simplified. Log messages are now defined as objects and the log formatter auto-aligns the values.
 * All remaining CCs had their log representation improved. If an error occurs during this conversion, this error is now caught.
 * Code cleanup: TODOs, useless string interpolations
+* Updated a bunch of dependencies
 
 ## 5.1.0 (2020-09-28)
 ### Features
