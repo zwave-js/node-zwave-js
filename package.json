@@ -108,7 +108,7 @@
     "toLogEntryOverview": "ts-node packages/zwave-js/maintenance/checkCCToLogEntry.ts",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
     "commit": "git-cz",
-    "prerelease": "npm install && lerna run build",
+    "prerelease": "lerna bootstrap && lerna run build",
     "release": "lerna version --no-commit-hooks",
     "preversion": "release-script --lerna-check",
     "version": "release-script --lerna",
