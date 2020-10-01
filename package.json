@@ -46,7 +46,7 @@
     "@types/jest": "^26.0.13",
     "@types/json5": "0.0.30",
     "@types/mockdate": "^2.0.0",
-    "@types/node": "^14.6.4",
+    "@types/node": "^14.11.2",
     "@types/prettier": "^2.1.0",
     "@types/semver": "^7.3.3",
     "@types/serialport": "^8.0.1",
