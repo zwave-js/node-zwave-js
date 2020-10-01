@@ -80,7 +80,7 @@
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.1.0-dev.20200930",
-    "yargs": "^15.4.1"
+    "yargs": "^16.0.3"
   },
   "dependencies": {
     "@zwave-js/config": "file:packages\\config",
