@@ -440,23 +440,25 @@ export class NotificationCC extends CommandClass {
 			}
 
 			// Determine whether the node is a push or pull node
-			const notificationMode =
-				valueDB.getValue<"push" | "pull">(
-					getNotificationModeValueId(),
-				) ??
-				(await this.determineNotificationMode(
+			let notificationMode = valueDB.getValue<"push" | "pull">(
+				getNotificationModeValueId(),
+			);
+			if (!notificationMode) {
+				notificationMode = await this.determineNotificationMode(
 					api,
 					supportedNotificationEvents,
-				));
-			// And remember the information
-			valueDB.setValue(getNotificationModeValueId(), notificationMode);
+				);
+				valueDB.setValue(
+					getNotificationModeValueId(),
+					notificationMode,
+				);
+			}
 
-			for (let i = 0; i < supportedNotificationTypes.length; i++) {
-				const type = supportedNotificationTypes[i];
-				const name = supportedNotificationNames[i];
-				const notificationConfig = lookupNotification(type);
+			if (notificationMode === "pull") {
+				for (let i = 0; i < supportedNotificationTypes.length; i++) {
+					const type = supportedNotificationTypes[i];
+					const name = supportedNotificationNames[i];
 
-				if (notificationMode === "pull") {
 					// Always query each notification for its current status
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
@@ -470,16 +472,24 @@ export class NotificationCC extends CommandClass {
 					// because the behaviour is too complex and spans the lifetime
 					// of several reports. Thus we handle it in the Node instance
 					await node.handleCommand(response);
-				} else {
-					// Enable reports for each notification type
-					log.controller.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `enabling notifications for ${name}...`,
-						direction: "outbound",
-					});
-					await api.set(type, true);
+				}
+			} else if (notificationMode === "push") {
+				for (let i = 0; i < supportedNotificationTypes.length; i++) {
+					const type = supportedNotificationTypes[i];
+					const name = supportedNotificationNames[i];
+					const notificationConfig = lookupNotification(type);
 
-					// And set the value to idle if possible and there is no value yet
+					if (complete) {
+						// Enable reports for each notification type
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `enabling notifications for ${name}...`,
+							direction: "outbound",
+						});
+						await api.set(type, true);
+					}
+
+					// Set the value to idle if possible and there is no value yet
 					if (notificationConfig) {
 						const property = notificationConfig.name;
 						const events = supportedNotificationEvents.get(type);

@@ -66,7 +66,10 @@ import {
 	getProductTypeValueId,
 } from "../commandclass/ManufacturerSpecificCC";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
-import { NotificationCCReport } from "../commandclass/NotificationCC";
+import {
+	NotificationCC,
+	NotificationCCReport,
+} from "../commandclass/NotificationCC";
 import {
 	getDimmingDurationValueID,
 	getSceneIdValueID,
@@ -1396,6 +1399,15 @@ version:               ${this.version}`;
 			CommandClasses["Multilevel Sensor"],
 			timespan.hours(6),
 		);
+		if (
+			this.supportsCC(CommandClasses.Notification) &&
+			this.createCCInstance(NotificationCC)?.notificationMode === "pull"
+		) {
+			this.scheduleManualValueRefresh(
+				CommandClasses.Notification,
+				timespan.hours(6),
+			);
+		}
 	}
 
 	private manualRefreshTimers = new Map<CommandClasses, NodeJS.Timeout>();
