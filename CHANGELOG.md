@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.2.0 (2020-10-01)
 ### Features
 * It is now possible to add an expiration timeout to sent messages by using the `expire` option for `sendMessage`.
 * `Security CC` now stores unsolicited nonces as "free" and tries to use free nonces instead of requesting a new one if possible.
