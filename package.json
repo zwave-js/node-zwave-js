@@ -73,7 +73,7 @@
     "jest-extended": "^0.11.5",
     "lerna": "^3.22.1",
     "mockdate": "^3.0.2",
-    "prettier": "^2.1.0",
+    "prettier": "^2.1.2",
     "prettier-plugin-organize-imports": "^1.1.1",
     "semver": "^7.3.2",
     "supports-color": "^7.2.0",
