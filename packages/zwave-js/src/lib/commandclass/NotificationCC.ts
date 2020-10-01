@@ -346,6 +346,7 @@ export class NotificationCC extends CommandClass {
 		const api = endpoint.commandClasses.Notification.withOptions({
 			priority: MessagePriority.NodeQuery,
 		});
+		const valueDB = this.getValueDB();
 
 		log.controller.logNode(node.id, {
 			endpoint: this.endpointIndex,
@@ -424,14 +425,14 @@ export class NotificationCC extends CommandClass {
 			} else {
 				// Load supported notification types and events from cache
 				supportedNotificationTypes =
-					this.getValueDB().getValue<readonly number[]>(
+					valueDB.getValue<readonly number[]>(
 						getSupportedNotificationTypesValueId(),
 					) ?? [];
 				supportedNotificationNames = lookupNotificationNames();
 				for (const type of supportedNotificationTypes) {
 					supportedNotificationEvents.set(
 						type,
-						this.getValueDB().getValue<readonly number[]>(
+						valueDB.getValue<readonly number[]>(
 							getSupportedNotificationEventsValueId(type),
 						) ?? [],
 					);
@@ -440,7 +441,7 @@ export class NotificationCC extends CommandClass {
 
 			// Determine whether the node is a push or pull node
 			const notificationMode =
-				this.getValueDB().getValue<"push" | "pull">(
+				valueDB.getValue<"push" | "pull">(
 					getNotificationModeValueId(),
 				) ??
 				(await this.determineNotificationMode(
@@ -448,14 +449,12 @@ export class NotificationCC extends CommandClass {
 					supportedNotificationEvents,
 				));
 			// And remember the information
-			this.getValueDB().setValue(
-				getNotificationModeValueId(),
-				notificationMode,
-			);
+			valueDB.setValue(getNotificationModeValueId(), notificationMode);
 
 			for (let i = 0; i < supportedNotificationTypes.length; i++) {
 				const type = supportedNotificationTypes[i];
 				const name = supportedNotificationNames[i];
+				const notificationConfig = lookupNotification(type);
 
 				if (notificationMode === "pull") {
 					// Always query each notification for its current status
@@ -479,6 +478,42 @@ export class NotificationCC extends CommandClass {
 						direction: "outbound",
 					});
 					await api.set(type, true);
+
+					// And set the value to idle if possible and there is no value yet
+					if (notificationConfig) {
+						const property = notificationConfig.name;
+						const events = supportedNotificationEvents.get(type);
+						if (events) {
+							// Find all variables that are supported by this node and have an idle state
+							for (const variable of notificationConfig.variables.filter(
+								(v) => !!v.idle,
+							)) {
+								if (
+									[...variable.states.keys()].some((key) =>
+										events.includes(key),
+									)
+								) {
+									const propertyKey = variable.name;
+									const valueId: ValueID = {
+										commandClass:
+											CommandClasses.Notification,
+										endpoint: endpoint.index,
+										property,
+										propertyKey,
+									};
+									// Set the value to idle if it has no value yet
+									// TODO: GH#1028
+									// * do this only if the last update was more than 5 minutes ago
+									// * schedule an auto-idle if the last update was less than 5 minutes ago but before the current driver start
+									if (
+										valueDB.getValue(valueId) == undefined
+									) {
+										valueDB.setValue(valueId, 0 /* idle */);
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
