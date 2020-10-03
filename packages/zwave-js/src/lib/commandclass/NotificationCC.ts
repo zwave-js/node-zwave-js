@@ -238,14 +238,11 @@ function defineMetadataForNotificationEvents(
 			const metadata: ValueMetadataNumeric = ret.get(dictKey) || {
 				...ValueMetadata.ReadOnlyUInt8,
 				label: valueConfig.variableName,
-				...(valueConfig.idle
-					? {
-							states: {
-								0: "idle",
-							},
-					  }
-					: {}),
+				states: {},
 			};
+			if (valueConfig.idle) {
+				metadata.states![0] = "idle";
+			}
 			metadata.states![value] = valueConfig.label;
 			ret.set(dictKey, metadata);
 		}

@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Bugfixes
 * Fixed a crash while trying to determine the notification mode of a node
+* Fixed a crash while defining metadata for a non-idle notification value
 
 ## 5.2.0 (2020-10-01)
 ### Features
