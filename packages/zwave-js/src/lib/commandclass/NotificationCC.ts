@@ -293,21 +293,27 @@ export class NotificationCC extends CommandClass {
 		// it may be concluded that the supporting node implements Pull Mode and discovery may be aborted.
 		if (!node.supportsCC(CommandClasses.Association)) return "pull";
 
-		if (node.supportsCC(CommandClasses["Association Group Information"])) {
-			const assocGroups = this.driver.controller.getAssociationGroups(
-				node.id,
-			);
-			for (const group of assocGroups.values()) {
-				// Check if this group sends Notification Reports
-				if (
-					group.issuedCommands
-						?.get(CommandClasses.Notification)
-						?.includes(NotificationCommand.Report)
-				) {
-					return "push";
+		try {
+			if (
+				node.supportsCC(CommandClasses["Association Group Information"])
+			) {
+				const assocGroups = this.driver.controller.getAssociationGroups(
+					node.id,
+				);
+				for (const group of assocGroups.values()) {
+					// Check if this group sends Notification Reports
+					if (
+						group.issuedCommands
+							?.get(CommandClasses.Notification)
+							?.includes(NotificationCommand.Report)
+					) {
+						return "push";
+					}
 				}
+				return "pull";
 			}
-			return "pull";
+		} catch {
+			// We might be dealing with an older cache file, fall back to testing
 		}
 
 		log.controller.logNode(node.id, {

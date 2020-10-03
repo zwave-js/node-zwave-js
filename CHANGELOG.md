@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a crash while trying to determine the notification mode of a node
+
 ## 5.2.0 (2020-10-01)
 ### Features
 * It is now possible to add an expiration timeout to sent messages by using the `expire` option for `sendMessage`.
