@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.2.2-artecktest.0 (2020-10-03)
 * Debug release for Arteck
 
 ## 5.2.1 (2020-10-03)
