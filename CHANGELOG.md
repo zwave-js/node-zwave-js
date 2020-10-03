@@ -4,6 +4,9 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+* Debug release for Arteck
+
 ## 5.2.1 (2020-10-03)
 ### Config changes
 * Added `Electronic Solutions DBMZ EU`

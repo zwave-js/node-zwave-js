@@ -1,20 +1,13 @@
 {
-	"packages": [
-		"packages/*"
-	],
+	"packages": ["packages/*"],
 	"version": "5.2.1",
 	"command": {
 		"run": {
 			"stream": true
 		},
 		"version": {
-			"allowBranch": [
-				"master",
-				"release-*"
-			],
-			"ignoreChanges": [
-				"*.md"
-			],
+			"allowBranch": ["master", "release-*", "arteck-test"],
+			"ignoreChanges": ["*.md"],
 			"amend": true,
 			"push": false
 		}

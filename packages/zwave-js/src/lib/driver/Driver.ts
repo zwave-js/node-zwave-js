@@ -1014,6 +1014,14 @@ export class Driver extends EventEmitter {
 	/** Checks if there are any pending messages for the given node */
 	private hasPendingMessages(node: ZWaveNode): boolean {
 		const { queue, currentTransaction } = this.sendThread.state.context;
+		if (node.id === 14 || node.id === 35 || node.id === 36) {
+			log.driver.sendQueue(queue);
+			if (currentTransaction?.message.getNodeId() === node.id) {
+				log.driver.print("Current transaction is:");
+				log.driver.transaction(currentTransaction);
+			}
+		}
+
 		return (
 			!!queue.find((t) => t.message.getNodeId() === node.id) ||
 			currentTransaction?.message.getNodeId() === node.id
