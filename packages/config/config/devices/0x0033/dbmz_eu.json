@@ -1,0 +1,78 @@
+// Electronic Solutions DBMZ EU
+// DC Motor Controller - Window coverings 
+{
+	"_approved": true,
+	"manufacturer": "Electronic Solutions",
+	"manufacturerId": "0x0033",
+	"label": "DBMZ EU",
+	"description": "DC Motor Controller - Window coverings",
+	"devices": [
+		{
+			"productType": "0x5250",
+			"productId": "0x3032"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Calibration",
+			"description": "Unit calibration state",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 129,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Calibrating",
+					"value": 1
+				},
+				{
+					"label": "Factory default",
+					"value": 129
+				}
+			]
+		},
+		"2": {
+			"label": "Motor direction",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Reversed",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Enable tilt feature",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

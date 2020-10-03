@@ -5,6 +5,9 @@
 -->
 
 ## 5.2.1 (2020-10-03)
+### Config changes
+* Added `Electronic Solutions DBMZ EU`
+
 ### Bugfixes
 * Fixed a crash while trying to determine the notification mode of a node
 * Fixed a crash while defining metadata for a non-idle notification value

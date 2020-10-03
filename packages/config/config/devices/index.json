@@ -1361,6 +1361,16 @@
         "filename": "0x0020/45601.json"
     },
     {
+        "manufacturerId": "0x0033",
+        "productType": "0x5250",
+        "productId": "0x3032",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0033/dbmz_eu.json"
+    },
+    {
         "manufacturerId": "0x0039",
         "productType": "0x5044",
         "productId": "0x3033",
@@ -1902,6 +1912,16 @@
     },
     {
         "manufacturerId": "0x0060",
+        "productType": "0x0015",
+        "productId": "0x0001",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0060/ac301.json"
+    },
+    {
+        "manufacturerId": "0x0060",
         "productType": "0x0000",
         "productId": "0x0000",
         "firmwareVersion": {
@@ -1929,16 +1949,6 @@
             "max": "255.255"
         },
         "filename": "0x0060/ad146.json"
-    },
-    {
-        "manufacturerId": "0x0060",
-        "productType": "0x0015",
-        "productId": "0x0001",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0060/ac301.json"
     },
     {
         "manufacturerId": "0x0060",
