@@ -26,8 +26,6 @@ export class Transaction implements Comparable<Transaction> {
 	/** Whether the node status should be updated when this transaction times out */
 	public changeNodeStatusOnTimeout: boolean = true;
 
-	public response?: Message;
-
 	/** Compares two transactions in order to plan their transmission sequence */
 	public compareTo(other: Transaction): CompareResult {
 		function compareWakeUpPriority(

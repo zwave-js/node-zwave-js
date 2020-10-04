@@ -99,9 +99,6 @@ export class Message {
 			this.functionType = payload[3];
 			const payloadLength = messageLength - 5;
 			this.payload = payload.slice(4, 4 + payloadLength);
-
-			// remember how many bytes were read
-			this._bytesRead = messageLength;
 		} else {
 			// Try to determine the message type
 			if (options.type == undefined) options.type = getMessageType(this);
@@ -178,15 +175,6 @@ export class Message {
 	 */
 	public needsCallbackId(): boolean {
 		return true;
-	}
-
-	protected _bytesRead: number = 0;
-	/**
-	 * @internal
-	 * The amount of bytes read while deserializing this message
-	 */
-	public get bytesRead(): number {
-		return this._bytesRead;
 	}
 
 	/** Serializes this message into a Buffer */
@@ -362,15 +350,6 @@ export class Message {
 		const nodeId = this.getNodeId();
 		if (nodeId != undefined)
 			return this.driver.controller.nodes.get(nodeId);
-	}
-
-	/** Include previously received partial responses into a final message */
-	/* istanbul ignore next */
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	public mergePartialMessages(partials: Message[]): void {
-		// This is highly message dependent
-		// Overwrite this in derived classes
-		// By default it does nothing
 	}
 }
 

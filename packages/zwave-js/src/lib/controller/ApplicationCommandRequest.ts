@@ -105,13 +105,6 @@ export class ApplicationCommandRequest
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
 	public command: SinglecastCC;
 
-	/** Include previously received partial responses into a final message */
-	public mergePartialMessages(partials: Message[]): void {
-		this.command.mergePartialCCs(
-			(partials as ApplicationCommandRequest[]).map((p) => p.command),
-		);
-	}
-
 	public serialize(): Buffer {
 		const statusByte =
 			(this.frameType === "broadcast"
