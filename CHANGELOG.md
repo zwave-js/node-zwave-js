@@ -4,8 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 5.2.2-artecktest.0 (2020-10-03)
-* Debug release for Arteck
+## __WORK IN PROGRESS__
+Debug release for Arteck
+
+### Bugfixes
+* Nodes are sent to sleep again when they have no pending messages
+* Compat queries are removed from the queue when a node goes to sleep
+* Pending pings are resolved when a node wakes up
 
 ## 5.2.1 (2020-10-03)
 ### Config changes
