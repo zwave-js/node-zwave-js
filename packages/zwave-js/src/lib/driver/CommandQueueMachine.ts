@@ -12,6 +12,7 @@ import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
+import log from "../log";
 import type { Message } from "../message/Message";
 import {
 	createSerialAPICommandMachine,
@@ -50,6 +51,7 @@ export type CommandQueueEvent =
 	| { type: "trigger" } // Used internally to trigger sending from the idle state
 	| { type: "add"; transaction: Transaction } // Adds a transaction to the command queue
 	| { type: "message"; message: Message } // Used for received messages. The message will be returned as unsolicited when it is not expected
+	| { type: "command_error"; error: Error } // An unexpected error occured during command execution
 	| ({ type: "command_success" } & Omit<
 			CommandQueueDoneData & { type: "success" },
 			"type"
@@ -98,6 +100,14 @@ const notifyResult = sendParent<
 	type: evt.data.type === "success" ? "command_success" : "command_failure",
 	transaction: ctx.currentTransaction,
 }));
+
+const notifyError = sendParent<CommandQueueContext, any, CommandQueueEvent>(
+	(ctx, evt) => ({
+		type: "command_error",
+		error: evt.data,
+		transaction: ctx.currentTransaction,
+	}),
+);
 
 export function createCommandQueueMachine(
 	implementations: ServiceImplementations,
@@ -168,6 +178,10 @@ export function createCommandQueueMachine(
 								actions: notifyResult,
 							},
 						],
+						onError: {
+							target: "executeDone",
+							actions: notifyError,
+						},
 					},
 				},
 				abortSendData: {
@@ -191,12 +205,23 @@ export function createCommandQueueMachine(
 		},
 		{
 			services: {
-				executeSerialAPICommand: (ctx) =>
-					createSerialAPICommandMachine(
-						ctx.currentTransaction!.message,
-						implementations,
-						params,
-					),
+				executeSerialAPICommand: (ctx) => {
+					// If there is an error while creating the command machine (e.g. during message serialization)
+					// wrap it in a rejected promise, so xstate can handle it
+					try {
+						return createSerialAPICommandMachine(
+							ctx.currentTransaction!.message,
+							implementations,
+							params,
+						);
+					} catch (e) {
+						log.driver.print(
+							`Unexpected error during SerialAPI command: ${e}`,
+							"error",
+						);
+						return Promise.reject(e);
+					}
+				},
 				executeSendDataAbort: (_) =>
 					createSerialAPICommandMachine(
 						implementations.createSendDataAbort(),

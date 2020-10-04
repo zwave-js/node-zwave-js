@@ -104,7 +104,11 @@ export type SendThreadEvent =
 	| { type: "NAK" }
 	| { type: "message"; message: Message }
 	| (CommandQueueEvent &
-			({ type: "command_success" } | { type: "command_failure" }));
+			(
+				| { type: "command_success" }
+				| { type: "command_failure" }
+				| { type: "command_error" }
+			));
 
 export type SendThreadMachine = StateMachine<
 	SendThreadContext,
@@ -391,6 +395,20 @@ export function createSendThreadMachine(
 		return ctx;
 	});
 
+	const rejectCurrentTransactionWithError: AssignAction<
+		SendThreadContext,
+		any
+	> = assign((ctx, evt) => {
+		implementations.rejectTransaction(
+			ctx.currentTransaction!,
+			new ZWaveError(
+				`Message dropped because of an unexpected error: ${evt.error}`,
+				ZWaveErrorCodes.Controller_MessageDropped,
+			),
+		);
+		return ctx;
+	});
+
 	const rejectCurrentTransactionWithNodeTimeout: AssignAction<
 		SendThreadContext,
 		any
@@ -432,6 +450,20 @@ export function createSendThreadMachine(
 		return ctx;
 	});
 
+	const rejectHandshakeTransactionWithError: AssignAction<
+		SendThreadContext,
+		any
+	> = assign((ctx, evt) => {
+		implementations.rejectTransaction(
+			ctx.handshakeTransaction!,
+			new ZWaveError(
+				`Message dropped because of an unexpected error: ${evt.error}`,
+				ZWaveErrorCodes.Controller_MessageDropped,
+			),
+		);
+		return ctx;
+	});
+
 	const rejectHandshakeTransactionWithNodeTimeout: AssignAction<
 		SendThreadContext,
 		any
@@ -468,6 +500,20 @@ export function createSendThreadMachine(
 			return ctx;
 		},
 	);
+
+	const rejectEventTransactionWithError: AssignAction<
+		SendThreadContext,
+		any
+	> = assign((ctx, evt) => {
+		implementations.rejectTransaction(
+			evt.transaction,
+			new ZWaveError(
+				`Message dropped because of an unexpected error: ${evt.error}`,
+				ZWaveErrorCodes.Controller_MessageDropped,
+			),
+		);
+		return ctx;
+	});
 
 	const notifyUnsolicited: Action<SendThreadContext, any> = (
 		_: any,
@@ -577,6 +623,16 @@ export function createSendThreadMachine(
 					{
 						cond: "isNotForActiveCurrentTransaction",
 						actions: rejectEventTransaction,
+					},
+				],
+				command_error: [
+					{
+						cond: "isNotForActiveHandshakeTransaction",
+						actions: rejectEventTransactionWithError,
+					},
+					{
+						cond: "isNotForActiveCurrentTransaction",
+						actions: rejectEventTransactionWithError,
 					},
 				],
 				// handle newly added messages
@@ -741,6 +797,22 @@ export function createSendThreadMachine(
 												target: "#sending.done",
 											},
 										],
+										command_error: [
+											// On failure, retry SendData commands if possible
+											{
+												cond: "mayRetry",
+												actions: rejectHandshakeTransactionWithError,
+												target: "#sending.retryWait",
+											},
+											// Otherwise reject the transaction
+											{
+												actions: [
+													rejectHandshakeTransactionWithError,
+													rejectCurrentTransactionWithError,
+												],
+												target: "#sending.done",
+											},
+										],
 									},
 								},
 								waitForHandshakeResponse: {
@@ -794,6 +866,21 @@ export function createSendThreadMachine(
 									// Otherwise reject the transaction
 									{
 										actions: rejectCurrentTransaction,
+										target: "done",
+									},
+								],
+								command_error: [
+									// On failure, retry SendData commands if possible
+									{
+										cond: every(
+											"currentTransactionIsSendData",
+											"mayRetry",
+										),
+										target: "retryWait",
+									},
+									// Otherwise reject the transaction
+									{
+										actions: rejectCurrentTransactionWithError,
 										target: "done",
 									},
 								],

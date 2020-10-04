@@ -25,7 +25,6 @@ import {
 /* eslint-disable @typescript-eslint/ban-types */
 export interface SerialAPICommandStateSchema {
 	states: {
-		init: {};
 		sending: {};
 		waitForACK: {};
 		waitForResponse: {};
@@ -144,10 +143,10 @@ export function getSerialAPICommandMachineConfig(
 ): SerialAPICommandMachineConfig {
 	return {
 		id: "serialAPICommand",
-		initial: "init",
+		initial: "sending",
 		context: {
 			msg: message,
-			data: Buffer.from([]),
+			data: message.serialize(),
 			attempts: 0,
 			maxAttempts: attemptsConfig.controller,
 		},
@@ -166,14 +165,6 @@ export function getSerialAPICommandMachineConfig(
 			],
 		},
 		states: {
-			// Extract the necessary data from the message instance and
-			// start sending
-			init: {
-				entry: assign({
-					data: (ctx) => ctx.msg.serialize(),
-				}),
-				always: "sending",
-			},
 			sending: {
 				// Every send attempt should increase the attempts by one
 				// and remember the timestamp of transmission
