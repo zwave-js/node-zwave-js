@@ -143,13 +143,6 @@ export class SendDataRequest<CCType extends CommandClass = CommandClass>
 		};
 	}
 
-	/** Include previously received partial responses into a final message */
-	public mergePartialMessages(partials: Message[]): void {
-		this.command.mergePartialCCs(
-			(partials as SendDataRequest[]).map((p) => p.command),
-		);
-	}
-
 	/** Computes the maximum payload size that can be transmitted with this message */
 	public getMaxPayloadLength(): number {
 		// From INS13954-7, chapter 4.3.3.1.5
@@ -359,13 +352,6 @@ export class SendDataMulticastRequest<
 				"callback id": this.callbackId,
 			},
 		};
-	}
-
-	/** Include previously received partial responses into a final message */
-	public mergePartialMessages(partials: Message[]): void {
-		this.command.mergePartialCCs(
-			(partials as SendDataMulticastRequest[]).map((p) => p.command),
-		);
 	}
 }
 
