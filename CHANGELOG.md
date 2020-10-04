@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Bugfixes
 * Fixed a crash when receiving truncated messages
+* When an unexpected error occurs while executing API commands (e.g. `Security CC requires a nonce to be sent!`), the corresponding transaction is now retried or rejected instead of crashing the driver.
 
 ## 5.2.1 (2020-10-03)
 ### Config changes
