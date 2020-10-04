@@ -2891,11 +2891,17 @@ version:               ${this.version}`;
 				message: "Sending node back to sleep...",
 				direction: "outbound",
 			});
-			await this.commandClasses["Wake Up"].sendNoMoreInformation();
-			this.markAsAsleep();
-			log.controller.logNode(this.id, "  Node asleep");
+			try {
+				// it is important that we catch errors in this call
+				// otherwise, this method will not work anymore
+				await this.commandClasses["Wake Up"].sendNoMoreInformation();
+				this.markAsAsleep();
+				log.controller.logNode(this.id, "  Node asleep");
 
-			msgSent = true;
+				msgSent = true;
+			} catch {
+				/* ignore */
+			}
 		}
 
 		this.isSendingNoMoreInformation = false;

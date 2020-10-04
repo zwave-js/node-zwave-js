@@ -67,6 +67,7 @@ import {
 	SupervisionResult,
 	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
+import { WakeUpCCNoMoreInformation } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
@@ -2148,7 +2149,11 @@ ${handlers.length} left`,
 				// because that will block the send queue until wakeup
 				if (
 					messageIsPing(msg) ||
-					transaction.priority === MessagePriority.Handshake
+					transaction.priority === MessagePriority.Handshake ||
+					// We don't want to immediately send the node to sleep when it wakes up,
+					// so drop these messages
+					(isCommandClassContainer(msg) &&
+						msg.command instanceof WakeUpCCNoMoreInformation)
 				) {
 					return reject;
 				} else {
