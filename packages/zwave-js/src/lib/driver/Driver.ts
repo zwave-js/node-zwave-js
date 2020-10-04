@@ -1261,6 +1261,7 @@ export class Driver extends EventEmitter {
 			switch (e.code) {
 				case ZWaveErrorCodes.PacketFormat_Invalid:
 				case ZWaveErrorCodes.PacketFormat_Checksum:
+				case ZWaveErrorCodes.PacketFormat_Truncated:
 					log.driver.print(
 						`Dropping message because it contains invalid data`,
 						"warn",

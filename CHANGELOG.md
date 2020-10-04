@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Fixed a crash when receiving truncated messages
+
 ## 5.2.1 (2020-10-03)
 ### Config changes
 * Added `Electronic Solutions DBMZ EU`
