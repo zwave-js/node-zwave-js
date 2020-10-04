@@ -26,6 +26,9 @@ export class Transaction implements Comparable<Transaction> {
 	/** Whether the node status should be updated when this transaction times out */
 	public changeNodeStatusOnTimeout: boolean = true;
 
+	/** Internal information used to identify or mark this transaction */
+	public tag?: any;
+
 	public response?: Message;
 
 	/** Compares two transactions in order to plan their transmission sequence */

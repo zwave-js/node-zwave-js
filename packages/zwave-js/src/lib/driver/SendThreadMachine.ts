@@ -133,6 +133,11 @@ export type TransactionReducerResult =
 			code: ZWaveErrorCodes;
 	  }
 	| {
+			// Resolve the transaction with the given message
+			type: "resolve";
+			message?: Message;
+	  }
+	| {
 			// Changes the priority of the transaction if a new one is given,
 			// and moves the current transaction back to the queue
 			type: "requeue";
@@ -498,6 +503,13 @@ export function createSendThreadMachine(
 							transaction.priority = reducerResult.priority;
 						}
 						requeue.push(transaction);
+						break;
+					case "resolve":
+						implementations.resolveTransaction(
+							transaction,
+							reducerResult.message,
+						);
+						drop.push(transaction);
 						break;
 					case "reject":
 						implementations.rejectTransaction(

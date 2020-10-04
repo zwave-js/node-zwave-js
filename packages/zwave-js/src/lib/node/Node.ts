@@ -1821,7 +1821,12 @@ version:               ${this.version}`;
 			// Try to access the API - if it doesn't work, skip this option
 			let API: CCAPI;
 			try {
-				API = (this.commandClasses as any)[ccName];
+				API = ((this.commandClasses as any)[
+					ccName
+				] as CCAPI).withOptions({
+					// Tag the resulting transactions as compat queries
+					tag: "compat",
+				});
 			} catch {
 				log.controller.logNode(this.id, {
 					message: `could not access API, skipping query`,
