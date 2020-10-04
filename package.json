@@ -25,7 +25,7 @@
   "devDependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
-    "@actions/github": "^2.1.1",
+    "@actions/github": "^4.0.0",
     "@alcalzone/release-script": "^1.8.1",
     "@babel/core": "^7.11.4",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
