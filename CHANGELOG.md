@@ -5,6 +5,9 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Config changes
+* Added `Electronic Solutions DBMZ EU`
+
 ### Bugfixes
 * Fixed a crash when receiving truncated messages
 * When an unexpected error occurs while executing API commands (e.g. `Security CC requires a nonce to be sent!`), the corresponding transaction is now retried or rejected instead of crashing the driver.
@@ -14,10 +17,10 @@
 * `sendNoMoreInformation` now continues to work after it failed once
 * `WakeUpCC::NoMoreInformation` is no longer moved to the wakeup queue when a node falls asleep
 
-## 5.2.1 (2020-10-03)
-### Config changes
-* Added `Electronic Solutions DBMZ EU`
+### Changes under the hood
+* Removed some unused code
 
+## 5.2.1 (2020-10-03)
 ### Bugfixes
 * Fixed a crash while trying to determine the notification mode of a node
 * Fixed a crash while defining metadata for a non-idle notification value
