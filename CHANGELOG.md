@@ -8,6 +8,11 @@
 ### Bugfixes
 * Fixed a crash when receiving truncated messages
 * When an unexpected error occurs while executing API commands (e.g. `Security CC requires a nonce to be sent!`), the corresponding transaction is now retried or rejected instead of crashing the driver.
+* Nodes are sent to sleep again when they have no pending messages
+* Compat queries are removed from the queue when a node goes to sleep
+* Pending pings are resolved when a node wakes up
+* `sendNoMoreInformation` now continues to work after it failed once
+* `WakeUpCC::NoMoreInformation` is no longer moved to the wakeup queue when a node falls asleep
 
 ## 5.2.1 (2020-10-03)
 ### Config changes

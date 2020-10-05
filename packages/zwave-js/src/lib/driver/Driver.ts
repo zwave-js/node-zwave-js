@@ -67,6 +67,7 @@ import {
 	SupervisionResult,
 	SupervisionStatus,
 } from "../commandclass/SupervisionCC";
+import { WakeUpCCNoMoreInformation } from "../commandclass/WakeUpCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
 import {
 	ApplicationUpdateRequest,
@@ -94,6 +95,7 @@ import {
 	createSendThreadMachine,
 	SendThreadInterpreter,
 	TransactionReducer,
+	TransactionReducerResult,
 } from "./SendThreadMachine";
 import { Transaction } from "./Transaction";
 
@@ -317,6 +319,8 @@ export interface SendMessageOptions {
 	changeNodeStatusOnMissingACK?: boolean;
 	/** Sets the number of milliseconds after which a transaction expires. When the expiration timer elapses, the transaction promise is rejected. */
 	expire?: number;
+	/** Internal information used to identify or mark this transaction */
+	tag?: any;
 }
 
 export interface SendCommandOptions extends SendMessageOptions {
@@ -877,7 +881,21 @@ export class Driver extends EventEmitter {
 		);
 
 		// Make sure to handle the pending messages as quickly as possible
-		if (oldStatus === NodeStatus.Asleep) this.sortSendQueue();
+		if (oldStatus === NodeStatus.Asleep) {
+			this.sendThread.send({
+				type: "reduce",
+				reducer: ({ message }) => {
+					// Ignore messages that are not for this node
+					if (message.getNodeId() !== node.id)
+						return { type: "keep" };
+					// Resolve pings, so we don't need to send them (we know the node is awake)
+					if (messageIsPing(message))
+						return { type: "resolve", message: undefined };
+					// Re-queue all other transactions for this node, so they get added in front of the others
+					return { type: "requeue" };
+				},
+			});
+		}
 	}
 
 	/** Is called when a node goes to sleep */
@@ -1840,7 +1858,11 @@ ${handlers.length} left`,
 			!!node &&
 			// Pings can be used to check if a node is really asleep, so they should be sent regardless
 			!messageIsPing(msg) &&
-			!node.isAwake() &&
+			// Nodes that are asleep should have their messages queued for wakeup
+			(!node.isAwake() ||
+				// Nodes that can sleep should use the WakeUp priority so their messages
+				// get handled immediately
+				node.supportsCC(CommandClasses["Wake Up"])) &&
 			// If we move multicasts to the wakeup queue, it is unlikely
 			// that there is ever a points where all targets are awake
 			!(msg instanceof SendDataMulticastRequest) &&
@@ -1864,6 +1886,7 @@ ${handlers.length} left`,
 			transaction.changeNodeStatusOnTimeout =
 				options.changeNodeStatusOnMissingACK;
 		}
+		transaction.tag = options.tag;
 
 		// start sending now (maybe)
 		this.sendThread.send({ type: "add", transaction });
@@ -1894,6 +1917,10 @@ ${handlers.length} left`,
 				if (node.supportsCC(CommandClasses["Wake Up"])) {
 					// The node responded, refresh its awake timer
 					node.refreshAwakeTimer();
+					// If the node is not meant to be kept awake, try to send it back to sleep
+					if (!node.keepAwake) {
+						this.debounceSendNodeToSleep(node);
+					}
 				} else if (node.status !== NodeStatus.Alive) {
 					// The node status was unknown or dead - in either case it must be alive because it answered
 					node.markAsAlive();
@@ -2076,23 +2103,31 @@ ${handlers.length} left`,
 
 	/** Moves all messages for a given node into the wakeup queue */
 	private moveMessagesToWakeupQueue(nodeId: number): void {
+		const reject: TransactionReducerResult = {
+			type: "reject",
+			message: `The node is asleep`,
+			code: ZWaveErrorCodes.Controller_MessageDropped,
+		};
+		const requeue: TransactionReducerResult = {
+			type: "requeue",
+			priority: MessagePriority.WakeUp,
+		};
+
 		const reducer: TransactionReducer = (transaction, source) => {
 			const msg = transaction.message;
 			if (msg.getNodeId() !== nodeId) return { type: "keep" };
+
+			// Remove compat queries because they will be recreated when the node wakes up
+			if (transaction.tag === "compat") {
+				return reject;
+			}
 			if (source === "queue") {
 				if (messageIsPing(msg)) {
 					// Pings must be rejected, so the next message may be queued
-					return {
-						type: "reject",
-						message: `The node is asleep`,
-						code: ZWaveErrorCodes.Controller_MessageDropped,
-					};
+					return reject;
 				} else {
 					// For all other messages, change the priority to wakeup
-					return {
-						type: "requeue",
-						priority: MessagePriority.WakeUp,
-					};
+					return requeue;
 				}
 			} else {
 				// The current outermost transaction must also be transferred,
@@ -2100,18 +2135,15 @@ ${handlers.length} left`,
 				// because that will block the send queue until wakeup
 				if (
 					messageIsPing(msg) ||
-					transaction.priority === MessagePriority.Handshake
+					transaction.priority === MessagePriority.Handshake ||
+					// We don't want to immediately send the node to sleep when it wakes up,
+					// so drop these messages
+					(isCommandClassContainer(msg) &&
+						msg.command instanceof WakeUpCCNoMoreInformation)
 				) {
-					return {
-						type: "reject",
-						message: `The node is asleep`,
-						code: ZWaveErrorCodes.Controller_MessageDropped,
-					};
+					return reject;
 				} else {
-					return {
-						type: "requeue",
-						priority: MessagePriority.WakeUp,
-					};
+					return requeue;
 				}
 			}
 		};

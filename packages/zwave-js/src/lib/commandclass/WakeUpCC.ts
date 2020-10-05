@@ -147,6 +147,8 @@ export class WakeUpCCAPI extends CCAPI {
 			...this.commandOptions,
 			// This command must be sent as part of the wake up queue
 			priority: MessagePriority.WakeUp,
+			// Don't try to resend this - if we get no response, the node is most likely asleep
+			maxSendAttempts: 1,
 		});
 	}
 }

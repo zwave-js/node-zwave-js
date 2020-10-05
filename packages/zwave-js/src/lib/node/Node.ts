@@ -1821,7 +1821,12 @@ version:               ${this.version}`;
 			// Try to access the API - if it doesn't work, skip this option
 			let API: CCAPI;
 			try {
-				API = (this.commandClasses as any)[ccName];
+				API = ((this.commandClasses as any)[
+					ccName
+				] as CCAPI).withOptions({
+					// Tag the resulting transactions as compat queries
+					tag: "compat",
+				});
 			} catch {
 				log.controller.logNode(this.id, {
 					message: `could not access API, skipping query`,
@@ -2886,11 +2891,18 @@ version:               ${this.version}`;
 				message: "Sending node back to sleep...",
 				direction: "outbound",
 			});
-			await this.commandClasses["Wake Up"].sendNoMoreInformation();
-			this.markAsAsleep();
-			log.controller.logNode(this.id, "  Node asleep");
+			try {
+				// it is important that we catch errors in this call
+				// otherwise, this method will not work anymore because
+				// isSendingNoMoreInformation is stuck on `true`
+				await this.commandClasses["Wake Up"].sendNoMoreInformation();
+				this.markAsAsleep();
+				log.controller.logNode(this.id, "  Node asleep");
 
-			msgSent = true;
+				msgSent = true;
+			} catch {
+				/* ignore */
+			}
 		}
 
 		this.isSendingNoMoreInformation = false;
