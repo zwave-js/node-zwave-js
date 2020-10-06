@@ -70,10 +70,10 @@ export enum SwitchType {
 	"Pull/Push" = 0x07,
 }
 /**
- * Translates a switch type into two actions that may be performed. Unknown types default to Off/On
+ * Translates a switch type into two actions that may be performed. Unknown types default to Down/Up
  */
-function switchTypeToActions(switchType: string): [string, string] {
-	if (!switchType.includes("/")) switchType = SwitchType[0x01]; // Off/On
+function switchTypeToActions(switchType: string): [down: string, up: string] {
+	if (!switchType.includes("/")) switchType = SwitchType[0x02]; // Down/Up
 	return switchType.split("/", 2) as any;
 }
 const switchTypeProperties = Object.keys(SwitchType)
@@ -322,22 +322,28 @@ export class MultilevelSwitchCC extends CommandClass {
 			direction: "none",
 		});
 
-		if (complete && this.version >= 3) {
-			// Find out which kind of switch this is
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "requesting switch type...",
-				direction: "outbound",
-			});
-			const switchType = await api.getSupported();
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `has switch type ${getEnumMemberName(
-					SwitchType,
-					switchType,
-				)}`,
-				direction: "inbound",
-			});
+		if (complete) {
+			if (this.version >= 3) {
+				// Find out which kind of switch this is
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "requesting switch type...",
+					direction: "outbound",
+				});
+				const switchType = await api.getSupported();
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `has switch type ${getEnumMemberName(
+						SwitchType,
+						switchType,
+					)}`,
+					direction: "inbound",
+				});
+			} else {
+				// requesting the switch type automatically creates the up/down actions
+				// We need to do this manually for V1 and V2
+				this.createMetadataForLevelChangeActions();
+			}
 		}
 
 		log.controller.logNode(node.id, {
@@ -361,6 +367,40 @@ export class MultilevelSwitchCC extends CommandClass {
 			value,
 		);
 		return true;
+	}
+
+	protected createMetadataForLevelChangeActions(
+		// SDS13781: The Primary Switch Type SHOULD be 0x02 (Up/Down)
+		switchType: SwitchType = SwitchType["Down/Up"],
+	): void {
+		const valueDb = this.getValueDB();
+
+		// Create metadata for the control values if necessary
+		const switchTypeName = getEnumMemberName(SwitchType, switchType);
+		const [down, up] = switchTypeToActions(switchTypeName);
+		const upValueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpointIndex,
+			property: up,
+		};
+		const downValueId: ValueID = {
+			commandClass: this.ccId,
+			endpoint: this.endpointIndex,
+			property: down,
+		};
+
+		if (!valueDb.hasMetadata(upValueId)) {
+			this.getValueDB().setMetadata(upValueId, {
+				...ValueMetadata.Boolean,
+				label: `Perform a level change (${up})`,
+			});
+		}
+		if (!valueDb.hasMetadata(downValueId)) {
+			this.getValueDB().setMetadata(downValueId, {
+				...ValueMetadata.Boolean,
+				label: `Perform a level change (${down})`,
+			});
+		}
 	}
 }
 
@@ -584,34 +624,7 @@ export class MultilevelSwitchCCSupportedReport extends MultilevelSwitchCC {
 
 	public persistValues(): boolean {
 		if (!super.persistValues()) return false;
-
-		const valueDb = this.getValueDB();
-		// Create metadata for the control values if necessary
-		const switchTypeName = getEnumMemberName(SwitchType, this._switchType);
-		const [up, down] = switchTypeToActions(switchTypeName);
-		const upValueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: up,
-		};
-		const downValueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: down,
-		};
-
-		if (!valueDb.hasMetadata(upValueId)) {
-			this.getValueDB().setMetadata(upValueId, {
-				...ValueMetadata.Boolean,
-				label: `Perform a level change (${up})`,
-			});
-		}
-		if (!valueDb.hasMetadata(downValueId)) {
-			this.getValueDB().setMetadata(downValueId, {
-				...ValueMetadata.Boolean,
-				label: `Perform a level change (${down})`,
-			});
-		}
+		this.createMetadataForLevelChangeActions(this._switchType);
 		return true;
 	}
 
