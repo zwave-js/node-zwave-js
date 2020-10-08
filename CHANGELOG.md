@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.2.3-beta.0 (2020-10-08)
 ### Bugfixes
 * The value IDs controlling `Start/Stop Level Change` commands in the `Multilevel Switch CC` are now also created for V1 and V2 nodes during the interview
 
