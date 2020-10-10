@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.3.0 (2020-10-10)
 ### Features
 * Transactions now remember where they were created. This can be used to track down unhandled transaction rejections.
 * When a message should be sent to a node that is assumed to be dead, the node is now pinged first to check if it is really dead.
