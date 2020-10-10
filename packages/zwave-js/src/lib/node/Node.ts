@@ -1004,7 +1004,7 @@ version:               ${this.version}`;
 	}
 
 	/** Node interview: pings the node to see if it responds */
-	protected async ping(): Promise<boolean> {
+	public async ping(): Promise<boolean> {
 		if (this.isControllerNode()) {
 			log.controller.logNode(this.id, "not pinging the controller");
 		} else {
