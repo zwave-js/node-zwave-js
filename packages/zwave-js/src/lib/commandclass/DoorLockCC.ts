@@ -866,10 +866,10 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 				DoorLockOperationType,
 				this.operationType,
 			),
-			"outside handle configuration": this.outsideHandlesCanOpenDoorConfiguration.join(
+			"outside handle configuration": this.outsideHandlesCanOpenDoorConfiguration?.join(
 				", ",
 			),
-			"inside handle configuration": this.insideHandlesCanOpenDoorConfiguration.join(
+			"inside handle configuration": this.insideHandlesCanOpenDoorConfiguration?.join(
 				", ",
 			),
 		};
