@@ -255,6 +255,49 @@ duration: ${currentValue.duration}`;
 		// Remember that the interview is complete
 		this.interviewComplete = true;
 	}
+
+	protected createMetadataForSensorType(sensorType: AlarmSensorType): void {
+		const stateValueId = getAlarmSensorStateValueId(
+			this.endpointIndex,
+			sensorType,
+		);
+		const severityValueId = getAlarmSensorSeverityValueId(
+			this.endpointIndex,
+			sensorType,
+		);
+		const durationValueId = getAlarmSensorDurationValueId(
+			this.endpointIndex,
+			sensorType,
+		);
+		const valueDB = this.getValueDB();
+		const alarmName = getEnumMemberName(AlarmSensorType, sensorType);
+
+		// Always create metadata if it does not exist
+		if (!valueDB.hasMetadata(stateValueId)) {
+			valueDB.setMetadata(stateValueId, {
+				...ValueMetadata.ReadOnlyBoolean,
+				label: `${alarmName} state`,
+				description: "Whether the alarm is active",
+			});
+		}
+		if (!valueDB.hasMetadata(severityValueId)) {
+			valueDB.setMetadata(severityValueId, {
+				...ValueMetadata.ReadOnlyNumber,
+				min: 1,
+				max: 100,
+				unit: "%",
+				label: `${alarmName} severity`,
+			});
+		}
+		if (!valueDB.hasMetadata(durationValueId)) {
+			valueDB.setMetadata(durationValueId, {
+				...ValueMetadata.ReadOnlyNumber,
+				unit: "s",
+				label: `${alarmName} duration`,
+				description: "For how long the alarm should be active",
+			});
+		}
+	}
 }
 
 @CCCommand(AlarmSensorCommand.Report)
@@ -302,6 +345,10 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 	}
 
 	public persistValues(): boolean {
+		if (!super.persistValues()) return false;
+		// Create metadata if it does not exist
+		this.createMetadataForSensorType(this.sensorType);
+
 		const stateValueId = getAlarmSensorStateValueId(
 			this.endpointIndex,
 			this.sensorType,
@@ -315,34 +362,6 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 			this.sensorType,
 		);
 		const valueDB = this.getValueDB();
-		const alarmName = getEnumMemberName(AlarmSensorType, this.sensorType);
-
-		// Always create metadata if it does not exist
-		if (!valueDB.hasMetadata(stateValueId)) {
-			valueDB.setMetadata(stateValueId, {
-				...ValueMetadata.ReadOnlyBoolean,
-				label: `${alarmName} state`,
-				description: "Whether the alarm is active",
-			});
-		}
-		if (!valueDB.hasMetadata(severityValueId)) {
-			valueDB.setMetadata(severityValueId, {
-				...ValueMetadata.ReadOnlyNumber,
-				min: 1,
-				max: 100,
-				unit: "%",
-				label: `${alarmName} severity`,
-			});
-		}
-		if (!valueDB.hasMetadata(durationValueId)) {
-			valueDB.setMetadata(durationValueId, {
-				...ValueMetadata.ReadOnlyNumber,
-				unit: "s",
-				label: `${alarmName} duration`,
-				description: "For how long the alarm should be active",
-			});
-		}
-
 		valueDB.setValue(stateValueId, this.state);
 		valueDB.setValue(severityValueId, this.severity);
 		valueDB.setValue(durationValueId, this.duration);
@@ -427,6 +446,15 @@ export class AlarmSensorCCSupportedReport extends AlarmSensorCC {
 	@ccValue({ internal: true })
 	public get supportedSensorTypes(): readonly AlarmSensorType[] {
 		return this._supportedSensorTypes;
+	}
+
+	public persistValues(): boolean {
+		if (!super.persistValues()) return false;
+		// Create metadata for each sensor type
+		for (const type of this._supportedSensorTypes) {
+			this.createMetadataForSensorType(type);
+		}
+		return true;
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
