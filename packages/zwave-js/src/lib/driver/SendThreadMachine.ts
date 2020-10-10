@@ -247,9 +247,9 @@ const every = (...guards: string[]) => ({
 });
 const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	maySendFirstMessage: (ctx) => {
+		const nextTransaction = ctx.queue.peekStart();
 		// We can't send anything if the queue is empty
-		if (ctx.queue.length === 0) return false;
-		const nextTransaction = ctx.queue.peekStart()!;
+		if (!nextTransaction) return false;
 
 		const message = nextTransaction.message;
 		const targetNode = message.getNodeUnsafe();
