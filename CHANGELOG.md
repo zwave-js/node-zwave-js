@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Features
 * Transactions now remember where they were created. This can be used to track down unhandled transaction rejections.
+* When a message should be sent to a node that is assumed to be dead, the node is now pinged first to check if it is really dead.
 
 ### Bugfixes
 * The value IDs controlling `Start/Stop Level Change` commands in the `Multilevel Switch CC` are now also created for V1 and V2 nodes during the interview
