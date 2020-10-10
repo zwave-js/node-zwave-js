@@ -19,8 +19,14 @@ export class Transaction implements Comparable<Transaction> {
 		public readonly promise: DeferredPromise<Message | void>,
 		public priority: MessagePriority,
 	) {
-		Object.getPrototypeOf(this).name = "Transaction";
-		Error.captureStackTrace(this, Transaction);
+		// We need create the stack on a temporary object or the Error
+		// class will try to print the message
+		const tmp = { message: "" };
+		Error.captureStackTrace(tmp, Transaction);
+		this.stack = (tmp as any).stack;
+		if (this.stack.startsWith("Error")) {
+			this.stack = "Transaction" + this.stack.substr(5);
+		}
 	}
 
 	/** The timestamp at which the transaction was created */

@@ -364,11 +364,12 @@ describe("lib/driver/Transaction => ", () => {
 	it("should capture a stack trace where it was created", () => {
 		const test = new Transaction(
 			undefined as any,
-			undefined as any,
+			"FOOBAR" as any,
 			undefined as any,
 			undefined as any,
 		);
 		expect(test.stack).toStartWith("Transaction:");
 		expect(test.stack).toInclude("Transaction.test.ts");
+		expect(test.stack).not.toInclude("FOOBAR");
 	});
 });
