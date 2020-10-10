@@ -124,5 +124,6 @@ export class ZWaveError extends Error {
 
 		// We need to set the prototype explicitly
 		Object.setPrototypeOf(this, ZWaveError.prototype);
+		Object.getPrototypeOf(this).name = "ZWaveError";
 	}
 }

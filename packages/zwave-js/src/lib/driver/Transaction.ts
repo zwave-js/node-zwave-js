@@ -18,7 +18,10 @@ export class Transaction implements Comparable<Transaction> {
 		public readonly message: Message,
 		public readonly promise: DeferredPromise<Message | void>,
 		public priority: MessagePriority,
-	) {}
+	) {
+		Object.getPrototypeOf(this).name = "Transaction";
+		Error.captureStackTrace(this, Transaction);
+	}
 
 	/** The timestamp at which the transaction was created */
 	public creationTimestamp: number = highResTimestamp();
@@ -28,6 +31,9 @@ export class Transaction implements Comparable<Transaction> {
 
 	/** Internal information used to identify or mark this transaction */
 	public tag?: any;
+
+	/** The stack trace where the transaction was created */
+	public readonly stack!: string;
 
 	/** Compares two transactions in order to plan their transmission sequence */
 	public compareTo(other: Transaction): CompareResult {

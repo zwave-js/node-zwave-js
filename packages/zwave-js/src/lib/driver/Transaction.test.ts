@@ -360,4 +360,15 @@ describe("lib/driver/Transaction => ", () => {
 		// The controller transaction should have a higher priority
 		expect(tController.compareTo(tSleepingNode)).toBe(-1);
 	});
+
+	it("should capture a stack trace where it was created", () => {
+		const test = new Transaction(
+			undefined as any,
+			undefined as any,
+			undefined as any,
+			undefined as any,
+		);
+		expect(test.stack).toStartWith("Transaction:");
+		expect(test.stack).toInclude("Transaction.test.ts");
+	});
 });

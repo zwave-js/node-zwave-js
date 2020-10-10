@@ -393,7 +393,7 @@ export function createSendThreadMachine(
 			ctx.currentTransaction!,
 			sendDataErrorToZWaveError(
 				evt.reason,
-				ctx.currentTransaction!.message,
+				ctx.currentTransaction!,
 				evt.result,
 			),
 		);
@@ -422,7 +422,7 @@ export function createSendThreadMachine(
 			ctx.currentTransaction!,
 			sendDataErrorToZWaveError(
 				"node timeout",
-				ctx.currentTransaction!.message,
+				ctx.currentTransaction!,
 				undefined,
 			),
 		);
@@ -448,7 +448,7 @@ export function createSendThreadMachine(
 			ctx.handshakeTransaction!,
 			sendDataErrorToZWaveError(
 				evt.reason,
-				ctx.handshakeTransaction!.message,
+				ctx.handshakeTransaction!,
 				evt.result,
 			),
 		);
@@ -477,7 +477,7 @@ export function createSendThreadMachine(
 			ctx.handshakeTransaction!,
 			sendDataErrorToZWaveError(
 				"node timeout",
-				ctx.handshakeTransaction!.message,
+				ctx.handshakeTransaction!,
 				undefined,
 			),
 		);
