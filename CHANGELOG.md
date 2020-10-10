@@ -5,6 +5,9 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Features
+* If a device supports `Notification CC` but sends `Alarm CC` (V1) frames, those are treated as `Notification Report`s if possible.
+
 ### Bugfixes
 * The value IDs controlling `Start/Stop Level Change` commands in the `Multilevel Switch CC` are now also created for V1 and V2 nodes during the interview
 * The `Alarm Sensor CC` value IDs for supported sensor types are now created as soon as they are known to be supported.

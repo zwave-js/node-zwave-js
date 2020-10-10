@@ -20,6 +20,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { JSONObject, num2hex } from "@zwave-js/shared";
+import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -651,6 +652,35 @@ export class NotificationCCReport extends NotificationCC {
 
 				// Turn the event parameters into something useful
 				this.parseEventParameters();
+			} else if (this.alarmType !== 0 && this.version >= 2) {
+				// Check if the device actually supports Notification CC, but chooses
+				// to send Alarm frames instead (GH#1034)
+				const valueDB = this.getValueDB();
+				const supportedNotificationTypes = valueDB.getValue<number[]>(
+					getSupportedNotificationTypesValueId(),
+				);
+				if (
+					isArray(supportedNotificationTypes) &&
+					supportedNotificationTypes.includes(this.alarmType)
+				) {
+					const supportedNotificationEvents = valueDB.getValue<
+						number[]
+					>(getSupportedNotificationEventsValueId(this.alarmType));
+					if (
+						isArray(supportedNotificationEvents) &&
+						supportedNotificationEvents.includes(this.alarmLevel)
+					) {
+						// This alarm frame corresponds to a valid notification event
+						log.controller.logNode(
+							this.nodeId as number,
+							`treating V1 Alarm frame as Notification Report`,
+						);
+						this.notificationType = this.alarmType;
+						this.notificationEvent = this.alarmLevel;
+						this.alarmType = 0;
+						this.alarmLevel = 0;
+					}
+				}
 			}
 		} else {
 			if ("alarmType" in options) {
