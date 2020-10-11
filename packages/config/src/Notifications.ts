@@ -111,9 +111,19 @@ export function lookupNotification(
 	return notifications.get(notificationType);
 }
 
+/**
+ * Looks up the notification configuration for a given notification type.
+ * If the config has not been loaded yet, this returns undefined.
+ */
+function lookupNotificationUnsafe(
+	notificationType: number,
+): Notification | undefined {
+	return notifications?.get(notificationType);
+}
+
 export function getNotificationName(notificationType: number): string {
 	return (
-		lookupNotification(notificationType)?.name ??
+		lookupNotificationUnsafe(notificationType)?.name ??
 		`Unknown (${num2hex(notificationType)})`
 	);
 }
