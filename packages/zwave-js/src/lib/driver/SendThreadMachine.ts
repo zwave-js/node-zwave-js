@@ -473,14 +473,17 @@ export function createSendThreadMachine(
 		SendThreadContext,
 		any
 	> = assign((ctx) => {
-		implementations.rejectTransaction(
-			ctx.handshakeTransaction!,
-			sendDataErrorToZWaveError(
-				"node timeout",
-				ctx.handshakeTransaction!,
-				undefined,
-			),
-		);
+		const hsTransaction = ctx.handshakeTransaction;
+		if (hsTransaction) {
+			implementations.rejectTransaction(
+				hsTransaction,
+				sendDataErrorToZWaveError(
+					"node timeout",
+					hsTransaction,
+					undefined,
+				),
+			);
+		}
 		return ctx;
 	});
 
