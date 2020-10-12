@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Changes under the hood
+* Changed how the transaction creation stack is included in error logs
+
 ## 5.3.0 (2020-10-10)
 ### Features
 * Transactions now remember where they were created. This can be used to track down unhandled transaction rejections.

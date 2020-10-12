@@ -100,6 +100,15 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 							ignore = true;
 							break;
 					}
+
+					// Try to attach transaction context this way
+					if (!ignore && hint.originalException.context) {
+						event.contexts = {
+							transaction: {
+								stack: hint.originalException.context as string,
+							},
+						};
+					}
 				}
 
 				// Don't ignore explicitly whitelisted paths

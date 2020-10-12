@@ -53,23 +53,27 @@ export function sendDataErrorToZWaveError(
 		case "CAN":
 		case "NAK":
 			return new ZWaveError(
-				`Failed to send the message after 3 attempts. ${transaction.stack}`,
+				`Failed to send the message after 3 attempts`,
 				ZWaveErrorCodes.Controller_MessageDropped,
+				transaction.stack,
 			);
 		case "ACK timeout":
 			return new ZWaveError(
-				`Timeout while waiting for an ACK from the controller. ${transaction.stack}`,
+				`Timeout while waiting for an ACK from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
+				transaction.stack,
 			);
 		case "response timeout":
 			return new ZWaveError(
-				`Timeout while waiting for a response from the controller. ${transaction.stack}`,
+				`Timeout while waiting for a response from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
+				transaction.stack,
 			);
 		case "callback timeout":
 			return new ZWaveError(
-				`Timeout while waiting for a callback from the controller. ${transaction.stack}`,
+				`Timeout while waiting for a callback from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
+				transaction.stack,
 			);
 		case "response NOK":
 			if (
@@ -77,15 +81,15 @@ export function sendDataErrorToZWaveError(
 				transaction.message instanceof SendDataMulticastRequest
 			) {
 				return new ZWaveError(
-					`Failed to send the command after ${transaction.message.maxSendAttempts} attempts. Transmission queue full. ${transaction.stack}`,
+					`Failed to send the command after ${transaction.message.maxSendAttempts} attempts. Transmission queue full`,
 					ZWaveErrorCodes.Controller_MessageDropped,
-					receivedMessage,
+					transaction.stack,
 				);
 			} else {
 				return new ZWaveError(
-					`The controller response indicated failure. ${transaction.stack}`,
+					`The controller response indicated failure`,
 					ZWaveErrorCodes.Controller_ResponseNOK,
-					receivedMessage,
+					transaction.stack,
 				);
 			}
 		case "callback NOK":
@@ -98,11 +102,11 @@ export function sendDataErrorToZWaveError(
 					} attempts (Status ${getEnumMemberName(
 						TransmitStatus,
 						status,
-					)}). ${transaction.stack}`,
+					)})`,
 					status === TransmitStatus.NoAck
 						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
-					receivedMessage,
+					transaction.stack,
 				);
 			} else if (
 				transaction.message instanceof SendDataMulticastRequest
@@ -113,24 +117,24 @@ export function sendDataErrorToZWaveError(
 					`One or more nodes did not respond to the multicast request (Status ${getEnumMemberName(
 						TransmitStatus,
 						status,
-					)}). ${transaction.stack}`,
+					)})`,
 					status === TransmitStatus.NoAck
 						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
-					receivedMessage,
+					transaction.stack,
 				);
 			} else {
 				return new ZWaveError(
-					`The controller callback indicated failure. ${transaction.stack}`,
+					`The controller callback indicated failure`,
 					ZWaveErrorCodes.Controller_CallbackNOK,
-					receivedMessage,
+					transaction.stack,
 				);
 			}
 		case "node timeout":
 			return new ZWaveError(
-				`Timed out while waiting for a response from the node. ${transaction.stack}`,
+				`Timed out while waiting for a response from the node`,
 				ZWaveErrorCodes.Controller_NodeTimeout,
-				receivedMessage,
+				transaction.stack,
 			);
 	}
 }
