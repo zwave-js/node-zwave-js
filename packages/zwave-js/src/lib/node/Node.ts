@@ -956,6 +956,18 @@ export class ZWaveNode extends Endpoint {
 				requestedNodeId: this.id,
 			}),
 		);
+		if (!(resp instanceof GetNodeProtocolInfoResponse)) {
+			// eslint-disable-next-line @typescript-eslint/no-var-requires
+			const Sentry: typeof import("@sentry/node") = require("@sentry/node");
+			Sentry.captureMessage(
+				"Response to GetNodeProtocolInfoRequest is not a GetNodeProtocolInfoResponse",
+				{
+					contexts: {
+						message: (resp as any).toLogEntry(),
+					},
+				},
+			);
+		}
 		this._deviceClass = resp.deviceClass;
 		for (const cc of this._deviceClass.mandatorySupportedCCs) {
 			this.addCC(cc, { isSupported: true });
