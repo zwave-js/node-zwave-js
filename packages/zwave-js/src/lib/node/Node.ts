@@ -956,7 +956,10 @@ export class ZWaveNode extends Endpoint {
 				requestedNodeId: this.id,
 			}),
 		);
-		if (!(resp instanceof GetNodeProtocolInfoResponse)) {
+		if (
+			process.env.NODE_ENV !== "test" &&
+			!(resp instanceof GetNodeProtocolInfoResponse)
+		) {
 			// eslint-disable-next-line @typescript-eslint/no-var-requires
 			const Sentry: typeof import("@sentry/node") = require("@sentry/node");
 			Sentry.captureMessage(
