@@ -5,6 +5,9 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Bugfixes
+* The `targetValue` metadata in `Color Switch CC` no longer claims that the value is readonly
+
 ### Changes under the hood
 * Changed how the transaction creation stack is included in error logs
 

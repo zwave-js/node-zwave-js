@@ -314,7 +314,7 @@ export class ColorSwitchCC extends CommandClass {
 				valueDB.setMetadata(
 					getTargetColorValueID(this.endpointIndex, color),
 					{
-						...ValueMetadata.ReadOnlyUInt8,
+						...ValueMetadata.UInt8,
 						label: `Target value (${colorName})`,
 						description: `The target value of the ${colorName} color.`,
 					},
