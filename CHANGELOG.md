@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.3.1 (2020-10-13)
 ### Bugfixes
 * The `targetValue` metadata in `Color Switch CC` no longer claims that the value is readonly
 
