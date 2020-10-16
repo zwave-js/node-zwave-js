@@ -63,7 +63,10 @@ export function throwWrongValueType(
 	);
 }
 
-/** The base class for all CC APIs exposed via `Node.commandClasses.<CCName>` */
+/**
+ * The base class for all CC APIs exposed via `Node.commandClasses.<CCName>`
+ * @publicAPI
+ */
 export class CCAPI {
 	public constructor(
 		protected readonly driver: Driver,

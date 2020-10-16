@@ -13,6 +13,7 @@ for (const file of definedCCs) {
 
 // explicitly export specific things from the CCs
 export { AlarmSensorType } from "./AlarmSensorCC";
+export type { CCAPI } from "./API";
 export { AssociationGroupInfoProfile } from "./AssociationGroupInfoCC";
 export type { AssociationGroup } from "./AssociationGroupInfoCC";
 export { BatteryChargingStatus, BatteryReplacementStatus } from "./BatteryCC";

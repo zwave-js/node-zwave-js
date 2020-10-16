@@ -4,6 +4,14 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Added / fixed some missing or incorrect exports from `zwave-js`:
+  * The `CCAPI` type is now exported
+  * `NODE_ID_BROADCAST` and `NODE_ID_MAX` are now value exports
+  * The `Endpoint` class is now exported
+  * The `InterviewStage` enum is now exported
+
 ## 5.3.1 (2020-10-13)
 ### Bugfixes
 * The `targetValue` metadata in `Color Switch CC` no longer claims that the value is readonly
