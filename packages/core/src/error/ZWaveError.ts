@@ -20,6 +20,7 @@ export enum ZWaveErrorCodes {
 	Driver_NoPriority,
 	Driver_InvalidCache,
 	Driver_InvalidOptions,
+	/** The driver tried to do something that requires security */
 	Driver_NoSecurity,
 	Driver_NoErrorHandler,
 
@@ -38,6 +39,8 @@ export enum ZWaveErrorCodes {
 	Controller_EndpointNotFound,
 	/** The node was removed from the network */
 	Controller_NodeRemoved,
+	/** Communication with the node will be insecure (no security configured) */
+	Controller_NodeInsecureCommunication,
 
 	/** The message has expired (the given timeout has elapsed) */
 	Controller_MessageExpired,

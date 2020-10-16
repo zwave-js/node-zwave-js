@@ -1202,12 +1202,13 @@ version:               ${this.version}`;
 					log.controller.logNode(this.nodeId, errorMessage, "error");
 					this.driver.emit(
 						"error",
-						new Error(
+						new ZWaveError(
 							`Node ${padStart(
 								this.id.toString(),
 								3,
 								"0",
 							)} ${errorMessage}`,
+							ZWaveErrorCodes.Controller_NodeInsecureCommunication,
 						),
 					);
 					this._hasEmittedNoNetworkKeyError = true;

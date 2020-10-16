@@ -11,6 +11,8 @@
   * `NODE_ID_BROADCAST` and `NODE_ID_MAX` are now value exports
   * The `Endpoint` class is now exported
   * The `InterviewStage` enum is now exported
+* Several user-facing errors were converted from `Error` to `ZWaveError` in order to be consistent with other errors.
+* Warnings about insecure communication with a node because of missing security configuration are now emitted as `ZWaveError`s with code `ZWaveErrorCodes.Controller_NodeInsecureCommunication`
 
 ## 5.3.1 (2020-10-13)
 ### Bugfixes
