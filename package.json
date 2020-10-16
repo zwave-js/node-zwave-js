@@ -55,7 +55,7 @@
     "@typescript-eslint/eslint-plugin": "^4.3.0",
     "@typescript-eslint/parser": "^4.3.0",
     "@xstate/test": "^0.4.1",
-    "@zwave-js/testing": "file:../testing",
+    "@zwave-js/testing": "file:packages\\testing",
     "ansi-colors": "^4.1.1",
     "axios": "^0.20.0",
     "clipboardy": "^2.3.0",
