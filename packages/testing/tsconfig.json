@@ -5,9 +5,6 @@
 	"references": [
 		{
 			"path": "../core/tsconfig.build.json"
-		},
-		{
-			"path": "../testing/tsconfig.build.json"
 		}
 	],
 	"include": [

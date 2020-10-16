@@ -1,10 +1,5 @@
-import {
-	assertLogInfo,
-	assertMessage,
-	getDirectionPrefix,
-	restoreSilence,
-	SpyTransport,
-} from "@zwave-js/core";
+import { getDirectionPrefix, restoreSilence } from "@zwave-js/core";
+import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import colors from "ansi-colors";
@@ -52,7 +47,6 @@ function createTransaction(
 		createDeferredPromise(),
 		options.priority || MessagePriority.Controller,
 	);
-	trns.sendAttempts = 1;
 	return trns;
 }
 

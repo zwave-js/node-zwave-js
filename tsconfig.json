@@ -20,6 +20,9 @@
 			],
 			"@zwave-js/shared": [
 				"shared/src"
+			],
+			"@zwave-js/testing": [
+				"testing/src"
 			]
 		},
 		"composite": true,

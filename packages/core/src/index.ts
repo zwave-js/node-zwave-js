@@ -6,7 +6,6 @@ export * from "./log/shared";
 export * from "./security/crypto";
 export * from "./security/Manager";
 export * from "./test/assertZWaveError";
-export * from "./test/SpyTransport";
 export * from "./util/crc";
 export * from "./util/date";
 export * from "./util/firmware";

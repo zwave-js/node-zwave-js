@@ -1,10 +1,5 @@
-import {
-	assertLogInfo,
-	assertMessage,
-	CommandClasses,
-	restoreSilence,
-	SpyTransport,
-} from "@zwave-js/core";
+import { CommandClasses, restoreSilence } from "@zwave-js/core";
+import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
 import winston from "winston";
 import { InterviewStage } from "../node/Types";
 import log from "./index";
