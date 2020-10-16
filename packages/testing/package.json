@@ -1,0 +1,39 @@
+{
+  "name": "@zwave-js/testing",
+  "version": "5.3.0",
+  "description": "zwave-js: testing utilities",
+  "private": true,
+  "keywords": [],
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build/**/*.{js,d.ts,map}"
+  ],
+  "author": {
+    "name": "AlCalzone",
+    "email": "d.griesel@gmx.net"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlCalzone/node-zwave-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlCalzone/node-zwave-js/issues"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/AlCalzone/"
+  },
+  "engines": {
+    "node": ">=10.0.0"
+  },
+  "dependencies": {
+    "@zwave-js/core": "file:../core"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "clean": "npm run build -- --clean",
+    "watch": "npm run build -- --watch --pretty"
+  }
+}

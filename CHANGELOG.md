@@ -12,6 +12,9 @@
   * The `Endpoint` class is now exported
   * The `InterviewStage` enum is now exported
 
+### Changes under the hood
+* `SpyTransport` was moved to `@zwave-js/testing`, a development-only testing package
+
 ## 5.3.1 (2020-10-13)
 ### Bugfixes
 * The `targetValue` metadata in `Color Switch CC` no longer claims that the value is readonly

@@ -1,7 +1,7 @@
+import type { ZWaveLogInfo } from "@zwave-js/core";
 import { ansiRegex, stripColor } from "ansi-colors";
 import { MESSAGE } from "triple-beam";
 import Transport from "winston-transport";
-import type { ZWaveLogInfo } from "../log/shared";
 
 const timestampRegex = /\d{2}\:\d{2}\:\d{2}\.\d{3}/g;
 const timestampPrefixRegex = new RegExp(
