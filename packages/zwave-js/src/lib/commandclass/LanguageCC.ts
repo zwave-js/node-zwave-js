@@ -142,8 +142,9 @@ export class LanguageCCSet extends LanguageCC {
 	}
 	public set language(value: string) {
 		if (value.length !== 3 || value.toLowerCase() !== value) {
-			throw new Error(
+			throw new ZWaveError(
 				"language must be a 3 digit (lowercase) code according to ISO 639-2",
+				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
 		this._language = value;
@@ -158,8 +159,9 @@ export class LanguageCCSet extends LanguageCC {
 			typeof value === "string" &&
 			(value.length !== 2 || value.toUpperCase() !== value)
 		) {
-			throw new Error(
+			throw new ZWaveError(
 				"country must be a 2 digit (uppercase) code according to ISO 3166-1",
+				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
 		this._country = value;
