@@ -55,14 +55,16 @@ function findExports() {
 		}
 		const fileFullText = sourceFile.getFullText();
 
-		// Visit each root node to see if it has a `@apiExport` comment
+		// Visit each root node to see if it has a `@publicAPI` comment
 		ts.forEachChild(sourceFile, (node) => {
 			// Define which declaration types we need to export
 			if (
 				ts.isEnumDeclaration(node) ||
 				ts.isTypeAliasDeclaration(node) ||
-				ts.isInterfaceDeclaration(node)
+				ts.isInterfaceDeclaration(node) ||
+				ts.isClassDeclaration(node)
 			) {
+				if (!node.name) return;
 				const leadingComments = ts.getLeadingCommentRanges(
 					fileFullText,
 					node.pos,
@@ -93,7 +95,8 @@ function findExports() {
 							sourceFile.fileName,
 							node.name.text,
 							ts.isTypeAliasDeclaration(node) ||
-								ts.isInterfaceDeclaration(node),
+								ts.isInterfaceDeclaration(node) ||
+								ts.isClassDeclaration(node),
 						);
 					}
 				}
