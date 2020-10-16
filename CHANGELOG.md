@@ -11,6 +11,7 @@
   * `NODE_ID_BROADCAST` and `NODE_ID_MAX` are now value exports
   * The `Endpoint` class is now exported
   * The `InterviewStage` enum is now exported
+* Internal references to `@types/fs-extra` and `jest` are no longer leaked, allowing users to consume this library without `skipLibCheck`
 
 ### Changes under the hood
 * `SpyTransport` was moved to `@zwave-js/testing`, a development-only testing package
