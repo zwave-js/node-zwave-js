@@ -18,7 +18,7 @@
 
 -   [License](LICENSE)
 -   [Changelog](CHANGELOG.md)
--   [Documentation](https://alcalzone.github.io/node-zwave-js/)
+-   [Documentation](https://zwave-js.github.io/node-zwave-js/)
 
 <!--
 TODO: Move all this to the documentation
