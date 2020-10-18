@@ -675,20 +675,22 @@ export class UserCodeCC extends CommandClass {
 		});
 
 		// Query capabilities first because they determine the next steps
-		let supportsMasterCode: boolean;
-		let supportsUserCodeChecksum: boolean;
-		let supportedKeypadModes: readonly KeypadMode[];
+		let supportsMasterCode = false;
+		let supportsUserCodeChecksum = false;
+		let supportedKeypadModes: readonly KeypadMode[] = [];
 		let supportedUsers: number;
 		if (complete) {
-			log.controller.logNode(node.id, {
-				message: "querying capabilities...",
-				direction: "outbound",
-			});
-			({
-				supportsMasterCode,
-				supportsUserCodeChecksum,
-				supportedKeypadModes,
-			} = await api.getCapabilities());
+			if (this.version >= 2) {
+				log.controller.logNode(node.id, {
+					message: "querying capabilities...",
+					direction: "outbound",
+				});
+				({
+					supportsMasterCode,
+					supportsUserCodeChecksum,
+					supportedKeypadModes,
+				} = await api.getCapabilities());
+			}
 
 			log.controller.logNode(node.id, {
 				message: "querying number of user codes...",
