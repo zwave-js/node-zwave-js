@@ -1,6 +1,8 @@
 {
-	"packages": ["packages/*"],
-	"version": "5.3.1",
+	"packages": [
+		"packages/*"
+	],
+	"version": "5.3.2-alpha.0",
 	"command": {
 		"run": {
 			"stream": true
@@ -11,7 +13,9 @@
 				"release-*",
 				"send-nonce-transmit-options"
 			],
-			"ignoreChanges": ["*.md"],
+			"ignoreChanges": [
+				"*.md"
+			],
 			"amend": true,
 			"push": false
 		}

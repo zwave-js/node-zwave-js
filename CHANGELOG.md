@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.3.2-alpha.0 (2020-10-19)
 ### Bugfixes
 * Added / fixed some missing or incorrect exports from `zwave-js`:
   * The `CCAPI` type is now exported
