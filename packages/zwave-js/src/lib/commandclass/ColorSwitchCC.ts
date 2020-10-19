@@ -21,6 +21,7 @@ import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	ignoreTimeout,
 	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
@@ -327,13 +328,24 @@ export class ColorSwitchCC extends CommandClass {
 		}
 
 		for (const color of supportedColors) {
-			const colorName = getEnumMemberName(ColorComponent, color);
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `querying current color state (${colorName})`,
-				direction: "outbound",
-			});
-			await api.get(color);
+			await ignoreTimeout(
+				async () => {
+					const colorName = getEnumMemberName(ColorComponent, color);
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `querying current color state (${colorName})`,
+						direction: "outbound",
+					});
+					await api.get(color);
+				},
+				() => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `Current color query timed out - skipping because it is not critical...`,
+						level: "warn",
+					});
+				},
+			);
 		}
 
 		// Remember that the interview is complete
