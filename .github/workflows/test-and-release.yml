@@ -156,12 +156,12 @@ jobs:
       run: |
         VERSION="${{ github.ref }}"
         VERSION=${VERSION##*/v}
-        echo "::set-env name=VERSION::$VERSION"
+        echo "VERSION=$VERSION" >> $GITHUB_ENV
         BODY=$(git show -s --format=%b)
         BODY="${BODY//'%'/'%25'}"
         BODY="${BODY//$'\n'/'%0A'}"
         BODY="${BODY//$'\r'/'%0D'}"
-        echo "::set-env name=BODY::$BODY"
+        echo "BODY=$BODY" >> $GITHUB_ENV
 
     - name: Install dependencies
       run: npm ci
@@ -195,6 +195,6 @@ jobs:
         export SENTRY_PROJECT=iobroker_zwave
         export SENTRY_VERSION=zwave-js@${{ env.VERSION }}
         sentry-cli releases new $SENTRY_VERSION
-        sentry-cli releases set-commits $SENTRY_VERSION --auto
+        sentry-cli releases set-commits $SENTRY_VERSION --auto --log-level=debug
         sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
         sentry-cli releases finalize $SENTRY_VERSION
