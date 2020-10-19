@@ -16,6 +16,7 @@ import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	ignoreTimeout,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -302,20 +303,32 @@ export class SoundSwitchCC extends CommandClass {
 				0: "off",
 			};
 			for (let toneId = 1; toneId <= toneCount; toneId++) {
-				log.controller.logNode(node.id, {
-					message: `requesting info for tone #${toneId}`,
-					direction: "outbound",
-				});
-				const info = await api.getToneInfo(toneId);
-				const logMessage = `received info for tone #${toneId}:
+				await ignoreTimeout(
+					async () => {
+						log.controller.logNode(node.id, {
+							message: `requesting info for tone #${toneId}`,
+							direction: "outbound",
+						});
+						const info = await api.getToneInfo(toneId);
+						const logMessage = `received info for tone #${toneId}:
 name:     ${info.name}
 duration: ${info.duration} seconds`;
-				log.controller.logNode(node.id, {
-					message: logMessage,
-					direction: "inbound",
-				});
-
-				metadataStates[toneId] = `${info.name} (${info.duration} sec)`;
+						log.controller.logNode(node.id, {
+							message: logMessage,
+							direction: "inbound",
+						});
+						metadataStates[
+							toneId
+						] = `${info.name} (${info.duration} sec)`;
+					},
+					() => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Tone info query timed out - skipping because it is not critical...`,
+							level: "warn",
+						});
+					},
+				);
 			}
 			metadataStates[0xff] = "default";
 
