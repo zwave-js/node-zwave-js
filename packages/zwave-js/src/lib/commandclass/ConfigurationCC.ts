@@ -30,6 +30,7 @@ import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	ignoreTimeout,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -312,20 +313,10 @@ export class ConfigurationCCAPI extends CCAPI {
 			value,
 			valueSize,
 		});
-		try {
+		// A timeout has to be expected, don't throw in that case
+		return ignoreTimeout(async () => {
 			await this.driver.sendCommand(cc, this.commandOptions);
-			return true;
-		} catch (e) {
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Controller_NodeTimeout
-			) {
-				// A timeout has to be expected
-				return false;
-			}
-			// This error was unexpected
-			throw e;
-		}
+		});
 	}
 
 	/**
@@ -346,20 +337,10 @@ export class ConfigurationCCAPI extends CCAPI {
 			parameter,
 			resetToDefault: true,
 		});
-		try {
+		// A timeout has to be expected, don't throw in that case
+		return ignoreTimeout(async () => {
 			await this.driver.sendCommand(cc, this.commandOptions);
-			return true;
-		} catch (e) {
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Controller_NodeTimeout
-			) {
-				// A timeout has to be expected
-				return false;
-			}
-			// This error was unexpected
-			throw e;
-		}
+		});
 	}
 
 	/** Resets all configuration parameters to their default value */
