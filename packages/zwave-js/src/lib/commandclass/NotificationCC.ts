@@ -24,7 +24,7 @@ import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import {
 	API,
 	CCCommand,
@@ -463,19 +463,30 @@ export class NotificationCC extends CommandClass {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
 
-					// Always query each notification for its current status
-					log.controller.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `querying notification status for ${name}...`,
-						direction: "outbound",
-					});
-					const response = await api.getInternal({
-						notificationType: type,
-					});
-					// NotificationReports don't store their values themselves,
-					// because the behaviour is too complex and spans the lifetime
-					// of several reports. Thus we handle it in the Node instance
-					await node.handleCommand(response);
+					await ignoreTimeout(
+						async () => {
+							// Always query each notification for its current status
+							log.controller.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message: `querying notification status for ${name}...`,
+								direction: "outbound",
+							});
+							const response = await api.getInternal({
+								notificationType: type,
+							});
+							// NotificationReports don't store their values themselves,
+							// because the behaviour is too complex and spans the lifetime
+							// of several reports. Thus we handle it in the Node instance
+							await node.handleCommand(response);
+						},
+						() => {
+							log.controller.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message: `querying notification status for ${name} timed out - skipping because it is not critical...`,
+								level: "warn",
+							});
+						},
+					);
 				}
 			} else if (notificationMode === "push") {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
