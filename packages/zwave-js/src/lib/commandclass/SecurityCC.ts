@@ -204,7 +204,9 @@ export class SecurityCCAPI extends CCAPI {
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
-				(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
+				(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
+					e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
+					e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
 					e.code === ZWaveErrorCodes.Controller_MessageDropped)
 			) {
 				// The nonce could not be sent, invalidate it
