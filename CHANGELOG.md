@@ -14,6 +14,7 @@
 * Several user-facing errors were converted from `Error` to `ZWaveError` in order to be consistent with other errors.
 * Warnings about insecure communication with a node because of missing security configuration are now emitted as `ZWaveError`s with code `ZWaveErrorCodes.Controller_NodeInsecureCommunication`
 * Internal references to `@types/fs-extra` and `jest` are no longer leaked, allowing users to consume this library without `skipLibCheck`
+* Sent nonces are now transmitted using the `ACK` and `AutoRoute` transmit options
 
 ### Changes under the hood
 * `SpyTransport` was moved to `@zwave-js/testing`, a development-only testing package
