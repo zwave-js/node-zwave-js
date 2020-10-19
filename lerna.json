@@ -1,7 +1,5 @@
 {
-	"packages": [
-		"packages/*"
-	],
+	"packages": ["packages/*"],
 	"version": "5.3.1",
 	"command": {
 		"run": {
@@ -10,11 +8,10 @@
 		"version": {
 			"allowBranch": [
 				"master",
-				"release-*"
+				"release-*",
+				"send-nonce-transmit-options"
 			],
-			"ignoreChanges": [
-				"*.md"
-			],
+			"ignoreChanges": ["*.md"],
 			"amend": true,
 			"push": false
 		}
