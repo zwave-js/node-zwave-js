@@ -191,56 +191,75 @@ export class CentralSceneCC extends CommandClass {
 		});
 
 		if (complete) {
-			// I'm not sure if the specs require supporting nodes to also
-			// support AGI and (Multi Channel) associations, but we assumet that
-			// for now.
-
 			// If one Association group issues CentralScene notifications,
 			// we need to associate ourselves with that channel
-			const groupsIssueingNotifications = node
-				.createCCInstance(AssociationGroupInfoCC)!
-				.findGroupsForIssuedCommand(
-					this.ccId,
-					CentralSceneCommand.Notification,
-				);
-			if (groupsIssueingNotifications.length > 0) {
-				// We always grab the first group - usually it should be the lifeline
-				const groupId = groupsIssueingNotifications[0];
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Configuring associations to receive Central Scene notifications...",
-					direction: "outbound",
-				});
-				await endpoint.commandClasses.Association.addNodeIds(
-					groupId,
-					this.driver.controller.ownNodeId!,
-				);
+			if (
+				node.supportsCC(
+					CommandClasses["Association Group Information"],
+				) &&
+				(node.supportsCC(CommandClasses.Association) ||
+					node.supportsCC(
+						CommandClasses["Multi Channel Association"],
+					))
+			) {
+				const groupsIssueingNotifications = node
+					.createCCInstance(AssociationGroupInfoCC)!
+					.findGroupsForIssuedCommand(
+						this.ccId,
+						CentralSceneCommand.Notification,
+					);
+				if (groupsIssueingNotifications.length > 0) {
+					// We always grab the first group - usually it should be the lifeline
+					const groupId = groupsIssueingNotifications[0];
+					const existingAssociations =
+						this.driver.controller
+							.getAssociations(node.id)
+							.get(groupId) ?? [];
 
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "Querying supported scenes...",
-					direction: "outbound",
-				});
-				const ccSupported = await api.getSupported();
-				const logMessage = `received supported scenes:
+					if (
+						!existingAssociations.some(
+							(a) =>
+								a.nodeId === this.driver.controller.ownNodeId,
+						)
+					) {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message:
+								"Configuring associations to receive Central Scene notifications...",
+							direction: "outbound",
+						});
+						await this.driver.controller.addAssociations(
+							node.id,
+							groupId,
+							[{ nodeId: this.driver.controller.ownNodeId! }],
+						);
+					}
+				}
+			}
+
+			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "Querying supported scenes...",
+				direction: "outbound",
+			});
+			const ccSupported = await api.getSupported();
+			const logMessage = `received supported scenes:
 # of scenes:           ${ccSupported.sceneCount}
 supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
+			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+
+			// The slow refresh capability should be enabled whenever possible
+			if (this.version >= 3 && ccSupported.supportsSlowRefresh) {
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
+					message: "Enabling slow refresh capability...",
+					direction: "outbound",
 				});
-
-				// The slow refresh capability should be enabled whenever possible
-				if (this.version >= 3 && ccSupported.supportsSlowRefresh) {
-					log.controller.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "Enabling slow refresh capability...",
-						direction: "outbound",
-					});
-					await api.setConfiguration(true);
-				}
+				await api.setConfiguration(true);
 			}
 		}
 
