@@ -18,6 +18,7 @@
 * Fixed an error during the `Central Scene CC` interview that could occur if `AGI` is not supported
 * For several CCs, missing responses to non-critical requests are now ignored during the interview
 * Sent nonces are now transmitted using the `ACK` and `AutoRoute` transmit options to fix secure inclusion issues with some devices
+* Fixed an error during logging of a `DoorLockCCConfigurationSet` command
 
 ### Changes under the hood
 * `SpyTransport` was moved to `@zwave-js/testing`, a development-only testing package

@@ -15,6 +15,7 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
@@ -861,17 +862,23 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
+		const insideHandles = isArray(
+			this.insideHandlesCanOpenDoorConfiguration,
+		)
+			? this.insideHandlesCanOpenDoorConfiguration
+			: [];
+		const outsideHandles = isArray(
+			this.outsideHandlesCanOpenDoorConfiguration,
+		)
+			? this.outsideHandlesCanOpenDoorConfiguration
+			: [];
 		const message: MessageRecord = {
 			"operation type": getEnumMemberName(
 				DoorLockOperationType,
 				this.operationType,
 			),
-			"outside handle configuration": this.outsideHandlesCanOpenDoorConfiguration?.join(
-				", ",
-			),
-			"inside handle configuration": this.insideHandlesCanOpenDoorConfiguration?.join(
-				", ",
-			),
+			"outside handle configuration": outsideHandles.join(", "),
+			"inside handle configuration": insideHandles.join(", "),
 		};
 		if (this.lockTimeoutConfiguration != undefined) {
 			message[
