@@ -17,6 +17,7 @@ import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	ignoreTimeout,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -392,18 +393,10 @@ export class ThermostatSetpointCC extends CommandClass {
 							scale: Scale;
 					  }
 					| undefined;
-				try {
+				await ignoreTimeout(async () => {
 					setpoint = await api.get(type);
-				} catch (e) {
-					if (
-						e instanceof ZWaveError &&
-						e.code === ZWaveErrorCodes.Controller_NodeTimeout
-					) {
-						// The node did not respond, assume the setpoint type is not supported
-					} else {
-						throw e;
-					}
-				}
+					// If the node did not respond, assume the setpoint type is not supported
+				});
 
 				let logMessage: string;
 				if (setpoint) {
@@ -462,34 +455,50 @@ export class ThermostatSetpointCC extends CommandClass {
 			// Versions >= 3 adhere to bitmap interpretation A, so we can rely on getSupportedSetpointTypes
 
 			// If we haven't yet, query the supported setpoint types
-			let setpointTypes: ThermostatSetpointType[];
+			let setpointTypes: ThermostatSetpointType[] = [];
 			if (complete) {
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "retrieving supported setpoint types...",
-					direction: "outbound",
-				});
-				setpointTypes = [...(await api.getSupportedSetpointTypes())];
-				const logMessage =
-					"received supported setpoint types:\n" +
-					setpointTypes
-						.map((type) =>
-							getEnumMemberName(ThermostatSetpointType, type),
-						)
-						.map((name) => `· ${name}`)
-						.join("\n");
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
+				if (
+					!(await ignoreTimeout(async () => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: "retrieving supported setpoint types...",
+							direction: "outbound",
+						});
+						setpointTypes = [
+							...(await api.getSupportedSetpointTypes()),
+						];
+						const logMessage =
+							"received supported setpoint types:\n" +
+							setpointTypes
+								.map((type) =>
+									getEnumMemberName(
+										ThermostatSetpointType,
+										type,
+									),
+								)
+								.map((name) => `· ${name}`)
+								.join("\n");
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: logMessage,
+							direction: "inbound",
+						});
+					}))
+				) {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `supported setpoint type query timed out - skipping interview...`,
+						level: "warn",
+					});
+					return;
+				}
 			} else {
 				setpointTypes =
 					this.getValueDB().getValue({
 						commandClass: this.ccId,
 						property: "supportedSetpointTypes",
 						endpoint: this.endpointIndex,
-					}) || [];
+					}) ?? [];
 			}
 
 			for (const type of setpointTypes) {
@@ -521,27 +530,38 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 					});
 				}
 				// Every time, query the current value
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `querying current value of setpoint ${setpointName}...`,
-					direction: "outbound",
-				});
-				const setpoint = await api.get(type);
-				let logMessage: string;
-				if (setpoint) {
-					logMessage = `received current value of setpoint ${setpointName}: ${
-						setpoint.value
-					} ${setpoint.scale.unit ?? ""}`;
-				} else {
-					// This shouldn't happen since we used getSupported
-					// But better be sure we don't crash
-					logMessage = `Setpoint ${setpointName} is not supported`;
-				}
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
+				await ignoreTimeout(
+					async () => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `querying current value of setpoint ${setpointName}...`,
+							direction: "outbound",
+						});
+						const setpoint = await api.get(type);
+						let logMessage: string;
+						if (setpoint) {
+							logMessage = `received current value of setpoint ${setpointName}: ${
+								setpoint.value
+							} ${setpoint.scale.unit ?? ""}`;
+						} else {
+							// This shouldn't happen since we used getSupported
+							// But better be sure we don't crash
+							logMessage = `Setpoint ${setpointName} is not supported`;
+						}
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: logMessage,
+							direction: "inbound",
+						});
+					},
+					() => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Setpoint ${setpointName} query timed out - skipping because it is not critical...`,
+							level: "warn",
+						});
+					},
+				);
 			}
 		}
 

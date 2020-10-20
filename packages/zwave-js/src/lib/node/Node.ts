@@ -39,7 +39,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
-import type { CCAPI } from "../commandclass/API";
+import { CCAPI, ignoreTimeout } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
 import {
@@ -839,7 +839,7 @@ export class ZWaveNode extends Endpoint {
 		// Remember that we tried to interview this node
 		this._interviewAttempts++;
 
-		// Wrapper around interview methods to return false in case of a timeout error
+		// Wrapper around interview methods to return false in case of a communication error
 		// This way the single methods don't all need to have the same error handler
 		const tryInterviewStage = async (
 			method: () => Promise<void>,
@@ -851,6 +851,8 @@ export class ZWaveNode extends Endpoint {
 				if (
 					e instanceof ZWaveError &&
 					(e.code === ZWaveErrorCodes.Controller_NodeTimeout ||
+						e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
+						e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
 						e.code === ZWaveErrorCodes.Controller_MessageDropped)
 				) {
 					return false;
@@ -1157,11 +1159,22 @@ version:               ${this.version}`;
 			}
 
 			try {
-				await instance.interview(!instance.interviewComplete);
+				const task = () =>
+					instance.interview(!instance.interviewComplete);
+				if (actuatorCCs.includes(cc) || sensorCCs.includes(cc)) {
+					// Ignore missing node responses for sensor and actuator CCs
+					// because they sometimes don't respond to stuff they should respond to
+					await ignoreTimeout(task);
+				} else {
+					// For all other CCs, abort the node interview since we're very likely missing critical information
+					await task();
+				}
 			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&
 					(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
+						e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
+						e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
 						e.code === ZWaveErrorCodes.Controller_NodeTimeout)
 				) {
 					// We had a CAN or timeout during the interview

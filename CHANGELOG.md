@@ -16,6 +16,7 @@
 * Internal references to `@types/fs-extra` and `jest` are no longer leaked, allowing users to consume this library without `skipLibCheck`
 * `User Code CC` no longer uses V2 methods during the interview of a V1 node
 * Fixed an error during the `Central Scene CC` interview that could occur if `AGI` is not supported
+* For several CCs, missing responses to non-critical requests are now ignored during the interview
 
 ### Changes under the hood
 * `SpyTransport` was moved to `@zwave-js/testing`, a development-only testing package

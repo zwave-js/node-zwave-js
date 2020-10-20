@@ -19,6 +19,7 @@ import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	ignoreTimeout,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -204,20 +205,31 @@ export class ThermostatModeCC extends CommandClass {
 			});
 		}
 
-		// Always query the actual status
-		log.controller.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: "querying current thermostat mode...",
-			direction: "outbound",
-		});
-		const currentStatus = await api.get();
-		log.controller.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message:
-				"received current thermostat mode: " +
-				getEnumMemberName(ThermostatMode, currentStatus.mode),
-			direction: "inbound",
-		});
+		if (
+			!(await ignoreTimeout(async () => {
+				// Always query the actual status
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "querying current thermostat mode...",
+					direction: "outbound",
+				});
+				const currentStatus = await api.get();
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"received current thermostat mode: " +
+						getEnumMemberName(ThermostatMode, currentStatus.mode),
+					direction: "inbound",
+				});
+			}))
+		) {
+			log.controller.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `Thermostat mode query timed out - skipping interview...`,
+				level: "warn",
+			});
+			return;
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
