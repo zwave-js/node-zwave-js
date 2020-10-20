@@ -39,6 +39,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
+import type { Message } from "zwave-js/src/lib/message/Message";
 import { CCAPI, ignoreTimeout } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
@@ -968,7 +969,10 @@ export class ZWaveNode extends Endpoint {
 				"Response to GetNodeProtocolInfoRequest is not a GetNodeProtocolInfoResponse",
 				{
 					contexts: {
-						message: (resp as any).toLogEntry(),
+						name: ((resp as any) as Message).constructor.name,
+						type: ((resp as any) as Message).type,
+						functionType: ((resp as any) as Message).functionType,
+						message: ((resp as any) as Message).toLogEntry(),
 					},
 				},
 			);
