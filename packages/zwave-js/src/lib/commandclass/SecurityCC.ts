@@ -191,10 +191,8 @@ export class SecurityCCAPI extends CCAPI {
 		});
 		const msg = new SendDataRequest(this.driver, {
 			command: cc,
-			// Don't want a response from the target node
-			transmitOptions: TransmitOptions.DEFAULT & ~TransmitOptions.ACK,
-			// Don't want a response from the controller whether the message was ACKed
-			callbackId: 0,
+			// Seems we need these options or some nodes won't accept the nonce
+			transmitOptions: TransmitOptions.ACK | TransmitOptions.AutoRoute,
 		});
 		try {
 			await this.driver.sendMessage(msg, {
