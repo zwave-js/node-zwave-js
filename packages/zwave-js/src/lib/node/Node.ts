@@ -2929,12 +2929,11 @@ version:               ${this.version}`;
 				// otherwise, this method will not work anymore because
 				// isSendingNoMoreInformation is stuck on `true`
 				await this.commandClasses["Wake Up"].sendNoMoreInformation();
-				this.markAsAsleep();
-				log.controller.logNode(this.id, "  Node asleep");
-
 				msgSent = true;
 			} catch {
 				/* ignore */
+			} finally {
+				this.markAsAsleep();
 			}
 		}
 

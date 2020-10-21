@@ -19,6 +19,7 @@
 * For several CCs, missing responses to non-critical requests are now ignored during the interview
 * Sent nonces are now transmitted using the `ACK` and `AutoRoute` transmit options to fix secure inclusion issues with some devices
 * Fixed an error during logging of a `DoorLockCCConfigurationSet` command
+* After a fresh interview, battery-powered nodes that are temporarily mains-powered, are no longer sent into a "go to sleep" loop
 
 ### Changes under the hood
 * `SpyTransport` was moved to `@zwave-js/testing`, a development-only testing package

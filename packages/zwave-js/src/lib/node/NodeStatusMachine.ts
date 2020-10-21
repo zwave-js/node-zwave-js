@@ -93,6 +93,12 @@ export function createNodeStatusMachine(
 				alive: {
 					on: {
 						DEAD: "dead",
+						// GH#1054 we must have a way to send a node to sleep even if
+						// it was previously detected as a non-sleeping device
+						ASLEEP: {
+							target: "asleep",
+							cond: "supportsWakeup",
+						},
 					},
 				},
 				asleep: {
