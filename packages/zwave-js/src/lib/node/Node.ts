@@ -39,8 +39,6 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
-import { isCommandClassContainer } from "zwave-js/src/lib/commandclass/ICommandClassContainer";
-import type { Message } from "zwave-js/src/lib/message/Message";
 import { CCAPI, ignoreTimeout } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
@@ -62,6 +60,7 @@ import {
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
 } from "../commandclass/FirmwareUpdateMetaDataCC";
+import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
 	getManufacturerIdValueId,
 	getProductIdValueId,
@@ -104,6 +103,7 @@ import {
 import type { Driver } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import log from "../log";
+import type { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import {
