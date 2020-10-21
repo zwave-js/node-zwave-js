@@ -20,6 +20,7 @@
 * Sent nonces are now transmitted using the `ACK` and `AutoRoute` transmit options to fix secure inclusion issues with some devices
 * Fixed an error during logging of a `DoorLockCCConfigurationSet` command
 * After a fresh interview, battery-powered nodes that are temporarily mains-powered, are no longer sent into a "go to sleep" loop
+* When a node requests multiple nonces in a short timespan, only respond to the most recent request
 
 ### Changes under the hood
 * `SpyTransport` was moved to `@zwave-js/testing`, a development-only testing package

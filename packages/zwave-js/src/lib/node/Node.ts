@@ -39,7 +39,6 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
-import type { Message } from "zwave-js/src/lib/message/Message";
 import { CCAPI, ignoreTimeout } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
@@ -61,6 +60,7 @@ import {
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
 } from "../commandclass/FirmwareUpdateMetaDataCC";
+import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
 	getManufacturerIdValueId,
 	getProductIdValueId,
@@ -103,6 +103,7 @@ import {
 import type { Driver } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
 import log from "../log";
+import type { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
 import {
@@ -1661,6 +1662,17 @@ version:               ${this.version}`;
 			secure: true,
 		});
 
+		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
+		this.driver.rejectTransactions(
+			(t) =>
+				t.message.getNodeId() === this.nodeId &&
+				isCommandClassContainer(t.message) &&
+				t.message.command instanceof SecurityCCNonceReport,
+			`Duplicate NonceReport was dropped`,
+			ZWaveErrorCodes.Controller_MessageDropped,
+		);
+
+		// Now send the current nonce
 		try {
 			await this.commandClasses.Security.sendNonce();
 		} catch (e) {
