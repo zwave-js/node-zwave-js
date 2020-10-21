@@ -53,6 +53,7 @@ describe("lib/driver/NodeStatusMachine", () => {
 			start: keyof NodeStatusStateSchema["states"];
 			event: NodeStatusEvent["type"];
 			target: keyof NodeStatusStateSchema["states"];
+			supportsWakeup?: boolean;
 		}[] = [
 			{
 				start: "unknown",
@@ -141,6 +142,14 @@ describe("lib/driver/NodeStatusMachine", () => {
 			},
 			{
 				start: "alive",
+				// See GH#1054 and description in NodeStatusMachine.ts
+				supportsWakeup: true,
+				event: "ASLEEP",
+				target: "asleep",
+			},
+			{
+				start: "alive",
+				supportsWakeup: false,
 				event: "ASLEEP",
 				target: "alive",
 			},
@@ -157,15 +166,27 @@ describe("lib/driver/NodeStatusMachine", () => {
 		];
 
 		for (const test of transitions) {
+			const prefix =
+				test.supportsWakeup != undefined
+					? `Node ${
+							test.supportsWakeup
+								? "supports"
+								: "does not support"
+					  } wakeup -> `
+					: "";
 			const name =
 				test.start === test.target
-					? `The ${test.event} event should not do anything in the "${test.start}" state`
-					: `When the ${test.event} event is received, it should transition from "${test.start}" to "${test.target}"`;
+					? `${prefix}The ${test.event} event should not do anything in the "${test.start}" state`
+					: `${prefix}When the ${test.event} event is received, it should transition from "${test.start}" to "${test.target}"`;
 
 			it(name, () => {
 				// For these tests, assume that the node does or does not support Wakeup, whatever fits
 				const testNode =
-					test.event === "ASLEEP" || test.event === "AWAKE"
+					test.supportsWakeup == undefined
+						? test.event === "ASLEEP" || test.event === "AWAKE"
+							? testNodeWakeup
+							: testNodeNoWakeup
+						: test.supportsWakeup
 						? testNodeWakeup
 						: testNodeNoWakeup;
 
