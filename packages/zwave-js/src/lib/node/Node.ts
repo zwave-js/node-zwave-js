@@ -39,6 +39,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
+import { isCommandClassContainer } from "zwave-js/src/lib/commandclass/ICommandClassContainer";
 import type { Message } from "zwave-js/src/lib/message/Message";
 import { CCAPI, ignoreTimeout } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
@@ -1661,6 +1662,17 @@ version:               ${this.version}`;
 			secure: true,
 		});
 
+		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
+		this.driver.rejectTransactions(
+			(t) =>
+				t.message.getNodeId() === this.nodeId &&
+				isCommandClassContainer(t.message) &&
+				t.message.command instanceof SecurityCCNonceReport,
+			`Duplicate NonceReport was dropped`,
+			ZWaveErrorCodes.Controller_MessageDropped,
+		);
+
+		// Now send the current nonce
 		try {
 			await this.commandClasses.Security.sendNonce();
 		} catch (e) {
