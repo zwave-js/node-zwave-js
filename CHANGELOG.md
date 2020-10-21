@@ -15,7 +15,7 @@
 * Warnings about insecure communication with a node because of missing security configuration are now emitted as `ZWaveError`s with code `ZWaveErrorCodes.Controller_NodeInsecureCommunication`
 * Internal references to `@types/fs-extra` and `jest` are no longer leaked, allowing users to consume this library without `skipLibCheck`
 * `User Code CC` no longer uses V2 methods during the interview of a V1 node
-* Fixed an error during the `Central Scene CC` interview that could occur if `AGI` is not supported
+* Fixed an error during the `Central Scene CC` interview that could occur if `Association Group Information` is not supported
 * For several CCs, missing responses to non-critical requests are now ignored during the interview
 * Sent nonces are now transmitted using the `ACK` and `AutoRoute` transmit options to fix secure inclusion issues with some devices
 * Fixed an error during logging of a `DoorLockCCConfigurationSet` command
