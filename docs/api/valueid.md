@@ -14,7 +14,7 @@ interface ValueID {
 It has four properties:
 
 -   `commandClass` - The numeric identifier of the command class.
--   `endpoint` - _(optional)_ The index of the node's endpoint (sub-device). `0` addresses the root device, `>= 1` one of the single endpoints.
+-   `endpoint` - _(optional)_ The index of the node's endpoint (sub-device). `0`, `undefined` and omitting the index addresses the root device (in fact, these options can be used interchangeably). An index `>= 1` addresses one of the single endpoints.
 -   `property` - The name (or a numeric identifier) of the property, for example `targetValue`
 -   `propertyKey` - _(optional)_ Allows sub-addressing properties that contain multiple values (like combined sensors).
 
