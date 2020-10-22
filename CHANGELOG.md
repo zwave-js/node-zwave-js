@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Including controller-type nodes (the bare minimum) is now supported
+
 ## 5.3.2 (2020-10-21)
 ### Bugfixes
 * Added / fixed some missing or incorrect exports from `zwave-js`:
