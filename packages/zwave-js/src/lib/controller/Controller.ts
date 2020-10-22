@@ -547,6 +547,7 @@ export class ZWaveController extends EventEmitter {
 	private _exclusionActive: boolean = false;
 	private _inclusionActive: boolean = false;
 	private _includeNonSecure: boolean = false;
+	private _includeController: boolean = false;
 	private _nodePendingInclusion: ZWaveNode | undefined;
 	private _nodePendingExclusion: ZWaveNode | undefined;
 	// The following variables are to be used for inclusion AND exclusion
@@ -743,6 +744,9 @@ export class ZWaveController extends EventEmitter {
 					/* ok */
 				}
 				break;
+			case AddNodeStatus.AddingController:
+				this._includeController = true;
+			// fall through!
 			case AddNodeStatus.AddingSlave: {
 				// this is called when a new node is added
 				this._nodePendingInclusion = new ZWaveNode(
@@ -756,6 +760,8 @@ export class ZWaveController extends EventEmitter {
 					msg.statusContext!.supportedCCs,
 					msg.statusContext!.controlledCCs,
 				);
+				// TODO: According to INS13954-7, there are several more steps and different timeouts when including a controller
+				// For now do the absolute minimum - that is include the controller
 				return true; // Don't invoke any more handlers
 			}
 			case AddNodeStatus.ProtocolDone: {
@@ -832,8 +838,11 @@ export class ZWaveController extends EventEmitter {
 							await api.setNetworkKey(
 								this.driver.securityManager.networkKey,
 							);
-							// TODO: support including controllers (when to do this?)
-							// await api.inheritSecurityScheme();
+
+							if (this._includeController) {
+								// Tell the controller which security scheme to use
+								await api.inheritSecurityScheme();
+							}
 
 							// Remember that the node is secure
 							newNode.isSecure = true;
@@ -867,6 +876,8 @@ export class ZWaveController extends EventEmitter {
 						// Remember that the node is non-secure
 						newNode.isSecure = false;
 					}
+
+					this._includeController = false;
 
 					// We're done adding this node, notify listeners
 					this.emit("node added", newNode);
@@ -966,7 +977,7 @@ export class ZWaveController extends EventEmitter {
 					this.emit("node removed", this._nodePendingExclusion);
 					// and forget the node
 					this._nodes.delete(this._nodePendingExclusion.id);
-					this._nodePendingInclusion = undefined;
+					this._nodePendingExclusion = undefined;
 				}
 				break;
 			}
