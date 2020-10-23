@@ -9,10 +9,7 @@ const {
 } = require("../packages/zwave-js/build/lib/commandclass/ICommandClassContainer");
 
 // The data to decode
-const data = Buffer.from(
-	"011c00040002169881e7fe687a2475411bbb749d4781ebefa5e6689713d5",
-	"hex",
-);
+const data = Buffer.from("010d00040003079c02000500000069", "hex");
 // The nonce needed to decode it
 const nonce = Buffer.from("478d7aa05d83f3ea", "hex");
 // The network key needed to decode it
