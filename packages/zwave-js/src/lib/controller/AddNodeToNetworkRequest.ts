@@ -69,13 +69,11 @@ export class AddNodeToNetworkRequest extends Message {
 					// no context for the status to parse
 					break;
 
-				case AddNodeStatus.AddingController:
 				case AddNodeStatus.Done:
-					// When a controller is added, or an inclusion is finished,
-					// the node ID is transmitted in payload byte #2
 					this._statusContext = { nodeId: this.payload[2] };
 					break;
 
+				case AddNodeStatus.AddingController:
 				case AddNodeStatus.AddingSlave: {
 					// the payload contains a node information frame
 					this._statusContext = parseNodeUpdatePayload(
