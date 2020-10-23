@@ -308,7 +308,12 @@ export class AlarmSensorCCReport extends AlarmSensorCC {
 	) {
 		super(driver, options);
 		validatePayload(this.payload.length >= 5, this.payload[1] !== 0xff);
-		this.nodeId = this.payload[0];
+		// Alarm Sensor reports may be forwarded by a different node, in this case
+		// (and only then!) the payload contains the original node ID
+		const sourceNodeId = this.payload[0];
+		if (sourceNodeId !== 0) {
+			this.nodeId = sourceNodeId;
+		}
 		this.sensorType = this.payload[1];
 		// Any positive value gets interpreted as alarm
 		this.state = this.payload[2] > 0;
