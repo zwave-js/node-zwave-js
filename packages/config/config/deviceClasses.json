@@ -42,6 +42,12 @@
 						"Version",
 						"Wake Up"
 					]
+				},
+				"0x04": {
+					"label": "AV Remote Controller"
+				},
+				"0x06": {
+					"label": "Simple Remote Controller"
 				}
 			}
 		},
