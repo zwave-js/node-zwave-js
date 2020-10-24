@@ -99,6 +99,16 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 						case ZWaveErrorCodes.Driver_NoErrorHandler:
 							ignore = true;
 							break;
+						// Or users that try to manage associations on nodes that don't support it
+						case ZWaveErrorCodes.CC_NotSupported:
+							if (
+								/does not support.+associations/.test(
+									hint.originalException.message,
+								)
+							) {
+								ignore = true;
+							}
+							break;
 					}
 
 					// Try to attach transaction context this way
