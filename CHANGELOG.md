@@ -8,6 +8,7 @@
 ### Bugfixes
 * Including controller-type nodes (the bare minimum) is now supported
 * The timespan that a node is assumed to be awake is now prolonged when it acknowledges a command
+* Fixed a crash while serializing a `DoorLockCC::ConfigurationSet` with invalid input
 
 ## 5.3.2 (2020-10-21)
 ### Bugfixes
@@ -23,7 +24,7 @@
 * Fixed an error during the `Central Scene CC` interview that could occur if `Association Group Information` is not supported
 * For several CCs, missing responses to non-critical requests are now ignored during the interview
 * Sent nonces are now transmitted using the `ACK` and `AutoRoute` transmit options to fix secure inclusion issues with some devices
-* Fixed an error during logging of a `DoorLockCCConfigurationSet` command
+* Fixed an error during logging of a `DoorLockCC::ConfigurationSet` command
 * After a fresh interview, battery-powered nodes that are temporarily mains-powered, are no longer sent into a "go to sleep" loop
 * When a node requests multiple nonces in a short timespan, only respond to the most recent request
 
