@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Bugfixes
 * Including controller-type nodes (the bare minimum) is now supported
+* `Alarm Sensor CC Report`s no longer overwrite the node ID with `0`.
 * The timespan that a node is assumed to be awake is now prolonged when it acknowledges a command
 * Fixed a crash while serializing a `DoorLockCC::ConfigurationSet` with invalid input
 
