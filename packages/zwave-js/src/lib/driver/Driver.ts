@@ -75,6 +75,7 @@ import {
 } from "../controller/ApplicationUpdateRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
+	isTransmitReport,
 	MAX_SEND_ATTEMPTS,
 	SendDataAbort,
 	SendDataMulticastRequest,
@@ -1263,6 +1264,12 @@ export class Driver extends EventEmitter {
 
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
 				if (!this.assemblePartialCCs(msg)) return;
+			} else if (isTransmitReport(msg) && msg.isOK()) {
+				// The node acknowledged a message so it must be awake - refresh its awake timer (GH#1068)
+				const node = msg.getNodeUnsafe();
+				if (node && node.supportsCC(CommandClasses["Wake Up"])) {
+					node.refreshAwakeTimer();
+				}
 			}
 
 			log.driver.logMessage(msg, { direction: "inbound" });

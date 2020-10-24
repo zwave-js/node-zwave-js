@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Bugfixes
 * Including controller-type nodes (the bare minimum) is now supported
+* The timespan that a node is assumed to be awake is now prolonged when it acknowledges a command
 
 ## 5.3.2 (2020-10-21)
 ### Bugfixes
