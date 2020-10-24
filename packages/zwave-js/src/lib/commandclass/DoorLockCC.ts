@@ -807,10 +807,18 @@ export class DoorLockCCConfigurationSet extends DoorLockCC {
 	public blockToBlock?: boolean;
 
 	public serialize(): Buffer {
-		const handles = [
-			...this.insideHandlesCanOpenDoorConfiguration,
-			...this.outsideHandlesCanOpenDoorConfiguration,
-		]
+		const insideHandles = isArray(
+			this.insideHandlesCanOpenDoorConfiguration,
+		)
+			? this.insideHandlesCanOpenDoorConfiguration
+			: [];
+		const outsideHandles = isArray(
+			this.outsideHandlesCanOpenDoorConfiguration,
+		)
+			? this.outsideHandlesCanOpenDoorConfiguration
+			: [];
+
+		const handles = [...insideHandles, ...outsideHandles]
 			.map((val, i) => (val ? 1 << i : 0))
 			.reduce((acc, cur) => acc | cur, 0);
 
