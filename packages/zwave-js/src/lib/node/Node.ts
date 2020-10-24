@@ -1552,6 +1552,25 @@ version:               ${this.version}`;
 					removeNonRepeaters: false,
 				}),
 			);
+			if (
+				process.env.NODE_ENV !== "test" &&
+				!(resp instanceof GetRoutingInfoResponse)
+			) {
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
+				const Sentry: typeof import("@sentry/node") = require("@sentry/node");
+				Sentry.captureMessage(
+					"Response to GetRoutingInfoRequest is not a GetRoutingInfoResponse",
+					{
+						contexts: {
+							name: ((resp as any) as Message).constructor.name,
+							type: ((resp as any) as Message).type,
+							functionType: ((resp as any) as Message)
+								.functionType,
+							message: ((resp as any) as Message).toLogEntry(),
+						},
+					},
+				);
+			}
 			this._neighbors = resp.nodeIds;
 			log.controller.logNode(this.id, {
 				message: `  node neighbors received: ${this._neighbors.join(
