@@ -10,6 +10,9 @@
 * The timespan that a node is assumed to be awake is now prolonged when it acknowledges a command
 * Fixed a crash while serializing a `DoorLockCC::ConfigurationSet` with invalid input
 
+### Changes under the hood
+* In case of an unexpected error while handling a message, the original error stack is now preserved if possible
+
 ## 5.3.2 (2020-10-21)
 ### Bugfixes
 * Added / fixed some missing or incorrect exports from `zwave-js`:

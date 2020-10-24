@@ -222,14 +222,6 @@ const sendCurrentTransactionToCommandQueue = send<SendThreadContext, any>(
 	{ to: (ctx) => ctx.commandQueue as any },
 );
 
-// const sendHandshakeTransactionToCommandQueue = send<SendThreadContext, any>(
-// 	(ctx) => ({
-// 		type: "add",
-// 		transaction: ctx.handshakeTransaction,
-// 	}),
-// 	{ to: (ctx) => ctx.commandQueue as any },
-// );
-
 const sortQueue: AssignAction<SendThreadContext, any> = assign({
 	queue: (ctx) => {
 		const queue = ctx.queue;
@@ -366,6 +358,15 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	},
 };
 
+function createMessageDroppedUnexpectedError(original: Error): ZWaveError {
+	const ret = new ZWaveError(
+		`Message dropped because of an unexpected error: ${original.message}`,
+		ZWaveErrorCodes.Controller_MessageDropped,
+	);
+	if (original.stack) ret.stack = original.stack;
+	return ret;
+}
+
 export function createSendThreadMachine(
 	implementations: ServiceImplementations,
 	params: SendThreadMachineParams,
@@ -406,10 +407,7 @@ export function createSendThreadMachine(
 	> = assign((ctx, evt) => {
 		implementations.rejectTransaction(
 			ctx.currentTransaction!,
-			new ZWaveError(
-				`Message dropped because of an unexpected error: ${evt.error}`,
-				ZWaveErrorCodes.Controller_MessageDropped,
-			),
+			createMessageDroppedUnexpectedError(evt.error),
 		);
 		return ctx;
 	});
@@ -461,10 +459,7 @@ export function createSendThreadMachine(
 	> = assign((ctx, evt) => {
 		implementations.rejectTransaction(
 			ctx.handshakeTransaction!,
-			new ZWaveError(
-				`Message dropped because of an unexpected error: ${evt.error}`,
-				ZWaveErrorCodes.Controller_MessageDropped,
-			),
+			createMessageDroppedUnexpectedError(evt.error),
 		);
 		return ctx;
 	});
@@ -515,10 +510,7 @@ export function createSendThreadMachine(
 	> = assign((ctx, evt) => {
 		implementations.rejectTransaction(
 			evt.transaction,
-			new ZWaveError(
-				`Message dropped because of an unexpected error: ${evt.error}`,
-				ZWaveErrorCodes.Controller_MessageDropped,
-			),
+			createMessageDroppedUnexpectedError(evt.error),
 		);
 		return ctx;
 	});
