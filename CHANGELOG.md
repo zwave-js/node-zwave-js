@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.3.3 (2020-10-25)
 ### Bugfixes
 * Including controller-type nodes (the bare minimum) is now supported
 * `Alarm Sensor CC Report`s no longer overwrite the node ID with `0`.
