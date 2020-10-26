@@ -4,6 +4,11 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Config changes
+* Updated config param description for `Z-Wave.Me ZME_05459 Blinds controller`
+* Added a device config for `Z-Wave.Me ZME_06436 Flush Mountable Blind Control`
+
 ## 5.3.3 (2020-10-25)
 ### Bugfixes
 * Including controller-type nodes (the bare minimum) is now supported

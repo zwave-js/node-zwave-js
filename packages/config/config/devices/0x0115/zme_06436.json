@@ -1,36 +1,21 @@
-// Z-Wave.Me ZME_05459
-// Blinds controller
+// Z-Wave.Me ZME_06436
+// Flush Mountable Blind Control
 {
-	"_approved": true,
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
-	"label": "ZME_05459",
-	"description": "Blinds controller",
+	"label": "ZME_06436",
+	"description": "Flush Mountable Blind Control",
 	"devices": [
 		{
-			"productType": "0xffff",
-			"productId": "0xffff"
+			"productType": "0x1000",
+			"productId": "0x0003"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Single press and hold of up/down buttons",
-			"maxNodes": 8
-		},
-		"2": {
-			"label": "Double press and press-hold of up/down buttons",
-			"maxNodes": 8
-		},
-		"3": {
-			"label": "Send Reports on blind state change",
-			"maxNodes": 8,
-			"isLifeline": true
-		}
-	},
+	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "LED mode",
@@ -194,11 +179,10 @@
 			]
 		},
 		"8": {
-			"label": "Stop or Revert if opposite button is pressed",
-			"description": "Defines behaviour on open press while closing and vice versa.",
+			"label": "Opposite button reaction",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -206,16 +190,12 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Stop (by buttons and Binary)",
+					"label": "Stop",
 					"value": 0
 				},
 				{
-					"label": "Revert",
+					"label": "Move in reverse direction",
 					"value": 1
-				},
-				{
-					"label": "Stop (by buttons, Binary and Basic)",
-					"value": 2
 				}
 			]
 		},
@@ -277,7 +257,6 @@
 		},
 		"12": {
 			"label": "Switch by buttons",
-			"description": "Local operations by buttons will/will not/ switch the load",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -306,8 +285,8 @@
 			"description": "Defines which command should be sent on button single press or hold.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 4,
+			"maxValue": 2,
+			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -318,24 +297,12 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off (send Basic Set)",
+					"label": "Switch On/Off and Dim (using Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch All ON/OFF",
 					"value": 2
-				},
-				{
-					"label": "Send Scenes",
-					"value": 3
-				},
-				{
-					"label": "Switch On/Off and Dim",
-					"value": 4
-				},
-				{
-					"label": "Send Preconfigured Scenes",
-					"value": 5
 				}
 			]
 		},
@@ -344,7 +311,7 @@
 			"description": "Defines which command should be sent on button double press or press-hold.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -356,24 +323,12 @@
 					"value": 0
 				},
 				{
-					"label": "Switch On/Off (send Basic Set)",
+					"label": "Switch On/Off and Dim (using Basic Set)",
 					"value": 1
 				},
 				{
-					"label": "Switch All",
+					"label": "Switch All ON/OFF",
 					"value": 2
-				},
-				{
-					"label": "Send Scenes",
-					"value": 3
-				},
-				{
-					"label": "Switch On/Off and Dim",
-					"value": 4
-				},
-				{
-					"label": "Send Preconfigured Scenes",
-					"value": 5
 				}
 			]
 		},
@@ -390,64 +345,16 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off only",
+					"label": "OFF only",
 					"value": 1
 				},
 				{
-					"label": "Switch on only",
+					"label": "ON only",
 					"value": 2
 				},
 				{
-					"label": "Switch all on and off",
+					"label": "ON and OFF",
 					"value": 255
-				}
-			]
-		},
-		"16": {
-			"label": "What to do on button Down press",
-			"description": "What to do on button Down press",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Close",
-					"value": 0
-				},
-				{
-					"label": "Open if closed else close",
-					"value": 1
-				},
-				{
-					"label": "Open",
-					"value": 2
-				}
-			]
-		},
-		"17": {
-			"label": "Action on Auto open or close function",
-			"description": "Defines the action to perform upon auto open or auto close.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Close blinds",
-					"value": 0
-				},
-				{
-					"label": "Open blinds",
-					"value": 1
 				}
 			]
 		}

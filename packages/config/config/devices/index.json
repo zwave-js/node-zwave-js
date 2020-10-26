@@ -8603,6 +8603,16 @@
     {
         "manufacturerId": "0x0115",
         "productType": "0x1000",
+        "productId": "0x0003",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0115/zme_06436.json"
+    },
+    {
+        "manufacturerId": "0x0115",
+        "productType": "0x1000",
         "productId": "0x0200",
         "firmwareVersion": {
             "min": "0.0",
