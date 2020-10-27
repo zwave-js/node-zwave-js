@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.3.4 (2020-10-27)
 ### Config changes
 * Updated config param description for `Z-Wave.Me ZME_05459 Blinds controller`
 * Added a device config for `Z-Wave.Me ZME_06436 Flush Mountable Blind Control`
