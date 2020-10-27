@@ -970,10 +970,13 @@ export class ZWaveNode extends Endpoint {
 				"Response to GetNodeProtocolInfoRequest is not a GetNodeProtocolInfoResponse",
 				{
 					contexts: {
-						name: ((resp as any) as Message).constructor.name,
-						type: ((resp as any) as Message).type,
-						functionType: ((resp as any) as Message).functionType,
-						message: ((resp as any) as Message).toLogEntry(),
+						message: {
+							name: ((resp as any) as Message).constructor.name,
+							type: ((resp as any) as Message).type,
+							functionType: ((resp as any) as Message)
+								.functionType,
+							...((resp as any) as Message).toLogEntry(),
+						},
 					},
 				},
 			);
@@ -1562,11 +1565,14 @@ version:               ${this.version}`;
 					"Response to GetRoutingInfoRequest is not a GetRoutingInfoResponse",
 					{
 						contexts: {
-							name: ((resp as any) as Message).constructor.name,
-							type: ((resp as any) as Message).type,
-							functionType: ((resp as any) as Message)
-								.functionType,
-							message: ((resp as any) as Message).toLogEntry(),
+							message: {
+								name: ((resp as any) as Message).constructor
+									.name,
+								type: ((resp as any) as Message).type,
+								functionType: ((resp as any) as Message)
+									.functionType,
+								...((resp as any) as Message).toLogEntry(),
+							},
 						},
 					},
 				);

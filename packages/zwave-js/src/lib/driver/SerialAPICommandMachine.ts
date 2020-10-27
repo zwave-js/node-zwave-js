@@ -1,5 +1,6 @@
 // wotan-disable no-uninferred-type-parameter
 
+import * as Sentry from "@sentry/node";
 import {
 	assign,
 	Interpreter,
@@ -107,6 +108,21 @@ function logOutgoingMessage(ctx: SerialAPICommandContext) {
 	log.driver.logMessage(ctx.msg, {
 		direction: "outbound",
 	});
+	if (process.env.NODE_ENV !== "test") {
+		// Enrich error data in case something goes wrong
+		Sentry.addBreadcrumb({
+			category: "message",
+			timestamp: Date.now(),
+			type: "debug",
+			data: {
+				direction: "outbound",
+				msgType: ctx.msg.type,
+				functionType: ctx.msg.functionType,
+				name: ctx.msg.constructor.name,
+				nodeId: ctx.msg.getNodeId(),
+			},
+		});
+	}
 }
 
 export type SerialAPICommandMachineConfig = MachineConfig<

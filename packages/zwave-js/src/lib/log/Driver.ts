@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node";
 import {
 	createLoggerFormat,
 	createLogTransports,
@@ -189,8 +190,6 @@ export function logMessage(
 	} catch (e) {
 		// When logging fails, send the message to Sentry
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-var-requires
-			const Sentry: typeof import("@sentry/node") = require("@sentry/node");
 			Sentry.captureException(e);
 		} catch {}
 	}

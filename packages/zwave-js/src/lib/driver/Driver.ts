@@ -1,4 +1,5 @@
 import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
+import * as Sentry from "@sentry/node";
 import {
 	loadDeviceClasses,
 	loadDeviceIndex,
@@ -1273,6 +1274,21 @@ export class Driver extends EventEmitter {
 			}
 
 			log.driver.logMessage(msg, { direction: "inbound" });
+			if (process.env.NODE_ENV !== "test") {
+				// Enrich error data in case something goes wrong
+				Sentry.addBreadcrumb({
+					category: "message",
+					timestamp: Date.now(),
+					type: "debug",
+					data: {
+						direction: "inbound",
+						msgType: msg.type,
+						functionType: msg.functionType,
+						name: msg.constructor.name,
+						nodeId: msg.getNodeId(),
+					},
+				});
+			}
 			this.sendThread.send({ type: "message", message: msg });
 		}
 	}

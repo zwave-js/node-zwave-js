@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/node";
 import {
 	createLoggerFormat,
 	createLogTransports,
@@ -6,7 +7,7 @@ import {
 	isLoglevelVisible,
 	ZWaveLogger,
 } from "@zwave-js/core";
-import { num2hex } from "@zwave-js/shared";
+import { buffer2hex, num2hex } from "@zwave-js/shared";
 import winston from "winston";
 import { MessageHeaders } from "./MessageHeaders";
 
@@ -83,6 +84,15 @@ export function data(direction: DataDirection, data: Buffer): void {
 			message: `0x${data.toString("hex")}`,
 			secondaryTags: `(${data.length} bytes)`,
 			direction: getDirectionPrefix(direction),
+		});
+	}
+	if (process.env.NODE_ENV !== "test") {
+		// Enrich error data in case something goes wrong
+		Sentry.addBreadcrumb({
+			category: "serial",
+			timestamp: Date.now(),
+			type: "debug",
+			message: `${getDirectionPrefix(direction)}${buffer2hex(data)}`,
 		});
 	}
 }
