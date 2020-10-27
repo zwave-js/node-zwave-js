@@ -1286,6 +1286,7 @@ export class Driver extends EventEmitter {
 						functionType: msg.functionType,
 						name: msg.constructor.name,
 						nodeId: msg.getNodeId(),
+						...msg.toLogEntry(),
 					},
 				});
 			}

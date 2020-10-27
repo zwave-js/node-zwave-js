@@ -120,6 +120,7 @@ function logOutgoingMessage(ctx: SerialAPICommandContext) {
 				functionType: ctx.msg.functionType,
 				name: ctx.msg.constructor.name,
 				nodeId: ctx.msg.getNodeId(),
+				...ctx.msg.toLogEntry(),
 			},
 		});
 	}
