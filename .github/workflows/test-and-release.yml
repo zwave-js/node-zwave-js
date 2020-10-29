@@ -195,6 +195,6 @@ jobs:
         export SENTRY_PROJECT=iobroker_zwave
         export SENTRY_VERSION=zwave-js@${{ env.VERSION }}
         sentry-cli releases new $SENTRY_VERSION
-        sentry-cli releases set-commits $SENTRY_VERSION --auto --log-level=debug
+        sentry-cli releases set-commits $SENTRY_VERSION --auto
         sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
         sentry-cli releases finalize $SENTRY_VERSION
