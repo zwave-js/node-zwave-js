@@ -110,7 +110,7 @@ interface ControllerEventCallbacks {
 	"node added": (node: ZWaveNode) => void;
 	"node removed": (node: ZWaveNode) => void;
 	"heal network progress": (
-		result: ReadonlyMap<number, HealNodeStatus>,
+		progress: ReadonlyMap<number, HealNodeStatus>,
 	) => void;
 	"heal network done": (result: ReadonlyMap<number, HealNodeStatus>) => void;
 }

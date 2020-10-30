@@ -139,9 +139,9 @@ function extractFirmware(data: Buffer, format: FirmwareFileFormat): Firmware
 
 `data` is the raw file data, `format` describes which kind of file that is. The following formats are available:
 
--   -   `"aeotec"` - A Windows executable (`.exe` or `.ex_`) that contains Aeotec's upload tool
--   -   `"otz"` - A compressed firmware file in Intel HEX format
--   -   `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
+-   `"aeotec"` - A Windows executable (`.exe` or `.ex_`) that contains Aeotec's upload tool
+-   `"otz"` - A compressed firmware file in Intel HEX format
+-   `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
 
 If successful, `extractFirmware` returns an object of the following form, whose properties can be passed to `beginFirmwareUpdate`:
 
@@ -184,6 +184,7 @@ This property tracks the status a node in the network currently has (or is belie
 -   `NodeStatus.Asleep (1)` - Nodes that support the `WakeUp` CC and failed to respond to a message are assumed asleep.
 -   `NodeStatus.Awake (2)` - Sleeping nodes that recently sent a wake up notification are marked awake until they are sent back to sleep or fail to respond to a message.
 -   `NodeStatus.Dead (3)` - Nodes that **don't** support the `WakeUp` CC are marked dead when they fail to respond. Examples are plugs that have been pulled out of their socket. Whenever a message is received from a presumably dead node, they are marked as unknown.
+-   `NodeStatus.Alive (4)` - Nodes that **don't** support the `WakeUp` CC are considered alive while they do respond. Note that the status may switch from alive to awake/asleep once it is discovered that a node does support the `WakeUp` CC.
 
 Changes of a node's status are broadcasted using the corresponding events - see below.
 
