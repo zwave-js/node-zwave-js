@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Bugfixes
 * Errors while updating the `Multilevel Switch` value in response to a `Supervision` report are now caught
+* Added missing metadata to the `duration` property in `Color Switch CC`
 
 ## 5.3.4 (2020-10-27)
 ### Config changes
