@@ -71,7 +71,7 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 				new Sentry.Integrations.FunctionToString(),
 				new Integrations.Dedupe() as any,
 			],
-			maxBreadcrumbs: 10,
+			maxBreadcrumbs: 30,
 			beforeSend(event, hint) {
 				let ignore = false;
 				// By default we ignore errors that original outside this library
