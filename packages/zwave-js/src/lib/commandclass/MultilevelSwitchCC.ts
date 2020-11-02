@@ -155,7 +155,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						status === SupervisionStatus.Working ||
 						status === SupervisionStatus.Success
 					) {
-						void this.get();
+						void this.get().catch();
 					}
 				},
 			},
