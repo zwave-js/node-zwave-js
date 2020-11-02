@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Errors while updating the `Multilevel Switch` value in response to a `Supervision` report are now caught
+
 ## 5.3.4 (2020-10-27)
 ### Config changes
 * Updated config param description for `Z-Wave.Me ZME_05459 Blinds controller`
