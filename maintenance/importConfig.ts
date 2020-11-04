@@ -181,22 +181,55 @@ async function parseOzwConfig(): Promise<void> {
 			console.log(`Adding missing manufacturer: ${man.name}`);
 		}
 
+		const id = "0x" + padStart(man.id, 4, "0").toLowerCase();
+
 		if (man.Product !== undefined && Array.isArray(man.Product)) {
 			for (const product of man.Product) {
-				await parseOzwProduct(product);
+				await parseOzwProduct(product, id);
 			}
 		}
 	}
 }
 
-async function parseOzwProduct(product: any): Promise<void> {
+async function parseOzwProduct(
+	product: any,
+	manufacturerId: string,
+): Promise<void> {
 	if (product.config === undefined) return;
 	const productFile = await fs.readFile(
 		path.join(ozwConfigFolder, product.config),
 		"utf8",
 	);
-	const productJson = xml2json.toJson(productFile, { object: true });
-	console.log(productJson);
+
+	// @ts-ignore
+	const json: Record<string, any> = xml2json.toJson(productFile, {
+		object: true,
+	}).Product;
+
+	const name = json?.MetaData?.MetaDataItem?.find(
+		(m: any) => m.name === "Name",
+	);
+
+	const description = json?.MetaData?.MetaDataItem?.find(
+		(m: any) => m.name === "Description",
+	);
+
+	if (name && description) {
+		const ret: Record<string, any> = {
+			_approved: true,
+			manufacturer: json.manufacturer,
+			manufacturerId: manufacturerId,
+			label: sanitizeText(name.$t),
+			description: sanitizeText(description.$t),
+			devices: [],
+			firmwareVersion: {
+				min: json.versionminDisplay,
+				max: json.versionmaxDisplay,
+			},
+		};
+
+		console.log(ret);
+	}
 }
 
 /**
