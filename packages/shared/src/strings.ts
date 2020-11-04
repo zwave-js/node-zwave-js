@@ -26,3 +26,7 @@ export function buffer2hex(buffer: Buffer, uppercase: boolean = false): string {
 	if (uppercase) ret = ret.toUpperCase();
 	return ret;
 }
+
+export function isPrintableASCII(text: string): boolean {
+	return /^[\u0020-\u007e]+$/.test(text);
+}
