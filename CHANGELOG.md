@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Bugfixes
 * If a node association is duplicated between `Association CC` and `Multi Channel Association CC`, it is now removed from both when using `Controller.removeAssociations`
+* The `duration` property for the `Binary Switch`, `Color Switch`, `Multilevel Switch` and `Scene Activation` CCs is now writeable
 
 ## 5.3.6 (2020-11-04)
 ### Bugfixes
