@@ -23,10 +23,12 @@ import { isArray } from "alcalzone-shared/typeguards";
 import { red } from "ansi-colors";
 import { AssertionError, ok } from "assert";
 import axios from "axios";
+import * as child from "child_process";
 import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
+import xml2json from "xml2json";
 
 // Where the files are located
 const importDir = path.join(__dirname, "../packages/config", "config/import");
@@ -35,6 +37,13 @@ const processedDir = path.join(
 	"../packages/config",
 	"config/devices",
 );
+
+const tmpDir = path.join(__dirname, "../.tmp");
+const ozwTarName = "openzwave.tar.gz";
+const ozwTarUrl =
+	"https://github.com/OpenZWave/open-zwave/archive/master.tar.gz";
+const ozwConfigFolder = path.join(tmpDir, "./config");
+
 const importedManufacturersPath = path.join(importDir, "manufacturers.json");
 const ownManufacturersPath = path.join(importDir, "../manufacturers.json");
 const ownManufacturers = JSON5.parse(
@@ -91,6 +100,72 @@ async function fetchIDs(): Promise<string[]> {
 async function fetchDevice(id: string): Promise<string> {
 	const source = (await axios({ url: urlDevice(id) })).data;
 	return JSON.stringify(source, null, "\t");
+}
+
+/** Downloads ozw master archive and stores it on `tmpDir` */
+async function downloadOzwConfig(): Promise<string> {
+	const data = (await axios({ url: ozwTarUrl, responseType: "stream" })).data;
+
+	return new Promise((resolve, reject) => {
+		const fileDest = path.join(tmpDir, ozwTarName);
+		const stream = fs.createWriteStream(fileDest);
+		data.pipe(stream);
+		let hasError = false;
+		stream.on("error", (err) => {
+			hasError = true;
+			stream.close();
+			reject(err);
+		});
+
+		stream.on("close", () => {
+			if (!hasError) {
+				resolve(fileDest);
+			}
+		});
+	});
+}
+
+/** Extract `config` folder from ozw archive in `tmpDir` */
+function extractConfigFromTar(): Promise<void> {
+	return new Promise((resolve, reject) => {
+		child.exec(
+			`tar -xzf ${ozwTarName} open-zwave-master/config  --strip-components=1`,
+			{ cwd: tmpDir },
+			function (error) {
+				if (error) {
+					reject(error);
+				} else {
+					resolve();
+				}
+			},
+		);
+	});
+}
+
+/** Delete all files in `tmpDir` */
+function cleanTmpDirectory(): Promise<void> {
+	return new Promise((resolve, reject) => {
+		child.exec("rm -rf *", { cwd: tmpDir }, function (error) {
+			if (error) {
+				reject(error);
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+
+/** Reads OZW `manufacturer_specific.xml` */
+async function parseOzwConfig(): Promise<void> {
+	const manufacturerFile = path.join(
+		ozwConfigFolder,
+		"manufacturer_specific.xml",
+	);
+	const manufacturerJson = xml2json.toJson(
+		await fs.readFile(manufacturerFile, "utf8"),
+	);
+
+	console.log(manufacturerJson);
 }
 
 /**
@@ -499,4 +574,9 @@ void (async () => {
 	} else if (process.argv.includes("index")) {
 		await generateDeviceIndex();
 	}
+
+	await cleanTmpDirectory();
+	await downloadOzwConfig();
+	await extractConfigFromTar();
+	await parseOzwConfig();
 })();
