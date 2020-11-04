@@ -104,6 +104,7 @@ async function fetchDevice(id: string): Promise<string> {
 
 /** Downloads ozw master archive and store it on `tmpDir` */
 async function downloadOzwConfig(): Promise<string> {
+	console.log("downloading ozw archive...");
 	const data = (await axios({ url: ozwTarUrl, responseType: "stream" })).data;
 
 	return new Promise((resolve, reject) => {
@@ -120,6 +121,7 @@ async function downloadOzwConfig(): Promise<string> {
 		stream.on("close", () => {
 			if (!hasError) {
 				resolve(fileDest);
+				console.log("ozw archive stored in temporary directory");
 			}
 		});
 	});
@@ -128,6 +130,7 @@ async function downloadOzwConfig(): Promise<string> {
 /** Extract `config` folder from ozw archive in `tmpDir` */
 function extractConfigFromTar(): Promise<void> {
 	return new Promise((resolve, reject) => {
+		console.log("extracting config folder from ozw archive...");
 		child.exec(
 			`tar -xzf ${ozwTarName} open-zwave-master/config  --strip-components=1`,
 			{ cwd: tmpDir },
@@ -150,6 +153,7 @@ function cleanTmpDirectory(): Promise<void> {
 				reject(error);
 			} else {
 				resolve();
+				console.log("temporary directory cleaned");
 			}
 		});
 	});
@@ -174,7 +178,7 @@ async function parseOzwConfig(): Promise<void> {
 
 		if (name === undefined) {
 			// add manufacturer to manufacturers.json
-			console.log(man.name);
+			console.log(`Adding missing manufacturer: ${man.name}`);
 		}
 	}
 }
@@ -567,7 +571,18 @@ async function updateManufacturerNames(): Promise<void> {
 }
 
 void (async () => {
-	if (process.argv.includes("manufacturers")) {
+	if (process.argv.includes("clean")) {
+		await cleanTmpDirectory();
+	} else if (process.argv.includes("ozw")) {
+		if (process.argv.includes("download")) {
+			await downloadOzwConfig();
+			await extractConfigFromTar();
+		}
+
+		if (process.argv.includes("manufacturers")) {
+			await parseOzwConfig();
+		}
+	} else if (process.argv.includes("manufacturers")) {
 		await downloadManufacturers();
 	} else if (process.argv.includes("manufacturerNames")) {
 		await updateManufacturerNames();
@@ -585,9 +600,4 @@ void (async () => {
 	} else if (process.argv.includes("index")) {
 		await generateDeviceIndex();
 	}
-
-	//await cleanTmpDirectory();
-	//await downloadOzwConfig();
-	//await extractConfigFromTar();
-	await parseOzwConfig();
 })();
