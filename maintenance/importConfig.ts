@@ -166,9 +166,19 @@ async function parseOzwConfig(): Promise<void> {
 		{ object: true },
 	);
 
+	await loadManufacturers();
+
 	// @ts-ignore
 	for (const man of manufacturerJson.ManufacturerSpecificData.Manufacturer) {
-		console.log(man.id, man.name);
+		let id = num2hex(parseInt(man.id), true);
+
+		if (id.length < 6) {
+			id = "0x" + "0".repeat(6 - id.length) + id.substr(2);
+		}
+
+		const name = lookupManufacturer(man.id);
+
+		console.log(name);
 	}
 }
 
