@@ -265,8 +265,8 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	private _duration: Duration | undefined;
 	@ccValue({ minVersion: 2 })
 	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "Remaining duration until target value",
+		...ValueMetadata.Any,
+		label: "Transition duration",
 	})
 	public get duration(): Duration | undefined {
 		return this._duration;

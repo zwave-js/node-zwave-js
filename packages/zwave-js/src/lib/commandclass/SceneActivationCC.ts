@@ -139,7 +139,12 @@ export class SceneActivationCCSet extends SceneActivationCC {
 	})
 	public sceneId: number;
 
-	@ccValue() public dimmingDuration: Duration | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Any,
+		label: "Dimming duration",
+	})
+	public dimmingDuration: Duration | undefined;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
