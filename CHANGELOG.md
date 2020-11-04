@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.3.6 (2020-11-04)
 ### Bugfixes
 * Compatibility with non-spec-compliant devices has been improved:
   * `User Code CC`: trim zero-padded user codes, handle non-ascii user codes as Buffers instead of strings
