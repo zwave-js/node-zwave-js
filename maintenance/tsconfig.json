@@ -6,14 +6,10 @@
 		"moduleResolution": "node",
 		// "noImplicitAny": true,
 		"target": "es2015",
-		"rootDir": "../",
-		"typeRoots": [
-			"./node_modules/@types",
-			"./maintenance/@types"
-		]
+		"rootDir": "../"
 	},
 	"include": [
-		"*.ts",
+		"**/*.ts",
 		"../packages/*/src/**/*.ts"
 	]
 }

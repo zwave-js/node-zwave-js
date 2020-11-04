@@ -102,7 +102,7 @@ async function fetchDevice(id: string): Promise<string> {
 	return JSON.stringify(source, null, "\t");
 }
 
-/** Downloads ozw master archive and stores it on `tmpDir` */
+/** Downloads ozw master archive and store it on `tmpDir` */
 async function downloadOzwConfig(): Promise<string> {
 	const data = (await axios({ url: ozwTarUrl, responseType: "stream" })).data;
 
