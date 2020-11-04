@@ -9,7 +9,7 @@
 		"rootDir": "../"
 	},
 	"include": [
-		"**/*.ts",
+		"*.ts",
 		"../packages/*/src/**/*.ts"
 	]
 }

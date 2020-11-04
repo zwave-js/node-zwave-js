@@ -163,9 +163,13 @@ async function parseOzwConfig(): Promise<void> {
 	);
 	const manufacturerJson = xml2json.toJson(
 		await fs.readFile(manufacturerFile, "utf8"),
+		{ object: true },
 	);
 
-	console.log(manufacturerJson);
+	// @ts-ignore
+	for (const man of manufacturerJson.ManufacturerSpecificData.Manufacturer) {
+		console.log(man.id, man.name);
+	}
 }
 
 /**
@@ -575,8 +579,8 @@ void (async () => {
 		await generateDeviceIndex();
 	}
 
-	await cleanTmpDirectory();
-	await downloadOzwConfig();
-	await extractConfigFromTar();
+	//await cleanTmpDirectory();
+	//await downloadOzwConfig();
+	//await extractConfigFromTar();
 	await parseOzwConfig();
 })();
