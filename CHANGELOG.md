@@ -4,6 +4,10 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* If a node association is duplicated between `Association CC` and `Multi Channel Association CC`, it is now removed from both when using `Controller.removeAssociations`
+
 ## 5.3.6 (2020-11-04)
 ### Bugfixes
 * Compatibility with non-spec-compliant devices has been improved:
