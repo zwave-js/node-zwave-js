@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Features
+* Added the compat config option `keepS0NonceUntilNext` to disable automatic nonce invalidation for bugged devices (e.g. ID Lock) which reuse nonces in some situations
+
+### Bugfixes
+* The receiver of a nonce is now stored and after a successful reply, all nonces for said issuer are now invalidated
+
 ## 5.3.6 (2020-11-04)
 ### Bugfixes
 * Compatibility with non-spec-compliant devices has been improved:

@@ -439,6 +439,18 @@ error in compat option queryOnWakeup`,
 					}),
 			) as any;
 		}
+
+		if (definition.keepS0NonceUntilNext != undefined) {
+			if (definition.keepS0NonceUntilNext !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option keepS0NonceUntilNext`,
+				);
+			}
+
+			this.keepS0NonceUntilNext = definition.keepS0NonceUntilNext;
+		}
 	}
 
 	public readonly queryOnWakeup?: [
@@ -451,6 +463,8 @@ error in compat option queryOnWakeup`,
 			| Pick<ValueID, "property" | "propertyKey">
 		)[]
 	][];
+
+	public keepS0NonceUntilNext?: boolean;
 }
 
 export class ParamInformation {

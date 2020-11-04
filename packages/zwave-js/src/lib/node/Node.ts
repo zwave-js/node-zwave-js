@@ -1729,7 +1729,7 @@ version:               ${this.version}`;
 				nonce: command.nonce,
 				receiver: this.driver.controller.ownNodeId!,
 			},
-			true,
+			{ free: true },
 		);
 	}
 

@@ -157,7 +157,7 @@ export class SecurityCCAPI extends CCAPI {
 					nonceId: secMan.getNonceId(nonce),
 				},
 				{ nonce, receiver: this.driver.controller.ownNodeId! },
-				true,
+				{ free: true },
 			);
 		}
 		return nonce;
@@ -180,9 +180,13 @@ export class SecurityCCAPI extends CCAPI {
 			);
 		}
 
+		// If a compat option requires the nonces to stick around, disable the expire feature
+		const expire = !this.endpoint.getNodeUnsafe()?.deviceConfig?.compat
+			?.keepS0NonceUntilNext;
 		const nonce = this.driver.securityManager.generateNonce(
 			this.endpoint.nodeId,
 			HALF_NONCE_SIZE,
+			expire,
 		);
 
 		const cc = new SecurityCCNonceReport(this.driver, {
@@ -476,8 +480,10 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			const nonce = this.driver.securityManager.getNonce(nonceId);
 			// Only accept the message if the nonce hasn't expired
 			validatePayload(!!nonce);
-			// and mark the nonce as used
-			this.driver.securityManager.deleteNonce(nonceId);
+			// and mark the nonce as used - except if a config flag forbids it
+			if (!this.getNode()?.deviceConfig?.compat?.keepS0NonceUntilNext) {
+				this.driver.securityManager.deleteNonce(nonceId);
+			}
 
 			this.authKey = this.driver.securityManager.authKey;
 			this.encryptionKey = this.driver.securityManager.encryptionKey;
@@ -604,7 +610,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			},
 			{ nonce, receiver: this.driver.controller.ownNodeId },
 			// The nonce is reserved for this command
-			false,
+			{ free: false },
 		);
 	}
 

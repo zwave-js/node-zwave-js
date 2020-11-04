@@ -31,6 +31,11 @@ export interface SecurityManagerOptions {
 	nonceTimeout: number;
 }
 
+export interface SetNonceOptions {
+	free?: boolean;
+	expire?: boolean;
+}
+
 export class SecurityManager {
 	public constructor(options: SecurityManagerOptions) {
 		this.networkKey = options.networkKey;
@@ -88,7 +93,11 @@ export class SecurityManager {
 	}
 
 	/** Generates a nonce for the current node */
-	public generateNonce(receiver: number, length: number): Buffer {
+	public generateNonce(
+		receiver: number,
+		length: number,
+		expire: boolean = true,
+	): Buffer {
 		let nonce: Buffer;
 		let nonceId: number;
 		do {
@@ -96,7 +105,7 @@ export class SecurityManager {
 			nonceId = this.getNonceId(nonce);
 		} while (this.hasNonce(nonceId));
 
-		this.setNonce(nonceId, { receiver, nonce }, false);
+		this.setNonce(nonceId, { receiver, nonce }, { free: false, expire });
 		return nonce;
 	}
 
@@ -107,7 +116,7 @@ export class SecurityManager {
 	public setNonce(
 		id: number | NonceKey,
 		entry: NonceEntry,
-		free: boolean = true,
+		{ free = true, expire = true }: SetNonceOptions = {},
 	): void {
 		const key = this.normalizeId(id);
 		if (this._nonceTimers.has(key)) {
@@ -115,12 +124,14 @@ export class SecurityManager {
 		}
 		this._nonceStore.set(key, entry);
 		if (free) this._freeNonceIDs.add(key);
-		this._nonceTimers.set(
-			key,
-			setTimeout(() => {
-				this.expireNonce(key);
-			}, this.nonceTimeout),
-		);
+		if (expire) {
+			this._nonceTimers.set(
+				key,
+				setTimeout(() => {
+					this.expireNonce(key);
+				}, this.nonceTimeout),
+			);
+		}
 	}
 
 	/** Deletes ALL nonces that were issued for a given node */

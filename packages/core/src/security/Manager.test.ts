@@ -109,7 +109,7 @@ describe("lib/security/Manager", () => {
 			).toBeUndefined();
 		});
 
-		it("the nonces should timeout after the given timeout", () => {
+		it("the nonces should expire after the given timeout", () => {
 			const man = new SecurityManager(options);
 			const nonce = man.generateNonce(2, 8);
 			const nonceId = nonce[0];
@@ -117,6 +117,16 @@ describe("lib/security/Manager", () => {
 
 			jest.advanceTimersByTime(options.nonceTimeout + 50);
 			expect(man.getNonce(nonceId)).toBeUndefined();
+		});
+
+		it("...except if this was explicitly forbidden", () => {
+			const man = new SecurityManager(options);
+			const nonce = man.generateNonce(2, 8, false);
+			const nonceId = nonce[0];
+			expect(man.getNonce(nonceId)).toEqual(nonce);
+
+			jest.advanceTimersByTime(options.nonceTimeout + 50);
+			expect(man.getNonce(nonceId)).not.toBeUndefined();
 		});
 
 		it(`the nonce should be marked as "reserved"`, () => {
