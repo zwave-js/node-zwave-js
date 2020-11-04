@@ -153,10 +153,10 @@ export class SecurityCCAPI extends CCAPI {
 			const secMan = this.driver.securityManager!;
 			secMan.setNonce(
 				{
-					nodeId: this.endpoint.nodeId,
+					issuer: this.endpoint.nodeId,
 					nonceId: secMan.getNonceId(nonce),
 				},
-				nonce,
+				{ nonce, receiver: this.driver.controller.ownNodeId! },
 				true,
 			);
 		}
@@ -181,6 +181,7 @@ export class SecurityCCAPI extends CCAPI {
 		}
 
 		const nonce = this.driver.securityManager.generateNonce(
+			this.endpoint.nodeId,
 			HALF_NONCE_SIZE,
 		);
 
@@ -573,7 +574,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		if (
 			this.nonceId != undefined &&
 			secMan.hasNonce({
-				nodeId: this.nodeId,
+				issuer: this.nodeId,
 				nonceId: this.nonceId,
 			})
 		) {
@@ -598,10 +599,10 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		this.nonceId = secMan.getNonceId(nonce);
 		secMan.setNonce(
 			{
-				nodeId: this.nodeId,
+				issuer: this.nodeId,
 				nonceId: this.nonceId,
 			},
-			nonce,
+			{ nonce, receiver: this.driver.controller.ownNodeId },
 			// The nonce is reserved for this command
 			false,
 		);
@@ -618,13 +619,13 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 		// Try to find an active nonce
 		if (this.nonceId == undefined) throwNoNonce();
 		const receiverNonce = this.driver.securityManager.getNonce({
-			nodeId: this.nodeId,
+			issuer: this.nodeId,
 			nonceId: this.nonceId,
 		});
 		if (!receiverNonce) throwNoNonce();
 		// and mark it as used
 		this.driver.securityManager.deleteNonce({
-			nodeId: this.nodeId,
+			issuer: this.nodeId,
 			nonceId: this.nonceId,
 		});
 
