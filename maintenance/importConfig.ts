@@ -180,7 +180,23 @@ async function parseOzwConfig(): Promise<void> {
 			// add manufacturer to manufacturers.json
 			console.log(`Adding missing manufacturer: ${man.name}`);
 		}
+
+		if (man.Product !== undefined && Array.isArray(man.Product)) {
+			for (const product of man.Product) {
+				await parseOzwProduct(product);
+			}
+		}
 	}
+}
+
+async function parseOzwProduct(product: any): Promise<void> {
+	if (product.config === undefined) return;
+	const productFile = await fs.readFile(
+		path.join(ozwConfigFolder, product.config),
+		"utf8",
+	);
+	const productJson = xml2json.toJson(productFile, { object: true });
+	console.log(productJson);
 }
 
 /**
