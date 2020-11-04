@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Bugfixes
+* Compatibility with non-spec-compliant devices has been improved:
+  * `User Code CC`: trim zero-padded user codes, handle non-ascii user codes as Buffers instead of strings
+  * `Notification CC`: support deserializing Notification Reports where the `Alarm Level` is not 0
+  * `Notification CC`: support deserializing Notification Reports with Keypad events that only contain a User ID instead of a `UserCode::Report`
+
 ## 5.3.5 (2020-11-03)
 ### Bugfixes
 * Errors while updating the `Multilevel Switch` value in response to a `Supervision` report are now caught
