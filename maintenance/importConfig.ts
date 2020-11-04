@@ -170,15 +170,12 @@ async function parseOzwConfig(): Promise<void> {
 
 	// @ts-ignore
 	for (const man of manufacturerJson.ManufacturerSpecificData.Manufacturer) {
-		let id = num2hex(parseInt(man.id), true);
+		const name = lookupManufacturer(parseInt(man.id));
 
-		if (id.length < 6) {
-			id = "0x" + "0".repeat(6 - id.length) + id.substr(2);
+		if (name === undefined) {
+			// add manufacturer to manufacturers.json
+			console.log(man.name);
 		}
-
-		const name = lookupManufacturer(man.id);
-
-		console.log(name);
 	}
 }
 
