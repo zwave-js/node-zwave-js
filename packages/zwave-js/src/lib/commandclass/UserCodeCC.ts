@@ -12,7 +12,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
+import {
+	buffer2hex,
+	getEnumMemberName,
+	isPrintableASCII,
+	num2hex,
+	pick,
+} from "@zwave-js/shared";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -230,7 +236,7 @@ function persistUserCode(
 	this: UserCodeCC,
 	userId: number,
 	userIdStatus: UserIDStatus,
-	userCode: string,
+	userCode: string | Buffer,
 ) {
 	const statusValueId = getUserIdStatusValueID(this.endpointIndex, userId);
 	const codeValueId = getUserCodeValueID(this.endpointIndex, userId);
@@ -384,11 +390,11 @@ export class UserCodeCCAPI extends CCAPI {
 			} else if (typeof propertyKey !== "number") {
 				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
 			}
-			if (typeof value !== "string") {
+			if (typeof value !== "string" && !Buffer.isBuffer(value)) {
 				throwWrongValueType(
 					this.ccId,
 					property,
-					"string",
+					"string or Buffer",
 					typeof value,
 				);
 			}
@@ -482,7 +488,7 @@ export class UserCodeCCAPI extends CCAPI {
 			UserIDStatus,
 			UserIDStatus.Available | UserIDStatus.StatusNotAvailable
 		>,
-		userCode: string,
+		userCode: string | Buffer,
 	): Promise<void> {
 		if (this.version > 1 || userId > 255) {
 			return this.setMany([{ userId, userIdStatus, userCode }]);
@@ -791,7 +797,7 @@ type UserCodeCCSetOptions =
 				UserIDStatus,
 				UserIDStatus.Available | UserIDStatus.StatusNotAvailable
 			>;
-			userCode: string;
+			userCode: string | Buffer;
 	  };
 
 @CCCommand(UserCodeCommand.Set)
@@ -832,12 +838,19 @@ export class UserCodeCCSet extends UserCodeCC {
 					ZWaveErrorCodes.Argument_Invalid,
 				);
 			} else if (this.userIdStatus === UserIDStatus.Available) {
-				this.userCode = "\x00".repeat(4);
+				this.userCode = "\0".repeat(4);
 			} else {
 				this.userCode = options.userCode!;
-				if (!/^[0-9]{4,10}$/.test(this.userCode)) {
+				// Specs say ASCII 0-9, manufacturers don't care :)
+				if (this.userCode.length < 4 || this.userCode.length > 10) {
 					throw new ZWaveError(
-						`${this.constructor.name}: The user code must consist of 4 to 10 numeric digits in ASCII representation.`,
+						`${
+							this.constructor.name
+						}: The user code must have a length of 4 to 10 ${
+							typeof this.userCode === "string"
+								? "characters"
+								: "bytes"
+						}`,
 						ZWaveErrorCodes.Argument_Invalid,
 					);
 				}
@@ -847,12 +860,14 @@ export class UserCodeCCSet extends UserCodeCC {
 
 	public userId: number;
 	public userIdStatus: UserIDStatus;
-	public userCode: string;
+	public userCode: string | Buffer;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.concat([
 			Buffer.from([this.userId, this.userIdStatus]),
-			Buffer.from(this.userCode, "ascii"),
+			typeof this.userCode === "string"
+				? Buffer.from(this.userCode, "ascii")
+				: this.userCode,
 		]);
 		return super.serialize();
 	}
@@ -863,7 +878,10 @@ export class UserCodeCCSet extends UserCodeCC {
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
-				"user code": this.userCode,
+				"user code":
+					typeof this.userCode === "string"
+						? this.userCode
+						: buffer2hex(this.userCode),
 			},
 		};
 	}
@@ -879,13 +897,27 @@ export class UserCodeCCReport extends UserCodeCC {
 		validatePayload(this.payload.length >= 6);
 		this.userId = this.payload[0];
 		this.userIdStatus = this.payload[1];
-		this.userCode = this.payload.slice(2).toString("ascii");
+
+		let userCodeBuffer = this.payload.slice(2);
+		// Specs say infer user code from payload length, manufacturers send zero-padded strings
+		while (userCodeBuffer[userCodeBuffer.length - 1] === 0) {
+			userCodeBuffer = userCodeBuffer.slice(0, -1);
+		}
+		// Specs say ASCII 0-9, manufacturers don't care :)
+		// Thus we check if the code is printable using ASCII, if not keep it as a Buffer
+		const userCodeString = userCodeBuffer.toString("utf8");
+		if (isPrintableASCII(userCodeString)) {
+			this.userCode = userCodeString;
+		} else {
+			this.userCode = userCodeBuffer;
+		}
+
 		this.persistValues();
 	}
 
 	public readonly userId: number;
 	public readonly userIdStatus: UserIDStatus;
-	public readonly userCode: string;
+	public readonly userCode: string | Buffer;
 
 	public persistValues(): boolean {
 		persistUserCode.call(
@@ -903,7 +935,10 @@ export class UserCodeCCReport extends UserCodeCC {
 			message: {
 				"user id": this.userId,
 				"id status": getEnumMemberName(UserIDStatus, this.userIdStatus),
-				"user code": this.userCode,
+				"user code":
+					typeof this.userCode === "string"
+						? this.userCode
+						: buffer2hex(this.userCode),
 			},
 		};
 	}
