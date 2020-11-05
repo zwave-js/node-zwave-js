@@ -1,9 +1,14 @@
+// Springs Window Fashions RSZ1
+// Somfy Motorized Shade
 {
     "_approved": true,
-    "manufacturer": "Springs Window Fashions (Graber)",
+    "_warnings": [
+        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
+    ],
+    "manufacturer": "Springs Window Fashions",
     "manufacturerId": "0x026e",
     "label": "RSZ1",
-    "description": "RSZ1 Roller Shade",
+    "description": "Somfy Motorized Shade",
     "devices": [
         {
             "productType": "0x5253",

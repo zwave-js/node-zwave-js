@@ -1,17 +1,19 @@
+// TKB Home TZ67
+// Wall Plug Dimmer
 {
     "_approved": true,
     "manufacturer": "TKB Home",
     "manufacturerId": "0x0118",
     "label": "TZ67",
-    "description": "TZ67 Wall Plug Dimmer",
+    "description": "Wall Plug Dimmer",
     "devices": [
-        {
-            "productType": "0x0202",
-            "productId": "0x0611"
-        },
         {
             "productType": "0x0003",
             "productId": "0x0008"
+        },
+        {
+            "productType": "0x0202",
+            "productId": "0x0611"
         }
     ],
     "firmwareVersion": {
@@ -20,29 +22,29 @@
     },
     "associations": {
         "1": {
-            "label": "Lifeline",
+            "label": "Group 1",
             "maxNodes": 5,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "LED-Behaviour",
-            "description": "Defines the behavior of the blue LED. Default: 0",
+            "label": "LED Behavior",
+            "description": "Defines the behavior of the blue LED",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Blue Indicator Off",
+                    "label": "blue indicates off",
                     "value": 0
                 },
                 {
-                    "label": "Blue Indicator On",
+                    "label": "blue indicates on",
                     "value": 1
                 }
             ]

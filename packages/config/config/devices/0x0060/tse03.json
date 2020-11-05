@@ -1,9 +1,11 @@
+// Everspring TSE03
+// Door Bell
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "TSE03",
-    "description": "TSE03 Door Bell",
+    "description": "Door Bell",
     "devices": [
         {
             "productType": "0x0009",
@@ -16,7 +18,7 @@
     },
     "associations": {
         "1": {
-            "label": "Reports",
+            "label": "Group 1",
             "maxNodes": 5,
             "isLifeline": true
         }

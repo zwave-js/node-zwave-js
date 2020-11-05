@@ -1,9 +1,11 @@
+// Vision Security ZG8101
+// Garage Door Tilt Sensor
 {
     "_approved": true,
     "manufacturer": "Vision Security",
     "manufacturerId": "0x0109",
     "label": "ZG8101",
-    "description": "ZG8101 Garage Door Detector",
+    "description": "Garage Door Tilt Sensor",
     "devices": [
         {
             "productType": "0x200a",
@@ -16,7 +18,7 @@
     },
     "associations": {
         "1": {
-            "label": "Control Command when trip",
+            "label": "Control Command",
             "maxNodes": 5,
             "isLifeline": true
         }

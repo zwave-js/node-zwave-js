@@ -1,13 +1,15 @@
+// Fibargroup FGPB101
+// A real push button (switch) available in several colors.
 {
     "_approved": true,
-    "manufacturer": "FIBARO System",
+    "manufacturer": "Fibargroup",
     "manufacturerId": "0x010f",
     "label": "FGPB101",
-    "description": "FGPB101 Button",
+    "description": "A real push button (switch) available in several colors.",
     "devices": [
         {
             "productType": "0x0f01",
-            "productId": "0x3000"
+            "productId": "0x1000"
         },
         {
             "productType": "0x0f01",
@@ -15,7 +17,7 @@
         },
         {
             "productType": "0x0f01",
-            "productId": "0x1000"
+            "productId": "0x3000"
         },
         {
             "productType": "0xfb10",
@@ -52,9 +54,9 @@
     "paramInformation": {
         "1": {
             "label": "Scenes sent to the controller",
-            "description": "This parameter determines which actions result in sending scene IDs and attributes assigned to them.\n\t\t\t\t1 - Key Pressed 1 time.\n\t\t\t\t2 - Key Pressed 2 times.\n\t\t\t\t4 - Key Pressed 3 times.\n\t\t\t\t8 - Key Pressed 4 times.\n\t\t\t\t16 - Key Pressed 5 times.\n\t\t\t\t32 - Key Held Down.\n\t\t\t\t64 - Key Released.\n\t\t\t\tNote: Values of parameter 1 may be combined, e.g. 1+2=3 means that scenes will be sent after pressing the button once or twice.\n\t\t\t\tDefault: 127 All.",
+            "description": "This parameter determines which actions result in sending scene IDs to them.",
             "valueSize": 1,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 127,
             "defaultValue": 127,
             "readOnly": false,
@@ -62,10 +64,10 @@
             "allowManualEntry": true
         },
         "3": {
-            "label": "Associations in Z-Wave network security mode",
-            "description": "This parameter defines how commands are sent in specified association groups: as secure or non-secure.\n\t\t\t\tParameter is active only in Z-Wave network security mode. It does not apply to 1st Lifeline group.\n\t\t\t\t1 - 2nd group sent as secure.\n\t\t\t\t2 - 3rd group sent as secure.\n\t\t\t\t4 - 4th group sent as secure.\n\t\t\t\tDefault: 3 All.",
+            "label": "Associations in Z-Wave network Security Mode",
+            "description": "This parameter defines how commands are sent in specified association groups",
             "valueSize": 1,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 7,
             "defaultValue": 7,
             "readOnly": false,
@@ -73,37 +75,19 @@
             "allowManualEntry": true
         },
         "10": {
-            "label": "Key Pressed 1 time - command sent to 2nd association group",
-            "description": "This parameter defines commands sent to devices associated in 2nd association group after a single click",
+            "label": "Key Pressed 1 time – command sent to 2nd group",
+            "description": "Associated in 2nd association group after a single click.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 3,
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No action",
-                    "value": 0
-                },
-                {
-                    "label": "Switch ON",
-                    "value": 1
-                },
-                {
-                    "label": "Switch OFF",
-                    "value": 2
-                },
-                {
-                    "label": "Switch ON/OFF - alternately",
-                    "value": 3
-                }
-            ]
+            "allowManualEntry": true
         },
         "11": {
-            "label": "Key Pressed 1 times - value of SWITCH ON command sent to 2nd association group",
-            "description": "This parameter defines value of SWITCH ON command sent to devices in 2nd association group after a single click.",
+            "label": "Key Pressed 1 time – value ON sent to 2nd group",
+            "description": "Value of SWITCH ON command sent to devices in 2nd association group",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -113,37 +97,19 @@
             "allowManualEntry": true
         },
         "12": {
-            "label": "Key Pressed 2 time - command sent to 2nd association group",
-            "description": "This parameter defines commands sent to devices associated in 2nd association group after a double click",
+            "label": "Key Pressed 2 times – command sent to 2nd group",
+            "description": "Commands sent to devices associated in 2nd association group",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 3,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No action",
-                    "value": 0
-                },
-                {
-                    "label": "Switch ON",
-                    "value": 1
-                },
-                {
-                    "label": "Switch OFF",
-                    "value": 2
-                },
-                {
-                    "label": "Switch ON/OFF - alternately",
-                    "value": 3
-                }
-            ]
+            "allowManualEntry": true
         },
         "13": {
-            "label": "Key Pressed 2 times - value of SWITCH ON command sent to 2nd association group",
-            "description": "This parameter defines value of SWITCH ON command sent to devices in 2nd association group after a double click.",
+            "label": "Key Pressed 2 times – value ON sent to 2nd group",
+            "description": "SWITCH ON command in 2nd association group after double click",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -153,37 +119,19 @@
             "allowManualEntry": true
         },
         "14": {
-            "label": "Key Pressed 3 time - command sent to 2nd association group",
-            "description": "This parameter defines commands sent to devices associated in 2nd association group after a triple click",
+            "label": "Key Pressed 3 times 2nd group command",
+            "description": "Commands associated in 2nd association group after a triple click.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 3,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No action",
-                    "value": 0
-                },
-                {
-                    "label": "Switch ON",
-                    "value": 1
-                },
-                {
-                    "label": "Switch OFF",
-                    "value": 2
-                },
-                {
-                    "label": "Switch ON/OFF - alternately",
-                    "value": 3
-                }
-            ]
+            "allowManualEntry": true
         },
         "15": {
-            "label": "Key Pressed 3 times - value of SWITCH ON command sent to 2nd association group",
-            "description": "This parameter defines value of SWITCH ON command sent to devices in 2nd association group after a triple click.",
+            "label": "Key Pressed 3 times – value  ON to 2nd group",
+            "description": "SWITCH ON  sent in 2nd association group after 3 presses",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -193,37 +141,19 @@
             "allowManualEntry": true
         },
         "20": {
-            "label": "Key Pressed 1 time - command sent to 3rd association group",
-            "description": "This parameter defines commands sent to devices associated in 2nd association group after a single click",
+            "label": "Key Pressed 1 time – command sent to 3rd group",
+            "description": "Ssent to devices associated in 3rd association group after a single click.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 3,
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No action",
-                    "value": 0
-                },
-                {
-                    "label": "Switch ON",
-                    "value": 1
-                },
-                {
-                    "label": "Switch OFF",
-                    "value": 2
-                },
-                {
-                    "label": "Switch ON/OFF - alternately",
-                    "value": 3
-                }
-            ]
+            "allowManualEntry": true
         },
         "21": {
-            "label": "Key Pressed 1 times - value of SWITCH ON command sent to 3rd association group",
-            "description": "This parameter defines value of SWITCH ON command sent to devices in 3rd association group after a single click.",
+            "label": "Key Pressed 1 time – value  ON sent to 3rd group",
+            "description": "Value of SWITCH ON command sent in 3rd association group after a single click.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -233,37 +163,19 @@
             "allowManualEntry": true
         },
         "22": {
-            "label": "Key Pressed 2 time - command sent to 3rd association group",
-            "description": "This parameter defines commands sent to devices associated in 3rd association group after a double click",
+            "label": "Key Pressed 2 times – command sent to 3rd group",
+            "description": "Sent to associated in 3rd association group after a double click.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 3,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No action",
-                    "value": 0
-                },
-                {
-                    "label": "Switch ON",
-                    "value": 1
-                },
-                {
-                    "label": "Switch OFF",
-                    "value": 2
-                },
-                {
-                    "label": "Switch ON/OFF - alternately",
-                    "value": 3
-                }
-            ]
+            "allowManualEntry": true
         },
         "23": {
-            "label": "Key Pressed 2 times - value of SWITCH ON command sent to 3rd association group",
-            "description": "This parameter defines value of SWITCH ON command sent to devices in 3rd association group after a double click.",
+            "label": "Key Pressed 2 times – value ON sent to 3rd group",
+            "description": "Value of SWITCH ON command sent in 3rd association group after a double click.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -273,37 +185,19 @@
             "allowManualEntry": true
         },
         "24": {
-            "label": "Key Pressed 3 time - command sent to 3rd association group",
-            "description": "This parameter defines commands sent to devices associated in 3rd association group after a triple click",
+            "label": "Key Pressed 3 times – command sent to 3rd group",
+            "description": "Sent to devices associated in 3rd association group after a triple click.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 3,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No action",
-                    "value": 0
-                },
-                {
-                    "label": "Switch ON",
-                    "value": 1
-                },
-                {
-                    "label": "Switch OFF",
-                    "value": 2
-                },
-                {
-                    "label": "Switch ON/OFF - alternately",
-                    "value": 3
-                }
-            ]
+            "allowManualEntry": true
         },
         "25": {
-            "label": "Key Pressed 3 times - value of SWITCH ON command sent to 3rd association group",
-            "description": "This parameter defines value of SWITCH ON command sent to devices in 3rd association group after a triple click.",
+            "label": "Key Pressed 3 times – value ON sent to 3rd group",
+            "description": "Value SWITCH ON command sent in 3rd association group after a triple click.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -313,39 +207,21 @@
             "allowManualEntry": true
         },
         "29": {
-            "label": "Key Held Down - command sent to 3rd association group",
-            "description": "This parameter defines commands sent to devices associated in 3rd association group after holding the button down.",
+            "label": "Key Held Down – command sent to 3rd group",
+            "description": "Sent associated in 3rd association group after holding the button down.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 3,
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No action",
-                    "value": 0
-                },
-                {
-                    "label": "Brightening",
-                    "value": 1
-                },
-                {
-                    "label": "Dimming",
-                    "value": 2
-                },
-                {
-                    "label": "Brightening/Dimming - alternately",
-                    "value": 3
-                }
-            ]
+            "allowManualEntry": true
         },
         "30": {
             "label": "Alarm frame triggers",
-            "description": "Parameter determines which actions result in sending alarm frames to 4th association group.\n\t\t\t\t1 - Key Pressed 1 time.\n\t\t\t\t2 - Key Pressed 2 times.\n\t\t\t\t4 - Key Pressed 3 times.\n\t\t\t\t8 - Key Pressed 4 times.\n\t\t\t\t16 - Key Pressed 5 times.\n\t\t\t\t32 - Key Held Down.\n\t\t\t\t64 - Key Released.\n\t\t\t\tDefault: 127 All.",
+            "description": "Which actions result in sending alarm frames to 4th association group.",
             "valueSize": 1,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 127,
             "defaultValue": 127,
             "readOnly": false,

@@ -1,257 +1,237 @@
+// NIE Technology Co., Ltd. NZW39
+// Dimmable Smart Plug
 {
-    "_approved": true,
-    "manufacturer": "Inovelli",
-    "manufacturerId": "0x0312",
-    "label": "NZW39",
-    "description": "NZW39 Smart Plug Dimmer (w/Scene)",
-    "devices": [
-        {
-            "productType": "0x2700",
-            "productId": "0x2700"
-        },
-        {
-            "productType": "0xb212",
-            "productId": "0x271c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "1": {
-            "label": "LED Indicator Control",
-            "description": "Choose if you want the LED indicator to turn on when switch is on or off or disable completely.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "",
-            "options": [
-                {
-                    "label": "LED on when switch is off",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when switch is on",
-                    "value": 1
-                },
-                {
-                    "label": "LED is disabled",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Automatically turn switch off after interval",
-            "description": "Automatically turn the switch off after this many seconds. 0 is disabled",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
-        },
-        "3": {
-            "label": "LED Indicator",
-            "description": "Turn LED indicator ON when light is ON (paddle switch only)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                },
-                {
-                    "label": "Disabled",
-                    "value": 2
-                },
-                {
-                    "label": "Always ON",
-                    "value": 3
-                }
-            ]
-        },
-        "4": {
-            "label": "Invert Switch",
-            "description": "Invert on & off on the physical switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Auto OFF",
-            "description": "Automatically turn switch off after this number of seconds",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Association Group 3 setting",
-            "description": "Change how devices respond when associated in group 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Dim up/down",
-                    "value": 0
-                },
-                {
-                    "label": "Keep in sync",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Default Level (local)",
-            "description": "Default level when light is turned on at the switch (0 = previous level)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Default Level (Z-Wave)",
-            "description": "Default level when light is turned on via Z-Wave command (0 = previous level)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6[0x01]": {
-            "label": "Send command on local action",
-            "description": "When should the switch send commands to Group 3 devices?",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "6[0x02]": {
-            "label": "Send command on 3-way action",
-            "description": "When should the switch send commands to Group 3 devices?",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "6[0x04]": {
-            "label": "Send command on z-wave action",
-            "description": "When should the switch send commands to Group 3 devices?",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "6[0x08]": {
-            "label": "Send command on auto off timer",
-            "description": "When should the switch send commands to Group 3 devices?",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "NZW39",
+	"description": "Dimmable Smart Plug",
+	"devices": [
+		{
+			"productType": "0x2700",
+			"productId": "0x2700"
+		},
+		{
+			"productType": "0xb212",
+			"productId": "0x271c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Dimming Step",
+			"description": "Percentage of step when switch is dimming up or down (0 = instant)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Minimum Level",
+			"description": "Minimum dimming level for attached light",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "LED Indicator",
+			"description": "Turn LED indicator ON when light is ON (paddle switch only)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				},
+				{
+					"label": "Disabled",
+					"value": 2
+				},
+				{
+					"label": "Always ON",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "Invert on & off on the physical switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Auto OFF",
+			"description": "Automatically turn switch off after this number of seconds",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Association Group 3 setting",
+			"description": "Change how devices respond when associated in group 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dim up/down",
+					"value": 0
+				},
+				{
+					"label": "Keep in sync",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Default Level (local)",
+			"description": "Default level when light is turned on at the switch (0 = previous level)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Default Level (Z-Wave)",
+			"description": "Default level when light is turned on via Z-Wave command (0 = previous level)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6[0x01]": {
+			"label": "Send command on local action",
+			"description": "When should the switch send commands to Group 3 devices?",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"6[0x02]": {
+			"label": "Send command on 3-way action",
+			"description": "When should the switch send commands to Group 3 devices?",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"6[0x04]": {
+			"label": "Send command on z-wave action",
+			"description": "When should the switch send commands to Group 3 devices?",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"6[0x08]": {
+			"label": "Send command on auto off timer",
+			"description": "When should the switch send commands to Group 3 devices?",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	}
 }

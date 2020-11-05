@@ -1,9 +1,11 @@
+// TKB Home TZ79
+// Insert switch module
 {
     "_approved": true,
     "manufacturer": "TKB Home",
     "manufacturerId": "0x0118",
     "label": "TZ79",
-    "description": "TZ79 Power meter Relay Switch",
+    "description": "Insert switch module",
     "devices": [
         {
             "productType": "0x0311",
@@ -14,52 +16,51 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "LED Behaviour",
+            "label": "Change the state of indicator light",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 1,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Normal",
+                    "label": "LED off",
                     "value": 0
                 },
                 {
-                    "label": "Inverted",
+                    "label": "LED on",
                     "value": 1
                 }
-            ],
-            "description": "Defines the behavior of the LED."
+            ]
         },
         "2": {
-            "label": "Memory function",
+            "label": "Memory Function",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 1,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Memory function off",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Memory function on",
                     "value": 1
                 }
-            ],
-            "description": ""
+            ]
         },
         "3": {
-            "label": "Watt meter report period",
-            "description": "If the setting is configured for 1 hour (value=720), the TZ79 will report its instant power consumption every 1 hour.",
+            "label": "Watt Meter Report Period",
+            "description": "5s x 720 (default) = 3600s = 1 hour",
             "unit": "5s",
             "valueSize": 2,
             "minValue": 1,
@@ -67,12 +68,11 @@
             "defaultValue": 720,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "5 sec"
+            "allowManualEntry": true
         },
         "4": {
-            "label": "kWh meter report period",
-            "description": "If the setting is configured for 1 hour (value=6), the TZ79 will report its accumulated power consumption (kWh) every 1 hour.",
+            "label": "kWH Meter Report Period",
+            "description": "6x10min = 1 hour",
             "unit": "10min",
             "valueSize": 2,
             "minValue": 1,
@@ -80,11 +80,10 @@
             "defaultValue": 6,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "10 min"
+            "allowManualEntry": true
         },
         "5": {
-            "label": "Threshold of Watt for Load Caution",
+            "label": "Threshold of Watt for load caution",
             "unit": "1Watt",
             "valueSize": 2,
             "minValue": 10,
@@ -92,12 +91,10 @@
             "defaultValue": 3000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "description": "",
-            "units": "Watt"
+            "allowManualEntry": true
         },
         "6": {
-            "label": "Threshold of Kwh for Load Caution",
+            "label": "Threshold of kWH for load caution",
             "unit": "Kwh",
             "valueSize": 2,
             "minValue": 0,
@@ -105,45 +102,18 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "description": "",
-            "units": "Kwh"
+            "allowManualEntry": true
         },
         "7": {
-            "label": "Mode",
-            "description": "",
+            "label": "Edge or Pulse mode or Edge-Toggle mode",
+            "description": "1 - Edge mode 2 - Pulse mode 3 - Edge toggle mode",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
+            "minValue": 1,
+            "maxValue": 3,
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Edge",
-                    "value": 1
-                },
-                {
-                    "label": "Pulse",
-                    "value": 2
-                },
-                {
-                    "label": "Edge-toggle",
-                    "value": 3
-                }
-            ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group2",
-            "maxNodes": 5
+            "allowManualEntry": true
         }
     }
 }

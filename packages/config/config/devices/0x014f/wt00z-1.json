@@ -1,9 +1,14 @@
+// Nortek Security & Control LLC WT00Z-1
+// 3-Way Wall Accessory Switch
 {
     "_approved": true,
-    "manufacturer": "Linear (Nortek Security Control LLC)",
+    "_warnings": [
+        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
+    ],
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "WT00Z-1",
-    "description": "WT00Z-1 3-Way Wall Accessory Switch",
+    "description": "3-Way Wall Accessory Switch",
     "devices": [
         {
             "productType": "0x5457",
@@ -16,7 +21,7 @@
     },
     "associations": {
         "1": {
-            "label": "Group 1",
+            "label": "Controller",
             "maxNodes": 5,
             "isLifeline": true
         },
@@ -79,11 +84,11 @@
             ]
         },
         "3": {
-            "label": "LED Mode",
-            "description": "By default, the LED on the switch will turn OFF when the Associated device is turned ON.",
+            "label": "Night Light",
+            "description": "Relationship between LED and status of devices in Group 1",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -91,38 +96,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "LED OFF when the load is on",
+                    "label": "On when load is on",
                     "value": 0
                 },
                 {
-                    "label": "LED ON when the load is on",
+                    "label": "On when load is off",
                     "value": 1
-                },
-                {
-                    "label": "LED is always ON",
-                    "value": 2
-                },
-                {
-                    "label": "LED is always OFF",
-                    "value": 3
-                },
-                {
-                    "label": "LED blinks during RF transmissions",
-                    "value": 4
                 }
             ]
         },
         "4": {
             "label": "Invert Switch",
-            "description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
+            "description": "Setting the relationship between the top of the transmitter to ON or OFF",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Top-ON, Bottom-OFF",
@@ -135,16 +128,16 @@
             ]
         },
         "5": {
-            "label": "Ignore Start-Level When Transmitting Dim Commands",
-            "description": "The associated dimmer will start dimming from its current level, ignoring any commanded start level.",
+            "label": "Ignore start level when recieving dim commands",
+            "description": "Ignore start level when recieving dim commands",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Use start level",
@@ -157,20 +150,19 @@
             ]
         },
         "7": {
-            "label": "Dim Step",
-            "description": "Dim Step can be set to a value of 1 to 99. This value indicates how many levels the dimmer will change each time the Dim Timer expires.",
+            "label": "dim step parameter",
+            "description": "dim step parameter valid values: 1-99",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 99,
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "8": {
-            "label": "Dim Timer",
-            "description": "The Dim Timer (how fast the dim steps happen). It can be set to a value of 1 to 255. This value indicates in 10 millisecond resolution, how often the dim level will change.",
+            "label": "dim timer parameter",
+            "description": "dim timer parameter valid values: 1-255",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 255,
@@ -178,8 +170,7 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "10ms"
+            "allowManualEntry": true
         },
         "9": {
             "label": "Local control dim step",

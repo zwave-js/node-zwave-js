@@ -1,9 +1,11 @@
+// Vision Security ZL7431
+// In Wall Relay Switch
 {
     "_approved": true,
     "manufacturer": "Vision Security",
     "manufacturerId": "0x0109",
     "label": "ZL7431",
-    "description": "ZL7431 In-Wall Switch Single Relay",
+    "description": "In Wall Relay Switch",
     "devices": [
         {
             "productType": "0x200c",
@@ -20,31 +22,31 @@
     },
     "associations": {
         "1": {
-            "label": "Lifeline",
+            "label": "Update Controller",
             "maxNodes": 5,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Behavior",
-            "description": "",
+            "label": "Indicator Light",
+            "description": "Indicator Light",
             "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "2 Wall Switches",
+                    "label": "without Indicator Light",
                     "value": 1
                 },
                 {
-                    "label": "Light Indicator",
-                    "value": 1
+                    "label": "with Indicator Light",
+                    "value": 2
                 }
             ]
         }

@@ -1,9 +1,14 @@
+// Evolve LRM-AS
+// Wall Mounted Dimmer
 {
     "_approved": true,
-    "manufacturer": "Evolve Guest Controls",
+    "_warnings": [
+        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
+    ],
+    "manufacturer": "Evolve",
     "manufacturerId": "0x0113",
     "label": "LRM-AS",
-    "description": "LRM-AS Wall Dimmer 500W",
+    "description": "Wall Mounted Dimmer",
     "devices": [
         {
             "productType": "0x4457",
@@ -24,15 +29,15 @@
     "paramInformation": {
         "3": {
             "label": "Night Light",
-            "description": "By default, the LED on the LRM-AS will turn OFF when the load attached is turned ON. To make the LED turn ON when the load attached is turned ON, set parameter to a value of 0.",
+            "description": "In night-light mode the LED will turn ON when the switch is turned OFF.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "No",
@@ -42,20 +47,19 @@
                     "label": "Yes",
                     "value": 1
                 }
-            ],
-            "units": ""
+            ]
         },
         "4": {
             "label": "Invert Switch",
-            "description": "To change the top of the switch to OFF and the bottom of the switch to ON, set parameter to 1.",
+            "description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "No",
@@ -65,19 +69,18 @@
                     "label": "Yes",
                     "value": 1
                 }
-            ],
-            "units": ""
+            ]
         },
         "29": {
             "label": "Load Sense",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
+            "maxValue": 255,
+            "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Disable",
@@ -87,9 +90,7 @@
                     "label": "Enable",
                     "value": 1
                 }
-            ],
-            "description": "Set this parameter to 0 to disable load sense. Set this parameter to 1 to enable load sense",
-            "units": ""
+            ]
         }
     }
 }

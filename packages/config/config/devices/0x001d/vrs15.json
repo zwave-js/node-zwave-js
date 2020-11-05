@@ -1,17 +1,19 @@
+// Leviton VRS15
+// Scene Capable Push On/Off
 {
     "_approved": true,
     "manufacturer": "Leviton",
     "manufacturerId": "0x001d",
     "label": "VRS15",
-    "description": "VRS15-1LZ Switch",
+    "description": "Scene Capable Push On/Off",
     "devices": [
         {
             "productType": "0x0301",
-            "productId": "0x0334"
+            "productId": "0x0209"
         },
         {
             "productType": "0x0301",
-            "productId": "0x0209"
+            "productId": "0x0334"
         }
     ],
     "firmwareVersion": {

@@ -1,9 +1,11 @@
+// Fakro ARZ
+// Roller Shutter Module
 {
     "_approved": true,
     "manufacturer": "Fakro",
     "manufacturerId": "0x0085",
     "label": "ARZ",
-    "description": "ARZ Roof Window Roller Shutter",
+    "description": "Roller Shutter Module",
     "devices": [
         {
             "productType": "0x0002",

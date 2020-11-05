@@ -1,9 +1,11 @@
+// Nortek Security & Control LLC WD500Z-1
+// Wall Dimmer Switch
 {
     "_approved": true,
-    "manufacturer": "Linear (Nortek Security Control LLC)",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "WD500Z-1",
-    "description": "WD500Z-1 Wall Dimmer Switch",
+    "description": "Wall Dimmer Switch",
     "devices": [
         {
             "productType": "0x4457",
@@ -53,11 +55,11 @@
             ]
         },
         "3": {
-            "label": "LED Mode",
-            "description": "In night-light mode the LED on the switch will turn ON when the switch is turned OFF, instead of following the state of the load.",
+            "label": "LED Indication",
+            "description": "The WD500Z-1 will flicker its LED when it is transmitting to any of its groups.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -65,26 +67,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Normal",
+                    "label": "LED ON - Switch ON",
                     "value": 0
                 },
                 {
-                    "label": "Night-light",
+                    "label": "LED ON - Switch OFF",
                     "value": 1
                 }
             ]
         },
         "4": {
             "label": "Invert Switch",
-            "description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
+            "description": "Reverse switch direction",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
-            "readOnly": false,
+            "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Top-ON, Bottom-OFF",
@@ -95,17 +97,6 @@
                     "value": 1
                 }
             ]
-        },
-        "5": {
-            "label": "Ignore Start-Level (Receiving)",
-            "description": "This dimmer will always start dimming from its current level, ignoring any commanded start level.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0
         },
         "14": {
             "label": "Enable Shade Control Group 2",

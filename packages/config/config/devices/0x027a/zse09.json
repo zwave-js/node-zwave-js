@@ -1,190 +1,139 @@
+// Zooz ZSE09
+// Motion and Light Mini Sensor
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZSE09",
-    "description": "ZSE09 Mini Sensor",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0083"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Motion Sensitivity",
-            "description": "Adjust motion detection sensitivity.  Lower number is for higher sensitivity, while higher number os for lower sensitivity.  Defaults to 12.",
-            "valueSize": 1,
-            "minValue": 8,
-            "maxValue": 255,
-            "defaultValue": 12,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Trigger ON Duration",
-            "description": "Set the duration you want the associated device to stay ON after being triggered by the sensor before it automatically turns OFF, in seconds.",
-            "unit": "integer",
-            "valueSize": 2,
-            "minValue": 5,
-            "maxValue": 600,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
-        },
-        "3": {
-            "label": "Trigger Action",
-            "description": "Configure whether the Mini Sensor turns an associated device on or off when sending the BASIC_SET command.  0 is OFF, 255 is ON, and 1-99 is a percentage of light level.  Value of 100-254 is NOT valid.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Motion Detection",
-            "description": "Enable or Disable motion detection.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 255
-                }
-            ]
-        },
-        "5": {
-            "label": "Light Trigger Level",
-            "description": "Set light sensor as a secondary trigger for associated devices.  If light level in a room falls beyond the set point and motion is detected, the Mini Sensor will send BASIC_SET command to associated devices to turn ON.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1000,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "lux"
-        },
-        "6": {
-            "label": "Motion Trigger Interval",
-            "description": "Adjust the time when motion is reported again after initial trigger, in seconds.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 8,
-            "defaultValue": 8,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
-        },
-        "7": {
-            "label": "Light Polling Interval",
-            "description": "How often the Mini Sensor reports light level to the controller and associated devices, in seconds.",
-            "valueSize": 2,
-            "minValue": 60,
-            "maxValue": 36000,
-            "defaultValue": 180,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
-        },
-        "8": {
-            "label": "Light Trigger",
-            "description": "Enable/Disable the light sensor as secondary trigger.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 255
-                }
-            ]
-        },
-        "9": {
-            "label": "Light Report",
-            "description": "Change required to report to the controller, in lux.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 100,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "lux"
-        },
-        "10": {
-            "label": "LED Notification",
-            "description": "Enable or Disable LED Notification.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Control Command",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Notification report",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Binary sensor report",
-            "maxNodes": 5
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZSE09",
+	"description": "Motion and Light Mini Sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0083"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Motion Sensitivity",
+			"description": "8 = high; 255 = low",
+			"valueSize": 1,
+			"minValue": 8,
+			"maxValue": 255,
+			"defaultValue": 12,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Trigger ON Duration",
+			"description": "delay after motion before turning OFF",
+			"unit": "integer",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 600,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Trigger Action",
+			"description": "Brightness to turn on the associated device 1-99, 255=ON",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Motion Detection",
+			"description": "255=Motion Detection Enabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Light Trigger Level",
+			"description": "Max Light level which enables motion trigger",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Motion Trigger Interval",
+			"description": "Minimum time between motion triggers.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Light Polling Interval",
+			"description": "Interval between light level reporting",
+			"valueSize": 2,
+			"minValue": 60,
+			"maxValue": 36000,
+			"defaultValue": 180,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Light Trigger",
+			"description": "255=enable Light sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Light Report",
+			"description": "Light level change to be reported.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "LED Notifications",
+			"description": "0=disable, 1=enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,9 +1,11 @@
+// Shenzhen Heiman Technology Co., Ltd. HS1DS-Z
+// Smart Door Sensor
 {
     "_approved": true,
-    "manufacturer": "Heiman Technology Co. Ltd",
+    "manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
     "manufacturerId": "0x0260",
     "label": "HS1DS-Z",
-    "description": "Door Sensor HS1DS-Z",
+    "description": "Smart Door Sensor",
     "devices": [
         {
             "productType": "0x0168",
@@ -14,27 +16,5 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "LifeLine",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Binary Sensor",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Binary Sensor tamper",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Notification",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Notification tamper",
-            "maxNodes": 5
-        }
-    }
+    "supportsZWavePlus": true
 }

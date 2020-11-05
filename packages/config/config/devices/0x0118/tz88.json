@@ -1,17 +1,19 @@
+// TKB Home TZ88
+// Energy Monitoring Wall Plug
 {
     "_approved": true,
     "manufacturer": "TKB Home",
     "manufacturerId": "0x0118",
     "label": "TZ88",
-    "description": "TZ88 Smart Energy Plug-in Switch",
+    "description": "Energy Monitoring Wall Plug",
     "devices": [
         {
             "productType": "0x0001",
-            "productId": "0x0011"
+            "productId": "0x0001"
         },
         {
             "productType": "0x0001",
-            "productId": "0x0001"
+            "productId": "0x0011"
         }
     ],
     "firmwareVersion": {
@@ -27,28 +29,26 @@
     },
     "paramInformation": {
         "1": {
-            "label": "Watt meter report period",
-            "description": "If the setting is configured for 1 hour (value=720), the TZ88 will report its instant power consumption every 1 hour.",
+            "label": "Watt meter report interval (5s)",
+            "description": "Interval (x5 seconds) to send out watt meter report",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 32767,
-            "defaultValue": 1,
+            "defaultValue": 720,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "5 sec"
+            "allowManualEntry": true
         },
         "2": {
-            "label": "kWh meter report period",
-            "description": "If the setting is configured for 1 hour (value=6), the TZ88 will report its accumulated power consumption (kWh) every 1 hour.",
+            "label": "KWH Meter Report Interval (10min)",
+            "description": "Interval (x10 minutes) to send out KWH Meter Report",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 32767,
             "defaultValue": 6,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "10 min"
+            "allowManualEntry": true
         },
         "3": {
             "label": "Threshold for Load Caution (10mA)",

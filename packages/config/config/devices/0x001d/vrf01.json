@@ -1,17 +1,19 @@
+// Leviton VRF01
+// Scene Capable Quiet Fan Speed Control
 {
     "_approved": true,
     "manufacturer": "Leviton",
     "manufacturerId": "0x001d",
     "label": "VRF01",
-    "description": "VRF01-1LZ Quiet Fan Speed Control",
+    "description": "Scene Capable Quiet Fan Speed Control",
     "devices": [
         {
             "productType": "0x1001",
-            "productId": "0x0334"
+            "productId": "0x0209"
         },
         {
             "productType": "0x1001",
-            "productId": "0x0209"
+            "productId": "0x0334"
         }
     ],
     "firmwareVersion": {

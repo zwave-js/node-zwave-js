@@ -1,9 +1,11 @@
+// Philio Technology Corp PAD02
+// Dimmer Socket
 {
     "_approved": true,
     "manufacturer": "Philio Technology Corp",
     "manufacturerId": "0x013c",
     "label": "PAD02",
-    "description": "PH-PAD02.eu Smart Dimmer Socket E27",
+    "description": "Dimmer Socket",
     "devices": [
         {
             "productType": "0x0005",
@@ -14,10 +16,11 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Dimmer Level Report mode",
-            "description": "Whenever dimmer on/off state changes, it will send MULTILEVEL_SWITCH_ REPORT to the nodes of group1.\n                The default setting is Enable the function.",
+            "label": "Mode of  Switch Off  function",
+            "description": "Switch button mode (enabled/disabled).",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -27,46 +30,20 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disabled",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enabled",
                     "value": 1
                 }
             ]
         },
         "2": {
             "label": "LED indication mode",
-            "description": "Show dimmer State: When dimmer is on, LED is on. When dimmer is off, LED is off.\n                Show Night mode: When dimmer is on, LED is off. When dimmer is off, LED is on.\n                One flash mode: When dimmer on/off state changes, LED will light on one second and then off.",
+            "description": "LED mode: 1 is show switch state. 2 is night mode (opposite).",
             "valueSize": 1,
             "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Show dimmer state",
-                    "value": 1
-                },
-                {
-                    "label": "Show night mode",
-                    "value": 2
-                },
-                {
-                    "label": "One flash mode",
-                    "value": 3
-                }
-            ]
-        },
-        "3": {
-            "label": "Restore dimmer state",
-            "description": "Whenever the AC power return from lost, PAD02 will restore the switch state which could be Dimmer off, Last dimmer state, Dimmer on.\n                The default setting is Last dimmer state.",
-            "unit": "1s",
-            "valueSize": 1,
-            "minValue": 0,
             "maxValue": 2,
             "defaultValue": 1,
             "readOnly": false,
@@ -74,18 +51,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Dimmer off",
-                    "value": 0
-                },
-                {
-                    "label": "Last dimmer state",
+                    "label": "Show current switch state",
                     "value": 1
                 },
                 {
-                    "label": "Dimmer on",
+                    "label": "Night mode (opposite)",
                     "value": 2
                 }
             ]
+        },
+        "3": {
+            "label": "Auto off timer",
+            "description": "Automatic OFF after given time.",
+            "unit": "1s",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
         },
         "4": {
             "label": "RF off command mode",
@@ -115,17 +100,6 @@
                     "value": 3
                 }
             ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Retransmit local Control",
-            "maxNodes": 5
         }
     }
 }

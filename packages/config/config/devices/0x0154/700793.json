@@ -1,9 +1,11 @@
+// Popp & Co 700793
+// Power Plug
 {
     "_approved": true,
     "manufacturer": "Popp & Co",
     "manufacturerId": "0x0154",
     "label": "700793",
-    "description": "700793 Smart Power Plug",
+    "description": "Power Plug",
     "devices": [
         {
             "productType": "0x0003",
@@ -24,10 +26,10 @@
     "paramInformation": {
         "1": {
             "label": "Condition after power failure",
-            "description": "Defines if the switch should restore switch state to the last prior to device power off (power cycle).",
+            "description": "Condition after power failure",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 2,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
@@ -42,7 +44,7 @@
                     "value": 1
                 },
                 {
-                    "label": "Last status",
+                    "label": "Last state",
                     "value": 2
                 }
             ]

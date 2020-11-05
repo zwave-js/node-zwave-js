@@ -1,9 +1,11 @@
+// Zooz ZSE19
+// S2 Multisiren
 {
     "_approved": true,
     "manufacturer": "Zooz",
     "manufacturerId": "0x027a",
     "label": "ZSE19",
-    "description": "ZSE19 S2 Multisiren",
+    "description": "S2 Multisiren",
     "devices": [
         {
             "productType": "0x000c",
@@ -14,51 +16,42 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Siren Alarm Duration",
-            "description": "Siren Alarm Duration, in seconds.  Defaults to 600 (10 minutes).",
+            "description": "Set the Siren Alarm Duration",
             "unit": "seconds",
             "valueSize": 2,
             "minValue": 10,
             "maxValue": 600,
-            "defaultValue": 600,
+            "defaultValue": 180,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
+            "allowManualEntry": true
         },
         "2": {
-            "label": "Temp/Humidity Reporting Interval",
-            "description": "Reporting interval for temperature and humidity sensor, in miuntes.  Defaults to 1440 (24 hours).",
+            "label": "temp & humidity reporting interval",
+            "description": "set temp & humidity reporting interval",
             "unit": "minutes",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 1440,
-            "defaultValue": 1440,
+            "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "minutes"
+            "allowManualEntry": true
         },
         "3": {
             "label": "Custom Sound Selection for Audio Speaker",
-            "description": "Selector for custom audio files that have been manually uploaded to the alarm unit.  0 sets to no sound (default), while 1-99 selects the sound file number in the library to be used.",
+            "description": "Set Custom Sound Selection for Audio Speaker",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
+            "allowManualEntry": true
         }
     }
 }

@@ -1,17 +1,19 @@
+// Philio Technology Corp PAN04
+// In Wall Dual Relay(1 Way) Switch Module 2x 1.5kW with power meter
 {
     "_approved": true,
     "manufacturer": "Philio Technology Corp",
     "manufacturerId": "0x013c",
     "label": "PAN04",
-    "description": "PAN04-1 Double Relay Switch 2x1.5kW with Power Measurement",
+    "description": "In Wall Dual Relay(1 Way) Switch Module 2x 1.5kW with power meter",
     "devices": [
         {
             "productType": "0x0001",
-            "productId": "0x0012"
+            "productId": "0x0003"
         },
         {
             "productType": "0x0001",
-            "productId": "0x0003"
+            "productId": "0x0012"
         },
         {
             "productType": "0x0001",
@@ -26,27 +28,14 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Relay 1 and 2 together",
-            "maxNodes": 1
-        },
-        "2": {
-            "label": "Relay 1",
-            "maxNodes": 1
-        },
-        "3": {
-            "label": "Relay 2",
-            "maxNodes": 1
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Watt meter report period",
-            "description": "If the setting is configured for 1hour (set value =720), the device will report its instant power consumption every 1 hour to Z-Wave Controller. Unit: 5 seconds.",
+            "label": "W meter report period",
+            "description": "Period for reporting W meter",
             "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32000,
+            "minValue": 0,
+            "maxValue": 65535,
             "defaultValue": 720,
             "unsigned": true,
             "readOnly": false,
@@ -55,10 +44,10 @@
         },
         "2": {
             "label": "kWh meter report period",
-            "description": "If the setting is configured for 1hour (set value =720), the device will report its power consumption in KWh every 1 hour to Z-Wave Controller. Unit: 5 seconds.",
+            "description": "Period for reporting kWh meter",
             "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32000,
+            "minValue": 0,
+            "maxValue": 65535,
             "defaultValue": 6,
             "unsigned": true,
             "readOnly": false,
@@ -66,16 +55,16 @@
             "allowManualEntry": true
         },
         "3": {
-            "label": "Selected end point",
-            "description": "1: Relay 1 and Relay 2. 2: Relay 1. 3: Relay 2",
+            "label": "Selected endpoint",
+            "description": "Which endpoint is addressed by the BASIC command class",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 3,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Relay 1",
@@ -92,16 +81,16 @@
             ]
         },
         "4": {
-            "label": "Edge or Pulse mode or Edge-Toggle mode",
-            "description": "Edge or Pulse mode or Edge-Toggle mode defines the operating mode of the externally connected switch. Default: Edge Mode",
+            "label": "Switch mode",
+            "description": "Change the external switch mode",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 3,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Edge mode",
@@ -119,11 +108,11 @@
         },
         "5": {
             "label": "Threshold of Watt for Load Caution",
-            "description": "Threshold of Watt for Load Caution",
+            "description": "If threshold of wattage is reached, a meter report will be generated",
             "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 1500,
-            "defaultValue": 1500,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 750,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
@@ -131,10 +120,10 @@
         },
         "6": {
             "label": "Threshold of kWh for Load Caution",
-            "description": "Threshold of kWh for Load Caution",
+            "description": "If threshold of kWh is reached, a Meter Report will be generated",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 10000,
+            "maxValue": 65535,
             "defaultValue": 10000,
             "unsigned": true,
             "readOnly": false,
@@ -146,12 +135,12 @@
             "description": "Restore switch state mode",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 2,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Switch Off",
@@ -168,28 +157,28 @@
             ]
         },
         "8": {
-            "label": "Auto off timer",
-            "description": "0: Disable auto off function. 1-32767: 1s ~32767s",
+            "label": "Auto Off Timer",
+            "description": "Auto Off Timer",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 10000,
-            "defaultValue": 32767,
+            "maxValue": 65535,
+            "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "9": {
-            "label": "RF offcommand mode",
+            "label": "RF off command mode",
             "description": "RF off command mode",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Switch Off",
@@ -210,16 +199,16 @@
             ]
         },
         "10": {
-            "label": "Existence of Endpoint3",
+            "label": "Endpoint 3",
             "description": "Endpoint 3",
             "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
+            "minValue": 0,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Exists",
@@ -230,17 +219,6 @@
                     "value": 2
                 }
             ]
-        },
-        "31": {
-            "label": "Primitive frame",
-            "description": "Can repair problems with bad switch selected",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1
         }
     }
 }

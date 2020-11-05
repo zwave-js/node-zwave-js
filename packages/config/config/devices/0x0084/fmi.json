@@ -1,123 +1,95 @@
+// FortrezZ LLC FMI
+// Flow Meter
 {
-    "_approved": true,
-    "manufacturer": "FortrezZ",
-    "manufacturerId": "0x0084",
-    "label": "FMI",
-    "description": "FMI Flow Meter",
-    "devices": [
-        {
-            "productType": "0x0473",
-            "productId": "0x0110"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Temperature Low Threshold",
-            "description": "246 to 69 -10 to 69C",
-            "unit": "Degrees Celsius",
-            "valueSize": 1,
-            "minValue": 69,
-            "maxValue": 246,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
-        },
-        "2": {
-            "label": "Temperature High Threshold",
-            "description": "247 to 70 -9 to 70C",
-            "unit": "Degrees Celsius",
-            "valueSize": 1,
-            "minValue": 70,
-            "maxValue": 247,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
-        },
-        "3": {
-            "label": "Meter Count",
-            "description": "0 TO 2147483647 count rolls over at 99,999,999",
-            "unit": "Tenths of Gallons",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Meter Reporting Interval",
-            "description": "0 to 2,550 seconds",
-            "unit": "10s of Seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Meter Threshold",
-            "description": "Low vs High flow 0 to 65535",
-            "unit": "Tenths of Gallons",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Report selection",
-            "description": "MultiLevel Sensor Report vs Notification Toggle",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Notification Toggle",
-                    "value": 0
-                },
-                {
-                    "label": "MultiLevel Sensor Report",
-                    "value": 1
-                }
-            ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Temperature High",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Temperature Low",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Flow has started",
-            "maxNodes": 5
-        }
-    }
+	"_approved": true,
+	"manufacturer": "FortrezZ LLC",
+	"manufacturerId": "0x0084",
+	"label": "FMI",
+	"description": "Flow Meter",
+	"devices": [
+		{
+			"productType": "0x0473",
+			"productId": "0x0110"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Temperature Low Threshold",
+			"description": "Temperature Low Threshold",
+			"unit": "Degrees Celsius",
+			"valueSize": 1,
+			"minValue": -10,
+			"maxValue": 69,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Temperature High Threshold",
+			"description": "Temperature High Threshold",
+			"unit": "Degrees Celsius",
+			"valueSize": 1,
+			"minValue": -9,
+			"maxValue": 70,
+			"defaultValue": 70,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Meter Count",
+			"description": "Meter Count",
+			"unit": "Tenths of Gallons",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99999999,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Meter Report Interval",
+			"description": "Meter Report Interval",
+			"unit": "10s of Seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 6,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Meter Leak Threshold",
+			"description": "Meter Leak Threshold",
+			"unit": "Tenths of Gallons",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Notification Commands MLS",
+			"description": "Toggle Commands or MLS",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

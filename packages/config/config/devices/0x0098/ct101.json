@@ -1,21 +1,19 @@
+// Radio Thermostat Company of America (RTC) CT101
+// Z-Wave Thermostat
 {
     "_approved": true,
-    "manufacturer": "2GIG Technologies",
+    "manufacturer": "Radio Thermostat Company of America (RTC)",
     "manufacturerId": "0x0098",
     "label": "CT101",
-    "description": "CT101 Thermostat",
+    "description": "Z-Wave Thermostat",
     "devices": [
-        {
-            "productType": "0x6501",
-            "productId": "0x000d"
-        },
         {
             "productType": "0x6501",
             "productId": "0x000c"
         },
         {
             "productType": "0x6501",
-            "productId": "0x000b"
+            "productId": "0x000d"
         }
     ],
     "firmwareVersion": {

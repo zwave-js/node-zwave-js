@@ -1,9 +1,11 @@
+// TKB Home TZ74
+// Insert two channel switch module
 {
     "_approved": true,
     "manufacturer": "TKB Home",
     "manufacturerId": "0x0118",
     "label": "TZ74",
-    "description": "TZ74 Dual Switch",
+    "description": "Insert two channel switch module",
     "devices": [
         {
             "productType": "0x0311",
@@ -14,10 +16,11 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Night light",
-            "description": "The LED on the TZ74 will by default, turn ON when the load attached is turned OFF. To make the LED turn ON when the load attached is turned ON instead, set parameter to a value of 0.",
+            "label": "Change the state of indicator light",
+            "description": "Default status of socket LED is on as indicator when the load is off",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -27,18 +30,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "The LED is ON when the load is ON",
+                    "label": "LED is off when load is off",
                     "value": 0
                 },
                 {
-                    "label": "The LED is ON when the load is OFF",
+                    "label": "LED is on when load is off",
                     "value": 1
                 }
             ]
         },
         "2": {
             "label": "Memory Function",
-            "description": "switch memory function",
+            "description": "Default with memory: the socket staus is same as before when power is on",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -48,18 +51,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "no switch memory function",
+                    "label": "socket status depends on switch",
                     "value": 0
                 },
                 {
-                    "label": "The socket status is same as before when power ON",
+                    "label": "socket status is same as before power outage",
                     "value": 1
                 }
             ]
         },
         "3": {
             "label": "Invert switch",
-            "description": "Change the top of the switch to OFF or ON , set parameter 4 to 1.",
+            "description": "In the edge mode invert switch - no effect if Pulse or Edge-toggle modes",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -69,18 +72,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "The top of the switch is ON",
+                    "label": "Normal",
                     "value": 0
                 },
                 {
-                    "label": "The top of the switch is OFF",
+                    "label": "In the edge mode invert switch",
                     "value": 1
                 }
             ]
         },
         "4": {
-            "label": "Edge or Pulse mode",
-            "description": "switch mode",
+            "label": "Edge, Pulse, or Edge Toggle Mode",
+            "description": "Set how the switch controls the module",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 3,
@@ -102,13 +105,6 @@
                     "value": 3
                 }
             ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
         }
     }
 }

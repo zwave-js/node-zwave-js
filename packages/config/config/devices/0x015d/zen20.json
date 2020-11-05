@@ -1,9 +1,11 @@
+// Willis Electric Co., Ltd. ZEN20
+// Smart Energy Power Strip
 {
     "_approved": true,
-    "manufacturer": "Zooz (Willis Electric)",
+    "manufacturer": "Willis Electric Co., Ltd.",
     "manufacturerId": "0x015d",
     "label": "ZEN20",
-    "description": "ZEN20 Power Strip",
+    "description": "Smart Energy Power Strip",
     "devices": [
         {
             "productType": "0x0651",
@@ -17,7 +19,7 @@
     "associations": {
         "1": {
             "label": "Lifeline",
-            "maxNodes": 5,
+            "maxNodes": 1,
             "isLifeline": true
         }
     },

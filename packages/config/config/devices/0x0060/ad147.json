@@ -1,9 +1,11 @@
+// Everspring AD147
+// Z-Wave Dimmer Plug
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "AD147",
-    "description": "AD147 Plug-in Dimmer Module",
+    "description": "Z-Wave Dimmer Plug",
     "devices": [
         {
             "productType": "0x0003",
@@ -16,13 +18,13 @@
     },
     "associations": {
         "1": {
-            "label": "Reports",
+            "label": "Lifeline",
             "description": "Provides reports",
             "maxNodes": 1,
             "isLifeline": true
         },
         "2": {
-            "label": "Basic",
+            "label": "On/Off control",
             "description": "Basic Set",
             "maxNodes": 4
         }
@@ -30,7 +32,7 @@
     "paramInformation": {
         "1": {
             "label": "Basic Set Command value",
-            "description": "0 is off. 1 to 99 sets output level at specified value. \n255 sets output level at last memorized level",
+            "description": "Basic Set Command value",
             "unit": "Percentage",
             "valueSize": 2,
             "minValue": 0,
@@ -38,12 +40,11 @@
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "2": {
-            "label": "Delay Time",
-            "description": "Delaying time to report to Group 1",
+            "label": "Delaying Time to report to Group 1",
+            "description": "The delaying time to report to Group 1",
             "unit": "seconds",
             "valueSize": 1,
             "minValue": 3,
@@ -51,12 +52,11 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
+            "allowManualEntry": true
         },
         "3": {
-            "label": "Last Status",
-            "description": "Remember the last status: 0 (do not remember) | 1 (remember)",
+            "label": "Remember the last status",
+            "description": "Remember the last status",
             "unit": "binary",
             "valueSize": 1,
             "minValue": 0,
@@ -64,12 +64,11 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "4": {
-            "label": "Output Mode",
-            "description": "Output mode setting: 0 (dimming) | 1 (on/off)",
+            "label": "Output mode setting: Dimming, On/Off",
+            "description": "Output mode setting: Dimming, On/Off",
             "unit": "binary",
             "valueSize": 1,
             "minValue": 0,
@@ -77,8 +76,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         }
     }
 }

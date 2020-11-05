@@ -1,17 +1,15 @@
+// Fibargroup FGS223
+// Double Switch 2
 {
     "_approved": true,
-    "manufacturer": "FIBARO System",
+    "manufacturer": "Fibargroup",
     "manufacturerId": "0x010f",
     "label": "FGS223",
-    "description": "FGS223 Double Relay",
+    "description": "Double Switch 2",
     "devices": [
         {
             "productType": "0x0203",
-            "productId": "0x4000"
-        },
-        {
-            "productType": "0x0203",
-            "productId": "0x3000"
+            "productId": "0x1000"
         },
         {
             "productType": "0x0203",
@@ -19,7 +17,11 @@
         },
         {
             "productType": "0x0203",
-            "productId": "0x1000"
+            "productId": "0x3000"
+        },
+        {
+            "productType": "0x0203",
+            "productId": "0x4000"
         },
         {
             "productType": "0x0203",
@@ -38,30 +40,30 @@
             "isLifeline": true
         },
         "2": {
-            "label": "On/Off S1",
+            "label": "On/Off (S1)",
             "description": "On/Off (S1) is assigned to switch connected to the S1 terminal (uses Basic command class)",
             "maxNodes": 5
         },
         "3": {
-            "label": "Dimmer S1",
+            "label": "Dimmer (S1)",
             "description": "“Dimmer (S1)” is assigned to switch connected to the S1 terminal (uses Switch Multilevel command class)",
             "maxNodes": 5
         },
         "4": {
-            "label": "On/Off S2",
+            "label": "On/Off (S2)",
             "description": "On/Off (S2) is assigned to switch connected to the S2 terminal (uses Basic command class)",
             "maxNodes": 5
         },
         "5": {
-            "label": "Dimmer S2",
+            "label": "Dimmer (S2)",
             "description": "Dimmer (S2) is assigned to switch connected to the S2 terminal (uses Switch Multilevel command class)",
             "maxNodes": 5
         }
     },
     "paramInformation": {
         "9": {
-            "label": "Saving state before power failure",
-            "description": "Saving state before power failure",
+            "label": "Restore state after power failure",
+            "description": "Restore state after power failure",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -71,18 +73,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "State NOT saved at power failure, all outputs are set to OFF upon power restore",
+                    "label": "off after power loss",
                     "value": 0
                 },
                 {
-                    "label": "State saved at power failure, all outputs are set to previous state upon power restore",
+                    "label": "restore last state",
                     "value": 1
                 }
             ]
         },
         "10": {
-            "label": "First channel - operating mode",
-            "description": "This parameter allows to choose operating for the 1st channel controlled by the S1 switch.",
+            "label": "First channel operating mode",
+            "description": "First channel - operating mode",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 5,
@@ -92,34 +94,34 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Standard operation",
+                    "label": "standard operation",
                     "value": 0
                 },
                 {
-                    "label": "Delay On",
+                    "label": "delay ON",
                     "value": 1
                 },
                 {
-                    "label": "Delay Off",
+                    "label": "delay OFF",
                     "value": 2
                 },
                 {
-                    "label": "Auto On",
+                    "label": "auto ON",
                     "value": 3
                 },
                 {
-                    "label": "Auto Off",
+                    "label": "auto OFF",
                     "value": 4
                 },
                 {
-                    "label": "Flashing Mode",
+                    "label": "flashing mode",
                     "value": 5
                 }
             ]
         },
         "11": {
-            "label": "First channel - reaction to switch for delay/auto ON/OFF modes",
-            "description": "This parameter determines how the device in timed mode reacts to pushing the switch connected to the S1 terminal.",
+            "label": "1st ch. reaction to switch",
+            "description": "First channel - reaction to switch for delay/auto ON/OFF modes",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 2,
@@ -129,25 +131,25 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Cancel mode and set target state",
+                    "label": "cancel mode and set target state",
                     "value": 0
                 },
                 {
-                    "label": "No reaction to switch - mode runs until it ends",
+                    "label": "no reaction to switch - mode runs until it ends",
                     "value": 1
                 },
                 {
-                    "label": "Reset timer - start counting from the beginning",
+                    "label": "reset timer - start counting from the beginning",
                     "value": 2
                 }
             ]
         },
         "12": {
-            "label": "First channel - time parameter for delay/auto ON/OFF modes",
-            "description": "This parameter allows to set time parameter used in timed modes. (s)",
+            "label": "time parameter for delay/auto ON/OFF modes",
+            "description": "First channel - time parameter for delay/auto ON/OFF modes",
             "unit": "seconds",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 32000,
             "defaultValue": 50,
             "readOnly": false,
@@ -155,8 +157,8 @@
             "allowManualEntry": true
         },
         "13": {
-            "label": "First channel - pulse time for flashing mode",
-            "description": "This parameter allows to set time of switching to opposite state in flashing mode.\n                1-32000 (0.1-3200.0s, 0.1s step)",
+            "label": "1st ch. pulse time for flashing mode",
+            "description": "First channel - pulse time for flashing mode",
             "unit": "0.1 seconds",
             "valueSize": 2,
             "minValue": 1,
@@ -167,8 +169,8 @@
             "allowManualEntry": true
         },
         "15": {
-            "label": "Second channel - operating mode",
-            "description": "This parameter allows to choose operating for the 2nd channel controlled by the S2 switch.",
+            "label": "2nd ch. operating mode",
+            "description": "Second channel - operating mode",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 5,
@@ -178,34 +180,34 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Standard operation",
+                    "label": "standard operation",
                     "value": 0
                 },
                 {
-                    "label": "Delay On",
+                    "label": "delay ON",
                     "value": 1
                 },
                 {
-                    "label": "Delay Off",
+                    "label": "delay OFF",
                     "value": 2
                 },
                 {
-                    "label": "Auto On",
+                    "label": "auto ON",
                     "value": 3
                 },
                 {
-                    "label": "Auto Off",
+                    "label": "auto OFF",
                     "value": 4
                 },
                 {
-                    "label": "Flashing Mode",
+                    "label": "flashing mode",
                     "value": 5
                 }
             ]
         },
         "16": {
-            "label": "Second channel - reaction to switch for delay/auto ON/OFF modes",
-            "description": "This parameter determines how the device in timed mode reacts to pushing the switch connected to the S2 terminal.",
+            "label": "2nd ch. reaction to switch",
+            "description": "Second channel - reaction to switch for delay/auto ON/OFF modes",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 2,
@@ -215,24 +217,24 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Cancel mode and set target state",
+                    "label": "cancel mode and set target state",
                     "value": 0
                 },
                 {
-                    "label": "No reaction to switch - mode runs until it ends",
+                    "label": "no reaction to switch - mode runs until it ends",
                     "value": 1
                 },
                 {
-                    "label": "Reset timer - start counting from the beginning",
+                    "label": "reset timer - start counting from the beginning",
                     "value": 2
                 }
             ]
         },
         "17": {
-            "label": "Second channel - time parameter for delay/auto ON/OFF modes",
-            "description": "This parameter allows to set time parameter used in timed modes. (s)",
+            "label": "2nd ch. time parameter for delay",
+            "description": "Second channel - time parameter for delay/auto ON/OFF modes",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 32000,
             "defaultValue": 50,
             "readOnly": false,
@@ -240,8 +242,8 @@
             "allowManualEntry": true
         },
         "18": {
-            "label": "Second channel - pulse time for flashing mode",
-            "description": "This parameter allows to set time of switching to opposite state in flashing mode.\n                1-32000 (0.1-3200.0s, 0.1s step)",
+            "label": "2nd ch. pulse time for flashing mode",
+            "description": "Second channel - pulse time for flashing mode",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 32000,
@@ -252,7 +254,7 @@
         },
         "20": {
             "label": "Switch type",
-            "description": "Inputs type configuration",
+            "description": "Switch type",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 2,
@@ -262,22 +264,22 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Momentary switch",
+                    "label": "momentary switch",
                     "value": 0
                 },
                 {
-                    "label": "Toggle switch (contact closed - On, contact opened - OFF)",
+                    "label": "toggle switch stable",
                     "value": 1
                 },
                 {
-                    "label": "Toggle switch (device changes status when switch changes status)",
+                    "label": "toggle switch",
                     "value": 2
                 }
             ]
         },
         "21": {
-            "label": "Flashing mode report",
-            "description": "Enabled / Disabled reports on Flashing mode",
+            "label": "Flashing mode - reports",
+            "description": "Flashing mode - reports",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -287,20 +289,20 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled",
+                    "label": "the device does not send reports",
                     "value": 0
                 },
                 {
-                    "label": "Enabled",
+                    "label": "the device sends reports",
                     "value": 1
                 }
             ]
         },
         "27": {
             "label": "Associations in Z-Wave network security mode",
-            "description": "This parameter defines how commands are sent to specified association groups: as secure or non-secure.\n                Parameter is active only in Z-Wave network security mode.\n                This parameter does not apply to 1st lifeline group.\n                1 - 2nd group sent as secure.\n                2 - 3rd group sent as secure.\n                4 - 4th group sent as secure.\n                8 - 5th group sent as secure.\n                Default setting: 15 (all)",
+            "description": "Associations in Z-Wave network security mode",
             "valueSize": 1,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 15,
             "defaultValue": 15,
             "readOnly": false,
@@ -335,7 +337,7 @@
         },
         "28": {
             "label": "S1 switch - scenes sent",
-            "description": "This parameter determines which actions result in sending scene IDs assigned to them.\n                1 - Key pressed 1 time.\n                2 - Key pressed 2 times.\n                4 - Key pressed 3 times.\n                8 - Key Hold Down and Key Released.\n                Default setting: 0 (none)",
+            "description": "S1 switch - scenes sent",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 15,
@@ -372,7 +374,7 @@
         },
         "29": {
             "label": "S2 switch - scenes sent",
-            "description": "This parameter determines which actions result in sending scene IDs assigned to them.\n                1 - Key pressed 1 time.\n                2 - Key pressed 2 times.\n                4 - Key pressed 3 times.\n                8 - Key Hold Down and Key Released.\n                Default setting: 0 (none)",
+            "description": "S2 switch - scenes sent",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 15,
@@ -408,8 +410,8 @@
             ]
         },
         "30": {
-            "label": "S1 associations sent to 2nd and 3rd association groups",
-            "description": "This parameter determines which actions are ignored when sending commands to devices associated in 2nd and 3rd association group.\n                All actions are active by default.\n                1 - ignore turning On with 1 click of the switch.\n                2 - ignore turning OFF with 1 click of the switch.\n                4 - ignore holding and releasing the switch.\n                8 - ignore double click of the switch.\n                Default setting: 0",
+            "label": "S1 assocs. sent to 2nd and 3rd group",
+            "description": "S1 switch - associations sent to 2nd and 3rd association groups",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 15,
@@ -441,8 +443,8 @@
             ]
         },
         "31": {
-            "label": "S1 Switch ON value sent to 2nd and 3rd association groups",
-            "description": "This parameter determines value sent with Switch On command to devices associated in 2nd and 3rd association group.",
+            "label": "S1 ON val sent to 2nd and 3rd groups",
+            "description": "S1 switch - Switch ON value sent to 2nd and 3rd association groups",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
@@ -452,8 +454,8 @@
             "allowManualEntry": true
         },
         "32": {
-            "label": "S1 Switch OFF value sent to 2nd and 3rd association groups",
-            "description": "This parameter determines value sent with Switch Off command to devices associated in 2nd and 3rd association group.",
+            "label": "S1 OFF val sent to 2nd and 3rd groups",
+            "description": "S1 switch - Switch ON value sent to 2nd and 3rd association groups",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
@@ -463,8 +465,8 @@
             "allowManualEntry": true
         },
         "33": {
-            "label": "S1 Switch Double Click value sent to 2nd and 3rd association groups",
-            "description": "This parameter determines value sent with Double Click command to devices associated in 2nd and 3rd association group.",
+            "label": "S1 DblClick val sent to 2nd and 3rd groups",
+            "description": "S1 switch - Double Click value sent to 2nd and 3rd association groups",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
@@ -474,8 +476,8 @@
             "allowManualEntry": true
         },
         "35": {
-            "label": "S2 associations sent to 4th and 5th association groups",
-            "description": "This parameter determines which actions are ignored when sending commands to devices associated in 4th and 5th association group.\n                All actions are active by default.\n                1 - ignore turning On with 1 click of the switch.\n                2 - ignore turning OFF with 1 click of the switch.\n                4 - ignore holding and releasing the switch.\n                8 - ignore double click of the switch.\n                Default setting: 0",
+            "label": "S2 assocs. sent to 4th and 5th group",
+            "description": "S2 switch - associations sent to 4th and 5th association groups",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 15,
@@ -507,8 +509,8 @@
             ]
         },
         "36": {
-            "label": "S2 Switch ON value sent to 4th and 5th association groups",
-            "description": "This parameter determines value sent with Switch On command to devices associated in 4th and 5th association group.",
+            "label": "S2 ON val sent to 4th and 5th groups",
+            "description": "S2 switch - Switch ON value sent to 4th and 5th association groups",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
@@ -518,8 +520,8 @@
             "allowManualEntry": true
         },
         "37": {
-            "label": "S2 Switch OFF value sent to 4th and 5th association groups",
-            "description": "This parameter determines value sent with Switch Off command to devices associated in 4th and 5th association group.",
+            "label": "S2 OFF val sent to 4th and 5th groups",
+            "description": "S2 switch - Switch OFF value sent to 4th and 5th association groups",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
@@ -529,8 +531,8 @@
             "allowManualEntry": true
         },
         "38": {
-            "label": "S2 Switch Double Click value sent to 4th and 5th association groups",
-            "description": "This parameter determines value sent with Double Click command to devices associated in 4th and 5th association group.",
+            "label": "S2 DblClick val sent to 4th and 5th groups",
+            "description": "S2 switch - Double Click value sent to 4th and 5th association groups",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
@@ -541,7 +543,7 @@
         },
         "40": {
             "label": "Reaction to General Alarm",
-            "description": "This parameter determines how the device will react to General Alarm frame.",
+            "description": "Reaction to General Alarm",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
@@ -551,26 +553,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Ignored",
+                    "label": "alarm frame is ignored",
                     "value": 0
                 },
                 {
-                    "label": "Turn On",
+                    "label": "turn ON after receiving the alarm frame",
                     "value": 1
                 },
                 {
-                    "label": "Turn OFF",
+                    "label": "turn OFF after receiving the alarm frame",
                     "value": 2
                 },
                 {
-                    "label": "Flash",
+                    "label": "flash after receiving the alarm frame",
                     "value": 3
                 }
             ]
         },
         "41": {
             "label": "Reaction to Flood Alarm",
-            "description": "This parameter determines how the device will react to Flood Alarm frame.",
+            "description": "Reaction to Flood Alarm",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
@@ -580,26 +582,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Ignored",
+                    "label": "alarm frame is ignored",
                     "value": 0
                 },
                 {
-                    "label": "Turn On",
+                    "label": "turn ON after receiving the alarm frame",
                     "value": 1
                 },
                 {
-                    "label": "Turn OFF",
+                    "label": "turn OFF after receiving the alarm frame",
                     "value": 2
                 },
                 {
-                    "label": "Flash",
+                    "label": "flash after receiving the alarm frame",
                     "value": 3
                 }
             ]
         },
         "42": {
             "label": "Reaction to CO/CO2/Smoke Alarm",
-            "description": "This parameter determines how the device will react to CO/CO2/Smoke Alarm frame.",
+            "description": "Reaction to CO/CO2/Smoke Alarm",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
@@ -609,26 +611,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Ignored",
+                    "label": "alarm frame is ignored",
                     "value": 0
                 },
                 {
-                    "label": "Turn On",
+                    "label": "turn ON after receiving the alarm frame",
                     "value": 1
                 },
                 {
-                    "label": "Turn OFF",
+                    "label": "turn OFF after receiving the alarm frame",
                     "value": 2
                 },
                 {
-                    "label": "Flash",
+                    "label": "flash after receiving the alarm frame",
                     "value": 3
                 }
             ]
         },
         "43": {
             "label": "Reaction to Heat Alarm",
-            "description": "This parameter determines how the device will react to Heat alarm frame.",
+            "description": "Reaction to Heat Alarm",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
@@ -638,26 +640,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Ignored",
+                    "label": "alarm frame is ignored",
                     "value": 0
                 },
                 {
-                    "label": "Turn On",
+                    "label": "turn ON after receiving the alarm frame",
                     "value": 1
                 },
                 {
-                    "label": "Turn OFF",
+                    "label": "turn OFF after receiving the alarm frame",
                     "value": 2
                 },
                 {
-                    "label": "Flash",
+                    "label": "flash after receiving the alarm frame",
                     "value": 3
                 }
             ]
         },
         "44": {
             "label": "Flashing alarm duration",
-            "description": "This parameter allows to set duration of flashing alarm mode.\n                1-32000 (0.1-32000s, 1s step) Default: 600 (10min)",
+            "description": "Flashing alarm duration",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 32000,
@@ -668,10 +670,10 @@
         },
         "50": {
             "label": "First channel - power reports",
-            "description": "This parameter determines the minimum change in consumed power\n                that will result in sending new power report to the main controller.\n                1-100 (%) Default 20 (20%)",
+            "description": "First channel - power reports",
             "unit": "percent",
-            "valueSize": 2,
-            "minValue": 1,
+            "valueSize": 1,
+            "minValue": 0,
             "maxValue": 100,
             "defaultValue": 20,
             "readOnly": false,
@@ -679,10 +681,10 @@
             "allowManualEntry": true
         },
         "51": {
-            "label": "First channel - minimal time between power reports",
-            "description": "This parameter determines minimum time that has to elapse before\n                sending new power report to the main controller.\n                1-120 (s) Default 10 (10s)",
-            "valueSize": 2,
-            "minValue": 1,
+            "label": "1st ch min time between reports",
+            "description": "First channel - minimal time between power reports",
+            "valueSize": 1,
+            "minValue": 0,
             "maxValue": 120,
             "defaultValue": 10,
             "readOnly": false,
@@ -690,10 +692,10 @@
             "allowManualEntry": true
         },
         "53": {
-            "label": "First channel - energy reports",
-            "description": "This parameter determines the minimum change in consumed energy\n                that will result in sending new energy report to the main controller.\n                1-32000 (0.01-320 kWh) Default 100 (1kWh)",
+            "label": "1st ch energy reports",
+            "description": "First channel - energy reports",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 32000,
             "defaultValue": 100,
             "readOnly": false,
@@ -701,10 +703,10 @@
             "allowManualEntry": true
         },
         "54": {
-            "label": "Second Channel - power reports",
-            "description": "This parameter determines the minimum change in consumed power\n                that will result in sending new power report to the main controller.\n                1-100 (%) Default 20 (20%)",
-            "valueSize": 2,
-            "minValue": 1,
+            "label": "Second channel - power reports",
+            "description": "Second channel - power reports",
+            "valueSize": 1,
+            "minValue": 0,
             "maxValue": 100,
             "defaultValue": 20,
             "readOnly": false,
@@ -712,10 +714,10 @@
             "allowManualEntry": true
         },
         "55": {
-            "label": "Second channel - minimal time between power reports",
-            "description": "This parameter determines minimum time that has to elapse before\n                sending new power report to the main controller.\n                1-120 (s) Default 10 (10s)",
-            "valueSize": 2,
-            "minValue": 1,
+            "label": "2nd ch min time between reports",
+            "description": "Second channel - minimal time between power reports",
+            "valueSize": 1,
+            "minValue": 0,
             "maxValue": 120,
             "defaultValue": 10,
             "readOnly": false,
@@ -723,10 +725,10 @@
             "allowManualEntry": true
         },
         "57": {
-            "label": "Second channel - energy reports",
-            "description": "This parameter determines the minimum change in consumed energy\n                that will result in sending new energy report to the main controller\n                1-32000 (0.01-320 kWh) Default 100 (1kWh)",
+            "label": "2nd ch energy reports",
+            "description": "Second channel - energy reports",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 32000,
             "defaultValue": 100,
             "readOnly": false,
@@ -735,9 +737,9 @@
         },
         "58": {
             "label": "Periodic power reports",
-            "description": "This parameter determines in what time interval the periodic\n                power reports are sent to the main controller.\n                1-32000 (s) Default 3600 (1h)",
+            "description": "Periodic power reports",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 32000,
             "defaultValue": 3600,
             "readOnly": false,
@@ -746,9 +748,9 @@
         },
         "59": {
             "label": "Periodic energy reports",
-            "description": "This parameter determines in what time interval the periodic\n                power reports are sent to the main controller.\n                1-32000 (s) Default 3600 (1h)",
+            "description": "Periodic energy reports",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 32000,
             "defaultValue": 3600,
             "readOnly": false,
@@ -756,8 +758,8 @@
             "allowManualEntry": true
         },
         "60": {
-            "label": "Measuring energy consumed by the device itself",
-            "description": "This parameter determines whether energy metering should include\n                the amount of energy consumed by the device itself. Results are\n                being added to energy reports for first endpoint.",
+            "label": "Include own energy",
+            "description": "Measuring energy consumed by the device itself",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -767,11 +769,11 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "function inactive",
+                    "label": "Disabled",
                     "value": 0
                 },
                 {
-                    "label": "function active",
+                    "label": "Enabled",
                     "value": 1
                 }
             ]

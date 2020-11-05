@@ -1,204 +1,196 @@
+// Eaton RF9540-N
+// All Load Dimmer Light Switch
 {
-    "_approved": true,
-    "manufacturer": "Cooper Wiring Devices",
-    "manufacturerId": "0x001a",
-    "label": "RF9540-N",
-    "description": "RF9540-N All Load Dimmer Light Switch",
-    "devices": [
-        {
-            "productType": "0x4449",
-            "productId": "0x0101"
-        },
-        {
-            "productType": "0x4449",
-            "productId": "0xaa00"
-        },
-        {
-            "productType": "0x4449",
-            "productId": "0xff00"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group #1",
-            "maxNodes": 5
-        },
-        "255": {
-            "label": "Group 255",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Delayed OFF time",
-            "description": "The configuration value is a signed single byte number. This value may represent a value with no units or may represent a value such as time. 0 to 127 (decimal) represents 0 to 127 seconds of time. -128 to -1 (negative decimal numbers) represents 128 to 255 seconds as calculated by this formula.  Config value = desired time in seconds (or desired value) -256 For an example of 172 seconds: config value = 172 - 256 = -84 (decimal) or 0xAC (hex)",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
-        },
-        "2": {
-            "label": "Panic ON time",
-            "description": "The amount of time in seconds the switch will turn on for when panic mode is trigered.  The configuration value is a signed single byte number. This value may represent a value with no units or may represent a value such as time. 0 to 127 (decimal) represents 0 to 127 seconds of time. -128 to -1 (negative decimal numbers) represents 128 to 255 seconds as calculated by this formula.  Config value = desired time in seconds (or desired value) -256 For an example of 172 seconds: config value = 172 - 256 = -84 (decimal) or 0xAC (hex)",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
-        },
-        "3": {
-            "label": "Panic OFF time",
-            "description": "The amount of time in seconds the switch will turn off for when panic mode is triggered.  The configuration value is a signed single byte number. This value may represent a value with no units or may represent a value such as time. 0 to 127 (decimal) represents 0 to 127 seconds of time. -128 to -1 (negative decimal numbers) represents 128 to 255 seconds as calculated by this formula.  Config value = desired time in seconds (or desired value) -256 For an example of 172 seconds: config value = 172 - 256 = -84 (decimal) or 0xAC (hex)",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
-        },
-        "4": {
-            "label": "Basic set value",
-            "description": "Setting this to anything other than 0 will cause the value to be transmitted to devices in the association group when the switch is triggered. A setting other than 0 will likely result in undesired operation",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
-        },
-        "5": {
-            "label": "Power Up State",
-            "description": "Power up state of the device",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 1
-                },
-                {
-                    "label": "ON",
-                    "value": 2
-                },
-                {
-                    "label": "Last state",
-                    "value": 3
-                }
-            ],
-            "units": ""
-        },
-        "6": {
-            "label": "Panic mode enable",
-            "description": "Enables this switch to participate in panic mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 1
-                },
-                {
-                    "label": "ON",
-                    "value": 2
-                }
-            ],
-            "units": ""
-        },
-        "7": {
-            "label": "Dimmer Ramp Time",
-            "description": "The amount of time in seconds the switch will take to reach the desired dim level.  The configuration value is a signed single byte number. This value may represent a value with no units or may represent a value such as time. 0 to 127 (decimal) represents 0 to 127 seconds of time. -128 to -1 (negative decimal numbers) represents 128 to 255 seconds as calculated by this formula.  Config value = desired time in seconds (or desired value) -256 For an example of 172 seconds: config value = 172 - 256 = -84 (decimal) or 0xAC (hex)",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
-        },
-        "8": {
-            "label": "Kickstart / Rapid Start",
-            "description": "Ensures that LED / CFL bulbs turn on when the preset dim level is low.  Enabling this feature may cause the lights brightness to momentarily be bright when the switch is turned on before reducing in brightness to desired level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "disable",
-                    "value": 0
-                },
-                {
-                    "label": "enable",
-                    "value": 1
-                }
-            ],
-            "units": ""
-        },
-        "11": {
-            "label": "Minimum Dimmer Level",
-            "description": "The minimum dim level the switch will allow.  The minimum level must always be at least 13 below the maximum level.",
-            "valueSize": 1,
-            "minValue": 4,
-            "maxValue": 99,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
-        },
-        "12": {
-            "label": "Maximum Dimmer Level",
-            "description": "The maximum dim level the switch will allow.  The maximum level must always be at least 13 above the minimum level.",
-            "valueSize": 1,
-            "minValue": 4,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RF9540-N",
+	"description": "All Load Dimmer Light Switch",
+	"devices": [
+		{
+			"productType": "0x4449",
+			"productId": "0x0101"
+		},
+		{
+			"productType": "0x4449",
+			"productId": "0xaa00"
+		},
+		{
+			"productType": "0x4449",
+			"productId": "0xff00"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5
+		},
+		"255": {
+			"label": "Group 255",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Delayed OFF time",
+			"description": "time in seconds to delay OFF",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Panic ON time",
+			"description": "Time in seconds for panic mode ON",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Panic OFF time",
+			"description": "time in seconds for OFF in panic mode",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Basic Set Value",
+			"description": "Send value to  association group on trigger",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Power Up State",
+			"description": "Power Up State of the switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				},
+				{
+					"label": "Last State",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Panic mode enable",
+			"description": "Enables this switch to participate in panic mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Dimmer Ramp Time",
+			"description": "Time in seconds to reach desired level",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Kickstart / Rapid Start",
+			"description": "Turn on or off rapid start feature",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "Minimum Dimmer Level",
+			"description": "The minimum dim level the switch will allow",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 99,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Maximum Dimmer Level",
+			"description": "The maximum dim level the switch will allow",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,32 +1,14 @@
+// AEON Labs ZW056
+// Doorbell
 {
     "_approved": true,
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "ZW056",
-    "description": "ZW056 Doorbell Gen5",
+    "description": "Doorbell",
     "devices": [
         {
-            "productType": "0x0A04",
-            "productId": "0x0038"
-        },
-        {
-            "productType": "0x1A04",
-            "productId": "0x0038"
-        },
-        {
-            "productType": "0x1D04",
-            "productId": "0x0038"
-        },
-        {
-            "productType": "0x0904",
-            "productId": "0x0038"
-        },
-        {
-            "productType": "0x0304",
-            "productId": "0x0038"
-        },
-        {
-            "productType": "0x0204",
+            "productType": "0x0004",
             "productId": "0x0038"
         },
         {
@@ -34,7 +16,15 @@
             "productId": "0x0038"
         },
         {
-            "productType": "0x0004",
+            "productType": "0x0204",
+            "productId": "0x0038"
+        },
+        {
+            "productType": "0x0304",
+            "productId": "0x0038"
+        },
+        {
+            "productType": "0x0904",
             "productId": "0x0038"
         },
         {
@@ -54,48 +44,36 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Transmit",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
-            "label": "doorbell ringtone repetitions",
-            "description": "Set the repetitions for playing doorbell ringtone.\n                Value=1 to 255, the range of repetition is 1 to 100.\n                Note: If the time of playing doorbell ringtone is more than 20s,\n                the volume of ringtone will reduce to silence no matter how\n                many repetitions of doorbell ringtone are set.",
+            "label": "Repetitions of ringtone",
+            "description": "Set the repetitions for playing doorbell ringtone.",
             "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
+            "minValue": 0,
+            "maxValue": 100,
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "5": {
-            "label": "Default Doorbell Ringtone",
-            "description": "Set the default doorbell ringtone.\n                Value=1-100, Specify the ringtone as default.",
+            "label": "Default ringtone",
+            "description": "Set the default doorbell ringtone. Default=1",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 100,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "6": {
-            "label": "Play Ringtone",
-            "description": "Select a ringtone to play.\n                Value=0, stop playing.\n                Value=1-100, play the specified ringtone.\n                Value=255, play the default ringtone.\n                Value=other, ignore.",
+            "label": "Ringtone to play",
+            "description": "Set a ringtone to play. Default=0",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
@@ -109,20 +87,23 @@
                     "label": "play the default ringtone",
                     "value": 255
                 }
-            ],
-            "units": ""
+            ]
         },
         "7": {
-            "label": "Control",
-            "description": "Playback Control",
+            "label": "Control items",
+            "description": "Control current output",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 2,
+            "maxValue": 5,
+            "defaultValue": 0,
             "readOnly": false,
-            "writeOnly": false,
+            "writeOnly": true,
             "allowManualEntry": false,
             "options": [
+                {
+                    "label": "Ignore",
+                    "value": 0
+                },
                 {
                     "label": "Play",
                     "value": 1
@@ -143,24 +124,22 @@
                     "label": "Previous",
                     "value": 5
                 }
-            ],
-            "units": ""
+            ]
         },
         "8": {
-            "label": "Volume",
-            "description": "Set the volume of ringtone",
+            "label": "Ringtone volume",
+            "description": "Default=10",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 10,
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "10": {
-            "label": "Swap Buttons",
-            "description": "Define functions of \"Button -\" and \"Button+\".\n                Button - is previous, Button+ is next.",
+            "label": "Define button- and button+ action",
+            "description": "Define functions of “Button ‐”  and “Button+”.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -170,19 +149,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Standard",
+                    "label": "“‐” is previous, “+” is next",
                     "value": 0
                 },
                 {
-                    "label": "Reversed",
+                    "label": "\"‐” is next, “+” is previous",
                     "value": 1
                 }
-            ],
-            "units": ""
+            ]
         },
         "11": {
-            "label": "Button Short/Long Press Function",
-            "description": "Define functions of \"Button -\" and \"Button+\" when short\n                pressing and long pressing it.",
+            "label": "Define long press button- and button+",
+            "description": "Define short/long button presses",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -192,154 +170,114 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Short Press - Volume, Long Press - RingTone",
+                    "label": "short changes vol, long changes ringtone",
                     "value": 0
                 },
                 {
-                    "label": "Short Press - RingTone, Long Press - Volume",
+                    "label": "long changes vol, short changes ringtone",
                     "value": 1
                 }
-            ],
-            "units": ""
+            ]
         },
         "42": {
-            "label": "Wireless Button Status",
-            "description": "Get Wireless Button Battery Status",
+            "label": "Get wireless button battery status",
+            "description": "Alert for low battery",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 0,
             "defaultValue": 0,
-            "readOnly": true,
+            "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Normal Battery Level",
+                    "label": "Battery Level Good",
                     "value": 0
                 },
                 {
-                    "label": "Low Battery Level",
+                    "label": "Low Battery",
                     "value": 255
                 }
-            ],
-            "units": ""
+            ]
         },
         "80": {
-            "label": "Notification status",
-            "description": "Defines the automated status notification of an associated device when status changes",
+            "label": "Enable Notifications",
+            "description": "Enable to send notifications to associated devices (Group1)",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 2,
-            "defaultValue": 2,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Nothing",
+                    "label": "nothing",
                     "value": 0
                 },
                 {
-                    "label": "Hail",
+                    "label": "hail CC",
                     "value": 1
                 },
                 {
-                    "label": "Basic",
+                    "label": "basic CC report",
                     "value": 2
                 }
-            ],
-            "units": ""
+            ]
         },
         "81": {
-            "label": "Low Battery Notification status",
-            "description": "Defines the automated status notification of an associated device when the wireless button battery level changes",
+            "label": "Enable/disable battery group notification",
+            "description": "Notifies Group 1 when battery state is low",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
-            "defaultValue": 1,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Nothing",
+                    "label": "nothing",
                     "value": 0
                 },
                 {
-                    "label": "Configuration Paramater 42",
+                    "label": "Configuration report parameter 42",
                     "value": 1
                 }
-            ],
-            "units": ""
+            ]
         },
         "241": {
-            "label": "Pair Wireless Button",
-            "description": "Pair the Wireless Button with Doorbell.\n                Value=0x55555555, Start the Wireless Button pairing mode and\n                the blue Led will blink slowly, short press the Wireless Button\n                once, if the blue Led change to be solid, which means the pairing\n                is successful. Otherwise, repeat the steps.\n                It will automatically exit the pairing mode after 8s if there is no\n                pressing action of the Wireless Button.\n                Note:\n                You can send this configuration Get CC to ask the pairing result:\n                If configuration report value=0x00000000, which means the\n                pairing is failed.\n                If configuration report value =0xFFFFFFFF, which means the\n                pairing is successful.",
+            "label": "Pair doorbell with button",
+            "description": "Starts wireless button pairing mode",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 0,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "",
-            "options": [
-                {
-                    "label": "Start Pairing/Paired",
-                    "value": 4294967295
-                },
-                {
-                    "label": "Not Pairing/Unpaired",
-                    "value": 0
-                }
-            ]
+            "allowManualEntry": true
         },
         "252": {
-            "label": "Configuration Locked",
-            "description": "Enable/disable Configuration Locked",
+            "label": "Lock configuration",
+            "description": "Lock configuration",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "",
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
+            "allowManualEntry": true
         },
         "255": {
-            "label": "Reset To Factory Defaults",
-            "description": "Reset to factory defaults",
+            "label": "Reset",
+            "description": "Reset to factory settings",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 1,
+            "maxValue": 0,
+            "defaultValue": 0,
             "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Reset to factory default setting",
-                    "value": 0
-                },
-                {
-                    "label": "Normal",
-                    "value": 1
-                },
-                {
-                    "label": "Reset to factory default setting and removed from the z-wave network",
-                    "value": 1431655765
-                }
-            ]
+            "writeOnly": false,
+            "allowManualEntry": true
         }
     }
 }

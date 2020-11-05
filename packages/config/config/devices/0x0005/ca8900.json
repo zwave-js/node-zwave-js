@@ -1,9 +1,11 @@
+// Intermatic CA8900
+// Z-Wave Thermostat
 {
     "_approved": true,
     "manufacturer": "Intermatic",
     "manufacturerId": "0x0005",
     "label": "CA8900",
-    "description": "CA8900 Digital Thermostat",
+    "description": "Z-Wave Thermostat",
     "devices": [
         {
             "productType": "0x4341",

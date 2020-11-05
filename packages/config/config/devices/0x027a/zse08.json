@@ -1,9 +1,11 @@
+// Zooz ZSE08
+// Z-Wave Plus Contact Sensor
 {
     "_approved": true,
     "manufacturer": "Zooz",
     "manufacturerId": "0x027a",
     "label": "ZSE08",
-    "description": "ZSE08 Contact Sensor",
+    "description": "Z-Wave Plus Contact Sensor",
     "devices": [
         {
             "productType": "0x0003",
@@ -14,10 +16,11 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Trigger Delay",
-            "description": "Set the delay time for turning associated devices OFF based on status change of your Contact Sensor, in seconds.  0 is default, which is instant.",
+            "label": "Close Delay",
+            "description": "Delay (in seconds) before close signal will be sent",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 65535,
@@ -25,12 +28,11 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
+            "allowManualEntry": true
         },
         "2": {
-            "label": "Trigger Action",
-            "description": "You can choose if your Contact Sensor turns an associated device on or off when sending the basic command set.  Value of 0 will set the associated device OFF and value 255 to turn it on.  Value between 1 and 99 will be a percentage of light.  Value between 100-254 are invalid.",
+            "label": "Trigger Value",
+            "description": "The value that will be set when the sensor is triggered",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -39,25 +41,6 @@
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Control Command",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Notification report",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Binary sensor report",
-            "maxNodes": 5
         }
     }
 }

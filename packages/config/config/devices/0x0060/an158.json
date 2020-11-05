@@ -1,78 +1,77 @@
+// Everspring AN158
+// Switch Meter Plugin
 {
-    "_approved": true,
-    "manufacturer": "Everspring",
-    "manufacturerId": "0x0060",
-    "label": "AN158",
-    "description": "AN158 Plug-in Meter Appliance Module",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Reports",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic",
-            "maxNodes": 4
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "True Period",
-            "description": "This is the time the switching status needs to remain\nunchanged after a change to cause the device to send out a status\nmessage. 0 is Disabled.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 120,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "100ms"
-        },
-        "2": {
-            "label": "Send Out Basic Command",
-            "description": "Enable or Disable Send Basic Command to Group 2 when the local\nbutton press changes the switching state.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ],
-            "units": ""
-        },
-        "3": {
-            "label": "Meter Report Period",
-            "description": "The device will report its meter value within the interval\nset. Set to 0 will disable the autoreporting function.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 3240,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "10s"
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "AN158",
+	"description": "Switch Meter Plugin",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Reports",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Control",
+			"maxNodes": 4
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "True Period",
+			"description": "Time of switching status to send status message",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 254,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Send Out Basic Command",
+			"description": "Enable or Disable the status message function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Meter Report Period",
+			"description": "Autoreporting meter value interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3240,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

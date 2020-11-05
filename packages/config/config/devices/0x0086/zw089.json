@@ -1,12 +1,14 @@
+// AEON Labs ZW089
+// Recessed Door Sensor Gen5
 {
     "_approved": true,
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "ZW089",
-    "description": "ZW089 Recessed Door Sensor Gen5",
+    "description": "Recessed Door Sensor Gen5",
     "devices": [
         {
-            "productType": "0x0202",
+            "productType": "0x0002",
             "productId": "0x0059"
         },
         {
@@ -14,7 +16,7 @@
             "productId": "0x0059"
         },
         {
-            "productType": "0x0002",
+            "productType": "0x0202",
             "productId": "0x0059"
         }
     ],
@@ -24,18 +26,18 @@
     },
     "associations": {
         "1": {
-            "label": "LifeLine",
+            "label": "State Updates",
             "maxNodes": 5,
             "isLifeline": true
         },
         "2": {
-            "label": "Battery",
+            "label": "Battery Warnings",
             "maxNodes": 5
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Sensor Binary Report Toggle",
+            "label": "Send Sensor binary report on open/close events",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -45,18 +47,17 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Normal",
+                    "label": "On for opened, Off for closed",
                     "value": 0
                 },
                 {
-                    "label": "Inverse",
+                    "label": "Off for opened, On for closed",
                     "value": 1
                 }
-            ],
-            "description": "Which value of the Sensor Binary Report will be sent when \n            the magnet switch to open/close."
+            ]
         },
         "3": {
-            "label": "Basic Set Toggle",
+            "label": "Send Basic Set on open/close event",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -66,19 +67,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Normal",
+                    "label": "On for opened, Off for closed",
                     "value": 0
                 },
                 {
-                    "label": "Inverse",
+                    "label": "Off for opened, On for closed",
                     "value": 1
                 }
-            ],
-            "description": "Which value of the Basic Set will be sent when the magnet \n            switch to open/close."
+            ]
         },
         "101": {
-            "label": "Low Battery Check Enable",
-            "description": "Enable/disable the function of low battery checking, when \n            the current voltage is less than the warning voltage, it will \n            send the Battery Low Warning Report.",
+            "label": "Low battery voltage check",
+            "description": "low battery check when voltage is less than warn voltage",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -88,59 +88,30 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
-                    "label": "Enabled",
+                    "label": "Enable",
                     "value": 1
                 }
             ]
         },
         "111": {
-            "label": "Low Battery Check Interval",
-            "description": "This parameter is available when the low battery checking\n                  function is activated or the device was waked up by other\n                  actions (i.e. the z-wave button trigger, magnet switch\n                  trigger and the Wake Up Interval Set timeout trigger).\n                  The Recessed Door Sensor will check the battery power\n                  when it was wake up as other ways. For example: the\n                  z-wave button trigger, magnet switch trigger and the\n                  Wake Up Interval Set timeout trigger.\n              Default setting: 86640",
+            "label": "Low battery voltage check time",
+            "description": "Minimum battery low check Interval time is 4 minutes",
             "unit": "seconds",
             "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 4294967295,
+            "minValue": 240,
+            "maxValue": 2147483647,
             "defaultValue": 86640,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
-        "121": {
-            "label": "Report Type",
-            "description": "Configure which sensor report will be sent when the sensor is Opened/Closed",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 256,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Basic Set",
-                    "value": 256
-                },
-                {
-                    "label": "Sensor Binary Report",
-                    "value": 16
-                },
-                {
-                    "label": "Basic Set and Sensor Binary Report",
-                    "value": 272
-                }
-            ]
-        },
         "252": {
-            "label": "Lock/Unlock Configuration",
-            "description": "Lock/ unlock all configuration parameters",
+            "label": "Permit other configurations",
+            "description": "Lock or Unlock other configuration set function",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -159,24 +130,12 @@
                 }
             ]
         },
-        "254": {
-            "label": "Device Tag",
-            "description": "Device Tag",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 65535,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
         "255": {
-            "label": "Reset To Factory Defaults",
-            "description": "Reset to factory defaults.",
+            "label": "Reset to default",
+            "description": "Reset to the default configuration",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,

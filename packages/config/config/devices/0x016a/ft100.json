@@ -1,676 +1,149 @@
+// Fantem FT100
+// Oomi Multisensor
 {
-    "_approved": true,
-    "manufacturer": "Fantem (Oomi)",
-    "manufacturerId": "0x016a",
-    "label": "FT100",
-    "description": "FT100 MultiSensor 6",
-    "devices": [
-        {
-            "productType": "0x1D02",
-            "productId": "0x0064"
-        },
-        {
-            "productType": "0x0202",
-            "productId": "0x0064"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x0064"
-        },
-        {
-            "productType": "0x0002",
-            "productId": "0x0064"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "LifeLine",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "2": {
-            "label": "Wake up 10 minutes on Power On",
-            "description": "Enable/Disable waking up for 10 minutes when re-power on (battery mode) the MultiSensor",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "On time",
-            "description": "Duration that the motion sensor must observe no motion before it will return to the no-motion state.\n\t\t\tIf value greater than 255, effective value is rounded up to the nearest minute (255 -> 255 seconds, 256 -> 300 seconds)",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 3600,
-            "defaultValue": 240,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
-        },
-        "4": {
-            "label": "Enable Motion Sensor",
-            "description": "Enable Motion Sensor, (1 minimum, 5 maximum sensitivity level)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled level 1",
-                    "value": 1
-                },
-                {
-                    "label": "Enabled level 2",
-                    "value": 2
-                },
-                {
-                    "label": "Enabled level 3",
-                    "value": 3
-                },
-                {
-                    "label": "Enabled level 4",
-                    "value": 4
-                },
-                {
-                    "label": "Enabled level 5",
-                    "value": 5
-                }
-            ]
-        },
-        "5": {
-            "label": "Command Options",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Basic Set",
-                    "value": 1
-                },
-                {
-                    "label": "Binary Sensor Report",
-                    "value": 2
-                }
-            ],
-            "description": "Which commands to send when PIR motion sensor triggered\n\t\t\tOZW Ideal Value is Binary Sensor Report"
-        },
-        "8": {
-            "label": "Awake timeout",
-            "description": "Set the timeout of awake after the Wake Up CC is sent out.\n\t\t\tAvailable rang: 8 to 255 seconds.",
-            "valueSize": 1,
-            "minValue": 8,
-            "maxValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 30
-        },
-        "9": {
-            "label": "Current power mode",
-            "description": "Report the current power mode and the product state for battery power mode",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 257,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 0,
-            "options": [
-                {
-                    "label": "USB power, sleeping mode after re-power on",
-                    "value": 0
-                },
-                {
-                    "label": "USB power, keep awake for 10 minutes after re-power on",
-                    "value": 1
-                },
-                {
-                    "label": "Battery power, sleeping mode after re-power on",
-                    "value": 256
-                },
-                {
-                    "label": "Battery power, keep awake for 10 minutes after re-power on",
-                    "value": 257
-                }
-            ]
-        },
-        "39": {
-            "label": "Low Battery",
-            "unit": "Percentage",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 50,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "description": "Configure low battery value\n\t\t\tValue=10 to 50."
-        },
-        "40": {
-            "label": "Report Only On Thresholds",
-            "description": "Enable/disable the selective reporting only when measurements reach a certain threshold or percentage \n\t\t\tset in the threshold settings.  This is used to reduce network\n\t\t\ttraffic.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "41": {
-            "label": "Temperature Reporting Threshold",
-            "description": "Threshold change in temperature to induce an automatic report.  \n\t\t\tNote: \n\t\t\t1. The unit is Fahrenheit for US version, Celsius for EU/AU version.\n\t\t\t2. The value contains one decimal point. E.g. if the value is set to 20, the threshold value = 2.0 C (EU/AU) or 2.0 F (US). When the temperature has changed by 2.0 (of the appropriate unit), a temperature report will be sent.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 39321,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 20,
-            "units": "C/F"
-        },
-        "42": {
-            "label": "Humidity Reporting Threshold",
-            "description": "Threshold change in humidity to induce an automatic report. \n\t\t\tNote: \n\t\t\t1. The unit is %.\n\t\t\t2. The default value is 10, which means that a 10% change in humidity will trigger a report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 10,
-            "units": "%"
-        },
-        "43": {
-            "label": "Luminance Reporting Threshold",
-            "description": "Threshold change in luminance to induce an automatic report.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 100,
-            "units": "LUX"
-        },
-        "44": {
-            "label": "Battery Reporting Threshold",
-            "description": "Threshold change in battery level to induce an  automatic report. \n\t\t\tNote: \n\t\t\t1. The unit is %.\n\t\t\t2. The default value is 10, which means that a 10% change in battery will trigger a report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 10,
-            "units": "%"
-        },
-        "45": {
-            "label": "UV Reporting Threshold",
-            "description": "Threshold change in ultraviolet to induce an automatic report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 2,
-            "units": ""
-        },
-        "46": {
-            "label": "Low Temp Alarm",
-            "description": "Enable/disable to send the alarm report of low temperature(Less than 15 Degress C)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 0,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "48": {
-            "label": "Enable/disable to send a report on Threshold",
-            "description": "Enable/disable to send a report when the measurement is more than the upper limit value or less than the lower limit value.\n\t\t\tBit mask = 0, disable.\n\t\t\tBit mask = 1, enable.\n\t\t\tBit 0 = temperature.\n\t\t\tBit 1 = humidity.\n\t\t\tBit 2 = luminance.\n\t\t\tBit 3 = ultraviolet.\n\t\t\tThe above bit masks are used to enable/disable to send out a report when the measurement is less than the lower limit value.\n\t\t\tThe below bit masks are used to enable/disable to send out a report when the measurement is more than the upper limit value.\n\t\t\tBit 4 = temperature.\n\t\t\tBit 5 = humidity.\n\t\t\tBit 6 = luminance.\n\t\t\tBit 7 = ultraviolet.\n\t\t\tNote: \n\t\t\tIf USB power, the Sensor will check the limit every 10 seconds. If battery power, the Sensor will check the limit when it is waken up.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "49": {
-            "label": "Set the upper limit value of temperature sensor",
-            "description": "When the measurement is more than this upper limit, which will trigger to sent out a sensor report.\n\t\t\tHigh byte is the upper limit value. Low byte is the unit (0x01=Celsius, 0x02=Fahrenheit).\n\t\t\t1. When unit is Celsius.\n\t\t\tUpper limit range: -40.0 to 100.0 C (0xFE70 to 0x03E8).\n\t\t\tE.g. The default upper limit of EU/AU version is 28.0 C (0x0118), when the measurement is more than 28.0C, it will be triggered to send out a temperature sensor report.\n\t\t\t2. When unit is Fahrenheit.\n\t\t\tUpper limit range: -40.0 to 212.0 F (0xFE70 to 0x0848).\n\t\t\tE.g. The default upper limit of US version is 82.4F (0X0338), when the measurement is more than 82.4F, it will be triggered to send out a temperature sensor report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 71681
-        },
-        "50": {
-            "label": "Set the lower limit value of temperature sensor",
-            "description": "When the measurement is less than this lower limit, which will trigger to sent out a sensor report.\n\t\t\tHigh byte is the lower limit value. Low byte is the unit (0x01=Celsius, 0x02=Fahrenheit).\n\t\t\t1. When unit is Celsius.\n\t\t\tLower limit range: -40.0 to 100.0 C (0xFE70 to 0x03E8).\n\t\t\tE.g. The default lower limit of EU/AU version is 0 C (0x0000), when the measurement is less than 0C, it will be triggered to send out a temperature sensor report.\n\t\t\t2. When unit is Fahrenheit. \n\t\t\tUpper limit range: -40.0 to 212.0 F (0xFE70 to 0x0848).\n\t\t\tE.g. The default lower limit of US version is 32.0F (0x0140), when the measurement is less than 32.0F, it will be triggered to send out a temperature sensor report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1
-        },
-        "51": {
-            "label": "Set the upper limit value of humidity sensor",
-            "description": "When the measurement is more than this upper limit, which will trigger to sent out a sensor report.\n\t\t\tUpper limit range: 0 to 100%.\n\t\t\tE.g. The default upper limit is 60%, when the measurement is more than 60%, it will be triggered to send out a humidity sensor report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 60,
-            "units": "%"
-        },
-        "52": {
-            "label": "Set the lower limit value of humidity sensor",
-            "description": "When the measurement is less than this lower limit, which will trigger to sent out a sensor report.\n\t\t\tLower limit range: 0 to 100%.\n\t\t\tE.g. The default lower limit is 50%, when the measurement is less than 50%, it will be triggered to send out a humidity sensor report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 50,
-            "units": "%"
-        },
-        "53": {
-            "label": "Set the upper limit value of Lighting sensor",
-            "description": "When the measurement is more than this upper limit, which will trigger to sent out a sensor report.\n\t\t\tUpper limit range: 0 to 30000 Lux.\n\t\t\tE.g. The default upper limit is 1000Lux, when the measurement is more than 1000Lux, it will be triggered to send out a Lighting sensor report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 30000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1000,
-            "units": "lux"
-        },
-        "54": {
-            "label": "Set the lower limit value of Lighting sensor",
-            "description": "When the measurement is less than this lower limit, which will trigger to sent out a sensor report.\n\t\t\tLower limit range: 0 to 30000 Lux.\n\t\t\tE.g. The default lower limit is 100Lux, when the measurement is less than 100Lux, it will be triggered to send out a Lighting sensor report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 30000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 100,
-            "units": "lux"
-        },
-        "55": {
-            "label": "Set the upper limit value of ultraviolet sensor",
-            "description": "When the measurement is more than this upper limit, which will trigger to sent out a sensor report.\n\t\t\t Upper limit range: 1 to 11.\n\t\t\t E.g. The default upper limit is 8, when the measurement is more than 8, it will be triggered to send out a ultraviolet sensor report.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 11,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 8,
-            "units": "UV"
-        },
-        "56": {
-            "label": "Set the lower limit value of ultraviolet sensor",
-            "description": "When the measurement is less than this upper limit, which will trigger to sent out a sensor report.\n\t\t\t Lower limit range: 1 to 11.\n\t\t\t E.g. The default lower limit is 4, when the measurement is less than 8, it will be triggered to send out a ultraviolet sensor report.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 11,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 4,
-            "units": "UV"
-        },
-        "57": {
-            "label": "Set the recover limit value of temperature sensor",
-            "description": "Note:\n\t\t\t1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. \n\t\t\tAfter that, the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit).\n\t\t\t2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. \n\t\t\tAfter that, the lower limit report would be disabled again until the measurement greater or equal (Lower limit + Recover limit).\n\t\t\t3. High byte is the recover limit value. Low byte is the unit (0x01=Celsius, 0x02=Fahrenheit).\n\t\t\t4. Recover limit range: 1.0 to 25.5 C/ F (0x0101 to 0xFF01 or 0x0102 to 0xFF02).\n\t\t\tE.g. The default recover limit value is 2.0 C/F (0x1401/0x1402), when the measurement is less than (Upper limit - 2), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 2), the lower limit report would be enabled one time.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 5121
-        },
-        "58": {
-            "label": "Set the recover limit value of humidity sensor",
-            "description": "Note:\n\t\t\t1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. \n\t\t\tAfter that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit).\n\t\t\t2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. \n\t\t\tAfter that the lower limit report would be disabled again until the measurement greater or equal(Lower limit + Recover limit).\n\t\t\t3. Recover limit range: 1 to 50% (0x01 to 0x32).\n\t\t\tE.g. The default recover limit value is 5%, when the measurement is less than (Upper limit - 5), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 5), the lower limit report would be enabled one time.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 5,
-            "units": "%"
-        },
-        "59": {
-            "label": "Set the recover limit value of Lighting sensor",
-            "description": "Note:\n\t\t\t1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. \n\t\t\tAfter that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit).\n\t\t\t2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. \n\t\t\tAfter that the lower limit report would be disabled again until the measurement greater or equal (Lower limit + Recover limit).\n\t\t\t3. Unit = 10*Recover limit (Lux)\n\t\t\t4. Recover limit range: 10 to 2550Lux (0x01 to 0xFF).\n\t\t\tE.g. The default recover limit value is 100 Lux, when the measurement is less than (Upper limit - 100), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 100), the lower limit report would be enabled one time.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 10,
-            "units": "10xlux"
-        },
-        "60": {
-            "label": "Set the recover limit value of Ultraviolet sensor",
-            "description": "Note:\n\t\t\t1. When the current measurement lower or equal (Upper limit - Recover limit), the upper limit report is enabled and then it would send out a sensor report when the next measurement is more than the upper limit. \n\t\t\tAfter that the upper limit report would be disabled again until the measurement lower or equal (Upper limit - Recover limit).\n\t\t\t2. When the current measurement greater or equal (Lower limit + Recover limit), the lower limit report is enabled and then it would send out a sensor report when the next measurement is less than the lower limit. \n\t\t\tAfter that the lower limit report would be disabled again until the measurement greater or equal(Lower limit + Recover limit).\n\t\t\t3. Recover limit range: 1 to 50% (0x01 to 0x32).\n\t\t\tE.g. The default recover limit value is 5%, when the measurement is less than (Upper limit - 5), the upper limit report would be enabled one time or when the measurement is more than (Lower limit + 5), the lower limit report would be enabled one time.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 2,
-            "units": "UV"
-        },
-        "61": {
-            "label": "Get the out-of-limit state of the Sensors",
-            "description": "Get the out-of-limit state of the Sensors.\n\t\t\tBit mask = 0, within the limit.\n\t\t\tBit mask = 1, out of the limit.\n\t\t\tBit 0 = temperature.\n\t\t\tBit 1 = humidity.\n\t\t\tBit 2 = luminance.\n\t\t\tBit 3 = ultraviolet.\n\t\t\tThe above bit masks are used to indicate whether the current measurements of the Sensors are out of the lower limit.\n\t\t\tThe below bit masks are used to indicate whether the current measurements of the Sensors are out of the upper limit.\n\t\t\tBit 4 = temperature.\n\t\t\tBit 5 = humidity.\n\t\t\tBit 6 = luminance.\n\t\t\tBit 7 = ultraviolet.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "64": {
-            "label": "Temperature scale",
-            "description": "Default value: Celsius for EU/AU version, Fahrenheit for US version.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 1,
-            "options": [
-                {
-                    "label": "Celsius",
-                    "value": 1
-                },
-                {
-                    "label": "Fahrenheit",
-                    "value": 2
-                }
-            ]
-        },
-        "81": {
-            "label": "LED blinking report",
-            "description": "Enable/disable the LED blinking for motion, wakeup, and sensor report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 0,
-            "options": [
-                {
-                    "label": "Enable LED blinking",
-                    "value": 0
-                },
-                {
-                    "label": "Disable LED blinking only when the PIR is triggered",
-                    "value": 1
-                },
-                {
-                    "label": "Completely disable LED for motion, wakeup, and sensor report",
-                    "value": 2
-                }
-            ]
-        },
-        "100": {
-            "label": "Reset Params 101-103 to Default",
-            "description": "Reset The Reporting Group Configuration (101 to 103) to default",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0
-        },
-        "101": {
-            "label": "Group 1 Reports",
-            "description": "Which reports need to send automatically in timing intervals for group 1.\n\t\t\t\tBitmask:\n\t\t\t\t10000000 - 128 - Luminance\n\t\t\t\t01000000 - 64 - Humidity\n\t\t\t\t00100000 - 32 - Temperature\n\t\t\t\t00010000 - 16 - Ultraviolet\n\t\t\t\t00000001 - 1 - Battery\n\t\t\t\t10100000 - 160 - Luminance and Temperature (32+128)\n\t\t\t\t11110001 - 241 - All (1+16+32+64+128)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 241
-        },
-        "102": {
-            "label": "Group 2 Reports",
-            "description": "Which reports need to send automatically in timing intervals for group 2.\n\t\t\t\tBitmask:\n\t\t\t\t10000000 - 128 - Luminance\n\t\t\t\t01000000 - 64 - Humidity\n\t\t\t\t00100000 - 32 - Temperature\n\t\t\t\t00010000 - 16 - Ultraviolet\n\t\t\t\t00000001 - 1 - Battery\n\t\t\t\t10100000 - 160 - Luminance and Temperature (32+128)\n\t\t\t\t11110001 - 241 - All (1+16+32+64+128)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0
-        },
-        "103": {
-            "label": "Group 3 Reports",
-            "description": "Which reports need to send automatically in timing intervals for group 3.\n\t\t\t\tBitmask:\n\t\t\t\t10000000 - 128 - Luminance\n\t\t\t\t01000000 - 64 - Humidity\n\t\t\t\t00100000 - 32 - Temperature\n\t\t\t\t00010000 - 16 - Ultraviolet\n\t\t\t\t00000001 - 1 - Battery\n\t\t\t\t10100000 - 160 - Luminance and Temperature (32+128)\n\t\t\t\t11110001 - 241 - All (1+16+32+64+128)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0
-        },
-        "110": {
-            "label": "Reset Params 111-113 to Default",
-            "description": "Reset The Reporting Group Interval Configuration (111 to 113) to default",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0
-        },
-        "111": {
-            "label": "Group 1 Interval",
-            "description": "The interval for sending reports for group 1.\n\t\t\tThe effective behavior of this setting depends on the device's power source:\n\t\t\t- If the device is on USB power, it will send the reports at the configured interval; set it to something low (~15-60 seconds) to get frequent updates from a powered device.\n\t\t\t- If the device is on battery, the sensor will never report in more often than its configured wake interval, regardless of what this setting is configured to; setting this to 3601 when the wake interval is 3600 would make this group report in every 7200 seconds. 240 seconds is the minimum wake interval, but will quickly use battery.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2678400,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 3600,
-            "units": "seconds"
-        },
-        "112": {
-            "label": "Group 2 Interval",
-            "description": "The interval for sending reports for group 2.\n\t\t\tThe effective behavior of this setting depends on the device's power source:\n\t\t\t- If the device is on USB power, it will send the reports at the configured interval; set it to something low (~15-60 seconds) to get frequent updates from a powered device.\n\t\t\t- If the device is on battery, the sensor will never report in more often than its configured wake interval, regardless of what this setting is configured to; setting this to 3601 when the wake interval is 3600 would make this group report in every 7200 seconds. 240 seconds is the minimum wake interval, but will quickly use battery.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2678400,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 3600,
-            "units": "seconds"
-        },
-        "113": {
-            "label": "Group 3 Interval",
-            "description": "The interval for sending reports for group 3.\n\t\t\tThe effective behavior of this setting depends on the device's power source:\n\t\t\t- If the device is on USB power, it will send the reports at the configured interval; set it to something low (~15-60 seconds) to get frequent updates from a powered device.\n\t\t\t- If the device is on battery, the sensor will never report in more often than its configured wake interval, regardless of what this setting is configured to; setting this to 3601 when the wake interval is 3600 would make this group report in every 7200 seconds. 240 seconds is the minimum wake interval, but will quickly use battery.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2678400,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 3600,
-            "units": "seconds"
-        },
-        "201": {
-            "label": "Temperature Calibration",
-            "description": "Temperature calibration (the available value range is [-128,127] or [-12.8C,12.7C]).\n\t\t\tNote:\n\t\t\t1. High byte is the calibration value. Low byte is the unit (0x01=Celsius,0x02=Fahrenheit)\n\t\t\t2. The calibration value (high byte) contains one decimal point. \n\t\t\tE.g. if the value is set to 20 (0x1401), the calibration value is 2.0C (EU/AU version) or if the value is set to 20 (0x1402), the calibration value is 2.0F (US version)\n\t\t\t3. The calibration value (high byte) = standard value - measure value. \n\t\t\tE.g. If measure value =25.3C and the standard value = 23.2C, so the calibration value= 23.2C - 25.3C= -2.1C (0xEB). \n\t\t\tIf the measure value =30.1C and the standard value = 33.2C, so the calibration value= 33.2C - 30.1C=3.1C (0x1F).\n\t\t\tDefault value: 1 for EU/AU version, 2 for US version.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1
-        },
-        "202": {
-            "label": "Humidity Calibration",
-            "description": "The calibration value = standard value - measure value.\n\t\t\t(the available value range is [-50, 50]).\n\t\t\tIf measure value =80RH and the standard value = 75RH, so the calibration value= 75RH-80RH = -5RH (0xFB).\n\t\t\tIf the measure value =85RH and the standard value = 90RH, so the calibration value= 90RH-85RH = 5RH (0x05).",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0
-        },
-        "203": {
-            "label": "Luminance Calibration",
-            "description": "The calibration value = standard value - measure value. \n\t\t\t(the available value range is [-1000, 1000]).\n\t\t\tIf measure value =800Lux and the standard value = 750Lux, so the calibration value= 750-800 = -50 (0xFFCE). \n\t\t\tIf the measure value =850Lux and the standard value = 900Lux, so the calibration value= 900-850 = 50 (0x0032).",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 65535,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0
-        },
-        "204": {
-            "label": "Ultraviolet Calibration",
-            "description": "The calibration value = standard value measure value. \n\t\t\t(the available value range is [-10, 10]).\n\t\t\tIf measure value =9 and the standard value = 8, so the calibration value= 8-9 = -1 (0xFE). \n\t\t\tIf the measure value =7 and the standard value = 9, so the calibration value= 9-7 = 2 (0x02).",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0
-        },
-        "252": {
-            "label": "Enable/disable Lock Configuration",
-            "description": "Enable/disable Lock Configuration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 0,
-            "units": "",
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "255": {
-            "label": "Reset To Factory Defaults",
-            "description": "Reset to factory defaults",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "defaultValue": 1,
-            "options": [
-                {
-                    "label": "Reset to factory default setting",
-                    "value": 0
-                },
-                {
-                    "label": "Normal",
-                    "value": 1
-                },
-                {
-                    "label": "Reset to factory default setting and removed from the z-wave network",
-                    "value": 1431655765
-                }
-            ]
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Fantem",
+	"manufacturerId": "0x016a",
+	"label": "FT100",
+	"description": "Oomi Multisensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0064"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Stay Awake in Battery Mode",
+			"description": "Stay awake for 10 minutes at power on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable",
+					"value": 0
+				},
+				{
+					"label": "enable",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Default PIR time",
+			"description": "The default PIR time",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 3600,
+			"defaultValue": 240,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Motion sensor sensitivity",
+			"description": "Sensitivity level of PIR sensor (1=minimum, 5=maximum)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable",
+					"value": 0
+				},
+				{
+					"label": "sensitivity level 1",
+					"value": 1
+				},
+				{
+					"label": "sensitivity level 2",
+					"value": 2
+				},
+				{
+					"label": "sensitivity level 3",
+					"value": 3
+				},
+				{
+					"label": "sensitivity level 4",
+					"value": 4
+				},
+				{
+					"label": "sensitivity level 5",
+					"value": 5
+				}
+			]
+		},
+		"5": {
+			"label": "Motion sensor command when triggered",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Basic Set CC",
+					"value": 1
+				},
+				{
+					"label": "Sensor Binary Report CC",
+					"value": 2
+				}
+			]
+		},
+		"39": {
+			"label": "Low battery value",
+			"unit": "Percentage",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Selective Reporting",
+			"description": "Select to report on thresholds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable",
+					"value": 0
+				},
+				{
+					"label": "enable",
+					"value": 1
+				}
+			]
+		}
+	}
 }

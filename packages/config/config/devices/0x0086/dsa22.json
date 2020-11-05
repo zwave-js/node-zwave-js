@@ -1,9 +1,11 @@
+// AEON Labs DSA22
+// 4 button keyfob
 {
     "_approved": true,
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "DSA22",
-    "description": "DSA22 Key Fob",
+    "description": "4 button keyfob",
     "devices": [
         {
             "productType": "0x0001",
@@ -16,7 +18,7 @@
     },
     "associations": {
         "1": {
-            "label": "Lifeline",
+            "label": "Scene 1",
             "maxNodes": 5,
             "isLifeline": true
         },
@@ -37,611 +39,93 @@
         }
     },
     "paramInformation": {
-        "0": {
-            "label": "Button #1(tap) Value 1",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "1": {
-            "label": "Button #1(tap) Value 2",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "2": {
-            "label": "Button #1(tap) Value 3",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "3": {
-            "label": "Button #1(tap) Value 4",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "4": {
-            "label": "Button #1(tap) Value 5",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "20": {
-            "label": "Button #1(hold) Value 1",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "21": {
-            "label": "Button #1(hold) Value 2",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "22": {
-            "label": "Button #1(hold) Value 3",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "23": {
-            "label": "Button #1(hold) Value 4",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "24": {
-            "label": "Button #1(hold) Value 5",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "40": {
-            "label": "Button #2(tap) Value 1",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "41": {
-            "label": "Button #2(tap) Value 2",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "42": {
-            "label": "Button #2(tap) Value 3",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "43": {
-            "label": "Button #2(tap) Value 4",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "44": {
-            "label": "Button #2(tap) Value 5",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "60": {
-            "label": "Button #2(hold) Value 1",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "61": {
-            "label": "Button #2(hold) Value 2",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "62": {
-            "label": "Button #2(hold) Value 3",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "63": {
-            "label": "Button #2(hold) Value 4",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "64": {
-            "label": "Button #2(hold) Value 5",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "80": {
-            "label": "Button #3(tap) Value 1",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "81": {
-            "label": "Button #3(tap) Value 2",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "82": {
-            "label": "Button #3(tap) Value 3",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "83": {
-            "label": "Button #3(tap) Value 4",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "84": {
-            "label": "Button #3(tap) Value 5",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "100": {
-            "label": "Button #3(hold) Value 1",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "101": {
-            "label": "Button #3(hold) Value 2",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "102": {
-            "label": "Button #3(hold) Value 3",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "103": {
-            "label": "Button #3(hold) Value 4",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "104": {
-            "label": "Button #3(hold) Value 5",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "120": {
-            "label": "Button #4(tap) Value 1",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "121": {
-            "label": "Button #4(tap) Value 2",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "122": {
-            "label": "Button #4(tap) Value 3",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "123": {
-            "label": "Button #4(tap) Value 4",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "124": {
-            "label": "Button #4(tap) Value 5",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "140": {
-            "label": "Button #4(hold) Value 1",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "141": {
-            "label": "Button #4(hold) Value 2",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "142": {
-            "label": "Button #4(hold) Value 3",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "143": {
-            "label": "Button #4(hold) Value 4",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "144": {
-            "label": "Button #4(hold) Value 5",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
         "241": {
-            "label": "Button #1 Programmable",
+            "label": "Mode of Button 1 (upper left)",
             "description": "Defines the switching mode of Button 1",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                }
-            ],
-            "units": ""
-        },
-        "242": {
-            "label": "Button #2 Programmable",
-            "description": "Defines the switching mode of Button 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                }
-            ],
-            "units": ""
-        },
-        "243": {
-            "label": "Button #3 Programmable",
-            "description": "Defines the switching mode of Button 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                }
-            ],
-            "units": ""
-        },
-        "244": {
-            "label": "Button #4 Programmable",
-            "description": "Defines the switching mode of Button 4",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                }
-            ],
-            "units": ""
-        },
-        "250": {
-            "label": "Mode",
-            "description": "Enable selective Group Mode or Scene Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
-            "defaultValue": 0,
-            "units": "",
             "options": [
                 {
-                    "label": "Group",
+                    "label": "Factory Default",
                     "value": 0
                 },
                 {
-                    "label": "Scene",
+                    "label": "Scene Mode",
                     "value": 1
                 }
             ]
         },
-        "255": {
-            "label": "Reset configuration",
-            "description": "Reset configuration set up to default setting",
+        "242": {
+            "label": "Mode of Button 2 (upper right)",
+            "description": "Defines the switching mode of Button 2",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
+            "maxValue": 255,
             "defaultValue": 0,
-            "units": ""
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Factory Default",
+                    "value": 0
+                },
+                {
+                    "label": "Scene Mode",
+                    "value": 1
+                }
+            ]
+        },
+        "243": {
+            "label": "Mode of Button 3 (lower left)",
+            "description": "Defines the switching mode of Button 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Factory Default",
+                    "value": 0
+                },
+                {
+                    "label": "Scene Mode",
+                    "value": 1
+                }
+            ]
+        },
+        "244": {
+            "label": "Mode of Button 4 (lower right)",
+            "description": "Defines the switching mode of Button 4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Factory Default",
+                    "value": 0
+                },
+                {
+                    "label": "Scene Mode",
+                    "value": 1
+                }
+            ]
         }
     }
 }

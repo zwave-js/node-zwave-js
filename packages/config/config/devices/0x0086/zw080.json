@@ -1,20 +1,18 @@
+// AEON Labs ZW080
+// Siren Gen5
 {
     "_approved": true,
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "ZW080",
-    "description": "ZW080 Siren Gen5",
+    "description": "Siren Gen5",
     "devices": [
-        {
-            "productType": "0x0204",
-            "productId": "0x0050"
-        },
         {
             "productType": "0x0104",
             "productId": "0x0050"
         },
         {
-            "productType": "0x0004",
+            "productType": "0x0204",
             "productId": "0x0050"
         }
     ],
@@ -22,200 +20,48 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "LifeLine",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
-        "37": {
-            "label": "Siren sound and Volume",
-            "description": "Select the Siren Sound and Volume",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 259,
-            "units": "",
-            "options": [
-                {
-                    "label": "Sound 1 - Low Volume",
-                    "value": 257
-                },
-                {
-                    "label": "Sound 1 - Mid Volume",
-                    "value": 258
-                },
-                {
-                    "label": "Sound 1 - High Volume",
-                    "value": 259
-                },
-                {
-                    "label": "Sound 2 - Low Volume",
-                    "value": 513
-                },
-                {
-                    "label": "Sound 2 - Mid Volume",
-                    "value": 514
-                },
-                {
-                    "label": "Sound 2 - High Volume",
-                    "value": 515
-                },
-                {
-                    "label": "Sound 3 - Low Volume",
-                    "value": 769
-                },
-                {
-                    "label": "Sound 3 - Mid Volume",
-                    "value": 770
-                },
-                {
-                    "label": "Sound 3 - High Volume",
-                    "value": 771
-                },
-                {
-                    "label": "Sound 4 - Low Volume",
-                    "value": 1025
-                },
-                {
-                    "label": "Sound 4 - Mid Volume",
-                    "value": 1026
-                },
-                {
-                    "label": "Sound 4 - High Volume",
-                    "value": 1027
-                },
-                {
-                    "label": "Sound 5 - Low Volume",
-                    "value": 1281
-                },
-                {
-                    "label": "Sound 5 - Mid Volume",
-                    "value": 1282
-                },
-                {
-                    "label": "Sound 5 - High Volume",
-                    "value": 1283
-                }
-            ]
-        },
-        "38": {
-            "label": "Enable/disable the action button",
-            "description": "Enable/disable to turn off the alarm sound via pressing the Action Button.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 1,
-            "units": "",
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
         "80": {
-            "label": "Send Notifications",
-            "description": "Enable to send notifications to associated devices (Group 1) when the state of Siren changed",
+            "label": "Enable Notifications to Group 1",
+            "description": "what type of notification to send to Group 1",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
+            "maxValue": 255,
+            "defaultValue": 25,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "",
-            "options": [
-                {
-                    "label": "Nothing",
-                    "value": 0
-                },
-                {
-                    "label": "Hail",
-                    "value": 1
-                },
-                {
-                    "label": "Basic",
-                    "value": 2
-                }
-            ]
+            "allowManualEntry": true
         },
         "200": {
             "label": "Partner ID",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "description": "Partner ID",
-            "units": "",
-            "options": [
-                {
-                    "label": "Aeon Labs Standard Product",
-                    "value": 0
-                }
-            ]
+            "allowManualEntry": true
         },
         "252": {
-            "label": "Enable/disable Lock Configuration",
+            "label": "Enable/disable Configuration Updates",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Enabled",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Disabled",
                     "value": 1
-                }
-            ],
-            "description": "Enable/disable Lock Configuration",
-            "units": ""
-        },
-        "255": {
-            "label": "Reset To Factory Defaults",
-            "description": "Reset to factory defaults",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "defaultValue": 1,
-            "options": [
-                {
-                    "label": "Reset to factory default setting",
-                    "value": 0
-                },
-                {
-                    "label": "Normal",
-                    "value": 1
-                },
-                {
-                    "label": "Reset to factory default setting and removed from the z-wave network",
-                    "value": 1431655765
                 }
             ]
         },

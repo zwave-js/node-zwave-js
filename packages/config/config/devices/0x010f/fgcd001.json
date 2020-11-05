@@ -1,58 +1,30 @@
+// Fibargroup FGCD001
+// Carbon Monoxide Sensor
 {
     "_approved": true,
-    "manufacturer": "FIBARO System",
+    "manufacturer": "Fibargroup",
     "manufacturerId": "0x010f",
     "label": "FGCD001",
-    "description": "FGSD001 CO Sensor",
+    "description": "Carbon Monoxide Sensor",
     "devices": [
         {
             "productType": "0x1201",
-            "productId": "0x1001"
+            "productId": "0x1000"
         },
         {
             "productType": "0x1201",
-            "productId": "0x1000"
+            "productId": "0x1001"
         }
     ],
     "firmwareVersion": {
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "CO Alarm",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "CO Alarm",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "CO Level",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Tamper Alarm",
-            "maxNodes": 5
-        },
-        "6": {
-            "label": "CO Alarm",
-            "maxNodes": 5
-        },
-        "7": {
-            "label": "Tamper Alarm BC",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
             "label": "Z-Wave notifications",
-            "description": "This parameter allows to set the actions which result in sending notifications to the Z-Wave network controller.",
+            "description": "Set the actions sent to controller",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
@@ -62,33 +34,33 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "All notifications disabled",
+                    "label": "Both actions disabled",
                     "value": 0
                 },
                 {
-                    "label": "Enclosure opening notification enabled",
+                    "label": "Tampering (opened casing)",
                     "value": 1
                 },
                 {
-                    "label": "Exceeding temperature threshold notification enabled",
+                    "label": "Exceeding the temperature",
                     "value": 2
                 },
                 {
-                    "label": "All notifications enabled",
+                    "label": "Both actions enabled",
                     "value": 3
                 }
             ]
         },
         "3": {
             "label": "LED diode indications",
-            "description": "This parameter allows to set the actions which result in LED diode indications.\n\t\t\t\t0=All actions disabled.\n\t\t\t\t1=Tampering (opened casing).\n\t\t\t\t2=Exceeding the temperature.\n\t\t\t\t4=Lack of Z-Wave range.\n\t\t\t\tThis parameter does not apply to the most important actions, such as CO Alarm, Malfunction Alarm and Low Battery Alarm.\n\t\t\t\tNOTE: Parameter 3 values may be combined, e.g. 1+2+4=7 means that all actions will be active.",
+            "description": "Set the actions which result in LED diode indications",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 7,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "All actions disabled",
@@ -126,14 +98,14 @@
         },
         "4": {
             "label": "Acoustic signals",
-            "description": "This parameter allows to set the actions which result in acoustic signals.\n\t\t\t\t0=All actions disabled.\n\t\t\t\t1=Tampering (opened casing).\n\t\t\t\t2=Exceeding the temperature.\n\t\t\t\t4=Lack of Z-Wave range.\n\t\t\t\tThis parameter does not apply to the most important actions, such as CO Alarm, Malfunction Alarm and Low Battery Alarm.\n\t\t\t\tNOTE: Parameter 4 values may be combined, e.g. 1+2+4=7 means that all actions will be active.",
+            "description": "Set the actions which result in acoustic signals",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 7,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "All actions disabled",
@@ -171,7 +143,7 @@
         },
         "7": {
             "label": "Associations in Z-Wave network security mode",
-            "description": "Parameter defines how commands are sent in specified association groups: as secure or non-secure. \n\t\t\t\tParameter is active only in Z-Wave network security mode. \n\t\t\t\tIt does not apply to 1st Lifeline association group.\n\t\t\t\tAvailable settings:\n\t\t\t\t0 - all groups sent as non-secure\n\t\t\t\t1 - 2nd group sent as secure.\n\t\t\t\t2 - 3rd group sent as secure.\n\t\t\t\t4 - 4th group sent as secure.\n\t\t\t\t8 - 5th group sent as secure.\n\t\t\t\t16 - 6th group sent as secure.\n\t\t\t\t32 - 7th group sent as secure.\n\t\t\t\tDefault setting: 63.\n\t\t\t\tNOTE Parameter 7 values may be combined, e.g. 1+2=3 means that 2nd and 3rd group are sent as secure.",
+            "description": "Secure or non-secure commands to assoc groups",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 63,
@@ -182,7 +154,7 @@
         },
         "10": {
             "label": "Commands sent to 2nd association group (CO Alarm)",
-            "description": "This parameter defines which frames will be sent in the 2-nd Association Group (CO ALARM).",
+            "description": "Commands sent to devices in 2nd association group",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 3,
@@ -200,21 +172,21 @@
                     "value": 2
                 },
                 {
-                    "label": "BASIC ON and OFF",
+                    "label": "BASIC ON & BASIC OFF",
                     "value": 3
                 }
             ]
         },
         "11": {
-            "label": "Value of BASIC ON command sent to 2nd association group",
-            "description": "This parameter defines the value of BASIC ON command sent to devices in 2nd association group after the CO Alarm activation.",
+            "label": "Value of BASIC ON command sent to 2nd assoc group",
+            "description": "Define value of BASIC ON cmd sent to 2nd assoc group",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Turning associated devices off",
@@ -231,8 +203,8 @@
             ]
         },
         "12": {
-            "label": "Value of BASIC OFF command sent to 2nd association group",
-            "description": "This parameter defines the value of BASIC OFF command sent to devices in 2nd association group after the CO Alarm cancellation.",
+            "label": "Value of BASIC OFF cmd sent to 2nd assoc group",
+            "description": "Defines value of BASIC OFF cmd sent 2nd assoc group",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
@@ -243,44 +215,29 @@
         },
         "13": {
             "label": "Commands sent to 4th association group (CO Level)",
-            "description": "This parameter defines commands sent to devices associated in 4th association group (CO Level). \n\t\t\t\tValues of specified commands may be set in parameters 16 and 19.",
+            "description": "Defines cmd sent to devices in 4th association group",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 3,
             "defaultValue": 3,
-            "readOnly": false,
+            "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "BASIC ON",
-                    "value": 1
-                },
-                {
-                    "label": "BASIC OFF",
-                    "value": 2
-                },
-                {
-                    "label": "BASIC ON and OFF",
-                    "value": 3
-                }
-            ]
+            "allowManualEntry": true
         },
         "14": {
-            "label": "CO level required for sending BASIC ON command to 4th association group",
-            "description": "This parameter defines the minimum level of CO concentration whichexceeding will result in starting the timer set in parameter 15. \n\t\t\t\tAvailable settings: 20 - 400  CO concentration level in ppm",
+            "label": "CO level for sending BASIC ON to 4th assoc group",
+            "description": "Defines min level of CO concentration starting timer",
             "valueSize": 2,
-            "minValue": 20,
+            "minValue": 25,
             "maxValue": 400,
             "defaultValue": 40,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "ppm"
+            "allowManualEntry": true
         },
         "15": {
-            "label": "Time required for sending BASIC ON command to 4th association group",
-            "description": "This parameter defines the time during which the level of CO concentration should remain above the value set in parameter 14 to send the BASIC ON command to 4th association group.\n\t\t\t\tAvailable settings: 0 - immediate sending of BASIC ON command 1-2880 (30s - 24h, in 30s steps)\n\t\t\t\tDefault setting: 0",
+            "label": "Time required for BASIC ON cmd to 4th assoc group",
+            "description": "Defines time of CO concentration should remain above param values",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 2880,
@@ -290,8 +247,8 @@
             "allowManualEntry": true
         },
         "16": {
-            "label": "Value of BASIC ON command sent to 4th association group",
-            "description": "This parameter defines the value of BASIC ON command sent to devices in 4th association group after exceeding the CO level set in parameter 14 through the time set in parameter 15.\n\t\t\t\tAvailable settings: 0-99 or 255.\n\t\t\t\tDefault setting: 255 (turn on)",
+            "label": "Value of BASIC ON cmd sent to 4th assoc group",
+            "description": "Defines value of BASIC ON cmd to 4th assoc group",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
@@ -301,42 +258,30 @@
             "allowManualEntry": true
         },
         "17": {
-            "label": "CO Level required for sending BASIC OFF command to 4th association group",
-            "description": "This parameter defines the level of CO concentration below which falling will result in sending the BASIC OFF command to 4th association group.\n\t\t\t\tAvailable settings: 10-400 - CO concentration level in ppm.\n\t\t\t\tDefault setting: 25 (25 ppm)",
+            "label": "CO Level for sending BASIC OFF to 4th assoc group",
+            "description": "Defines level of CO concentration for BASIC OFF to 4th assoc group",
             "valueSize": 2,
             "minValue": 10,
             "maxValue": 400,
             "defaultValue": 25,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "ppm"
-        },
-        "18": {
-            "label": "Time required for sending BASIC OFF command to 4th association group",
-            "description": "This parameter defines the time during which the level of CO concentration should remain below the value set in parameter 17 to send the BASIC OFF command to 4th association group.\n\t\t\t\tAvailable settings: 0 - immediate sending of BASIC OFF command 1-2880 (30s - 24h, in 30s steps)\n\t\t\t\tDefault setting: 0",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2880,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0
+            "allowManualEntry": true
         },
         "19": {
-            "label": "Value of BASIC OFF command sent to 4th association group",
-            "description": "This parameter defines the value of BASIC OFF command sent to devices in 4th association group after falling below the CO level set in parameter 17.\n\t\t\t\tAvailable settings: 0-99 or 255\n\t\t\t\tDefault setting: 0 (turn off)",
+            "label": "Value of BASIC OFF cmd sent to 4th assoc group",
+            "description": "Defines value of BASIC OFF sent to 4th association group",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
             "defaultValue": 0,
-            "readOnly": false,
+            "readOnly": true,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "20": {
-            "label": "Temperature report interval",
-            "description": "Time interval (in seconds) between consecutive reports of temperature (done by built-in temperature sensor). \n\t\t\t\tShort time interval means more frequent communication, which results in shortened battery life.\n\t\t\t\tAvailable settings: 0 - no periodical reports 10-1440 (5min - 12h, in 30s steps)\n\t\t\t\tDefault setting: 0",
+            "label": "Temperature reporting time interval",
+            "description": "Time interval between consecutive reports of temperature",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 1440,
@@ -346,8 +291,8 @@
             "allowManualEntry": true
         },
         "21": {
-            "label": "Temperature report hysteresis",
-            "description": "This parameter defines a minimum change in temperature resulting in a report being sent to the main Z-Wave controller.\n\t\t\t\tAvailable settings: 1-20 (0.5C - 10C, each 0.5C)\n\t\t\t\tDefault setting: 2 (1C) P",
+            "label": "Temperature reporting hysteresis",
+            "description": "Min change in temperature resulting in a report being sent",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 20,
@@ -358,19 +303,18 @@
         },
         "22": {
             "label": "Threshold of exceeding the temperature",
-            "description": "This parameter defines the temperature level, which exceeding will result in sending actions set in parameters 2, 3 and 4.\n\t\t\t\tAvailable settings: 1-85 (1C - 85C, each 1C)\n\t\t\t\tDefault setting: 55 (55C)",
+            "description": "Temp level resulting in sending actions (parameters 2, 3 and 4)",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 85,
             "defaultValue": 55,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "Celsius"
+            "allowManualEntry": true
         },
         "23": {
             "label": "CO meter activation",
-            "description": "This parameter activates reporting the value of CO concentration level to the main Z-Wave controller.",
+            "description": "Activates reporting of CO concentration to controller.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -381,49 +325,25 @@
         },
         "25": {
             "label": "CO level reporting hysteresis",
-            "description": "This parameter defines a minimum change in CO concentration level which results in sending a new value to the main Z-Wave controller.",
+            "description": "Minchange in CO concentration resulting in sending new value to controller",
             "valueSize": 1,
             "minValue": 2,
             "maxValue": 6,
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "ppm",
-            "options": [
-                {
-                    "label": "10",
-                    "value": 2
-                },
-                {
-                    "label": "15",
-                    "value": 3
-                },
-                {
-                    "label": "20",
-                    "value": 4
-                },
-                {
-                    "label": "25",
-                    "value": 5
-                },
-                {
-                    "label": "30",
-                    "value": 6
-                }
-            ]
+            "allowManualEntry": true
         },
         "26": {
             "label": "Threshold of CO meter activation",
-            "description": "This parameter defines the CO concentration level, which exceeding will result in sending a new value to the main Z-Wave controller, according to parameter 25 settings. \n\t\t\t\tAdjusting the value allows to get the accurate data in case of danger and helps to save the battery in normal conditions.\n\t\t\t\tAvailable settings: 10-255 (ppm)\n\t\t\t\tDefault setting: 30 (30 ppm)",
+            "description": "Defines CO concentration level sending a new value to controller",
             "valueSize": 2,
             "minValue": 10,
             "maxValue": 255,
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "ppm"
+            "allowManualEntry": true
         }
     }
 }

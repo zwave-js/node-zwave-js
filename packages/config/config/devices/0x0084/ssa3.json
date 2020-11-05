@@ -1,45 +1,29 @@
+// FortrezZ LLC SSA3
+// Siren and Strobe Alarm
 {
-    "_approved": true,
-    "manufacturer": "FortrezZ",
+    "_approved": false,
+    "_errors": [
+        "No endpoints are configured",
+        "Device has configuration parameters defined, but does not support the CONFIGURATION command class."
+    ],
+    "manufacturer": "FortrezZ LLC",
     "manufacturerId": "0x0084",
     "label": "SSA3",
-    "description": "SSA3 - Siren/Strobe Light Alarm",
+    "description": "Siren and Strobe Alarm",
     "devices": [
-        {
-            "productType": "0x0343",
-            "productId": "0x0205"
-        },
         {
             "productType": "0x0341",
             "productId": "0x0205"
-        },
-        {
-            "productType": "0x0331",
-            "productId": "0x010b"
         }
     ],
     "firmwareVersion": {
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Tamper Alarm",
-            "maxNodes": 2
-        },
-        "2": {
-            "label": "Main power has dropped",
-            "maxNodes": 2
-        },
-        "3": {
-            "label": "Security panel trigger is active",
-            "maxNodes": 2
-        }
-    },
     "paramInformation": {
         "1": {
             "label": "Delay before accept of Basic Set Off",
-            "description": "Delay, from the time the siren-strobe turns on, before the Basic Set Off command is accepted;\n\t\t\t\t1 Byte (in seconds, default is 0, interpreted as unsigned integer for negative values sent in set command).\n\t\t\t\tThis could be used, for example, to avoid the situation where an associated window/door sensor turns the SSA3 alarm on and immediately off when the window/door is opened and then quickly closed",
+            "description": "Delay before accept of Basic Set Off",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -47,8 +31,7 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
+            "allowManualEntry": true
         }
     }
 }

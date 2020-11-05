@@ -1,9 +1,11 @@
+// Zooz ZSE33
+// Smart Chime/Alarm
 {
     "_approved": true,
     "manufacturer": "Zooz",
     "manufacturerId": "0x027a",
     "label": "ZSE33",
-    "description": "ZSE33 Smart Chime",
+    "description": "Smart Chime/Alarm",
     "devices": [
         {
             "productType": "0x0003",
@@ -14,36 +16,22 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Siren Volume",
-            "description": "Siren volume level; low, medium, high (default).",
+            "description": "3 volume levels for the alarm siren sound.",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 3,
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "",
-            "options": [
-                {
-                    "label": "Low",
-                    "value": 1
-                },
-                {
-                    "label": "Medium",
-                    "value": 2
-                },
-                {
-                    "label": "High",
-                    "value": 3
-                }
-            ]
+            "allowManualEntry": true
         },
         "2": {
             "label": "Siren Alarm Duration",
-            "description": "Duration of siren alarm.  Default is 30 seconds.",
+            "description": "5 modes to set the duration for siren alarm",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -51,174 +39,85 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "",
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "30 seconds",
-                    "value": 1
-                },
-                {
-                    "label": "60 seconds",
-                    "value": 2
-                },
-                {
-                    "label": "5 minutes",
-                    "value": 3
-                },
-                {
-                    "label": "Until battery drains",
-                    "value": 255
-                }
-            ]
+            "allowManualEntry": true
         },
         "3": {
-            "label": "Doorbell Chime Sound Duration",
-            "description": "How many times the doorbell chime should repeat once triggered by a BASIC_SET alarm command from a door sensor. 0 is chime off, 1-254 is the number of cycles, 255 is chime continues until battery drains. 2 cycles is default.",
+            "label": "Chime Sound Duration",
+            "description": "Chime Sound Duration",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
-            "defaultValue": 1,
+            "defaultValue": 2,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "times"
+            "allowManualEntry": true
         },
         "4": {
-            "label": "Doorbell Chime Volume",
-            "description": "Doorbell chime volume level; low, medium, high (default).",
+            "label": "Chime Volume",
+            "description": "3 volume levels for the doorbell sound. Set volume to low, medium, or high.",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 3,
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "",
-            "options": [
-                {
-                    "label": "Low",
-                    "value": 1
-                },
-                {
-                    "label": "Medium",
-                    "value": 2
-                },
-                {
-                    "label": "High",
-                    "value": 3
-                }
-            ]
+            "allowManualEntry": true
         },
         "5": {
             "label": "Siren Alarm Tone",
-            "description": "Chose one of the 10 different tones for the alarm siren.  10 is default.",
+            "description": "10 different tones for alarm siren",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 10,
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "6": {
-            "label": "Doorbell Chime Tone",
-            "description": "Chose one of the 10 different tones for the doorbell chime.  4 is default.",
+            "label": "Chime Tone",
+            "description": "10 different tones for doorbell",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 10,
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "7": {
-            "label": "Siren Alarm or Doorbell Chime Mode",
-            "description": "Choose between Siren Alarm (configured by Siren Alarm parameters) or Doorbell Chime (configured by Doorbell Chime paramenters).  Doorbell Chime enabled by default.",
+            "label": "Siren Alarm or Chime Mode",
+            "description": "Siren Alarm or Chime Mode",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 2,
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "",
-            "options": [
-                {
-                    "label": "Siren Alarm",
-                    "value": 1
-                },
-                {
-                    "label": "Doorbell Chime",
-                    "value": 2
-                }
-            ]
+            "allowManualEntry": true
         },
         "8": {
-            "label": "LED Notification for Siren Alarm",
-            "description": "Enable or disable visual LED alarm for Siren Mode.  The LED will blink when triggered.  Enabled by default.",
+            "label": "LED Notifications for Siren Alarm",
+            "description": "LED Notifications for Siren Alarm",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "",
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
+            "allowManualEntry": true
         },
         "9": {
-            "label": "LED Notification for Doorbell Chime",
-            "description": "Enable or disable visual LED for Doorbell Chime mode.  The LED will blink when triggered.  Enabled by default.",
+            "label": "LED Notifications for Chime",
+            "description": "LED Notifications for Chime",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "",
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Switch binary report",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Notification report",
-            "maxNodes": 5
+            "allowManualEntry": true
         }
     }
 }

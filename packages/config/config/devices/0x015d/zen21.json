@@ -1,9 +1,11 @@
+// Willis Electric Co., Ltd. ZEN21
+// Zooz Z-Wave On / Off Light Switch
 {
     "_approved": true,
-    "manufacturer": "Zooz (Willis Electric)",
+    "manufacturer": "Willis Electric Co., Ltd.",
     "manufacturerId": "0x015d",
     "label": "ZEN21",
-    "description": "ZEN21 Switch",
+    "description": "Zooz Z-Wave On / Off Light Switch",
     "devices": [
         {
             "productType": "0x0111",
@@ -14,79 +16,5 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "paramInformation": {
-        "1": {
-            "label": "Orientation",
-            "description": "Controls the on/off orientation of the rocker switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 0,
-            "units": "",
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Inverted",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "LED Indicator Control",
-            "description": "Choose if you want the LED indicator to turn on when switch is on or off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 0,
-            "units": "",
-            "options": [
-                {
-                    "label": "LED on when switch is off",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when switch is on",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "LED Indicator",
-            "description": "Enable or disable LED indicator so it stays off at all times",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 0,
-            "units": "",
-            "options": [
-                {
-                    "label": "Enabled",
-                    "value": 0
-                },
-                {
-                    "label": "Disabled",
-                    "value": 1
-                }
-            ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+    "supportsZWavePlus": true
 }

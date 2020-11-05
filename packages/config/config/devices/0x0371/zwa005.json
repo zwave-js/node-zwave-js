@@ -1,12 +1,14 @@
+// Aeotec Ltd. ZWA005
+// Motion, light, and temperature sensor
 {
     "_approved": true,
-    "manufacturer": "Aeotec Limited",
+    "manufacturer": "Aeotec Ltd.",
     "manufacturerId": "0x0371",
     "label": "ZWA005",
-    "description": "ZWA005 TriSensor",
+    "description": "Motion, light, and temperature sensor",
     "devices": [
         {
-            "productType": "0x0202",
+            "productType": "0x0002",
             "productId": "0x0005"
         },
         {
@@ -14,7 +16,7 @@
             "productId": "0x0005"
         },
         {
-            "productType": "0x0002",
+            "productType": "0x0202",
             "productId": "0x0005"
         }
     ],
@@ -22,25 +24,11 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "BasicSet report",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Temperature Alarm report",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Motion Re-trigger Time",
-            "description": "This parameter is configured the delay time before PIR sensor can be triggered again to reset motion timeout counter.\n\t\t\t\tValue = 0 will disable PIR sensor from triggering until motion timeout has finished.",
+            "label": "Motion Retrigger Time",
+            "description": "Delay before the motion event can be re-triggered",
             "unit": "Seconds",
             "valueSize": 2,
             "minValue": 0,
@@ -54,107 +42,61 @@
                     "label": "Disable re-triggering until motion timeout",
                     "value": 0
                 }
-            ],
-            "units": "Second"
+            ]
         },
         "2": {
-            "label": "Motion clear time",
-            "description": "This configures the clear time when your motion sensor times out and sends a no motion status.",
+            "label": "Motion Clear Time",
+            "description": "Time until the motion event is cleared",
             "unit": "Seconds",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 32767,
             "defaultValue": 240,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "Second"
+            "allowManualEntry": true
         },
         "3": {
             "label": "Motion Sensitivity",
-            "description": "This parameter is configured the sensitivity that motion detect.\n\t\t\t\t0  - PIR sensor disabled.\n\t\t\t\t1  - Lowest sensitivity.\n\t\t\t\t11 - Highest sensitivity.",
+            "description": "Motion sensor sensitivity on a scale from 1-11",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 11,
-            "defaultValue": 8,
+            "defaultValue": 11,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
-                    "label": "Disabled",
+                    "label": "Motion sensor disabled",
                     "value": 0
-                },
-                {
-                    "label": "1",
-                    "value": 1
-                },
-                {
-                    "label": "2",
-                    "value": 2
-                },
-                {
-                    "label": "3",
-                    "value": 3
-                },
-                {
-                    "label": "4",
-                    "value": 4
-                },
-                {
-                    "label": "5",
-                    "value": 5
-                },
-                {
-                    "label": "6",
-                    "value": 6
-                },
-                {
-                    "label": "7",
-                    "value": 7
-                },
-                {
-                    "label": "8",
-                    "value": 8
-                },
-                {
-                    "label": "9",
-                    "value": 9
-                },
-                {
-                    "label": "10",
-                    "value": 10
-                },
-                {
-                    "label": "11",
-                    "value": 11
                 }
             ]
         },
         "4": {
-            "label": "Binary Sensor Report",
-            "description": "Enable/disable sensor binary report when motion event is detected or cleared",
+            "label": "Motion Sensor Report Mode",
+            "description": "Sets the report to send when motion is detected",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 0,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Notification Reports",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Binary Sensor",
                     "value": 1
                 }
             ]
         },
         "5": {
-            "label": "Disable BASIC_SET to Associated nodes",
-            "description": "This parameter is configured the enabled or disabled send BASIC_SET command to nodes that associated in group 2 and group 3.",
+            "label": "Send BASIC_SET to Associated nodes",
+            "description": "Send BASIC_SET when events are triggered",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
@@ -164,26 +106,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled All Group Basic Set Command",
+                    "label": "Disabled",
                     "value": 0
                 },
                 {
-                    "label": "Enabled Group 2",
+                    "label": "Group 2",
                     "value": 1
                 },
                 {
-                    "label": "Enabled Group 3 ",
+                    "label": "Group 3",
                     "value": 2
                 },
                 {
-                    "label": "Enabled Group 2 and Group 3",
+                    "label": "Group 2 and 3",
                     "value": 3
                 }
             ]
         },
         "6": {
             "label": "Basic Set Value Settings for Group 2",
-            "description": "Define Basic Set Value  when motion event is triggered and / or cleared",
+            "description": "Values to send to Group 2",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 5,
@@ -193,47 +135,46 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "0xFF when motion is triggered and 0x00 when motion is cleared",
+                    "label": "Set 0xFF on triggered, 0x00 on cleared",
                     "value": 0
                 },
                 {
-                    "label": "0x00 when motion is triggered and 0xFF when motion is cleared",
+                    "label": "Set 0x00 on triggered, 0xFF on cleared",
                     "value": 1
                 },
                 {
-                    "label": "0xFF when motion is triggered",
+                    "label": "Set 0xFF on motion triggered",
                     "value": 2
                 },
                 {
-                    "label": "0x00 when motion is triggered",
+                    "label": "Set 0x00 on motion triggered",
                     "value": 3
                 },
                 {
-                    "label": "0x00 when motion event is cleared",
+                    "label": "Set 0x00 on motion cleared",
                     "value": 4
                 },
                 {
-                    "label": "0xFF when motion event is cleared",
+                    "label": "Set 0xFF on motion cleared",
                     "value": 5
                 }
             ]
         },
         "7": {
             "label": "Temperature Alarm Value",
-            "description": "This parameter is configured the threshold value that alarm level for temperature.\n\t\t\t\tWhen the current ambient temperature value is larger than this configuration value, device will send a BASIC_SET = 0xFF to nodes associated in group 3.\n\t\t\t\tIf current temperature value is less than this value, device will send a BASIC_SET = 0x00 to nodes associated in group 3.\n\t\t\t\tValue = [Value] x 0.1(Celsius / Fahrenheit)\n\t\t\t\tAvailable Settings: -400 to 850 (40.0 to 85.0 Celsius) or -400 to 1185 (-40.0 to 118.5 Fahrenheit).\n\t\t\t\tDefault value: 239 (23.9 Celsius) or 750 (75.0 Fahrenheit)",
+            "description": "Alert nodes when temperature is above this value",
             "unit": "0.1 degrees (C/F)",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 100,
+            "minValue": -400,
+            "maxValue": 1185,
             "defaultValue": 239,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": 0.1
+            "allowManualEntry": true
         },
         "10": {
-            "label": "LED over TriSensor",
-            "description": "Enable or Disable LED over TriSensor\n\t\t\t\tThis completely disables all LED reaction regardless of Parameter 9 - 13 settings",
+            "label": "LED Indicate Disable",
+            "description": "Whether to blink the LED when motion is detected",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -243,18 +184,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disable Led Blink",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enable Led Blink",
                     "value": 1
                 }
             ]
         },
         "11": {
-            "label": "Motion report LED",
-            "description": "This setting changes the color of the LED when your TriSensor sends a motion report.",
+            "label": "LED Color For Motion Event Report",
+            "description": "LED color when sending a motion event report",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 8,
@@ -264,7 +205,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
@@ -302,18 +243,18 @@
             ]
         },
         "12": {
-            "label": "Temperature report LED",
-            "description": "This setting changes the color of the LED when your TriSensor sends a temperature report.",
+            "label": "Led Color For Temperature Sensor Report",
+            "description": "LED color when sending a temperature sensor report",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 8,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
@@ -351,8 +292,8 @@
             ]
         },
         "13": {
-            "label": "Light report LED",
-            "description": "This setting changes the color of the LED when your TriSensor sends a light report.",
+            "label": "Led Color For Light Sensor Report",
+            "description": "LED color when sending a light sensor report",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 8,
@@ -362,56 +303,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Yellow",
-                    "value": 4
-                },
-                {
-                    "label": "Pink",
-                    "value": 5
-                },
-                {
-                    "label": "Cyan",
-                    "value": 6
-                },
-                {
-                    "label": "Purple",
-                    "value": 7
-                },
-                {
-                    "label": "Orange",
-                    "value": 8
-                }
-            ]
-        },
-        "14": {
-            "label": "Battery report LED",
-            "description": "It is possible to change the color of what the LED blinks when your TriSensor sends a battery report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 8,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 0,
-            "options": [
-                {
-                    "label": "Disabled",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
@@ -449,8 +341,8 @@
             ]
         },
         "15": {
-            "label": "Wakeup report LED",
-            "description": "This setting changes the color of the LED when your TriSensor sends a wakeup report.",
+            "label": "Led Color For Wakeup Notification Report",
+            "description": "LED color when sending a wakeup report",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 8,
@@ -460,7 +352,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
@@ -498,8 +390,8 @@
             ]
         },
         "20": {
-            "label": "Temperature Scale Setting",
-            "description": "Configure temperature sensor scale type, Temperature to report in Celsius or Fahrenheit",
+            "label": "Temperature Scale",
+            "description": "Report temperature in Celsius or Fahrenheit",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -519,21 +411,20 @@
             ]
         },
         "21": {
-            "label": "Temperature Threshold reporting",
-            "description": "Change threshold value for change in temperature to induce an automatic report for temperature sensor.\n\t\t\t\tScale is identical setting in Parameter No.20.\n\t\t\t\t0-> Disable Threshold Report for Temperature Sensor.\n\t\t\t\tSetting of value 20 can be a change of -2.0 or +2.0 (C or F depending on Parameter No.20) to induce automatic report or setting a value of 2 will be a change of 0.2(C or F).\n\t\t\t\tAvailable Settings: 0 to 250.",
+            "label": "Temperature Threshold Value to Report",
+            "description": "Minimum temperature change to report",
             "unit": "0.1 degrees (C/F)",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 250,
-            "defaultValue": 20,
+            "defaultValue": 25,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": 0.1
+            "allowManualEntry": true
         },
         "22": {
             "label": "Light intensity Threshold Value to Report",
-            "description": "Change threshold value for change in lux to induce an automatic report for light sensor.",
+            "description": "Minimum light intensity change to report",
             "unit": "Lux",
             "valueSize": 2,
             "minValue": 0,
@@ -541,12 +432,11 @@
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "Lux"
+            "allowManualEntry": true
         },
         "23": {
             "label": "Temperature Sensor Report Interval",
-            "description": "This parameter is configured the time interval for temperature sensor report.\n\t\t\t\tThis value is larger, the battery life is longer.\n\t\t\t\tAnd the temperature value changed is not obvious.",
+            "description": "Interval for timed temperature reports",
             "unit": "Seconds",
             "valueSize": 2,
             "minValue": 0,
@@ -554,12 +444,11 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "Second"
+            "allowManualEntry": true
         },
         "24": {
             "label": "Light Sensor Report Interval",
-            "description": "This parameter is configured the time interval for light sensor report.\n\t\t\t\tThis value is larger, the battery life is longer.\n\t\t\t\tAnd the light intensity changed is not obvious.",
+            "description": "Interval for timed light level reports",
             "unit": "Seconds",
             "valueSize": 2,
             "minValue": 0,
@@ -567,46 +456,42 @@
             "defaultValue": 3600,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "Second"
+            "allowManualEntry": true
         },
         "30": {
             "label": "Temperature Offset Value",
-            "description": "The current measuring temperature value can be add and minus a value by this setting.\n\t\t\t\tThe scale can be decided by Parameter Number 20.\n\t\t\t\tTemperature Offset Value = [Value] * 0.1(Celsius / Fahrenheit)\n\t\t\t\tAvailable Settings: -200 to 200.",
+            "description": "Adjustment for temperature measurements",
             "unit": "0.1 degrees (C/F)",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 100,
+            "minValue": -200,
+            "maxValue": 200,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": 0.1
+            "allowManualEntry": true
         },
         "31": {
             "label": "Light Intensity Offset Value",
-            "description": "The current measuring light intensity value can be add and minus a value by this setting.\n\t\t\t\tAvailable Settings: -1000 to 1000.",
+            "description": "Adjustment for light intensity measurements",
             "unit": "Lux",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 100,
+            "minValue": -1000,
+            "maxValue": 1000,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "Lux"
+            "allowManualEntry": true
         },
         "100": {
             "label": "Light Sensor Calibrated Coefficient",
-            "description": "This configuration defines the calibrated scale for ambient light intensity.\n\t\t\t\tBecause the method and position that the sensor mounted and the cover of sensor will bring measurement error, user can get more real light intensity by this parameter setting.\n\t\t\t\tUser should run the steps as blows for calibrating\n\t\t\t\t1) Set this parameter value to default (Assumes the sensor has been added in a Z- Wave Network).\n\t\t\t\t2) Place a digital light meter close to sensor and keep the same direction, monitor the light intensity value (Vm) which report to controller and record it.\n\t\t\t\tThe same time user should record the value (Vs) of light meter.\n\t\t\t\t3) The scale calibration formula: k = Vm / Vs.\n\t\t\t\t4) The value of k is then multiplied by 1024 and rounded to the nearest whole number.\n\t\t\t\t5) Set the value getting in 5) to this parameter, calibrate finished.\n\n\t\t\t\tFor example, Vm = 300, Vs = 2600, then k = 2600 / 300 = 8.6667\n\t\t\t\t\tk = 8.6667 * 1024 = 8874.7 => 8875.\n\t\t\t\t\tThe parameter should be set to 8875.",
+            "description": "Calibration coefficient for light measurements",
             "valueSize": 2,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 32767,
             "defaultValue": 1024,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         }
     }
 }

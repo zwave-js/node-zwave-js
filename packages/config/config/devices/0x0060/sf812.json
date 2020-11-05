@@ -1,9 +1,11 @@
+// Everspring SF812
+// Smoke Sensor
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "SF812",
-    "description": "SF812 Smoke Alarm",
+    "description": "Smoke Sensor",
     "devices": [
         {
             "productType": "0x000d",
@@ -16,7 +18,7 @@
     },
     "associations": {
         "1": {
-            "label": "Reports",
+            "label": "Alarm notifications",
             "maxNodes": 5,
             "isLifeline": true
         }

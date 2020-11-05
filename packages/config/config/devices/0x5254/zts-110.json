@@ -1,16 +1,18 @@
+// Remotec ZTS-110
+// ZTS-110 Z Wave Thermostat
 {
     "_approved": true,
     "manufacturer": "Remotec",
     "manufacturerId": "0x5254",
     "label": "ZTS-110",
-    "description": "ZTS-110",
+    "description": "ZTS-110 Z Wave Thermostat",
     "devices": [
         {
-            "productType": "0x0202",
+            "productType": "0x0200",
             "productId": "0x8031"
         },
         {
-            "productType": "0x0200",
+            "productType": "0x0202",
             "productId": "0x8031"
         }
     ],
@@ -20,15 +22,15 @@
     },
     "associations": {
         "1": {
-            "label": "Heating Mode group. All associated nodes will recieve basic set command ON and OFF when heat is triggered/deactivated.",
-            "maxNodes": 5
+            "label": "Heat Pump",
+            "maxNodes": 4
         },
         "2": {
-            "label": "Cooling Mode group. All associated nodes will recieve basic set command ON and OFF when cooling is triggered/deactivated.",
-            "maxNodes": 5
+            "label": "Compressor",
+            "maxNodes": 4
         },
         "3": {
-            "label": "Auto-report Group. Your controller/gateway should be associated in this group. All status changes will be reported to this node",
+            "label": "Controller Update",
             "maxNodes": 1,
             "isLifeline": true
         }
@@ -36,9 +38,9 @@
     "paramInformation": {
         "1": {
             "label": "Swing",
-            "description": "Swing is the difference allowed from current temp to setpoint before the thermostat turns on.\n\t\t\t\tEG: A swing of 2 and setpoint of 70 means the heat turns on at 68 and off at 72.",
+            "description": "Set Swing value from 1F/.5C to 4F/2.0C Available settings: 1 - 4",
             "valueSize": 1,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 4,
             "defaultValue": 2,
             "readOnly": false,
@@ -46,10 +48,10 @@
             "allowManualEntry": true
         },
         "2": {
-            "label": "Differential",
-            "description": "Differential is the difference needed from the swing before the 2nd stage kicks in.\n\t\t\t\tEG: A swing of 2, differntial of 2, and setpoint of 70 means the heat turns on at 68 and off at 72. The second-stage heat would turn on at 67 and off at 68.",
+            "label": "Differntial",
+            "description": "Set Differential value from 1F/.5C to 4F/2.0C Available settings: 1 - 4",
             "valueSize": 1,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 4,
             "defaultValue": 2,
             "readOnly": false,
@@ -57,8 +59,8 @@
             "allowManualEntry": true
         },
         "3": {
-            "label": "Set filter counter",
-            "description": "How many hours before the filter change reminder is displayed.",
+            "label": "Set Filter Counter",
+            "description": "Set filter replacement timer from 500 to 4000 hours.",
             "valueSize": 2,
             "minValue": 500,
             "maxValue": 4000,
@@ -68,22 +70,22 @@
             "allowManualEntry": true
         },
         "4": {
-            "label": "Report filter counter",
-            "description": "How many hours the system has run since the filter counter was last reset. Read only.",
+            "label": "Report Filter Counter",
+            "description": "READ ONLY: Data in hours",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 9999,
             "defaultValue": 0,
-            "readOnly": true,
+            "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "5": {
-            "label": "Celsius/Fahrenheit",
-            "description": "Celsius or Fahrenheit.",
+            "label": "Scale of Temperature",
+            "description": "Set Temperature Scale to Farhenheit or Centigrade. DEFAULT =1 Farhenheit",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -91,43 +93,43 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Celsius",
+                    "label": "Centigrade",
                     "value": 0
                 },
                 {
-                    "label": "Fahrenheit",
+                    "label": "Farhenheit",
                     "value": 1
                 }
             ]
         },
         "6": {
-            "label": "Upper limit of heat set point",
-            "description": "Unit in C:\n\t\t\t\tRange from 5 to [(37 ) - (dead band)]\n\t\t\t\tRange from 50 (0x0032) to 355 (0x0163)\n\t\t\t\tExample 28 ; input = 280 (0x0118)\n\t\t\t\t\n\t\t\t\tUnit in F:\n\t\t\t\tRange from 41 to [(99 ) - (dead band)]\n\t\t\t\tRange from 410 (0x019A) to 960 (0x03C0)\n\t\t\t\tExample 82 ; input = 820 (0x0334)\n\t\t\t\tDefault = (99 ) - (dead band)",
+            "label": "Upper Limit of Setpoint A",
+            "description": "Upper Limit of Setpoint A",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 950,
+            "minValue": 37,
+            "maxValue": 99,
+            "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "7": {
-            "label": "Lower limit of cool set point",
-            "description": "Unit in C:\n\t\t\t\tRange from [(5 C) + (dead band)] to 37 C\n\t\t\t\tRange from 65 (0x0041) to 370 (0x0172)\n\t\t\t\tExample 20 C; input = 200 (0x00C8)\n\n\t\t\t\tUnit in F:\n\t\t\t\tRange from [(41 F) + (dead band)] to 99 F\n\t\t\t\tRange from 440 (0x01B8) to 990 (0x03DE)\n\t\t\t\tExample 68 F; input = 680 (0x02A8)\n\t\t\t\tDefault = (41 F) + (dead band)",
+            "label": "Lower Limit of Setpoint B",
+            "description": "Lower Limit of Setpoint B",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 440,
+            "minValue": 5,
+            "maxValue": 95,
+            "defaultValue": 41,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "8": {
             "label": "Easy Mode",
-            "description": "Easy mode hides advanced features on the thermostat interface.",
+            "description": "Set Easy Mode 0:DISABLE 1:ENABLED DEFAULT:ENABLED",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -135,21 +137,21 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Off",
+                    "label": "Easy Mode Disabled",
                     "value": 0
                 },
                 {
-                    "label": "On",
+                    "label": "Easy Mode Enabled",
                     "value": 1
                 }
             ]
         },
         "9": {
             "label": "Time Format",
-            "description": "Use the 24 hour or 12 hour (am/pm) time format.",
+            "description": "Configures for 12 or 24 Hour format. Default is 12 Hours.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -157,21 +159,21 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "24 hour",
+                    "label": "24 Hour Format",
                     "value": 0
                 },
                 {
-                    "label": "12 hour (am/pm)",
+                    "label": "12 Hour Format",
                     "value": 1
                 }
             ]
         },
         "10": {
-            "label": "Repeat basic set counter",
-            "description": "Repeat basic set counter (Association Group A and B only)\n\t\t\t\tValue(X): 0 (0x00), 3 (0x03) to 255 (0xFF)\n\t\t\t\t0 (0X00) = Disable, default\n\t\t\t\t3 (0x03) to 255 (0xFF) minutes\n\t\t\t\t(Thermostat sends \"Basic Set\" command to its association node repeatedly in every X minutes)",
+            "label": "Repeat Basic Set Counter",
+            "description": "Repeat Basic Set Counter",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -179,8 +181,8 @@
             "allowManualEntry": true
         },
         "11": {
-            "label": "Auto report trigger threshold",
-            "description": "Trigger AUTO report if room temperature is different from last\n\t\t\t\treport.\t(It will report room temperature only)\n\t\t\t\t*User can use this function to enhance batteries service life\n\t\t\t\t0 (0x00) = disable AUTO report if room temperature is different from last report.\n\t\t\t\tAUTO report if room temperature is different from last report.\n\t\t\t\tDelta change is >=\n\t\t\t\t1 (0x01) = 1 F (0.5 C)\n\t\t\t\t2 (0x02) = 2 F (1.0 C)\n\t\t\t\t3 (0x03) = 3 F (1.5 C)\n\t\t\t\t4 (0x04) = 4 F (2.0 C), (default)\n\t\t\t\t5 (0x05) = 5 F (2.5 C)\n\t\t\t\t6 (0x06) = 6 F (3.0 C)\n\t\t\t\t7 (0x07) = 7 F (3.5 C)\n\t\t\t\t8 (0x08) = 8 F (4.0 C)",
+            "label": "AUTO report by room temperature",
+            "description": "AUTO report by room temperature",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 8,
@@ -190,19 +192,8 @@
             "allowManualEntry": true
         },
         "12": {
-            "label": "Auto report time interval",
-            "description": "AUTO report by time interval. (It will report room temperature only)\n\t\t\t\t*User can use this function to enhance batteries service life.\n\t\t\t\t0 (0x00) = disable AUTO report function. (by time interval)\n\t\t\t\tAUTO report timer:\n\t\t\t\t1 (0x01) = 0.5 hr\n\t\t\t\t2 (0x02) = 1.0 hr, (default)\n\t\t\t\t3 (0x03) = 1.5 hrs\n\t\t\t\t4 (0x04) = 2.0 hrs\n\t\t\t\t5 (0x05) = 2.5 hrs\n\t\t\t\t6 (0x06) = 3.0 hrs\n\t\t\t\t7 (0x07) = 3.5 hrs\n\t\t\t\t8 (0x08) = 4.0 hrs\n\t\t\t\t9 (0x09) = 4.5 hrs\n\t\t\t\t10 (0x0A) = 5.0 hrs\n\t\t\t\t11 (0x0B) = 5.5 hrs\n\t\t\t\t12 (0x0C) = 6.0 hrs\n\t\t\t\t13 (0x0D) = 6.5 hrs\n\t\t\t\t14 (0x0E) = 7.0 hrs\n\t\t\t\t15 (0x0F) = 7.5 hrs\n\t\t\t\t16 (0x10) = 8.0 hrs",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 16,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "sensor temperature calibration",
-            "description": "This parameter is used to change the display temperature\n\t\t\t\tto match with your previous thermostat, or to match another\n\t\t\t\tthermostat already in your home\n\t\t\t\tFormula: Display temperature = sensor reading value + offset value\n\t\t\t\t0 (0x00) = 0 F (default)\n\t\t\t\t1 (0x01) = 1 F (0.5 C)\n\t\t\t\t2 (0x02) = 2 F (1.0 C)\n\t\t\t\t3 (0x03) = 3 F (1.5 C)\n\t\t\t\t4 (0x04) = 4 F (2.0 C)\n\t\t\t\t5 (0x05) = 5 F (2.5 C)\n\t\t\t\t6 (0x06) = 6 F (3.0 C)\n\t\t\t\t7 (0x07) = 7 F (3.5 C)\n\t\t\t\t8 (0x08) = 8 F (4.0 C)\n\t\t\t\t9 (0x09) = 9 F (4.5 C)\n\t\t\t\t10 (0x0A) = 10 F (5.0 C)\n\t\t\t\t-1 (0xFF) = -1 F (-0.5 C)\n\t\t\t\t-2 (0xFE) = -2 F (-1.0 C)\n\t\t\t\t-3 (0xFD) = -3 F (-1.5 C)\n\t\t\t\t-4 (0xFC) = -4 F (-2.0 C)\n\t\t\t\t-5 (0xFB) = -5 F (-2.5 C)\n\t\t\t\t-6 (0xFA) = -6 F (-3.0 C)\n\t\t\t\t-7 (0xF9) = -7 F (-3.5 C)\n\t\t\t\t-8 (0xF8) = -8 F (-4.0 C)\n\t\t\t\t-9 (0xF7) = -9 F (-4.5 C)\n\t\t\t\t-10 (0xF6) = -10 F (-5.0 C)",
+            "label": "Sensor temperature calibration.",
+            "description": "Sensor temperature calibration.",
             "valueSize": 1,
             "minValue": -10,
             "maxValue": 10,
@@ -211,16 +202,16 @@
             "writeOnly": false,
             "allowManualEntry": true
         },
-        "14": {
-            "label": "Dead band",
-            "description": "On thermostats that automatically control both heating and cooling systems,\n\t\t\t\ta dead band is a temperature range in which neither system turns on. The dead\n\t\t\t\tband prevents the thermostat from activating heat and cooling in rapid\n\t\t\t\tsuccession. This conserves energy by providing a range of temperatures\n\t\t\t\trequiring no energy consumption.\n\t\t\t\tDead band value:\n\t\t\t\t3(0x03)= 3 F / 1.5 C\n\t\t\t\t4(0x04)= 4 F / 2.0 C\n\t\t\t\t5(0x05)= 5 F / 2.5 C\n\t\t\t\t6(0x06)= 6 F / 3.0 C",
+        "13": {
+            "label": "AUTO report by time interval.",
+            "description": "AUTO report by time interval.",
             "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 6,
+            "minValue": 0,
+            "maxValue": 16,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 4
+            "allowManualEntry": true
         }
     }
 }

@@ -1,14 +1,12 @@
+// Everspring SM103
+// Door/Window Contact
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "SM103",
-    "description": "SM103 Door/Window Sensor",
+    "description": "Door/Window Contact",
     "devices": [
-        {
-            "productType": "0x0202",
-            "productId": "0x0001"
-        },
         {
             "productType": "0x0002",
             "productId": "0x0001"
@@ -20,7 +18,7 @@
     },
     "associations": {
         "1": {
-            "label": "Reports",
+            "label": "Tamper Event Report (Alarm Report)",
             "maxNodes": 5,
             "isLifeline": true
         },
@@ -32,40 +30,26 @@
     },
     "paramInformation": {
         "1": {
-            "label": "On Level",
-            "description": "Defines the level in the event sent when the sensor is triggered.  Default is 99 (full brightness for a Z-Wave dimmer). 100-127 will set device on to the last value it was when turned off.",
+            "label": "Basic Set Level",
+            "description": "Value to be sent with a BASIC SET command",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 127,
+            "maxValue": 99,
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "2": {
-            "label": "Off Time",
-            "description": "On Time sets the number of seconds the sensor stays alerted before the off event is sent.",
+            "label": "Configuring the OFF Delay",
+            "description": "OFF Delay in seconds",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
-        },
-        "3": {
-            "label": "Power Saving",
-            "description": "Enable/Disable power saving mode. 0 enables.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
+            "allowManualEntry": true
         }
     }
 }

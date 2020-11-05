@@ -1,25 +1,15 @@
+// Leviton VRI10
+// Scene Capable Push On/Off Dimmer
 {
     "_approved": true,
     "manufacturer": "Leviton",
     "manufacturerId": "0x001d",
     "label": "VRI10",
-    "description": "VRMX1-1LZ Multilevel Scene Switch",
+    "description": "Scene Capable Push On/Off Dimmer",
     "devices": [
         {
-            "productType": "0x0602",
-            "productId": "0x0334"
-        },
-        {
-            "productType": "0x0602",
-            "productId": "0x0209"
-        },
-        {
             "productType": "0x0501",
             "productId": "0x0209"
-        },
-        {
-            "productType": "0x0501",
-            "productId": "0x0206"
         },
         {
             "productType": "0x0501",

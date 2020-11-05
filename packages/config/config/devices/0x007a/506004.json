@@ -1,5 +1,16 @@
+// Merten 506004
+// Transmitter Flush-Mounted 4-Gang Switch
 {
-    "_approved": true,
+    "_approved": false,
+    "_errors": [
+        "Overview information is not set",
+        "Inclusion information is not set",
+        "Exclusion information is not set",
+        "No endpoints are configured",
+        "Device has configuration parameters defined, but does not support the CONFIGURATION command class.",
+        "Device has association groups defined, but does not support the ASSOCIATION command class.",
+        "At least one device manual must be uploaded as PDF"
+    ],
     "manufacturer": "Merten",
     "manufacturerId": "0x007a",
     "label": "506004",

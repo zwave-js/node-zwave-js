@@ -1,9 +1,11 @@
+// Wenzhou MTLC Electric Appliances Co., Ltd. ZW20R
+// 20A Tamper Resistant Duplex Receptacle
 {
     "_approved": true,
-    "manufacturer": "Enerwave",
+    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
     "manufacturerId": "0x011a",
     "label": "ZW20R",
-    "description": "ZW20R 20A TR Duplex Receptacle",
+    "description": "20A Tamper Resistant Duplex Receptacle",
     "devices": [
         {
             "productType": "0x0101",
@@ -24,7 +26,7 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "LED is on when switch is off",

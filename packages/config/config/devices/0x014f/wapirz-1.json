@@ -1,9 +1,11 @@
+// Nortek Security & Control LLC WAPIRZ-1
+// PIR Motion Detector
 {
     "_approved": true,
-    "manufacturer": "Linear (Nortek Security Control LLC)",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "WAPIRZ-1",
-    "description": "WAPIRZ-1 Motion Sensor",
+    "description": "PIR Motion Detector",
     "devices": [
         {
             "productType": "0x2002",
@@ -16,7 +18,7 @@
     },
     "associations": {
         "1": {
-            "label": "Lifeline",
+            "label": "Group 1",
             "maxNodes": 5,
             "isLifeline": true
         }
@@ -24,17 +26,16 @@
     "paramInformation": {
         "1": {
             "label": "Re-trigger Wait Time",
-            "description": "By default, to conserve battery life, after the WAPIRZ-1 detects motion it cannot\tbe re-triggered by motion again for 3 minutes.\n\t\t\tEach time motion is detected (even during this wait time) the 3 minute timer starts over. \n\t\t\tThe length of the re-trigger wait time can be adjusted with this setting.",
+            "description": "Re-trigger Wait Time",
             "unit": "minutes",
-            "valueSize": 2,
-            "minValue": 0,
+            "valueSize": 1,
+            "minValue": 1,
             "maxValue": 255,
             "defaultValue": 3,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "minutes"
+            "allowManualEntry": true
         }
     }
 }

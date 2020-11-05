@@ -1,9 +1,11 @@
+// Nortek Security & Control LLC WA00Z-1
+// Wall Mounted Switch
 {
     "_approved": true,
-    "manufacturer": "Linear (Nortek Security Control LLC)",
+    "manufacturer": "Nortek Security & Control LLC",
     "manufacturerId": "0x014f",
     "label": "WA00Z-1",
-    "description": "WA00Z-1 Scene Switch",
+    "description": "Wall Mounted Switch",
     "devices": [
         {
             "productType": "0x5343",
@@ -14,6 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Activation of Central Scene",
@@ -28,54 +31,25 @@
         },
         "2": {
             "label": "Control Mode",
-            "description": "Set the switch to control other devices or issue various scene activation commands to a central controller.",
+            "description": "Control  other  devices  or  issue  various  scene activation...",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Scenes and groups",
-                    "value": 0
-                },
-                {
-                    "label": "Scenes",
-                    "value": 1
-                },
-                {
-                    "label": "Groups",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Invert Switch",
-            "description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 2,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
         },
-        "2": {
-            "label": "Top/bottom button click and holding down",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Top/bottom button double-click and holding down",
-            "maxNodes": 5
+        "4": {
+            "label": "Invert Switch",
+            "description": "Invert top of switch ON/OFF buttons",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
         }
     }
 }

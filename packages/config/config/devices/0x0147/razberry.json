@@ -1,28 +1,36 @@
+// Z-Wave.me RaZberry
+// Z-Wave daughtercard
 {
-    "_approved": true,
-    "manufacturer": "Z-Wave.Me",
-    "manufacturerId": "0x0147",
-    "label": "RAZBERRY",
-    "description": "RaZberry Controller 2016 ZWave+",
-    "devices": [
-        {
-            "productType": "0x0400",
-            "productId": "0x0002"
-        },
-        {
-            "productType": "0x0002",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "associations",
-            "description": "Associations for RaZberry",
-            "maxNodes": 16
-        }
-    }
+	"_approved": false,
+	"_errors": [
+		"Overview information is not set",
+		"Inclusion information is not set",
+		"Exclusion information is not set",
+		"No endpoints are configured",
+		"Device category is not set.",
+		"Device has association groups defined, but does not support the ASSOCIATION command class.",
+		"At least one manufacturers product image must be uploaded",
+		"At least one device manual must be uploaded as PDF"
+	],
+	"manufacturer": "Z-Wave.me",
+	"manufacturerId": "0x0147",
+	"label": "RaZberry",
+	"description": "Z-Wave daughtercard",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "associations",
+			"description": "Associations for RaZberry",
+			"maxNodes": 16
+		}
+	}
 }

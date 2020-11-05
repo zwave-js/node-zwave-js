@@ -1,14 +1,12 @@
+// Sunricher ZV9101
+// RGBW LED Controller
 {
     "_approved": true,
     "manufacturer": "Sunricher",
     "manufacturerId": "0x0330",
     "label": "ZV9101",
-    "description": "Dimmer ZV-9101",
+    "description": "RGBW LED Controller",
     "devices": [
-        {
-            "productType": "0x0200",
-            "productId": "0xd005"
-        },
         {
             "productType": "0x0201",
             "productId": "0xd002"
@@ -18,118 +16,64 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
-            "label": "Saving state before power failure",
-            "description": "Saving state before power failure. Default Not saved.",
+            "label": "Saving load state",
+            "description": "Saving load state before power failure",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 1,
+            "maxValue": 2,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "State NOT saved at power failure, all outputs are set to OFF upon power restore",
-                    "value": 0
-                },
-                {
-                    "label": "State NOT saved at power failure, all outputs are set to ON upon power restore",
-                    "value": 1
-                },
-                {
-                    "label": "State saved at power failure, all outputs are set to previous state upon power restore",
-                    "value": 2
-                }
-            ]
+            "allowManualEntry": true
         },
         "3": {
-            "label": "Send the basic report",
-            "description": "Enable/disable to send the basic report to the Lifeline when the load state changed.\n              When value set as 1, re-power on the dimmer, it will send Basic report automatically.\n            Default Enabled.",
+            "label": "Enable/disable basic report",
+            "description": "Enables/disables to send Basic report to the Lifeline when load state changed",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 1,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Fade time",
-            "description": "Fade time (units between 1-127 represent 1-127 seconds.\n            Units Between 128-244 represent minutes, 128 = 1 minute, 129 = 2 minutes.\n              This value has the same function as Duration of Multilevel).\n            Default 1.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1
+            "allowManualEntry": true
         },
         "5": {
-            "label": "Setting minimum brightness value",
-            "description": "Setting minimum brightness value.\n              Valid value: 0 - 50, the bigger the value is, the higher the loads minimum brightness is.\n              Note: when configure this value, the value of Multilevel will be configured as 1 automatically so that users can preview the corresponding effect of minimum brightness value",
+            "label": "Cool light stage mode",
+            "description": "Choose a cool light stage mode",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 50,
+            "maxValue": 7,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "6": {
-            "label": "Choose MOSFET driving type",
-            "description": "Choose MOSFET driving type\". Default trailing edge.",
+            "label": "Stage mode speed",
+            "description": "Speed of stage mode",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 1,
+            "maxValue": 255,
+            "defaultValue": 243,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Trailing edge",
-                    "value": 0
-                },
-                {
-                    "label": "Leading edge",
-                    "value": 1
-                }
-            ]
+            "allowManualEntry": true
         },
         "7": {
-            "label": "Enable/disable external switch to be added to and removed from a network",
-            "description": "Enable/disable external switch to be added to and removed from a network.\n              When enables this function, triple press the external switch within 1.5 seconds to be added to or removed from a net-work.\n            Default Enabled.",
+            "label": "Stage Mode Execution",
+            "description": "Execution times of stage mode",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 1,
+            "maxValue": 255,
+            "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
+            "allowManualEntry": true
         },
         "8": {
             "label": "Stage Mode Hue",
@@ -153,21 +97,6 @@
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off",
-            "maxNodes": 8
-        },
-        "3": {
-            "label": "Dimmer",
-            "maxNodes": 8
         }
     }
 }

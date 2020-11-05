@@ -1,9 +1,16 @@
+// Wenzhou MTLC Electric Appliances Co., Ltd. ZWN-SC7
+// Scene Controller
 {
     "_approved": true,
-    "manufacturer": "Enerwave",
+    "_warnings": [
+        "Overview information is not set",
+        "Inclusion information is not set",
+        "Exclusion information is not set"
+    ],
+    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
     "manufacturerId": "0x011a",
     "label": "ZWN-SC7",
-    "description": "ZWN-SC7 7-Button Scene Controller",
+    "description": "Scene Controller",
     "devices": [
         {
             "productType": "0x0801",

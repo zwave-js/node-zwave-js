@@ -1,9 +1,11 @@
+// wiDom UMS2
+// WiDom Smart Roller Shutter
 {
     "_approved": true,
     "manufacturer": "wiDom",
     "manufacturerId": "0x0149",
     "label": "UMS2",
-    "description": "UMS2 Smart Roller Shutter",
+    "description": "WiDom Smart Roller Shutter",
     "devices": [
         {
             "productType": "0x1214",
@@ -14,17 +16,18 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Numbers of clicks to control the loads",
-            "description": "Define which sequences of click control the local load. (Default Value: 3)",
+            "label": "Numbers of clicks to control the local load",
+            "description": "Define which sequences of click control the local load",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 3,
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "DISABLED",
@@ -46,89 +49,87 @@
         },
         "2": {
             "label": "Favorite level for ON position",
-            "description": "50 to 100: 50-100% opening level (100% correspond to completely open)\n        (Default Value: 100)",
+            "description": "Favorite level for ON position",
             "valueSize": 1,
             "minValue": 50,
             "maxValue": 100,
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "3": {
             "label": "Favorite level for OFF position",
-            "description": "0 to 49: 0-49% opening level (0 correspond to completely closed)\n        (Default Value: 0)",
+            "description": "Favorite level for OFF position",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 50,
+            "maxValue": 49,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "4": {
-            "label": "Value used for devices belonging to Group 2 using UP button",
-            "description": "Value used for devices belonging to Group 2 when UP button receive 1 Click\n        1-99 : Dimming purpose\n        0 : OFF\n        -1 : ON (Default Value)",
+            "label": "Value for Group 2 with 1 click on  UP button",
+            "description": "Value for Group 2 with 1 click on  UP button",
             "valueSize": 1,
             "minValue": -1,
-            "maxValue": 100,
+            "maxValue": 99,
             "defaultValue": -1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "5": {
-            "label": "Value used for devices belonging to Group 2 using DOWN button",
-            "description": "Value used for devices belonging to Group 2 when DOWN button receive 1 Click\n        1-99 : Dimming purpose\n        0 : OFF (Default Value)\n        -1 : ON",
+            "label": "Value for Group 2 with 1 click on DOWN button",
+            "description": "Value for Group 2 with 1 click on DOWN button",
             "valueSize": 1,
             "minValue": -1,
-            "maxValue": 100,
+            "maxValue": 99,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "6": {
-            "label": "Value used for devices belonging to Group 3 using UP button",
-            "description": "Value used for devices belonging to Group 3 when UP button receive 2 Clicks\n        1-99 : Dimming purpose\n        0 : OFF\n        -1 : ON (Default Value)",
+            "label": "Value for Group 3 with 2 clicks on UP button",
+            "description": "Value for Group 3 with 2 clicks on UP button",
             "valueSize": 1,
             "minValue": -1,
-            "maxValue": 100,
+            "maxValue": 99,
             "defaultValue": -1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "7": {
-            "label": "Value used for devices belonging to Group 3 using DOWN button",
-            "description": "Value used for devices belonging to Group 3 when DOWN button receive 2 Clicks\n        1-99 : Dimming purpose\n        0 : OFF (Default Value)\n        -1 : ON",
+            "label": "Value for Group 3 with 2 clicks on DOWN button",
+            "description": "Value for Group 3 with 2 clicks on DOWN button",
             "valueSize": 1,
             "minValue": -1,
-            "maxValue": 100,
+            "maxValue": 99,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "8": {
-            "label": "Value used for devices belonging to Group 4 using UP button",
-            "description": "Value used for devices belonging to Group 4 when UP button receive 3 Clicks\n        1-99 : Dimming purpose\n        0 : OFF\n        -1 : ON (Default Value)",
+            "label": "Value for Group 4 with 3 clicks on UP button",
+            "description": "Value for Group 4 with 3 clicks on UP button",
             "valueSize": 1,
             "minValue": -1,
-            "maxValue": 100,
+            "maxValue": 99,
             "defaultValue": -1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "9": {
-            "label": "Value used for devices belonging to Group 4 using DOWN button",
-            "description": "Value used for devices belonging to Group 4 when DOWN button receive 3 Clicks\n        1-99 : Dimming purpose\n        0 : OFF (Default Value)\n        -1 : ON",
+            "label": "Value for Group 4 with 3 clicks on DOWN button",
+            "description": "Value for Group 4 with 3 clicks on DOWN button",
             "valueSize": 1,
             "minValue": -1,
-            "maxValue": 100,
+            "maxValue": 99,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
@@ -136,32 +137,18 @@
         },
         "20": {
             "label": "Calibration",
-            "description": "Defines the status of the calibration procedure. By default, as soon as the device has been included, the \n        calibration starts in automatic mode. At the end of the calibration, this parameter is set to 1. \n        Afterwards the calibration can be done again by setting this parameter to 0 (AUTO) or 2 (MANUAL) and clicking \n        on any external button. If the calibration is set in AUTO mode, it will be completed automatically.\n        If the calibration is set in MANUAL mode, a click on any external button is necessary to carry on the next step. \n        During the calibration, the LED indicator blinks repeatedly in BLUE.\n        (Default Value: 0)",
+            "description": "Defines the status of the calibration procedure",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 1,
+            "maxValue": 2,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "TO_BE_DONE_AUTO",
-                    "value": 0
-                },
-                {
-                    "label": "DONE",
-                    "value": 1
-                },
-                {
-                    "label": "TO_BE_DONE_MANUAL",
-                    "value": 2
-                }
-            ]
+            "allowManualEntry": true
         },
         "21": {
             "label": "Motor idle state definition",
-            "description": "Defines the level of power consumption under which the motor is considered steady (stationary)\n        0 to 3000 : Expressed in hundredths of Watt (ex. 3000=30 Watt)\n        (Default Value: 1000)",
+            "description": "Motor idle state definition",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 3000,
@@ -172,7 +159,7 @@
         },
         "22": {
             "label": "Limit switch recognition",
-            "description": "The motor has reached the limit switch when its power consumption is lower than PLIMIT (the power defined in parameter No. 21) for an amount of time defined by this parameter. \n        1 to 127 : Expressed in hundredths of Watt (ex. 3000=30 Watt)\n        0 : Limit Switch ignored\n        (Default Value: 30)",
+            "description": "Limit switch recognition",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
@@ -180,25 +167,6 @@
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "1 Click",
-            "maxNodes": 8
-        },
-        "3": {
-            "label": "2 Clicks",
-            "maxNodes": 8
-        },
-        "4": {
-            "label": "2 Clicks",
-            "maxNodes": 8
         }
     }
 }

@@ -1,25 +1,27 @@
+// Aeotec Ltd. ZW164
+// Indoor Siren 6 and Doorbell 6
 {
     "_approved": true,
-    "manufacturer": "Aeotec Limited",
+    "manufacturer": "Aeotec Ltd.",
     "manufacturerId": "0x0371",
     "label": "ZW164",
-    "description": "ZW164 Indoor Siren 6",
+    "description": "Indoor Siren 6 and Doorbell 6",
     "devices": [
         {
-            "productType": "0x0103",
-            "productId": "0x00a4"
+            "productType": "0x0003",
+            "productId": "0x00a2"
         },
         {
             "productType": "0x0003",
             "productId": "0x00a4"
         },
         {
-            "productType": "0x0003",
+            "productType": "0x0103",
             "productId": "0x00a2"
         },
         {
             "productType": "0x0103",
-            "productId": "0x00a2"
+            "productId": "0x00a4"
         },
         {
             "productType": "0x0203",
@@ -30,213 +32,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "LifeLine",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off control (Browse)",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "On/Off control (Tampering)",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "On/Off control (Doorbell 1)",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "On/Off control (Doorbell 2)",
-            "maxNodes": 5
-        },
-        "6": {
-            "label": "On/Off control (Doorbell 3)",
-            "maxNodes": 5
-        },
-        "7": {
-            "label": "On/Off control (Environment)",
-            "maxNodes": 5
-        },
-        "8": {
-            "label": "On/Off control (Security)",
-            "maxNodes": 5
-        },
-        "9": {
-            "label": "On/Off control (Emergency)",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
-        "1": {
-            "label": "Configure the Light Effect and Tone Play Mode for Endpoint 1 (Browse).",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 16777216,
-            "maxValue": 2147418112,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 16777216
-        },
-        "2": {
-            "label": "Configure the Light Effect and Tone Effect for Endpoint 2 (Tampering).",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 16777217
-        },
-        "3": {
-            "label": "Configure the Light Effect and Tone Effect for Endpoint 3 (Doorbell 1).",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 16777216,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 33554433
-        },
-        "4": {
-            "label": "Configure the Light Effect and Tone Effect for Endpoint 4 (Doorbell 2).",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 16777216,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 33554433
-        },
-        "5": {
-            "label": "Configure the Light Effect and Tone Effect for Endpoint 5 (Doorbell 3).",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 16777216,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 33554433
-        },
-        "6": {
-            "label": "Configure the Light Effect and Tone Effect for Endpoint 6 (Environment).",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 16777216,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 67108864
-        },
-        "7": {
-            "label": "Configure the Light Effect and Tone Effect for Endpoint 7 (Security).",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 16777216,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 67108864
-        },
-        "8": {
-            "label": "Configure the Light Effect and Tone Effect for Endpoint 8 (Emergency).",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 16777216,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 67108864
-        },
-        "16": {
-            "label": "Configure #1 Light Effect.",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1259934723
-        },
-        "17": {
-            "label": "Configure #2 Light Effect.",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1259934723
-        },
-        "18": {
-            "label": "Configure #3 Light Effect.",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1259934723
-        },
-        "19": {
-            "label": "Configure #4 Light Effect.",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1259934723
-        },
-        "20": {
-            "label": "Configure #5 Light Effect.",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1259934723
-        },
-        "21": {
-            "label": "Configure #6 Light Effect.",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1259934723
-        },
-        "22": {
-            "label": "Configure #7 Light Effect.",
-            "description": "",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 1259934723
-        },
         "32": {
-            "label": "Configure how to send Basic Set to nodes in Group 2.",
+            "label": "Sending Basic Set to nodes in Group 2.",
             "description": "Sending Basic Set to nodes in Group 2.",
             "valueSize": 1,
             "minValue": 0,
@@ -247,29 +46,29 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Don't send Basic Set",
+                    "label": "Don’t send Basic Set.",
                     "value": 0
                 },
                 {
-                    "label": "When Endpoint 1 starts playing tone, send Basic Set 0xFF. When Endpoint 1 stops playing tone, don't send Basic Set",
+                    "label": "Option 1",
                     "value": 1
                 },
                 {
-                    "label": "When Endpoint 1 starts playing tone, send Basic Set 0x00. When Endpoint 1 stops playing tone, don't send Basic Set",
+                    "label": "Option 2",
                     "value": 2
                 },
                 {
-                    "label": "When Endpoint 1 starts playing tone, send Basic Set 0xFF. When Endpoint 1 stops playing tone, send Basic Set 0x00",
+                    "label": "Option 3 (default)",
                     "value": 3
                 },
                 {
-                    "label": "When Endpoint 1 starts playing tone, send Basic Set 0x00. When Endpoint 1 stops playing tone, send Basic Set 0xFF",
+                    "label": "Option 4",
                     "value": 4
                 }
             ]
         },
         "33": {
-            "label": "Configure how to send Basic Set to nodes in Group 3.",
+            "label": "Sending Basic Set to nodes in Group 3 .",
             "description": "Sending Basic Set to nodes in Group 3 .",
             "valueSize": 1,
             "minValue": 0,
@@ -280,29 +79,29 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Don't send Basic Set",
+                    "label": "Don’t send Basic Set.",
                     "value": 0
                 },
                 {
-                    "label": "When Endpoint 2 starts playing tone, send Basic Set 0xFF. When Endpoint 2 stops playing tone, don't send Basic Set",
+                    "label": "Option 1",
                     "value": 1
                 },
                 {
-                    "label": "When Endpoint 2 starts playing tone, send Basic Set 0x00. When Endpoint 2 stops playing tone, don't send Basic Set",
+                    "label": "Option 2",
                     "value": 2
                 },
                 {
-                    "label": "When Endpoint 2 starts playing tone, send Basic Set 0xFF. When Endpoint 2 stops playing tone, send Basic Set 0x00",
+                    "label": "Option 3 (default)",
                     "value": 3
                 },
                 {
-                    "label": "When Endpoint 2 starts playing tone, send Basic Set 0x00. When Endpoint 2 stops playing tone, send Basic Set 0xFF",
+                    "label": "Option 4",
                     "value": 4
                 }
             ]
         },
         "34": {
-            "label": "Configure how to send Basic Set to nodes in Group 4.",
+            "label": "Sending Basic Set to nodes in Group 4.",
             "description": "Sending Basic Set to nodes in Group 4.",
             "valueSize": 1,
             "minValue": 0,
@@ -313,29 +112,29 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Don't send Basic Set",
+                    "label": "Don’t send Basic Set.",
                     "value": 0
                 },
                 {
-                    "label": "When Endpoint 3 starts playing tone, send Basic Set 0xFF. When Endpoint 3 stops playing tone, don't send Basic Set",
+                    "label": "Option 1",
                     "value": 1
                 },
                 {
-                    "label": "When Endpoint 3 starts playing tone, send Basic Set 0x00. When Endpoint 3 stops playing tone, don't send Basic Set",
+                    "label": "Option 2",
                     "value": 2
                 },
                 {
-                    "label": "When Endpoint 3 starts playing tone, send Basic Set 0xFF. When Endpoint 3 stops playing tone, send Basic Set 0x00",
+                    "label": "Option 3 (default)",
                     "value": 3
                 },
                 {
-                    "label": "When Endpoint 3 starts playing tone, send Basic Set 0x00. When Endpoint 3 stops playing tone, send Basic Set 0xFF",
+                    "label": "Option 4",
                     "value": 4
                 }
             ]
         },
         "35": {
-            "label": "Configure how to send Basic Set to nodes in Group 5.",
+            "label": "Sending Basic Set to nodes in Group 5.",
             "description": "Sending Basic Set to nodes in Group 5.",
             "valueSize": 1,
             "minValue": 0,
@@ -346,29 +145,29 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Don't send Basic Set",
+                    "label": "Don’t send Basic Set.",
                     "value": 0
                 },
                 {
-                    "label": "When Endpoint 4 starts playing tone, send Basic Set 0xFF. When Endpoint 4 stops playing tone, don't send Basic Set",
+                    "label": "Option 1",
                     "value": 1
                 },
                 {
-                    "label": "When Endpoint 4 starts playing tone, send Basic Set 0x00. When Endpoint 4 stops playing tone, don't send Basic Set",
+                    "label": "Option 2",
                     "value": 2
                 },
                 {
-                    "label": "When Endpoint 4 starts playing tone, send Basic Set 0xFF. When Endpoint 4 stops playing tone, send Basic Set 0x00",
+                    "label": "Option 3 (default)",
                     "value": 3
                 },
                 {
-                    "label": "When Endpoint 4 starts playing tone, send Basic Set 0x00. When Endpoint 4 stops playing tone, send Basic Set 0xFF",
+                    "label": "Option 4",
                     "value": 4
                 }
             ]
         },
         "36": {
-            "label": "Configure how to send Basic Set to nodes in Group 6.",
+            "label": "Sending Basic Set to nodes in Group 6 .",
             "description": "Sending Basic Set to nodes in Group 6 .",
             "valueSize": 1,
             "minValue": 0,
@@ -379,29 +178,29 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Don't send Basic Set",
+                    "label": "Don’t send Basic Set.",
                     "value": 0
                 },
                 {
-                    "label": "When Endpoint 5 starts playing tone, send Basic Set 0xFF. When Endpoint 5 stops playing tone, don't send Basic Set",
+                    "label": "Option 1",
                     "value": 1
                 },
                 {
-                    "label": "When Endpoint 5 starts playing tone, send Basic Set 0x00. When Endpoint 5 stops playing tone, don't send Basic Set",
+                    "label": "Option 2",
                     "value": 2
                 },
                 {
-                    "label": "When Endpoint 5 starts playing tone, send Basic Set 0xFF. When Endpoint 5 stops playing tone, send Basic Set 0x00",
+                    "label": "Option 3 (default)",
                     "value": 3
                 },
                 {
-                    "label": "When Endpoint 5 starts playing tone, send Basic Set 0x00. When Endpoint 5 stops playing tone, send Basic Set 0xFF",
+                    "label": "Option 4",
                     "value": 4
                 }
             ]
         },
         "37": {
-            "label": "Configure how to send Basic Set to nodes in Group 7.",
+            "label": "Sending Basic Set to nodes in Group 7 .",
             "description": "Sending Basic Set to nodes in Group 7 .",
             "valueSize": 1,
             "minValue": 0,
@@ -412,29 +211,29 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Don't send Basic Set",
+                    "label": "Don’t send Basic Set.",
                     "value": 0
                 },
                 {
-                    "label": "When Endpoint 6 starts playing tone, send Basic Set 0xFF. When Endpoint 6 stops playing tone, don't send Basic Set",
+                    "label": "Option 1",
                     "value": 1
                 },
                 {
-                    "label": "When Endpoint 6 starts playing tone, send Basic Set 0x00. When Endpoint 6 stops playing tone, don't send Basic Set",
+                    "label": "Option 2",
                     "value": 2
                 },
                 {
-                    "label": "When Endpoint 6 starts playing tone, send Basic Set 0xFF. When Endpoint 6 stops playing tone, send Basic Set 0x00",
+                    "label": "Option 3 (default)",
                     "value": 3
                 },
                 {
-                    "label": "When Endpoint 6 starts playing tone, send Basic Set 0x00. When Endpoint 6 stops playing tone, send Basic Set 0xFF",
+                    "label": "Option 4",
                     "value": 4
                 }
             ]
         },
         "38": {
-            "label": "Configure how to send Basic Set to nodes in Group 8.",
+            "label": "Sending Basic Set to nodes in Group 8 .",
             "description": "Sending Basic Set to nodes in Group 8 .",
             "valueSize": 1,
             "minValue": 0,
@@ -445,29 +244,29 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Don't send Basic Set",
+                    "label": "Don’t send Basic Set.",
                     "value": 0
                 },
                 {
-                    "label": "When Endpoint 7 starts playing tone, send Basic Set 0xFF. When Endpoint 7 stops playing tone, don't send Basic Set",
+                    "label": "Option 1",
                     "value": 1
                 },
                 {
-                    "label": "When Endpoint 7 starts playing tone, send Basic Set 0x00. When Endpoint 7 stops playing tone, don't send Basic Set",
+                    "label": "Option 2",
                     "value": 2
                 },
                 {
-                    "label": "When Endpoint 7 starts playing tone, send Basic Set 0xFF. When Endpoint 7 stops playing tone, send Basic Set 0x00",
+                    "label": "Option 3 (default)",
                     "value": 3
                 },
                 {
-                    "label": "When Endpoint 7 starts playing tone, send Basic Set 0x00. When Endpoint 7 stops playing tone, send Basic Set 0xFF",
+                    "label": "Option 4",
                     "value": 4
                 }
             ]
         },
         "39": {
-            "label": "Configure how to send Basic Set to nodes in Group 9.",
+            "label": "Sending Basic Set to nodes in Group 9 .",
             "description": "Sending Basic Set to nodes in Group 9 .",
             "valueSize": 1,
             "minValue": 0,
@@ -478,206 +277,173 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Don't send Basic Set",
+                    "label": "Don’t send Basic Set.",
                     "value": 0
                 },
                 {
-                    "label": "When Endpoint 8 starts playing tone, send Basic Set 0xFF. When Endpoint 8 stops playing tone, don't send Basic Set",
+                    "label": "Option 1",
                     "value": 1
                 },
                 {
-                    "label": "When Endpoint 8 starts playing tone, send Basic Set 0x00. When Endpoint 8 stops playing tone, don't send Basic Set",
+                    "label": "Option 2",
                     "value": 2
                 },
                 {
-                    "label": "When Endpoint 8 starts playing tone, send Basic Set 0xFF. When Endpoint 8 stops playing tone, send Basic Set 0x00",
+                    "label": "Option 3 (default)",
                     "value": 3
                 },
                 {
-                    "label": "When Endpoint 8 starts playing tone, send Basic Set 0x00. When Endpoint 8 stops playing tone, send Basic Set 0xFF",
+                    "label": "Option 4",
                     "value": 4
                 }
             ]
         },
         "48": {
-            "label": "Trigger Unpairing Button Mode",
-            "description": "",
+            "label": "Trigger Unpairing Button Mode (Write Only)",
+            "description": "Trigger Unpairing Button Mode (Write Only)",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
+            "minValue": 1,
+            "maxValue": 7,
+            "defaultValue": 1,
             "readOnly": false,
             "writeOnly": true,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Trigger Unpairing #1 Button Mode",
+                    "label": "Trigger Unpairing #1 Button Mode .",
                     "value": 1
                 },
                 {
-                    "label": "Trigger Unpairing #2 Button Mode",
+                    "label": "Trigger Unpairing #2 Button Mode .",
                     "value": 2
                 },
                 {
-                    "label": "Trigger Unpairing #2 and #1 Button Mode",
+                    "label": "Trigger Unpairing #2 and #1 Button Mode .",
                     "value": 3
                 },
                 {
-                    "label": "Trigger Unpairing #3 Button Mode",
+                    "label": "Trigger Unpairing #3 Button Mode.",
                     "value": 4
                 },
                 {
-                    "label": "Trigger Unpairing #3 and #1 Button Mode",
+                    "label": "Trigger Unpairing #3 and #1 Button Mode.",
                     "value": 5
                 },
                 {
-                    "label": "Trigger Unpairing #3 and #2 Button Mode",
+                    "label": "Trigger Unpairing #3 and #2 Button Mode.",
                     "value": 6
                 },
                 {
-                    "label": "Trigger Unpairing #3, #2 and #1 Button Mode",
+                    "label": "Trigger Unpairing #3, #2 and #1 Button Mode.",
                     "value": 7
                 }
             ]
         },
         "49": {
-            "label": "Trigger pairing Button Mode",
-            "description": "",
+            "label": "Trigger Pairing Button Mode (Write Only)",
+            "description": "Trigger Pairing Button Mode (Write Only)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
+            "maxValue": 4,
+            "defaultValue": 1,
             "readOnly": false,
             "writeOnly": true,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Exit Pairing Button Mode",
+                    "label": "Exit Pairing Button Mode.",
                     "value": 0
                 },
                 {
-                    "label": "Trigger Pairing #1 Button Mode",
+                    "label": "Trigger Pairing #1 Button Mode .",
                     "value": 1
                 },
                 {
-                    "label": "Trigger Pairing #2 Button Mode",
+                    "label": "Trigger Pairing #2 Button Mode .",
                     "value": 2
                 },
                 {
-                    "label": "Trigger Pairing #3 Button Mode",
+                    "label": "Trigger Pairing #3 Button Mode .",
                     "value": 4
                 }
             ]
         },
         "50": {
             "label": "Report which Pairing Button Mode is triggered",
-            "description": "",
+            "description": "Report which Pairing Button Mode is triggered ( Read Only)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 4,
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "There is no Pairing Button Mode being triggered",
+                    "label": "There is no Pairing Button Mode being triggered.",
                     "value": 0
                 },
                 {
-                    "label": "Pairing #1 Button Mode is triggered",
+                    "label": "Pairing #1 Button Mode is triggered.",
                     "value": 1
                 },
                 {
-                    "label": "Pairing #1 Button Mode is triggered",
+                    "label": "Pairing #2 Button Mode is triggered.",
                     "value": 2
                 },
                 {
-                    "label": "Pairing #1 Button Mode is triggered",
+                    "label": "Pairing #3 Button Mode is triggered.",
                     "value": 4
                 }
             ]
         },
         "51": {
             "label": "Report which Buttons had been paired",
-            "description": "",
+            "description": "Report which Buttons had been paired",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 7,
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "There is no paired Button",
+                    "label": "There is no paired Button .",
                     "value": 0
                 },
                 {
-                    "label": "#1 Button had been paired",
+                    "label": "#1 Button had been paired.",
                     "value": 1
                 },
                 {
-                    "label": "#2 Button had been paired",
+                    "label": "#2 Button had been paired.",
                     "value": 2
                 },
                 {
-                    "label": "#2 and #1 Button had been paired",
+                    "label": "#2 and #1 Button had been paired.",
                     "value": 3
                 },
                 {
-                    "label": "#3 Button had been paired",
+                    "label": "#3 Button had been paired.",
                     "value": 4
                 },
                 {
-                    "label": "#3 and #1 Button had been paired",
+                    "label": "#3 and #1 Button had been paired.",
                     "value": 5
                 },
                 {
-                    "label": "#3 and #2 Button had been paired",
+                    "label": "#3 and #2 Button had been paired.",
                     "value": 6
                 },
                 {
-                    "label": "#3x #2 and #1 Button had been paired",
+                    "label": "#3, #2 and #1 Button had been paired.",
                     "value": 7
                 }
             ]
         },
-        "52": {
-            "label": "Get the information of #1 Button",
-            "description": "Please Refer to Engineering Specification - Aeotec Indoor Siren 6",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0
-        },
-        "53": {
-            "label": "Get the information of #2 Button",
-            "description": "Please Refer to Engineering Specification - Aeotec Indoor Siren 6",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0
-        },
-        "54": {
-            "label": "Get the information of #3 Button",
-            "description": "Please Refer to Engineering Specification - Aeotec Indoor Siren 6",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0
-        },
         "96": {
-            "label": "Enable or Disable the ability that click the Action Button to stop a playing tone.",
+            "label": "Click the Action Button to stop a playing tone",
             "description": "Click the Action Button to stop a playing tone",
             "valueSize": 1,
             "minValue": 0,
@@ -698,29 +464,15 @@
             ]
         },
         "255": {
-            "label": "Reset To Factory Defaults",
-            "description": "Reset to factory defaults",
+            "label": "Factory Reset or Initialization",
+            "description": "Factory Reset or Initialization",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 1,
+            "maxValue": 1431655765,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Reset to factory default setting",
-                    "value": 0
-                },
-                {
-                    "label": "Normal",
-                    "value": 1
-                },
-                {
-                    "label": "Reset to factory default setting and removed from the z-wave network",
-                    "value": 1431655765
-                }
-            ]
+            "allowManualEntry": true
         },
         "1[0xff0000]": {
             "label": "Tone Play Mode for Endpoint 1 (Browse)",

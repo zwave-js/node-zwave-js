@@ -1,319 +1,144 @@
+// Remotec ZXT-120
+// AC IR Remote
 {
-    "_approved": true,
-    "manufacturer": "Remotec",
-    "manufacturerId": "0x5254",
-    "label": "ZXT-120",
-    "description": "ZXT-120BR",
-    "devices": [
-        {
-            "productType": "0x0108",
-            "productId": "0x8377"
-        },
-        {
-            "productType": "0x0107",
-            "productId": "0x8377"
-        },
-        {
-            "productType": "0x0106",
-            "productId": "0x8377"
-        },
-        {
-            "productType": "0x0103",
-            "productId": "0x8377"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x8377"
-        },
-        {
-            "productType": "0x0101",
-            "productId": "0x8377"
-        },
-        {
-            "productType": "0x0100",
-            "productId": "0x8377"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "25": {
-            "label": "Indicate a location for IR code learning and start learning",
-            "description": "In case none of the code on the code list works for the targeted air conditioner, user can use IR code learning function.\n\t\t\t\tSee manual at section \"IR Code Learning\" for a description of the procedure. Value 0-22",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 22,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON (resume)",
-                    "value": 1
-                },
-                {
-                    "label": "cool 19 C",
-                    "value": 2
-                },
-                {
-                    "label": "cool 20 C",
-                    "value": 3
-                },
-                {
-                    "label": "cool 21 C",
-                    "value": 4
-                },
-                {
-                    "label": "cool 22 C",
-                    "value": 5
-                },
-                {
-                    "label": "cool 23 C",
-                    "value": 6
-                },
-                {
-                    "label": "cool 24 C",
-                    "value": 7
-                },
-                {
-                    "label": "cool 25 C",
-                    "value": 8
-                },
-                {
-                    "label": "cool 26 C",
-                    "value": 9
-                },
-                {
-                    "label": "cool 27 C",
-                    "value": 10
-                },
-                {
-                    "label": "cool 28 C",
-                    "value": 11
-                },
-                {
-                    "label": "heat 19 C",
-                    "value": 12
-                },
-                {
-                    "label": "heat 20 C",
-                    "value": 13
-                },
-                {
-                    "label": "heat 21 C",
-                    "value": 14
-                },
-                {
-                    "label": "heat 22 C",
-                    "value": 15
-                },
-                {
-                    "label": "heat 23 C",
-                    "value": 16
-                },
-                {
-                    "label": "heat 24 C",
-                    "value": 17
-                },
-                {
-                    "label": "heat 25 C",
-                    "value": 18
-                },
-                {
-                    "label": "heat 26 C",
-                    "value": 19
-                },
-                {
-                    "label": "heat 27 C",
-                    "value": 20
-                },
-                {
-                    "label": "heat 28 C",
-                    "value": 21
-                }
-            ]
-        },
-        "26": {
-            "label": "Learning status register",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "description": "Note: The status value 0x01 and 0x04 will be reset to 0 when the ZXT-120 receive a get command to this parameter.\n\t\t\t\tIdle - this IR channel is idle (default).\n\t\t\t\tOK - the latest learning process successful and completed.\n\t\t\t\tLearning - the ZXT- 120 is busy processing previous learning request.\n\t\t\t\tFailed - the latest learning request failed.",
-            "options": [
-                {
-                    "label": "Idle",
-                    "value": 0
-                },
-                {
-                    "label": "OK",
-                    "value": 1
-                },
-                {
-                    "label": "Learning",
-                    "value": 2
-                },
-                {
-                    "label": "Failed",
-                    "value": 4
-                }
-            ]
-        },
-        "27": {
-            "label": "IR code number for built-in code library",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "description": "Look up the code list of ZXT-120 according to your AC brand."
-        },
-        "28": {
-            "label": "External IR Emitter power level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "High",
-                    "value": 255
-                }
-            ],
-            "description": ""
-        },
-        "32": {
-            "label": "Surround IR control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 255
-                }
-            ],
-            "description": "To avoid the IR interference by disabling the surrounding IR emitter if 2 air-conditioners in a room are used.\n\t\t\t\tExtend the battery life by disabling the Surround IR Emitters"
-        },
-        "33": {
-            "label": "AC function SWING control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Auto",
-                    "value": 1
-                }
-            ],
-            "description": ""
-        },
-        "35": {
-            "label": "Learn location status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "description": "Bit mask = 1, learn location has learn data.\n\t\t\t\tOtherwise, Bit mask 0 See figure Learn location"
-        },
-        "37": {
-            "label": "Sensor temperature compensation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "description": "This parameter is used to compensate the temperature error at temperature sensor.\n\t\t\t\tFormula: Display temperature = sensor reading value + offset value\n\t\t\t\t(unit = degree C)\n\t\t\t\t0x00 = 0C (Default)",
-            "options": [
-                {
-                    "label": "0 C",
-                    "value": 0
-                },
-                {
-                    "label": "1 C",
-                    "value": 1
-                },
-                {
-                    "label": "2 C",
-                    "value": 2
-                },
-                {
-                    "label": "3 C",
-                    "value": 3
-                },
-                {
-                    "label": "4 C",
-                    "value": 4
-                },
-                {
-                    "label": "5 C",
-                    "value": 5
-                },
-                {
-                    "label": "-1 C",
-                    "value": 255
-                },
-                {
-                    "label": "-2 C",
-                    "value": 254
-                },
-                {
-                    "label": "-3 C",
-                    "value": 253
-                },
-                {
-                    "label": "-4 C",
-                    "value": 252
-                },
-                {
-                    "label": "-5 C",
-                    "value": 251
-                }
-            ]
-        }
-    }
+	"_approved": true,
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZXT-120",
+	"description": "AC IR Remote",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x8377"
+		},
+		{
+			"productType": "0x0101",
+			"productId": "0x8377"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x8377"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"25": {
+			"label": "Location",
+			"description": "Location",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 22,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"26": {
+			"label": "Learning status register (Read Only)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"27": {
+			"label": "IR code number for built-in code library",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"28": {
+			"label": "External IR Emitter power level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal power mode",
+					"value": 0
+				},
+				{
+					"label": "High power mode",
+					"value": 255
+				}
+			]
+		},
+		"32": {
+			"label": "Surround IR control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable Surround IR Emitters",
+					"value": 255
+				},
+				{
+					"label": "Disable Surround IR Emitters",
+					"value": 0
+				}
+			]
+		},
+		"33": {
+			"label": "AC function Swing control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Swing Off",
+					"value": 0
+				},
+				{
+					"label": "Swing Auto",
+					"value": 1
+				}
+			]
+		},
+		"35": {
+			"label": "Learn location status. Bitmask. (Read Only)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"37": {
+			"label": "Sensor temperature compensation",
+			"valueSize": 1,
+			"minValue": -5,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

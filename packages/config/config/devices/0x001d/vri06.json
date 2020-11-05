@@ -1,9 +1,11 @@
+// Leviton VRI06
+// Incandescent Scene Capable Dimmer
 {
     "_approved": true,
     "manufacturer": "Leviton",
     "manufacturerId": "0x001d",
     "label": "VRI06",
-    "description": "VRI06-1LX Multilevel Scene Switch",
+    "description": "Incandescent Scene Capable Dimmer",
     "devices": [
         {
             "productType": "0x0401",

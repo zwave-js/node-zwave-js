@@ -1,9 +1,14 @@
+// Merten 507801
+// CONNECT radio flush-mounted receiver, Roller shutter
 {
     "_approved": true,
+    "_warnings": [
+        "Overview information is not set"
+    ],
     "manufacturer": "Merten",
     "manufacturerId": "0x007a",
     "label": "507801",
-    "description": "Plug-in Roller Shutter Module",
+    "description": "CONNECT radio flush-mounted receiver, Roller shutter",
     "devices": [
         {
             "productType": "0x8003",
@@ -13,69 +18,5 @@
     "firmwareVersion": {
         "min": "0.0",
         "max": "255.255"
-    },
-    "paramInformation": {
-        "176": {
-            "label": "Changeover delay (motor protection)",
-            "description": "To configure the time (value * 0.1 sec) the motor waits before switching direction.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 100
-        },
-        "177": {
-            "label": "Raising time input 1",
-            "description": "To configure input 1 of the raising time calculation (256 * Input 1 + Input 2) * 0.1 sec",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 100
-        },
-        "178": {
-            "label": "Raising time input 2",
-            "description": "To configure input 1 of the raising time calculation (256 * Input 1 + Input 2) * 0.1 sec",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 100
-        },
-        "179": {
-            "label": "Lowering time input 1",
-            "description": "To configure input 1 of the lowering time calculation (256 * Input 1 + Input 2) * 0.1 sec",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 100
-        },
-        "180": {
-            "label": "Lowering time input 2",
-            "description": "To configure input 1 of the lowering time calculation (256 * Input 1 + Input 2) * 0.1 sec",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 100
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 12,
-            "isLifeline": true
-        }
     }
 }

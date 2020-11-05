@@ -1,16 +1,14 @@
+// McoHome Technology Co., Ltd. MH7H
+// Water / Electrical Heating Thermostat
 {
     "_approved": true,
-    "manufacturer": "McoHome Technology Co Ltd",
+    "manufacturer": "McoHome Technology Co., Ltd.",
     "manufacturerId": "0x015f",
     "label": "MH7H",
-    "description": "MH7H Water/Electrical Heating Thermostat",
+    "description": "Water / Electrical Heating Thermostat",
     "devices": [
         {
-            "productType": "0x0732",
-            "productId": "0x5102"
-        },
-        {
-            "productType": "0x0712",
+            "productType": "0x0701",
             "productId": "0x5102"
         },
         {
@@ -18,7 +16,11 @@
             "productId": "0x5102"
         },
         {
-            "productType": "0x0701",
+            "productType": "0x0712",
+            "productId": "0x5102"
+        },
+        {
+            "productType": "0x0732",
             "productId": "0x5102"
         }
     ],
@@ -26,21 +28,7 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic_Set",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Basic_Set",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Upload temperature format automatically",
@@ -65,8 +53,7 @@
                     "label": "Follow the main display",
                     "value": 2
                 }
-            ],
-            "units": ""
+            ]
         },
         "2": {
             "label": "Upload temperature and humidity automatically",
@@ -95,20 +82,18 @@
                     "label": "Upload the difference+timing upload mode",
                     "value": 3
                 }
-            ],
-            "units": ""
+            ]
         },
         "3": {
             "label": "Upload temperature difference",
-            "description": "Base on 0.1C unit, 5 by default, 5*0.1C=0.5C",
+            "description": "Base on 0.1°C unit, 5 by default, 5*0.1°C=0.5°C",
             "valueSize": 2,
             "minValue": 3,
             "maxValue": 1000,
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "4": {
             "label": "Upload time interval regularly",
@@ -120,8 +105,7 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "5": {
             "label": "Upload humidity difference",
@@ -133,8 +117,7 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "255": {
             "label": "Factory setting",
@@ -145,9 +128,8 @@
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "writeOnly": true,
+            "allowManualEntry": true
         }
     }
 }

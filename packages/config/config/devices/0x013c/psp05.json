@@ -1,9 +1,11 @@
+// Philio Technology Corp PSP05
+// Motion Sensor
 {
     "_approved": true,
     "manufacturer": "Philio Technology Corp",
     "manufacturerId": "0x013c",
     "label": "PSP05",
-    "description": "PSP05 PIR/Motion",
+    "description": "Motion Sensor",
     "devices": [
         {
             "productType": "0x0002",
@@ -14,10 +16,11 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
             "label": "Basic Set Level",
-            "description": "Setting the BASIC command value to turn on the light. The 0xFF (-1) means turn on the light. \n          For dimmer equipment 1 to 100 means the light strength. 0 means turn off the light.",
+            "description": "Setting the BASIC command value to turn on the light.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -28,8 +31,8 @@
             "allowManualEntry": true
         },
         "3": {
-            "label": "PIR sensitivity",
-            "description": "0 means disable the PIR motion.\n          1 means the lowest sensitivity.\n          99 means the highest sensitivity.\n          High sensitivity means can detected long distance, but if there is more noise signal in the invironment, it wil re-trigger too frequent.",
+            "label": "PIR Sensitivity",
+            "description": "Adjust the PIR Sensitivity",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
@@ -40,10 +43,10 @@
         },
         "6": {
             "label": "Multi-Sensor Function Switch",
-            "description": "Multi-Sensor Function switch. Using bit to control.\n          Bit 0: Reserved always 0 \n          Bit 1: Reserved always 0 \n          Bit 2: Reserved always 1\n          Bit 3: Are the device and the lighting in the same room? 0: In the same room(Default), 1: In the different room.\n          Bit 4: Disable delay 5 seconds to turn off the light, when door/window closed. \n          Bit 5: Disable auto turn off the light, after door/window opened to turn on the light. Notice: If bit2 is zero, this setting is useless. Notice: If the configuration No.9 is zero, this setting is useless. \n          Bit 6: Reserve.\n\t  Bit 7: Reserve.",
+            "description": "Parameter to set the sensor functions.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 127,
+            "maxValue": 255,
             "defaultValue": 5,
             "unsigned": true,
             "readOnly": false,
@@ -52,7 +55,7 @@
         },
         "7": {
             "label": "Customer Function",
-            "description": "Customer function switch, using bit control. \n          Bit 0: Reserve. \n          Bit 1: Enable sending motion OFF report (0:Disable, 1:Enable). \n\t\t\t\t Note: Depends on the Bit4, 0: Report Notification CC, Type: 0x07, Event: 0xFE 1: Sensor Binary Report, Type: 0x0C, Value: 0x00. \n          Bit 2: Enable PIR super sensitivity mode (0:Disable, 1:Enable).\n          Bit 3: Reserve. \n          Bit 4: Notification Type (0: Notification Report, 1: Sensor Binary Report).\n          Bit 5: Disable Multi CC in auto report (1:Disable, 0:Enable). \n          Bit 6: Disable to report battery state when the device triggered (1:Disable, 0:Enable)\n          Bit 7: Reserve.\n\t       ozw recommended setting: 00010110 : 22",
+            "description": "Parameter to set the Customer Function.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
@@ -62,8 +65,8 @@
             "allowManualEntry": true
         },
         "8": {
-            "label": "PIR Re-Detect Interval Time",
-            "description": "In the normal mode, after the PIR motion detected, setting the re-detect time, 8 seconds per tick, default tick is 3 (24 seconds).\n          Setting the suitable value to prevent received the trigger signal too frequency. Also can save the battery energy.\n          Notice: If this value bigger than the configuration setting NO. 9. There is a period after the light turned off and the PIR not start detecting.",
+            "label": "Re-detection interval",
+            "description": "Multiples of 8 seconds to wait before re-detection",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 127,
@@ -73,32 +76,30 @@
             "allowManualEntry": true
         },
         "9": {
-            "label": "Turn Off Light Time",
-            "description": "After turn on the lighting, setting the delay time to turn off the lighting when the PIR motion is not detected. \n          8 seconds per tick, default tick is 4 (32 seconds). 0 means never send turn off light command.",
+            "label": "Turn off light time",
+            "description": "Time to wait after lighting has been turned on before turning off again",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "8 sec"
+            "allowManualEntry": true
         },
         "10": {
-            "label": "Auto Report Battery Time",
-            "description": "The interval time for auto report the battery level. 0 means turn off auto report battery. The default value is 12. The tick time can setting by the configuration No.20.",
+            "label": "Batery level reporting interval",
+            "description": "How frequently battery status should be reported",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "30 min"
+            "allowManualEntry": true
         },
         "20": {
-            "label": "Auto Report Tick Interval",
-            "description": "The interval time for auto report each tick. Setting this configuration will effect configuration No.10, No.11, No.12 and No.13. Caution: Setting to 0 means turn off all auto report function.",
+            "label": "Tick Interval",
+            "description": "Interval time for sending reports",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -212,17 +213,6 @@
                     "value": 1
                 }
             ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Light Control",
-            "maxNodes": 8
         }
     }
 }

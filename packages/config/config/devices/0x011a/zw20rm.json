@@ -1,9 +1,11 @@
+// Wenzhou MTLC Electric Appliances Co., Ltd. ZW20RM
+// In-wall Smart Meter  Duplex Receptacle
 {
     "_approved": true,
-    "manufacturer": "Enerwave",
+    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
     "manufacturerId": "0x011a",
     "label": "ZW20RM",
-    "description": "ZW20RM 20A TR Smart Meter Duplex Receptacle",
+    "description": "In-wall Smart Meter  Duplex Receptacle",
     "devices": [
         {
             "productType": "0x0111",
@@ -16,9 +18,9 @@
     },
     "associations": {
         "1": {
-            "label": "Reports",
+            "label": "Notifications",
             "description": "Lifeline",
-            "maxNodes": 5,
+            "maxNodes": 1,
             "isLifeline": true
         },
         "2": {
@@ -34,11 +36,11 @@
     },
     "paramInformation": {
         "1": {
-            "label": "LED mode",
-            "description": "Synchronization of outlet power and LED indicator",
+            "label": "Synchronization of load power and LED indicator",
+            "description": "Synchronization of load power and LED indicator",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
@@ -56,7 +58,7 @@
         },
         "8": {
             "label": "Instant Meter Autosend Interval",
-            "description": "How often to send the energy report for the moment-in-time usage (METER_REPORT version) automatically in minutes. 0 = disabled.",
+            "description": "Instant Energy Autosend Interval (send METER_REPORT)",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -64,12 +66,11 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "minutes"
+            "allowManualEntry": true
         },
         "9": {
-            "label": "Instant Multilevel Autosend Interval",
-            "description": "How often to send the energy report for the moment-in-time usage (SENSOR_MULTILEVEL_REPORT version) automatically in minutes. 0 = disabled.",
+            "label": "Instant Sensor Autosend interval",
+            "description": "Instant Energy Autosend interval (send SENSOR_MULTILEVEL_REPORT)",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -77,12 +78,11 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "minutes"
+            "allowManualEntry": true
         },
         "10": {
-            "label": "Accumulated Energy Autosend Interval",
-            "description": "How often to send the energy report for the accumulated energy usage usage (METER_REPORT) automatically in minutes. 0 = disabled.",
+            "label": "Accumulated Meter Autosend Interval",
+            "description": "Accumulated Energy Autosend Interval report (send METER_REPORT)",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -90,41 +90,40 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "minutes"
+            "allowManualEntry": true
         },
         "11": {
-            "label": "Wattage Change Notifications",
-            "description": "Enable automatic notifications when there is a change in wattage.",
+            "label": "Enable automatic notifications",
+            "description": "Enable automatic notifications to associated device",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 3,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "No report",
+                    "label": "Not report (METER_REPORT)",
                     "value": 0
                 },
                 {
-                    "label": "Send METER_REPORT only (default)",
+                    "label": "Send (METER_REPORT) only",
                     "value": 1
                 },
                 {
-                    "label": "Send SENSOR_MULTILEVEL_REPORT only",
+                    "label": "Send (SENSOR_MULTI_LEVEL_REPORT) only",
                     "value": 2
                 },
                 {
-                    "label": "Send both reports (recommended)",
+                    "label": "Send both",
                     "value": 3
                 }
             ]
         },
         "12": {
-            "label": "Wattage Change Threshold",
-            "description": "How much the wattage needs to change by to trigger the wattage change notifications. Units are 1-10th of a watt; 0-255: 0.0-25.5W",
+            "label": "Minimum change to report",
+            "description": "Minimum change in wattage report",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -132,8 +131,7 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "0.1 watt"
+            "allowManualEntry": true
         }
     }
 }

@@ -1,9 +1,11 @@
+// permundo GmbH PSC234ZW
+// Metering Plug switching 16A
 {
     "_approved": true,
     "manufacturer": "permundo GmbH",
     "manufacturerId": "0x0245",
     "label": "PSC234ZW",
-    "description": "PSC234ZW Smart Plug",
+    "description": "Metering Plug switching 16A",
     "devices": [
         {
             "productType": "0x0003",
@@ -14,6 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "31": {
             "label": "LocalControlOff",

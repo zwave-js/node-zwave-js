@@ -1,9 +1,11 @@
+// Wenzhou MTLC Electric Appliances Co., Ltd. ZW500D
+// Dimmer
 {
     "_approved": true,
-    "manufacturer": "Enerwave",
+    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
     "manufacturerId": "0x011a",
     "label": "ZW500D",
-    "description": "ZW500D 500W In-Wall Preset Dimmer Switch",
+    "description": "Dimmer",
     "devices": [
         {
             "productType": "0x0102",
@@ -20,22 +22,22 @@
     },
     "associations": {
         "1": {
-            "label": "Lifeline",
+            "label": "Group 1",
             "maxNodes": 5,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Toggle LED mode",
-            "description": "Set to 1 for LED to be in sync with switch.",
+            "label": "configure LED light state",
+            "description": "configure LED light state",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "LED off with load on",
@@ -48,15 +50,15 @@
             ]
         },
         "2": {
-            "label": "Toggle button reverse",
-            "description": "Set to 1 for \"up\" to turn the load off.",
+            "label": "Reverse installed direction",
+            "description": "Control if switch up is on or off",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "normal install - up is on",

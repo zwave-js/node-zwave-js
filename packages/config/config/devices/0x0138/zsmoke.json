@@ -1,9 +1,11 @@
+// BRK Brands, Inc. ZSMOKE
+// Smoke Alarm
 {
     "_approved": true,
-    "manufacturer": "First Alert (BRK Brands Inc)",
+    "manufacturer": "BRK Brands, Inc.",
     "manufacturerId": "0x0138",
     "label": "ZSMOKE",
-    "description": "ZSmoke Smoke Detector",
+    "description": "Smoke Alarm",
     "devices": [
         {
             "productType": "0x0001",
@@ -16,18 +18,18 @@
     },
     "associations": {
         "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
+            "label": "Group 1",
+            "maxNodes": 5,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Send double alarm messages",
-            "description": "Causes the device to send double alarm messages.",
+            "label": "Send double alarms",
+            "description": "Causes the device to send double alarm messages",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -35,11 +37,11 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Single Alarm",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Double Alarm",
                     "value": 1
                 }
             ]

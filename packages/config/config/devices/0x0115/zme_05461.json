@@ -1,9 +1,11 @@
+// Z-Wave.Me ZME_05461
+// Double switch
 {
     "_approved": true,
     "manufacturer": "Z-Wave.Me",
     "manufacturerId": "0x0115",
     "label": "ZME_05461",
-    "description": "ZME_05461 Dual Load Wall Switch",
+    "description": "Double switch",
     "devices": [
         {
             "productType": "0x1000",
@@ -16,16 +18,16 @@
     },
     "associations": {
         "1": {
-            "label": "Send Reports on switch state change",
+            "label": "Group 1",
             "maxNodes": 5,
             "isLifeline": true
         },
         "2": {
-            "label": "Single press and hold of up/down buttons",
+            "label": "Group 2",
             "maxNodes": 5
         },
         "3": {
-            "label": "Double press and press-hold of up/down buttons",
+            "label": "Group 3",
             "maxNodes": 5
         }
     },
@@ -33,8 +35,8 @@
         "1": {
             "label": "Set LED indication mode",
             "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
+            "minValue": 0,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -46,20 +48,18 @@
                     "value": 0
                 },
                 {
-                    "label": "Show switch state (Default)",
+                    "label": "Show switch state",
                     "value": 1
                 },
                 {
-                    "label": "Night mode (inverted switch state)",
+                    "label": "night light (inverted state)",
                     "value": 2
                 }
-            ],
-            "description": "",
-            "units": ""
+            ]
         },
         "2": {
-            "label": "Automatically switch first channel off after",
-            "description": "If not zero, automatically switch first channel off after a user defined time",
+            "label": "Automatically switch off first channel after",
+            "description": "If not zero, automatically switch off after a user defined time",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 65535,
@@ -67,15 +67,14 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
+            "allowManualEntry": true
         },
         "3": {
-            "label": "What to do on RF first channel off command",
-            "description": "Defines how to interpret RF first channel Off command. Can be used in conjunction with Auto Off function: Ignore - to switch on the light by motion detectors and switch it off after some amount of time: in case of multiple motion detectors each would try to switch the light off that would break logics; Switch on - to switch on the light on both On and Off paddle press on the remote and switch it off after some amount of time. Button off click will still work (if button\n                operations are not disabled).",
+            "label": "Function of RF off command on first channel",
+            "description": "Function of RF off command on first channel",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -83,7 +82,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Switch off (default)",
+                    "label": "Switch OFF",
                     "value": 0
                 },
                 {
@@ -91,7 +90,7 @@
                     "value": 1
                 },
                 {
-                    "label": "Switch on",
+                    "label": "Switch ON",
                     "value": 2
                 },
                 {
@@ -101,11 +100,11 @@
             ]
         },
         "4": {
-            "label": "Ignore Start Level",
-            "description": "Defines if the dimmer shall ignore start level in StartLevelChange command despite it is specified or not.",
+            "label": "Switch on/off by holding buttons",
+            "description": "Switch on/off by holding buttons",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -114,28 +113,6 @@
             "options": [
                 {
                     "label": "No",
-                    "value": 0
-                },
-                {
-                    "label": "Yes (default)",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Restore switch state after power cycle",
-            "description": "Defines if the switch should restore switch state to the last state prior to device power off (power cycle).",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No, turn OFF",
                     "value": 0
                 },
                 {
@@ -147,7 +124,37 @@
                     "value": 2
                 },
                 {
-                    "label": "Yes (for both channels) (Default)",
+                    "label": "Yes (for both channels)",
+                    "value": 3
+                }
+            ]
+        },
+        "5": {
+            "label": "Restore switch state after power cycle",
+            "description": "Restore switch state after power cycle",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No, turn off",
+                    "value": 0
+                },
+                {
+                    "label": "Yes (only for the first channel)",
+                    "value": 1
+                },
+                {
+                    "label": "Yes (only for the second channel)",
+                    "value": 2
+                },
+                {
+                    "label": "Yes (for both channels)",
                     "value": 3
                 }
             ]
@@ -157,7 +164,7 @@
             "description": "Allows for exchanging ON and OFF.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -165,7 +172,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "No (Default)",
+                    "label": "No",
                     "value": 0
                 },
                 {
@@ -176,10 +183,10 @@
         },
         "12": {
             "label": "Switch by buttons (first channel)",
-            "description": "If disabled, the local operations by buttons will not switch relay on first channel, but only send commands to On/Off association group. In this mode buttons are not linked with the switch anymore. They can be used separately: buttons to control remote device, switch will operate by RF commands only.",
+            "description": "Switch by buttons (first channel)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -191,21 +198,21 @@
                     "value": 0
                 },
                 {
-                    "label": "By single press and hold (default)",
+                    "label": "By single press and hold",
                     "value": 1
                 },
                 {
-                    "label": "By double press and hold",
+                    "label": "By double press and press-hold",
                     "value": 2
                 }
             ]
         },
         "13": {
             "label": "Action on button single press or hold",
-            "description": "Defines which command should be sent on button single press or hold. Basic and Scene Activation commands are sent to Association group. Use Scene Controller Conf to set up Scene ID for Scene Activation. Switch All commands are sent broadcast.",
+            "description": "Action on button single press or hold",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 2,
             "unsigned": true,
             "readOnly": false,
@@ -217,25 +224,25 @@
                     "value": 0
                 },
                 {
-                    "label": "Switch On/Off and Dim (send Basic Set and Switch Multilevel) (Default)",
-                    "value": 2
-                },
-                {
                     "label": "Switch On/Off only (send Basic Set)",
                     "value": 1
                 },
                 {
-                    "label": "Send Scenes",
+                    "label": "Switch On/Off and Dim",
+                    "value": 2
+                },
+                {
+                    "label": "Scene activation",
                     "value": 3
                 }
             ]
         },
         "14": {
             "label": "Action on button double press or hold",
-            "description": "Defines which command should be sent on button double press or press-hold. Basic and Scene Activation commands are sent to Association group. Use Scene Controller Conf to set up Scene ID for Scene Activation. Switch All commands are sent broadcast. If not disabled, the device will wait for a click timeout to see if the second click would be pressed. This will introduce a small delay for single click commands.",
+            "description": "Action on button double press or hold",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 2,
             "unsigned": true,
             "readOnly": false,
@@ -243,37 +250,37 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled (don't wait for double click)",
+                    "label": "Disabled",
                     "value": 0
                 },
                 {
-                    "label": "Switch On/Off and Dim (send Basic Set and Switch Multilevel, default)",
-                    "value": 2
-                },
-                {
-                    "label": "Switch On, Off only (send Basic Set)",
+                    "label": "Switch On/Off only (send Basic Set)",
                     "value": 1
                 },
                 {
-                    "label": "Send Scenes",
+                    "label": "Switch On/Off and Dim",
+                    "value": 2
+                },
+                {
+                    "label": "Scene activation",
                     "value": 3
                 }
             ]
         },
         "16": {
-            "label": "What to do on button Down press (for both channels)",
-            "description": "Defines how to interpret button Down press. Depends on parameters 12 and 32 \"Switch by buttons\" parameter. If not Disabled this parameter will affect the action selected by the latter parameter. Can be used in conjunction with Auto Off function.",
+            "label": "What to do on button Down press (both)",
+            "description": "What to do on button Down press (both)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Switch off (Default)",
+                    "label": "Switch off",
                     "value": 0
                 },
                 {
@@ -288,10 +295,10 @@
         },
         "20": {
             "label": "Energy consumption for first channel",
-            "description": "Specify the consumption of the load in watts, for the calculation of power consumption. Max load 1800 W. Disabled if zero.",
+            "description": "Energy consumption for first channel",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 708,
+            "maxValue": 1800,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
@@ -301,12 +308,11 @@
                     "label": "Disabled",
                     "value": 0
                 }
-            ],
-            "units": "watts"
+            ]
         },
         "22": {
-            "label": "Automatically switch second channel off after",
-            "description": "If not zero, automatically switch second channel off after a user defined time",
+            "label": "Automatically switch off second channel after",
+            "description": "If not zero, automatically switch off after a user defined time",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 65535,
@@ -314,15 +320,14 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
+            "allowManualEntry": true
         },
         "23": {
-            "label": "What to do on RF second channel off command",
-            "description": "Defines how to interpret RF second channel Off command. Can be used in conjunction with Auto Off function: Ignore - to switch on the light by motion detectors and switch it off after some amount of time: in case of multiple motion detectors each would try to switch the light off that would break logics; Switch on - to switch on the light on both On and Off paddle press on the remote and switch it off after some amount of time. Button off click will still work (if button\n                operations are not disabled).",
+            "label": "Function of RF off command on second channel",
+            "description": "Function of RF off command on second channel",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -330,7 +335,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Switch off (default)",
+                    "label": "Switch OFF",
                     "value": 0
                 },
                 {
@@ -338,7 +343,7 @@
                     "value": 1
                 },
                 {
-                    "label": "Switch on",
+                    "label": "Switch ON",
                     "value": 2
                 },
                 {
@@ -349,10 +354,10 @@
         },
         "32": {
             "label": "Switch by buttons (second channel)",
-            "description": "If disabled, the local operations by buttons will not switch relay on second channel, but only send commands to On/Off association group. In this mode buttons are not linked with the switch anymore. They can be used separately: buttons to control remote device, switch will operate by RF commands only.",
+            "description": "Switch by buttons (second channel)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 255,
             "defaultValue": 2,
             "unsigned": true,
             "readOnly": false,
@@ -368,17 +373,17 @@
                     "value": 1
                 },
                 {
-                    "label": "By double press and hold (Default)",
+                    "label": "By double press and press-hold",
                     "value": 2
                 }
             ]
         },
         "40": {
             "label": "Energy consumption for second channel",
-            "description": "Specify the consumption of the load in watts, for the calculation of power consumption. Max load 1800 W. Disabled if zero.",
+            "description": "Energy consumption for second channel",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 708,
+            "maxValue": 1800,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
@@ -388,8 +393,7 @@
                     "label": "Disabled",
                     "value": 0
                 }
-            ],
-            "units": "watts"
+            ]
         }
     }
 }

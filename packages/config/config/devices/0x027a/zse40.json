@@ -1,9 +1,11 @@
+// Zooz ZSE40
+// 4-in-1 Sensor
 {
     "_approved": true,
     "manufacturer": "Zooz",
     "manufacturerId": "0x027a",
     "label": "ZSE40",
-    "description": "ZSE40 4-in-1 sensor",
+    "description": "4-in-1 Sensor",
     "devices": [
         {
             "productType": "0x2021",
@@ -14,14 +16,15 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Temperature Scale",
-            "description": "Temperature scale (Celsius or Fahrenheit (default)).",
+            "description": "Set the temperature scale",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
-            "defaultValue": 1,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
@@ -34,24 +37,22 @@
                     "label": "Fahrenheit",
                     "value": 1
                 }
-            ],
-            "units": ""
+            ]
         },
         "2": {
-            "label": "Temperature Change Notif",
-            "description": "Minimum temperature change that will trigger a report to the controller, in 0.1 degrees. 10 = 1.0 degrees (default).",
+            "label": "Temperature offset",
+            "description": "temperature change to be reported",
             "valueSize": 1,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 50,
-            "defaultValue": 10,
+            "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "0.1 degree"
+            "allowManualEntry": true
         },
         "3": {
-            "label": "Humidity Change Notif",
-            "description": "Minimum humidity change (%) that will trigger a report to the controller. 10 = 10% (default).",
+            "label": "Humidity",
+            "description": "Configure Relative Humidity",
             "unit": "percent",
             "valueSize": 1,
             "minValue": 1,
@@ -59,39 +60,36 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "4": {
-            "label": "Light Change Notif",
-            "description": "Minimum light sensor change (%) that will trigger a report to the controller. 10 = 10% (default).",
+            "label": "Light Sensor",
+            "description": "Configure Light Sensor",
             "unit": "percent",
             "valueSize": 1,
-            "minValue": 5,
+            "minValue": 1,
             "maxValue": 50,
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "5": {
-            "label": "Motion Sensor Trigger Interval",
-            "description": "After initial motion, sensor will wait this long before reporting again. 15 = 15 seconds (default); 60 = 60 seconds.",
+            "label": "Trigger Interval",
+            "description": "Set the trigger interval for motion sensor re-activation.",
             "unit": "minutes",
             "valueSize": 1,
-            "minValue": 15,
-            "maxValue": 60,
-            "defaultValue": 15,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "second"
+            "allowManualEntry": true
         },
         "6": {
             "label": "Motion Sensor Sensitivity",
-            "description": "Motion sensor sensitivity.",
+            "description": "Adjust sensitivity of the motion sensor.",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 7,
@@ -101,43 +99,42 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Very High",
+                    "label": "highest",
                     "value": 1
                 },
                 {
-                    "label": "High",
+                    "label": "higher",
                     "value": 2
                 },
                 {
-                    "label": "Somewhat High",
+                    "label": "high",
                     "value": 3
                 },
                 {
-                    "label": "Normal",
+                    "label": "normal",
                     "value": 4
                 },
                 {
-                    "label": "Somewhat Low",
+                    "label": "low",
                     "value": 5
                 },
                 {
-                    "label": "Low",
+                    "label": "lower",
                     "value": 6
                 },
                 {
-                    "label": "Very Low",
+                    "label": "lowest",
                     "value": 7
                 }
-            ],
-            "units": ""
+            ]
         },
         "7": {
             "label": "LED indicator mode",
-            "description": "Color LED behavior. 1 = LED off; 2 = pulsing light for temperature, flashing light for motion (high battery drain); 3 = flashing light for temperature and motion (default); 4 = flashing light for motion.",
+            "description": "Select the LED indicator mode",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 4,
-            "defaultValue": 4,
+            "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
@@ -147,26 +144,18 @@
                     "value": 1
                 },
                 {
-                    "label": "Pulse Temp/Flash Motion",
+                    "label": "Pulsing Temperature, Flashing Motion",
                     "value": 2
                 },
                 {
-                    "label": "Flash Temp & Motion",
+                    "label": "Flashing Temperature and Motion",
                     "value": 3
                 },
                 {
-                    "label": "Flash Motion",
+                    "label": "No Temperature, Flashing Motion",
                     "value": 4
                 }
-            ],
-            "units": ""
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
+            ]
         }
     }
 }

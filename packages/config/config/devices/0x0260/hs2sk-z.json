@@ -1,14 +1,12 @@
+// Shenzhen Heiman Technology Co., Ltd. HS2SK-Z
+// Smart Metering Plug
 {
     "_approved": true,
-    "manufacturer": "Heiman Technology Co. Ltd",
+    "manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
     "manufacturerId": "0x0260",
     "label": "HS2SK-Z",
-    "description": "Smart Plug HS2SK-Z",
+    "description": "Smart Metering Plug",
     "devices": [
-        {
-            "productType": "0x8008",
-            "productId": "0x1000"
-        },
         {
             "productType": "0x8006",
             "productId": "0x1000"
@@ -18,11 +16,5 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "LifeLine",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+    "supportsZWavePlus": true
 }

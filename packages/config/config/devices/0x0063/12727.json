@@ -1,9 +1,11 @@
+// Jasco Products 12727
+// GE 12727 Z-Wave Wireless Lighting Control Smart Toggle Switch
 {
     "_approved": true,
-    "manufacturer": "GE (Jasco Products)",
+    "manufacturer": "Jasco Products",
     "manufacturerId": "0x0063",
     "label": "12727",
-    "description": "12727 In-Wall Smart Switch (Toggle)",
+    "description": "GE 12727 Z-Wave Wireless Lighting Control Smart Toggle Switch",
     "devices": [
         {
             "productType": "0x4952",

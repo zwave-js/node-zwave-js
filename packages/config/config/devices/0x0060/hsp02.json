@@ -1,9 +1,11 @@
+// Everspring HSP02
+// Motion Detector
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "HSP02",
-    "description": "HSP02 Motion Detector",
+    "description": "Motion Detector",
     "devices": [
         {
             "productType": "0x0001",
@@ -20,38 +22,37 @@
     },
     "associations": {
         "1": {
-            "label": "Reports",
+            "label": "Target for reports",
             "maxNodes": 1,
             "isLifeline": true
         },
         "2": {
-            "label": "Control",
-            "maxNodes": 3
+            "label": "Target nodes who receive BASIC_SET command",
+            "maxNodes": 5
         }
     },
     "paramInformation": {
         "1": {
             "label": "Basic Set Level",
-            "description": "When Basic Set Command is sent where contains a value, the receiver will take it for consideration; for instance, if a lamp module is received the Basic Set Command of which value is decisive as to how bright of dim level of lamp module shall be.",
+            "description": "Value to be sent with a BASIC SET command",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "2": {
-            "label": "Enable/Disable Detecting",
+            "label": "Sensor Detecting Function",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 3,
+            "maxValue": 255,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Group 1 Enabled / Group 2 Enabled",
@@ -65,8 +66,7 @@
                     "label": "Group 1 Disabled / Group 2 Disabled",
                     "value": 3
                 }
-            ],
-            "description": "The Detecting function can be Disabled of Enabled."
+            ]
         },
         "3": {
             "label": "Sensitivity Level",
@@ -76,47 +76,40 @@
             "defaultValue": 6,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "description": "1 Means lowest sensitivity and 10 means highest.",
-            "units": ""
+            "allowManualEntry": true
         },
         "4": {
             "label": "Re-trigger Interval Setting",
             "valueSize": 1,
             "minValue": 5,
-            "maxValue": 3600,
+            "maxValue": 255,
             "defaultValue": 180,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "description": "Adjust the interval of being re-triggered afer the detector has\tbeen triggered in seconds.",
-            "units": "Seconds"
+            "allowManualEntry": true
         },
         "5": {
-            "label": "Lux Level",
-            "description": "Sets minimum Lux Level of ambient illumination necessary for Motion Detector to trigger.",
+            "label": "LUX Level",
+            "description": "Value for what LUX level will arm the detection sensor",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 100,
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "6": {
             "label": "On-Off Duration",
             "valueSize": 1,
             "minValue": 5,
-            "maxValue": 3600,
+            "maxValue": 255,
             "defaultValue": 15,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "description": "The duration determines how long before the module sends an Off after being triggered.",
-            "units": "Seconds"
+            "allowManualEntry": true
         }
     }
 }

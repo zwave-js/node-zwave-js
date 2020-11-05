@@ -1,9 +1,11 @@
+// D-Link DCH-Z110
+// Door & Window Sensor
 {
     "_approved": true,
-    "manufacturer": "D-Link Corporation",
+    "manufacturer": "D-Link",
     "manufacturerId": "0x0108",
     "label": "DCH-Z110",
-    "description": "DCH-Z110 Door/Window 3 in 1 sensor",
+    "description": "Door & Window Sensor",
     "devices": [
         {
             "productType": "0x0002",
@@ -14,14 +16,15 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "2": {
-            "label": "2. Basic Set Level",
-            "description": "Setting the BASIC command value to turn on the light. The 0xFF (-1) means turn on the light. \n          For dimmer equipment 1 to 100 means the light strength. 0 means turn off the light.",
+            "label": "Basic Set Level",
+            "description": "Setting the BASIC command value to turn on the light.",
             "valueSize": 1,
-            "minValue": -1,
+            "minValue": 0,
             "maxValue": 100,
-            "defaultValue": -1,
+            "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true,
@@ -54,12 +57,12 @@
             ]
         },
         "4": {
-            "label": "4. Light threshold",
-            "description": "Setting the illumination threshold to turn on the light. When the event triggered and the environment illumination lower than \n          the threshold, the device will turn on the light.\n          0 means turn off illumination detected function and never turn on the light.\n          1 means darkest.\n          99 means brightest.\n          100 means turn off illumination detected function. And always turn on the light.\n          * Notice * in none test mode, only the value in 1 to 99 will enable the illumination detected function and update the illumination value.",
+            "label": "Light Threshold",
+            "description": "Set the illumination threshold to turn on the light.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 100,
-            "defaultValue": 99,
+            "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true,
@@ -71,8 +74,8 @@
             ]
         },
         "5": {
-            "label": "5. Operation Mode",
-            "description": "Bit 0: Reserved \n          Bit 1: Reserved \n          Bit 2: Disable the door/window function (1: Disable, 0: Enable). \n          Bit 3: Setting the temperature scale. 0: Fahrenheit, 1:Celsius. \n          Bit 4: Disable the illumination report after event triggered (1: Disable, 0: Enable). \n          Bit 5: Disable the temperature report after event triggered (1: Disable, 0: Enable).",
+            "label": "Operation Mode",
+            "description": "Operation Mode",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
@@ -88,8 +91,8 @@
             ]
         },
         "6": {
-            "label": "6. Multi-Sensor Function Switch",
-            "description": "Multi-Sensor Function switch. Using bit to control.\n          Bit 0: Disable magnetic integrate illumination to turn ON the lighting nodes in the association group 2 (1: Disable, 0: Enable). \n          Bit 1: Reserved always 1 \n          Bit 2: Reserved always 1\n          Bit 3: Reserved\n          Bit 4: Disable delay 5 seconds to turn off the light, when door/window closed. \n          Bit 5: Disable auto turn off the light, after door/window opened to turn on the light. Notice: If bit2 is zero, this setting is useless. Notice: If the configuration No.9 is zero, this setting is useless. \n          Bit 6: Enable temperature monitoring. When this bit enabled the temperature changed 3 degree Fahrenheit. It will report. And also temp above 140 it will report every 64 seconds.",
+            "label": "Multi-Sensor Function Switch",
+            "description": "Multi-Sensor Function Switch",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
@@ -99,8 +102,8 @@
             "allowManualEntry": true
         },
         "7": {
-            "label": "7. Customer Function",
-            "description": "Customer function switch, using bit control. \n          Bit 0: Reserve. \n          Bit 1: Enable sending motion OFF report. Note: Depends on the Bit4, 0: Report Notification CC, Type: 0x07, Event: 0xFE 1: Sensor Binary Report, Type: 0x0C, Value: 0x00. \n          Bit 2: Enable PIR super sensitivity mode. \n          Bit 3: Enable don't send out BASIC OFF after door closed. \n          Bit 4: Notification Type, 0: Using Notification Report. 1: Using Sensor Binary Report. \n          Bit 5: Disable Multi CC in auto report. \n          Bit 6: Disable to report battery state when the device triggered. \n          Bit 7: Reserve.",
+            "label": "Customer Function",
+            "description": "Parameter to set the Customer Function.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
@@ -127,68 +130,63 @@
             "allowManualEntry": true
         },
         "9": {
-            "label": "9. Turn Off Light Time",
-            "description": "After turn on the lighting, setting the delay time to turn off the lighting when the PIR motion is not detected. \n          8 seconds per tick, default tick is 4 (32 seconds). 0 means never send turn off light command.",
+            "label": "Turn Off Light Time",
+            "description": "Turn Off Light Time",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "8 sec"
+            "allowManualEntry": true
         },
         "10": {
-            "label": "10. Auto Report Battery Time",
-            "description": "The interval time for auto report the battery level. 0 means turn off auto report battery. The default value is 12. The tick time can setting by the configuration No.20.",
+            "label": "Auto Report Battery Time",
+            "description": "Auto Report Battery Time",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "30 min"
+            "allowManualEntry": true
         },
         "11": {
-            "label": "11. Auto Report Door/Window State Time",
-            "description": "The interval time for auto report the door/window state. 0 means turn off auto report door/window state. The default value is 12. The tick time can setting by the configuration No.20.",
+            "label": "Auto Report Door/Window State Time",
+            "description": "Auto Report Door/Window State Time",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "30 min"
+            "allowManualEntry": true
         },
         "12": {
-            "label": "12. Auto Report Illumination Time",
-            "description": "The interval time for auto report the illumination. 0 means turn off auto report illumination. The default value is 12. The tick time can setting by the configuration No.20.",
+            "label": "Auto Report Illumination Time",
+            "description": "Auto Report Illumination Time",
             "valueSize": 1,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 127,
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "30 min"
+            "allowManualEntry": true
         },
         "13": {
-            "label": "13. Auto Report Temperature time",
-            "description": "The interval time for auto report the temperature. 0 means turn off auto report temperature. The default value is 12. The tick time can setting by the configuration No.20.",
+            "label": "Auto Report Temperature Time",
+            "description": "Auto Report Temperature Time",
             "valueSize": 1,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 127,
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "30 min"
+            "allowManualEntry": true
         },
         "20": {
-            "label": "20. Auto Report Tick Interval",
-            "description": "The interval time for auto report each tick. Setting this configuration will effect configuration No.10, No.11, No.12 and No.13. Caution: Setting to 0 means turn off all auto report function.",
+            "label": "Auto Report Tick Interval",
+            "description": "Auto Report Tick Interval",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -199,23 +197,23 @@
             "allowManualEntry": true
         },
         "21": {
-            "label": "21. Temperature Differential Report",
-            "description": "The temperature differential to report. 0 means turn off this function. The unit is Fahrenheit. Enable this function the device will detect every minutes. And when the temperature is over 140 degree Fahrenheit, it will continue report. Enable this functionality will cause some issue please see the detail in the \"Temperature Report\" section.",
+            "label": "Temperature Differential Report",
+            "description": "Temperature Differential Report",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 127,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "22": {
-            "label": "22. Illumination Differential Report",
-            "description": "The illumination differential to report.0 means turn off this function. The unit is percentage. Enable this function the device will detect every minutes. Enable this functionality will cause some issue please see the detail in the \"Illumination Report\" section.",
+            "label": "Illumination Differential Report",
+            "description": "Illumination Differential Report",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
+            "maxValue": 99,
+            "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
@@ -299,16 +297,6 @@
                     "value": 1
                 }
             ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Reports",
-            "maxNodes": 8
-        },
-        "2": {
-            "label": "Light Control",
-            "maxNodes": 8
         }
     }
 }

@@ -1,22 +1,12 @@
+// Fantem FT111
+// Nano Dimmer
 {
     "_approved": true,
-    "manufacturer": "Fantem (Oomi)",
+    "manufacturer": "Fantem",
     "manufacturerId": "0x016a",
     "label": "FT111",
-    "description": "FT111 In Wall Dimmer",
+    "description": "Nano Dimmer",
     "devices": [
-        {
-            "productType": "0x1D03",
-            "productId": "0x006F"
-        },
-        {
-            "productType": "0x0203",
-            "productId": "0x006F"
-        },
-        {
-            "productType": "0x0103",
-            "productId": "0x006F"
-        },
         {
             "productType": "0x0003",
             "productId": "0x006f"
@@ -30,29 +20,11 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Retransmit",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Control Key1",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Control Key2",
-            "maxNodes": 5
-        }
-    },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
-            "label": "Over current protection",
-            "description": "Output Load will be turned off automatically after 30 seconds and if the current overrun 1.5A.",
+            "label": "Current Overload Protection",
+            "description": "Current Overload Protection",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -66,15 +38,14 @@
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "(Default) Enable",
                     "value": 1
                 }
-            ],
-            "units": ""
+            ]
         },
         "4": {
-            "label": "Over heat protection",
-            "description": "Output load will be closed after 30 seconds if the temperature inside the product exceeds 100C.",
+            "label": "Overheat protection",
+            "description": "Overheat protection",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -84,29 +55,28 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "(Default) Disable",
                     "value": 0
                 },
                 {
                     "label": "Enable",
                     "value": 1
                 }
-            ],
-            "units": ""
+            ]
         },
         "20": {
-            "label": "Status re-power on",
-            "description": "Configure the output load status after re-power on",
+            "label": "Configure the output status after re-power on it",
+            "description": "Configure the output status after re-power on it",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 2,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "The last status before the power outage",
+                    "label": "(Default) Last status",
                     "value": 0
                 },
                 {
@@ -120,26 +90,26 @@
             ]
         },
         "80": {
-            "label": "Notification report association group 1",
-            "description": "To set which notification would be sent to the associated nodes in association group 1 when the state of output load is changed",
+            "label": "Group 1 notificaiton",
+            "description": "Set notification sent to associated nodes (group 1)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 3,
+            "maxValue": 4,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "None",
+                    "label": "(Default) Send Nothing",
                     "value": 0
                 },
                 {
-                    "label": "Hail",
+                    "label": "Send Hail CC",
                     "value": 1
                 },
                 {
-                    "label": "Basic",
+                    "label": "Send Basic CC report",
                     "value": 2
                 },
                 {
@@ -147,116 +117,111 @@
                     "value": 3
                 },
                 {
-                    "label": "Send Hail CC when using the manual switch to change the load state",
+                    "label": "Send Hail CC when using the manual switch",
                     "value": 4
                 }
-            ],
-            "units": ""
+            ]
         },
         "81": {
-            "label": "Notification report using the external switch 1",
-            "description": "To set which notification would be sent to the associated nodes in association group 3 when using the external switch 1 to switch the loads",
+            "label": "Group 3 notificaiton",
+            "description": "Set notification sent to associated nodes (group 3)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Basic",
-                    "value": 1
-                }
-            ],
-            "units": ""
-        },
-        "82": {
-            "label": "Notification report using the external switch 2",
-            "description": "To set which notification would be sent to the associated nodes in association group 4 when using the external switch 2 to switch the loads",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Basic",
-                    "value": 1
-                }
-            ],
-            "units": ""
-        },
-        "85": {
-            "label": "State appointment 1",
-            "description": "State appointment\n                Set the ON time of output load.\n                Value1 = 0, disable or = non zero, enable (day, bit0 - bit6 represent Mon to Sun).\n                Value2 = ON (hour)\n                Value3 = ON (minute)\n                Value4 = ON (brightness level)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 2566920192,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "86": {
-            "label": "State appointment 2",
-            "description": "State appointment\n                Set the ON time of output load.\n                Value1 = 0, disable or = non zero, enable (day, bit0 - bit6 represent Mon to Sun).\n                Value2 = ON (hour)\n                Value3 = ON (minute)\n                Value4 = ON (brightness level)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 8960,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "90": {
-            "label": "Enable/disable the parameter 91 and 92",
-            "description": "Enables/disables parameter 91 and 92",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Send Nothing",
+                    "value": 0
+                },
+                {
+                    "label": "(Default) Send Basic Set CC",
+                    "value": 1
+                }
+            ]
+        },
+        "82": {
+            "label": "Group 4 notificaiton",
+            "description": "Set notification sent to associated nodes (group 4)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Send Nothing",
+                    "value": 0
+                },
+                {
+                    "label": "(Default) Send Basic Set CC",
+                    "value": 1
+                }
+            ]
+        },
+        "85": {
+            "label": "Set appointment 1",
+            "description": "Set appointment 1",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 16843197,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "86": {
+            "label": "Set appointment 2",
+            "description": "Set appointment 2",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 16843197,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "90": {
+            "label": "(En/dis)able 91 and 92",
+            "description": "Enables/disables parameter 91 and 92",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "(Default) Disable",
                     "value": 0
                 },
                 {
                     "label": "Enable",
                     "value": 1
                 }
-            ],
-            "units": ""
+            ]
         },
         "91": {
-            "label": "Minimum Change to send Report (Watt)",
-            "description": "The value represents the minimum change in wattage for a Report to be sent (default 25 W)",
+            "label": "Set the threshold value of wattage",
+            "description": "Threshold change in wattage (in terms of wattage) to induce an automatic report",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 6000,
+            "maxValue": 60000,
             "defaultValue": 25,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "watts"
+            "allowManualEntry": true
         },
         "92": {
-            "label": "Minimum Change to send Report (%)",
-            "description": "The value represents the minimum percentage change in wattage for a Report to be sent (Default 5)",
+            "label": "Set the threshold value of percent power",
+            "description": "Threshold change in wattage (in terms of percentage)",
             "unit": "watt",
             "valueSize": 1,
             "minValue": 0,
@@ -264,15 +229,14 @@
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "100": {
-            "label": "Default Group Reports",
-            "description": "Set report types for groups 1, 2 and 3 to default.",
+            "label": "Reset 101-103 to default",
+            "description": "Reset parameters 101-103 to default values",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 0,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
@@ -282,51 +246,47 @@
                     "label": "Reset the parameter 101-103",
                     "value": 0
                 }
-            ],
-            "units": ""
+            ]
         },
         "101": {
-            "label": "Report type sent in Reporting Group 1",
-            "description": "Defines the type of report sent for reporting group 1.\n                1 is meter report for voltage.\n                2 is meter report for current.\n                4 is meter report for watts.\n                8 is meter report for kilowatts.\n                Value 1 (msb) Reserved\n                Value 2 Reserved\n                Value 3 Reserved\n                Value 4 (lsb) bits 7-4 reserved\n                bit 3 current\n                bit 2 voltage\n                bit 1 watt\n                bit 0 kWh",
+            "label": "Set group 1 reports",
+            "description": "To set which reports need to be sent in Report group 1",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 0,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "102": {
-            "label": "Report type sent in Reporting Group 2",
-            "description": "Defines the type of report sent for reporting group 2.\n                1 is meter report for voltage.\n                2 is meter report for current.\n                4 is meter report for watts.\n                8 is meter report for kilowatts.\n                Value 1 (msb) Reserved\n                Value 2 Reserved\n                Value 3 Reserved\n                Value 4 (lsb) bits 7-4 reserved\n                bit 3 current\n                bit 2 voltage\n                bit 1 watt\n                bit 0 kWh",
+            "label": "Set group 2 reports",
+            "description": "To set which reports need to be sent in Report group 2",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 0,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "103": {
-            "label": "Report type sent in Reporting Group 3",
-            "description": "Defines the type of report sent for reporting group 3.\n                1 is meter report for voltage.\n                2 is meter report for current.\n                4 is meter report for watts.\n                8 is meter report for kilowatts.\n                Value 1 (msb) Reserved\n                Value 2 Reserved\n                Value 3 Reserved\n                Value 4 (lsb) bits 7-4 reserved\n                bit 3 current\n                bit 2 voltage\n                bit 1 watt\n                bit 0 kWh",
+            "label": "Reports  sent to Report group 3",
+            "description": "Reports  sent to Report group 3",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 15,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": ""
+            "allowManualEntry": true
         },
         "110": {
-            "label": "Set 111-113 to default",
-            "description": "Set time interval for sending reports for groups 1, 2 and 3 to default.",
+            "label": "Reset 111-113 to default",
+            "description": "Reset parameters 111-113 to default values",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 100,
+            "maxValue": 0,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": true,
@@ -336,140 +296,133 @@
                     "label": "Reset the parameter 111-113",
                     "value": 0
                 }
-            ],
-            "units": ""
+            ]
         },
         "111": {
-            "label": "Send Interval for Reporting Group 1",
-            "description": "Defines the time interval when the defined report for group 1 is sent.",
+            "label": "Automatic report interval group 1",
+            "description": "Set the interval of automatic report for Report group 1",
             "valueSize": 4,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 2147483647,
-            "defaultValue": 3,
+            "defaultValue": 2147483647,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
+            "allowManualEntry": true
         },
         "112": {
-            "label": "Send Interval for Reporting Group 2",
-            "description": "Defines the time interval when the defined report for group 2 is sent.",
+            "label": "Automatic report interval group 2",
+            "description": "Set the interval of automatic report for Report group 2",
             "valueSize": 4,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 2147483647,
-            "defaultValue": 600,
+            "defaultValue": 2147483647,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
+            "allowManualEntry": true
         },
         "113": {
-            "label": "Send Interval for Reporting Group 3",
-            "description": "Defines the time interval when the defined report for group 3 is sent.",
+            "label": "Automatic report interval group 3",
+            "description": "Set the interval of automatic report for Report group 3",
             "valueSize": 4,
             "minValue": 0,
             "maxValue": 2147483647,
-            "defaultValue": 600,
+            "defaultValue": 2147483647,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
+            "allowManualEntry": true
         },
         "120": {
-            "label": "Set the external switch mode for S1",
-            "description": "When the mode is determined, this mode value will not be reset after exclusion",
+            "label": "Configure the external switch mode for S1",
+            "description": "Configure the external switch mode for S1",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 4,
+            "maxValue": 3,
             "defaultValue": 0,
             "readOnly": false,
-            "writeOnly": false,
+            "writeOnly": true,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Unidentified",
+                    "label": "(Default) Unknown mode",
                     "value": 0
                 },
                 {
-                    "label": "2-state switch",
+                    "label": "2-state switch mode",
                     "value": 1
                 },
                 {
-                    "label": "3-way switch",
+                    "label": "3 way switch mode",
                     "value": 2
                 },
                 {
-                    "label": "Momentary button",
+                    "label": "Momentary push button mode",
                     "value": 3
                 },
                 {
-                    "label": "Enter automatic identification",
+                    "label": "Enter automatic identification mode",
                     "value": 4
                 }
-            ],
-            "units": ""
+            ]
         },
         "121": {
-            "label": "Set the external switch mode for S2",
-            "description": "When the mode is determined, this mode value will not be reset after exclusion",
+            "label": "Configure the external switch mode for S2",
+            "description": "Configure the external switch mode for S2",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 4,
+            "maxValue": 3,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Unidentified",
+                    "label": "(Default) Unknown mode",
                     "value": 0
                 },
                 {
-                    "label": "2-state switch",
+                    "label": "2-state switch mode",
                     "value": 1
                 },
                 {
-                    "label": "3-way switch",
+                    "label": "3 way switch mode",
                     "value": 2
                 },
                 {
-                    "label": "Momentary button",
+                    "label": "Momentary push button mode",
                     "value": 3
                 },
                 {
-                    "label": "Enter automatic identification",
+                    "label": "Enter automatic identification mode",
                     "value": 4
                 }
-            ],
-            "units": ""
+            ]
         },
         "122": {
-            "label": "Touch panel port state",
+            "label": "Get the state of touch panel port",
             "description": "Get the state of touch panel port",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 5,
             "defaultValue": 0,
-            "readOnly": true,
+            "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Not connected",
+                    "label": "(Default) the touch panel is not connected.",
                     "value": 0
                 },
                 {
-                    "label": "Connected",
+                    "label": "the touch panel is connected",
                     "value": 5
                 }
-            ],
-            "units": ""
+            ]
         },
         "123": {
-            "label": "Control destination for external switch S1",
+            "label": "Set the control destination for external switch S1",
             "description": "Set the control destination for external switch S1",
             "valueSize": 1,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 3,
             "defaultValue": 3,
             "readOnly": false,
@@ -477,22 +430,21 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Output loads of itself",
+                    "label": "control the output loads of itself",
                     "value": 1
                 },
                 {
-                    "label": "Other nodes",
+                    "label": "control the other nodes",
                     "value": 2
                 },
                 {
-                    "label": "Output loads of itself and other nodes",
+                    "label": "Control the output loads of itself and others",
                     "value": 3
                 }
-            ],
-            "units": ""
+            ]
         },
         "124": {
-            "label": "Control destination for external switch S2",
+            "label": "Set the control destination for external switch S2",
             "description": "Set the control destination for external switch S2",
             "valueSize": 1,
             "minValue": 1,
@@ -503,46 +455,44 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Output loads of itself",
+                    "label": "control the output loads of itself",
                     "value": 1
                 },
                 {
-                    "label": "Other nodes",
+                    "label": "control the other nodes",
                     "value": 2
                 },
                 {
-                    "label": "Output loads of itself and other nodes",
+                    "label": "Control the output loads of itself and others",
                     "value": 3
                 }
-            ],
-            "units": ""
+            ]
         },
         "125": {
-            "label": "Default dimming rate",
-            "description": "Set the default dimming rate",
+            "label": "Set the default dimming rate",
+            "description": "The value range is 1 to 255 seconds",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 3,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 255,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "128": {
-            "label": "Current working mode",
+            "label": "Get the current working mode",
             "description": "Get the current working mode",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 2,
             "defaultValue": 0,
-            "readOnly": true,
+            "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Unknown",
+                    "label": "(Default) Unknown working mode",
                     "value": 0
                 },
                 {
@@ -553,11 +503,10 @@
                     "label": "3-wire mode",
                     "value": 2
                 }
-            ],
-            "units": ""
+            ]
         },
         "129": {
-            "label": "Dimming principle",
+            "label": "Set the dimming principle",
             "description": "Set the dimming principle",
             "valueSize": 1,
             "minValue": 0,
@@ -572,25 +521,24 @@
                     "value": 0
                 },
                 {
-                    "label": "Leading edge mode",
+                    "label": "(Default) Leading edge mode",
                     "value": 1
                 }
-            ],
-            "units": ""
+            ]
         },
         "130": {
-            "label": "Type of load",
-            "description": "To get what type of load the Dimmer is connected to",
+            "label": "Type of load the Dimmer is connected to",
+            "description": "Type of load the Dimmer is connected to",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
             "defaultValue": 0,
-            "readOnly": true,
+            "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Unknown",
+                    "label": "(Default) Unknown load",
                     "value": 0
                 },
                 {
@@ -605,35 +553,32 @@
                     "label": "Inductive load",
                     "value": 3
                 }
-            ],
-            "units": ""
+            ]
         },
         "131": {
-            "label": "Min brightness level",
-            "description": "Set the min brightness level that the load can reach to",
+            "label": "Set the min brightness level",
+            "description": "Set the min brightness level",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
-            "defaultValue": 20,
+            "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "132": {
-            "label": "Max brightness level",
-            "description": "Set the max brightness level that the load can reach to",
+            "label": "Set the max brightness level",
+            "description": "Set the max brightness level",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
-            "defaultValue": 95,
+            "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "249": {
-            "label": "Recognition way of load",
+            "label": "Set the recognition way of load",
             "description": "Set the recognition way of load",
             "valueSize": 1,
             "minValue": 0,
@@ -652,15 +597,14 @@
                     "value": 1
                 },
                 {
-                    "label": "Recognize the load once power on",
+                    "label": "(Default) Recognize the load once power on",
                     "value": 2
                 }
-            ],
-            "units": ""
+            ]
         },
         "252": {
-            "label": "Configuration Locked",
-            "description": "Enable/disable Configuration Locked",
+            "label": "Lock/unlock configuration parameters",
+            "description": "Lock/unlock configuration parameters",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -670,37 +614,32 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "(Default) Unlock",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Lock",
                     "value": 1
                 }
-            ],
-            "units": ""
+            ]
         },
         "255": {
-            "label": "Reset To Factory Defaults",
-            "description": "Reset to factory defaults",
+            "label": "Reset the Nano Dimmer",
+            "description": "Reset the Nano Dimmer",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 1,
+            "maxValue": 1431655765,
+            "defaultValue": 0,
             "readOnly": false,
-            "writeOnly": true,
+            "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Reset to factory default setting",
+                    "label": "(Default) factory default",
                     "value": 0
                 },
                 {
-                    "label": "Normal",
-                    "value": 1
-                },
-                {
-                    "label": "Reset to factory default setting and removed from the z-wave network",
+                    "label": "factory default and remove",
                     "value": 1431655765
                 }
             ]

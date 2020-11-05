@@ -1,9 +1,10 @@
+// Evolve LFM-20
 {
     "_approved": true,
-    "manufacturer": "Evolve Guest Controls",
+    "manufacturer": "Evolve",
     "manufacturerId": "0x0113",
     "label": "LFM-20",
-    "description": "LFM-20 Fixture Module",
+    "description": "",
     "devices": [
         {
             "productType": "0x5246",

@@ -1,9 +1,11 @@
+// Chromagic Technologies Corporation HSM02
+// Door Window Sensor
 {
     "_approved": true,
     "manufacturer": "Chromagic Technologies Corporation",
     "manufacturerId": "0x0116",
     "label": "HSM02",
-    "description": "HSM02 Mini Door/Window Detector",
+    "description": "Door Window Sensor",
     "devices": [
         {
             "productType": "0x0002",
@@ -16,39 +18,26 @@
     },
     "associations": {
         "1": {
-            "label": "Alarm Reports",
+            "label": "Target for reports",
             "maxNodes": 1,
             "isLifeline": true
         },
         "2": {
-            "label": "Basic level",
+            "label": "Target nodes who receive BASIC_SET command",
             "maxNodes": 5
         }
     },
     "paramInformation": {
-        "0": {
+        "1": {
             "label": "Basic Set Level",
-            "description": "When Basic Set Command is sent where contains a value, the receiver will\n\t\t\t\ttake it for consideration; for instance, if a lamp module is received the Basic\n\t\t\t\tSet command of which value is decisive as to how bright of dim level of lamp\n\t\t\t\tmodule shall be.",
+            "description": "Value to be sent with a BASIC SET command",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
             "defaultValue": 99,
-            "units": ""
-        },
-        "1": {
-            "label": "Off Delay",
-            "description": "The Configuration parameter that can be used to adjust the amount of delay\n\t\t\t\tbefore the OFF command is transmitted as Configuration Parameter #2.\n\t\t\t\tThis parameter can be configured with the value of 0 through 127, where 0\n\t\t\t\tmeans send OFF command immediately and 127 means 127 seconds of\n\t\t\t\tdelay",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "seconds"
+            "allowManualEntry": true
         },
         "2": {
             "label": "Configuring the OFF Delay",

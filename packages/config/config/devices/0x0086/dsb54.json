@@ -1,165 +1,153 @@
+// AEON Labs DSB54
+// Recessed Door/Window Sensor
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSB54",
-    "description": "DSB54 Recessed Door Sensor",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0036"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Low Battery Warning Report",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Toggle the sensor binary report value when the Magnet switch is opened/closed.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "On for opened, Off for closed",
-                    "value": 0
-                },
-                {
-                    "label": "Off for opened, On for closed",
-                    "value": 1
-                }
-            ],
-            "description": "0, Open: FF, Close: 00; 1, Open: 00, Close: FF;\n              Default setting: 0"
-        },
-        "3": {
-            "label": "Toggle the basic set value when Magnet switch is opened/closed.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "On for opened, Off for closed",
-                    "value": 0
-                },
-                {
-                    "label": "Off for opened, On for closed",
-                    "value": 1
-                }
-            ],
-            "description": "0, Open: FF, Close: 00; 1, Open: 00, Close: FF;\n              Default setting: 0"
-        },
-        "101": {
-            "label": "If battery power is below the warning value, low battery checking function will be triggered and Low Battery Warning Report will be sent.",
-            "description": "0, Disable, 1, Enable;\n              Default setting: 0",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "111": {
-            "label": "The low battery check Interval time,0-4294967295 seconds.",
-            "description": "This parameter is available when the low battery checking\n                  function is activated or the device was waked up by other\n                  actions (i.e. the z-wave button trigger, magnet switch\n                  trigger and the Wake Up Interval Set timeout trigger).\n                  The Recessed Door Sensor will check the battery power\n                  when it was wake up as other ways. For example: the\n                  z-wave button trigger, magnet switch trigger and the\n                  Wake Up Interval Set timeout trigger.\n              Default setting: 86640",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 86640,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "121": {
-            "label": "Flag values for which reports to send when the Magnet of Recessed Door Sensor is triggered.",
-            "description": "Bitsets:\n                4 -> Sensor Binary\n                8 -> Basic Set\n              Default setting: 0x00000100 (Basic Set)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 256,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "252": {
-            "label": "Permit other configurations",
-            "description": "Lock or Unlock other configuration set function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Unlock",
-                    "value": 0
-                },
-                {
-                    "label": "Lock",
-                    "value": 1
-                }
-            ]
-        },
-        "254": {
-            "label": "Device Tag",
-            "description": "Device Tag",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
-        },
-        "255": {
-            "label": "Reset configuration settings to factory defaults",
-            "description": "Reset to factory defaults.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true
-        }
-    }
+	"_approved": true,
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSB54",
+	"description": "Recessed Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0036"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "State Updates",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Battery Warnings",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Send Sensor binary report on open/close events",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On for opened, Off for closed",
+					"value": 0
+				},
+				{
+					"label": "Off for opened, On for closed",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Send Basic Set on open/close event",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On for opened, Off for closed",
+					"value": 0
+				},
+				{
+					"label": "Off for opened, On for closed",
+					"value": 1
+				}
+			]
+		},
+		"101": {
+			"label": "Low battery voltage check",
+			"description": "Enable battery check",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"111": {
+			"label": "Low battery voltage check time",
+			"description": "Minimum battery low check Interval time is 4 minutes (240 seconds)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 112,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"121": {
+			"label": "Flag values for triggered magnet switch",
+			"description": "Flag values for which reports to send when the magnet switch is triggered",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 256,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"252": {
+			"label": "Permit other configurations",
+			"description": "Lock or Unlock other configuration set function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock",
+					"value": 0
+				},
+				{
+					"label": "Lock",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset to default",
+			"description": "Reset to the default configuration",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,9 +1,14 @@
+// Willis Electric Co., Ltd. ZEN22
+// Zooz Z-Wave Dimmable Light Switch ZEN22
 {
     "_approved": true,
-    "manufacturer": "Zooz (Willis Electric)",
+    "_warnings": [
+        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
+    ],
+    "manufacturer": "Willis Electric Co., Ltd.",
     "manufacturerId": "0x015d",
     "label": "ZEN22",
-    "description": "ZEN22 Dimmer",
+    "description": "Zooz Z-Wave Dimmable Light Switch ZEN22",
     "devices": [
         {
             "productType": "0x0112",
@@ -14,6 +19,7 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Paddle Functions",
@@ -77,13 +83,6 @@
                     "value": 1
                 }
             ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
         }
     }
 }

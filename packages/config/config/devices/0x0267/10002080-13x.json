@@ -1,9 +1,11 @@
+// SimonTech S.L.U 10002080-13x
+// Simon IO: Roller Blind
 {
     "_approved": true,
-    "manufacturer": "Simon",
+    "manufacturer": "SimonTech S.L.U",
     "manufacturerId": "0x0267",
-    "label": "10002080-13X",
-    "description": "S100 Rocker iO for Roller Blind",
+    "label": "10002080-13x",
+    "description": "Simon IO: Roller Blind",
     "devices": [
         {
             "productType": "0x0004",
@@ -42,38 +44,39 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Association LED",
-            "description": "Used during Association process by Simon Shortcut Switch IO to turn ON the main LED of all devices already associated to this shortcut.",
+            "description": "Activates the Central LED.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 0,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Turns the central LED OFF",
+                    "label": "Turns the LED OFF (default)",
                     "value": 0
                 },
                 {
-                    "label": "Turns the central LED ON",
+                    "label": "Turns the LED ON",
                     "value": 255
                 }
             ]
         },
         "4": {
-            "label": "UP Time",
-            "description": "This parameter allows to choose the roller blind UP time in seconds.\n        Value 0 - Instantly (default).\n        Values from 1 to 127 - 1 second to 127 seconds in 1 second resolution.",
+            "label": "Up Time",
+            "description": "Up Time",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
+            "maxValue": 120,
+            "defaultValue": 60,
+            "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Sets the UP time in seconds",
@@ -83,19 +86,18 @@
                     "label": "Default",
                     "value": 60
                 }
-            ],
-            "units": "seconds"
+            ]
         },
         "5": {
-            "label": "DOWN Time",
-            "description": "This parameter allows to choose the roller blind DOWN time in minutes.\n        Values from 1 to 127 - 1 minute to 127 minutes in 1 minute resolution.",
+            "label": "Down Time",
+            "description": "Down Time",
             "valueSize": 1,
-            "minValue": 128,
-            "maxValue": 254,
-            "defaultValue": 128,
+            "minValue": 1,
+            "maxValue": 120,
+            "defaultValue": 60,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Sets the DOWN time in seconds",
@@ -105,8 +107,7 @@
                     "label": "Default",
                     "value": 60
                 }
-            ],
-            "units": "minutes"
+            ]
         },
         "9": {
             "label": "Calibration",
@@ -122,10 +123,10 @@
         },
         "12": {
             "label": "Behavior of LED in Repose",
-            "description": "This parameter allows to choose behaviour of LED in repose",
+            "description": "Configuration of Main LED as identification at 20%.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 0,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
@@ -143,7 +144,7 @@
         },
         "13": {
             "label": "Lock Input",
-            "description": "This parameter locks the direct control of load.",
+            "description": "Unlock/lock the direct control of load.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -154,59 +155,25 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Unlock the direct control of load",
+                    "label": "Unlock the direct control of load.",
                     "value": 0
                 },
                 {
-                    "label": "Lock the direct control of load",
-                    "value": 255
-                }
-            ]
-        },
-        "15": {
-            "label": "Reset Default",
-            "description": "Parameters, Groups, and Z-Wave status are restored to default (Only writable).",
-            "valueSize": 2,
-            "minValue": 39015,
-            "maxValue": 39015,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "defaultValue": 0,
-            "options": [
-                {
-                    "label": "Device performs a factory default Reset",
-                    "value": 39015
-                }
-            ]
-        },
-        "20": {
-            "label": "Identify (Write Only)",
-            "description": "Write only value that performs a fast blink on Central LED during 5 seconds in order to identify the device when it is installed in a multiple frame.",
-            "valueSize": 1,
-            "minValue": 255,
-            "maxValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 0,
-            "options": [
-                {
-                    "label": "The central LED flashes for 5 seconds at a frequency of 0,1s.",
+                    "label": "Lock the direct control of load.",
                     "value": 255
                 }
             ]
         },
         "21": {
-            "label": "Load State (Read Only)",
-            "description": "Read only Configuration used to report the device state and last value. This value is represented in Hexadecimal.\n        Byte 0 informs about Load State (0 load is OFF and 1 load is ON).\n        Byte 1 informs about Load value (0x00 or 0xFF)",
-            "valueSize": 1,
+            "label": "Load State",
+            "description": "Load State (Read Only)",
+            "valueSize": 2,
             "minValue": 0,
-            "maxValue": 65535,
+            "maxValue": 0,
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Bit 0: Load is OFF",
@@ -227,15 +194,15 @@
             ]
         },
         "23": {
-            "label": "Calibration required (Read Only)",
-            "description": "Reports whether the roller blind needs calibration.\n        0x00 Calibration is not required.\n        0xFF It is necessary to calibrate the dimmer to work properly.",
+            "label": "Calibration Required",
+            "description": "Calibration Required (Read Only)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 0,
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": true,
+            "allowManualEntry": false,
             "options": [
                 {
                     "label": "Calibration is not required.",
@@ -243,48 +210,6 @@
                 },
                 {
                     "label": "It is necessary to calibrate the device.",
-                    "value": 255
-                }
-            ]
-        },
-        "24": {
-            "label": "Operating Mode",
-            "description": "This parameter allows to choose the roller blind operating mode (window shutter or sundblinds).",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 255,
-            "options": [
-                {
-                    "label": "Window shutter",
-                    "value": 0
-                },
-                {
-                    "label": "Sunblinds (default)",
-                    "value": 255
-                }
-            ]
-        },
-        "25": {
-            "label": "Lock long press",
-            "description": "This parameter allows to choose the long press behaviour.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "defaultValue": 0,
-            "options": [
-                {
-                    "label": "Long press works as described in the product manual.",
-                    "value": 0
-                },
-                {
-                    "label": "Long press between 2s to 10s: do not send the Node Info. Long press of more than 30s: parameters, except Lock long press are restored to default and device sends a Node Info ",
                     "value": 255
                 }
             ]
@@ -309,13 +234,6 @@
                     "value": 255
                 }
             ]
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 3,
-            "isLifeline": true
         }
     }
 }

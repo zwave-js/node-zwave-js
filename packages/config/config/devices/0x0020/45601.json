@@ -1,9 +1,14 @@
+// Universal Electronics Inc. 45601
+// Advanced Remote Wireless Lighting Control
 {
     "_approved": true,
+    "_warnings": [
+        "No channels have been assigned even though there are user configurable command classes."
+    ],
     "manufacturer": "Universal Electronics Inc.",
     "manufacturerId": "0x0020",
     "label": "45601",
-    "description": "45601 Advanced Remote",
+    "description": "Advanced Remote Wireless Lighting Control",
     "devices": [
         {
             "productType": "0x8007",

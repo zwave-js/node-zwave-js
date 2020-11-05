@@ -1,9 +1,11 @@
+// Willis Electric Co., Ltd. Zen24
+// Toggle Dimmer
 {
     "_approved": true,
-    "manufacturer": "Zooz (Willis Electric)",
+    "manufacturer": "Willis Electric Co., Ltd.",
     "manufacturerId": "0x015d",
-    "label": "ZEN24",
-    "description": "ZEN24 Dimmer Switch",
+    "label": "Zen24",
+    "description": "Toggle Dimmer",
     "devices": [
         {
             "productType": "0x0111",
@@ -14,35 +16,28 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Invert Switch",
-            "description": "Should the switch be inverted. Pressing down on the switch turns the load ON.",
+            "label": "Control Mode",
+            "description": "Control Mode",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
-            "defaultValue": 0,
+            "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Inverted",
-                    "value": 1
+                    "label": "Mode 1",
+                    "value": 0
                 },
                 {
-                    "label": "Default",
-                    "value": 0
+                    "label": "Mode 2",
+                    "value": 1
                 }
-            ],
-            "units": ""
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
+            ]
         }
     }
 }

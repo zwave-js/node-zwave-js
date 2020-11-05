@@ -1,128 +1,126 @@
+// TKB Home TZ69
+// Smart meter switch
 {
-    "_approved": true,
-    "manufacturer": "TKB Home",
-    "manufacturerId": "0x0118",
-    "label": "TZ69",
-    "description": "TZ69E Smart energy plug in switch",
-    "devices": [
-        {
-            "productType": "0x0311",
-            "productId": "0x0103"
-        },
-        {
-            "productType": "0x0116",
-            "productId": "0x3119"
-        },
-        {
-            "productType": "0x0004",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "LED-Behaviour",
-            "description": "Defines the behavior of the LED.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Indicator Off",
-                    "value": 0
-                },
-                {
-                    "label": "Indicator On",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Memory function",
-            "description": "",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Watt meter report period",
-            "description": "If the setting is configured for 1 hour (value=720), the TZ69E will report its instant power consumption every 1 hour.",
-            "unit": "5 seconds",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 720,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "5 sec"
-        },
-        "4": {
-            "label": "kWh meter report period",
-            "description": "If the setting is configured for 1 hour (value=6), the TZ69E will report its accumulated power consumption (kWh) every 1 hour.",
-            "unit": "10 minutes",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "10 min"
-        },
-        "5": {
-            "label": "Threshold of Kwh for Load Caution",
-            "description": "",
-            "unit": "Watt",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 10000,
-            "defaultValue": 10000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "Kwh"
-        },
-        "6": {
-            "label": "Threshold of Watt for Load Caution",
-            "description": "",
-            "unit": "kWH",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 3000,
-            "defaultValue": 3000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "Watt"
-        }
-    }
+	"_approved": true,
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "TZ69",
+	"description": "Smart meter switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0002"
+		},
+		{
+			"productType": "0x0116",
+			"productId": "0x3119"
+		},
+		{
+			"productType": "0x0311",
+			"productId": "0x0103"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "LED Indicator Mode",
+			"description": "Sets whether LED should indicate device is on (1) or off (0)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch off = LED off",
+					"value": 0
+				},
+				{
+					"label": "Switch off = LED on",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Memory Function",
+			"description": "determines if current state is memorized on power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Memory function off",
+					"value": 0
+				},
+				{
+					"label": "Memory function on",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Watt Meter Report Period",
+			"description": "5s x 720 (default) = 3600s = 1 hour",
+			"unit": "5 seconds",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 720,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "kWH Meter Report Period",
+			"description": "10m * 6 (default) = 60m = 1 hour",
+			"unit": "10 minutes",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Threshold of Watt for Load Caution",
+			"description": "Above this level, switch enters overload mode",
+			"unit": "Watt",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 3000,
+			"defaultValue": 3000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Threshold of kWH for Load Caution",
+			"description": "Over this level, unit with go into overload mode",
+			"unit": "kWH",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10000,
+			"defaultValue": 10000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

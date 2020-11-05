@@ -1,9 +1,11 @@
+// AEON Labs DSA38
+// Panic Button Key Fob
 {
     "_approved": true,
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "DSA38",
-    "description": "DSA38 Panic Button",
+    "description": "Panic Button Key Fob",
     "devices": [
         {
             "productType": "0x0001",
@@ -16,18 +18,18 @@
     },
     "associations": {
         "1": {
-            "label": "Lifeline",
+            "label": "Scene 1",
             "maxNodes": 5,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "250": {
-            "label": "Mode",
-            "description": "Enable selective Group Mode or Scene Mode when the Panic Button is in Use mode",
+            "label": "Mode of Button 1",
+            "description": "Defines the switching mode of Button 1",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -35,27 +37,14 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Group",
+                    "label": "Factory Default",
                     "value": 0
                 },
                 {
-                    "label": "Scene",
+                    "label": "Scene Mode",
                     "value": 1
                 }
-            ],
-            "units": ""
-        },
-        "255": {
-            "label": "Reset configuration",
-            "description": "Reset configuration set up to default setting",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": ""
+            ]
         }
     }
 }

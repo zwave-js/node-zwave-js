@@ -1,14 +1,12 @@
+// Zooz ZEN15
+// Power Switch
 {
     "_approved": true,
     "manufacturer": "Zooz",
     "manufacturerId": "0x027a",
     "label": "ZEN15",
-    "description": "ZEN15 Power Switch",
+    "description": "Power Switch",
     "devices": [
-        {
-            "productType": "0x0101",
-            "productId": "0x000D"
-        },
         {
             "productType": "0x0101",
             "productId": "0x000d"
@@ -18,6 +16,7 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "20": {
             "label": "Overload Protection",
@@ -81,18 +80,18 @@
                     "value": 0
                 },
                 {
-                    "label": "Sends notification if status is changed manually or remotely",
+                    "label": "Sends notification if changed manually or remotely",
                     "value": 1
                 },
                 {
-                    "label": "Sends notification ONLY if status is changed manually",
+                    "label": "Sends notification ONLY if changed manually",
                     "value": 2
                 }
             ]
         },
         "27": {
-            "label": "LED Indicator Control",
-            "description": "0 - LED indicator will display power consumption whenever the device is plugged in. 1 - LED indicator will display the level of power consumption for 5 seconds only whenever the device is turned on or off",
+            "label": "LED Indicator",
+            "description": "How the LED indicator displays power consumption.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -102,68 +101,66 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Display whenever the device is plugged in (Default)",
+                    "label": "Always On",
                     "value": 0
                 },
                 {
-                    "label": "Display power consumption for 5 seconds",
+                    "label": "Momentary (at status change)",
                     "value": 1
                 }
             ]
         },
         "151": {
             "label": "Power Report Value Threshold",
-            "description": "Number of Watts the appliance needs to go over for the change to be reported",
+            "description": "When to report power consumption to your controller",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 65535,
-            "defaultValue": 0,
+            "defaultValue": 50,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "watts"
+            "allowManualEntry": true
         },
         "152": {
             "label": "Power Report Percentage Threshold",
-            "description": "Percentage in power usage change the appliance needs to go over for the event to be reported (Default 10)",
-            "valueSize": 4,
-            "minValue": 1,
+            "description": "How to report power consumption to your controller by percentage rate",
+            "valueSize": 1,
+            "minValue": 0,
             "maxValue": 255,
             "defaultValue": 10,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "171": {
             "label": "Power Report Frequency",
-            "description": "Number of seconds",
+            "description": "How often to report power consumption (W) to your controller",
             "valueSize": 4,
-            "minValue": 5,
+            "minValue": 0,
             "maxValue": 2678400,
-            "defaultValue": 0,
+            "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "172": {
             "label": "Energy Report Frequency",
-            "description": "Number of seconds",
+            "description": "How often to report energy usage (KWH) to your controller",
             "valueSize": 4,
-            "minValue": 5,
+            "minValue": 0,
             "maxValue": 2678400,
-            "defaultValue": 0,
+            "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "173": {
             "label": "Voltage Report Frequency",
-            "description": "Number of seconds",
+            "description": "How often to report voltage (V) to your controller",
             "valueSize": 4,
-            "minValue": 5,
+            "minValue": 0,
             "maxValue": 2678400,
             "defaultValue": 0,
             "readOnly": false,
@@ -172,21 +169,14 @@
         },
         "174": {
             "label": "Electricity Report Frequency",
-            "description": "Number of seconds",
+            "description": "How often to report levels of electrical current (A) to your controller",
             "valueSize": 4,
-            "minValue": 5,
+            "minValue": 0,
             "maxValue": 2678400,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
         }
     }
 }

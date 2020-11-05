@@ -1,17 +1,19 @@
+// Leviton VRE06
+// Electronic Low Voltage Scene Capable Dimmer
 {
     "_approved": true,
     "manufacturer": "Leviton",
     "manufacturerId": "0x001d",
     "label": "VRE06",
-    "description": "VRE06-1LZ Multilevel Scene Switch",
+    "description": "Electronic Low Voltage Scene Capable Dimmer",
     "devices": [
         {
             "productType": "0x0e01",
-            "productId": "0x0334"
+            "productId": "0x0209"
         },
         {
             "productType": "0x0e01",
-            "productId": "0x0209"
+            "productId": "0x0334"
         }
     ],
     "firmwareVersion": {

@@ -1,9 +1,11 @@
+// Everspring ST815
+// Illumination Sensor
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "ST815",
-    "description": "ST815 Illumination Sensor",
+    "description": "Illumination Sensor",
     "devices": [
         {
             "productType": "0x0007",
@@ -21,82 +23,76 @@
             "isLifeline": true
         },
         "2": {
-            "label": "Basic",
+            "label": "Control",
             "maxNodes": 3
         }
     },
     "paramInformation": {
         "1": {
             "label": "Basic Set Level",
-            "description": "Defines the level in the Basic Set event sent to group 2 when the sensor is triggered.  Default is 99 (full brightness for a Z-Wave dimmer). 0 disables.",
+            "description": "Basic Set Level",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "%"
+            "allowManualEntry": true
         },
         "2": {
-            "label": "Lux On Trigger",
-            "description": "Lux level to trigger when a ON command is sent out. 0 will clear the value.",
+            "label": "Lux Trigger On Value",
+            "description": "Lux Trigger On Value",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 1000,
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "LUX"
+            "allowManualEntry": true
         },
         "3": {
-            "label": "Lux Off Trigger",
-            "description": "Lux level to trigger when an OFF command is sent out. 0 will clear the value.",
+            "label": "Lux Trigger Off Value",
+            "description": "Lux Trigger Off Value",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 1000,
             "defaultValue": 500,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "LUX"
+            "allowManualEntry": true
         },
         "4": {
-            "label": "Lux Timer Off Trigger",
-            "description": "Set Lux timer trigger to send an OFF command. 0 will clear the value.",
+            "label": "Lux Trigger Off Timer Value.",
+            "description": "Lux Trigger Off Timer Value.",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 480,
-            "defaultValue": 240,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "minutes"
+            "allowManualEntry": true
         },
         "5": {
-            "label": "Auto Report Time",
-            "description": "Sets the auto report time interval. 0 disables.",
+            "label": "Auto Report Time Interval",
+            "description": "Auto Report Time Interval",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 1439,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "minutes"
+            "allowManualEntry": true
         },
         "6": {
-            "label": "Auto Report Lux",
-            "description": "Sets the auto report Lux interval. 0 disabled.",
+            "label": "Auto Report Lux Interval",
+            "description": "Auto Report Lux Interval",
             "valueSize": 2,
-            "minValue": 30,
+            "minValue": 0,
             "maxValue": 1000,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true,
-            "units": "LUX"
+            "allowManualEntry": true
         }
     }
 }

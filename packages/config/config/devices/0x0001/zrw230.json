@@ -1,9 +1,11 @@
+// ACT - Advanced Control Technologies ZRW230
+// Wall Mounted 3-Way Switch
 {
     "_approved": true,
-    "manufacturer": "ACT",
+    "manufacturer": "ACT - Advanced Control Technologies",
     "manufacturerId": "0x0001",
     "label": "ZRW230",
-    "description": "ZRW230 Wall Appliance Module",
+    "description": "Wall Mounted 3-Way Switch",
     "devices": [
         {
             "productType": "0x5257",

@@ -1,9 +1,11 @@
+// Willis Electric Co., Ltd. NZW97
+// Inovelli Outdoor Smart Plug (2 Channel)
 {
     "_approved": true,
-    "manufacturer": "Zooz (Willis Electric)",
+    "manufacturer": "Willis Electric Co., Ltd.",
     "manufacturerId": "0x015d",
     "label": "NZW97",
-    "description": "NZW97 Inovelli Dual Outdoor Z-Wave Plug",
+    "description": "Inovelli Outdoor Smart Plug (2 Channel)",
     "devices": [
         {
             "productType": "0x6100",
@@ -14,67 +16,18 @@
         "min": "0.0",
         "max": "255.255"
     },
+    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "LED Indicator Control",
-            "description": "Choose if you want the LED indicator to turn on when switch is on or off or disable completely.",
+            "label": "LED Indicator",
+            "description": "LED Indicator ON/OFF/Disabled",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 2,
             "defaultValue": 0,
             "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "units": "",
-            "options": [
-                {
-                    "label": "LED on when switch is off",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when switch is on",
-                    "value": 1
-                },
-                {
-                    "label": "LED is disabled",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Automatically turn channel 1 off after interval",
-            "description": "Automatically turn channel 1 off after this many seconds. 0 is disabled",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": "seconds"
-        },
-        "3": {
-            "label": "Automatically turn channel 2 off after interval",
-            "description": "Automatically turn channel 2 off after this many seconds. 0 is disabled",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "defaultValue": 0,
-            "units": "seconds"
-        }
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Basic_Set",
-            "maxNodes": 5
+            "writeOnly": true,
+            "allowManualEntry": true
         }
     }
 }
