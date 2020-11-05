@@ -352,18 +352,24 @@ async function parseOzwProduct(
 	for (const param of parameters) {
 		if (isNaN(param.index)) continue;
 
-		const parsedParam: Record<string, any> = {
-			label: param.label,
-			description: param.Help,
-			valueSize: param.size || 1,
-			minValue: param.min || 0,
-			maxValue: param.max || 100,
-			readOnly: Boolean(param.read_only),
-			writeOnly: Boolean(param.write_only),
-			allowManualEntry: param.type !== "list",
-			defaultValue: param.value || 0,
-		};
+		const parsedParam = ret.paramInformation[param.index] || {};
 
+		parsedParam.label = param.label || parsedParam.label;
+		parsedParam.description = param.Help || parsedParam.description;
+		parsedParam.valueSize = param.size || parsedParam.valueSize || 1;
+		parsedParam.minValue = param.min || parsedParam.min || 0;
+		parsedParam.maxValue = param.max || parsedParam.max || 100;
+		parsedParam.readOnly = Boolean(param.read_only);
+		parsedParam.writeOnly = Boolean(param.write_only);
+		parsedParam.allowManualEntry = param.type !== "list";
+		parsedParam.defaultValue = param.value || parsedParam.value || 0;
+
+		if (param.units !== undefined) {
+			parsedParam.units = param.units;
+		}
+
+		// could have multiple translations, if so it's an array, the first
+		// is the english one
 		if (Array.isArray(parsedParam.description)) {
 			parsedParam.description = parsedParam.description[0];
 		}
