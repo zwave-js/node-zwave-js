@@ -236,7 +236,20 @@ async function parseOzwProduct(
 		parseInt(product.id, 16),
 	);
 
-	const fileName = `${manufacturerId}/${labelToFilename(productName)}.json`;
+	// @ts-ignore
+	const json: Record<string, any> = xml2json.toJson(productFile, {
+		object: true,
+		coerce: true,
+	}).Product;
+
+	let metadata = json.MetaData?.MetaDataItem || [];
+	metadata = Array.isArray(metadata) ? metadata : [metadata];
+	const name = metadata.find((m: any) => m.name === "Name")?.$t;
+	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
+
+	const fileName = `${manufacturerId}/${labelToFilename(
+		name || productName,
+	)}.json`;
 
 	if (existingDevice === undefined) {
 		addDeviceToIndex(
@@ -247,21 +260,10 @@ async function parseOzwProduct(
 		);
 	}
 
-	// @ts-ignore
-	const json: Record<string, any> = xml2json.toJson(productFile, {
-		object: true,
-		coerce: true,
-	}).Product;
-
 	let commandClasses = json.CommandClass || [];
 	commandClasses = Array.isArray(commandClasses)
 		? commandClasses
 		: [commandClasses];
-
-	// let metadata = json.MetaData?.MetaDataItem || [];
-	// metadata = Array.isArray(metadata) ? metadata : [metadata];
-	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
-	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
 
 	const ret: Record<string, any> = {
 		_approved: true,
