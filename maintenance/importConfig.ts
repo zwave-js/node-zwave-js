@@ -234,11 +234,16 @@ async function parseOzwProduct(
 	const productId = "0x" + padStart(product.id, 4);
 	const productType = "0x" + padStart(product.type, 4);
 
-	const existingDevice = await lookupDevice(
-		manufacturerIdInt,
-		parseInt(product.type, 16),
-		parseInt(product.id, 16),
-	);
+	const fileName = `${manufacturerId}/${labelToFilename(productLabel)}.json`;
+	const filePath = path.join(processedDir, fileName);
+
+	let existingDevice;
+
+	try {
+		existingDevice = JSON5.parse(await fs.readFile(filePath, "utf8"));
+	} catch (error) {
+		// device doesn't exists
+	}
 
 	// @ts-ignore
 	const json: Record<string, any> = xml2json.toJson(productFile, {
@@ -250,8 +255,6 @@ async function parseOzwProduct(
 	// metadata = Array.isArray(metadata) ? metadata : [metadata];
 	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
 	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
-
-	const fileName = `${manufacturerId}/${labelToFilename(productLabel)}.json`;
 
 	if (existingDevice === undefined) {
 		addDeviceToIndex(
@@ -299,31 +302,11 @@ async function parseOzwProduct(
 		}
 
 		if (existingDevice.associations) {
-			ret.associations = {};
-			for (const [key, ass] of existingDevice.associations) {
-				ret.associations[key] = ass;
-				if (ret.associations[key].noEndpoint === false) {
-					delete ret.associations[key].noEndpoint;
-				}
-				if (ret.associations[key].isLifeline === false) {
-					delete ret.associations[key].isLifeline;
-				}
-
-				delete ret.associations[key].groupId;
-			}
+			ret.associations = existingDevice.associations;
 		}
 
 		if (existingDevice.paramInformation) {
-			ret.paramInformation = {};
-			for (const [
-				key,
-				param,
-			] of existingDevice.paramInformation.entries()) {
-				ret.paramInformation[key.parameter] = param;
-				delete ret.paramInformation[key.parameter].parameterNumber;
-				if (ret.paramInformation[key.parameter].options.length === 0)
-					delete ret.paramInformation[key.parameter].options;
-			}
+			ret.paramInformation = existingDevice.paramInformation;
 		}
 	}
 
@@ -411,10 +394,7 @@ async function parseOzwProduct(
 	const manufacturerDir = path.join(processedDir, manufacturerId);
 
 	await fs.ensureDir(manufacturerDir);
-	await fs.writeFile(
-		path.join(processedDir, fileName),
-		JSON.stringify(ret, undefined, 4),
-	);
+	await fs.writeFile(filePath, JSON.stringify(ret, undefined, 4));
 
 	// check for device errors
 	await lookupDevice(
