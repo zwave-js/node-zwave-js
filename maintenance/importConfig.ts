@@ -308,6 +308,8 @@ async function parseOzwProduct(
 				if (ret.associations[key].isLifeline === false) {
 					delete ret.associations[key].isLifeline;
 				}
+
+				delete ret.associations[key].groupId;
 			}
 		}
 
