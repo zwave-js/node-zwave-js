@@ -174,18 +174,21 @@ async function parseOzwConfig(): Promise<void> {
 
 	// @ts-ignore
 	for (const man of manufacturerJson.ManufacturerSpecificData.Manufacturer) {
-		const name = lookupManufacturer(parseInt(man.id));
+		let name = lookupManufacturer(parseInt(man.id));
 
 		if (name === undefined) {
+			name = man.name;
 			// add manufacturer to manufacturers.json
-			console.log(`Adding missing manufacturer: ${man.name}`);
+			console.log(`Adding missing manufacturer: ${name}`);
+
+			// TODO: update the device configuration
 		}
 
 		const id = "0x" + padStart(man.id, 4, "0").toLowerCase();
 
 		if (man.Product !== undefined && Array.isArray(man.Product)) {
 			for (const product of man.Product) {
-				await parseOzwProduct(product, id);
+				await parseOzwProduct(product, name, id);
 			}
 		}
 	}
@@ -193,6 +196,7 @@ async function parseOzwConfig(): Promise<void> {
 
 async function parseOzwProduct(
 	product: any,
+	manufacturer: string | undefined,
 	manufacturerId: string,
 ): Promise<void> {
 	if (product.config === undefined) return;
@@ -201,35 +205,103 @@ async function parseOzwProduct(
 		"utf8",
 	);
 
+	const productLabel = path
+		.basename(product.config, ".xml")
+		.toLocaleUpperCase();
+
 	// @ts-ignore
 	const json: Record<string, any> = xml2json.toJson(productFile, {
 		object: true,
+		coerce: true,
 	}).Product;
 
-	const name = json?.MetaData?.MetaDataItem?.find(
-		(m: any) => m.name === "Name",
-	);
+	let metadata = json.MetaData?.MetaDataItem || [];
+	metadata = Array.isArray(metadata) ? metadata : [metadata];
 
-	const description = json?.MetaData?.MetaDataItem?.find(
-		(m: any) => m.name === "Description",
-	);
+	let commandClasses = json.CommandClass || [];
+	commandClasses = Array.isArray(commandClasses)
+		? commandClasses
+		: [commandClasses];
 
-	if (name && description) {
-		const ret: Record<string, any> = {
-			_approved: true,
-			manufacturer: json.manufacturer,
-			manufacturerId: manufacturerId,
-			label: sanitizeText(name.$t),
-			description: sanitizeText(description.$t),
-			devices: [],
-			firmwareVersion: {
-				min: json.versionminDisplay,
-				max: json.versionmaxDisplay,
-			},
+	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
+
+	const description = metadata.find((m: any) => m.name === "Description")?.$t;
+
+	const ret: Record<string, any> = {
+		_approved: true,
+		manufacturer: manufacturer,
+		manufacturerId: manufacturerId,
+		label: productLabel,
+		description: sanitizeText(description || ""),
+		devices: [],
+		firmwareVersion: {
+			min: "0.0.0",
+			max: "255.255.255",
+		},
+	};
+
+	let parameters = commandClasses.find((c: any) => c.id === 112)?.Value || [];
+
+	if (!Array.isArray(parameters)) {
+		parameters = [parameters];
+	}
+
+	if (parameters.length > 0) {
+		ret.paramInformation = {};
+	}
+
+	for (const param of parameters) {
+		const parsedParam: Record<string, any> = {
+			label: param.label,
+			description: param.Help,
+			valueSize: param.size,
+			minValue: param.min,
+			maxValue: param.max,
+			default: param.value,
+			readOnly: Boolean(param.read_only),
+			writeOnly: Boolean(param.write_only),
+			allowManualEntry: param.type !== "list",
 		};
 
-		console.log(ret);
+		if (param.type === "list" && Array.isArray(param.Item)) {
+			parsedParam.options = [];
+			for (const item of param.Item) {
+				const opt = {
+					label: item.label,
+					value: item.value,
+				};
+				parsedParam.options.push(opt);
+			}
+		}
+
+		ret.paramInformation[param.index] = parsedParam;
 	}
+
+	let associations =
+		commandClasses.find((c: any) => c.id === 133)?.Associations?.Group ||
+		[];
+
+	if (!Array.isArray(associations)) {
+		associations = [associations];
+	}
+
+	if (associations.length > 0) {
+		ret.associations = {};
+	}
+
+	for (const ass of associations) {
+		const parsedAssociation: Record<string, any> = {
+			label: ass.label,
+			isLifeline: /lifeline/i.test(ass.label),
+			maxNodes: ass.max_associations,
+		};
+
+		ret.associations[ass.index] = parsedAssociation;
+	}
+
+	console.log(ret);
+
+	// TODO: update the device configuration
 }
 
 /**
