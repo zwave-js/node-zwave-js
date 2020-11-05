@@ -301,10 +301,28 @@ async function parseOzwProduct(
 			readOnly: Boolean(param.read_only),
 			writeOnly: Boolean(param.write_only),
 			allowManualEntry: param.type !== "list",
+			defaultValue: param.value || 0,
 		};
 
-		if (param.value !== undefined) {
-			parsedParam.defaultValue = param.value;
+		if (Array.isArray(parsedParam.description)) {
+			parsedParam.description = parsedParam.description[0];
+		}
+
+		if (typeof parsedParam.description !== "string") {
+			parsedParam.description = "";
+		}
+
+		if (typeof parsedParam.defaultValue !== "number") {
+			parsedParam.defaultValue = 0;
+		}
+
+		if (typeof parsedParam.maxValue === "string") {
+			if (parsedParam.maxValue === "2147418112‬")
+				parsedParam.maxValue = 2147418112;
+			else
+				parsedParam.maxValue = parseInt(
+					parsedParam.maxValue.replace(/[A-Za-z]/g, ""),
+				);
 		}
 
 		if (param.type === "list" && Array.isArray(param.Item)) {
