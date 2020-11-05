@@ -15,6 +15,8 @@ import {
 	DeviceConfigIndexEntry,
 	loadManufacturers,
 	lookupManufacturer,
+	setManufacturer,
+	writeManufacturersToJson,
 } from "@zwave-js/config";
 import { num2hex } from "@zwave-js/shared";
 import { composeObject, entries } from "alcalzone-shared/objects";
@@ -174,24 +176,29 @@ async function parseOzwConfig(): Promise<void> {
 
 	// @ts-ignore
 	for (const man of manufacturerJson.ManufacturerSpecificData.Manufacturer) {
-		let name = lookupManufacturer(parseInt(man.id));
+		const intId = parseInt(man.id);
 
-		if (name === undefined) {
-			name = man.name;
+		let name = lookupManufacturer(intId);
+
+		const hexId = "0x" + padStart(man.id, 4, "0").toLowerCase();
+
+		if (name === undefined && man.name !== undefined) {
 			// add manufacturer to manufacturers.json
-			console.log(`Adding missing manufacturer: ${name}`);
+			console.log(`Adding missing manufacturer: ${man.name}`);
 
-			// TODO: update the device configuration
+			setManufacturer(intId, man.name);
 		}
 
-		const id = "0x" + padStart(man.id, 4, "0").toLowerCase();
+		name = man.name;
 
 		if (man.Product !== undefined && Array.isArray(man.Product)) {
 			for (const product of man.Product) {
-				await parseOzwProduct(product, name, id);
+				await parseOzwProduct(product, name, hexId);
 			}
 		}
 	}
+
+	await writeManufacturersToJson();
 }
 
 async function parseOzwProduct(
@@ -299,7 +306,7 @@ async function parseOzwProduct(
 		ret.associations[ass.index] = parsedAssociation;
 	}
 
-	console.log(ret);
+	// console.log(ret);
 
 	// TODO: update the device configuration
 }

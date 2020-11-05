@@ -1,14 +1,15 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { entries } from "alcalzone-shared/objects";
+import { padStart } from "alcalzone-shared/strings";
 import { isObject } from "alcalzone-shared/typeguards";
-import { pathExists, readFile } from "fs-extra";
+import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import log from "./Logger";
 import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "manufacturers.json");
-let manufacturers: ReadonlyMap<number, string> | undefined;
+let manufacturers: Map<number, string> | undefined;
 
 /** @internal */
 export async function loadManufacturersInternal(): Promise<void> {
@@ -92,4 +93,44 @@ export function lookupManufacturer(manufacturerId: number): string | undefined {
 	}
 
 	return manufacturers.get(manufacturerId);
+}
+
+/**
+ * Add new manufacturers to configuration DB
+ * @param manufacturerId The manufacturer id to look up
+ * @param manufacturerName The manufacturer name
+ */
+export function setManufacturer(
+	manufacturerId: number,
+	manufacturerName: string,
+): void {
+	if (!manufacturers) {
+		throw new ZWaveError(
+			"The config has not been loaded yet!",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	}
+
+	manufacturers.set(manufacturerId, manufacturerName);
+}
+
+/**
+ * Write current manufacturers map to json
+ */
+export async function writeManufacturersToJson(): Promise<void> {
+	if (!manufacturers) {
+		throw new ZWaveError(
+			"The config has not been loaded yet!",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	}
+
+	const data: Record<string, string> = {};
+
+	for (const [id, name] of manufacturers) {
+		const hexId = "0x" + padStart(id.toString(16), 4, "0").toUpperCase();
+		data[hexId] = name;
+	}
+
+	await writeFile(configPath, JSON.stringify(data, undefined, 4));
 }
