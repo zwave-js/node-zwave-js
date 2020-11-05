@@ -180,6 +180,7 @@ async function parseOzwConfig(): Promise<void> {
 
 		let name = lookupManufacturer(intId);
 
+		// TODO: Manufacturers ids are lower case in both folders and devices ids
 		const hexId = "0x" + padStart(man.id, 4, "0").toLowerCase();
 
 		if (name === undefined && man.name !== undefined) {
@@ -216,31 +217,39 @@ async function parseOzwProduct(
 		.basename(product.config, ".xml")
 		.toLocaleUpperCase();
 
+	const productName = product.name;
+
+	const productId = "0x" + padStart(product.id, 4);
+	const productType = "0x" + padStart(product.type, 4);
+
 	// @ts-ignore
 	const json: Record<string, any> = xml2json.toJson(productFile, {
 		object: true,
 		coerce: true,
 	}).Product;
 
-	let metadata = json.MetaData?.MetaDataItem || [];
-	metadata = Array.isArray(metadata) ? metadata : [metadata];
-
 	let commandClasses = json.CommandClass || [];
 	commandClasses = Array.isArray(commandClasses)
 		? commandClasses
 		: [commandClasses];
 
+	// let metadata = json.MetaData?.MetaDataItem || [];
+	// metadata = Array.isArray(metadata) ? metadata : [metadata];
 	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
-
-	const description = metadata.find((m: any) => m.name === "Description")?.$t;
+	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
 
 	const ret: Record<string, any> = {
 		_approved: true,
 		manufacturer: manufacturer,
 		manufacturerId: manufacturerId,
 		label: productLabel,
-		description: sanitizeText(description || ""),
-		devices: [],
+		description: productName,
+		devices: [
+			{
+				productType: productType,
+				productId: productId,
+			},
+		],
 		firmwareVersion: {
 			min: "0.0.0",
 			max: "255.255.255",
