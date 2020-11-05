@@ -318,6 +318,10 @@ async function parseOzwProduct(
 				param,
 			] of existingDevice.paramInformation.entries()) {
 				ret.paramInformation[key.parameter] = param;
+				delete ret.paramInformation[key.parameter].unsigned;
+				delete ret.paramInformation[key.parameter].parameterNumber;
+				if (ret.paramInformation[key.parameter].options.length === 0)
+					delete ret.paramInformation[key.parameter].options;
 			}
 		}
 	}
@@ -392,15 +396,14 @@ async function parseOzwProduct(
 	}
 
 	for (const ass of associations) {
-		const parsedAssociation: Record<string, any> = {
-			label: ass.label,
-			maxNodes: ass.max_associations,
-		};
+		const parsedAssociation = ret.associations[ass.index] || {};
+
+		parsedAssociation.label = ass.label;
+		parsedAssociation.maxNodes = ass.max_associations;
 
 		if (/lifeline/i.test(ass.label)) {
 			parsedAssociation.isLifeline = true;
 		}
-
 		ret.associations[ass.index] = parsedAssociation;
 	}
 
