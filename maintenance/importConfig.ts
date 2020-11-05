@@ -333,9 +333,12 @@ async function parseOzwProduct(
 	for (const ass of associations) {
 		const parsedAssociation: Record<string, any> = {
 			label: ass.label,
-			isLifeline: /lifeline/i.test(ass.label),
 			maxNodes: ass.max_associations,
 		};
+
+		if (/lifeline/i.test(ass.label)) {
+			parsedAssociation.isLifeline = true;
+		}
 
 		ret.associations[ass.index] = parsedAssociation;
 	}
