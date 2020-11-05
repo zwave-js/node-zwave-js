@@ -185,7 +185,7 @@ async function parseOzwConfig(): Promise<void> {
 
 		let name = lookupManufacturer(intId);
 
-		// TODO: Manufacturers ids are lower case in both folders and devices ids
+		// manufacturers ids are lower case in both folders and devices ids
 		const hexId = "0x" + padStart(man.id, 4, "0").toLowerCase();
 
 		if (name === undefined && man.name !== undefined) {
@@ -210,6 +210,29 @@ async function parseOzwConfig(): Promise<void> {
 	await writeIndexToFile();
 }
 
+/**
+ * When using xml2json some fields expected as array are parsed as objects
+ * when there is only one element. This method ensures that them are arrays
+ *
+ * @param {any} json
+ * @returns {Array<any>}
+ */
+function ensureArray(json: any): Array<any> {
+	json = json || [];
+	return Array.isArray(json) ? json : [json];
+}
+
+/**
+ * Read and parse the product xml, add it to index if missing,
+ * create/update device json config and validate the newly added
+ * device
+ *
+ * @param {any} product the parsed product json entry from manufacturer.xml
+ * @param {(string | undefined)} manufacturer manufacturer name string
+ * @param {string} manufacturerId manufacturer hex id `0xXXXX`
+ * @param {number} manufacturerIdInt manufacturer integer id
+ * @returns {Promise<void>} fulfilled once the parsing ends
+ */
 async function parseOzwProduct(
 	product: any,
 	manufacturer: string | undefined,
@@ -271,10 +294,7 @@ async function parseOzwProduct(
 		);
 	}
 
-	let commandClasses = json.CommandClass || [];
-	commandClasses = Array.isArray(commandClasses)
-		? commandClasses
-		: [commandClasses];
+	const commandClasses = ensureArray(json.CommandClass);
 
 	const ret: Record<string, any> = {
 		_approved: true,
@@ -324,12 +344,11 @@ async function parseOzwProduct(
 		ret.paramInformation = {};
 	}
 
-	let parameters = commandClasses.find((c: any) => c.id === 112)?.Value || [];
+	const parameters = ensureArray(
+		commandClasses.find((c: any) => c.id === 112)?.Value,
+	);
 
-	if (!Array.isArray(parameters)) {
-		parameters = [parameters];
-	}
-
+	// parse paramInformations contained in command class 112
 	for (const param of parameters) {
 		if (isNaN(param.index)) continue;
 
@@ -357,15 +376,18 @@ async function parseOzwProduct(
 			parsedParam.defaultValue = 0;
 		}
 
+		// some values have typos, this fixes them
 		if (typeof parsedParam.maxValue === "string") {
 			parsedParam.maxValue = parseInt(
 				parsedParam.maxValue.replace(/[^0-9]/g, ""),
 			);
 		}
 
-		if (param.type === "list" && Array.isArray(param.Item)) {
+		const items = ensureArray(param.Item);
+
+		if (param.type === "list" && items.length > 0) {
 			parsedParam.options = [];
-			for (const item of param.Item) {
+			for (const item of items) {
 				const opt = {
 					label: item.label.toString(),
 					value: parseInt(item.value),
@@ -377,24 +399,17 @@ async function parseOzwProduct(
 		ret.paramInformation[param.index] = parsedParam;
 	}
 
-	let associations =
-		commandClasses.find((c: any) => c.id === 133)?.Associations?.Group ||
-		[];
+	const associations = ensureArray(
+		commandClasses.find((c: any) => c.id === 133)?.Associations?.Group,
+	);
 
-	let multiInstanceAssociations =
-		commandClasses.find((c: any) => c.id === 142)?.Associations?.Group ||
-		[];
-
-	if (!Array.isArray(associations)) {
-		associations = [associations];
-	}
-
-	if (!Array.isArray(multiInstanceAssociations)) {
-		multiInstanceAssociations = [multiInstanceAssociations];
-	}
+	const multiInstanceAssociations = ensureArray(
+		commandClasses.find((c: any) => c.id === 142)?.Associations?.Group,
+	);
 
 	associations.push(...multiInstanceAssociations);
 
+	// parse associations contained in command class 133 and 142
 	for (const ass of associations) {
 		const parsedAssociation = ret.associations[ass.index] || {};
 
@@ -409,10 +424,13 @@ async function parseOzwProduct(
 
 	const manufacturerDir = path.join(processedDir, manufacturerId);
 
+	// create manufacturer dir if doesn't exists
 	await fs.ensureDir(manufacturerDir);
+
+	// write the updated configuration file
 	await fs.writeFile(filePath, JSON.stringify(ret, undefined, 4));
 
-	// check for device errors
+	// validate the newly added device
 	await lookupDevice(
 		manufacturerIdInt,
 		parseInt(product.type, 16),
