@@ -336,17 +336,13 @@ async function parseOzwProduct(
 		}
 	}
 
-	if (ret.associations === undefined) {
-		ret.associations = {};
-	}
-
-	if (ret.paramInformation === undefined) {
-		ret.paramInformation = {};
-	}
-
 	const parameters = ensureArray(
 		commandClasses.find((c: any) => c.id === 112)?.Value,
 	);
+
+	if (parameters.length > 0 && ret.paramInformation === undefined) {
+		ret.paramInformation = {};
+	}
 
 	// parse paramInformations contained in command class 112
 	for (const param of parameters) {
@@ -414,6 +410,10 @@ async function parseOzwProduct(
 	);
 
 	associations.push(...multiInstanceAssociations);
+
+	if (associations.length > 0 && ret.associations === undefined) {
+		ret.associations = {};
+	}
 
 	// parse associations contained in command class 133 and 142
 	for (const ass of associations) {
