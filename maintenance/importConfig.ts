@@ -256,7 +256,13 @@ async function parseOzwProduct(
 	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
 	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
 
-	if (existingDevice === undefined) {
+	if (
+		(await lookupDevice(
+			manufacturerIdInt,
+			parseInt(product.type, 16),
+			parseInt(product.id, 16),
+		)) === undefined
+	) {
 		addDeviceToIndex(
 			manufacturerIdInt,
 			parseInt(product.type, 16),
