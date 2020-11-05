@@ -320,7 +320,6 @@ async function parseOzwProduct(
 				param,
 			] of existingDevice.paramInformation.entries()) {
 				ret.paramInformation[key.parameter] = param;
-				delete ret.paramInformation[key.parameter].unsigned;
 				delete ret.paramInformation[key.parameter].parameterNumber;
 				if (ret.paramInformation[key.parameter].options.length === 0)
 					delete ret.paramInformation[key.parameter].options;
