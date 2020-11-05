@@ -297,16 +297,43 @@ async function parseOzwProduct(
 				ret.devices.push(device);
 			}
 		}
+
+		if (existingDevice.associations) {
+			ret.associations = {};
+			for (const [key, ass] of existingDevice.associations) {
+				ret.associations[key] = ass;
+				if (ret.associations[key].noEndpoint === false) {
+					delete ret.associations[key].noEndpoint;
+				}
+				if (ret.associations[key].isLifeline === false) {
+					delete ret.associations[key].isLifeline;
+				}
+			}
+		}
+
+		if (existingDevice.paramInformation) {
+			ret.paramInformation = {};
+			for (const [
+				key,
+				param,
+			] of existingDevice.paramInformation.entries()) {
+				ret.paramInformation[key.parameter] = param;
+			}
+		}
+	}
+
+	if (ret.associations === undefined) {
+		ret.associations = {};
+	}
+
+	if (ret.paramInformation === undefined) {
+		ret.paramInformation = {};
 	}
 
 	let parameters = commandClasses.find((c: any) => c.id === 112)?.Value || [];
 
 	if (!Array.isArray(parameters)) {
 		parameters = [parameters];
-	}
-
-	if (parameters.length > 0) {
-		ret.paramInformation = {};
 	}
 
 	for (const param of parameters) {
@@ -362,10 +389,6 @@ async function parseOzwProduct(
 
 	if (!Array.isArray(associations)) {
 		associations = [associations];
-	}
-
-	if (associations.length > 0) {
-		ret.associations = {};
 	}
 
 	for (const ass of associations) {
