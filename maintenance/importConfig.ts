@@ -227,6 +227,10 @@ async function parseOzwProduct(
 
 	const productName = product.name;
 
+	// for some reasons some products already have the prefix `0x`, remove it
+	product.id = product.id.replace("0x", "");
+	product.type = product.type.replace("0x", "");
+
 	const productId = "0x" + padStart(product.id, 4);
 	const productType = "0x" + padStart(product.type, 4);
 
@@ -292,6 +296,8 @@ async function parseOzwProduct(
 	}
 
 	for (const param of parameters) {
+		if (isNaN(param.index)) continue;
+
 		const parsedParam: Record<string, any> = {
 			label: param.label,
 			description: param.Help,
@@ -317,12 +323,9 @@ async function parseOzwProduct(
 		}
 
 		if (typeof parsedParam.maxValue === "string") {
-			if (parsedParam.maxValue === "2147418112‬")
-				parsedParam.maxValue = 2147418112;
-			else
-				parsedParam.maxValue = parseInt(
-					parsedParam.maxValue.replace(/[A-Za-z]/g, ""),
-				);
+			parsedParam.maxValue = parseInt(
+				parsedParam.maxValue.replace(/[^0-9]/g, ""),
+			);
 		}
 
 		if (param.type === "list" && Array.isArray(param.Item)) {
@@ -330,7 +333,7 @@ async function parseOzwProduct(
 			for (const item of param.Item) {
 				const opt = {
 					label: item.label.toString(),
-					value: item.value,
+					value: parseInt(item.value),
 				};
 				parsedParam.options.push(opt);
 			}
@@ -372,9 +375,12 @@ async function parseOzwProduct(
 		JSON.stringify(ret, undefined, 4),
 	);
 
-	// console.log(ret);
-
-	// TODO: update the device configuration
+	// check for device errors
+	await lookupDevice(
+		manufacturerIdInt,
+		parseInt(product.type, 16),
+		parseInt(product.id, 16),
+	);
 }
 
 /**
