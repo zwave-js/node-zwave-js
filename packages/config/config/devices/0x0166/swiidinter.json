@@ -1,0 +1,58 @@
+{
+    "_approved": true,
+    "manufacturer": "Swiid (CBCC Domotique SAS)",
+    "manufacturerId": "0x0166",
+    "label": "SWIIDINTER",
+    "description": "SwiidInter",
+    "devices": [
+        {
+            "productType": "0x0100",
+            "productId": "0x0100"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Switch All",
+            "description": "Enable/Disable ALL ON/OFF",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 255,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Switch off only",
+                    "value": 1
+                },
+                {
+                    "label": "Switch on only",
+                    "value": 2
+                },
+                {
+                    "label": "Fully enabled (Default)",
+                    "value": 255
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Long press",
+            "maxNodes": 5
+        },
+        "2": {
+            "label": "Short press",
+            "maxNodes": 5
+        }
+    }
+}

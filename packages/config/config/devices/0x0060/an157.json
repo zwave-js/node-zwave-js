@@ -1,11 +1,9 @@
-// Everspring AN157
-// Switch Plugin
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "AN157",
-    "description": "Switch Plugin",
+    "description": "AN157 Plug-in Appliance Module",
     "devices": [
         {
             "productType": "0x0004",

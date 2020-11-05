@@ -1,0 +1,52 @@
+{
+    "_approved": true,
+    "manufacturer": "zwaveproducts.com",
+    "manufacturerId": "0x0315",
+    "label": "PA-100",
+    "description": "PA-100",
+    "devices": [
+        {
+            "productType": "0x4447",
+            "productId": "0x3031"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Nightlight",
+            "description": "DEFAULT: the LED indicator will be OFF when the connected appliance is ON, and the LED indicator will be ON when the connected appliance is OFF.\nINVERTED: the LED indicator will be OFF when the connected appliance is OFF, and the LED indicator will be ON when the connected appliance is ON.\nOFF: the LED indicator will be always OFF regardless of the load status.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Default",
+                    "value": 0
+                },
+                {
+                    "label": "Inverted",
+                    "value": 1
+                },
+                {
+                    "label": "Off",
+                    "value": 2
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    }
+}

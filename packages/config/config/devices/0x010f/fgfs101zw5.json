@@ -1,0 +1,307 @@
+{
+    "_approved": true,
+    "manufacturer": "FIBARO System",
+    "manufacturerId": "0x010f",
+    "label": "FGFS101ZW5",
+    "description": "FGFS101 Zwave+ Flood Sensor",
+    "devices": [
+        {
+            "productType": "0x0b01",
+            "productId": "0x3002"
+        },
+        {
+            "productType": "0x0b01",
+            "productId": "0x2002"
+        },
+        {
+            "productType": "0x0b01",
+            "productId": "0x1003"
+        },
+        {
+            "productType": "0x0b01",
+            "productId": "0x1002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Flood Control",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Flood Alarm",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Tamper Alarm",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Alarm Cancellation Delay",
+            "description": "Determines time period (in seconds) by which a Flood Sensor will retain the flood state after the flooding itself has ceased. The sensor will keep on reporting flooding to the main controller. This parameter setting does not affect acoustic and visual alarms, which turn off immediately after flooding ceases.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "2": {
+            "label": "Acoustic and visual signals",
+            "description": "Acoustic and visual signals in case of flooding.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "options": [
+                {
+                    "label": "acoustic and visual alarms inactive",
+                    "value": 0
+                },
+                {
+                    "label": "acoustic alarm inactive, visual alarm active",
+                    "value": 1
+                },
+                {
+                    "label": "acoustic alarm active, visual alarm inactive",
+                    "value": 2
+                },
+                {
+                    "label": "acoustic and visual alarms active",
+                    "value": 3
+                }
+            ]
+        },
+        "7": {
+            "label": "Requested dimming level / roller blind opening level when sending turn on / open command to 2nd association group devices",
+            "description": "Determines the requested \"on\" level to be sent to devices from 2nd association group upon flood event.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "9": {
+            "label": "Deactivate turning off devices in 2nd association group alarm cancellation in 3rd group",
+            "description": "This setting decides whether device turn off commands and alarm cancellation notifications will be sent to devices in 2nd and 3rd association groups (respectively)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Alarm (flooding) cancellation INACTIVE",
+                    "value": 0
+                },
+                {
+                    "label": "Alarm (flooding) cancellation ACTIVE",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Interval between successive readings of temperature sensors",
+            "description": "Interval between successive readings of temperature from all sensors connected to the device in seconds. Note: taking temperature readings from the sensor does not result in sending a temperature condition report to the central hub.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 300
+        },
+        "12": {
+            "label": "Insensitiveness to temperature changes.",
+            "description": "Insensitiveness to temperature changes. This is the maximum acceptable difference between the last reported temperature and the current temperature taken from the sensor. If the temperatures differ by the set value or more, then a report with the current temperature value is sent to the device assigned to association group no. 3. Intervals between taking readings from sensors are specified by parameter no. 10.\n                Possible parameter settings:1 to 1000 [each 0.01oC] [0.01oC to 10.00oC].",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 1000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50
+        },
+        "50": {
+            "label": "Low temperature alarm threshold.",
+            "description": "The parameter stores a temperature value, below which LED indicator blinks with a colour determined by Parameter 61 settings. By default the LED indicator blinks blue.\n                Possible parameter settings:-10000 to 10000 [each 0.01oC] [-100oC to 100oC].",
+            "valueSize": 1,
+            "minValue": -10000,
+            "maxValue": 10000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1500
+        },
+        "51": {
+            "label": "High temperature alarm threshold.",
+            "description": "The parameter stores a temperature value, above which LED indicator blinks with a colour determined by Parameter 62 settings. By default the LED indicator blinks red.\n                Possible parameter settings:-10000 to 10000 [each 0.01oC] [-100oC to 100oC].",
+            "valueSize": 1,
+            "minValue": -10000,
+            "maxValue": 10000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3500
+        },
+        "61": {
+            "label": "Low temperature alarm indicator colour.",
+            "description": "The parameter stores RGB colour value.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 16777215,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "62": {
+            "label": "High temperature alarm indicator colour.",
+            "description": "The parameter stores RGB colour value.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 16777215,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 16711680
+        },
+        "63": {
+            "label": "Managing a LED indicator under standard operation.",
+            "description": "Parameter determines LED indicator's operation. Set to 0 turns the indicator off, saving battery life.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "options": [
+                {
+                    "label": "LED doesn't indicate temperature",
+                    "value": 0
+                },
+                {
+                    "label": "LED indicates temperature (blink) every Temperature Measurement Interval (Parameter 10, constant power + battery) or Wake Up Interval (battery)",
+                    "value": 1
+                },
+                {
+                    "label": "LED indicates temperature constantly, only in constant power mode.",
+                    "value": 2
+                }
+            ]
+        },
+        "73": {
+            "label": "Temperature measurement compensation.",
+            "description": "Parameter stores a temperature value to be added to or deducted from the current temperature measured by the internal temperature sensor in order to compensate the difference between air temperature and the temperature at floor level.\n                Possible parameter settings:-10000 to 10000 [each 0.01oC] [-100oC to 100oC].",
+            "valueSize": 1,
+            "minValue": -10000,
+            "maxValue": 10000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "74": {
+            "label": "Alarm frame sent to 1st and 4th Association Group activation.",
+            "description": "The device is able to report tamper alarms resulting from sensor tilt/movement or TMP button state change.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "options": [
+                {
+                    "label": "Tamper alarms INACTIVE",
+                    "value": 0
+                },
+                {
+                    "label": "Button tamper alarm ACTIVE",
+                    "value": 1
+                },
+                {
+                    "label": "Movement tamper alarm ACTIVE",
+                    "value": 2
+                },
+                {
+                    "label": "Button and movement tamper alarms ACTIVE",
+                    "value": 3
+                }
+            ]
+        },
+        "75": {
+            "label": "Visual and audible alarm duration",
+            "description": "Parameter determines a time period after which alarm will become quiet - still active but the device will go into battery saving mode. Visual or acoustic alarm will be reactivated after time period specified in Parameter 76. When alarm status ceases, alarm will be turned off immediately.\n                Value of 0 means visual and acoustic alarms are active indefinitely. In battery power mode the device will never go to sleep which may shorten battery life significantly.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "76": {
+            "label": "Alarm signalization reactivation period",
+            "description": "Parameter determines a time period after which an alarm frame will be retransmitted.\n                Value of 0 cancels an alarm frame retransmission.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "77": {
+            "label": "Flood sensor functionality turned off.",
+            "description": "Allows for turning off the internal flood sensor. Tamper and internal temperature sensors will remain active.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Default flood sensor operation (ACTIVE)",
+                    "value": 0
+                },
+                {
+                    "label": "Flood sensor INACTIVE",
+                    "value": 1
+                }
+            ]
+        },
+        "78": {
+            "label": "Associations in Z-Wave network security mode",
+            "description": "This parameter defines how commands are sent in specified association groups: as secure or non-secure. Parameter is active only in Z-Wave network security mode. It does not apply to 1st Lifeline group.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 7
+        }
+    }
+}

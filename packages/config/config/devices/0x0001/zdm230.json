@@ -1,11 +1,9 @@
-// ACT - Advanced Control Technologies ZDM230
-// HomePro Wall Dimmer ZDM230
 {
     "_approved": true,
-    "manufacturer": "ACT - Advanced Control Technologies",
+    "manufacturer": "ACT",
     "manufacturerId": "0x0001",
     "label": "ZDM230",
-    "description": "HomePro Wall Dimmer ZDM230",
+    "description": "ZDM230 Wall Dimmer Module",
     "devices": [
         {
             "productType": "0x444d",
@@ -18,22 +16,22 @@
     },
     "associations": {
         "1": {
-            "label": "Group 1",
+            "label": "Left Switch",
             "description": "Left paddle",
             "maxNodes": 5
         },
         "2": {
-            "label": "Group 2",
+            "label": "Right Switch",
             "description": "Right Paddle",
             "maxNodes": 5
         },
         "3": {
-            "label": "Group 3",
+            "label": "Right Switch (2 Taps)",
             "description": "Right double click paddle",
             "maxNodes": 5
         },
         "4": {
-            "label": "Group 4",
+            "label": "Update Controller",
             "description": "Group used to inform devices about status updates",
             "maxNodes": 5,
             "isLifeline": true
@@ -45,7 +43,7 @@
             "description": "Dimmers controlled by this switch will start dimming from their current level.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
@@ -62,11 +60,11 @@
             ]
         },
         "2": {
-            "label": "Suspend group 4",
-            "description": "Temporarily disable transmitting commands to Group 4",
+            "label": "Suspend Group 4",
+            "description": "Disable transmitting commands to Z-Wave devices that are in Group 4 without disassociating those devices from the group.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
@@ -84,14 +82,270 @@
         },
         "3": {
             "label": "Night Light",
-            "description": "Night-light mode",
+            "description": "In night-light mode the LED on the switch will turn ON when the switch is turned OFF.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Invert Switch",
+            "description": "Change the top of the switch to OFF and the bottom of the switch to ON. Note: If you invert the switches and also install the product upside down, remember the load will now be controlled by the right, not the left switch.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Ignore Start-Level (Receiving)",
+            "description": "This dimmer will start dimming from its current level.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Don't Send Level After Dim",
+            "description": "When you press and hold the bottom of the ZDM230 switch once, the Z-Wave devices that are associated into Group 1 are sent the Dim command. If this parameter is set to \"Yes\" the devices in Group 1 will not go to the same level as the ZDM230.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "On/Off Command Dim Step",
+            "description": "Indicates how many levels the dimmer will change for each dimming step.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1,
+            "units": ""
+        },
+        "8": {
+            "label": "On/Off Command Dim Rate",
+            "description": "This value indicates in 10 millisecond resolution, how often the dim level will change. For example, if you set this parameter to 1, then every 10ms the dim level will change. If you set it to 255, then every 2.55 seconds the dim level will change.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3,
+            "units": "x 10 milliseconds"
+        },
+        "9": {
+            "label": "Local Control Dim Step",
+            "description": "Indicates how many levels the dimmer will change for each dimming step.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1,
+            "units": ""
+        },
+        "10": {
+            "label": "Local Control Dim Rate",
+            "description": "This value indicates in 10 millisecond resolution, how often the dim level will change. For example, if you set this parameter to 1, then every 10ms the dim level will change. If you set it to 255, then every 2.55 seconds the dim level will change.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3,
+            "units": "x 10 milliseconds"
+        },
+        "11": {
+            "label": "ALL ON/ALL OFF Dim Step",
+            "description": "Indicates how many levels the dimmer will change for each dimming step.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1,
+            "units": ""
+        },
+        "12": {
+            "label": "ALL ON/ALL OFF Dim Rate",
+            "description": "This value indicates in 10 millisecond resolution, how often the dim level will change. For example, if you set this parameter to 1, then every 10ms the dim level will change. If you set it to 255, then every 2.55 seconds the dim level will change.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3,
+            "units": "x 10 milliseconds"
+        },
+        "13": {
+            "label": "Disable Group 4 During Dim",
+            "description": "Units in Group 4 only track when the dimmer is being turned ON and OFF and not while dimming.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "14": {
+            "label": "Enable Shade Control Group 2",
+            "description": "The ZDM230 can operate shade control devices via its group 2.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "15": {
+            "label": "Enable Shade Control Group 3",
+            "description": "The ZDM230 can operate shade control devices via its group 3.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "19": {
+            "label": "LED Transmission Indication",
+            "description": "The ZDM230 will flicker its LED when it is transmitting to any of its 4 groups. This flickering can be set to not flicker at all, to flicker the entire time it is transmitting, or to flicker for only 1 second when it begins transmitting.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "options": [
+                {
+                    "label": "None",
+                    "value": 0
+                },
+                {
+                    "label": "While Transmitting",
+                    "value": 1
+                },
+                {
+                    "label": "One Second Maximum",
+                    "value": 2
+                }
+            ]
+        },
+        "20": {
+            "label": "Poll Group 2 Interval",
+            "description": "Poll Group 2 Interval",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 2,
+            "units": "minutes"
+        },
+        "22": {
+            "label": "Enable Group 2 Polling",
+            "description": "Poll Group 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
             "options": [
                 {
                     "label": "No",

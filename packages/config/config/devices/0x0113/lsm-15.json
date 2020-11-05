@@ -1,14 +1,9 @@
-// Evolve LSM-15
-// Wall Mounted Switch
 {
     "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Evolve",
+    "manufacturer": "Evolve Guest Controls",
     "manufacturerId": "0x0113",
     "label": "LSM-15",
-    "description": "Wall Mounted Switch",
+    "description": "LSM-15 Wall Switch",
     "devices": [
         {
             "productType": "0x5257",
@@ -22,15 +17,15 @@
     "paramInformation": {
         "3": {
             "label": "Night Light",
-            "description": "By default, the LED will turn OFF when the lead attached is turned ON.",
+            "description": "By default, the LED on the LSM-15 will turn OFF when the load attached is turned ON. To make the LED turn ON when the load attached is turned ON, set parameter to a value of 0.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 1,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "On when load is on",
@@ -40,19 +35,20 @@
                     "label": "Off when load is on",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "4": {
             "label": "Invert Switch",
-            "description": "To change the top of the switch to OFF and the bottom of the switch ON.",
+            "description": "To change the top of the switch to OFF and the bottom of the switch to ON, set parameter to 1.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 1,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Top-ON, Bottom-OFF",
@@ -62,7 +58,8 @@
                     "label": "Bottom--ON, Top-OFF",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         }
     }
 }

@@ -1,11 +1,9 @@
-// Philio Technology Corp PAN03
-// In Wall Micromodule Single Switch
 {
     "_approved": true,
     "manufacturer": "Philio Technology Corp",
     "manufacturerId": "0x013c",
     "label": "PAN03",
-    "description": "In Wall Micromodule Single Switch",
+    "description": "PAN03 Switch Module with meter 3 KW X1",
     "devices": [
         {
             "productType": "0x0001",
@@ -16,11 +14,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Watt Meter Report Period",
-            "description": "Watt Meter Report Period",
+            "label": "Watt meter report period",
+            "description": "If the setting is configured for 1 hour (set value =720), the device will report its instant power consumption every 1 hour to Z-Wave Controller. Unit: 5 seconds.",
             "unit": "5",
             "valueSize": 2,
             "minValue": 1,
@@ -31,8 +28,8 @@
             "allowManualEntry": true
         },
         "2": {
-            "label": "KWH Meter Report Period",
-            "description": "KWH Meter Report Period (6*10min=1 hour)",
+            "label": "kWh meter report period",
+            "description": "If the setting is configured for 1hour (set value =6), the Micromodule will report its Accumulated Power Consumption (KW/h) every 1 hour to Z-Wave Controller. 10min.",
             "unit": "10",
             "valueSize": 2,
             "minValue": 1,
@@ -43,8 +40,8 @@
             "allowManualEntry": true
         },
         "3": {
-            "label": "Threshold of current for Load caution",
-            "description": "Threshold of current for Load caution (1100*0.01A = 11A)",
+            "label": "Threshold of current load for Load Caution",
+            "description": "This is a warning when the current of load over the preset threshold value, if the setting value is 1100 (11A), when the load current of Relay1 over this value, Micromodule will send current meter report to warn the Z-Wave Controller. Unit: 0.01A",
             "unit": "0.01",
             "valueSize": 2,
             "minValue": 10,
@@ -55,8 +52,8 @@
             "allowManualEntry": true
         },
         "4": {
-            "label": "Threshold of KWh for Load caution",
-            "description": "Threshold of KWh for Load caution",
+            "label": "Threshold of KWh for Load Caution",
+            "description": "This is a warning when the KWh of load over the preset threshold value, if the setting value is 10000, when the Accumulated Power Consumption of Relay1 over this value, Micromodule will send KWH meter report to warn the Z-Wave Controller. Unit: 1KWh",
             "valueSize": 2,
             "minValue": 10,
             "maxValue": 10000,
@@ -66,8 +63,8 @@
             "allowManualEntry": true
         },
         "5": {
-            "label": "Restore switch state mode",
-            "description": "Restore switch state mode",
+            "label": "Restore Switch State Mode",
+            "description": "Whenever the AC power return from lost, Micromodule will restore the switch state which could be \n\t\t\t\tSWITCH OFF\n\t\t\t\tLAST SWITCH STATE\n\t\t\t\tSWITCH ON",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 2,
@@ -77,29 +74,29 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Switch off",
+                    "label": "SWITCH OFF",
                     "value": 0
                 },
                 {
-                    "label": "Last switch state",
+                    "label": "LAST SWITCH STATE",
                     "value": 1
                 },
                 {
-                    "label": "Switch on",
+                    "label": "SWITCH ON",
                     "value": 2
                 }
             ]
         },
         "6": {
-            "label": "Manual On/Off mode",
-            "description": "Manual On/Off mode",
+            "label": "Manual ON/OFF Mode",
+            "description": "The On/Off function of S1, S2 and learn switch can be disabled or enabled by this parameter, default value is Enable. But the learning operation won't be affected. When manual On/Off function is disabled, the RF command can only switch On but not Off. This is useful function for keeping the device in switch on state.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Disable manual On/Off",
@@ -112,15 +109,15 @@
             ]
         },
         "7": {
-            "label": "LED indication mode",
-            "description": "LED indication mode",
+            "label": "LED Indication Mode",
+            "description": "LED Indication Mode:\n\t\t\t\t1: SHOW SWITCH STATE: When switch is on, LED is on. When switch is off, LED is off. The default setting is Show Switch State. :\n\t\t\t\t2 :SHOW NIGHT MODE: When switch is on, LED is off. When switch is off, LED is on.\n\t\t\t\t3 : ONE FLASH MODE: When the state of switch changes, LED will be on only one second, then LED keeps off.",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 3,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Show switch state",
@@ -138,7 +135,7 @@
         },
         "8": {
             "label": "Auto off timer",
-            "description": "Auto off timer",
+            "description": "Whenever Micromodule switches to on, the auto off timer begin to count down. After the timer decrease to zero, it will switch to off automatically. However if Auto off timer is set as 0, the auto off function will be disabled. The default setting is 0.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 32767,
@@ -148,15 +145,15 @@
             "allowManualEntry": true
         },
         "9": {
-            "label": "RF off command mode",
-            "description": "RF off command mode",
+            "label": "RF Off Command Mode",
+            "description": "Whenever a switch off command, BASIC_SET, BINARY_SWITCH_SET, SWITCH_ALL_OFF, is received, it could be interpreted as 4 variety of commands: \n\t\t\t\t0: SWITCH OFF:It switches to OFF state. The default setting is Switch Off. \n\t\t\t\t1: IGNORE:The switch off command will be ignored. \n\t\t\t\t2: SWITCH TOGGLE:It switches to the inverse of current state. \n\t\t\t\t3 :SWITCH ON:It switches to ON state",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Switch off",
@@ -177,15 +174,15 @@
             ]
         },
         "10": {
-            "label": "Switch mode",
-            "description": "Edge or Pulse mode or Edge-Toggle mode",
+            "label": "Edge Mode, Pulse mode or Edge-Toggle mode",
+            "description": "Manual switch S1 and S2 can set to Edge mode or Pulse mode or Edge-Toggle mode, default value is Edge mode.\n\t\t\t\t1: EDGE MODE: This mode is suitable for the bi-stable wall switch that has indicator point on the switch, and the same position correspond to same state of relay1. If the Micromodule relay change the state because of receiving Z-Wave RF command, it may need two times of change (switch on to off or switch off to on) to let relay back to the correspond state. Manual switch S2 is disabled in this mode. \n\t\t\t\t2: PULSE MODE: This mode is suitable for the toggle type wall switch to swap the state of Relay1. \n\t\t\t\t3 :EDGE-TOGGLE MODE: This mode is suitable for the normal bi-stable switch, wheneverchange the state of the wall switch will also swap the state of Relay1.",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 3,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Edge mode",
@@ -221,6 +218,13 @@
                     "value": 1
                 }
             ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
         }
     }
 }

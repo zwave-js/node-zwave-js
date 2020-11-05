@@ -1,189 +1,206 @@
-// Zooz ZEN07
-// Mini Plug On / Off Module ZEN07
 {
-	"_approved": true,
-	"manufacturer": "Zooz",
-	"manufacturerId": "0x027a",
-	"label": "ZEN07",
-	"description": "Mini Plug On / Off Module ZEN07",
-	"devices": [
-		{
-			"productType": "0x0003",
-			"productId": "0x0087"
-		}
-	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
-			"label": "Metering Report",
-			"description": "send metering reports",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled (default).",
-					"value": 1
-				}
-			]
-		},
-		"2": {
-			"label": "Metering Report Frequency",
-			"description": "Frecuency metering reports to the controller.",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 300,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"3": {
-			"label": "Overload Protection",
-			"description": "Maximum amount of electricity Mini Plug to handle.",
-			"unit": "Amperes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 16,
-			"defaultValue": 13,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"4": {
-			"label": "Overload Protection Notification",
-			"description": "LED notifications of heavy load.",
-			"unit": "Amperes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 13,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"5": {
-			"label": "LED Notifications",
-			"description": "Use this parameter to turn LED notifications on or off",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED disabled",
-					"value": 0
-				},
-				{
-					"label": "LED enabled (default)",
-					"value": 1
-				}
-			]
-		},
-		"6": {
-			"label": "Power Report Percentage Threshold",
-			"description": "Mini Plug to report energy usage  percentage rate.",
-			"unit": "%",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 100,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"7": {
-			"label": "On/Off Status Recovery After Power Failure",
-			"description": "Choose the recovery state for your Mini Plug if power outage occurs",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "OFF once power is restored",
-					"value": 0
-				},
-				{
-					"label": "Remembers the status",
-					"value": 1
-				}
-			]
-		},
-		"8": {
-			"label": "Auto Turn-Off Timer  Enable",
-			"description": ": Use this parameter to enable or disable the auto turn-off timer function",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "timer disabled (default)",
-					"value": 0
-				},
-				{
-					"label": "timer enabled",
-					"value": 1
-				}
-			]
-		},
-		"9": {
-			"label": "Auto Turn-Off Timer Interval",
-			"description": "Set the time to automatically turn off",
-			"unit": "Minutes",
-			"valueSize": 2,
-			"minValue": 1,
-			"maxValue": 65535,
-			"defaultValue": 150,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"10": {
-			"label": "Manual Control",
-			"description": "Turn the Mini Plug with button",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "manual control disabled",
-					"value": 0
-				},
-				{
-					"label": "manual control enabled (default)",
-					"value": 1
-				}
-			]
-		}
-	}
+    "_approved": true,
+    "manufacturer": "Zooz",
+    "manufacturerId": "0x027a",
+    "label": "ZEN07",
+    "description": "ZEN07 Mini Plug",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0087"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Metering Reports",
+            "description": "Choose if you want the Mini Plug to send metering reports to the controller.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Metering Reports Interval",
+            "description": "Choose how often you want the Mini Plug to send metering reports to the controller, in seconds.",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 65535,
+            "defaultValue": 300,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        },
+        "3": {
+            "label": "Overload Protection",
+            "description": "Use this parameter to adjust the max amount of electricity you want your Mini Plug to handle, by Amperes.\n                Defaults to 13A.",
+            "unit": "Amperes",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 16,
+            "defaultValue": 13,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "Amperes"
+        },
+        "4": {
+            "label": "LED Notifications - Heavy Load",
+            "description": "Use this parameter to adjust the LED Notification for Heavy Load by setting a threshold of Amperes.\n                Must be lower than Parameter #3.\n                Defaults to 12A",
+            "unit": "Amperes",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 13,
+            "defaultValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "Amperes"
+        },
+        "5": {
+            "label": "LED Notifications",
+            "description": "Use this parameter to turn LED notifications on or off.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Power Reporting Percentage Threshold",
+            "description": "Percentage change of electricity, voltage, power consumption, or energy before report is sent.\n                Defaults to 5%.",
+            "unit": "%",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 100,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "%"
+        },
+        "7": {
+            "label": "On/Off Status After Power Failure",
+            "description": "Choose the recovery state for the Mini Plug if power outage occurs. Off sets the state to \"OFF\" once power is restored.\n                Resume sets the state to the previous state prior to the outage.\n                Defaults to Resume.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Resume",
+                    "value": 1
+                }
+            ]
+        },
+        "8": {
+            "label": "Auto Turn-Off Timer",
+            "description": "Use this parameter to enable or disable the auto turn-off timer function.\n                If enabled, the Mini Plug will automatically turn off after a fixed period of time, set in Parameter #9.\n                Defaults to Disabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "9": {
+            "label": "Auto Turn-Off Timer Interval",
+            "description": "Use this parameter to set the time, in minutes, after which the Mini Plug should turn off if Auto Turn-Off Timer is Enabled (Parameter #8).\n                Defaults to 150 minutes.",
+            "unit": "Minutes",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 65535,
+            "defaultValue": 150,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "minutes"
+        },
+        "10": {
+            "label": "Manual Control",
+            "description": "Choose if you want the Z-Wave button to turn the Mini Plug on or off manually, or if you want to disable this function. Defaults to Enabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Status",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Notifications",
+            "maxNodes": 5
+        }
+    }
 }

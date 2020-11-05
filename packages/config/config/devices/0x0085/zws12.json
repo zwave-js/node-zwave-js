@@ -1,12 +1,14 @@
-// Fakro ZWS12
-// Chain actuator - window opener (2019)
 {
     "_approved": true,
     "manufacturer": "Fakro",
     "manufacturerId": "0x0085",
     "label": "ZWS12",
-    "description": "Chain actuator - window opener (2019)",
+    "description": "ZWS12 Chain actuator 12VDC",
     "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0001"
+        },
         {
             "productType": "0x0002",
             "productId": "0x0010"
@@ -20,7 +22,6 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "7": {
             "label": "Motor speed 1",
@@ -103,6 +104,13 @@
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
         }
     }
 }

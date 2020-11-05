@@ -1,0 +1,324 @@
+{
+    "_approved": true,
+    "manufacturer": "Zooz",
+    "manufacturerId": "0x027a",
+    "label": "ZEN23V3",
+    "description": "ZEN23 Toggle Switch",
+    "devices": [
+        {
+            "productType": "0xb111",
+            "productId": "0x251c"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "On/Off Toggle Orientation",
+            "description": "Normal mode: Toggle up turns the light on, toggle down turns the light off. Reverse mode: Toggle up turns the light off, toggle down turns the light on. Toggle mode: Either direction toggles the light.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Toggle up to turn the light on, toggle down to turn it off (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Toggle up to turn the light off, toggle down to turn it on",
+                    "value": 1
+                },
+                {
+                    "label": "Toggle up or down to turn light on/off (change state)",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "Auto Turn-Off Timer",
+            "description": "Use this parameter to enable or disable the auto turn-off timer function.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Timer disabled (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Timer enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Auto Turn-Off Timer Duration",
+            "description": "Time, in minutes, for auto-off timer delay.",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60,
+            "units": "minutes"
+        },
+        "5": {
+            "label": "Auto Turn-On Timer",
+            "description": "Use this parameter to enable or disable the auto turn-on timer function.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Timer disabled (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Timer enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Auto Turn-On Timer Duration",
+            "description": "Set the time (in minutes) after which you want the switch to automatically turn on once it has been turned off.",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60,
+            "units": "minutes"
+        },
+        "7": {
+            "label": "Association Reports",
+            "description": "Choose which physical and Z-Wave triggers should prompt the switch to send a status change report to associated devices.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 15,
+            "units": "",
+            "options": [
+                {
+                    "label": "None",
+                    "value": 0
+                },
+                {
+                    "label": "Physical tap on ZEN23 only",
+                    "value": 1
+                },
+                {
+                    "label": "Physical tap on connected 3-way switch only",
+                    "value": 2
+                },
+                {
+                    "label": "Physical tap on ZEN23 or connected 3-way switch",
+                    "value": 3
+                },
+                {
+                    "label": "Z-Wave command from hub",
+                    "value": 4
+                },
+                {
+                    "label": "Physical tap on ZEN23 or Z-Wave command from hub",
+                    "value": 5
+                },
+                {
+                    "label": "Physical tap on connected 3-way switch or Z-Wave command from hub",
+                    "value": 6
+                },
+                {
+                    "label": "Physical tap on ZEN23 / connected 3-way switch or Z-Wave command from hub",
+                    "value": 7
+                },
+                {
+                    "label": "Timer only",
+                    "value": 8
+                },
+                {
+                    "label": "Physical tap on ZEN23 or timer",
+                    "value": 9
+                },
+                {
+                    "label": "Physical tap on connected 3-way switch or timer",
+                    "value": 10
+                },
+                {
+                    "label": "Physical tap on ZEN23 / connected 3-way switch or timer",
+                    "value": 11
+                },
+                {
+                    "label": "Z-Wave command from hub or timer",
+                    "value": 12
+                },
+                {
+                    "label": "Physical tap on ZEN23, Z-Wave command from hub, or timer",
+                    "value": 13
+                },
+                {
+                    "label": "Physical tap on ZEN23 / connected 3-way switch, Z-Wave command from hub, or timer",
+                    "value": 14
+                },
+                {
+                    "label": "All of the above. (default)",
+                    "value": 15
+                }
+            ]
+        },
+        "8": {
+            "label": "On Off Status After Power Failure",
+            "description": "Status after Power Failure",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "units": "",
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "On",
+                    "value": 1
+                },
+                {
+                    "label": "Restore",
+                    "value": 2
+                }
+            ]
+        },
+        "9": {
+            "label": "Enable/Disable Scene Control",
+            "description": "Enable or disable scene control functionality for quick double tap triggers.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Scene control disabled (default).",
+                    "value": 0
+                },
+                {
+                    "label": "Scene Control enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "11": {
+            "label": "Smart Bulb Mode: Enable/Disable Paddle / Z-Wave Control",
+            "description": "Enable or disable manual on/off control. If enabled, you’ll only be able to control the connected light via Z-Wave. Scenes and other functionality will still be available through the physical switch.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "units": "",
+            "options": [
+                {
+                    "label": "Physical toggle control disabled.",
+                    "value": 0
+                },
+                {
+                    "label": "Physical toggle control enabled (default).",
+                    "value": 1
+                },
+                {
+                    "label": "Physical toggle and Z-Wave control disabled. NOTE: toggle the switch up 10 times quickly to change this mode.",
+                    "value": 2
+                }
+            ]
+        },
+        "13": {
+            "label": "Reporting behavior with disabled physical control",
+            "description": "Set reporting behavior for disabled physical control.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Switch reports on/off status and changes LED indicator state even if physical and Z-Wave control is disabled (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Switch doesn't report on/off status or change LED indicator state when physical (and Z-Wave) control is disabled",
+                    "value": 1
+                }
+            ]
+        },
+        "19": {
+            "label": "3-Way Switch Type",
+            "description": "Choose the type of 3-way switch you want to use in a 3-way set-up.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Regular mechanical 3-way on/off switch, use the connected 3-way switch to turn the light on or off (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Momentary switch, click once to change status (light on or off).",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Group 2",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Group 3",
+            "maxNodes": 5
+        }
+    }
+}

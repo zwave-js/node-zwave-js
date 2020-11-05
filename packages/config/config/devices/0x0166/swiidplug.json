@@ -1,0 +1,50 @@
+{
+    "_approved": true,
+    "manufacturer": "Swiid (CBCC Domotique SAS)",
+    "manufacturerId": "0x0166",
+    "label": "SWIIDPLUG",
+    "description": "SwiidPlug",
+    "devices": [
+        {
+            "productType": "0x2007",
+            "productId": "0x0706"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Switch All",
+            "description": "Enable/Disable ALL ON/OFF",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 255,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 255
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Long press",
+            "maxNodes": 5
+        },
+        "2": {
+            "label": "Status",
+            "maxNodes": 5
+        }
+    }
+}

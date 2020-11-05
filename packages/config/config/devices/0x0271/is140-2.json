@@ -1,11 +1,9 @@
-// STEINEL GmbH IS140-2
-// PIR sensor with relay
 {
     "_approved": true,
-    "manufacturer": "STEINEL GmbH",
+    "manufacturer": "Steinel",
     "manufacturerId": "0x0271",
     "label": "IS140-2",
-    "description": "PIR sensor with relay",
+    "description": "IS140-2",
     "devices": [
         {
             "productType": "0x0002",
@@ -20,11 +18,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Time",
-            "description": "Duration of light after motion detection",
+            "label": "Duration of light after motion detection",
+            "description": "Available settings: 5-900 seconds.",
             "unit": "s",
             "valueSize": 2,
             "minValue": 5,
@@ -32,11 +29,12 @@
             "defaultValue": 180,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "2": {
-            "label": "Light",
-            "description": "Light threshold",
+            "label": "Light threshold",
+            "description": "2000 - is used as daylight (always night mode).\n                0 - run Learn ambient light sequence. 2-1999 lux.",
             "unit": "lx",
             "valueSize": 2,
             "minValue": 0,
@@ -44,11 +42,12 @@
             "defaultValue": 2000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "lx"
         },
         "5": {
             "label": "Sensitivity",
-            "description": "Motion Radar Sensitivity",
+            "description": "Potentiometer State.\n                Available settings: 2-100%.",
             "unit": "Percent",
             "valueSize": 1,
             "minValue": 2,
@@ -56,106 +55,148 @@
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "%"
         },
         "8": {
-            "label": "Global_Light",
-            "description": "External ambient light value",
+            "label": "Global Light",
+            "description": "External ambient light value.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "units": "",
+            "options": [
+                {
+                    "label": "Enable",
+                    "value": 0
+                },
+                {
+                    "label": "Disable",
+                    "value": 1
+                }
+            ]
         },
         "9": {
-            "label": "SLAVE_MODE",
-            "description": "Disable local control",
+            "label": "Slave Mode",
+            "description": "Disable local control.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 4,
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "units": "",
+            "options": [
+                {
+                    "label": "Normal mode",
+                    "value": 0
+                },
+                {
+                    "label": "Slave mode without gateway checking",
+                    "value": 1
+                },
+                {
+                    "label": "Normal mode with lifeline error signalisation",
+                    "value": 2
+                },
+                {
+                    "label": "Slave mode with gateway checking",
+                    "value": 3
+                },
+                {
+                    "label": "Stupid mode - lamp permanently on",
+                    "value": 4
+                }
+            ]
         },
         "10": {
-            "label": "(OFF_BEHAVIOUR)",
-            "description": "Off behaviour (timeout)",
+            "label": "Off behaviour",
+            "description": "Off behaviour (timeout).\n                0 - Lamp is switched off and remains so until any new motion event (local or remote) is received.\n                1 to 100 (Default) timeout: 1 second (1) to 100 seconds (100) in 1-second resolution.\n                101 to 200 timeout: 1 minute (101) to 100 minutes (200) 1-minute resolution.\n                201 to 209 timeout: 1 hour (201) to 9 hours (209) in 1-hour resolution.\n                255 Lamp is switched off for TIME (cfg 1).\n                It does not wait for a motion event and works normally via current motion evaluation.",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 209,
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "11": {
-            "label": "ON_BEHAVIOUR",
-            "description": "On behaviour (timeout)",
+            "label": "On behaviour",
+            "description": "On behaviour (timeout).\n                Similar than Off behaviour.\n                Available settings: 0-255.\n                0 - Lamp is switched on and remains so until any new motion event (local or remote) is received.\n                It then works normally via current motion evaluation.\n                Notice - during the day, this mode cannot be ended remotely due to motion events not being transmitted - only via local motion sensor if enabled.",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 209,
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "12": {
-            "label": "ON_TIME_OVER",
-            "description": "On behaviour time over (timeout)",
+            "label": "On behaviour time over",
+            "description": "On behaviour time over (timeout).\n                Available settings: 0-255.\n                0 No additional waiting for motion.\n                1 to 100 timeout: 1 second (1) to 100 seconds (100) in 1-second resolution.\n                101 to 200 timeout: 1 minute (101) to 100 minutes (200) 1-minute resolution.\n                201 to 209 (Default) timeout: 1 hour (201) to 9 hours (209) in 1-hour resolution.\n                255 Never stop waiting before motion.",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 209,
             "defaultValue": 204,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "13": {
-            "label": "ON_OFF_ BEHAVIOUR",
-            "description": "Sequence On-Off behaviour (timeout)",
+            "label": "Sequence On-Off behaviour",
+            "description": "Available settings: 0-255.\n                0 - Lamp is switched off and remains so until any new motion event (local or remote) is received.\n                1 to 100 timeout: 1 second (1) to 100 seconds (100) in 1-second resolution.\n                101 to 200 timeout: 1 minute (101) to 100 minutes (200) 1-minute resolution.\n                201 to 209 (Default) timeout: 1 hour (201) to 9 hours (209) in 1-hour resolution.\n                255 device ignores ON - OFF sequence and uses OFF behavior.",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 209,
             "defaultValue": 204,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "14": {
-            "label": "OFF_ON_ BEHAVIOUR",
-            "description": "Sequence Off-On behaviour (timeout)",
+            "label": "Sequence Off-On behaviour",
+            "description": "Available settings: 0-255.\n                0 - Lamp is switched on and remains so until any new motion event (local or remote) is received.\n                It then works normally via current motion evaluation.\n                Notice - during the day, this mode cannot be ended remotely due to motion events not being transmitted - only via local motion sensor if enabled.\n                1 to 100 timeout: 1 second (1) to 100 seconds (100) in 1-second resolution.\n                101 to 200 timeout: 1 minute (101) to 100 minutes (200) 1-minute resolution.\n                201 to 209 (Default) timeout: 1 hour (201) to 9 hours (209) in 1-hour resolution.\n                255 device ignores OFF - ON sequence and uses ON behaviour.",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 209,
             "defaultValue": 204,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "15": {
-            "label": "SEQUENCE_ TIME",
-            "description": "Sequence timing",
+            "label": "Sequence timing",
+            "description": "Available settings: 10-50.",
             "valueSize": 1,
             "minValue": 10,
             "maxValue": 50,
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "16": {
-            "label": "MOTION_ DISABLE",
-            "description": "Motion Off behaviour (timeout)",
+            "label": "Motion Off behaviour",
+            "description": "Available settings: 0-255.\n                0 (Default) BASIC SET to Motion sensor endpoint ignored, BASIC to root is mapped to relay endpoint, motion sensor still enabled.\n                1 to 100 timeout: 1 second (1) to 100 seconds (100) in 1-second resolution.\n                101 to 200 timeout: 1 minute (101) to 100 minutes (200) 1-minute resolution.\n                201 to 209 timeout: 1 hour (201) to 9 hours (209) in 1-hour resolution.\n                255 BASIC SET to Motion sensor endpoint ignored, BASIC to root is mapped to relay endpoint, motion sensor still disabled",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "9[0x01]": {
             "label": "Bit 0: Slave Mode",
@@ -219,6 +260,25 @@
                     "value": 1
                 }
             ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Control Basic Set",
+            "maxNodes": 16
+        },
+        "3": {
+            "label": "Motion Notifications",
+            "maxNodes": 16
+        },
+        "4": {
+            "label": "Sensor Luminescence",
+            "maxNodes": 16
         }
     }
 }

@@ -1,0 +1,40 @@
+{
+    "_approved": true,
+    "manufacturer": "Sunricher",
+    "manufacturerId": "0x0330",
+    "label": "SRZV9001T4DIMEU",
+    "description": "Touch Panel Wall Controller - ZSC-01D",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0xa10d"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Button 1",
+            "maxNodes": 12
+        },
+        "3": {
+            "label": "Button 2",
+            "maxNodes": 12
+        },
+        "4": {
+            "label": "Button 3",
+            "maxNodes": 12
+        },
+        "5": {
+            "label": "Button 4",
+            "maxNodes": 12
+        }
+    }
+}

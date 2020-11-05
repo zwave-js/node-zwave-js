@@ -1,0 +1,68 @@
+{
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "ZW088",
+    "description": "ZW088 Key Fob Gen5",
+    "devices": [
+        {
+            "productType": "0x0201",
+            "productId": "0x0058"
+        },
+        {
+            "productType": "0x0101",
+            "productId": "0x0058"
+        },
+        {
+            "productType": "0x0001",
+            "productId": "0x0058"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "250": {
+            "label": "Mode",
+            "description": "Enable selective Group Mode or Scene Mode when the Key Fob is in Use mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Group",
+                    "value": 0
+                },
+                {
+                    "label": "Scene",
+                    "value": 1
+                }
+            ]
+        },
+        "255": {
+            "label": "Reset configuration",
+            "description": "Reset configuration set up to default setting",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        }
+    }
+}

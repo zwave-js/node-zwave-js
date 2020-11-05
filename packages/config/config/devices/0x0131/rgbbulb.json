@@ -1,0 +1,49 @@
+{
+    "_approved": true,
+    "manufacturer": "Zipato",
+    "manufacturerId": "0x0131",
+    "label": "RGBBULB",
+    "description": "RGBW LED Bulb",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "RGB Color",
+            "description": "Color Temperature",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50,
+            "units": ""
+        },
+        "2": {
+            "label": "Shock Sensor",
+            "description": "Shock sensor : 0=Maximum sensitivity ; 32=minimum sensitivity",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": ""
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Report",
+            "maxNodes": 5
+        }
+    }
+}

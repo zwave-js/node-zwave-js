@@ -1,0 +1,88 @@
+{
+    "_approved": true,
+    "manufacturer": "HomeSeer Technologies",
+    "manufacturerId": "0x000c",
+    "label": "HS-FLS100PLUS",
+    "description": "HS-FLS100+ Floodlight Sensor",
+    "devices": [
+        {
+            "productType": "0x0201",
+            "productId": "0x000b"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "PIR Trigger Off Period",
+            "description": "Period to send Trigger Off command after PIR is triggered.",
+            "valueSize": 2,
+            "minValue": 8,
+            "maxValue": 720,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 15,
+            "units": "seconds"
+        },
+        "2": {
+            "label": "Lux sensor threshold",
+            "description": "When the lux level falls below this threshold and the PIR gets triggered, the unit emits a Basic Set Command (Value=0xFF) and turns on its floodlight. This overwrites the Lux level set by the Lux knob.\n\n        Setting = 0: Never turn ON light when PIR triggered\n        Setting = 30~200: Turn ON light when lux is below configured threshold.\n        Setting = 255: Always turn ON light when PIR triggered\n\n        If the level is set to 0, the unit will not turn on its floodlight. The sensor will only send a notification report to the controller.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50,
+            "units": ""
+        },
+        "3": {
+            "label": "Auto Report luminance interval",
+            "description": "sets the interval of periodic lux level report to the controller",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1440,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "minutes"
+        },
+        "4": {
+            "label": "Basic Report",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "units": "",
+            "options": [
+                {
+                    "label": "Disable Basic Report",
+                    "value": 0
+                },
+                {
+                    "label": "Enable Basic Report",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "PIR Control",
+            "maxNodes": 4
+        }
+    }
+}

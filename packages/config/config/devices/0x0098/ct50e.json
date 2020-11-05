@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "2GIG Technologies",
+    "manufacturerId": "0x0098",
+    "label": "CT50E",
+    "description": "CT50e Thermostat",
+    "devices": [
+        {
+            "productType": "0x3200",
+            "productId": "0x015e"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

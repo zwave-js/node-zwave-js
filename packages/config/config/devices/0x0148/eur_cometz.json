@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "EUROtronic",
+    "manufacturerId": "0x0148",
+    "label": "EUR_COMETZ",
+    "description": "EUR_COMETZ Wall Radiator Thermostat Valve Control",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

@@ -1,11 +1,9 @@
-// Nortek Security & Control LLC PD300Z-2
-// Plug-in Wall Dimmer
 {
     "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
+    "manufacturer": "Linear (Nortek Security Control LLC)",
     "manufacturerId": "0x014f",
     "label": "PD300Z-2",
-    "description": "Plug-in Wall Dimmer",
+    "description": "PD300Z-2 Plug-in Dimmer Module",
     "devices": [
         {
             "productType": "0x4450",
@@ -17,17 +15,28 @@
         "max": "255.255"
     },
     "paramInformation": {
-        "29": {
-            "label": "Load Sense",
-            "description": "Turn load sense on with 1, off with 0",
+        "5": {
+            "label": "Ignore Start-Level (Receiving)",
+            "description": "This dimmer will always start dimming from its current level, ignoring any commanded start level.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "29": {
+            "label": "Load Sensing",
+            "description": "Turn on the module when the attached load is connected.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Disable load sense",

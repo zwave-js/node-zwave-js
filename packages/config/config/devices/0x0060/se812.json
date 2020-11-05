@@ -1,11 +1,9 @@
-// Everspring SE812
-// Siren
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "SE812",
-    "description": "Siren",
+    "description": "SE812 Siren",
     "devices": [
         {
             "productType": "0x000c",
@@ -18,7 +16,7 @@
     },
     "associations": {
         "1": {
-            "label": "Control/Report Group",
+            "label": "Lifeline",
             "maxNodes": 5,
             "isLifeline": true
         }

@@ -1,11 +1,9 @@
-// Popp & Co 700045
-// Battery driven IP44 keypad for access control.
 {
     "_approved": true,
     "manufacturer": "Popp & Co",
     "manufacturerId": "0x0154",
     "label": "700045",
-    "description": "Battery driven IP44 keypad for access control.",
+    "description": "700045 Universal Keypad",
     "devices": [
         {
             "productType": "0x0005",
@@ -16,11 +14,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Automatic Secure Timeout",
-            "description": "After this time a CLOSE is sent to the door lock.",
+            "label": "Door Lock Automatic Secure Timeout",
+            "description": "After this time a CLOSE command is sent to the controlled door lock.\n                On default no CLOSE command is sent assuming that the strike lock has its own timeout set.\n                Default Value: 0",
             "unit": "seconds",
             "valueSize": 1,
             "minValue": 0,
@@ -28,11 +25,12 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "2": {
-            "label": "Ring Button OFF Timeout",
-            "description": "After this time the Door Bell will receive an OFF.",
+            "label": "Ring Button Press Basic Command OFF Timeout",
+            "description": "After this time the Door Bell will receive an OF command regardless of the actual button is pressed or not.\n                Default Value: 3",
             "unit": "seconds",
             "valueSize": 1,
             "minValue": 3,
@@ -40,11 +38,12 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "3": {
             "label": "Ring Button ON Command",
-            "description": "Value to send on ring button press.",
+            "description": "This value is sent into Association Group 3 when the door bell button is pressed.\n                Default Value: 255",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -52,7 +51,8 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "4": {
             "label": "Ring Button OFF Command",
@@ -63,31 +63,13 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "description": "This value is sent into Association Group 3 when the door bell button is released or the timeout has reached.\n                Default Value: 0",
+            "units": ""
         },
         "5": {
-            "label": "Central Scene ID",
-            "description": "Defines if different user codes shall cause individual or similar scene ID.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Constant Scene ID 20 for all User Codes",
-                    "value": 0
-                },
-                {
-                    "label": "Individual User Codes 1 ... 20",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Buzzer Confirmation",
+            "label": "Central Scene ID for User Codes",
+            "description": "This parameter defines if different user codes shall cause individual or similar scene ID sent to the main controller.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -97,14 +79,52 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled",
+                    "label": "Constant Scene ID",
                     "value": 0
                 },
                 {
-                    "label": "Enabled",
+                    "label": "Individual User Codes",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
+        },
+        "6": {
+            "label": "Buzzer Confirmation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ],
+            "description": "Buzzer Confirmation",
+            "units": ""
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 10,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Lock door control",
+            "maxNodes": 10
+        },
+        "3": {
+            "label": "Ring button",
+            "maxNodes": 10
         }
     }
 }

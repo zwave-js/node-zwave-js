@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "Everspring",
+    "manufacturerId": "0x0060",
+    "label": "HAN02-1",
+    "description": "HAN02 In-wall Switch Module",
+    "devices": [
+        {
+            "productType": "0x0011",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

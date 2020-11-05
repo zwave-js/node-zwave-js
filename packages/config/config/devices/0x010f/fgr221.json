@@ -1,23 +1,13 @@
-// Fibargroup FGR221
-// Roller Shutter Controller
 {
     "_approved": true,
-    "manufacturer": "Fibargroup",
+    "manufacturer": "FIBARO System",
     "manufacturerId": "0x010f",
     "label": "FGR221",
-    "description": "Roller Shutter Controller",
+    "description": "FGR221 Roller Shutter Controller",
     "devices": [
         {
             "productType": "0x0300",
-            "productId": "0x0102"
-        },
-        {
-            "productType": "0x0300",
-            "productId": "0x0104"
-        },
-        {
-            "productType": "0x0300",
-            "productId": "0x0106"
+            "productId": "0x0109"
         },
         {
             "productType": "0x0300",
@@ -25,11 +15,19 @@
         },
         {
             "productType": "0x0300",
-            "productId": "0x0109"
+            "productId": "0x0106"
         },
         {
             "productType": "0x0300",
             "productId": "0x100a"
+        },
+        {
+            "productType": "0x0300",
+            "productId": "0x0104"
+        },
+        {
+            "productType": "0x0300",
+            "productId": "0x0102"
         }
     ],
     "firmwareVersion": {
@@ -38,38 +36,34 @@
     },
     "associations": {
         "1": {
-            "label": "Group 1",
+            "label": "Switch click",
             "maxNodes": 16
         },
         "2": {
-            "label": "Group 2",
+            "label": "Switch hold",
             "maxNodes": 16
         },
         "3": {
-            "label": "Controller Updates",
+            "label": "Lifeline",
             "maxNodes": 1,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Enable/Disable ALL ON/OFF",
+            "label": "Activate / deactivate functions ALL ON / ALL OFF",
             "description": "Activate/Deactive ALL ON/OFF",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
+            "maxValue": 100,
+            "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "ALL ON active / ALL OFF active",
-                    "value": -1
-                },
-                {
-                    "label": "ALL ON disabled/ ALL OFF disabled",
+                    "label": "ALL ON disabled/ ALL OFF disable - Default",
                     "value": 0
                 },
                 {
@@ -79,15 +73,19 @@
                 {
                     "label": "ALL ON active / ALL OFF disabled",
                     "value": 2
+                },
+                {
+                    "label": "ALL ON active / ALL OFF active",
+                    "value": 255
                 }
             ]
         },
         "10": {
-            "label": "Control key #2 behaviour",
+            "label": "Turning off the shutter positioning function",
             "description": "Turning off the shutter positioning function",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -95,7 +93,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Turn ON the shutter positioning (default)",
+                    "label": "Turning on the shutter positioning function - Default",
                     "value": 0
                 },
                 {
@@ -105,11 +103,11 @@
             ]
         },
         "14": {
-            "label": "Inputs Button/Switch configuration",
+            "label": "14. Inputs Button/Switch configuration",
             "description": "Binary inputs type configuration",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -117,11 +115,11 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Mono-stable input (button)",
+                    "label": "Mono-stable switch (button) - Default",
                     "value": 0
                 },
                 {
-                    "label": "Bi-stable input (switch)",
+                    "label": "Bi-stable switch (switch)",
                     "value": 1
                 },
                 {
@@ -131,11 +129,11 @@
             ]
         },
         "20": {
-            "label": "Dimmer/Roller shutter control",
+            "label": "Saving the position Favourites",
             "description": "Options for changing parameter 1-99, default 16",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 16,
             "unsigned": true,
             "readOnly": false,
@@ -143,11 +141,11 @@
             "allowManualEntry": true
         },
         "30": {
-            "label": "General Alarm",
+            "label": "General Alarm, set for shutter no. 1",
             "description": "set for shutter no. 1",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 2,
             "unsigned": true,
             "readOnly": false,
@@ -155,25 +153,25 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Deactivation",
+                    "label": "DEACTIVATION - the device does not respond to alarm data frames",
                     "value": 0
                 },
                 {
-                    "label": "OPEN shutter alarm",
+                    "label": "OPEN SHUTTER ALARM - the device closes the roller shutter after detecting an alarm",
                     "value": 1
                 },
                 {
-                    "label": "CLOSED shutter alarm",
+                    "label": "CLOSED SHUTTER ALARM - the device opens the roller shutter after detecting an alarm - Default",
                     "value": 2
                 }
             ]
         },
         "31": {
-            "label": "Alarm of flooding with water",
+            "label": "Alarm of flooding with water, set for relay the shutter.",
             "description": "set for relay the shutter",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -181,25 +179,25 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Deactivation",
+                    "label": "DEACTIVATION - the device does not respond to alarm data frames - Default",
                     "value": 0
                 },
                 {
-                    "label": "OPEN shutter alarm",
+                    "label": "OPEN SHUTTER ALARM - the device closes the roller shutter after detecting an alarm",
                     "value": 1
                 },
                 {
-                    "label": "CLOSED shutter alarm",
+                    "label": "CLOSED SHUTTER ALARM - the device opens the roller shutter after detecting an alarm",
                     "value": 2
                 }
             ]
         },
         "32": {
-            "label": "Smoke, CO, CO2 Alarm.",
+            "label": "Smoke, CO, CO2 Alarm. Set for the roller shutter.",
             "description": "Set for the roller shutter.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -207,25 +205,25 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Deactivation",
+                    "label": "DEACTIVATION - the device does not respond to alarm data frames",
                     "value": 0
                 },
                 {
-                    "label": "OPEN shutter alarm",
+                    "label": "OPEN SHUTTER ALARM - the device closes the roller shutter after detecting an alarm - Default",
                     "value": 1
                 },
                 {
-                    "label": "CLOSED shutter alarm",
+                    "label": "CLOSED SHUTTER ALARM - the device opens the roller shutter after detecting an alarm",
                     "value": 2
                 }
             ]
         },
         "33": {
-            "label": "Temperature Alarm",
+            "label": "Temperature Alarm, set for roller shutter",
             "description": "set for roller shutter",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -233,30 +231,30 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Deactivation",
+                    "label": "DEACTIVATION - the device does not respond to alarm data frames",
                     "value": 0
                 },
                 {
-                    "label": "OPEN shutter alarm",
+                    "label": "OPEN SHUTTER ALARM - the device closes the roller shutter after detecting an alarm - Default",
                     "value": 1
                 },
                 {
-                    "label": "CLOSED shutter alarm",
+                    "label": "CLOSED SHUTTER ALARM - the device opens the roller shutter after detecting an alarm",
                     "value": 2
                 }
             ]
         },
         "41": {
             "label": "Scene activation functionality",
-            "description": "Only valid for the 1.9 version of FGR221.",
+            "description": "Only valid for the 1.9 version of FGR221. The device offers the possibility of sending commands compatible with Command class scene activation. Information is sent to devices assigned to association group no. 3. Controllers such as Home Center 2 are able to interpret such commands and based on these commands they activate scenes, to which specific scene IDs have been assigned. The user may expand the functionality of the button connected to inputs S1 and S2 by distinguishing the actions of keys connected to those inputs. For example: double click would activate the scene goodnight and triple click would activate the scene morning.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Deactivation of functionality - Default",

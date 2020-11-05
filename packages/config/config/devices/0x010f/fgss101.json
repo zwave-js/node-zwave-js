@@ -1,0 +1,330 @@
+{
+    "_approved": true,
+    "manufacturer": "FIBARO System",
+    "manufacturerId": "0x010f",
+    "label": "FGSS101",
+    "description": "FGSS101 Smoke Sensor",
+    "devices": [
+        {
+            "productType": "0x0c00",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Smoke alarm cancellation delay",
+            "description": "The time between when the smoke disappears and the Fibaro Smoke Sensor stops sending the alarm signal. Available settings: 0 to 17280, 65535 (5s multiplier) [5s-24h]. 0: no delay, immediate cancellation, 65535: alarm cancellation inactive - Smoke Sensor will keep indicating smoke alarm after the smoke will have disappeared. The smoke alarm can be only ceased manually, by entering 2nd menu level (see section XIII). Default setting: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "2": {
+            "label": "LED indicator and acoustic alarm turned ON / OFF at any alarm type",
+            "description": "Allows for deactivating the LED indicator and the acoustic alarm, in case of detecting an alarm of any type. This doesn't affect the communication with the Z-Wave network controller, i.e. the sensor will keep sending alarms, reports and all information to the associated devices. Modifying this parameter settings helps extending the battery life.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "options": [
+                {
+                    "label": "Acoustic and visual alarms inactive",
+                    "value": 0
+                },
+                {
+                    "label": "Acoustic alarm inactive, visual alarm active",
+                    "value": 1
+                },
+                {
+                    "label": "Acoustic alarm active, visual alarm inactive",
+                    "value": 2
+                },
+                {
+                    "label": "Acoustic and visual alarms active",
+                    "value": 3
+                }
+            ]
+        },
+        "5": {
+            "label": "Type of alarm frame for association group 1",
+            "description": "Type of alarm frame for association group 1, activated by smoke sensor. The parameter allows to specify the type of alarm frame or to force transmission of control commands (BASIC_SET)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 255,
+            "options": [
+                {
+                    "label": "ALARM SMOKE",
+                    "value": 0
+                },
+                {
+                    "label": "BASIC_SET",
+                    "value": 255
+                }
+            ]
+        },
+        "7": {
+            "label": "Forced Level of Dimming group 1",
+            "description": "The value of 255 allows for turning on a device. In case of Dimmer, the value of 255 means turning on the device with the last memorized state. E.g. Dimmer set to 30% and then turned off, and next turned on using the 255 command, will turn on with the last remembered status, i.e. 30%. In case of alarm frames, alarm priority is defined. Available settings: (1 - 99) or 255. Default setting: 255",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "10": {
+            "label": "Temperature report interval",
+            "description": "Time interval between consecutive temperature reports. The parameter is relevant for the battery powering mode only. Longer time interval means less frequent communication and thus a longer battery life. Report is sent when new temperatue value is different from the one previously reported. Temperature reports can be also sent as a result of polling. Available settings: 1 to 17280, 0 (multiply by 5 seconds) [5s-24h]. 0 reports inactive. Default setting: 0 (Reports inactive)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 17280,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "12": {
+            "label": "Temperature report hysteresis",
+            "description": "The temperature report will only be sent if there is a difference in temperature value from the previous value reported, defined in this parameter (hysteresis). Temparature reports can be also sent as a result of polling. Available settings: 0 to 100 (in 0,1C steps). 0 temperature change reporting inactive. Default setting: 20 (2C)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20
+        },
+        "13": {
+            "label": "Alarm broadcast",
+            "description": "Transmitting the alarm or control frame in \"broadcast\" mode (i.e. to all devices within range), information sent in this mode is not repeated by the mesh network. NOTE: If the broadcast mode of information transmission is activated for a given channel, then transmission of information in singlecast mode to devices assigned to the association group of this channel is deactivated.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Broadcasts INACTIVE",
+                    "value": 0
+                },
+                {
+                    "label": "Smoke ACTIVE, tamper INACTIVE",
+                    "value": 1
+                },
+                {
+                    "label": "Smoke INACTIVE, tamper ACTIVE",
+                    "value": 2
+                },
+                {
+                    "label": "Smoke ACTIVE, tamper ACTIVE",
+                    "value": 3
+                }
+            ]
+        },
+        "73": {
+            "label": "Temperature measurement compensation",
+            "description": "Parameter stores a temperature value to be added to or deducted from the current temperature measured by internal temperature sensor in order to compensate the difference between air temperature and temperature measured at the ceiling level. Available settings: -1000 -/+ 1000 (in 0,1C steps). Default setting: 0 (0C)",
+            "valueSize": 2,
+            "minValue": -1000,
+            "maxValue": 1000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "80": {
+            "label": "Z-Wave range test interval",
+            "description": "Time period between the consecutive Z-Wave network range tests. In battery powering mode, Z-Wave network range test is carried out at the wake up interval. The value of 0 turns off the Z-Wave range test, regardless of the powering mode chosen. Available settings: 0 to 144 (10min multiplier) [10min-24h]. 0 Z-Wave network range test inactive. Default setting: 1 (10min)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 144,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "81": {
+            "label": "Temperature alarm threshold",
+            "description": "Temperature value, measured by the built-in temperature sensor, above which the temperature alarm is sent. Available settings: 0,2 - 100. 0 temperature alarm inactive. 2 - 100 (2 - 100C). Default setting: 54 (54C)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 54
+        },
+        "82": {
+            "label": "Smoke Sensor sensitivity",
+            "description": "There are 3 levels of sensitivity to smoke presence. Level 1 means the highest sensitivity.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "options": [
+                {
+                    "label": "High",
+                    "value": 1
+                },
+                {
+                    "label": "Medium",
+                    "value": 2
+                },
+                {
+                    "label": "Low",
+                    "value": 3
+                }
+            ]
+        },
+        "83": {
+            "label": "Black Box sensitivity level",
+            "description": "This parameter allows for specifying the moment in which the Black Box starts recording data. After the specified smoke and temperature values will be exceeded, the Fibaro Smoke Sensor Black Box will record them.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "options": [
+                {
+                    "label": "High",
+                    "value": 1
+                },
+                {
+                    "label": "Medium",
+                    "value": 2
+                },
+                {
+                    "label": "Low",
+                    "value": 3
+                }
+            ]
+        },
+        "84": {
+            "label": "Malfunction alarm",
+            "description": "Time interval in which malfunction alarm, if detected, is repeated using visual and acoustic alarms. Available settings: 1 - 255 (100 ms multiplier) [100ms-25,5s]. Default setting: 10 (1s)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10
+        },
+        "85": {
+            "label": "Temperature alarm",
+            "description": "Time interval in which temperature alarm, if detected, is repeated using visual and acoustic alarms. Available settings: 1 - 255 (100 ms multiplier) [100ms-25,5s]. Default setting: 5 (500ms)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        },
+        "86": {
+            "label": "Lack of the Z-Wave range alarm",
+            "description": "Time interval in which lack of the Z-Wave network alarm, if detected, is repeated using visual and acoustic alarms. Available settings: 1 - 17280 (5s multiplier) [5s-24h]. Default setting: 360 (30min)",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 17280,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 360
+        },
+        "87": {
+            "label": "Low battery alarm",
+            "description": "Time interval in which low battery alarm, if detected, is repeated using visual and acoustic alarms. Available settings: 1 - 17280 (5s multiplier) [5s-24h]. Default setting: 360 (30min)",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 17280,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 360
+        },
+        "88": {
+            "label": "Consider temperature measurement compensation",
+            "description": "This parameter allows for specifying the moment in which the Black Box starts recording data. After the specified smoke and temperature values will be exceeded, the Fibaro Smoke Sensor Black Box will record them.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Ignore temperature compensation",
+                    "value": 0
+                },
+                {
+                    "label": "Include temperature compensation",
+                    "value": 1
+                }
+            ]
+        },
+        "89": {
+            "label": "Tamper alarm",
+            "description": "default setting: tamper alarm active, with cancellation option available",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "tamper alarm inactive",
+                    "value": 0
+                },
+                {
+                    "label": "tamper alarm active, with cancellation option available",
+                    "value": 1
+                },
+                {
+                    "label": "tamper alarm active, without cancellation option",
+                    "value": 2
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Smoke Alarm",
+            "maxNodes": 5
+        },
+        "2": {
+            "label": "Tamper Alarm",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    }
+}

@@ -1,0 +1,59 @@
+{
+    "_approved": true,
+    "manufacturer": "GE (Jasco Products)",
+    "manufacturerId": "0x0063",
+    "label": "14288-OUTLET",
+    "description": "14288 In-Wall Tamper Resistant Smart Outlet",
+    "devices": [
+        {
+            "productType": "0x4952",
+            "productId": "0x3134"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "3": {
+            "label": "LED Light",
+            "description": "Sets when the LED on the outlet is lit.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "LED On when load is Off, Led Off when load is On",
+                    "value": 0
+                },
+                {
+                    "label": "LED On when load is On, LED Off when laod is Off (Default)",
+                    "value": 1
+                },
+                {
+                    "label": "LED always off",
+                    "value": 2
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Z-Wave Plus Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Supports Basic Set and is controlled with the local load",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Supports Basic Set and is controlled by pressing the On or Off button",
+            "maxNodes": 5
+        }
+    }
+}

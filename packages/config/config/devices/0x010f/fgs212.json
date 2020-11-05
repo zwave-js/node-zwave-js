@@ -1,19 +1,25 @@
-// Fibargroup FGS212
-// Relay Switch 1x2.5kW
 {
     "_approved": true,
-    "manufacturer": "Fibargroup",
+    "manufacturer": "FIBARO System",
     "manufacturerId": "0x010f",
     "label": "FGS212",
-    "description": "Relay Switch 1x2.5kW",
+    "description": "FGS212 Switch 3kW",
     "devices": [
         {
-            "productType": "0x0401",
-            "productId": "0x100a"
+            "productType": "0x0402",
+            "productId": "0x4002"
+        },
+        {
+            "productType": "0x0402",
+            "productId": "0x3002"
         },
         {
             "productType": "0x0402",
             "productId": "0x1002"
+        },
+        {
+            "productType": "0x0401",
+            "productId": "0x100a"
         }
     ],
     "firmwareVersion": {
@@ -22,15 +28,15 @@
     },
     "associations": {
         "1": {
-            "label": "Switch 1",
-            "maxNodes": 16
+            "label": "Key no 1",
+            "maxNodes": 5
         },
         "2": {
-            "label": "Switch 2",
-            "maxNodes": 16
+            "label": "Key no 2",
+            "maxNodes": 5
         },
         "3": {
-            "label": "Controller Updates",
+            "label": "Lifeline",
             "maxNodes": 1,
             "isLifeline": true
         }
@@ -38,10 +44,10 @@
     "paramInformation": {
         "1": {
             "label": "Enable/Disable ALL ON/OFF",
-            "description": "Activate/Deactive ALL ON/OFF",
+            "description": "Enable/Disable ALL ON/OFF",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 255,
             "unsigned": true,
             "readOnly": false,
@@ -49,11 +55,11 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "ALL ON disabled / ALL OFF disabled",
+                    "label": "ALL ON disabled/ ALL OFF disabled",
                     "value": 0
                 },
                 {
-                    "label": "ALL ON disabled / ALL OFF active",
+                    "label": "ALL ON disabled/ ALL OFF active",
                     "value": 1
                 },
                 {
@@ -67,29 +73,29 @@
             ]
         },
         "3": {
-            "label": "Override OFF-delay",
-            "description": "Forced auto off period",
+            "label": "Auto off relay after specified time",
+            "description": "Auto off relay after specified time, with the possibility of manual override - immediate Off after button push.\n      Default value: 0 Manual override disabled",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Turn off with push button disabled",
+                    "label": "Manual override disabled",
                     "value": 0
                 },
                 {
-                    "label": "Turn off with push button enabled",
+                    "label": "Manual override enabled",
                     "value": 1
                 }
             ]
         },
         "4": {
-            "label": "Relay 1: OFF-delay time (100ms steps)",
-            "description": "Automatic turning off relay 1 after set time ...",
+            "label": "Auto off",
+            "description": "Time period for auto off, in milliseconds (0,1 s to 6553,5 s)\n         0 - Auto off disabled\n         Default value: 0",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 65535,
@@ -101,10 +107,10 @@
         },
         "6": {
             "label": "Separation of association sending (key 1)",
-            "description": "Sending commands to control devices assigned ...",
+            "description": "Activate/Deactivate association sending for group 1 - Also see param #15",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -112,25 +118,25 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Map status to all devices in group 1",
+                    "label": "Map status to all devices in group 1 (default)",
                     "value": 0
                 },
                 {
-                    "label": "Map OFF status to all devices in group 1  ...",
+                    "label": "Map OFF status to all devices in group 1, Double click on key 1 will send ON to all devices in group 1, all dimmers set to prev.value",
                     "value": 1
                 },
                 {
-                    "label": "Map OFF status to all devices in group 1 ...",
+                    "label": "Map OFF status to all devices in group 1, Double click on key 1 will send ON to all devices in group 1, all dimmers set to 100%",
                     "value": 2
                 }
             ]
         },
         "13": {
             "label": "Inputs behaviour",
-            "description": "Assigns bistable key status to the device status.",
+            "description": "In case of bi-stable switches, define their behaviour (toggle or follow)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -152,7 +158,7 @@
             "description": "Binary inputs type configuration",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -171,10 +177,10 @@
         },
         "15": {
             "label": "Dimmer/Roller shutter control",
-            "description": "Enable/Disable operation of dimmer or roller shutter devices ...",
+            "description": "Enable/Disable operation of dimmer or roller shutter devices associated to group 1.\n        Available only when using mono-stable inputs (buttons) - Hold button 1 or double-tap for operation",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -196,7 +202,7 @@
             "description": "Saving state before power failure",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -204,20 +210,20 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "State NOT saved at pwr failure, outputs set ...",
+                    "label": "State NOT saved at power failure, all outputs are set to OFF upon power restore",
                     "value": 0
                 },
                 {
-                    "label": "State saved at pwr failure, outputs are set to ...",
+                    "label": "State saved at power failure, all outputs are set to previous state upon power restore",
                     "value": 1
                 }
             ]
         },
         "30": {
-            "label": "Relay 1: Response to General Alarm",
+            "label": "Relay: Response to General Alarm",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 3,
             "unsigned": true,
             "readOnly": false,
@@ -229,24 +235,25 @@
                     "value": 0
                 },
                 {
-                    "label": "Alarm relay ON",
+                    "label": "ALARM RELAY ON - relay will turn ON upon receipt of alarm frame",
                     "value": 1
                 },
                 {
-                    "label": "Alarm relay OFF",
+                    "label": "ALARM RELAY OFF - relay will turn OFF upon receipt of alarm frame",
                     "value": 2
                 },
                 {
-                    "label": "ALARM FLASHING - relay will turn ON and OFF ...",
+                    "label": "ALARM FLASHING - relay will turn ON and OFF periodically (see param.39)",
                     "value": 3
                 }
-            ]
+            ],
+            "description": ""
         },
         "31": {
-            "label": "Relay 1: Response to Water Flood Alarm",
+            "label": "Relay: Response to Water Flood Alarm",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 2,
             "unsigned": true,
             "readOnly": false,
@@ -258,24 +265,25 @@
                     "value": 0
                 },
                 {
-                    "label": "Alarm relay ON",
+                    "label": "ALARM RELAY ON - relay will turn ON upon receipt of alarm frame",
                     "value": 1
                 },
                 {
-                    "label": "Alarm relay OFF",
+                    "label": "ALARM RELAY OFF - relay will turn OFF upon receipt of alarm frame",
                     "value": 2
                 },
                 {
-                    "label": "ALARM FLASHING - relay will turn ON and OFF ...",
+                    "label": "ALARM FLASHING - relay will turn ON and OFF periodically (see param.39)",
                     "value": 3
                 }
-            ]
+            ],
+            "description": ""
         },
         "32": {
-            "label": "Relay 1: Response to Smoke, CO, CO2 Alarm",
+            "label": "Relay: Response to Smoke, CO, CO2 Alarm",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 3,
             "unsigned": true,
             "readOnly": false,
@@ -287,24 +295,25 @@
                     "value": 0
                 },
                 {
-                    "label": "Alarm relay ON",
+                    "label": "ALARM RELAY ON - relay will turn ON upon receipt of alarm frame",
                     "value": 1
                 },
                 {
-                    "label": "Alarm relay OFF",
+                    "label": "ALARM RELAY OFF - relay will turn OFF upon receipt of alarm frame",
                     "value": 2
                 },
                 {
-                    "label": "ALARM FLASHING - relay will turn ON and OFF ...",
+                    "label": "ALARM FLASHING - relay will turn ON and OFF periodically (see param.39)",
                     "value": 3
                 }
-            ]
+            ],
+            "description": ""
         },
         "33": {
-            "label": "Relay 1: Response to Temperature Alarm",
+            "label": "Relay: Response to Temperature Alarm",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -316,25 +325,26 @@
                     "value": 0
                 },
                 {
-                    "label": "Alarm relay ON",
+                    "label": "ALARM RELAY ON - relay will turn ON upon receipt of alarm frame",
                     "value": 1
                 },
                 {
-                    "label": "Alarm relay OFF",
+                    "label": "ALARM RELAY OFF - relay will turn OFF upon receipt of alarm frame",
                     "value": 2
                 },
                 {
-                    "label": "ALARM FLASHING - relay will turn ON and OFF ...",
+                    "label": "ALARM FLASHING - relay will turn ON and OFF periodically (see param.39)",
                     "value": 3
                 }
-            ]
+            ],
+            "description": ""
         },
         "39": {
-            "label": "ALARM FLASHING alarm time",
+            "label": "Active flashing alarm time",
             "description": "Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
+            "minValue": 1,
+            "maxValue": 20000,
             "defaultValue": 600,
             "unsigned": true,
             "readOnly": false,

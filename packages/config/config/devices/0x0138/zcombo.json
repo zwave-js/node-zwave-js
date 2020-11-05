@@ -1,11 +1,9 @@
-// BRK Brands, Inc. ZCOMBO
-// Smoke and Carbon Monoxide Alarm
 {
     "_approved": true,
-    "manufacturer": "BRK Brands, Inc.",
+    "manufacturer": "First Alert (BRK Brands Inc)",
     "manufacturerId": "0x0138",
     "label": "ZCOMBO",
-    "description": "Smoke and Carbon Monoxide Alarm",
+    "description": "ZCombo Smoke and Carbon Monoxide Detector",
     "devices": [
         {
             "productType": "0x0001",
@@ -22,18 +20,18 @@
     },
     "associations": {
         "1": {
-            "label": "Group 1",
+            "label": "Lifeline",
             "maxNodes": 1,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Send double alarms",
-            "description": "Causes the device to send double alarm messages",
+            "label": "Send double alarm messages",
+            "description": "Causes the device to send double alarm messages.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -41,11 +39,11 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Single Alarm",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
-                    "label": "Double Alarm",
+                    "label": "Enable",
                     "value": 1
                 }
             ]

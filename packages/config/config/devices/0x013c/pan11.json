@@ -1,19 +1,17 @@
-// Philio Technology Corp PAN11
-// Smart Energy Plug In Switch
 {
     "_approved": true,
     "manufacturer": "Philio Technology Corp",
     "manufacturerId": "0x013c",
     "label": "PAN11",
-    "description": "Smart Energy Plug In Switch",
+    "description": "PAN11 Smart Energy Plug In Switch",
     "devices": [
         {
             "productType": "0x0001",
-            "productId": "0x0001"
+            "productId": "0x0011"
         },
         {
             "productType": "0x0001",
-            "productId": "0x0011"
+            "productId": "0x0001"
         },
         {
             "productType": "0x0001",
@@ -24,57 +22,60 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "W meter report period",
-            "description": "Set automatic W meter reporting interval",
+            "label": "Watt Meter Report Period",
+            "description": "If the setting is configured for 1 hour(set value=720), the device will report its instant power consumption every 1 hour to Z_Wave controller. Unit: 5 secs, Min: 1, Max: 32767, Default: 720",
             "valueSize": 2,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 32767,
             "defaultValue": 720,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "2": {
-            "label": "kWh meter report period",
-            "description": "Set automatic kWh meter reporting interval.",
+            "label": "KWH Meter Report Period",
+            "description": "If the setting is configured for 1hour (set value =6), the PAN11 will report its Accumulated Power Consumption (KW/h) every 1 hour to Group1 node. The maximum interval to report its Accumulated Power Consumption (KW/h) is 227.55 days (10min*32767/1440=227.55 days).",
             "valueSize": 2,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 32767,
             "defaultValue": 6,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "minutes"
         },
         "3": {
-            "label": "Threshold of Watt for load caution",
-            "description": "Set threshold of wattage meter value for load caution .",
+            "label": "Thereshold of current for Load Caution",
+            "description": "This is a warning when the current of load over the preset threshold value, if the setting value is 1300, when the load current of Relay1 over this value, PAN11 will send current meter report to warn the Group1 node, the Range of the setting value is from 10 to 1300,and the default value is 1300.",
             "valueSize": 2,
             "minValue": 10,
             "maxValue": 1300,
             "defaultValue": 1300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "ampere"
         },
         "4": {
-            "label": "Threshold of kWh for Load Caution",
-            "description": "If threshold of kWh is reached, a Meter Report will be generated",
+            "label": "Thereshold of KWh for Load Caution",
+            "description": "This is a warning when the KWh of load over the preset threshold value, If the setting value is 10000, when the Accumulated Power Consumption of Relay1 over this value, PAN11 will send KWH meter report to warn the Group1 node, minimum value is 1KWh and default value is 10000 kWh.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 10000,
             "defaultValue": 10000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "KWh"
         },
         "5": {
             "label": "Restore switch state mode",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 2,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -86,20 +87,21 @@
                     "value": 0
                 },
                 {
-                    "label": "Last State",
+                    "label": "Last Switch State",
                     "value": 1
                 },
                 {
                     "label": "Switch On",
                     "value": 2
                 }
-            ]
+            ],
+            "description": "Whenever the AC power return from lost, PAN11 will restore the switch state which could be SWITCH OFF, LAST SWITCH STATE, SWITCH ON. The default setting is LAST SWITCH STATE."
         },
         "6": {
-            "label": "Mode of switch Off function",
+            "label": "Mode of Switch Off function",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 1,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -107,20 +109,21 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "SWITCH OFF commands received are ignored.",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
-                    "label": "SWITCH OFF commands received are honored.",
+                    "label": "Enable",
                     "value": 1
                 }
-            ]
+            ],
+            "description": "When the mode of switch On/Off is set to 0, any command of switch off will be disabled and the On/Off function of include button will be disabled. The default setting is enable mode. When manual On/Off function is disabled, the RF command can only switch On but not Off. This is useful function for keeping the device in switch on state."
         },
         "7": {
             "label": "LED indication mode",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
+            "minValue": 1,
+            "maxValue": 3,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -128,35 +131,37 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "The LED follows the state of the switch.",
+                    "label": "Switch state",
                     "value": 1
                 },
                 {
-                    "label": "LED off with load ON",
+                    "label": "Night mode",
                     "value": 2
                 },
                 {
-                    "label": "One flash mode",
+                    "label": "One flash",
                     "value": 3
                 }
-            ]
+            ],
+            "description": "Show Switch State:When switch is on, LED is on. When switch is off, LED is off. The default setting is Show Switch State. Show Night mode:When switch is on, LED is off. When switch is off, LED is on. One Flash mode:When the state of switch changes, LED will be on only one second, then LED keeps off."
         },
         "8": {
-            "label": "Auto Off Timer",
-            "description": "Auto off timer. 0 will disable the auto off function.",
+            "label": "Auto off timer",
+            "description": "Whenever PAN11 switches to on, the auto off timer begin to count down. After the timer decrease to zero, it will switch to off automatically. However if Auto off timer is set as 0, the auto off function will be disabled. The default setting is 0.",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 32767,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "9": {
-            "label": "RF Off command mode",
+            "label": "RF off command mode",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 3,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -164,7 +169,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Switch Off",
+                    "label": "Switch off",
                     "value": 0
                 },
                 {
@@ -172,14 +177,21 @@
                     "value": 1
                 },
                 {
-                    "label": "Switch Toggle",
+                    "label": "Switch toggle",
                     "value": 2
                 },
                 {
-                    "label": "Switch On",
+                    "label": "Switch on",
                     "value": 3
                 }
-            ]
+            ],
+            "description": "Whenever a switch off command (BASIC_SET, BINARY_SWITCH_SET, SWITCH_ALL_OFF) is received, it could be interpreted as 4 variety of commands. Switch Off: It switches to OFF state. The default setting is Switch Off. Ignore: The switch off command will be ignored. Switch Toggle: It switches to the inverse of current state. Switch On: It switches to ON state."
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "load vary over 5% or stage has changed",
+            "maxNodes": 1
         }
     }
 }

@@ -1,0 +1,28 @@
+{
+    "_approved": true,
+    "manufacturer": "McoHome Technology Co Ltd",
+    "manufacturerId": "0x015f",
+    "label": "MH8FCEU0803",
+    "description": "MH8-FC-EU Thermostat",
+    "devices": [
+        {
+            "productType": "0x0803",
+            "productId": "0x5102"
+        },
+        {
+            "productType": "0x0803",
+            "productId": "0x3102"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    }
+}

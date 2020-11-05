@@ -1,0 +1,489 @@
+{
+    "_approved": true,
+    "manufacturer": "HomeSeer Technologies",
+    "manufacturerId": "0x000c",
+    "label": "HS-WD200PLUS",
+    "description": "HS-WD200+ Wall Dimmer",
+    "devices": [
+        {
+            "productType": "0x4447",
+            "productId": "0x3036"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Sets bottom LED operation",
+            "description": "Sets bottom LED operation (in normal mode)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "LED on if load is off",
+                    "value": 0
+                },
+                {
+                    "label": "LED off if load is off",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Invert switch",
+            "description": "Change the top of the switch to OFF and the bottom of the switch to ON if the switch was installed upside down.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "11": {
+            "label": "Dimmer ramp rate for remote control",
+            "description": "Ramp rate in seconds. 0 is no delay",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 90,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "12": {
+            "label": "Dimmer ramp rate for local control",
+            "description": "Ramp rate in seconds. 0 is no delay",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 90,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "13": {
+            "label": "Dimmer LED mode",
+            "description": "Normal mode (load status) or status mode (custom status)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Normal mode",
+                    "value": 0
+                },
+                {
+                    "label": "Status mode",
+                    "value": 1
+                }
+            ]
+        },
+        "14": {
+            "label": "Normal mode LED color",
+            "description": "Sets the Normal mode LED color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "White",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                }
+            ]
+        },
+        "21": {
+            "label": "Status mode LED 1 (bottom) color",
+            "description": "Sets the Status mode LED color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "22": {
+            "label": "Status mode LED 2 color",
+            "description": "Sets the Status mode LED color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "23": {
+            "label": "Status mode LED 3 color",
+            "description": "Sets the Status mode LED color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "24": {
+            "label": "Status mode LED 4 color",
+            "description": "Sets the Status mode LED color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "25": {
+            "label": "Status mode LED 5 color",
+            "description": "Sets the Status mode LED color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "26": {
+            "label": "Status mode LED 6 color",
+            "description": "Sets the Status mode LED color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "27": {
+            "label": "Status mode LED 7 color",
+            "description": "Sets the Status mode LED color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "30": {
+            "label": "Status mode blink frequency",
+            "description": "100ms blink intervals. 0 is off",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "31": {
+            "label": "LEDs to blink in status mode",
+            "description": "Bitmask defines specific LEDs to enable for blinking: Note: this decimal value is derived from a hex code calculation based on the following: \n              Bit 0 = led 1\n              Bit 1 = led 2\n              Bit 2 = led 3\n              Bit 3 = led 4\n              Bit 4 = led 5\n              Bit 5 = led 6\n              Bit 6 = led 7 \n              IE: value of 1 = first LED, 64 = led 7",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

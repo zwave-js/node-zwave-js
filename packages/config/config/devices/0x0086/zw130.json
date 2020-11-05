@@ -1,161 +1,219 @@
-// AEON Labs ZW130
-// WallMote Quad
 {
-	"_approved": true,
-	"manufacturer": "AEON Labs",
-	"manufacturerId": "0x0086",
-	"label": "ZW130",
-	"description": "WallMote Quad",
-	"devices": [
-		{
-			"productType": "0x0002",
-			"productId": "0x0082"
-		},
-		{
-			"productType": "0x0102",
-			"productId": "0x0082"
-		},
-		{
-			"productType": "0x0202",
-			"productId": "0x0082"
-		}
-	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
-			"label": "Touch sound",
-			"description": "Enable/disable the touch sound.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"2": {
-			"label": "Touch vibration",
-			"description": "Enable/disable the touch vibration.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"3": {
-			"label": "Button slide",
-			"description": "Enable/disable the function of button slide.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"4": {
-			"label": "Notification report",
-			"description": "Which notification to be sent to the associated devices.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Central scene",
-					"value": 1
-				},
-				{
-					"label": "Central scene and config",
-					"value": 3
-				}
-			]
-		},
-		// It is not clear when this config parameter was added
-		// My device with did not have it in v1.5 and v1.8, which is currently the latest version
-		// It is also not present in v2.3 (new hardware revision)
-		// 	"5": {
-		// 	"label": "Color",
-		// 	"description": "Configure which color will be displayed when a button is pressed",
-		// 	"valueSize": 4,
-		// 	"minValue": 0,
-		// 	"maxValue": 4294967040,
-		// 	"defaultValue": 65280,
-		// 	"unsigned": true,
-		// 	"readOnly": false,
-		// 	"writeOnly": false,
-		// 	"allowManualEntry": true
-		// },
-		"39": {
-			"label": "Low battery value",
-			"description": "Set the low battery value",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 50,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"255": {
-			"label": "Reset the WallMote Quad",
-			"description": "Reset the WallMote Quad to factory default.",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Reset to factory default",
-					"value": 0
-				},
-				{
-					"label": "Reset and remove",
-					"value": 1431655765
-				}
-			]
-		}
-	}
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "ZW130",
+    "description": "ZW130 WallMote Quad",
+    "devices": [
+        {
+            "productType": "0x1D02",
+            "productId": "0x0082"
+        },
+        {
+            "productType": "0x0202",
+            "productId": "0x0082"
+        },
+        {
+            "productType": "0x0102",
+            "productId": "0x0082"
+        },
+        {
+            "productType": "0x0002",
+            "productId": "0x0082"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "On/Off control via Button 1",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Dimmer control via Button 1",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "On/Off control via Button 2",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Dimmer control via Button 2",
+            "maxNodes": 5
+        },
+        "6": {
+            "label": "On/Off control via Button 3",
+            "maxNodes": 5
+        },
+        "7": {
+            "label": "Dimmer control via Button 3",
+            "maxNodes": 5
+        },
+        "8": {
+            "label": "On/Off control via Button 4",
+            "maxNodes": 5
+        },
+        "9": {
+            "label": "Dimmer control via Button 4",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Touch sound",
+            "description": "This will enable or disable the sound effects when you press or touch  the sensing area",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Touch vibration",
+            "description": "This will enable or disable the vibration effects when you press or  touch the sensing area",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Button slide function",
+            "description": "This will enable or disable control by sliding the button area",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Report type",
+            "description": "To configure which report will be sent when pressing the buttons",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Send nothing",
+                    "value": 0
+                },
+                {
+                    "label": "Send Central Scene Command Notification",
+                    "value": 1
+                },
+                {
+                    "label": "Send Central Scene Command Notification and Configuration report",
+                    "value": 3
+                }
+            ]
+        },
+        "5": {
+            "label": "Color when button is pressed",
+            "description": "To configure which color will be displayed when the button is pressed.\n                Value 1: (msb) Red.\n                Value 2: Green.\n                Value 3: Blue.\n                Value 4: Reserved",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 65280,
+            "units": ""
+        },
+        "33": {
+            "label": "Test the LED, buzzer and vibrator",
+            "description": "Get the LED Strip color value\n                Value 1: (msb) Red.\n                Value 2: Green.\n                Value 3: Blue.\n                Value 4: buzzer and vibrator. (1=ON, 0=OFF)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "39": {
+            "label": "Set the low battery value",
+            "description": "Set the low battery value.\n                Range: 10% - 50%.",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 50,
+            "defaultValue": 20,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "%"
+        },
+        "255": {
+            "label": "Reset To Factory Defaults",
+            "description": "Reset to factory defaults",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Reset to factory default setting",
+                    "value": 0
+                },
+                {
+                    "label": "Normal",
+                    "value": 1
+                },
+                {
+                    "label": "Reset to factory default setting and removed from the z-wave network",
+                    "value": 1431655765
+                }
+            ]
+        }
+    }
 }

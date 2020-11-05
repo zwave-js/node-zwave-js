@@ -1,11 +1,9 @@
-// Willis Electric Co., Ltd. ZEN23
-// Wall mounted switch
 {
     "_approved": true,
-    "manufacturer": "Willis Electric Co., Ltd.",
+    "manufacturer": "Zooz (Willis Electric)",
     "manufacturerId": "0x015d",
     "label": "ZEN23",
-    "description": "Wall mounted switch",
+    "description": "ZEN23 Toggle Switch",
     "devices": [
         {
             "productType": "0x1111",
@@ -16,11 +14,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Control mode",
-            "description": "Control mode",
+            "label": "Invert Switch",
+            "description": "Should the switch be inverted. Pressing down on the switch turns the load ON.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -30,14 +27,22 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Mode 1",
-                    "value": 0
+                    "label": "Inverted",
+                    "value": 1
                 },
                 {
-                    "label": "Mode 2",
-                    "value": 1
+                    "label": "Default",
+                    "value": 0
                 }
-            ]
+            ],
+            "units": ""
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
         }
     }
 }

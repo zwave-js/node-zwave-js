@@ -1,0 +1,95 @@
+{
+    "_approved": true,
+    "manufacturer": "HomeSeer Technologies",
+    "manufacturerId": "0x000c",
+    "label": "HS-WD100PLUS",
+    "description": "HS-WD100+ Wall Dimmer",
+    "devices": [
+        {
+            "productType": "0x4447",
+            "productId": "0x3034"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "4": {
+            "label": "Invert switch",
+            "description": "Change the top of the switch to OFF and the bottom of the switch to ON if the switch was installed upside down.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "Remote level percent",
+            "description": "Indicates how much each level dims/brightens as a portion of the whole range when set remotely.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99,
+            "units": "%"
+        },
+        "8": {
+            "label": "Remote duration per level",
+            "description": "Indicates the time duration of each level when set remotely.",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 22,
+            "units": "cs"
+        },
+        "9": {
+            "label": "Local level percent",
+            "description": "Indicates how much each level dims/brightens as a portion of the whole range when set locally.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99,
+            "units": "%"
+        },
+        "10": {
+            "label": "Local duration per level",
+            "description": "Indicates the time duration of each level when set locally.",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 22,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 22,
+            "units": "cs"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

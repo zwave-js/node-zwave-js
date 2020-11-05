@@ -1,11 +1,9 @@
-// AEON Labs DSA03202
-// Minimote 4 button remote control
 {
     "_approved": true,
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "DSA03202",
-    "description": "Minimote 4 button remote control",
+    "description": "DSA03202 Minimote",
     "devices": [
         {
             "productType": "0x0001",
@@ -22,29 +20,29 @@
     },
     "associations": {
         "1": {
-            "label": "Scene 1",
+            "label": "Button #1",
             "maxNodes": 5
         },
         "2": {
-            "label": "Scene 2",
+            "label": "Button #2",
             "maxNodes": 5
         },
         "3": {
-            "label": "Scene 3",
+            "label": "Button #3",
             "maxNodes": 5
         },
         "4": {
-            "label": "Scene 4",
+            "label": "Button #4",
             "maxNodes": 5
         }
     },
     "paramInformation": {
         "241": {
-            "label": "Mode of Button 1 (upper left)",
-            "description": "Defines the switching mode of Button 1",
+            "label": "Button #1 Mode",
+            "description": "Default Mode 0 The button on the Minimote uses the factory default functions for operation instead of any special functionality related to the below modes. Scene Mode 1 The button on the Minimote executes a scene from data received for Parameters Numbers 0-239 related to the button being pressed. Add Mode 2 The button on the Minimote is able to include/add devices into the Z-Wave network. Remove Mode 3 The button on the Minimote is able to remove devices from the Z-Wave network. Association Mode 4 The button on the Minimote is able to associate one device to another. Learn Mode 5 The button on the Minimote is able to allow the Minimote to be included into other Z-Wave networks and to learn Z-Wave network information.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 5,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -52,7 +50,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Factory Default",
+                    "label": "Default Mode",
                     "value": 0
                 },
                 {
@@ -78,11 +76,11 @@
             ]
         },
         "242": {
-            "label": "Mode of Button 2 (upper right)",
+            "label": "Button #2 Mode",
             "description": "Defines the switching mode of Button 2",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 5,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -90,7 +88,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Factory Default",
+                    "label": "Default Mode",
                     "value": 0
                 },
                 {
@@ -116,11 +114,11 @@
             ]
         },
         "243": {
-            "label": "Mode of Button 3 (lower left)",
+            "label": "Button #3 Mode",
             "description": "Defines the switching mode of Button 3",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 5,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -128,7 +126,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Factory Default",
+                    "label": "Default Mode",
                     "value": 0
                 },
                 {
@@ -154,11 +152,11 @@
             ]
         },
         "244": {
-            "label": "Mode of Button 4 (lower right)",
+            "label": "Button #4 Mode",
             "description": "Defines the switching mode of Button 4",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 5,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -166,7 +164,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Factory Default",
+                    "label": "Default Mode",
                     "value": 0
                 },
                 {
@@ -344,26 +342,31 @@
             ]
         },
         "250": {
-            "label": "Secondary Controller Mode",
-            "description": "Selects Group Mode or Scene Mode",
+            "label": "Mode",
+            "description": "Enable selective Group Mode or Scene Mode. Long press learn button to wake up device.\n        Option As-Last-Set is not a real option, it exists because the Minimote does not report back its actual setting.\n        When long-pressing a button, if RED + BLUE LED turn on/off at the same time, device is in scene mode.\n        If the BLUE LED starts blinking, it is in group mode.\n        NOTE: Minimote firmware 1.17 or higher is required, firmware 1.19 is highly recommended.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
+            "maxValue": 2,
+            "defaultValue": 2,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": true,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Group Mode",
+                    "label": "Group",
                     "value": 0
                 },
                 {
-                    "label": "Scene Mode",
+                    "label": "Scene",
                     "value": 1
+                },
+                {
+                    "label": "As-Last-Set",
+                    "value": 2
                 }
-            ]
+            ],
+            "units": ""
         }
     }
 }

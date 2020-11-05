@@ -1,0 +1,189 @@
+{
+    "_approved": true,
+    "manufacturer": "devolo Home Control",
+    "manufacturerId": "0x0175",
+    "label": "MT2647",
+    "description": "Motion Sensor MT02647",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x000d"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Basic Set Level",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "3": {
+            "label": "PIR Sensitivity",
+            "description": "PIR sensitivity settings. \n          0 means disable the PIR motion. \n          1 means the lowest sensitivity, \n          99 means the highest sensitivity. \n          High sensitivity means can detected long distance, but if there is more noise signal in the environment, it will re-trigger too frequency.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 80
+        },
+        "4": {
+            "label": "Light threshold",
+            "description": "Setting the illumination threshold to turn on the light. When the event triggered and the environment illumination lower than \n          the threshold, the device will turn on the light.\n          0 means turn off illumination detected function and never turn on the light.\n          1 means darkest.\n          99 means brightest.\n          100 means turn off illumination detected function. And always turn on the light.\n          * Notice * in none test mode, only the value in 1 to 99 will enable the illumination detected function and update the illumination value.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "5": {
+            "label": "Operation Mode",
+            "description": "Bit 0: Reserve. \n          Bit 1: 1 means enable test mode, 0 means disable normal mode. Notice: This bit only effect by the DIP Switch setting to program mode. \n          Bit 2: Set to 1.\n          Bit 3: Setting the temperature scale. 0: Fahrenheit, 1:Celsius. \n          Bit 4: Disable the illumination report after event triggered (1: Disable, 0: Enable). \n          Bit 5: Disable the temperature report after event triggered (1: Disable, 0: Enable). \n          Bit 6: Reserve. \n          Bit 7: Disable the back key release into test mode (1: Disable, 0: Enable).\n          ozw Recommended: 12",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 4
+        },
+        "6": {
+            "label": "Multi-Sensor Function Switch",
+            "description": "Bit 0: Reserve, set to 1.\n           Bit 1: Disable PIR integrate Illumination to turn ON the lighting nodes in the association group 2. (1:Disable, 0:Enable).\n           Bit 2: Reserve, set to 1.\n           Bit 3: Reserve.\n           Bit 4: Reserve.\n           Bit 5: Reserve.\n           Bit 6: Reserve.\n           Bit 7: Reserve.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        },
+        "7": {
+            "label": "Customer Function",
+            "description": "Bit 0: Reserve. \n          Bit 1: Enable sending motion OFF report (0:Disable, 1:Enable). \n\t\t\t\t Note: Depends on the Bit4, 0: Report Notification CC, Type: 0x07, Event: 0xFE 1: Sensor Binary Report, Type: 0x0C, Value: 0x00.  \n          Bit 2: Enable PIR super sensitivity mode (0:Disable, 1:Enable).\n          Bit 3: Reserve. \n          Bit 4: Notification Type (0: Notification Report, 1: Sensor Binary Report).\n          Bit 5: Disable Multi CC in auto report (1:Disable, 0:Enable).\n          Bit 6: Disable to report battery state when the device triggered (1:Disable, 0:Enable)\n          Bit 7: Reserve.\n          ozw Recommended: 22",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 4
+        },
+        "8": {
+            "label": "PIR re-detect interval time",
+            "description": "In the normal mode, after the PIR motion detected, setting the re-detect time. 8 seconds per tick, default tick is 3 (24 seconds). \n          Setting the suitable value to prevent received the trigger signal too frequency. Also can save the battery energy. \n          Notice: If this value bigger than the configuration setting NO. 9. There is a period after the light turned off and the PIR not start detecting.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3,
+            "units": "8 sec"
+        },
+        "9": {
+            "label": "Turn Off Light Time",
+            "description": "After turn on the lighting, setting the delay time to turn off the lighting when the PIR motion is not detected. \n          8 seconds per tick, default tick is 4 (32 seconds). 0 means never send turn off light command.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 4,
+            "units": "8 sec"
+        },
+        "10": {
+            "label": "Auto Report Battery Time",
+            "description": "The interval time for auto report the battery level. 0 means turn off auto report battery. The default value is 12. The tick time can setting by the configuration No.20.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 12,
+            "units": "30 min"
+        },
+        "12": {
+            "label": "Auto Report Illumination Time",
+            "description": "The interval time for auto report the illumination. 0 means turn off auto report illumination. The default value is 12. The tick time can setting by the configuration No.20.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 12,
+            "units": "30 min"
+        },
+        "13": {
+            "label": "Auto Report Temperature time",
+            "description": "The interval time for auto report the temperature. 0 means turn off auto report temperature. The default value is 12. The tick time can setting by the configuration No.20.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 12,
+            "units": "30 min"
+        },
+        "20": {
+            "label": "Auto Report Tick Interval",
+            "description": "The interval time for auto report each tick. Setting this configuration will effect configuration No.10, No.11, No.12 and No.13. Caution: Setting to 0 means turn off all auto report function.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30
+        },
+        "21": {
+            "label": "Temperature Differential Report",
+            "description": "The temperature differential to report. 0 means turn off this function. The unit is Fahrenheit. Enable this function the device will detect every minutes. And when the temperature is over 140 degree Fahrenheit, it will continue report. Enable this functionality will cause some issue please see the detail in the \"Temperature Report\" section.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "22": {
+            "label": "Illumination Differential Report",
+            "description": "The illumination differential to report.0 means turn off this function. The unit is percentage. Enable this function the device will detect every minutes. Enable this functionality will cause some issue please see the detail in the \"Illumination Report\" section.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 8,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Set",
+            "maxNodes": 8
+        }
+    }
+}

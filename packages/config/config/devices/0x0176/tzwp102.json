@@ -1,0 +1,190 @@
+{
+    "_approved": true,
+    "manufacturer": "Telldus",
+    "manufacturerId": "0x0176",
+    "label": "TZWP102",
+    "description": "TZWP-102 Plug-in Switch",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0003"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Overcurrent protection",
+            "description": "If the current exceeds 16A for more than 5 sec, the load will be switched off. Default 1.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Remember device status after power failure",
+            "description": "Define how the plug will react after the power supply is back on. Default 0.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Remember status",
+                    "value": 0
+                },
+                {
+                    "label": "Always on",
+                    "value": 1
+                },
+                {
+                    "label": "Always off",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "Send status in Lifeline when Load status change",
+            "description": "Smart Plug can send notifications to associated devices in Lifeline when the status of the plug is changed. Default 1.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Send Basic Report",
+                    "value": 1
+                },
+                {
+                    "label": "Send Basic Report only when Load status is not changed by Z-Wave Command",
+                    "value": 2
+                }
+            ]
+        },
+        "4": {
+            "label": "LED Indicator",
+            "description": "Configure LED mode. Default 0.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "The LED follows the load status",
+                    "value": 0
+                },
+                {
+                    "label": "When operating plug, the LED is lit for 5 seconds",
+                    "value": 1
+                }
+            ]
+        },
+        "16": {
+            "label": "Send report on change of power consumption (W)",
+            "description": "This parameter will send a power report automatically if the power value changes of x W (Watts) compared to the last report. Default 50.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 2500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50,
+            "units": "Watts"
+        },
+        "17": {
+            "label": "Send report on change of power consumption (%)",
+            "description": "This parameter will send a power report automatically if the power value changes of x % compared to the last report. Default 10.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "%"
+        },
+        "101": {
+            "label": "Power (W) report interval",
+            "description": "This parameter defines the period of sending power reports. Default 600.\n                                0=Disabled, 5-2678400 seconds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2678400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "seconds"
+        },
+        "102": {
+            "label": "Energy (kWh) report interval",
+            "description": "This parameter defines the period of sending energy reports. Default 3600.\n                                0=Disabled, 5-2678400 seconds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2678400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3600,
+            "units": "seconds"
+        },
+        "103": {
+            "label": "Voltage (V) report interval",
+            "description": "This parameter defines the period of sending voltage reports. Default 0.\n                                0=Disabled, 5-2678400 seconds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2678400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "104": {
+            "label": "Current (A) report interval",
+            "description": "This parameter defines the period of sending current reports. Default 0.\n                                0=Disabled, 5-2678400 seconds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2678400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

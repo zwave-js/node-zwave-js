@@ -1,0 +1,509 @@
+{
+    "_approved": true,
+    "manufacturer": "Aeotec Limited",
+    "manufacturerId": "0x0371",
+    "label": "ZW141",
+    "description": "ZW141 Nano Shutter",
+    "devices": [
+        {
+            "productType": "0x0203",
+            "productId": "0x008d"
+        },
+        {
+            "productType": "0x0103",
+            "productId": "0x008d"
+        },
+        {
+            "productType": "0x0003",
+            "productId": "0x008d"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Retransmit",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "20": {
+            "label": "Motor behavior after powering on",
+            "description": "Set the motor behavior after powering on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Stay the same position",
+                    "value": 0
+                },
+                {
+                    "label": "Move to 99%",
+                    "value": 1
+                },
+                {
+                    "label": "Move to 0%",
+                    "value": 2
+                }
+            ]
+        },
+        "22": {
+            "label": "Motor direction",
+            "description": "Set to toggle the motor running direction",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "units": ""
+        },
+        "34": {
+            "label": "Blade turn time",
+            "description": "Set the blade turn time for Venetian mode. Details can be found in section 4.2 of Advanced information Product Manual.",
+            "valueSize": 2,
+            "minValue": 10,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 150,
+            "units": "0.01 seconds"
+        },
+        "35": {
+            "label": "Curtain trip time",
+            "description": "Set the run time of the curtain. Details can be found in section 4.2 of Advanced information Product Manual.",
+            "valueSize": 2,
+            "minValue": 500,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 15000,
+            "units": "0.01 seconds"
+        },
+        "36": {
+            "label": "Enter/exit calibration mode",
+            "description": "Set to enter/exit calibration mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Set: Exit calibration mode/Report: Not in calibration mode",
+                    "value": 0
+                },
+                {
+                    "label": "Set: Enter shutter mode calibration/Report: in shutter mode calibration",
+                    "value": 1
+                },
+                {
+                    "label": "Set: Enter Venetian mode calibration/Report: in Venetian mode calibration",
+                    "value": 2
+                }
+            ]
+        },
+        "37": {
+            "label": "User confirmation for calibration",
+            "description": "Set user confirmation for calibration",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Default",
+                    "value": 0
+                },
+                {
+                    "label": "Confirm calibration",
+                    "value": 1
+                }
+            ]
+        },
+        "38": {
+            "label": "Calibration mode status report",
+            "description": "Get calibration mode status report",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Calibration mode complete",
+                    "value": 0
+                },
+                {
+                    "label": "Start calibration mode, going to reference point A",
+                    "value": 1
+                },
+                {
+                    "label": "Reach reference point A, going to reference point B",
+                    "value": 2
+                },
+                {
+                    "label": "Reach reference point B, waiting for blade turn calibration",
+                    "value": 3
+                },
+                {
+                    "label": "Going to reference point C",
+                    "value": 4
+                },
+                {
+                    "label": "Calibration mode terminated",
+                    "value": 5
+                }
+            ]
+        },
+        "39": {
+            "label": "Curtain mode opeation",
+            "description": "Set the curtain mode operation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Shutter mode",
+                    "value": 0
+                },
+                {
+                    "label": "Venetian mode",
+                    "value": 1
+                }
+            ]
+        },
+        "40": {
+            "label": "Repositioning",
+            "description": "Set to begin repositioning",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "units": "",
+            "options": [
+                {
+                    "label": "Default",
+                    "value": 0
+                },
+                {
+                    "label": "In repositioning",
+                    "value": 1
+                }
+            ]
+        },
+        "41": {
+            "label": "Repositioning status report",
+            "description": "Get repositioning status report",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Repositioning complete",
+                    "value": 0
+                },
+                {
+                    "label": "In repositioning",
+                    "value": 1
+                }
+            ]
+        },
+        "42": {
+            "label": "Calibration lock",
+            "description": "Enable/disable calibration lock",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "units": "",
+            "options": [
+                {
+                    "label": "Disable calibration",
+                    "value": 0
+                },
+                {
+                    "label": "Enable calibration",
+                    "value": 1
+                }
+            ]
+        },
+        "48": {
+            "label": "S1 scene activation",
+            "description": "Set S1 scene activation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Enable S1 'Key pressed one time'",
+                    "value": 1
+                },
+                {
+                    "label": "Enable S1 'Key released'",
+                    "value": 2
+                },
+                {
+                    "label": "Enable S1 'Key held down'",
+                    "value": 4
+                },
+                {
+                    "label": "Enable S1 'Key pressed two times'",
+                    "value": 8
+                }
+            ]
+        },
+        "49": {
+            "label": "S2 scene activation",
+            "description": "Set S1 scene activation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Enable S2 'Key pressed one time'",
+                    "value": 1
+                },
+                {
+                    "label": "Enable S2 'Key released'",
+                    "value": 2
+                },
+                {
+                    "label": "Enable S2 'Key held down'",
+                    "value": 4
+                },
+                {
+                    "label": "Enable S2 'Key pressed two times'",
+                    "value": 8
+                }
+            ]
+        },
+        "80": {
+            "label": "Type of status report",
+            "description": "Select which report to send when switch status changes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "units": "",
+            "options": [
+                {
+                    "label": "No report",
+                    "value": 0
+                },
+                {
+                    "label": "Basic report",
+                    "value": 1
+                },
+                {
+                    "label": "Switch multilevel report",
+                    "value": 2
+                }
+            ]
+        },
+        "85": {
+            "label": "External button mode operation",
+            "description": "Set operation mode of external button. \n        In Operation Mode 1, external button 1 maps to z-wave button, external button 2 opens or stops motor.\n        In Operation Mode 2, external button 1 maps to z-wave button, external button 2 closes or stops motor.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Operation Mode 1",
+                    "value": 0
+                },
+                {
+                    "label": "Operation Mode 2",
+                    "value": 1
+                }
+            ]
+        },
+        "120": {
+            "label": "Set external switch mode for S1",
+            "description": "When the mode is determined, this mode value will not be reset after exclusion",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Unidentified",
+                    "value": 0
+                },
+                {
+                    "label": "2-state switch",
+                    "value": 1
+                },
+                {
+                    "label": "3-way switch",
+                    "value": 2
+                },
+                {
+                    "label": "Push button",
+                    "value": 3
+                },
+                {
+                    "label": "Automatic identification mode",
+                    "value": 4
+                }
+            ]
+        },
+        "121": {
+            "label": "Set external switch mode for S2",
+            "description": "When the mode is determined, this mode value will not be reset after exclusion",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Unidentified",
+                    "value": 0
+                },
+                {
+                    "label": "2-state switch",
+                    "value": 1
+                },
+                {
+                    "label": "3-way switch",
+                    "value": 2
+                },
+                {
+                    "label": "Push button",
+                    "value": 3
+                },
+                {
+                    "label": "Automatic identification mode",
+                    "value": 4
+                }
+            ]
+        },
+        "243": {
+            "label": "DSK",
+            "description": "Get the DSK from the product",
+            "valueSize": 16,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "248": {
+            "label": "S1 and S2 operation",
+            "description": "Set the operation of external switches S1 and S2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "units": "",
+            "options": [
+                {
+                    "label": "Enable network inclusion/exclusion",
+                    "value": 1
+                },
+                {
+                    "label": "Enable reset to factory defaults",
+                    "value": 2
+                },
+                {
+                    "label": "Enable network function and reset to factory defaults",
+                    "value": 3
+                }
+            ]
+        },
+        "255": {
+            "label": "Reset to factory defaults",
+            "description": "Reset to factory defaults",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Reset to factory default setting",
+                    "value": 0
+                },
+                {
+                    "label": "Reset to factory default setting and remove from the z-wave network",
+                    "value": 1431655765
+                }
+            ]
+        }
+    }
+}

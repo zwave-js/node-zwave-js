@@ -1,0 +1,166 @@
+{
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "DSC26103",
+    "description": "DSC26103 Micro Switch (2nd Edition)",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x001a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Blinking behavior",
+            "description": "This is actually a double byte value. The LSB defines the total time the device needs to blink in seconds. The MSB defines the on/off interval of the blink in tenths of seconds.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "80": {
+            "label": "Notification status",
+            "description": "Enables automatic notifications to associated devices whenever there is a state change.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "None",
+                    "value": 0
+                },
+                {
+                    "label": "Hail",
+                    "value": 1
+                },
+                {
+                    "label": "Basic",
+                    "value": 2
+                }
+            ]
+        },
+        "120": {
+            "label": "Turn external button mode",
+            "description": "Turn external button mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 255,
+            "units": "",
+            "options": [
+                {
+                    "label": "Momentary button",
+                    "value": 0
+                },
+                {
+                    "label": "2 state switch",
+                    "value": 1
+                },
+                {
+                    "label": "3 way switch",
+                    "value": 2
+                },
+                {
+                    "label": "Unidentified",
+                    "value": 255
+                }
+            ]
+        },
+        "200": {
+            "label": "Partner ID",
+            "description": "Partner ID",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Aeon Labs Standard (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "AT&T",
+                    "value": 1
+                }
+            ]
+        },
+        "252": {
+            "label": "Configuration Locked",
+            "description": "Enable/disable Configuration Locked",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "254": {
+            "label": "Device tag",
+            "description": "Device tag.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "255": {
+            "label": "Reset device",
+            "description": "Reset to the default configuration.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Retransmit Switch CC",
+            "maxNodes": 5
+        }
+    }
+}

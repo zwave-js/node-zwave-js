@@ -1,0 +1,353 @@
+{
+    "_approved": true,
+    "manufacturer": "HomeSeer Technologies",
+    "manufacturerId": "0x000c",
+    "label": "HS-FC200PLUS",
+    "description": "HS-FC200+ Z-Wave Plus Fan Controller",
+    "devices": [
+        {
+            "productType": "0x0203",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Bottom LED operation",
+            "description": "Sets bottom LED operation (in normal mode)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Bottom LED on if load is off",
+                    "value": 0
+                },
+                {
+                    "label": "Bottom LED off if load is off",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Paddle load orientation",
+            "description": "Sets paddle's load orientation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Top of paddle turns load ON",
+                    "value": 0
+                },
+                {
+                    "label": "Bottom of paddle turns load ON",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Fan type",
+            "description": "Sets fan type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "3-speed",
+                    "value": 0
+                },
+                {
+                    "label": "4-speed",
+                    "value": 1
+                }
+            ]
+        },
+        "13": {
+            "label": "LED indicator mode",
+            "description": "Sets LED indicator mode of operation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Normal mode (load status)",
+                    "value": 0
+                },
+                {
+                    "label": "Status mode (custom status)",
+                    "value": 1
+                }
+            ]
+        },
+        "14": {
+            "label": "Normal mode LED color",
+            "description": "Sets the Normal mode LED color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "White",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                }
+            ]
+        },
+        "21": {
+            "label": "Status mode LED 1 (bottom) color",
+            "description": "Sets the Status mode LED 1 (bottom) color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "22": {
+            "label": "Status mode LED 2 color",
+            "description": "Sets the Status mode LED 2 color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "23": {
+            "label": "Status mode LED 3 color",
+            "description": "Sets the Status mode LED 3 color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "24": {
+            "label": "Status mode LED 4 color",
+            "description": "Sets the Status mode LED 4 color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "30": {
+            "label": "Blink frequency for all LEDs in Status mode",
+            "description": "Sets the blink frequency for all LEDs in Status mode. Possible values: 0, 1-255\n              0 = No blink\n              1 = 100ms ON then 100ms OFF",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "31": {
+            "label": "LEDs to blink in status mode",
+            "description": "Sets LEDs 1-4 to blink in Status mode. Bitmask defines specific LEDs to enable for blinking. Note: this decimal value is derived from a hex code calculation based on the following: \n              Bit 0 = LED 1\n              Bit 1 = LED 2\n              Bit 2 = LED 3\n              Bit 3 = LED 4\n              IE: value of 1 = first LED, 8 = LED 4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

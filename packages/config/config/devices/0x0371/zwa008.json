@@ -1,14 +1,12 @@
-// Aeotec Ltd. ZWA008
-// Door/Window Sensor 7
 {
     "_approved": true,
-    "manufacturer": "Aeotec Ltd.",
+    "manufacturer": "Aeotec Limited",
     "manufacturerId": "0x0371",
     "label": "ZWA008",
-    "description": "Door/Window Sensor 7",
+    "description": "ZWA008 Door Window Sensor 7",
     "devices": [
         {
-            "productType": "0x0002",
+            "productType": "0x0202",
             "productId": "0x0007"
         },
         {
@@ -16,7 +14,7 @@
             "productId": "0x0007"
         },
         {
-            "productType": "0x0202",
+            "productType": "0x0002",
             "productId": "0x0007"
         }
     ],
@@ -24,11 +22,29 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Control",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Alarm sensor",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Alarm tamper",
+            "maxNodes": 5
+        }
+    },
     "paramInformation": {
         "1": {
-            "label": "Sensor Operation Mode",
-            "description": "Defines if internal magnet sensor or the external terminal input is detected",
+            "label": "Operation mode",
+            "description": "Parameter defines device operation mode.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -38,18 +54,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Internal Magnet Sensor Used",
+                    "label": "Built-in hall sensor",
                     "value": 0
                 },
                 {
-                    "label": "External Terminal Inputs Used",
+                    "label": "External Input",
                     "value": 1
                 }
             ]
         },
         "2": {
-            "label": "Sensor State Polarity",
-            "description": "Defines the polarity of the magnet sensor",
+            "label": "Door/Window or alarm status",
+            "description": "Parameter defines state of the sensor when the magnet is close.\n                If the alarm sensor is connected, it determines the output type.\n                Parameter inactive in external button mode (parameter Operation Mode set to 1).",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -59,29 +75,29 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Closed when Magnet in proximity",
+                    "label": "Closed",
                     "value": 0
                 },
                 {
-                    "label": "Opened when Magnet in proximity",
+                    "label": "Opened",
                     "value": 1
                 }
             ]
         },
         "3": {
-            "label": "Visual LED Indications",
-            "description": "Defines when the red LED will indicate events.",
+            "label": "Visual LED indications",
+            "description": "This parameter defines events indicated by the visual LED indicator. Disabling events might extend battery life.\n                Values of parameters may be combined, e.g. 1+2=3 means opening/closing and wake up will be indicated by the visual indicator.\n                0 - No indications.\n                1 - Indication of opening/closing status change (input In).\n                2 - Indication of wake up (1 x click or periodical).\n                4 - Indication of device tampering.",
             "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 31,
+            "minValue": 0,
+            "maxValue": 7,
             "defaultValue": 7,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "4": {
-            "label": "Range Test after double click",
-            "description": "Allows to enable the activation of a Z-Wave range.",
+            "label": "Range test after double click",
+            "description": "Allows to enable activation of Z-Wave range test with double click of a Tamper Switch 2.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -91,46 +107,46 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
-                    "label": "Enabled",
+                    "label": "Enable",
                     "value": 1
                 }
             ]
         },
         "5": {
-            "label": "2nd Association Group Trigger",
-            "description": "Sending a BASIC command to all devices of Association Group 2",
+            "label": "2nd Association Group triggers",
+            "description": "Parameter defines events which result in sending On/Off commands to devices added to the 2nd Association Group.\n                These commands are sent alternately to switch the devices On and Off.\n                Commands represent the values of BASIC SET command frames.\n                Parameter is inactive in external dry-contact mode (parameter Operation Mode set to 1).",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 2,
+            "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Switch after ‘Open‘ and ‘Close‘",
+                    "label": "Switch after opening and closing",
                     "value": 0
                 },
                 {
-                    "label": "Switch after ‘Open‘",
+                    "label": "Switch after opening",
                     "value": 1
                 },
                 {
-                    "label": "Switch after ‘Close‘",
+                    "label": "Switch after closing",
                     "value": 2
                 }
             ]
         },
         "6": {
-            "label": "Command Sent to Devices of Association Group 2",
-            "description": "This parameter defines which commands is sent to 2nd Association Group",
+            "label": "Commands sent to 2nd Association Group",
+            "description": "Command frames sent to devices added to the 2nd association group.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 2,
+            "maxValue": 1,
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
@@ -151,8 +167,8 @@
             ]
         },
         "7": {
-            "label": "BASIC command value sent to 2nd Assoc Group on On",
-            "description": "BASIC command value sent to 2nd Association Group on ‘On‘ event",
+            "label": "Value of ON command frame sent to 2nd Association Group",
+            "description": "The value of 0 turns OFF the device, 255 turns it On.\n                In case of associating the Dimmer or Roller Shutter module, values 1-99 allow to set an Associated device to a specified level.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -163,8 +179,8 @@
             "allowManualEntry": true
         },
         "8": {
-            "label": "BASIC command value sent to 2nd Assoc Group on Off",
-            "description": "BASIC command value sent to 2nd Association Group on ‘Off‘ event",
+            "label": "Value of OFF command frame sent to 2nd Association Group",
+            "description": "The value of 0 turns OFF the device, 255 turns it On.\n                In case of associating the Dimmer or Roller Shutter module, values 1-99 allow to set an Associated device to a specified level.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -175,8 +191,8 @@
             "allowManualEntry": true
         },
         "9": {
-            "label": "Time Delay of ‘On‘ command frame",
-            "description": "Time Delay of ‘On‘ command frame",
+            "label": "Time delay of ON command frame",
+            "description": "Time period after which On command frame will be sent.",
             "unit": "Seconds",
             "valueSize": 2,
             "minValue": 0,
@@ -184,33 +200,36 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "10": {
-            "label": "Time Delay of ‘Off‘ command frame",
-            "description": "Time Delay of ‘Off‘ command frame",
+            "label": "Time delay of OFF command frame",
+            "description": "Time period after which Off command frame will be sent.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 32400,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "11": {
-            "label": "Delay of Tamper Alarm Cancellation",
-            "description": "Delay of Tamper Alarm Cancellation",
+            "label": "Delay of tamper alarm cancellation",
+            "description": "Time period after which a tamper alarm will be cancelled.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 32400,
-            "defaultValue": 0,
+            "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "12": {
-            "label": "Reporting Tamper Alarm Cancellation",
-            "description": "Reporting Tamper Alarm Cancellation",
+            "label": "Reporting tamper alarm cancellation",
+            "description": "Reporting cancellation of tamper alarm to the controller and 5th Association Group.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -220,18 +239,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Do not send Report",
+                    "label": "Do not send tamper cancellation report",
                     "value": 0
                 },
                 {
-                    "label": "Send Report",
+                    "label": "Send tamper cancellation report",
                     "value": 1
                 }
             ]
         },
         "13": {
-            "label": "Central Scene Event Functionality",
-            "description": "Central Scene Event Functionality",
+            "label": "Scene activation functionality",
+            "description": "The device can trigger scenes via Dry Input Terminal (external contact) using scene IDs assigned to different events.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -241,18 +260,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
-                    "label": "Enabled",
+                    "label": "Enable",
                     "value": 1
                 }
             ]
         },
         "14": {
-            "label": "Tilt Sensor Functionality",
-            "description": "Tilt Sensor Functionality",
+            "label": "Tilt Sensor functionality",
+            "description": "The device can report Tilt Window events.\n                This functionality can be disabled if the device is mounted on a door or windows without tilt functionality.To disable tilt detection set the value to 0.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -262,11 +281,11 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
-                    "label": "Enabled",
+                    "label": "Enable",
                     "value": 1
                 }
             ]

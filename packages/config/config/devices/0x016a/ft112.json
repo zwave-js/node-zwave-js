@@ -1,11 +1,9 @@
-// Fantem FT112
-// Door/Window Sensor 6
 {
     "_approved": true,
-    "manufacturer": "Fantem",
+    "manufacturer": "Fantem (Oomi)",
     "manufacturerId": "0x016a",
     "label": "FT112",
-    "description": "Door/Window Sensor 6",
+    "description": "FT112 Door-window sensor",
     "devices": [
         {
             "productType": "0x0002",
@@ -16,10 +14,9 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Value that will be sent on open/close events",
+            "label": "Value when the Magnet is triggered",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -29,18 +26,19 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "On for opened, Off for closed",
+                    "label": "Open: 0xFF, Close: 0x00",
                     "value": 0
                 },
                 {
-                    "label": "Off for opened On for Closed",
+                    "label": "Open: 0x00, Close: 0xFF",
                     "value": 1
                 }
-            ]
+            ],
+            "description": "Which value of the Sensor Binary Report or Basic Set will be sent when the door is Opened/Closed"
         },
         "39": {
-            "label": "Low battery threshold (10% to 50%)",
-            "description": "The value the sensor will use to determine a low battery level",
+            "label": "Set the low battery value",
+            "description": "10% to 50%",
             "valueSize": 1,
             "minValue": 10,
             "maxValue": 50,
@@ -49,8 +47,40 @@
             "writeOnly": false,
             "allowManualEntry": true
         },
+        "101": {
+            "label": "Low Battery Check",
+            "description": "Enable/disable the low battery checking",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "111": {
+            "label": "Interval time of low battery checking",
+            "description": "The minimum interval is 4 minutes",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2147483647,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 86640
+        },
         "121": {
-            "label": "Reporting mode on open/close event",
+            "label": "Report Type to Send",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
@@ -60,25 +90,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Send nothing",
+                    "label": "Disabled",
                     "value": 0
                 },
                 {
-                    "label": "Send Basic Set CC",
+                    "label": "Basic Set",
                     "value": 1
                 },
                 {
-                    "label": "Send Sensor Binary Report CC",
+                    "label": "Sensor Binary Report",
                     "value": 2
                 },
                 {
-                    "label": "Send Basic Set CC and Sensor Binary Report CC",
+                    "label": "Basic Set and Sensor Binary Report",
                     "value": 3
                 }
-            ]
+            ],
+            "description": "Configure which sensor report will be sent when the door is Opened/Closed"
         },
         "252": {
-            "label": "Lock/Unlock all configuration parameters",
+            "label": "Lock/Unlock Configuration",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -95,18 +126,40 @@
                     "label": "Lock",
                     "value": 1
                 }
-            ]
+            ],
+            "description": "Lock/ unlock all configuration parameters"
         },
         "255": {
-            "label": "Reset sensor",
-            "description": "Reset sensor to factory default and remove from network",
+            "label": "Reset To Factory Defaults",
+            "description": "Reset to factory defaults",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 2147483647,
+            "maxValue": 100,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Reset to factory default setting",
+                    "value": 0
+                },
+                {
+                    "label": "Normal",
+                    "value": 1
+                },
+                {
+                    "label": "Reset to factory default setting and removed from the z-wave network",
+                    "value": 1431655765
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
         }
     }
 }

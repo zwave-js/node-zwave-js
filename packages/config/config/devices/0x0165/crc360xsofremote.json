@@ -1,0 +1,250 @@
+{
+    "_approved": true,
+    "manufacturer": "NodOn (ID-RF)",
+    "manufacturerId": "0x0165",
+    "label": "CRC360XSOFREMOTE",
+    "description": "CRC-3-6-0x Soft Remote",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Profile Buttons 1 and 3",
+            "description": "This parameter configures the behavior of the buttons 1 and 3 when the product is in \"Gateway Centric Mode\"",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Scene Mode",
+                    "value": 0
+                },
+                {
+                    "label": "Mono Mode",
+                    "value": 1
+                },
+                {
+                    "label": "Duo Mode",
+                    "value": 2
+                }
+            ]
+        },
+        "2": {
+            "label": "Profile Buttons 2 and 4",
+            "description": "This parameter configures the behavior of the buttons 2 and 4 when the product is in \"Gateway Centric Mode\"",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Scene Mode",
+                    "value": 0
+                },
+                {
+                    "label": "Mono Mode",
+                    "value": 1
+                },
+                {
+                    "label": "Duo Mode",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "Scene Type",
+            "description": "This parameter configures the type of command sent when the product is in \"Gateway Centric Mode\", with buttons profile configuration set in \"Scene Behavior\".",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Central Scene",
+                    "value": 0
+                },
+                {
+                    "label": "Scene Activation",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Action Button 1 Mono",
+            "description": "When button are set in Mono Button mode they can have 3 different behaviors :\n        1: They can directly control other nodes with Basic and multi-level command class\n        2: Send Switch All On command\n        3: Send Switch All Off command",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Control Group 2",
+                    "value": 0
+                },
+                {
+                    "label": "All Switch ON",
+                    "value": 1
+                },
+                {
+                    "label": "All Switch OFF",
+                    "value": 2
+                }
+            ]
+        },
+        "5": {
+            "label": "Action Button 2 Mono",
+            "description": "When button are set in Mono Button mode they can have 3 different behaviors :\n        1: They can directly control other nodes with Basic and multi-level command class\n        2: Send Switch All On command\n        3: Send Switch All Off command",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Control Group 3",
+                    "value": 0
+                },
+                {
+                    "label": "All Switch ON",
+                    "value": 1
+                },
+                {
+                    "label": "All Switch OFF",
+                    "value": 2
+                }
+            ]
+        },
+        "6": {
+            "label": "Action Button 3 Mono",
+            "description": "When button are set in Mono Button mode they can have 3 different behaviors :\n        1: They can directly control other nodes with Basic and multi-level command class\n        2: Send Switch All On command\n        3: Send Switch All Off command",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Control Group 4",
+                    "value": 0
+                },
+                {
+                    "label": "All Switch ON",
+                    "value": 1
+                },
+                {
+                    "label": "All Switch OFF",
+                    "value": 2
+                }
+            ]
+        },
+        "7": {
+            "label": "Action Button 4 Mono",
+            "description": "When button are set in Mono Button mode they can have 3 different behaviors :\n        1: They can directly control other nodes with Basic and multi-level command class\n        2: Send Switch All On command\n        3: Send Switch All Off command",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Control Group 5",
+                    "value": 0
+                },
+                {
+                    "label": "All Switch ON",
+                    "value": 1
+                },
+                {
+                    "label": "All Switch OFF",
+                    "value": 2
+                }
+            ]
+        },
+        "8": {
+            "label": "Led Management",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Led OFF",
+                    "value": 0
+                },
+                {
+                    "label": "Led Blink on button action",
+                    "value": 1
+                },
+                {
+                    "label": "Led Blink on transmission result",
+                    "value": 2
+                },
+                {
+                    "label": "Led Blink on button action and transmission result",
+                    "value": 3
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Button 1 - Mono - Controlled nodes",
+            "maxNodes": 8
+        },
+        "3": {
+            "label": "Button 2 - Mono - Controlled nodes",
+            "maxNodes": 8
+        },
+        "4": {
+            "label": "Button 3 - Mono - Controlled nodes",
+            "maxNodes": 8
+        },
+        "5": {
+            "label": "Button 4 - Mono - Controlled nodes",
+            "maxNodes": 8
+        },
+        "6": {
+            "label": "Button 1 and 3 - Duo - Controlled nodes",
+            "maxNodes": 8
+        },
+        "7": {
+            "label": "Button 2 and 4 - Duo - Controlled nodes",
+            "maxNodes": 8
+        }
+    }
+}

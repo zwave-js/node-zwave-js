@@ -1,227 +1,225 @@
-// BeNext builtInDimmer
-// Built-in Dimmer
 {
-	"_approved": true,
-	"manufacturer": "BeNext",
-	"manufacturerId": "0x008a",
-	"label": "builtInDimmer",
-	"description": "Built-in Dimmer",
-	"devices": [
-		{
-			"productType": "0x000d",
-			"productId": "0x0100"
-		}
-	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
-	"associations": {
-		"1": {
-			"label": "Group 1",
-			"description": "All nodes in this group will receive a BASIC_SET frame",
-			"maxNodes": 8
-		},
-		"2": {
-			"label": "Group 2",
-			"maxNodes": 1,
-			"isLifeline": true
-		},
-		"3": {
-			"label": "Group 3",
-			"maxNodes": 1
-		}
-	},
-	"paramInformation": {
-		"1": {
-			"label": "Reset to factory settings",
-			"description": "Set all configuration values to default values (factory settings).",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"2": {
-			"label": "The way how the button reacts when press/released",
-			"description": "The way how the button reacts when press/released",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Toggle light when button is pressed only",
-					"value": 0
-				},
-				{
-					"label": "Toggle light on release, dimming on press",
-					"value": 1
-				},
-				{
-					"label": "Toggle  on press & Dim with quick press & release",
-					"value": 2
-				}
-			]
-		},
-		"3": {
-			"label": "Control Type",
-			"description": "The way the Built-in Dimmer reacts when light is turned on/off with button",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Switch own light on and send message to all nodes",
-					"value": 0
-				},
-				{
-					"label": "Don't switch own light. only send to extern node",
-					"value": 1
-				}
-			]
-		},
-		"4": {
-			"label": "Enable dimming",
-			"description": "Enable dimming",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"6": {
-			"label": "Maximum load",
-			"description": "Maximum load",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 200,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"7": {
-			"label": "Dimming speed",
-			"description": "Dimming speed",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"8": {
-			"label": "Fading up speed",
-			"description": "Fading up speed",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"9": {
-			"label": "Toggle time",
-			"description": "Toggle time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 50,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"11": {
-			"label": "Auto meter report: percentage",
-			"description": "Auto meter report: percentage",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 20,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"12": {
-			"label": "Auto meter report: watt",
-			"description": "Auto meter report: watt",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"13": {
-			"label": "Auto meter report: time",
-			"description": "Auto meter report: time",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 10,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"14": {
-			"label": "Last known status",
-			"description": "Last known status",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"15": {
-			"label": "Fading down speed",
-			"description": "Fading down speed",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		}
-	}
+    "_approved": true,
+    "manufacturer": "BeNext",
+    "manufacturerId": "0x008a",
+    "label": "BUILTINDIMMER",
+    "description": "Built-in Dimmer",
+    "devices": [
+        {
+            "productType": "0x000d",
+            "productId": "0x0100"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1: All nodes in this group will receive a BASIC_SET frame when light is set to a certain state with the button of the Built-in Dimmer (manual switching).",
+            "description": "All nodes in this group will receive a BASIC_SET frame",
+            "maxNodes": 8
+        },
+        "2": {
+            "label": "Group 2: The node associated in this group will receive a SWITCH_MULTILEVEL_REPORT frame every time the level of light is changed, where the value represents the (changed) dim level. The status is reported after every change that means manual but also if changed by Z-Wave. The node in this group will also received the (auto) METER_REPORT.",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "3": {
+            "label": "Group 3: If configured that the control mode is extern only (configuration param3, value 1) then a BASIC_SET frame is sent to the node in this group when the button is changed.",
+            "maxNodes": 1
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Set to Default",
+            "description": "Set all configuration values to default values (factory settings).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": -1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "2": {
+            "label": "Button Type",
+            "description": "The way how the button reacts when press/released",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Toggle light when button is pressed, no action when button is released.",
+                    "value": 0
+                },
+                {
+                    "label": "Toggle light when button is released, Start dimming when button pressed.",
+                    "value": 1
+                },
+                {
+                    "label": "Toggle light when button is pressed and when button is Released, start dimming when quickly press and release button.",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "Control Type",
+            "description": "The way the Built-in Dimmer reacts when light is turned on/off with button",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Switch own light on and send a Z-Wave message to all associated nodes (direct and extern)",
+                    "value": 0
+                },
+                {
+                    "label": "Don.t switch own light on but only send a Z-Wave message to associated node. (extern only)",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Dimming enabled",
+            "description": "This parameter is used to enable the dimming option of the product. When disabled the dimming and fading routine are disabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Maximum Powerload",
+            "description": "The maximum powerload in watts when light is turned on, when measured higher then this value the Inline Dimmer is automatically turned off.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "Dimming Speed",
+            "description": "The speed of dimming when activated (manual and RF). Dim speed is 1% per value (* 10 ms)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Fading up  Speed",
+            "description": "The speed of fading up when activated (manual and RF). Fade speed is 1% per value (* 10 ms)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "9": {
+            "label": "Toggle time",
+            "description": "The time window to repress button to start dimming. Toggle time is value (* 10ms)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 50,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "Auto meter report: percentage",
+            "description": "A percentage that an energy value must be different compared to a previous sent value before an unsolicited meter report is sent. Minimum value = 10%  Maximum value = 100%",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 20,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "Auto meter report: watt",
+            "description": "A watt value that an energy value must be different compared to a previous sent value before an unsolicited meter report is sent. Minimum value = 5 watt  Maximum value = 255 watt",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "13": {
+            "label": "Auto meter report: time",
+            "description": "A time value that has to be passed compared to a previous sent value before a unsolicited meter report is sent. Minimum value = 10 seconds  Maximum value = 255 seconds",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 20,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "14": {
+            "label": "Last known status",
+            "description": "What to do with lamp status when power applied. If 0x00: Always switch light off when power applied. If > 0x00: Switch lamp on/off depending on last known lampstatus before power was disconnected.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "15": {
+            "label": "Fading down speed",
+            "description": "The speed of fading up when activated (manual and RF). Fade speed is 1% per value (* 10 ms)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
 }

@@ -1,0 +1,72 @@
+{
+    "_approved": true,
+    "manufacturer": "HomeSeer Technologies",
+    "manufacturerId": "0x000c",
+    "label": "HS-WS100PLUS",
+    "description": "HS-WS100+ Wall Switch",
+    "devices": [
+        {
+            "productType": "0x4447",
+            "productId": "0x3033"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "3": {
+            "label": "LED Status",
+            "description": "Set the LED policy: on if the load is on, off if the load is on, or off all the time",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "LED off if load on",
+                    "value": 0
+                },
+                {
+                    "label": "LED on if load on",
+                    "value": 1
+                },
+                {
+                    "label": "LED off all the time",
+                    "value": 2
+                }
+            ]
+        },
+        "4": {
+            "label": "Invert switch",
+            "description": "Change the top of the switch to OFF and the bottom of the switch to ON if the switch was installed upside down.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

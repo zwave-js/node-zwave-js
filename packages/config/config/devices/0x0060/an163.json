@@ -1,11 +1,9 @@
-// Everspring AN163
-// Metering Power Switch
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "AN163",
-    "description": "Metering Power Switch",
+    "description": "AN163 Plug-in On/Off with meter function",
     "devices": [
         {
             "productType": "0x0004",
@@ -18,13 +16,13 @@
     },
     "associations": {
         "1": {
-            "label": "Grouping 1",
+            "label": "Lifeline",
             "description": "Grouping 1 reports status",
             "maxNodes": 1,
             "isLifeline": true
         },
         "2": {
-            "label": "Grouping 2",
+            "label": "Basic",
             "description": "Allows control of up to four other devices",
             "maxNodes": 4
         }
@@ -32,7 +30,7 @@
     "paramInformation": {
         "1": {
             "label": "True Period",
-            "description": "Timeout before unit transmits ON/OFF state after manual button press",
+            "description": "This is the time the switching status needs to remain unchanged after a change to cause the device to send out a status message. 0 is Disabled.",
             "unit": "100ms",
             "valueSize": 1,
             "minValue": 0,
@@ -40,11 +38,12 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "100ms"
         },
         "2": {
-            "label": "Send Basic Command to Group 2",
-            "description": "Configure the unit to send command to other devices in Grouping 2",
+            "label": "Send Out Basic Command",
+            "description": "Enable or Disable Send Basic Command to Group 2 when the local button press changes the switching state.",
             "unit": "integer",
             "valueSize": 1,
             "minValue": 0,
@@ -55,18 +54,19 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
-                    "label": "Enabled",
+                    "label": "Enable",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "3": {
             "label": "Meter Report Period (W)",
-            "description": "How often the meter should report load (W).",
+            "description": "The device will report its meter value within the interval set. \n\t      Set to 0 will disable the autoreporting function.",
             "unit": "10s",
             "valueSize": 2,
             "minValue": 0,
@@ -74,19 +74,21 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "10s"
         },
         "4": {
             "label": "Meter Report Period (kWh)",
-            "description": "How often the meter should report load (kWh).",
+            "description": "The device will report its meter value within the interval set. \n\t      Set to 0 will disable the autoreporting function.",
             "unit": "1min",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 10080,
+            "maxValue": 3240,
             "defaultValue": 1440,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "10s"
         }
     }
 }

@@ -1,12 +1,22 @@
-// FortrezZ LLC MIMOlite
-// Digital or Analog Voltage input and/or Dry Contact Relay
 {
     "_approved": true,
-    "manufacturer": "FortrezZ LLC",
+    "manufacturer": "FortrezZ",
     "manufacturerId": "0x0084",
-    "label": "MIMOlite",
-    "description": "Digital or Analog Voltage input and/or Dry Contact Relay",
+    "label": "MIMOLITE",
+    "description": "MIMOlite",
     "devices": [
+        {
+            "productType": "0x0453",
+            "productId": "0x0111"
+        },
+        {
+            "productType": "0x0453",
+            "productId": "0x0110"
+        },
+        {
+            "productType": "0x0451",
+            "productId": "0x0111"
+        },
         {
             "productType": "0x0451",
             "productId": "0x010e"
@@ -22,14 +32,6 @@
         {
             "productType": "0x0453",
             "productId": "0x010f"
-        },
-        {
-            "productType": "0x0453",
-            "productId": "0x0110"
-        },
-        {
-            "productType": "0x0453",
-            "productId": "0x0111"
         }
     ],
     "firmwareVersion": {
@@ -38,7 +40,7 @@
     },
     "associations": {
         "1": {
-            "label": "Binary input Set Group",
+            "label": "Input trigger Basic Set report",
             "maxNodes": 2
         },
         "2": {
@@ -47,40 +49,42 @@
             "isLifeline": true
         },
         "3": {
-            "label": "Power Alarm",
+            "label": "Power dropout Alarm",
             "maxNodes": 2,
             "isLifeline": true
         },
         "4": {
-            "label": "Binary Sensor report",
+            "label": "Input trigger Binary Sensor report",
             "maxNodes": 2
         },
         "5": {
-            "label": "Pulse Meter Sensor report",
+            "label": "Pulse meter counts",
             "maxNodes": 2
         }
     },
     "paramInformation": {
         "2": {
-            "label": "Clear_Pulse_Meter_Counts",
+            "label": "Clear Pulse Meter Counts",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
-            "writeOnly": false,
+            "writeOnly": true,
             "allowManualEntry": true,
             "options": [
                 {
                     "label": "Clear Pulse Meter Counts",
                     "value": 0
                 }
-            ]
+            ],
+            "description": "Clear Pulse Meter Counts (actual value is dont care; count gets reset whenever\n\t\t\t\tthis command is received regardless of value). This parameter is for SIG1 only.",
+            "units": ""
         },
         "3": {
-            "label": "Trigger_Mapping",
-            "description": "Input-to-relay Mapping",
+            "label": "Trigger Mapping",
+            "description": "SIG1 triggered/untriggered sets or clears Relay1. \n\t\t\t\tRefer to description in User Manual under section, Input to Relay Mapping. Note\n\t\t\t\tthat neither a Basic Report nor a Binary Switch Report is sent when relay is\n\t\t\t\tautomatically set or cleared by Trigger Mapping. Only applies to the Relay1 output.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -98,11 +102,12 @@
                     "label": "SIG1 triggered/untriggered sets or clears Relay1",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "4": {
-            "label": "Lower_Threshold_High",
-            "description": "Lower Threshold, High",
+            "label": "Lower Threshold, High",
+            "description": "SIG1 high lower threshold. \n\t\t\t\tMust be less than Upper Threshold Low and greater than Lower Threshold Low.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -119,8 +124,8 @@
             ]
         },
         "5": {
-            "label": "Lower_Threshold_Low",
-            "description": "Lower Threshold, Low",
+            "label": "Lower Threshold, Low",
+            "description": "SIG1 low lower threshold.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -137,8 +142,8 @@
             ]
         },
         "6": {
-            "label": "Upper_Threshold_High",
-            "description": "Upper Threshold, High",
+            "label": "Upper Threshold, High",
+            "description": "SIG1 high upper threshold.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -155,8 +160,8 @@
             ]
         },
         "7": {
-            "label": "Upper_Threshold_Low",
-            "description": "Upper Threshold, Low",
+            "label": "Upper Threshold, Low",
+            "description": "SIG1 low upper threshold.\n\t\t\t\tMust be greater than Lower Threshold High and less than Upper Threshold High.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -173,10 +178,10 @@
             ]
         },
         "8": {
-            "label": "Trigger_Level_And_Input_Threshold",
+            "label": "Input Flags",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 3,
             "defaultValue": 3,
             "unsigned": true,
             "readOnly": false,
@@ -184,26 +189,27 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "ANALOG, trigger OUTSIDE of thresholds.",
+                    "label": "Trigger outside thresholds, analog trigger thresholds",
                     "value": 0
                 },
                 {
-                    "label": "ANALOG, trigger BETWEEN thresholds.",
+                    "label": "Trigger between thresholds, analog trigger thresholds",
                     "value": 1
                 },
                 {
-                    "label": "DIGITAL, trigger OUTSIDE of thresholds.",
+                    "label": "Trigger outside thresholds, digital trigger thresholds",
                     "value": 2
                 },
                 {
-                    "label": "DIGITAL, trigger BETWEEN thresholds.",
+                    "label": "Trigger between thresholds, digital trigger thresholds",
                     "value": 3
                 }
-            ]
+            ],
+            "description": "Bits 7 - 2 are ignored and should be set to 0\n\n\t\t\t\tBit1 : Digital-Configuration flag\n\t\t\t\t\t1=Set Trigger levels for this channel to digital thresholds (approx. 1V); Default\n\t\t\t\t\t0=Set Trigger levels to analog thresholds (see parameters 4 through 7)\n\n\t\t\t\tBit0 : Trigger-Between-Thresholds flag (see below)\n\t\t\t\t\t1 = Set to triggered when input falls between thresholds; Default\n\t\t\t\t\t0 = Set to triggered when input falls outside of thresholds"
         },
         "9": {
-            "label": "Multilevel_AutoReport_Interval",
-            "description": "Multilevel AutoReport Interval",
+            "label": "Sensor/Pulse Report Interval",
+            "description": "Periodic send interval of Multilevel Sensor Reports (Association Group 2) and/or\n\t\t\t\tPulse Count Reports (Association Group 5) for SIG1. This parameter has a resolution\n\t\t\t\tof 10 seconds; for example, 1 = 10 seconds, 2 = 20 seconds, 3 = 30 seconds (Default),\n\t\t\t\t... 255 = 2550 seconds = 42.5 minutes. A value of 0 disables automatic reporting.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -211,7 +217,7 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Disable Automatic Reports",
@@ -221,11 +227,12 @@
                     "label": "Enable Reports every 30 seconds (Default)",
                     "value": 3
                 }
-            ]
+            ],
+            "units": "10 minutes"
         },
         "11": {
-            "label": "Momentary_Relay1_Duration",
-            "description": "Momentary Relay1 output enable/disable (100msec).",
+            "label": "Momentary Relay1 enable/disable",
+            "description": "Momentary Relay1 output enable/disable.\n\t\t\t\t1..255 = enable / value sets the approximate momentary on time in increments\n\t\t\t\tof 100msec.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -243,7 +250,8 @@
                     "label": "500 milliseconds",
                     "value": 5
                 }
-            ]
+            ],
+            "units": "100 msec"
         }
     }
 }

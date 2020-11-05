@@ -1,11 +1,9 @@
-// Zooz ZSE18
-// Motion and Vibration Sensor
 {
     "_approved": true,
     "manufacturer": "Zooz",
     "manufacturerId": "0x027a",
     "label": "ZSE18",
-    "description": "Motion and Vibration Sensor",
+    "description": "ZSE18 Motion Sensor",
     "devices": [
         {
             "productType": "0x0301",
@@ -16,11 +14,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "12": {
-            "label": "PIR sensor sensitivity",
-            "description": "1 = low sensitivity and 8 = high sensitivity.",
+            "label": "PIR Sensitivity",
+            "description": "Adjust PIR sensor sensitivity.  1-8; 1 is low sensitivity, 8 is high sensitivity  Defaults to 4.",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 8,
@@ -30,41 +27,71 @@
             "allowManualEntry": true
         },
         "14": {
-            "label": "BASIC SET reports",
-            "description": "0 - disabled, 1 - enabled",
+            "label": "Enable BASIC SET reports",
+            "description": "Enable or Disable BASIC SET reports when motion is triggered for Group 2 of associated devices.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
         },
         "15": {
-            "label": "reverse BASIC SET",
-            "description": "0: 255 motion, 0 timeout. 1: 0 motion, 255 timeout",
+            "label": "Reverse values BASIC SET reports",
+            "description": "Use it to reverse values sent in BASIC SET reports when motion is triggered for Group 2 of associated devices. Defaults to Disabled, which will send value 255 when motion is triggered and send value 0 when motion times out.  Enabled will send value 0 when motion is triggered, and send value 255 when motion times out",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
         },
         "17": {
-            "label": "vibration sensor",
-            "description": "0=disabled, 1=enabled",
+            "label": "Vibration Sensor",
+            "description": "Enable or Disable vibration sensor.  Enabled by default.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
         },
         "18": {
-            "label": "trigger interval",
-            "description": "3=6 seconds, 65535=65538 seconds (add 3 seconds to value set)",
+            "label": "Trigger ON Duration",
+            "description": "Use it to set trigger interval - the time when motion is reported again after initial trigger.  Values are between 3 and 65535 seconds, with a +3 second offset.  Example; value of 3 actually means 6 seconds.  Value of 27 actually means 30 seconds.  Value of 65535 actually means 65538 seconds.  Defaults to 27, so 30 seconds. NOTE: Small interval will increase activity and decrease battery life.",
             "unit": "seconds",
             "valueSize": 2,
             "minValue": 3,
@@ -73,22 +100,33 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "20": {
             "label": "LED Indicator",
-            "description": "0=disabled, 1=enabled (default)",
+            "description": "Enable or Disable LED indicator.  Enabled by default.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
         },
         "32": {
             "label": "Low Battery Alert",
-            "description": "percent battery left",
+            "description": "Use this to set battery level for low battery reports.  value of 10 means 10% battery remaining, while value 50 means 50% battery remaining.  Defaults to 10.",
             "valueSize": 1,
             "minValue": 10,
             "maxValue": 50,
@@ -96,6 +134,25 @@
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Control Command",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Notification report",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Binary sensor report",
+            "maxNodes": 5
         }
     }
 }

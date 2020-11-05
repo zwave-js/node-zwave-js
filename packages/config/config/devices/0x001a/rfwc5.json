@@ -1,11 +1,9 @@
-// Eaton RFWC5
-// 5-Scene Keypad
 {
     "_approved": true,
-    "manufacturer": "Eaton",
+    "manufacturer": "Cooper Wiring Devices",
     "manufacturerId": "0x001a",
     "label": "RFWC5",
-    "description": "5-Scene Keypad",
+    "description": "RFWC5/RFWDC Scene Controller",
     "devices": [
         {
             "productType": "0x574d",
@@ -46,7 +44,7 @@
     "paramInformation": {
         "1": {
             "label": "Group 1 Level",
-            "description": "Group 1 Level",
+            "description": "Value 0x00-0x63 or 0xFF is the level for all nodes listed in the Group 1",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 255,
@@ -54,11 +52,12 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "2": {
             "label": "Group 2 Level",
-            "description": "Group 2 Level",
+            "description": "Value 0x00-0x63 or 0xFF is the level for all nodes listed in the Group 2",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 255,
@@ -66,11 +65,12 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "3": {
             "label": "Group 3 Level",
-            "description": "Group 3 Level",
+            "description": "Value 0x00-0x63 or 0xFF is the level for all nodes listed in the Group 3",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 255,
@@ -78,11 +78,12 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "4": {
             "label": "Group 4 Level",
-            "description": "Group 4 Level",
+            "description": "Value 0x00-0x63 or 0xFF is the level for all nodes listed in the Group 1",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 255,
@@ -90,11 +91,12 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "5": {
             "label": "Group 5 Level",
-            "description": "Group 5 Level",
+            "description": "Value 0x00-0x63 or 0xFF is the level for all nodes listed in the Group 4",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 255,
@@ -102,7 +104,8 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         }
     }
 }

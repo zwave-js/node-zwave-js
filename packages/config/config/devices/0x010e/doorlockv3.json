@@ -1,0 +1,125 @@
+{
+    "_approved": true,
+    "manufacturer": "Poly-control",
+    "manufacturerId": "0x010e",
+    "label": "DOORLOCKV3",
+    "description": "Danalock V3 BTZE",
+    "devices": [
+        {
+            "productType": "0x0009",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Twist Assist",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Hold and Release",
+            "description": "0 Disable.\n                1 to 2147483647 Enable, time in seconds.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2147483647,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "3": {
+            "label": "Block to Block",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "BLE Temporary Allowed",
+            "description": "0 Disable.\n                1 to 2147483647 Enable, time in seconds.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2147483647,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "5": {
+            "label": "BLE Always Allowed",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Autolock",
+            "description": "0 Disable.\n                1 to 2147483647 Enable, time in seconds.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 2147483647,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    }
+}

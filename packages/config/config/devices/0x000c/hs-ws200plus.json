@@ -1,0 +1,186 @@
+{
+    "_approved": true,
+    "manufacturer": "HomeSeer Technologies",
+    "manufacturerId": "0x000c",
+    "label": "HS-WS200PLUS",
+    "description": "HS-WS200+ Wall Switch",
+    "devices": [
+        {
+            "productType": "0x4447",
+            "productId": "0x3035"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Sets bottom LED operation",
+            "description": "Sets bottom LED operation (in normal mode)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "LED on if load is off",
+                    "value": 0
+                },
+                {
+                    "label": "LED off if load is off",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Invert switch",
+            "description": "Change the top of the switch to OFF and the bottom of the switch to ON if the switch was installed upside down.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "13": {
+            "label": "LED mode",
+            "description": "Normal mode (load status) or status mode (custom status)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Normal mode",
+                    "value": 0
+                },
+                {
+                    "label": "Status mode",
+                    "value": 1
+                }
+            ]
+        },
+        "14": {
+            "label": "Normal mode LED color",
+            "description": "Sets the Normal mode LED color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "White",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                }
+            ]
+        },
+        "21": {
+            "label": "Status mode LED color",
+            "description": "Sets the Status mode LED color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Magenta",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "White",
+                    "value": 7
+                }
+            ]
+        },
+        "31": {
+            "label": "LED blink frequency",
+            "description": "Sets the blink frequency of the LED\n              0 = No Blink\n              1 = 100ms ON then 100ms OFF",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

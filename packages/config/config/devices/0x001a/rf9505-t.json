@@ -1,0 +1,97 @@
+{
+    "_approved": true,
+    "manufacturer": "Cooper Wiring Devices",
+    "manufacturerId": "0x001a",
+    "label": "RF9505-T",
+    "description": "RF9505-T Split Control Duplex Receptacle",
+    "devices": [
+        {
+            "productType": "0x5244",
+            "productId": "0x0000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Panic ON time",
+            "description": "The amount of time in seconds the switch will turn on for when panic mode is trigered.  The configuration value is a signed single byte number. This value may represent a value with no units or may represent a value such as time. 0 to 127 (decimal) represents 0 to 127 seconds of time. -128 to -1 (negative decimal numbers) represents 128 to 255 seconds as calculated by this formula.  Config value = desired time in seconds (or desired value) -256 For an example of 172 seconds: config value = 172 - 256 = -84 (decimal) or 0xAC (hex)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "3": {
+            "label": "Panic OFF time",
+            "description": "The amount of time in seconds the switch will turn off for when panic mode is triggered.  The configuration value is a signed single byte number. This value may represent a value with no units or may represent a value such as time. 0 to 127 (decimal) represents 0 to 127 seconds of time. -128 to -1 (negative decimal numbers) represents 128 to 255 seconds as calculated by this formula.  Config value = desired time in seconds (or desired value) -256 For an example of 172 seconds: config value = 172 - 256 = -84 (decimal) or 0xAC (hex)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "5": {
+            "label": "Power Up State",
+            "description": "Power up state of the device",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "units": "",
+            "options": [
+                {
+                    "label": "OFF",
+                    "value": 1
+                },
+                {
+                    "label": "ON",
+                    "value": 2
+                },
+                {
+                    "label": "Last state",
+                    "value": 3
+                }
+            ]
+        },
+        "6": {
+            "label": "Panic mode enable",
+            "description": "Enables this device to participate in panic mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "OFF",
+                    "value": 0
+                },
+                {
+                    "label": "ON",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "255": {
+            "label": "Group #255",
+            "maxNodes": 1
+        }
+    }
+}

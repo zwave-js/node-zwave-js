@@ -1,0 +1,267 @@
+{
+    "_approved": true,
+    "manufacturer": "FIBARO System",
+    "manufacturerId": "0x010f",
+    "label": "FGK001",
+    "description": "FGK101 Door Opening Sensor",
+    "devices": [
+        {
+            "productType": "0x0700",
+            "productId": "0x4000"
+        },
+        {
+            "productType": "0x0700",
+            "productId": "0x3000"
+        },
+        {
+            "productType": "0x0700",
+            "productId": "0x2000"
+        },
+        {
+            "productType": "0x0700",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Input IN1",
+            "maxNodes": 5
+        },
+        "2": {
+            "label": "TMP Button",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "IN1 Alarm Cancellation Delay",
+            "description": "Input I alarm cancellation delay. Additional delay after an alarm from input IN1 has ceased. The parameter allows you to specify additional time, after which the input no. 1 alarm is cancelled once its violation has ceased.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "2": {
+            "label": "Status change signalled by LED",
+            "description": "Status change signalled by LED. Default setting: LED turned On",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "LED turned Off",
+                    "value": 0
+                },
+                {
+                    "label": "LED turned On",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Type of input no. 1",
+            "description": "Type of input no. 1, what the input 1 will report if no contact is made",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "NO (Normal Open)",
+                    "value": 0
+                },
+                {
+                    "label": "NC (Normal Close)",
+                    "value": 1
+                },
+                {
+                    "label": "MONOSTABLE",
+                    "value": 2
+                },
+                {
+                    "label": "BISTABLE",
+                    "value": 3
+                }
+            ]
+        },
+        "5": {
+            "label": "Type of transmitted control frame for association group 1",
+            "description": "Type of transmitted control frame for association group 1, activated via input IN1. The parameter allows to specify the type of alarm frame or to force transmission of control commands (BASIC_SET)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 255,
+            "options": [
+                {
+                    "label": "ALARM GENERIC",
+                    "value": 0
+                },
+                {
+                    "label": "ALARM SMOKE",
+                    "value": 1
+                },
+                {
+                    "label": "ALARM CO",
+                    "value": 2
+                },
+                {
+                    "label": "ALARM CO2",
+                    "value": 3
+                },
+                {
+                    "label": "ALARM HEAT",
+                    "value": 4
+                },
+                {
+                    "label": "ALARM WATER",
+                    "value": 5
+                },
+                {
+                    "label": "BASIC_SET",
+                    "value": 255
+                }
+            ]
+        },
+        "7": {
+            "label": "Forced Level of Dimming group 1",
+            "description": "Value of the parameter specifying the forced level of dimming / opening sun blinds when comes \"switch on\" / \"open\" command to devices from association group no. 1.\n\t\t\t  In the case of alarm frames the alarm priority is specified. Possible parameter settings: (1 - 99) and 255. Value of 255 makes it possible to activate the device when using the Dimmer module it means activating the device and setting it to the previous stored condition, e.g. when Dimmer is set to 30%, then deactivated, and then reactivated using command 255, it will automatically be set to the previous condition, i.e. 30%.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "9": {
+            "label": "Deactivate transmission of frame cancelling alarm",
+            "description": "Deactivating transmission of the frame cancelling the alarm or the control frame deactivating the device (Basic). It allows for disabling the deactivation function or the alarm cancellation function for devices associated with the appropriate input of the Fibaro Sensor. NOTE: Information concerning alarm violation or activation commands for devices from association groups are always sent.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Groups 1 and 2 sent",
+                    "value": 0
+                },
+                {
+                    "label": "Group 1 sent, Group 2 not sent.",
+                    "value": 1
+                },
+                {
+                    "label": "Group 1 not sent, Group 2 sent.",
+                    "value": 2
+                }
+            ]
+        },
+        "10": {
+            "label": "Interval between successive readings of temperature sensors",
+            "description": "Interval between successive readings of temperature from all sensors connected to the device in seconds. Note: taking temperature readings from the sensor does not result in sending a temperature condition report to the central hub.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20
+        },
+        "11": {
+            "label": "Interval between forcing to send report concerning the temperature conditions",
+            "description": "Interval between forcing to send report concerning the temperature conditions. The forced report is sent immediately after the next reading of temperature from the sensor, irrespective of the settings of parameter no. 12. Value 0 = Deactivates the function. Note: Frequent sending of temperature condition reports is reasonable when the sensor is located somewhere where can occur rapid changes of ambient temperature. In other cases it is recommended to leave the parameter set to the default value.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 200
+        },
+        "12": {
+            "label": "Insensitiveness to temperature changes",
+            "description": "Insensitiveness to temperature changes. This is the maximum acceptable difference between the last reported temperature and the current temperature taken from the sensor. If the temperatures differ by the set value or more, then a report with the current temperature value is sent to the device assigned to association group no. 3. Intervals between taking readings from sensors are specified by parameter no. 10.\n\t\t\t  Possible parameter settings:0 - 255 [0oC to 16oC] [0 oF - 28.8oF]\n\t\t\t  In order to set the appropriate value of the parameter, the following formula should be used:\n\t\t\t  x = delta T x 16 - for Celsius\n\t\t\t  x = delta T x 80 / 9 - for Fahrenheit\n\t\t\t  x - parameter value\n\t\t\t  delta T - maximum acceptable temperature gradient in Celsius or Fahrenheit\n\t\t\t  If the value is set to 0, then information about the temperature will be sent every time, immediately once the readings have been taken from the sensor.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 8
+        },
+        "13": {
+            "label": "Transmitting the alarm or control frame broadcast mode",
+            "description": "Transmitting the alarm or control frame in \"broadcast\" mode (i.e. to all devices within range), information sent in this mode is not repeated by the mesh network. NOTE: If the broadcast mode of information transmission is activated for a given channel, then transmission of information in singlecast mode to devices assigned to the association group of this channel is deactivated.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "IN1 and IN2 Broadcast inactive",
+                    "value": 0
+                },
+                {
+                    "label": "IN1 broadcast mode active, Sensor 2 broadcast mode inactive",
+                    "value": 1
+                },
+                {
+                    "label": "IN1 broadcast mode inactive, Sensor 2 broadcast mode active",
+                    "value": 2
+                },
+                {
+                    "label": "INI and IN2 broadcast mode active",
+                    "value": 3
+                }
+            ]
+        },
+        "14": {
+            "label": "Scene activation",
+            "description": "Enable/Disable scene functionality. The device offers the possibility of sending commands compatible with Command class scene activation. Information is sent to devices assigned to association group no. 3.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Scenes disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Scenes enabled",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

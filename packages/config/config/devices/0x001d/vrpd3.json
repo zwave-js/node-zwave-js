@@ -1,18 +1,16 @@
-// Leviton VRPD3
-// Scene Capable Plug-in Dimmer
 {
     "_approved": true,
     "manufacturer": "Leviton",
     "manufacturerId": "0x001d",
     "label": "VRPD3",
-    "description": "Scene Capable Plug-in Dimmer",
+    "description": "Leviton VRPD3-1LW 300W Plug-In Lamp Dimming Module",
     "devices": [
         {
-            "productType": "0x1705",
+            "productType": "0x1706",
             "productId": "0x0334"
         },
         {
-            "productType": "0x1706",
+            "productType": "0x1705",
             "productId": "0x0334"
         },
         {
@@ -26,7 +24,7 @@
     },
     "associations": {
         "1": {
-            "label": "Group 1",
+            "label": "Lifeline",
             "maxNodes": 5,
             "isLifeline": true
         }

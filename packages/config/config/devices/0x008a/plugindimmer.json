@@ -1,10 +1,8 @@
-// BeNext plugInDimmer
-// Plug-in Dimmer
 {
     "_approved": true,
     "manufacturer": "BeNext",
     "manufacturerId": "0x008a",
-    "label": "plugInDimmer",
+    "label": "PLUGINDIMMER",
     "description": "Plug-in Dimmer",
     "devices": [
         {
@@ -18,12 +16,12 @@
     },
     "associations": {
         "1": {
-            "label": "Group 1",
+            "label": "BASIC Report on manual switching",
             "description": "Receives BASIC SET commands",
             "maxNodes": 8
         },
         "2": {
-            "label": "Group 2",
+            "label": "Lifeline",
             "description": "Receives METER and MULTILEVEL_SWITCH commands",
             "maxNodes": 1,
             "isLifeline": true
@@ -31,28 +29,49 @@
     },
     "paramInformation": {
         "1": {
-            "label": "Reset to factory settings",
+            "label": "Set to Default",
             "description": "Set all configuration values to default values (factory settings).",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
+            "maxValue": 100,
+            "defaultValue": -1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
-        "4": {
-            "label": "Enable dimming",
-            "description": "Enable dimming",
+        "3": {
+            "label": "Control Type",
+            "description": "The way the Built-in Dimmer reacts when light is turned on/off with button",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
+            "maxValue": 100,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Switch own light on and send a Z-Wave message to all associated nodes (direct and external)",
+                    "value": 0
+                },
+                {
+                    "label": "Don.t switch own light on but only send a Z-Wave message to associated node. (external only)",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Dimming enabled",
+            "description": "This parameter is used to enable the dimming option of the product. When disabled the dimming and fading routine are disabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Disable",
@@ -65,19 +84,55 @@
             ]
         },
         "6": {
-            "label": "Maximum powerload",
-            "description": "Maximum powerload",
+            "label": "Maximum Power load",
+            "description": "The maximum power load in watts when light is turned on, when measured higher then this value the Inline Dimmer is automatically turned off.",
             "valueSize": 2,
-            "minValue": 25,
-            "maxValue": 150,
+            "minValue": 0,
+            "maxValue": 100,
             "defaultValue": 125,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "7": {
-            "label": "Dimming speed",
-            "description": "Dimming speed",
+            "label": "Dimming Speed",
+            "description": "The speed of dimming when activated (manual and RF). Dim speed is 1% per value (* 10 ms)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Fading up  Speed",
+            "description": "The speed of fading up when activated (manual and RF). Fade speed is 1% per value (* 10 ms)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "Auto meter report: percentage",
+            "description": "A percentage that an energy value must be different compared to a previous sent value before an unsolicited meter report is sent. Minimum value = 0% (disabled report)  Maximum value = 100%",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 2,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "Auto meter report: watt",
+            "description": "A watt value that an energy value must be different compared to a previous sent value before an unsolicited meter report is sent. Minimum value = 0 watt  (disabled report) Maximum value = 255 watt",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -87,49 +142,13 @@
             "writeOnly": false,
             "allowManualEntry": true
         },
-        "8": {
-            "label": "Fading up speed",
-            "description": "Fading up speed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Auto meter report: percentage",
-            "description": "Auto meter report: percentage",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Auto meter report: watt",
-            "description": "Auto meter report: watt",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
         "13": {
             "label": "Auto meter report: time",
-            "description": "Auto meter report: time",
+            "description": "A time value that has to be passed compared to a previous sent value before a unsolicited meter report is sent. Minimum value = 10 seconds  Maximum value = 255 seconds",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
+            "maxValue": 100,
+            "defaultValue": 20,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
@@ -137,10 +156,10 @@
         },
         "14": {
             "label": "Last known status",
-            "description": "Last known status",
+            "description": "What to do with lamp status when power applied. If 0x00: Always switch light off when power applied. If > 0x00: Switch lamp on/off depending on last known lampstatus before power was disconnected.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -149,10 +168,10 @@
         },
         "15": {
             "label": "Fading down speed",
-            "description": "Fading down speed",
+            "description": "The speed of fading up when activated (manual and RF). Fade speed is 1% per value (* 10 ms)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,

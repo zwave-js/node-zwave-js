@@ -1,11 +1,9 @@
-// Eaton RF9534
-// Smart Dimmer
 {
     "_approved": true,
-    "manufacturer": "Eaton",
+    "manufacturer": "Cooper Wiring Devices",
     "manufacturerId": "0x001a",
     "label": "RF9534",
-    "description": "Smart Dimmer",
+    "description": "RF9534DS Wall Dimmer Module",
     "devices": [
         {
             "productType": "0x4449",

@@ -1,11 +1,9 @@
-// Nortek Security & Control LLC WD500Z5-1
-// An in-wall lighting dimmer
 {
     "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
+    "manufacturer": "Linear (Nortek Security Control LLC)",
     "manufacturerId": "0x014f",
     "label": "WD500Z5-1",
-    "description": "An in-wall lighting dimmer",
+    "description": "WD500Z5-1 Wall Mounted Dimmer",
     "devices": [
         {
             "productType": "0x5744",
@@ -16,44 +14,85 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "3": {
             "label": "Night Light",
-            "description": "Control the LED on the device.",
+            "description": "By default, the Dimmer LED will turn OFF when the load attached is turned ON.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 4,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Night-light Mode",
+                    "value": 0
+                },
+                {
+                    "label": "LED ON when load is on",
+                    "value": 1
+                },
+                {
+                    "label": "LED always ON",
+                    "value": 2
+                },
+                {
+                    "label": "LED always OFF",
+                    "value": 3
+                },
+                {
+                    "label": "LED blink during RF transmission",
+                    "value": 4
+                }
+            ]
         },
         "4": {
             "label": "Invert Switch",
-            "description": "Invert the operation of the paddle.",
+            "description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 0
+                },
+                {
+                    "label": "Invert",
+                    "value": 1
+                }
+            ]
         },
         "5": {
-            "label": "Ignore Start Level in Dim Command",
-            "description": "The Start Level sent in a Dim command can be ignored or not.",
+            "label": "Ignore Start-Level",
+            "description": "This dimmer will always start dimming from its current level, ignoring any commanded start level.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
         },
         "7": {
             "label": "Dim Remote On/Off Step",
-            "description": "Dim Remote On/Off Step (default=3, 3 steps)",
+            "description": "Dim Step can be set to a value of 1 to 99. This value indicates how many levels the dimmer will change each time the Dim Timer expires.",
             "unit": "Step(s)",
             "valueSize": 1,
             "minValue": 1,
@@ -61,11 +100,12 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "steps"
         },
         "8": {
             "label": "Dim Remote On/Off Timer",
-            "description": "Dim Remote On/Off Timer (default = 10, 10 ms)",
+            "description": "The Dim Timer (how fast the dim steps happen). It can be set to a value of 1 to 255. This value indicates in 10 millisecond resolution, how often the dim level will change.",
             "unit": "ms",
             "valueSize": 1,
             "minValue": 1,
@@ -74,11 +114,12 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "ms"
         },
         "9": {
             "label": "Dim Local On/Off Step",
-            "description": "Dim Local On/Off Step (default = 10, 10 steps)",
+            "description": "Dim Step can be set to a value of 1 to 99. This value indicates how many levels the dimmer will change each time the Dim Timer expires.",
             "unit": "Step(s)",
             "valueSize": 1,
             "minValue": 1,
@@ -86,11 +127,12 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "steps"
         },
         "10": {
             "label": "Dim Local On/Off Timer",
-            "description": "Dim Local On/Off Timer (default = 10, 10 ms)",
+            "description": "The Dim Timer (how fast the dim steps happen). It can be set to a value of 1 to 255. This value indicates in 10 millisecond resolution, how often the dim level will change.",
             "unit": "ms",
             "valueSize": 1,
             "minValue": 1,
@@ -99,11 +141,12 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "ms"
         },
         "11": {
             "label": "Dim ALL On/Off Step",
-            "description": "Dim ALL On/Off Step (default = 10, 10 steps)",
+            "description": "Dim Step can be set to a value of 1 to 99. This value indicates how many levels the dimmer will change each time the Dim Timer expires.",
             "unit": "Step(s)",
             "valueSize": 1,
             "minValue": 1,
@@ -111,20 +154,29 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "steps"
         },
         "12": {
             "label": "Dim ALL On/Off Timer",
-            "description": "Dim ALL On/Off Timer (default = 3, 3 ms)",
+            "description": "The Dim Timer (how fast the dim steps happen). It can be set to a value of 1 to 255. This value indicates in 10 millisecond resolution, how often the dim level will change.",
             "unit": "ms",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 255,
-            "defaultValue": 3,
+            "defaultValue": 10,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "ms"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
         }
     }
 }

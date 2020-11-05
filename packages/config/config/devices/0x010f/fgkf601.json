@@ -1,19 +1,17 @@
-// Fibargroup FGKF601
-// Keyfob
 {
     "_approved": true,
-    "manufacturer": "Fibargroup",
+    "manufacturer": "FIBARO System",
     "manufacturerId": "0x010f",
     "label": "FGKF601",
-    "description": "Keyfob",
+    "description": "FGKF601 Keyfob",
     "devices": [
         {
             "productType": "0x1001",
-            "productId": "0x1000"
+            "productId": "0x2000"
         },
         {
             "productType": "0x1001",
-            "productId": "0x2000"
+            "productId": "0x1000"
         },
         {
             "productType": "0x1001",
@@ -24,11 +22,65 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Square - On/Of",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Square - Multilevel",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Circle - On/Of",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Circle - Multilevel",
+            "maxNodes": 5
+        },
+        "6": {
+            "label": "Cross - On/Of",
+            "maxNodes": 5
+        },
+        "7": {
+            "label": "Cross - Multilevel",
+            "maxNodes": 5
+        },
+        "8": {
+            "label": "Triangle - On/Of",
+            "maxNodes": 5
+        },
+        "9": {
+            "label": "Triangle - Multilevel",
+            "maxNodes": 5
+        },
+        "10": {
+            "label": "Minus - On/Of",
+            "maxNodes": 5
+        },
+        "11": {
+            "label": "Minus - Multilevel",
+            "maxNodes": 5
+        },
+        "12": {
+            "label": "Plus - On/Of",
+            "maxNodes": 5
+        },
+        "13": {
+            "label": "Plus - Multilevel",
+            "maxNodes": 5
+        }
+    },
     "paramInformation": {
         "1": {
             "label": "Lock Mode - unlocking sequence",
-            "description": "0 - Lock Mode disabled, 9-28086 - unlocking sequence",
+            "description": "This parameter allows to activate Lock Mode and set up unlocking sequence. \n\t\t\tDevice will lock after time set in parameter 2 or after pressing and holding selected button. \n\t\t\t0 - Lock Mode disabled.\n\t\t\t9-28086 - unlocking sequence.\n\t\t\tSee \"Lock Mode\" on page 9 for more information.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 28086,
@@ -39,7 +91,7 @@
         },
         "2": {
             "label": "Lock Mode - time to lock and locking button",
-            "description": "0 - Lock Mode disabled, 5-1791 - calculated value",
+            "description": "This parameter allows to set time that must elapse from the last press of the button to lock the device and locking button.\n\t\t\tSetting locking button will deactivate associations and scenes for pressing and holding the selected button.\n\t\t\tThis parameter is irrelevant if parameter 1 is set to 0 (Lock Mode disable).\n\t\t\t0 - Lock Mode disabled.\n\t\t\t5-1791- calculated value.\n\t\t\tSee \"Lock Mode\" on page 9 for more information",
             "unit": "s",
             "valueSize": 2,
             "minValue": 0,
@@ -51,7 +103,7 @@
         },
         "3": {
             "label": "First scene sequence",
-            "description": "0 - 1st sequence disabled, 9-28086 - value of sequence",
+            "description": "This parameter allows to set up sequence that activates scene with ID 7.\n\t\t\t0 - 1st sequence disabled.\n\t\t\t9-28086 - value of sequence.\n\t\t\tSee \"Sequences\" on page 10 for more information.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 28086,
@@ -62,7 +114,7 @@
         },
         "4": {
             "label": "Second scene sequence",
-            "description": "0 - 2nd sequence disabled, 9-28086 - value of sequence",
+            "description": "This parameter allows to set up sequence that activates scene with ID 8.\n\t\t\t0 - 1st sequence disabled.\n\t\t\t9-28086 - value of sequence.\n\t\t\tSee \"Sequences\" on page 10 for more information.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 28086,
@@ -73,7 +125,7 @@
         },
         "5": {
             "label": "Third scene sequence",
-            "description": "0 - 3rd sequence disabled, 9-28086 - value of sequence",
+            "description": "This parameter allows to set up sequence that activates scene with ID 9.\n\t\t\t0 - 1st sequence disabled.\n\t\t\t9-28086 - value of sequence.\n\t\t\tSee \"Sequences\" on page 10 for more information.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 28086,
@@ -84,7 +136,7 @@
         },
         "6": {
             "label": "Fourth scene sequence",
-            "description": "0 - 4th sequence disabled, 9-28086 - value of sequence",
+            "description": "This parameter allows to set up sequence that activates scene with ID 10.\n\t\t\t0 - 1st sequence disabled.\n\t\t\t9-28086 - value of sequence.\n\t\t\tSee \"Sequences\" on page 10 for more information.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 28086,
@@ -95,7 +147,7 @@
         },
         "7": {
             "label": "Fifth scene sequence",
-            "description": "0 - 5th sequence disabled, 9-28086 - value of sequence",
+            "description": "This parameter allows to set up sequence that activates scene with ID 11.\n\t\t\t0 - 1st sequence disabled.\n\t\t\t9-28086 - value of sequence.\n\t\t\tSee \"Sequences\" on page 10 for more information.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 28086,
@@ -106,7 +158,7 @@
         },
         "8": {
             "label": "Sixth scene sequence",
-            "description": "0 - 6th sequence disabled, 9-28086 - value of sequence",
+            "description": "This parameter allows to set up sequence that activates scene with ID 12.\n\t\t\t0 - 1st sequence disabled.\n\t\t\t9-28086 - value of sequence.\n\t\t\tSee \"Sequences\" on page 10 for more information.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 28086,
@@ -117,7 +169,7 @@
         },
         "9": {
             "label": "Sequences - timeout",
-            "description": "5-30 (0.5-3s, 0.1s step) - time to lock",
+            "description": "This parameter allows to set time that must elapse from the last press of the button to check if the sequence is valid.\n\t\t\tAvailable settings: 5-30 (0.5-3s, 0.1s step) - time to lock",
             "unit": "s",
             "valueSize": 1,
             "minValue": 5,
@@ -132,29 +184,29 @@
             "description": "This parameter allows to choose operating mode for single button associations.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 2,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "single click switches state to opposite",
+                    "label": "Single press switches state to opposite",
                     "value": 0
                 },
                 {
-                    "label": "single click => opposite, double click => max",
+                    "label": "Single press switches state to opposite, double press sets to maximum level",
                     "value": 1
                 },
                 {
-                    "label": "single click turns on, double click turns off",
+                    "label": "Single press turns on, double press turns off",
                     "value": 2
                 }
             ]
         },
         "11": {
-            "label": "Value sent to □ association group",
-            "description": "1-99 or 255 (last state)",
+            "label": "Value sent to Square association group",
+            "description": "This parameter allows to set value sent to devices in association group. \n\t\t\tIt will result in turning multilevel devices on with set or last level. \n\t\t\tValue is irrelevant for simple on/off devices.\n\t\t\tAvailable settings: 1-99 or 255.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -164,8 +216,8 @@
             "allowManualEntry": true
         },
         "12": {
-            "label": "Value sent to ○ association group",
-            "description": "1-99 or 255 (last state)",
+            "label": "Value sent to Circle association group",
+            "description": "This parameter allows to set value sent to devices in association group. \n\t\t\tIt will result in turning multilevel devices on with set or last level. \n\t\t\tValue is irrelevant for simple on/off devices.\n\t\t\tAvailable settings: 1-99 or 255.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -175,8 +227,8 @@
             "allowManualEntry": true
         },
         "13": {
-            "label": "Value sent to x association group",
-            "description": "1-99 or 255 (last state)",
+            "label": "Value sent to Cross association group",
+            "description": "This parameter allows to set value sent to devices in association group. \n\t\t\tIt will result in turning multilevel devices on with set or last level. \n\t\t\tValue is irrelevant for simple on/off devices.\n\t\t\tAvailable settings: 1-99 or 255.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -186,8 +238,8 @@
             "allowManualEntry": true
         },
         "14": {
-            "label": "Value sent to Δ association group",
-            "description": "1-99 or 255 (last state)",
+            "label": "Value sent to Triangle association group",
+            "description": "This parameter allows to set value sent to devices in association group. \n\t\t\tIt will result in turning multilevel devices on with set or last level. \n\t\t\tValue is irrelevant for simple on/off devices.\n\t\t\tAvailable settings: 1-99 or 255.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -197,8 +249,8 @@
             "allowManualEntry": true
         },
         "15": {
-            "label": "Value sent to - association group",
-            "description": "1-99 or 255 (last state)",
+            "label": "Value sent to Minus association group",
+            "description": "This parameter allows to set value sent to devices in association group. \n\t\t\tIt will result in turning multilevel devices on with set or last level. \n\t\t\tValue is irrelevant for simple on/off devices.\n\t\t\tAvailable settings: 1-99 or 255.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -208,8 +260,8 @@
             "allowManualEntry": true
         },
         "16": {
-            "label": "Value sent to + association group",
-            "description": "1-99 or 255 (last state)",
+            "label": "Value sent to Plus association group",
+            "description": "This parameter allows to set value sent to devices in association group. \n\t\t\tIt will result in turning multilevel devices on with set or last level. \n\t\t\tValue is irrelevant for simple on/off devices.\n\t\t\tAvailable settings: 1-99 or 255.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 255,
@@ -219,137 +271,137 @@
             "allowManualEntry": true
         },
         "17": {
-            "label": "Paired buttons association for □ and ○",
-            "description": "activate paired buttons association mode for □ and ○ buttons",
+            "label": "Paired buttons association for Square and Circle",
+            "description": "This parameter allows to activate paired buttons association mode for Square and Circle buttons. \n\t\t\tPaired buttons are dependent and association are sent only to Square groups. Circle turns devices on and increases value, Square turns them off and decreases value.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "paired buttons association inactive",
+                    "label": "Inactive",
                     "value": 0
                 },
                 {
-                    "label": "paired buttons association active",
+                    "label": "Active",
                     "value": 1
                 }
             ]
         },
         "18": {
-            "label": "Paired buttons association for x and Δ",
-            "description": "allows to activate paired buttons association mode for x and Δ buttons",
+            "label": "Paired buttons association for Cross and Triangle",
+            "description": "This parameter allows to activate paired buttons association mode for Cross and Triangle buttons. \n\t\t\tPaired buttons are dependent and association are sent only to Cross groups. Triangle turns devices on and increases value, Cross turns them off and decreases value.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "paired buttons association inactive",
+                    "label": "Inactive",
                     "value": 0
                 },
                 {
-                    "label": "paired buttons association active",
+                    "label": "Active",
                     "value": 1
                 }
             ]
         },
         "19": {
-            "label": "Paired buttons association for - and +",
-            "description": "allows to activate paired buttons association mode for - and + buttons",
+            "label": "Paired buttons association for Minus and Plus",
+            "description": "This parameter allows to activate paired buttons association mode for Minus and Plus buttons. \n\t\t\tPaired buttons are dependent and association are sent only to Minus groups. Plus turns devices on and increases value, Minus turns them off and decreases value.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "paired buttons association inactive",
+                    "label": "Inactive",
                     "value": 0
                 },
                 {
-                    "label": "paired buttons association active",
+                    "label": "Active",
                     "value": 1
                 }
             ]
         },
         "21": {
-            "label": "Scene activation for □ button",
-            "description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
+            "label": "Scene activation for Square button",
+            "description": "This parameter determines which actions result in sending assigned scene IDs and attributes to the controller.\n\t\t\t1 - Key Pressed 1 time.\n\t\t\t2 - Key Pressed 2 times.\n\t\t\t4 - Key Pressed 3 times.\n\t\t\t8 - Key Held Down and Released.\n\t\t\tDefault setting: 9, 1x and hold.",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
+            "minValue": 1,
+            "maxValue": 255,
             "defaultValue": 9,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "22": {
-            "label": "Scene activation for ○ button",
-            "description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
+            "label": "Scene activation for Circle button",
+            "description": "This parameter determines which actions result in sending assigned scene IDs and attributes to the controller.\n\t\t\t1 - Key Pressed 1 time.\n\t\t\t2 - Key Pressed 2 times.\n\t\t\t4 - Key Pressed 3 times.\n\t\t\t8 - Key Held Down and Released.\n\t\t\tDefault setting: 9, 1x and hold.",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
+            "minValue": 1,
+            "maxValue": 255,
             "defaultValue": 9,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "23": {
-            "label": "Scene activation for x button",
-            "description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
+            "label": "Scene activation for Cross button",
+            "description": "This parameter determines which actions result in sending assigned scene IDs and attributes to the controller.\n\t\t\t1 - Key Pressed 1 time.\n\t\t\t2 - Key Pressed 2 times.\n\t\t\t4 - Key Pressed 3 times.\n\t\t\t8 - Key Held Down and Released.\n\t\t\tDefault setting: 9, 1x and hold.",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
+            "minValue": 1,
+            "maxValue": 255,
             "defaultValue": 9,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "24": {
-            "label": "Scene activation for Δ button",
-            "description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
+            "label": "Scene activation for Triangle button",
+            "description": "This parameter determines which actions result in sending assigned scene IDs and attributes to the controller.\n\t\t\t1 - Key Pressed 1 time.\n\t\t\t2 - Key Pressed 2 times.\n\t\t\t4 - Key Pressed 3 times.\n\t\t\t8 - Key Held Down and Released.\n\t\t\tDefault setting: 9, 1x and hold.",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
+            "minValue": 1,
+            "maxValue": 255,
             "defaultValue": 9,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "25": {
-            "label": "Scene activation for - button",
-            "description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
+            "label": "Scene activation for Minus button",
+            "description": "This parameter determines which actions result in sending assigned scene IDs and attributes to the controller.\n\t\t\t1 - Key Pressed 1 time.\n\t\t\t2 - Key Pressed 2 times.\n\t\t\t4 - Key Pressed 3 times.\n\t\t\t8 - Key Held Down and Released.\n\t\t\tDefault setting: 9, 1x and hold.",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
+            "minValue": 1,
+            "maxValue": 255,
             "defaultValue": 9,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "26": {
-            "label": "Scene activation for + button",
-            "description": "1 = 1 time, 2 = 2 times, 4 = 3 times, 8 = held down and released",
+            "label": "Scene activation for Plus button",
+            "description": "This parameter determines which actions result in sending assigned scene IDs and attributes to the controller.\n\t\t\t1 - Key Pressed 1 time.\n\t\t\t2 - Key Pressed 2 times.\n\t\t\t4 - Key Pressed 3 times.\n\t\t\t8 - Key Held Down and Released.\n\t\t\tDefault setting: 9, 1x and hold.",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
+            "minValue": 1,
+            "maxValue": 255,
             "defaultValue": 9,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "29": {
-            "label": "Associations in Z-Wave network security mode",
-            "description": "defines how commands are sent in specified association groups",
+            "label": "Associations in Z-Wave network Security Mode",
+            "description": "Parameter defines how commands are sent in specified association groups: using Security Mode or not.\n\t\t\tParameter is active only in Z-Wave network Security Mode. It does not apply to 1st Lifeline association group.\n\t\t\t1    : 2nd group sent using Security Mode.\n\t\t\t2    : 3rd group sent using Security Mode.\n\t\t\t4    : 4th group sent using Security Mode.\n\t\t\t8    : 5th group sent using Security Mode.\n\t\t\t16   : 6th group sent using Security Mode.\n\t\t\t32   : 7th group sent using Security Mode.\n\t\t\t64   : 8th group sent using Security Mode.\n\t\t\t128  : 9th group sent using Security Mode.\n\t\t\t256  : 10th group sent using Security Mode.\n\t\t\t512  : 11th group sent using Security Mode.\n\t\t\t1024 : 12th group sent using Security Mode.\n\t\t\t2048 : 13th group sent using Security Mode.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 4095,

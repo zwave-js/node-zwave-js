@@ -1,0 +1,94 @@
+{
+    "_approved": true,
+    "manufacturer": "TechniSat",
+    "manufacturerId": "0x0299",
+    "label": "03009496",
+    "description": "Shutter",
+    "devices": [
+        {
+            "productType": "0x0005",
+            "productId": "0x1a93"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Parameter 1",
+            "description": "Enable/disable central scene notifications for 2x-5x button presses.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "disable central scene",
+                    "value": 0
+                },
+                {
+                    "label": "enable central scene",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Parameter 2",
+            "description": "3 to 8640 - Interval of current wattage meter reports in 10 seconds increments.\n        0 - Disable unsolicited meter reports of current wattage.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 8640,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "3": {
+            "label": "Parameter 3",
+            "description": "Interval of active energy meter reports in minutes.\n         - 10 to 30240 - Interval of active energy meter unsolicited reports in minutes (10 minutes - 3 weeks)\n         - 0 - Disable unsolicited meter reports of active energy.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 30240,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60
+        },
+        "4": {
+            "label": "Parameter 4",
+            "description": "Setting this parameter to 1 will start a manual shutter calibration.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Default",
+                    "value": 0
+                },
+                {
+                    "label": "manual shutter calibration",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic on/off",
+            "maxNodes": 16
+        }
+    }
+}

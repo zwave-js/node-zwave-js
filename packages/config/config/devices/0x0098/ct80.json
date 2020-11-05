@@ -1,12 +1,14 @@
-// Radio Thermostat Company of America (RTC) CT80
-// Z-Wave Thermostat
 {
     "_approved": true,
-    "manufacturer": "Radio Thermostat Company of America (RTC)",
+    "manufacturer": "2GIG Technologies",
     "manufacturerId": "0x0098",
     "label": "CT80",
-    "description": "Z-Wave Thermostat",
+    "description": "CT80 Thermostat",
     "devices": [
+        {
+            "productType": "0x5003",
+            "productId": "0x0109"
+        },
         {
             "productType": "0x5002",
             "productId": "0x0100"
@@ -14,10 +16,6 @@
         {
             "productType": "0x5002",
             "productId": "0x0108"
-        },
-        {
-            "productType": "0x5003",
-            "productId": "0x0109"
         }
     ],
     "firmwareVersion": {

@@ -1,0 +1,61 @@
+{
+    "_approved": true,
+    "manufacturer": "FortrezZ",
+    "manufacturerId": "0x0084",
+    "label": "WWA02",
+    "description": "WWA-02 Water and Temperature Alarm",
+    "devices": [
+        {
+            "productType": "0x0023",
+            "productId": "0x0109"
+        },
+        {
+            "productType": "0x0021",
+            "productId": "0x010a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Water Alarm or Heat Alarm",
+            "maxNodes": 2
+        },
+        "2": {
+            "label": "Water Alarm",
+            "maxNodes": 2
+        },
+        "3": {
+            "label": "Temperature Alarm",
+            "maxNodes": 2
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Low Temperature Trigger Point",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 4,
+            "units": "degrees"
+        },
+        "2": {
+            "label": "High Temperature Trigger Point",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 70,
+            "units": "degrees"
+        }
+    }
+}

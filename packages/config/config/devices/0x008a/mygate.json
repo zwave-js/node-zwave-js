@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "BeNext",
+    "manufacturerId": "0x008a",
+    "label": "MYGATE",
+    "description": "myGate",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0100"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

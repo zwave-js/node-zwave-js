@@ -1,0 +1,459 @@
+{
+    "_approved": true,
+    "manufacturer": "FIBARO System",
+    "manufacturerId": "0x010f",
+    "label": "FGWR111",
+    "description": "FGWR111 Walli Roller Shutter",
+    "devices": [
+        {
+            "productType": "0x1d01",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "11": {
+            "label": "LED frame – colour when moving",
+            "description": "This parameter defines the LED colour when the motor is running.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "LED disabled",
+                    "value": 0
+                },
+                {
+                    "label": "White",
+                    "value": 1
+                },
+                {
+                    "label": "Red",
+                    "value": 2
+                },
+                {
+                    "label": "Green",
+                    "value": 3
+                },
+                {
+                    "label": "Blue",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "Magenta",
+                    "value": 7
+                }
+            ]
+        },
+        "12": {
+            "label": "LED frame – colour when not moving",
+            "description": "This parameter defines the LED colour when the device motor is not running.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "LED disabled",
+                    "value": 0
+                },
+                {
+                    "label": "White",
+                    "value": 1
+                },
+                {
+                    "label": "Red",
+                    "value": 2
+                },
+                {
+                    "label": "Green",
+                    "value": 3
+                },
+                {
+                    "label": "Blue",
+                    "value": 4
+                },
+                {
+                    "label": "Yellow",
+                    "value": 5
+                },
+                {
+                    "label": "Cyan",
+                    "value": 6
+                },
+                {
+                    "label": "Magenta",
+                    "value": 7
+                }
+            ]
+        },
+        "13": {
+            "label": "LED frame – brightness",
+            "description": "This parameter allows to adjust the LED frame brightness.\n        0 - LED disabled\n        1-100 - (1-100% brightness)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 100,
+            "units": "%"
+        },
+        "24": {
+            "label": "Buttons orientation",
+            "description": "This parameter allows reversing the operation of the buttons.\n\n        0 - default (1st button UP, 2nd button DOWN)\n        1 - reversed (1st button DOWN, 2nd button UP)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Default",
+                    "value": 0
+                },
+                {
+                    "label": "Reversed",
+                    "value": 1
+                }
+            ]
+        },
+        "25": {
+            "label": "Outputs orientation",
+            "description": "This parameter allows reversing the operation of Q1 and Q2 without changing the wiring (e.g. in case of invalid motor connection).\n\n        0 - default (Q1 - UP, Q2 - DOWN)\n        1 - reversed (Q1 - DOWN, Q2 - UP)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Default",
+                    "value": 0
+                },
+                {
+                    "label": "Reversed",
+                    "value": 1
+                }
+            ]
+        },
+        "30": {
+            "label": "Alarm configuration - 1st slot",
+            "description": "This parameter determines to which alarm frames and how the device should react.\n        The parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification.\n\n        1B [MSB] - Notification Type\n        2B - Notification Status\n        3B - Event/State Parameters\n        4B [LSB] - action:\n          0x00 - no action,\n          0xX1 - open,\n          0xX2 - close,\n          0x0X - no action on LED frame,\n          0x1X - LED frame blinks red,\n          0x2X - LED frame blinks green,\n          0x4X - LED frame blinks blue,\n          0x8X - dis- able LED frame,\n          0xFX - LED frame LAPD signal (red-white-blue)\n\n        Default value: [0x00, 0x00, 0x00, 0x00] (disabled)",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "31": {
+            "label": "Alarm configuration - 2nd slot (Water)",
+            "description": "This parameter determines to which alarm frames and how the device should react.\n        The parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification.\n\n        1B [MSB] - Notification Type\n        2B – Notification Status\n        3B – Event/State Parameters\n        4B [LSB] – action:\n          0x00 - no action,\n          0xX1 - open,\n          0xX2 - close,\n          0x0X - no action on LED frame,\n          0x1X - LED frame blinks red,\n          0x2X - LED frame blinks green,\n          0x4X - LED frame blinks blue,\n          0x8X - dis- able LED frame,\n          0xFX - LED frame LAPD signal (red-white-blue)\n\n        Default value: [0x05, 0xFF, 0x00, 0x00] (Water Alarm, any notification, no action)",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1358888960
+        },
+        "32": {
+            "label": "Alarm configuration - 3rd slot (Smoke)",
+            "description": "This parameter determines to which alarm frames and how the device should react.\n        The parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification.\n\n        1B [MSB] - Notification Type\n        2B - Notification Status\n        3B - Event/State Parameters\n        4B [LSB] - action:\n          0x00 - no action,\n          0xX1 - open,\n          0xX2 - close,\n          0x0X - no action on LED frame,\n          0x1X - LED frame blinks red,\n          0x2X - LED frame blinks green,\n          0x4X - LED frame blinks blue,\n          0x8X - dis- able LED frame,\n          0xFX - LED frame LAPD signal (red-white-blue)\n\n        Default value: [0x01, 0xFF, 0x00, 0x00] (Smoke Alarm, any notification, no action)",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 33488896
+        },
+        "33": {
+            "label": "Alarm configuration - 4th slot (CO)",
+            "description": "This parameter determines to which alarm frames and how the device should react.\n        The parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification.\n\n        1B [MSB] - Notification Type\n        2B - Notification Status\n        3B - Event/State Parameters\n        4B [LSB] - action:\n          0x00 - no action,\n          0xX1 - open,\n          0xX2 - close,\n          0x0X - no action on LED frame,\n          0x1X - LED frame blinks red,\n          0x2X - LED frame blinks green,\n          0x4X - LED frame blinks blue,\n          0x8X - dis- able LED frame,\n          0xFX - LED frame LAPD signal (red-white-blue)\n\n        Default value: [0x02, 0xFF, 0x00, 0x00] (CO Alarm, any notification, no action)",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1358888960
+        },
+        "34": {
+            "label": "Alarm configuration - 5th slot (Heat)",
+            "description": "This parameter determines to which alarm frames and how the device should react.\n        The parameters consist of 4 bytes, three most significant bytes are set according to the official Z-Wave protocol specification.\n\n        1B [MSB] - Notification Type\n        2B - Notification Status\n        3B - Event/State Parameters\n        4B [LSB] - action:\n          0x00 - no action,\n          0xX1 - open,\n          0xX2 - close,\n          0x0X - no action on LED frame,\n          0x1X - LED frame blinks red,\n          0x2X - LED frame blinks green,\n          0x4X - LED frame blinks blue,\n          0x8X - dis- able LED frame,\n          0xFX - LED frame LAPD signal (red-white-blue)\n\n        Default value: [0x02, 0xFF, 0x00, 0x00] (CO Alarm, any notification, no action)",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50266112
+        },
+        "35": {
+            "label": "Alarm configuration – duration",
+            "description": "This parameter defines duration of alarm sequence.\n        When time set in this parameter elapses, alarm is cancelled, LED frame and relay restore normal operation, but do not recover state from before the alarm.\n\n        0 – infinite\n        1-32400 (1s-9h, 1s step) – duration\n\n        Default value: 600 (10min)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600
+        },
+        "40": {
+            "label": "First button – scenes sent",
+            "description": "This parameter determines which actions result in sending scene IDs assigned to them.\n        Values can be combined (e.g. 1+2=3 means that scenes for single and double click are sent).\n        Enabling scenes for triple click disables entering the device in learn mode by triple clicking.\n\n        1 - Key pressed 1 time\n        2 - Key pressed 2 times\n        4 - Key pressed 3 times\n        8 - Key hold down and key released\n\n        Default value: 0 (no scenes)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "41": {
+            "label": "Second button – scenes sent",
+            "description": "This parameter determines which actions result in sending scene IDs assigned to them.\n        Values can be combined (e.g. 1+2=3 means that scenes for single and double click are sent).\n        Enabling scenes for triple click disables entering the device in learn mode by triple clicking.\n\n        1 - Key pressed 1 time\n        2 - Key pressed 2 times\n        4 - Key pressed 3 times\n        8 - Key hold down and key released\n\n        Default value: 0 (no scenes)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "60": {
+            "label": "Power reports – include self-consumption",
+            "description": "This parameter determines whether the power measurements should include power consumed by the device itself.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "self-consumption not included",
+                    "value": 0
+                },
+                {
+                    "label": "self-consumption included",
+                    "value": 1
+                }
+            ]
+        },
+        "61": {
+            "label": "Power reports – on change",
+            "description": "This parameter defines minimal change (from the last reported) in measured power that results in sending new report.\n        For loads under 50W the parameter is irrelevant, report are sent every 5W change.\n\n        0 - reporting on change disabled\n        1-500 (1-500%, 1% step) – minimal change\n\n        Default value: 15 (15%)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 15,
+            "units": "%"
+        },
+        "62": {
+            "label": "Power reports - periodic",
+            "description": "This parameter defines reporting interval for measured power.\n        Periodic reports are independent from changes in value (parameter 61).\n\n        0 – periodic reports disabled\n        30-32400 (30s-9h, 1s step) – time interval\n\n        Default value: 3600 (1h)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3600,
+            "units": "second"
+        },
+        "65": {
+            "label": "Energy reports – on change",
+            "description": "This parameter defines minimal change (from the last reported) in measured energy that results in sending new report.\n\n        0 - reporting on change disabled\n        1-500 (0.01-5kWh, 0.01kWh step) – minimal change\n\n        Default value: 10 (0.1kWh)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "kWh"
+        },
+        "66": {
+            "label": "Energy reports - periodic",
+            "description": "This parameter defines reporting interval for measured energy.\n        Periodic reports are independent from changes in value (parameter 65).\n\n        0 – periodic reports disabled\n        30-32400 (30s-9h, 1s step) – time interval\n\n        Default value: 3600 (1h)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3600,
+            "units": "second"
+        },
+        "150": {
+            "label": "Force calibration",
+            "description": "By setting this parameter to 2 the device enters the calibration mode.\n        The parameter relevant only if the device is set to work in positioning mode (parameter 151 set to 1 or 2).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Device is not calibrated",
+                    "value": 0
+                },
+                {
+                    "label": "Device is calibrated",
+                    "value": 1
+                },
+                {
+                    "label": "Force device calibration",
+                    "value": 2
+                }
+            ]
+        },
+        "151": {
+            "label": "Operating mode",
+            "description": "This parameter allows adjusting operation according to the connected device.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Roller blind",
+                    "value": 1
+                },
+                {
+                    "label": "Venetian blind",
+                    "value": 2
+                },
+                {
+                    "label": "roller blind with built-in driver",
+                    "value": 5
+                },
+                {
+                    "label": "roller blind with built-in driver (impulse)",
+                    "value": 6
+                }
+            ]
+        },
+        "152": {
+            "label": "Venetian blind - time of full turn of the slats",
+            "description": "For Venetian blinds (parameter 151 set to 2) the parameter determines time of full turn cycle of the slats.\n        The parameter is irrelevant for other modes.\n\n        0-65535 (0 - 655.35s, every 0.01s) - time of turn\n\n        Default value: 150 (1.5 seconds)",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 150,
+            "units": "0.1 second"
+        },
+        "153": {
+            "label": "Set slats back to previous position",
+            "description": "For Venetian blinds (parameter 151 set to 2) the parameter determines slats positioning in various situations.\n        The parameter is irrelevant for other modes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Only in case of the main controller operation",
+                    "value": 0
+                },
+                {
+                    "label": "In case of the main controller operation, momentary switch operation, or when the limit switch is reached.",
+                    "value": 1
+                },
+                {
+                    "label": "In case of the main controller operation, momentary switch operation, when the limit switch is reached or after receiving the Switch Multilevel Stop control frame",
+                    "value": 2
+                }
+            ]
+        },
+        "154": {
+            "label": "Delay motor stop after reaching end switch",
+            "description": "The parameter determines the time after which the motor will be stopped after end switch contacts are closed.\n\n        1-255 (0.1s - 25.5 seconds)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "0.1 second"
+        },
+        "155": {
+            "label": "Motor operation detection",
+            "description": "Power threshold interpreted as reaching a limit switch.\n\n        1-255 (1-255W) - report interval\n        0 - no detection\n\n        Default value: 10 (10W)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "watt"
+        },
+        "156": {
+            "label": "Time of up movement",
+            "description": "This parameter determines the time needed for roller blinds to reach the top.\n        For modes with positioning value is set automatically during calibration, otherwise, it must be set manually.\n\n        1-65535 (0.01 - 655.35 seconds)\n\n        Default value: 6000 (60 seconds)",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 6000,
+            "units": "0.01 second"
+        },
+        "157": {
+            "label": "Time of down movement",
+            "description": "This parameter determines the time needed for roller blinds to reach the bottom.\n        For modes with positioning value is set automatically during calibration, otherwise, it must be set manually.\n\n        1-65535 (0.01 - 655.35 seconds)\n\n        Default value: 6000 (60 seconds)",
+            "valueSize": 4,
+            "minValue": 1,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 6000,
+            "units": "0.01 second"
+        }
+    }
+}

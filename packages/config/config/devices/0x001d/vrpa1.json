@@ -1,11 +1,9 @@
-// Leviton VRPA1
-// Vizia RF + Scene Capable Plug-in Module
 {
     "_approved": true,
     "manufacturer": "Leviton",
     "manufacturerId": "0x001d",
     "label": "VRPA1",
-    "description": "Vizia RF + Scene Capable Plug-in Module",
+    "description": "Leviton VRPA1 Plug-In Outlet",
     "devices": [
         {
             "productType": "0x1805",
@@ -18,8 +16,8 @@
     },
     "associations": {
         "1": {
-            "label": "Unknown",
-            "maxNodes": 254,
+            "label": "Lifeline",
+            "maxNodes": 5,
             "isLifeline": true
         }
     }

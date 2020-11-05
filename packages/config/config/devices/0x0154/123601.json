@@ -1,0 +1,115 @@
+{
+    "_approved": true,
+    "manufacturer": "Popp & Co",
+    "manufacturerId": "0x0154",
+    "label": "123601",
+    "description": "123601 Plug-in Switch",
+    "devices": [
+        {
+            "productType": "0x1100",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Led mode",
+            "description": "Set LED indication mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Show switch state (Default)",
+                    "value": 1
+                },
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Night mode (inverted switch state)",
+                    "value": 2
+                },
+                {
+                    "label": "Operated by Indicator Command Class",
+                    "value": 3
+                }
+            ]
+        },
+        "2": {
+            "label": "Automatically switch off after",
+            "description": "If not zero, automatically switch off after a user defined time. Unit: Sec, Min: 0, Max: 65535, Default: 0",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "3": {
+            "label": "What to do on RF off command",
+            "description": "Defines how to interpret RF Off command. Can be used in conjunction with Auto Off function: Ignore - to switch on the light by motion detectors and switch it off after some amount of time: in case of multiple motion detectors each would try to switch the light off that would break logics; Switch on - to switch on the light on both On and Off paddle press on the remote and switch it off after some amount of time. Button off click will still work (if button operations are not disabled).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Switch off (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Ignore",
+                    "value": 1
+                },
+                {
+                    "label": "Switch on",
+                    "value": 2
+                },
+                {
+                    "label": "Switch on if load is off else switch off",
+                    "value": 3
+                }
+            ]
+        },
+        "5": {
+            "label": "Restore switch state after power cycle",
+            "description": "Defines if the switch should restore switch state to the last state prior to device power off (power cycle).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Yes (Default)",
+                    "value": 1
+                },
+                {
+                    "label": "No, turn off",
+                    "value": 0
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 1
+        }
+    }
+}

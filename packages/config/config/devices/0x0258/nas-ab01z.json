@@ -1,15 +1,13 @@
-// Shenzhen Neo Electronics Co., Ltd. NAS-AB01Z
-// Siren Alarm
 {
     "_approved": true,
-    "manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
+    "manufacturer": "Shenzhen Neo Electronics Co Ltd",
     "manufacturerId": "0x0258",
     "label": "NAS-AB01Z",
     "description": "Siren Alarm",
     "devices": [
         {
             "productType": "0x0003",
-            "productId": "0x0088"
+            "productId": "0x6088"
         },
         {
             "productType": "0x0003",
@@ -17,7 +15,7 @@
         },
         {
             "productType": "0x0003",
-            "productId": "0x6088"
+            "productId": "0x0088"
         }
     ],
     "firmwareVersion": {
@@ -26,100 +24,287 @@
     },
     "associations": {
         "1": {
-            "label": "Group 1",
+            "label": "Lifeline",
             "maxNodes": 5,
             "isLifeline": true
         },
         "2": {
-            "label": "Group 2",
+            "label": "Send Binary Switch Report",
             "maxNodes": 5,
             "isLifeline": true
         },
         "3": {
-            "label": "Group2",
+            "label": "Send Notification Report",
             "maxNodes": 5,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Configure Alarm music volume",
-            "description": "Configure Alarm music volume",
+            "label": "Alarm Music Volume",
+            "description": "This parameter defines the output volume when siren plays door bell music.\n                Door Bell music volume is divided into 3 stages",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 3,
-            "defaultValue": 2,
+            "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Low",
+                    "value": 1
+                },
+                {
+                    "label": "Middle",
+                    "value": 2
+                },
+                {
+                    "label": "High",
+                    "value": 3
+                }
+            ]
         },
         "2": {
-            "label": "Alarm music duration time",
-            "description": "Alarm music duration time",
+            "label": "Alarm Music Duration Time",
+            "description": "This Parameter defines the alarm music duration time when siren receive an alarm sensor notification report or an alarm command from controller.\n                The duration time is divided into 5 stages.",
             "valueSize": 1,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 255,
             "defaultValue": 2,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "30 second",
+                    "value": 1
+                },
+                {
+                    "label": "1 minute",
+                    "value": 2
+                },
+                {
+                    "label": "5 minute",
+                    "value": 3
+                },
+                {
+                    "label": "Always on",
+                    "value": 255
+                }
+            ]
         },
         "3": {
-            "label": "Door bell music duration time",
-            "description": "Door bell music duration time",
+            "label": "Door Bell Music Duration Time",
+            "description": "This parameter defines the door bell music duration time when siren receives a door/window sensor notification report or an alarm command (BASIC_SET = 0x02) from controller.\n                The door bell music will be played always if this parameter is set to 255.\n                The door bell music will not be  played if this parameter is set to 0.\n                Other values are the door bell music playing duration time.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
-            "defaultValue": 1,
+            "defaultValue": 255,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "minute"
         },
         "4": {
-            "label": "Door bell music volume",
-            "description": "Door bell music volume",
+            "label": "Door Bell Music Volume",
+            "description": "This parameter defines the output volume when siren plays alarm music.\n                Door Bell music volume is divided into 3 stages",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 3,
-            "defaultValue": 2,
+            "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Low",
+                    "value": 1
+                },
+                {
+                    "label": "Middle",
+                    "value": 2
+                },
+                {
+                    "label": "High",
+                    "value": 3
+                }
+            ]
         },
         "5": {
-            "label": "Alarm music index",
-            "description": "Alarm music index",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 9,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Door bell music index",
-            "description": "Door bell music index",
+            "label": "Alarm Music Index",
+            "description": "This parameter defines the alarm music index for siren play different music when alarm occurs.\n                There are 10 different music for user selection",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 10,
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Doorbell",
+                    "value": 1
+                },
+                {
+                    "label": "Fur Elise",
+                    "value": 2
+                },
+                {
+                    "label": "Doorbell Extended",
+                    "value": 3
+                },
+                {
+                    "label": "Alert",
+                    "value": 4
+                },
+                {
+                    "label": "William Tell",
+                    "value": 5
+                },
+                {
+                    "label": "Rondo Alla Turca",
+                    "value": 6
+                },
+                {
+                    "label": "Police Siren",
+                    "value": 7
+                },
+                {
+                    "label": "Evacuation",
+                    "value": 8
+                },
+                {
+                    "label": "Beep Beep",
+                    "value": 9
+                },
+                {
+                    "label": "Beep",
+                    "value": 10
+                }
+            ]
+        },
+        "6": {
+            "label": "Door Bell Music Index",
+            "description": "This parameter defines the door bell music index for siren play different music when alarm occurs.\n                There are 10 different music for user selection.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 10,
+            "defaultValue": 9,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Doorbell",
+                    "value": 1
+                },
+                {
+                    "label": "Fur Elise",
+                    "value": 2
+                },
+                {
+                    "label": "Doorbell Extended",
+                    "value": 3
+                },
+                {
+                    "label": "Alert",
+                    "value": 4
+                },
+                {
+                    "label": "William Tell",
+                    "value": 5
+                },
+                {
+                    "label": "Rondo Alla Turca",
+                    "value": 6
+                },
+                {
+                    "label": "Police Siren",
+                    "value": 7
+                },
+                {
+                    "label": "Evacuation",
+                    "value": 8
+                },
+                {
+                    "label": "Beep Beep",
+                    "value": 9
+                },
+                {
+                    "label": "Beep",
+                    "value": 10
+                }
+            ]
         },
         "7": {
-            "label": "Default Siren on mode",
-            "description": "Default Siren on mode",
+            "label": "Configure Default Siren On Mode",
+            "description": "This parameter defines the default music index, volume and the duration time for 3 siren on.\n                This parameter can be selected between ALARM MUSIC and DOOR BELL MUSIC.\n                The settings for ALARM MUSIC MODE defines by Param #1, #2 and #5.\n                The settings for DOOR BELL MUSIC MODE defines by Param #3, #4 and #6",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 2,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Alarm music",
+                    "value": 1
+                },
+                {
+                    "label": "Door bell music",
+                    "value": 2
+                }
+            ]
+        },
+        "8": {
+            "label": "Configure Alarm Led Enable",
+            "description": "This parameter defines the default led enable status when siren is on for ALARM MUSIC MODE",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "9": {
+            "label": "Door Bell Led Enable",
+            "description": "This parameter defines the default led enable status when siren is on for DOOR BELL MUSIC MODE",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
         }
     }
 }

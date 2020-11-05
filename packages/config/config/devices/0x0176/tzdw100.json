@@ -1,0 +1,198 @@
+{
+    "_approved": true,
+    "manufacturer": "Telldus",
+    "manufacturerId": "0x0176",
+    "label": "TZDW100",
+    "description": "TZDW-100 Magnet Switch",
+    "devices": [
+        {
+            "productType": "0x0005",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Type of command no. 2",
+            "description": "Type of input no. 2, what the input 1 will report if no contact is made",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Basic",
+                    "value": 0
+                },
+                {
+                    "label": "Switch Binary",
+                    "value": 1
+                },
+                {
+                    "label": "Switch All",
+                    "value": 2
+                },
+                {
+                    "label": "Switch Multilevel",
+                    "value": 3
+                }
+            ]
+        },
+        "2": {
+            "label": "Forced Level of Dimming group 2",
+            "description": "Possible parameter settings: (1 - 63) and 255. When setting 255 will automatically be set dimmer to the previous condition i.e 30% or what the last state was.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "3": {
+            "label": "Type of commands no. 2",
+            "description": "Type of commands to association group 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 0
+                },
+                {
+                    "label": "Inverted",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Type of command no. 3",
+            "description": "Type of input no. 3, what the input 3 will report if no contact is made",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Basic",
+                    "value": 0
+                },
+                {
+                    "label": "Switch Binary",
+                    "value": 1
+                },
+                {
+                    "label": "Switch All",
+                    "value": 2
+                },
+                {
+                    "label": "Switch Multilevel",
+                    "value": 3
+                }
+            ]
+        },
+        "5": {
+            "label": "Forced Level of Dimming group 3",
+            "description": "Possible parameter settings: (1 - 63) and 255. When setting 255 will automatically be set dimmer to the previous condition i.e 30% or what the last state was.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "6": {
+            "label": "Type of commands no. 3",
+            "description": "Type of commands to association group 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 0
+                },
+                {
+                    "label": "Inverted",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "Status change signalled by LED",
+            "description": "Status change signalled by LED. Default setting: LED turned On",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "LED turned Off",
+                    "value": 0
+                },
+                {
+                    "label": "LED turned On",
+                    "value": 1
+                }
+            ]
+        },
+        "8": {
+            "label": "Sent in the Lifeline",
+            "description": "Select the type of command to be sent in the Lifeline",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Notification",
+                    "value": 0
+                },
+                {
+                    "label": "Sensor binary",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Sensor changes",
+            "maxNodes": 10
+        },
+        "3": {
+            "label": "Opened only",
+            "maxNodes": 10
+        }
+    }
+}

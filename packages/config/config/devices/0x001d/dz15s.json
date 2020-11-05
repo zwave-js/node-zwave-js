@@ -1,11 +1,9 @@
-// Leviton DZ15S
-// Scene Capable Push On/Off
 {
     "_approved": true,
     "manufacturer": "Leviton",
     "manufacturerId": "0x001d",
     "label": "DZ15S",
-    "description": "Scene Capable Push On/Off",
+    "description": "DZ15S-1BZ Decora Smart Switch",
     "devices": [
         {
             "productType": "0x3401",
@@ -16,7 +14,6 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "7": {
             "label": "Locator LED Status",
@@ -30,7 +27,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "LED Off",
+                    "label": "Off",
                     "value": 0
                 },
                 {
@@ -41,7 +38,16 @@
                     "label": "Locator Mode",
                     "value": 255
                 }
-            ]
+            ],
+            "description": "Change the mode of the LED to Status Mode where the LED is illuminated when the load is On, Locator Mode where the LED is illuminated when the Load is Off, or turns off the LED completely for any other setting values.",
+            "units": ""
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
         }
     }
 }

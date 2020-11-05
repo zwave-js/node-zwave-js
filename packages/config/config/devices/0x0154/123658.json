@@ -1,0 +1,69 @@
+{
+    "_approved": true,
+    "manufacturer": "Popp & Co",
+    "manufacturerId": "0x0154",
+    "label": "123658",
+    "description": "123658 Plug-in Switch plus Power Meter",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Watt Meter Report Period",
+            "description": "If the setting is configured for 1 hour(set value=720), the device will report its instant power consumption every 1 hour to Z_Wave controller. Unit: 5 secs, Min: 1, Max: 32767, Default: 720",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 720
+        },
+        "2": {
+            "label": "KWH Meter Report Period",
+            "description": "If the setting is configured for 1 hour(set value=6), the device will report its Accumulated power consumption (KW/h) every hour to Z_Wave controller. Unit: 10 min, Min: 1, Max: 32767, Default: 6",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 6
+        },
+        "3": {
+            "label": "Thereshold of Watt for Load Caution",
+            "description": "This is a warning when the wattage of load over the present threshold value, if the load wattage exceeds the setting value the device will send a warning alarm command to the controller. Min: 10, Max: 3000, Default: 3000",
+            "valueSize": 2,
+            "minValue": 10,
+            "maxValue": 3000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3000
+        },
+        "5": {
+            "label": "Behaviour on Power Outages",
+            "description": "0 for Switch Off, 1 for Last Switch State (Default), 2 for Switch On",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 1
+        }
+    }
+}

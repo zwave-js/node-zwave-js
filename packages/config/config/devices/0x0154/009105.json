@@ -1,0 +1,195 @@
+{
+    "_approved": true,
+    "manufacturer": "Popp & Co",
+    "manufacturerId": "0x0154",
+    "label": "009105",
+    "description": "009105 Wall Plug Switch Schuko (IP44)",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "LED indication mode",
+            "description": "Set LED indication mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Show switch (default)",
+                    "value": 1
+                },
+                {
+                    "label": "Operated by Indicator Command Class",
+                    "value": 2
+                }
+            ]
+        },
+        "2": {
+            "label": "Automatically switch Off",
+            "description": "If not zero, automatically switch device off after an user defined time.\n\t\t\t0 -> Disabled (default)\n\t\t\t1-65535 -> Enabled time in seconds.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "3": {
+            "label": "Behaviour for a RF Off-Command",
+            "description": "Defines how to interpret RF Off-Command. \n\t\t\tIgnore - to switch on the light by motion detectors and switch it off after some amount of time;\n\t\t\tin case of multiple motion detectors each would try to switch the light off that would break logics;\n\t\t\tSwitch on - to switch on the light on both On and Off paddle press on the remote and switch it off after some amount of time.\n\t\t\tButton off click will still work (if button operations are not disabled).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Switch off (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Ignore",
+                    "value": 1
+                },
+                {
+                    "label": "Switch on",
+                    "value": 2
+                },
+                {
+                    "label": "Switch on if load is off else switch off",
+                    "value": 3
+                }
+            ]
+        },
+        "5": {
+            "label": "Restore switch state after power cycle",
+            "description": "Defines if the switch should restore switch state to the last prior to device power off (power cycle).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "No, turn off",
+                    "value": 0
+                },
+                {
+                    "label": "Yes (default)",
+                    "value": 1
+                }
+            ]
+        },
+        "20": {
+            "label": "Energy consumption",
+            "description": "Specify the consumption of the load in Watts, for the calculation of power.\n\t\t\t0 -> Disabled (default)\n\t\t\t1 - 3500 -> Watts",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 3500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "Watts"
+        },
+        "21": {
+            "label": "LED OFF color",
+            "description": "Color for OFF state",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off (default)",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue",
+                    "value": 3
+                },
+                {
+                    "label": "Yellow",
+                    "value": 4
+                }
+            ]
+        },
+        "22": {
+            "label": "LED ON color",
+            "description": "Color for ON state",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Red",
+                    "value": 1
+                },
+                {
+                    "label": "Green",
+                    "value": 2
+                },
+                {
+                    "label": "Blue (default)",
+                    "value": 3
+                },
+                {
+                    "label": "Yellow",
+                    "value": 4
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Controlled by buttons",
+            "maxNodes": 5
+        }
+    }
+}

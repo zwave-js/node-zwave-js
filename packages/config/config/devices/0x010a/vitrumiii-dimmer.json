@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "Vitrum (VDA)",
+    "manufacturerId": "0x010a",
+    "label": "VITRUMIII-DIMMER",
+    "description": "Vitrum III EU Wireless Dimmer",
+    "devices": [
+        {
+            "productType": "0x1100",
+            "productId": "0x4b00"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

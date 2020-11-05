@@ -1,11 +1,9 @@
-// Inovelli LZW30-SN
-// Red Series On/Off switch
 {
-    "_approved": false,
+    "_approved": true,
     "manufacturer": "Inovelli",
     "manufacturerId": "0x031e",
     "label": "LZW30-SN",
-    "description": "Red Series On/Off switch",
+    "description": "LZW30-SN Switch Red Series",
     "devices": [
         {
             "productType": "0x0002",
@@ -16,11 +14,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Power On State",
-            "description": "Power On State",
+            "description": "When Power is restored\n      Range: 0-2\n      Default: 0",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 2,
@@ -30,7 +27,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Prior State",
+                    "label": "Previous",
                     "value": 0
                 },
                 {
@@ -45,7 +42,7 @@
         },
         "2": {
             "label": "Invert Switch",
-            "description": "Invert Switch",
+            "description": "Inverts the orientation of the switch. Useful when the switch is installed upside down. Essentially up becomes down and down becomes up.\n      Range: 0-1\n      Default: 0",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -66,7 +63,7 @@
         },
         "3": {
             "label": "Auto Off Timer",
-            "description": "Auto Off Timer",
+            "description": "Automatically turns the switch off after this many seconds. When the switch is turned on a timer is started that is the duration of this setting. When the timer expires, the switch is turned off.\n      Range: 0-32767\n      Default: 0",
             "unit": "seconds",
             "valueSize": 2,
             "minValue": 0,
@@ -78,7 +75,7 @@
         },
         "4": {
             "label": "Association Behavior",
-            "description": "Association Behavior",
+            "description": "When should the switch send commands to associated devices?  01 - local 02 - 3way 03 - 3way & local 04 - z-wave hub 05 - z-wave hub & local 06 - z-wave hub & 3-way 07 - z-wave hub & local & 3way 08 - timer 09 - timer & local 10 - timer & 3-way 11 - timer & 3-way & local 12 - timer & z-wave hub 13 - timer & z-wave hub & local 14 - timer & z-wave hub & 3-way 15 - all\n      Range: 0-15\n      Default: 15",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 15,
@@ -89,7 +86,7 @@
         },
         "5": {
             "label": "LED Indicator Color",
-            "description": "LED Indicator Color",
+            "description": "This is the color of the LED strip.\n      Range: 0 to 255\n      Default: 170",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 255,
@@ -134,14 +131,14 @@
         },
         "6": {
             "label": "LED Indicator Intensity",
-            "description": "LED Indicator Intensity",
+            "description": "This is the intensity of the LED strip.\n      Range: 0-10\n      Default: 5",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 10,
             "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Off",
@@ -191,14 +188,14 @@
         },
         "7": {
             "label": "LED Indicator Intensity (When Off)",
-            "description": "LED Indicator Intensity (When Off)",
+            "description": "This is the intensity of the LED strip when the switch is off. This is useful for users to see the light switch location when the lights are off.\n      Range: 0 - 10\n      Default: 0",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 10,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Off",
@@ -248,7 +245,7 @@
         },
         "8": {
             "label": "LED Strip Effect",
-            "description": "LED Strip Effect",
+            "description": "Please see website for documentation.\n      Range: 0-83823359\n      Default: 0",
             "valueSize": 4,
             "minValue": 0,
             "maxValue": 83823359,
@@ -316,8 +313,8 @@
             ]
         },
         "10": {
-            "label": "Active Power Reports",
-            "description": "Active Power Reports",
+            "label": "Active Power Alerts",
+            "description": "The power level change that will result in a new power report being sent. The value is a percentage of the previous report. 0 = disabled.\n      Range: 0-100\n      Default: 10",
             "unit": "percent",
             "valueSize": 1,
             "minValue": 0,
@@ -328,8 +325,8 @@
             "allowManualEntry": true
         },
         "11": {
-            "label": "Periodic Power & Energy Reports",
-            "description": "Periodic Power & Energy Reports",
+            "label": "Periodic Power + Energy Reports",
+            "description": "Time period between consecutive power & energy reports being sent (in seconds). The timer is reset after each report is sent.\n      Range: 0 to 32767\n      Default: 3600",
             "unit": "seconds",
             "valueSize": 2,
             "minValue": 0,
@@ -341,7 +338,7 @@
         },
         "12": {
             "label": "Energy Reports",
-            "description": "Energy Reports",
+            "description": "The energy level change that will result in a new energy report being sent. The value is a percentage of the previous report.\n      Range: 0-100\n      Default: 10",
             "unit": "percent",
             "valueSize": 1,
             "minValue": 0,
@@ -350,6 +347,48 @@
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
+        },
+        "13": {
+            "label": "Load Type",
+            "description": "The default of the switch is to auto detect the load. In some situations you may want to try the option for a special load type. (firmware 1.17+)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Default",
+                    "value": 0
+                },
+                {
+                    "label": "Special Load",
+                    "value": 1
+                }
+            ]
+        },
+        "51": {
+            "label": "Instant On",
+            "description": "Enables instant on (ie: disables the 700ms button delay). Note, if you disable the delay, it will also disable scene control except for the following: Up pressed, held, released, Down pressed, held, released & config button pressed.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Enabled (no delay)",
+                    "value": 0
+                },
+                {
+                    "label": "Disabled (700ms delay)",
+                    "value": 1
+                }
+            ]
         },
         "8[0xff]": {
             "label": "LED Strip Effect (Color)",
@@ -496,6 +535,17 @@
                     "value": 4
                 }
             ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic_Set",
+            "maxNodes": 5
         }
     }
 }

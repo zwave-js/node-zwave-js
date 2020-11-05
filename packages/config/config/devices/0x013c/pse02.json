@@ -1,54 +1,87 @@
-// Philio Technology Corp PSE02
-// Siren
 {
-	"_approved": true,
-	"manufacturer": "Philio Technology Corp",
-	"manufacturerId": "0x013c",
-	"label": "PSE02",
-	"description": "Siren",
-	"devices": [
-		{
-			"productType": "0x0004",
-			"productId": "0x000a"
-		}
-	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"7": {
-			"label": "Costumer  Function",
-			"description": "NotificationReport/BinaryReport",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"29": {
-			"label": "Disable Alarm",
-			"description": "Disable the alarm  function.",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"31": {
-			"label": "Alarm Duration",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		}
-	}
+    "_approved": true,
+    "manufacturer": "Philio Technology Corp",
+    "manufacturerId": "0x013c",
+    "label": "PSE02",
+    "description": "PH-PSE02.eu Zipato Indoor Siren",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x000a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "7": {
+            "label": "Customer Function",
+            "description": "bit 0 Notification Type: 0: Using Notification Report, 1: Using Sensor Binary Report.\n\t\t\t\tbit 7 Other sounds: 0: Disabled, 1: Enable.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Using Notification Report",
+                    "value": 0
+                },
+                {
+                    "label": "Using Sensor Binary Report",
+                    "value": 1
+                },
+                {
+                    "label": "Using Notification Report with other sounds",
+                    "value": 128
+                },
+                {
+                    "label": "Using Sensor Binary Report with other sounds",
+                    "value": 129
+                }
+            ]
+        },
+        "29": {
+            "label": "Disable Alarm",
+            "description": "Disable the alarm function.\n\t\t\t\t1: Disable Alarm,\n\t\t\t\t0: Enable Alarm.\n\t\t\t\tCaution: After the power up, this configuration is always 0.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enable Alarm",
+                    "value": 0
+                },
+                {
+                    "label": "Disable Alarm",
+                    "value": 1
+                }
+            ]
+        },
+        "31": {
+            "label": "Basic Set Off Level",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "description": "Play alarm sound duration,\n\t\t\t\t1 tick is 30 seconds. Default is 3 minutes, maximum is 63.5 minutes.\n\t\t\t\t0 means never auto stop."
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 8,
+            "isLifeline": true
+        }
+    }
 }

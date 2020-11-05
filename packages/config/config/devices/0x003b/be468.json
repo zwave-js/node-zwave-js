@@ -1,11 +1,9 @@
-// Allegion BE468
-// Touchscreen Deadbolt
 {
     "_approved": true,
-    "manufacturer": "Allegion",
+    "manufacturer": "Schlage (Allegion)",
     "manufacturerId": "0x003b",
     "label": "BE468",
-    "description": "Touchscreen Deadbolt",
+    "description": "BE468 Touchscreen Deadbolt",
     "devices": [
         {
             "productType": "0x6349",
@@ -26,7 +24,7 @@
     "paramInformation": {
         "3": {
             "label": "Beeper",
-            "description": "Audio feedback when keypad pressed during normal operation",
+            "description": "Enable or disable the beeper.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -37,18 +35,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disable Beeper",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enable Beeper",
                     "value": 255
                 }
             ]
         },
         "4": {
             "label": "Vacation Mode",
-            "description": "Prevents all user codes from unlocking the deadbolt",
+            "description": "Prevents all user codes from unlocking the deadbolt.\n\t\t\t\tEnable for extra security while you are away for\n\t\t\t\tan extended period of time.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -59,18 +57,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disable Vacation Mode",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enable Vacation Mode",
                     "value": 255
                 }
             ]
         },
         "5": {
             "label": "Lock & Leave",
-            "description": "Press the Schlage button to lock the deadbolt",
+            "description": "When enabled: Press the Outside Schlage Button to lock the\n\t\t\t\tdeadbolt. (Default setting).\n\t\t\t\tWhen disabled: Press the Outside Schlage Button and then enter\n\t\t\t\ta user code to lock the deadbolt.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -81,21 +79,55 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disable Lock & Leave",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enable Lock & Leave",
                     "value": 255
                 }
-            ]
+            ],
+            "units": ""
         },
-        "15": {
-            "label": "Auto Lock",
-            "description": "Automatically locks 30 seconds after unlocking",
+        "12": {
+            "label": "Electronic transition count",
+            "description": "",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "13": {
+            "label": "Mechanical transition count",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "14": {
+            "label": "Electronic failed count",
+            "description": "Each failed electronic attempt increments this count by one.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "15": {
+            "label": "Auto lock",
+            "description": "When enabled, the lock will automatically relock 30 seconds\n\t\t\t\tafter unlocking. (Disabled by default.)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -103,18 +135,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disable auto lock",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enable auto lock",
                     "value": 255
                 }
             ]
         },
         "16": {
-            "label": "User Code PIN Length",
-            "description": "User codes can be 4-8 digits. Changing length will delete all existing codes.",
+            "label": "User code pin length",
+            "description": "User Code PIN length, a value between 4 and 8. \n\t\t\t\tIMPORTANT: All user codes must be the same length.",
             "valueSize": 1,
             "minValue": 4,
             "maxValue": 8,
@@ -122,6 +154,28 @@
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
+        },
+        "17": {
+            "label": "Electrical High Preload Transition Count",
+            "description": "A subset of Electronic transition count, the number of transitions\n\t\t\t\twith high preload.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "18": {
+            "label": "Bootloader Version",
+            "description": "The version of the bootloader",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
         }
     }
 }

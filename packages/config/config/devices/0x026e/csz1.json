@@ -1,14 +1,9 @@
-// Springs Window Fashions CSZ1
-// Cellular Shade Radio Z-Wave
 {
     "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Springs Window Fashions",
+    "manufacturer": "Springs Window Fashions (Graber)",
     "manufacturerId": "0x026e",
     "label": "CSZ1",
-    "description": "Cellular Shade Radio Z-Wave",
+    "description": "CSZ1 Cellular Shade",
     "devices": [
         {
             "productType": "0x4353",
@@ -18,6 +13,5 @@
     "firmwareVersion": {
         "min": "0.0",
         "max": "255.255"
-    },
-    "supportsZWavePlus": true
+    }
 }

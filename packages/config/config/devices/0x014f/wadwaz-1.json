@@ -1,11 +1,9 @@
-// Nortek Security & Control LLC WADWAZ-1
-// Door/Windows Sensor
 {
     "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
+    "manufacturer": "Linear (Nortek Security Control LLC)",
     "manufacturerId": "0x014f",
     "label": "WADWAZ-1",
-    "description": "Door/Windows Sensor",
+    "description": "WADWAZ-1 Door/Window Sensor",
     "devices": [
         {
             "productType": "0x2001",
@@ -18,9 +16,32 @@
     },
     "associations": {
         "1": {
-            "label": "Controller Updates",
+            "label": "All Reports",
             "maxNodes": 5,
             "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "External Switch",
+            "description": "External Switch Status",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "On",
+                    "value": 255
+                },
+                {
+                    "label": "Off",
+                    "value": 0
+                }
+            ]
         }
     }
 }

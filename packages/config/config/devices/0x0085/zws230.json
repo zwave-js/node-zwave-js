@@ -1,0 +1,28 @@
+{
+    "_approved": true,
+    "manufacturer": "Fakro",
+    "manufacturerId": "0x0085",
+    "label": "ZWS230",
+    "description": "ZWS230 Chain actuator 230VAC",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0002"
+        },
+        {
+            "productType": "0x0002",
+            "productId": "0x0005"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

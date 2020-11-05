@@ -1,14 +1,16 @@
-// AEON Labs ZW139
-// Nano Switch Gen5 (without meter)
 {
     "_approved": true,
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "ZW139",
-    "description": "Nano Switch Gen5 (without meter)",
+    "description": "ZW139 Nano Switch",
     "devices": [
         {
-            "productType": "0x0003",
+            "productType": "0x1d03",
+            "productId": "0x008b"
+        },
+        {
+            "productType": "0x0203",
             "productId": "0x008b"
         },
         {
@@ -16,7 +18,7 @@
             "productId": "0x008b"
         },
         {
-            "productType": "0x0203",
+            "productType": "0x0003",
             "productId": "0x008b"
         }
     ],
@@ -24,42 +26,61 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Retransmit",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Control Key1",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Control Key2",
+            "maxNodes": 5
+        }
+    },
     "paramInformation": {
         "4": {
-            "label": "Overheat protection",
-            "description": "Overheat protection",
+            "label": "Over heat protection",
+            "description": "Output load will be closed after 30 seconds if the temperature inside the product exceeds 100C.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 0,
+            "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "(Default) Disable",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
                     "label": "Enable",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "20": {
-            "label": "Output status after re-power",
-            "description": "Configure the output status after re-power on it",
+            "label": "Status re-power on",
+            "description": "Configure the output load status after re-power on",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 0,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Last status",
+                    "label": "The last status before the power outage",
                     "value": 0
                 },
                 {
@@ -72,196 +93,298 @@
                 }
             ]
         },
-        "80": {
-            "label": "Group 1 notifications",
-            "description": "Group 1 notifications when the state of Nano Switch's load is changed",
+        "21": {
+            "label": "WallSwipe IR sensor",
+            "description": "Enable/disable the IR sensor of WallSwipe.\n\t\t\t\t(LSB) Value 1.\n\t\t\t\tValue 1 = 0, disable the IR Sensor.\n\t\t\t\tValue 1 = 1, enable the IR Sensor.\n\t\t\t\tValue 2 = 0, Wave Option 1 is selected.\n\t\t\t\tValue 2 = 1, Wave Option 2 is selected.\n\t\t\t\tValue 3 = 0, disable the scene control functionality for Left/Right wave.\n\t\t\t\tValue 3 = 1, enable the scene control functionality for Left/Right wave\n\t\t\t\tValue 4 = 0, disable the scene control functionality for all wave actions.\n\t\t\t\tValue 4 = 1, enable the scene control functionality for all wave actions.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 3,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 80
+        },
+        "64": {
+            "label": "WallSwipe button color",
+            "description": "Set the button color of WallSwipe.\n\t\t\t\tValue 1= Level 1.\n\t\t\t\tValue 2= the color value of Red.\n\t\t\t\tValue 3= the color value of Green.\n\t\t\t\tValue 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 184549375
+        },
+        "65": {
+            "label": "WallSwipe LED Up gesture action",
+            "description": "Set the LED indication color of WallSwipe when the gesture action is UP.\n\t\t\t\tValue 1= Reserved.\n\t\t\t\tValue 2= the color value of Red.\n\t\t\t\tValue 3= the color value of Green.\n\t\t\t\tValue 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 855638015
+        },
+        "66": {
+            "label": "WallSwipe LED Down gesture action",
+            "description": "Set the LED indication color of WallSwipe when the gesture action is Down.\n\t\t\t\tValue 1= Reserved.\n\t\t\t\tValue 2= the color value of Red.\n\t\t\t\tValue 3= the color value of Green.\n\t\t\t\tValue 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 855638015
+        },
+        "67": {
+            "label": "WallSwipe LED Left gesture action",
+            "description": "Set the LED indication color of WallSwipe when the gesture action is Left.\n\t\t\t\tValue 1= Reserved.\n\t\t\t\tValue 2= the color value of Red.\n\t\t\t\tValue 3= the color value of Green.\n\t\t\t\tValue 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 855638015
+        },
+        "68": {
+            "label": "WallSwipe LED Right gesture action",
+            "description": "Set the LED indication color of WallSwipe when the gesture action is Right.\n\t\t\t\tValue 1= Reserved.\n\t\t\t\tValue 2= the color value of Red.\n\t\t\t\tValue 3= the color value of Green.\n\t\t\t\tValue 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 855638015
+        },
+        "69": {
+            "label": "WallSwipe Night light",
+            "description": "Set the LED indication color of WallSwipe when it is in Night light state.\n\t\t\t\tValue 1= Reserved.\n\t\t\t\tValue 2= the color value of Red.\n\t\t\t\tValue 3= the color value of Green.\n\t\t\t\tValue 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 184483840
+        },
+        "71": {
+            "label": "WallSwipe sensitivity",
+            "description": "Set the sensitivity of WallSwipe.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "80": {
+            "label": "Notification report association group 1",
+            "description": "To set which notification would be sent to the associated nodes in association group 1 when the state of output load is changed",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Send Nothing",
+                    "label": "None",
                     "value": 0
                 },
                 {
-                    "label": "Send Hail CC",
+                    "label": "Hail",
                     "value": 1
                 },
                 {
-                    "label": "Send Basic Report CC",
+                    "label": "Basic",
                     "value": 2
                 },
                 {
-                    "label": "Send Hail CC",
+                    "label": "Hail CC when using the external switch to switch the loads",
                     "value": 3
                 }
-            ]
+            ],
+            "units": ""
         },
         "81": {
-            "label": "Group 3 notifications",
-            "description": "Notification to sent for Group 3 when using the external switch 1",
+            "label": "Notification report using the external switch 1",
+            "description": "To set which notification would be sent to the associated nodes in association group 3 when using the external switch 1 to switch the loads",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Send Nothing",
+                    "label": "None",
                     "value": 0
                 },
                 {
-                    "label": "Send Basic Set CC",
+                    "label": "Basic",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "82": {
-            "label": "Group 4 notifications",
-            "description": "Notification to sent for Group 4 when using the external switch 2",
+            "label": "Notification report using the external switch 2",
+            "description": "To set which notification would be sent to the associated nodes in association group 4 when using the external switch 2 to switch the loads",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Send Nothing",
+                    "label": "None",
                     "value": 0
                 },
                 {
-                    "label": "Send Basic Set CC",
+                    "label": "Basic",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "83": {
-            "label": "Configure the state of LED",
-            "description": "Configure the state of LED when it is in 3 modes",
+            "label": "LED status",
+            "description": "Configure the state of LED when it is in 3 modes below",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 2,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Energy mode.",
+                    "label": "The LED will follow the status",
                     "value": 0
                 },
                 {
-                    "label": "Momentary indicate mode",
+                    "label": "LED will follow the status (on/off) of its load but the LED will turn off after 5 seconds",
                     "value": 1
                 },
                 {
-                    "label": "Night light mode. The LED will remain ON state",
+                    "label": "Night light mode",
                     "value": 2
                 }
-            ]
+            ],
+            "units": ""
         },
         "84": {
-            "label": "Night light mode LED state",
-            "description": "Set the ON/OFF time of the LED when it is in Night light mode",
+            "label": "Time set for Night light mode",
+            "description": "Value1: Hour of ON.\n\t\t\t\tValue2: Minute of ON.\n\t\t\t\tValue3: Hour of OFF.\n\t\t\t\tValue4: Minute of OFF.\n\t\t\t\tE.g. The default setting is the Night light mode is enabled at 12: 00 and disabled at 8:00 0x12000800.",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 16777276,
+            "maxValue": 100,
             "defaultValue": 301991936,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "86": {
-            "label": "Set appointment 1",
-            "description": "Set the ON time of output load.",
+            "label": "Set the ON time of output load",
+            "description": "Value1: 0= Disable / 1= Enable.\n\t\t\t\tValue2: Weekday (Bit 0-6 means Monday to Sunday).\n\t\t\t\tValue3: Hour of turning OFF.\n\t\t\t\tValue4: Minute of turning OFF\n\t\t\t\tE.g. The default setting 0x007F1200",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 0,
+            "maxValue": 100,
             "defaultValue": 8327680,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "87": {
-            "label": "Set appointment 2",
-            "description": "Set the OFF time of output load",
+            "label": "Set the OFF time of output load",
+            "description": "Value1: 0= Disable / 1= Enable.\n\t\t\t\tValue2: Weekday (Bit 0-6 means Monday to Sunday).\n\t\t\t\tValue3: Hour of turning OFF.\n\t\t\t\tValue4: Minute of turning OFF\n\t\t\t\tE.g. The default setting 0x001707F00",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 16777216,
-            "defaultValue": 8327680,
+            "maxValue": 100,
+            "defaultValue": 8328960,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "120": {
-            "label": "External switch mode for S1",
-            "description": "Configure the external switch mode for S1",
+            "label": "Set the external S1 mode",
+            "description": "When the switch mode of S1 is determined or identified or configured, this mode value will not be reset after exclusion",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 0,
+            "maxValue": 3,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Enter automatic identification mode",
+                    "label": "Unknown switch mode",
                     "value": 0
                 },
                 {
-                    "label": "2-state switch mode",
+                    "label": "2-state switch",
                     "value": 1
                 },
                 {
-                    "label": "3 way switch mode",
+                    "label": "3-way switch",
                     "value": 2
                 },
                 {
-                    "label": "Momentary push button mode",
+                    "label": "Momentary button",
                     "value": 3
+                },
+                {
+                    "label": "Automatic identification mode",
+                    "value": 4
                 }
-            ]
+            ],
+            "units": ""
         },
         "121": {
-            "label": "External switch mode for S2",
-            "description": "Configure the external switch mode for S2",
+            "label": "Set the external S2 mode",
+            "description": "When the switch mode of S2 is determined or identified or configured, this mode value will not be reset after exclusion",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 0,
+            "maxValue": 3,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Enter automatic identification mode",
+                    "label": "Unknown switch mode",
                     "value": 0
                 },
                 {
-                    "label": "2-state switch mode",
+                    "label": "2-state switch",
                     "value": 1
                 },
                 {
-                    "label": "3 way switch mode",
+                    "label": "3-way switch",
                     "value": 2
                 },
                 {
-                    "label": "Momentary push button mode",
+                    "label": "Momentary button",
                     "value": 3
+                },
+                {
+                    "label": "Automatic identification mode",
+                    "value": 4
                 }
-            ]
+            ],
+            "units": ""
         },
         "122": {
-            "label": "Control destination of external switch",
-            "description": "Set the control destination for external switch",
+            "label": "Set the control destination of the external switch",
+            "description": "",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
@@ -271,16 +394,103 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "control the output loads of itself",
+                    "label": "Control itself",
                     "value": 1
                 },
                 {
-                    "label": "control the other nodes",
+                    "label": "Control other nodes in the same network",
                     "value": 2
                 },
                 {
-                    "label": "control the output loads of itself and other nodes",
+                    "label": "Control itself and other nodes in the same network",
                     "value": 3
+                }
+            ],
+            "units": ""
+        },
+        "144": {
+            "label": "WallSwipe",
+            "description": "Get the state of touch panel port",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Disconnected",
+                    "value": 0
+                },
+                {
+                    "label": "Connected",
+                    "value": 1
+                }
+            ]
+        },
+        "247": {
+            "label": "S1/S2 when the Switch mode is 3-way switch",
+            "description": "Set the working way for S1/S2 when the Switch mode is 3-way switch mode.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "S1 and S2 is a toggle switch",
+                    "value": 0
+                },
+                {
+                    "label": "S1 is an On/Off switch",
+                    "value": 1
+                },
+                {
+                    "label": "S2 is an On/Off switch",
+                    "value": 2
+                },
+                {
+                    "label": "S1 and S2 are an On/Off switch",
+                    "value": 3
+                }
+            ]
+        },
+        "248": {
+            "label": "Function of S1/S2",
+            "description": "Set the function of S1/S2.\n\t\t\t\tBit 0 = 0, the function of sending NIF is disabled.\n\t\t\t\tBit 0 = 1, the function of sending NIF is enabled.\n\t\t\t\tBit 1 = 0, the function of entering RF power level test mode is disabled.\n\t\t\t\tBit 1 = 1, the function of entering RF power level test mode is enabled.\n\t\t\t\tBit 2 = 0, the function of factory reset is disabled.\n\t\t\t\tBit 2 = 1, the function of factory reset is enabled.\n\t\t\t\tBit 3 to Bit 6 are reserved.\n\t\t\t\tBit 7 = 0, the setting for Bit 0 to Bit 2 are ineffective. Bit 7 = 1, the setting for Bit 0 to Bit 2 are effective.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 131,
+            "units": ""
+        },
+        "251": {
+            "label": "Configuration factory reset function",
+            "description": "Enable/disable the factory reset function of Action Button, external switches or WallSwipe.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "units": "",
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
                 }
             ]
         },
@@ -306,24 +516,29 @@
             ]
         },
         "255": {
-            "label": "Reset the Nano Switch",
+            "label": "Reset To Factory Defaults",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
+            "maxValue": 100,
+            "defaultValue": 1,
             "readOnly": false,
-            "writeOnly": false,
+            "writeOnly": true,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "(Default) Reset all configuration parameters",
+                    "label": "Reset to factory default setting",
                     "value": 0
                 },
                 {
-                    "label": "Reset and remove from network",
+                    "label": "Normal",
+                    "value": 1
+                },
+                {
+                    "label": "Reset to factory default setting and removed from the z-wave network",
                     "value": 1431655765
                 }
-            ]
+            ],
+            "description": "Reset to factory defaults"
         }
     }
 }

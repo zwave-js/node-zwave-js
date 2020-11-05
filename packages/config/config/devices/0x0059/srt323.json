@@ -1,11 +1,9 @@
-// Secure Meters (UK) Ltd. SRT323
-// Secure Z-Wave Room Thermostat
 {
     "_approved": true,
-    "manufacturer": "Secure Meters (UK) Ltd.",
+    "manufacturer": "Horstmann (Secure Meters)",
     "manufacturerId": "0x0059",
     "label": "SRT323",
-    "description": "Secure Z-Wave Room Thermostat",
+    "description": "SRT 323 Electronic Room Thermostat and Temperature",
     "devices": [
         {
             "productType": "0x0001",
@@ -23,11 +21,11 @@
             "isLifeline": true
         },
         "2": {
-            "label": "Thermostat Operating State reports",
+            "label": "Thermostat Operating State Reports",
             "maxNodes": 4
         },
         "3": {
-            "label": "Low Battery Warnings",
+            "label": "Unsolicited Battery Level Reports",
             "maxNodes": 4
         },
         "4": {
@@ -35,17 +33,17 @@
             "maxNodes": 4
         },
         "5": {
-            "label": "Multilevel Sensor Reports",
+            "label": "Unsolicited Sensor Multilevel Reports",
             "maxNodes": 4
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Temperature Sensor",
-            "description": "Disable or enable temperature sensor",
+            "label": "Temperature sensor reading",
+            "description": "Enables or not the temperature sensor reading",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 255,
             "unsigned": true,
             "readOnly": false,
@@ -64,10 +62,10 @@
         },
         "2": {
             "label": "Temperature Scale",
-            "description": "Temperature Scale",
+            "description": "Controls the temperature sensor scale",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -85,10 +83,10 @@
             ]
         },
         "3": {
-            "label": "Delta T",
-            "description": "Define the temperature steps",
+            "label": "Delta T: Temperature change",
+            "description": "Change between temperatures to trigger a temperature report (step 0.1) (Default 10 = 1C)",
             "valueSize": 1,
-            "minValue": 0,
+            "minValue": 1,
             "maxValue": 100,
             "defaultValue": 10,
             "readOnly": false,

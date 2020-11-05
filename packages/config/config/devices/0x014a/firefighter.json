@@ -1,0 +1,24 @@
+{
+    "_approved": true,
+    "manufacturer": "Ecolink",
+    "manufacturerId": "0x014a",
+    "label": "FIREFIGHTER",
+    "description": "FireFighter",
+    "devices": [
+        {
+            "productType": "0x0005",
+            "productId": "0x000f"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

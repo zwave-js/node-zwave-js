@@ -1,0 +1,84 @@
+{
+    "_approved": true,
+    "manufacturer": "GE (Jasco Products)",
+    "manufacturerId": "0x0063",
+    "label": "46202-SWITCH",
+    "description": "46202 In-Wall Smart Switch",
+    "devices": [
+        {
+            "productType": "0x4952",
+            "productId": "0x3137"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "3": {
+            "label": "LED Light",
+            "description": "Sets when the LED on the switch is lit.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "LED on when light off",
+                    "value": 0
+                },
+                {
+                    "label": "LED on when light on",
+                    "value": 1
+                },
+                {
+                    "label": "LED always off",
+                    "value": 2
+                },
+                {
+                    "label": "LED always on",
+                    "value": 3
+                }
+            ]
+        },
+        "19": {
+            "label": "Alternate Exclusion",
+            "description": "Default - normal exclusion\n        Active - perform a series of button presses to help eliminate accidental exclusion",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Press any button",
+                    "value": 0
+                },
+                {
+                    "label": "Press two times ON, two times OFF",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic - Local Load",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Basic - Double Tap",
+            "maxNodes": 5
+        }
+    }
+}

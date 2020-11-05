@@ -1,0 +1,64 @@
+{
+    "_approved": true,
+    "manufacturer": "FortrezZ",
+    "manufacturerId": "0x0084",
+    "label": "WV01",
+    "description": "WV-01 Automated Water Shut-Off Valve",
+    "devices": [
+        {
+            "productType": "0x0243",
+            "productId": "0x0216"
+        },
+        {
+            "productType": "0x0241",
+            "productId": "0x0300"
+        },
+        {
+            "productType": "0x0233",
+            "productId": "0xaa06"
+        },
+        {
+            "productType": "0x0213",
+            "productId": "0x020c"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "0": {
+            "label": "Mode",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Water Alarm",
+                    "value": 0
+                },
+                {
+                    "label": "Water Level",
+                    "value": 255
+                }
+            ]
+        },
+        "1": {
+            "label": "Water Level timeout",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60,
+            "units": "minutes"
+        }
+    }
+}

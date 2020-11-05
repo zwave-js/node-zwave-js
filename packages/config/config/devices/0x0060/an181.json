@@ -1,11 +1,9 @@
-// Everspring AN181
-// Mini Plug Switch with Metering (Gen5)
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "AN181",
-    "description": "Mini Plug Switch with Metering (Gen5)",
+    "description": "AN181 Miniplug On/Off with meter function",
     "devices": [
         {
             "productType": "0x0004",
@@ -16,14 +14,13 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Command value",
-            "description": "Set Basic Set Command value to be sent to group 2 when switch is turned on",
+            "label": "Basic Set Command",
+            "description": "Set Basic Set Command value to be sent to group 2 when switch is turned on.\n\n\tWhen the physical button on the mini-plug is used to turn OFF the switch the value \"0\" will always be sent to group 2,\n\thowever this is not the case when the switch is turned off remotely.",
             "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 99,
+            "minValue": 0,
+            "maxValue": 255,
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
@@ -37,11 +34,12 @@
                     "label": "Basic Set Command ON will be sent",
                     "value": 255
                 }
-            ]
+            ],
+            "units": ""
         },
         "2": {
-            "label": "Delaying time",
-            "description": "Set the delaying time to report to Group 1 in seconds",
+            "label": "Delay",
+            "description": "The delaying time to report to Group 1",
             "unit": "Seconds",
             "valueSize": 1,
             "minValue": 3,
@@ -49,11 +47,12 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "3": {
-            "label": "Remember status",
-            "description": "Set whether to remember the last status",
+            "label": "Remember Last",
+            "description": "Remember the last status on plug",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -70,14 +69,15 @@
                     "label": "Remember",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "4": {
-            "label": "Interval for wattage auto report",
-            "description": "Set the interval for wattage auto report in minutes",
+            "label": "Wattage Auto Report",
+            "description": "Set the interval for wattage auto report (0 = disabled)",
             "unit": "Minutes",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 32767,
             "defaultValue": 1,
             "readOnly": false,
@@ -88,14 +88,15 @@
                     "label": "Does not report automatically",
                     "value": 0
                 }
-            ]
+            ],
+            "units": "minutes"
         },
         "5": {
-            "label": "Interval for kW*h auto report",
-            "description": "Set the interval for kW*h auto report in minutes",
+            "label": "Energy Auto report",
+            "description": "Set the interval for kWh auto report (0 = disabled)",
             "unit": "Minutes",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 32767,
             "defaultValue": 60,
             "readOnly": false,
@@ -106,14 +107,15 @@
                     "label": "Does not report automatically",
                     "value": 0
                 }
-            ]
+            ],
+            "units": "minutes"
         },
         "6": {
-            "label": "Auto report load surpasses value",
-            "description": "Auto report when load surpasses the set value of wattage",
+            "label": "Value of Wattage surpassed",
+            "description": "Auto report is sent when load surpasses the set value of wattage (0 = disabled)",
             "unit": "Watt",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 2500,
             "defaultValue": 0,
             "readOnly": false,
@@ -124,14 +126,15 @@
                     "label": "Does not report automatically",
                     "value": 0
                 }
-            ]
+            ],
+            "units": "watts"
         },
         "7": {
-            "label": "Auto report change percentage",
-            "description": "Auto report when the change of wattage surpasses the set percentage",
+            "label": "Change of Wattage surpassed",
+            "description": "Auto report is sent when the change of wattage surpasses the set percentage (0 = disabled)",
             "unit": "Percent",
             "valueSize": 1,
-            "minValue": 1,
+            "minValue": 0,
             "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
@@ -142,7 +145,19 @@
                     "label": "Does not report automatically",
                     "value": 0
                 }
-            ]
+            ],
+            "units": "%"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "On/Off control (Button on the mini-plug)",
+            "maxNodes": 4
         }
     }
 }

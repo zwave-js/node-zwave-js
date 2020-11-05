@@ -1,11 +1,9 @@
-// Everspring HAC01
-// In-Wall Remote Insert
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "HAC01",
-    "description": "In-Wall Remote Insert",
+    "description": "HAC01 In-wall Remote Module",
     "devices": [
         {
             "productType": "0x0010",

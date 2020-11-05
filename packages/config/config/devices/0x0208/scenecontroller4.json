@@ -1,0 +1,83 @@
+{
+    "_approved": true,
+    "manufacturer": "HANK Electronics Ltd",
+    "manufacturerId": "0x0208",
+    "label": "SCENECONTROLLER4",
+    "description": "HKZW-SCN04 Scene Controller",
+    "devices": [
+        {
+            "productType": "0x0201",
+            "productId": "0x000b"
+        },
+        {
+            "productType": "0x0200",
+            "productId": "0x000b"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Set button 1",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Multilevel Set button 1",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Basic Set button 2",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Multilevel Set button 2",
+            "maxNodes": 5
+        },
+        "6": {
+            "label": "Basic Set button 3",
+            "maxNodes": 5
+        },
+        "7": {
+            "label": "Multilevel Set button 3",
+            "maxNodes": 5
+        },
+        "8": {
+            "label": "Basic Set button 4",
+            "maxNodes": 5
+        },
+        "9": {
+            "label": "Multilevel Set button 4",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "254": {
+            "label": "Configuration Command",
+            "description": "Lock/unlock all configuration parameters",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Unlock",
+                    "value": 0
+                },
+                {
+                    "label": "Lock",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

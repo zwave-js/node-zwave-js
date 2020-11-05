@@ -1,11 +1,9 @@
-// zwaveproducts.com WD-100
-// In-Wall Dimmer
 {
     "_approved": true,
     "manufacturer": "zwaveproducts.com",
     "manufacturerId": "0x0315",
     "label": "WD-100",
-    "description": "In-Wall Dimmer",
+    "description": "WD-100",
     "devices": [
         {
             "productType": "0x4447",
@@ -16,7 +14,6 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "4": {
             "label": "Orientation",
@@ -38,7 +35,8 @@
                     "label": "Inverted",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "7": {
             "label": "Remote dim level increment",
@@ -49,7 +47,8 @@
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "8": {
             "label": "Remote dim step duration",
@@ -61,19 +60,21 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "10ms"
         },
         "9": {
             "label": "Dim Level Increment",
             "description": "Indicates the number of levels (1-99) to change dimming each step",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
+            "minValue": 1,
+            "maxValue": 99,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "%"
         },
         "10": {
             "label": "Step Duration",
@@ -84,7 +85,15 @@
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "milliseconds"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
         }
     }
 }

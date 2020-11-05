@@ -1,113 +1,117 @@
-// ACT - Advanced Control Technologies ZIR010
-// PIR Motion Sensor
 {
-	"_approved": true,
-	"manufacturer": "ACT - Advanced Control Technologies",
-	"manufacturerId": "0x0001",
-	"label": "ZIR010",
-	"description": "PIR Motion Sensor",
-	"devices": [
-		{
-			"productType": "0x4952",
-			"productId": "0x3030"
-		},
-		{
-			"productType": "0x4952",
-			"productId": "0x3130"
-		}
-	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
-	"associations": {
-		"1": {
-			"label": "Motion",
-			"maxNodes": 5,
-			"isLifeline": true
-		},
-		"2": {
-			"label": "Tamper",
-			"maxNodes": 5,
-			"isLifeline": true
-		},
-		"3": {
-			"label": "Battery",
-			"maxNodes": 5,
-			"isLifeline": true
-		}
-	},
-	"paramInformation": {
-		"17": {
-			"label": "Mode",
-			"description": "Notification modes: 0=light, 1=alarm, 2=sensor",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Lightning",
-					"value": 0
-				},
-				{
-					"label": "Alarm",
-					"value": 1
-				},
-				{
-					"label": "Sensor",
-					"value": 2
-				}
-			]
-		},
-		"18": {
-			"label": "Off/Idle delay",
-			"description": "Configuring the off/idle delay",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"19": {
-			"label": "Unsolicited Commands",
-			"description": "Disabling the zir010 trom sending commands unsolicited",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
-		},
-		"22": {
-			"label": "Awake Time",
-			"description": "Duration ranges from 15 to 45 seconds. Valid values range from 15 to 45.",
-			"unit": "seconds",
-			"valueSize": 1,
-			"minValue": 15,
-			"maxValue": 45,
-			"defaultValue": 30,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		}
-	}
+    "_approved": true,
+    "manufacturer": "ACT",
+    "manufacturerId": "0x0001",
+    "label": "ZIR010",
+    "description": "ZIR010 PIR Motion Sensor",
+    "devices": [
+        {
+            "productType": "0x4952",
+            "productId": "0x3130"
+        },
+        {
+            "productType": "0x4952",
+            "productId": "0x3330"
+        },
+        {
+            "productType": "0x4952",
+            "productId": "0x3030"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Motion",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Tamper",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "3": {
+            "label": "Battery",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "17": {
+            "label": "Mode",
+            "description": "The ZIR010 can be configured to operate in 1 of 3 modes.\n\t\t\t\tThose modes are:\n\t\t\t\tLighting Mode (factory default)\n\t\t\t\tAlarm Mode\n\t\t\t\tSensor Mode\n\t\t\t\tTo change the mode of operation:\n\t\t\t\tFor Lighting Mode: Send a value of 0 to Configuration Parameter #17.\n\t\t\t\tFor Alarm Mode: Send a value of 1 to Configuration Parameter #17.\n\t\t\t\tFor Sensor Mode: Send a value of 2 to Configuration Parameter # 17.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Lighting",
+                    "value": 0
+                },
+                {
+                    "label": "Alarm",
+                    "value": 1
+                },
+                {
+                    "label": "Sensor",
+                    "value": 2
+                }
+            ]
+        },
+        "18": {
+            "label": "Off/Idle Delay",
+            "description": "The configuration parameter that can be used to adjust the amount of delay before the OFF or IDLE command is transmitted is Configuration Parameter # 18.\n\t\t\t\tThis parameter can be configured with the value of 0 through 255.\n\t\t\t\tWhere 0 means no delay and 255 means 255 minutes of delay.\n\t\t\t\tDefault appears to be 1 min.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "minutes"
+        },
+        "19": {
+            "label": "Unsolicited Commands",
+            "description": "The ZIR010 can be disabled from sending commands unsolicited without removing associated devices by\n\t\t\t\tsetting Configuration Parameter # 19 to 0 (when asked for number of bytes, select 1).\n\t\t\t\tSetting it back to 1 will re-enable the ZIR010.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "22": {
+            "label": "Awake Time",
+            "description": "The time the ZIR010 stays awake can be adjusted from 15 seconds to 45 seconds by sending a value of 15\n\t\t\t\tto 45 to the ZIR010 using Configuration Parameter # 22 (when asked for the number of bytes, select 1).\n\t\t\t\tThis awake time period starts over every time the ZIR010 receives a command or request.\n\t\t\t\tDefaults to 30 seconds.",
+            "unit": "seconds",
+            "valueSize": 1,
+            "minValue": 15,
+            "maxValue": 45,
+            "defaultValue": 30,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        }
+    }
 }

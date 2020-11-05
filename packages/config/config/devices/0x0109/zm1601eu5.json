@@ -1,0 +1,73 @@
+{
+    "_approved": true,
+    "manufacturer": "Vision Security",
+    "manufacturerId": "0x0109",
+    "label": "ZM1601EU5",
+    "description": "ZM1601EU-5 Battery Operated Siren",
+    "devices": [
+        {
+            "productType": "0x2005",
+            "productId": "0x0508"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Siren Strobe Mode",
+            "description": "Defines the reaction of the siren: turn either Siren sound, Strobe light, or both when triggered",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Strobe and Siren",
+                    "value": 0
+                },
+                {
+                    "label": "Siren Only",
+                    "value": 1
+                },
+                {
+                    "label": "Strobe Only",
+                    "value": 2
+                }
+            ]
+        },
+        "2": {
+            "label": "Alarm Auto Stop",
+            "description": "Defines the auto time out of the alarm indication",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "30 seconds",
+                    "value": 0
+                },
+                {
+                    "label": "60 seconds",
+                    "value": 1
+                },
+                {
+                    "label": "120 seconds",
+                    "value": 2
+                },
+                {
+                    "label": "Will Not Automatically Stop",
+                    "value": 3
+                }
+            ]
+        }
+    }
+}

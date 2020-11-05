@@ -1,0 +1,102 @@
+{
+    "_approved": true,
+    "manufacturer": "Ring",
+    "manufacturerId": "0x0346",
+    "label": "PIR-SS",
+    "description": "PIR-SS Motion Detector",
+    "devices": [
+        {
+            "productType": "0x0301",
+            "productId": "0x0201"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Unsolicted Report Time",
+            "description": "Interval which unsolicted reports are sent.",
+            "valueSize": 2,
+            "minValue": 255,
+            "maxValue": 4200,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3600,
+            "units": "seconds"
+        },
+        "2": {
+            "label": "Dwell Time",
+            "description": "Time which sensor will hold onto a motion detected or cleared event.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 9,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5,
+            "units": "minutes"
+        },
+        "3": {
+            "label": "Pet Immunity",
+            "description": "Pet Immunity Setting",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "units": "",
+            "options": [
+                {
+                    "label": "No pet immunity",
+                    "value": 0
+                },
+                {
+                    "label": "15kg (33lb)",
+                    "value": 1
+                },
+                {
+                    "label": "25kg (55lb)",
+                    "value": 2
+                }
+            ]
+        },
+        "4": {
+            "label": "Walk Test",
+            "description": "Activate walk test for 15 minutes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Normal Operation",
+                    "value": 0
+                },
+                {
+                    "label": "Activated",
+                    "value": 255
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Group",
+            "maxNodes": 1
+        }
+    }
+}

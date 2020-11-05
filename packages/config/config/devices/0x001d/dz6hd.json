@@ -1,12 +1,14 @@
-// Leviton DZ6HD
-// 600W Dimmer
 {
     "_approved": true,
     "manufacturer": "Leviton",
     "manufacturerId": "0x001d",
     "label": "DZ6HD",
-    "description": "600W Dimmer",
+    "description": "DZ1KD-1BZ Decora 1000W Smart Dimmer",
     "devices": [
+        {
+            "productType": "0x3301",
+            "productId": "0x0001"
+        },
         {
             "productType": "0x3201",
             "productId": "0x0001"
@@ -16,11 +18,17 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
     "paramInformation": {
         "1": {
             "label": "Fade On Time",
-            "description": "Fade on time",
+            "description": "The amount of time to take to fade the lights from off to on.\n\t\t\t\tA value of zero is instant (no fade), values between 1 and 127 represent 1 to 127 seconds, and values from 128 to 253 represent from 1 to 126 minutes.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 253,
@@ -28,11 +36,12 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "2": {
             "label": "Fade Off Time",
-            "description": "Fade off time",
+            "description": "The amount of time to take to fade the lights from on to off.  \n\t\t\t\tA value of zero is instant (no fade), values between 1 and 127 represent 1 to 127 seconds, and values from 128 to 253 represent from 1 to 126 minutes.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 253,
@@ -40,44 +49,48 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "3": {
             "label": "Minimum Light Level",
-            "description": "Minimum light level",
+            "description": "Smallest dimming value permitted.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 100,
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "4": {
             "label": "Maximum Light Level",
-            "description": "Maximum light level",
+            "description": "Largest dimming value permitted.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 100,
             "defaultValue": 100,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "5": {
             "label": "Preset Light Level",
-            "description": "Preset light level",
+            "description": "The dimming level of the lights when turned from off to on via the switch.\n\t\t\t\tIf the value of 0 is used, this means the restore dimming to the last dimming value.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "6": {
             "label": "LED Dim Level Indicator Timeout",
-            "description": "LED dim level indicator timeout",
+            "description": "The length of time in seconds that the level indicators should stay illuminated after the dimming level is changed.  A value of 0 means the indicator is always off, and a value of 255 means the indicators are always on.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -85,11 +98,22 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "units": "",
+            "options": [
+                {
+                    "label": "Level Indicators Always Off",
+                    "value": 0
+                },
+                {
+                    "label": "Level Indicators Always On",
+                    "value": 255
+                }
+            ]
         },
         "7": {
             "label": "Locator LED Status",
-            "description": "Locator LED status",
+            "description": "Change the mode of the LED to Status Mode where the LED is illuminated when the load is On, Locator Mode where the LED is illuminated when the Load is Off, or turns off the LED completely for any other setting values.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -97,18 +121,48 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "units": "",
+            "options": [
+                {
+                    "label": "LED Off",
+                    "value": 0
+                },
+                {
+                    "label": "Status Mode",
+                    "value": 254
+                },
+                {
+                    "label": "Locator Mode",
+                    "value": 255
+                }
+            ]
         },
         "8": {
             "label": "Load Type",
-            "description": "Load type",
+            "description": "Specify the type of load that this dimmer controls.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 2,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "units": "",
+            "options": [
+                {
+                    "label": "Incandescent",
+                    "value": 0
+                },
+                {
+                    "label": "LED",
+                    "value": 1
+                },
+                {
+                    "label": "CFL",
+                    "value": 2
+                }
+            ]
         }
     }
 }

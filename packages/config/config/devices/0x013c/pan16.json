@@ -1,0 +1,186 @@
+{
+    "_approved": true,
+    "manufacturer": "Philio Technology Corp",
+    "manufacturerId": "0x013c",
+    "label": "PAN16",
+    "description": "PAN16 Smart energy plug in switch",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0029"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Watt Meter Report Period",
+            "description": "The interval at which the device reports its instant power consumption to Group 1 nodes. Unit: 5 secs, Min: 1, Max: 32767, Default: 720 (= 1 hr)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 720,
+            "units": "5 seconds"
+        },
+        "2": {
+            "label": "kWh Meter Report Period",
+            "description": "The interval at which the device reports its accumulated energy consumption, in kWh, to all Group 1 nodes. Unit: 10 minutes, min: 1, max: 32767, default: 6 (= 1 hr)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 6,
+            "units": "10 minutes"
+        },
+        "3": {
+            "label": "Threshold of current for Load Caution",
+            "description": "When the current through the device exceeds this threshold, a current meter report will be sent to Group 1 nodes. min: 10, max: 1100, default: 1100 (= 11 A)",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 1100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1100,
+            "units": "0.01 ampere"
+        },
+        "4": {
+            "label": "Threshold of kWh for Load Caution",
+            "description": "When the energy consumption through the device exceeds this threshold, a kWh report will be sent to Group 1 nodes. min: 1, max: 10000, default: 10000 kWh",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 10000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10000,
+            "units": "1 kWh"
+        },
+        "5": {
+            "label": "Restore switch state mode",
+            "description": "After loss of power, device state will be set according to this parameter, default: Previous state.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Previous state",
+                    "value": 1
+                },
+                {
+                    "label": "On",
+                    "value": 2
+                }
+            ]
+        },
+        "6": {
+            "label": "Mode of Switch Off function",
+            "description": "When set to Disable, all commands to switch off the device are ignored, both via radio and the include button. default: Enable",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "LED indication mode",
+            "description": "Controls the light indicator in the device\n                Switch State: When switch is on, LED is on. When switch is off, LED is off. (default)\n                Night mode: When switch is on, LED is off. When switch is off, LED is on.\n                One flash: When the device changes state, the LED illuminates for one second.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Switch state",
+                    "value": 1
+                },
+                {
+                    "label": "Night mode",
+                    "value": 2
+                },
+                {
+                    "label": "One flash",
+                    "value": 3
+                }
+            ]
+        },
+        "8": {
+            "label": "Auto off timer",
+            "description": "Controls the auto-off timer\n                0: The auto off timer is disabled (default)\n                1-32767: After switching on, the device will automatically switch off after this time",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "9": {
+            "label": "RF off command mode",
+            "description": "Controls how the device reacts to the SWITCH_ALL_OFF command\n                Off: The device switches off (default)\n                Ignore: The switch off command is ignored\n                Toggle: It switches to the inverse of current state\n                On: The device switches on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Ignore",
+                    "value": 1
+                },
+                {
+                    "label": "Toggle",
+                    "value": 2
+                },
+                {
+                    "label": "On",
+                    "value": 3
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    }
+}

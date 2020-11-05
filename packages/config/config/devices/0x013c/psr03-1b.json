@@ -1,0 +1,198 @@
+{
+    "_approved": true,
+    "manufacturer": "Philio Technology Corp",
+    "manufacturerId": "0x013c",
+    "label": "PSR03-1B",
+    "description": "PSR03-1B.EU Keyfob 5 Remote",
+    "devices": [
+        {
+            "productType": "0x0008",
+            "productId": "0x001d"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Basic Set Level",
+            "description": "Setting the BASIC command value to turn on the light.\n                The 0xFF(-1) means turn on the light.\n                For dimmer equipment 1 to 99 means the light strength.\n                0 means turn off the light.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255,
+            "units": ""
+        },
+        "7": {
+            "label": "Customer function",
+            "description": "Customer function switch, using bit control.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Switch AV control",
+                    "value": 0
+                },
+                {
+                    "label": "Lighting group control",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Auto Report Battery Time",
+            "description": "The interval time for auto report the battery level.\n                0 means turn off auto report battery.\n                Each tick means 30 minutes.\n                The default value is 12(6 hours).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 12
+        },
+        "82": {
+            "label": "Association Group 2 Basic Set Level",
+            "description": "Setting the BASIC command value to turn on the light in the association group 2.\n                0 means using the value of configuration 2 to set.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "83": {
+            "label": "Association Group 3 Basic Set Level",
+            "description": "Setting the BASIC command value to turn on the light in the association group 3.\n                0 means using the value of configuration 2 to set.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "84": {
+            "label": "Association Group 4 Basic Set Level",
+            "description": "Setting the BASIC command value to turn on the light in the association group 4.\n                0 means using the value of configuration 2 to set.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "85": {
+            "label": "Association Group 5 Basic Set Level",
+            "description": "Setting the BASIC command value to turn on the light in the association group 5.\n                0 means using the value of configuration 2 to set.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "86": {
+            "label": "Association Group 6 Basic Set Level",
+            "description": "Setting the BASIC command value to turn on the light in the association group 6.\n                0 means using the value of configuration 2 to set.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "87": {
+            "label": "Association Group 7 Basic Set Level",
+            "description": "Setting the BASIC command value to turn on the light in the association group 7.\n                0 means using the value of configuration 2 to set.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "88": {
+            "label": "Association Group 8 Basic Set Level",
+            "description": "Setting the BASIC command value to turn on the light in the association group 8.\n                0 means using the value of configuration 2 to set.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "89": {
+            "label": "Association Group 9 Basic Set Level",
+            "description": "Setting the BASIC command value to turn on the light in the association group 9.\n                0 means using the value of configuration 2 to set.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Z-Wave Plus Lifeline",
+            "maxNodes": 4,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Top-left Key",
+            "maxNodes": 4
+        },
+        "3": {
+            "label": "Top-right Key",
+            "maxNodes": 4
+        },
+        "4": {
+            "label": "Bottom-left Key",
+            "maxNodes": 4
+        },
+        "5": {
+            "label": "Bottom-right Key",
+            "maxNodes": 4
+        },
+        "6": {
+            "label": "Top-left Key",
+            "maxNodes": 4
+        },
+        "7": {
+            "label": "Top-right Key",
+            "maxNodes": 4
+        },
+        "8": {
+            "label": "Bottom-left Key",
+            "maxNodes": 4
+        },
+        "9": {
+            "label": "Bottom-right Key",
+            "maxNodes": 4
+        }
+    }
+}

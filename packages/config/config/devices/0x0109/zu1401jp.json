@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "Vision Security",
+    "manufacturerId": "0x0109",
+    "label": "ZU1401JP",
+    "description": "ZU1401 Z-Wave USB Stick",
+    "devices": [
+        {
+            "productType": "0x1001",
+            "productId": "0x0101"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

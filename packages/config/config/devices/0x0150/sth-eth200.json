@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "Samsung SmartThings",
+    "manufacturerId": "0x0150",
+    "label": "STH-ETH200",
+    "description": "SmartThings Hub v2",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0006"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

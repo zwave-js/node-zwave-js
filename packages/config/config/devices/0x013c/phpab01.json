@@ -1,0 +1,106 @@
+{
+    "_approved": true,
+    "manufacturer": "Philio Technology Corp",
+    "manufacturerId": "0x013c",
+    "label": "PHPAB01",
+    "description": "PH-PAB01.eu Micromodule Energy Meter",
+    "devices": [
+        {
+            "productType": "0x0006",
+            "productId": "0x001a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Watt Meter Report Period",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 720,
+            "units": "5 sec"
+        },
+        "2": {
+            "label": "kWh meter report period",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 720,
+            "units": "5 sec"
+        },
+        "3": {
+            "label": "Selected End Point",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "CT1 and CT2",
+                    "value": 1
+                },
+                {
+                    "label": "CT1",
+                    "value": 2
+                },
+                {
+                    "label": "CT2",
+                    "value": 3
+                }
+            ]
+        },
+        "4": {
+            "label": "Threshold of Current for Load Caution",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 750,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 750,
+            "units": "0.01 Amp"
+        },
+        "5": {
+            "label": "Threshold of KWH for Load Caution",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 10000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10000,
+            "units": "KWh"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Report CT1 and CT2",
+            "maxNodes": 1
+        },
+        "2": {
+            "label": "Report CT1",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Report CT2",
+            "maxNodes": 5
+        }
+    }
+}

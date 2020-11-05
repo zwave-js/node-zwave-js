@@ -1,11 +1,9 @@
-// Fakro ZWP10
-// Z-Wave Controller
 {
     "_approved": true,
     "manufacturer": "Fakro",
     "manufacturerId": "0x0085",
     "label": "ZWP10",
-    "description": "Z-Wave Controller",
+    "description": "ZWP10 Remote Controller",
     "devices": [
         {
             "productType": "0x0001",
@@ -18,43 +16,43 @@
     },
     "associations": {
         "1": {
-            "label": "Channel \"1234\" left",
+            "label": "Channel 1 Basic",
             "maxNodes": 232
         },
         "2": {
-            "label": "Channel \"1234\" right",
+            "label": "Channel 1 Multilevel",
             "maxNodes": 232
         },
         "3": {
-            "label": "Channel \"1\" left",
+            "label": "Channel 2 Basic",
             "maxNodes": 232
         },
         "4": {
-            "label": "Channel \"1\" right",
+            "label": "Channel 2 Multilevel",
             "maxNodes": 232
         },
         "5": {
-            "label": "Channel \"2\" left",
+            "label": "Channel 3 Basic",
             "maxNodes": 232
         },
         "6": {
-            "label": "Channel \"2\" right",
+            "label": "Channel 3 Multilevel",
             "maxNodes": 232
         },
         "7": {
-            "label": "Channel \"3\" left",
+            "label": "Channel 4 Basic",
             "maxNodes": 232
         },
         "8": {
-            "label": "Channel \"3\" right",
+            "label": "Channel 4 Multilevel",
             "maxNodes": 232
         },
         "9": {
-            "label": "Channel \"4\" left",
+            "label": "Channel 5 Basic",
             "maxNodes": 232
         },
         "10": {
-            "label": "Channel \"4\" right",
+            "label": "Channel 5 Multilevel",
             "maxNodes": 232
         }
     }

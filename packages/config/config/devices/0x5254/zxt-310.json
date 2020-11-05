@@ -1,17 +1,36 @@
-// Remotec ZXT-310
-// AV IR Extender
 {
     "_approved": true,
-    "_warnings": [
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
     "manufacturer": "Remotec",
     "manufacturerId": "0x5254",
     "label": "ZXT-310",
-    "description": "AV IR Extender",
+    "description": "ZXT-310BR",
     "devices": [
         {
+            "productType": "0x0108",
+            "productId": "0x8371"
+        },
+        {
+            "productType": "0x0107",
+            "productId": "0x8371"
+        },
+        {
+            "productType": "0x0106",
+            "productId": "0x8371"
+        },
+        {
+            "productType": "0x0103",
+            "productId": "0x8371"
+        },
+        {
             "productType": "0x0102",
+            "productId": "0x8371"
+        },
+        {
+            "productType": "0x0101",
+            "productId": "0x8371"
+        },
+        {
+            "productType": "0x0100",
             "productId": "0x8371"
         }
     ],
@@ -52,6 +71,90 @@
             "readOnly": true,
             "writeOnly": false,
             "allowManualEntry": true
+        },
+        "25": {
+            "label": "IR Code Learning",
+            "description": "Please make sure that the \"End point selection control\" has completed (if necessary) before process the following setup.\n\n        Place the ZXT-310 and your original remote on a flat surface, aimed at each other and 1-3 cm apart from the \"L\" learning mark.\n        Press and keep holding the key on your original equipment remote which you want to learn for a few seconds.\n\n        Value is the Simple AV command number or key going to be learned.\n        Any incoming operation may probably to wait up to 15s to release until the internal process of parameter has finished.\n\n        (Z-Wave Cmd#, e.g. if POWER key is going to be learnt, input the value: 39 (0x27))",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "26": {
+            "label": "Learning status register",
+            "description": "* 0 (0x00): IR channel idle (default)\n        * 1 (0x01): OK\n        * 2 (0x02): Learning\n        * 3 (0x03): Command Full\n        * 4 (0x04): Learning Fail",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "27": {
+            "label": "IR code number from table",
+            "description": "IR code number for built-in code library. Refer \"Code list\" for details.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "28": {
+            "label": "IR Output Power",
+            "description": "Please  make  sure  that  the  \"End  point  selection  control\"  has completed (if necessary) before process the following setup. \n        \n        Set IR output power level by entering: \n        * 0 (0x00) Normal power mode; \n        * 255 (0xFF) High power mode; \n        (default is in high power mode).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "29": {
+            "label": "IR Port Mapping",
+            "description": "IR output port routing. \n        Please make sure that the \"End point selection control\" has completed (if necessary) before process the following setup.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "31": {
+            "label": "IR transmission mode",
+            "description": "Please make sure that the \"End point selection control\" has completed (if necessary) before process the following setup. \n\n        * 0 (0x00): Continuous IR transmission mode (default); \n        * 255 (0xFF): Single shot IR transmission mode;",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "38": {
+            "label": "End-point selection control",
+            "description": "* 1 (0x01) = EP1 \n        * 1 (0x02) = EP2 \n        * 1 (0x03) = EP3 \n        * 1 (0x04) = EP4 \n        * 1 (0x05) = EP5 \n        * 1 (0x06) = EP6",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
         }
     }
 }

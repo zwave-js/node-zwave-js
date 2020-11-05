@@ -1,11 +1,9 @@
-// Zipato PAN04
-// In Wall Dual Relay
 {
     "_approved": true,
     "manufacturer": "Zipato",
     "manufacturerId": "0x0131",
     "label": "PAN04",
-    "description": "In Wall Dual Relay",
+    "description": "Micro Module Switch Double PAN04",
     "devices": [
         {
             "productType": "0x0001",
@@ -16,5 +14,205 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true
+    "paramInformation": {
+        "1": {
+            "label": "Watt Meter Report Period",
+            "description": "If the setting is configured for 1hour (set value =720), Micromodule will report its instant power consumption every 1 hour to the node of correspond Group.\n                The maximum interval to report its instant power consumption is 45 hours (5s*32767/3600=45hr).",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 32000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 720,
+            "units": "5 seconds"
+        },
+        "2": {
+            "label": "KWh Meter Report Period",
+            "description": "If the setting is configured for 1hour (set value =6), Micromodule will report its Accumulated Power Consumption (KW/h) every 1 hour to the node of correspond Group.\n                The maximum interval to report its Accumulated Power Consumption (KW/h) is 227.55 days (10min*32767/1440=227.55 days).",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 32000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 6,
+            "units": "10 minutes"
+        },
+        "3": {
+            "label": "Selected end point",
+            "description": "If Micromodule is not using Multi_Channel command class to access the relay of Switch, you may configure the select value to react the Basic Command Class, Binary Switch Command Class or Meter Command Class V3.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Relay 1 and Relay 2",
+                    "value": 1
+                },
+                {
+                    "label": "Relay 1",
+                    "value": 2
+                },
+                {
+                    "label": "Relay 2",
+                    "value": 3
+                }
+            ]
+        },
+        "4": {
+            "label": "External switch operating mode",
+            "description": "Manual switch S1 and S2 can set to Edge mode or Pulse mode or Edge-Toggle mode, default value is Edge mode.\n            1) Edge : This mode is suitable for the bi stable wall switch that has indicator point on the Micromodule, and the same position correspond to same state of relay1 and relay2. if the Switchs relay changes the state because of receiving Z-Wave RF command, it may need two switchings (switch on to off or switch off to on) to let relay back to the corresponding state.\n            2) Pulse : this mode is suitable for the toggle type wall switch to swap the state of Relay1 or Relay2.\n            3) Edge-Toggle : This mode is suitable for the normal bi-stable switch, every state change of the wall switch will also swap the state of Relay1 or Relay2.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Edge",
+                    "value": 1
+                },
+                {
+                    "label": "Pulse",
+                    "value": 2
+                },
+                {
+                    "label": "Edge/Toggle",
+                    "value": 3
+                }
+            ]
+        },
+        "5": {
+            "label": "Threshold of Watt for Load Caution",
+            "description": "This is a warning when the wattage of load over the preset threshold value, If the setting value is 750, when the load wattage of Relay1 or Relay2 over this value, Micromodule will send Watt Meter Report command to the node of correspond Group, the Range of the setting value is from 10 to 750, and the default value is 750.",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 750,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 750,
+            "units": "0.01A"
+        },
+        "6": {
+            "label": "Threshold of kWh for Load Caution",
+            "description": "This is a warning when the KWh of load exceeds preset threshold value, If the setting value is 1000, when the Accumulated Power Consumption of Relay1 or Relay2 exceeds this value, Micromodule will send KWh Meter Report command to the node of corresponding Group, the Range of the setting value is from 10 to 1000, and the default value is 750.",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 1000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 750,
+            "units": "1KWh"
+        },
+        "7": {
+            "label": "Restore switch state mode",
+            "description": "Whenever the AC power return from lost, Micromodule will restore the switch state which could be",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Switch off",
+                    "value": 1
+                },
+                {
+                    "label": "Last switch state",
+                    "value": 2
+                },
+                {
+                    "label": "Switch on",
+                    "value": 3
+                }
+            ]
+        },
+        "8": {
+            "label": "Auto off timer",
+            "description": "Whenever Micromodule switches to on, the auto off timer begin to count down.\n                After the timer decrease to zero, it will switch off automatically.\n                However if Auto off timer is set as 0, the auto off function will be disabled.\n                The default setting is 0.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "second"
+        },
+        "9": {
+            "label": "RF off command mode",
+            "description": "Whenever a switch off command, BASIC_SET, BINARY_SWITCH_SET, SWITCH_ALL_OFF, is received, it could be interpreted as 4 kinds of commands.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Switch off",
+                    "value": 0
+                },
+                {
+                    "label": "Ignore",
+                    "value": 1
+                },
+                {
+                    "label": "Switch toogle",
+                    "value": 2
+                },
+                {
+                    "label": "Switch on",
+                    "value": 3
+                }
+            ]
+        },
+        "10": {
+            "label": "Existence of Endpoint3",
+            "description": "Multi-Channel Command is a good way to control relay1 and relay2 of Switch individually.\n                 The endpoint3 of Micromodule is related to both relay1 and relay2.\n                 In some condition it becomes redundant in Multi-Channel Command Class.\n                 When the Existence of Endpoint3 is set as 2, the endpoint3 will be disabled.\n                 The default value is 1.\n                 Endpoint1 and Endpoint2 are fixed, only Endpoint3 is dynamic.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Endpoint 3 exist",
+                    "value": 1
+                },
+                {
+                    "label": "No Endpoint 3",
+                    "value": 2
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Relay 1 and 2 together",
+            "maxNodes": 1
+        },
+        "2": {
+            "label": "Relay 1",
+            "maxNodes": 1
+        },
+        "3": {
+            "label": "Relay 2",
+            "maxNodes": 1
+        }
+    }
 }
