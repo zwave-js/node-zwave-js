@@ -295,20 +295,23 @@ async function parseOzwProduct(
 		const parsedParam: Record<string, any> = {
 			label: param.label,
 			description: param.Help,
-			valueSize: param.size,
-			minValue: param.min,
-			maxValue: param.max,
-			default: param.value,
+			valueSize: param.size || 1,
+			minValue: param.min || 0,
+			maxValue: param.max || 100,
 			readOnly: Boolean(param.read_only),
 			writeOnly: Boolean(param.write_only),
 			allowManualEntry: param.type !== "list",
 		};
 
+		if (param.value !== undefined) {
+			parsedParam.defaultValue = param.value;
+		}
+
 		if (param.type === "list" && Array.isArray(param.Item)) {
 			parsedParam.options = [];
 			for (const item of param.Item) {
 				const opt = {
-					label: item.label,
+					label: item.label.toString(),
 					value: item.value,
 				};
 				parsedParam.options.push(opt);
