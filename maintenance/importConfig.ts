@@ -242,14 +242,12 @@ async function parseOzwProduct(
 		coerce: true,
 	}).Product;
 
-	let metadata = json.MetaData?.MetaDataItem || [];
-	metadata = Array.isArray(metadata) ? metadata : [metadata];
-	const name = metadata.find((m: any) => m.name === "Name")?.$t;
+	// let metadata = json.MetaData?.MetaDataItem || [];
+	// metadata = Array.isArray(metadata) ? metadata : [metadata];
+	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
 	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
 
-	const fileName = `${manufacturerId}/${labelToFilename(
-		name || productName,
-	)}.json`;
+	const fileName = `${manufacturerId}/${labelToFilename(productLabel)}.json`;
 
 	if (existingDevice === undefined) {
 		addDeviceToIndex(
