@@ -1,11 +1,9 @@
-// Everspring ST814
-// Temperature and Humidity Sensor
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "ST814",
-    "description": "Temperature and Humidity Sensor",
+    "description": "ST814 Temperature and Humidity Sensor",
     "devices": [
         {
             "productType": "0x0006",
@@ -23,14 +21,14 @@
             "isLifeline": true
         },
         "2": {
-            "label": "Control",
+            "label": "Basic",
             "maxNodes": 3
         }
     },
     "paramInformation": {
         "1": {
             "label": "Basic Set Level",
-            "description": "Set basic set value to be on or off",
+            "description": "Defines the level in the Basic Set event sent to group 2 when the sensor is triggered.  Default is 99 (full brightness for a Z-Wave dimmer). 0 disables.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
@@ -43,15 +41,16 @@
                     "label": "Disable",
                     "value": 0
                 }
-            ]
+            ],
+            "units": "%"
         },
         "2": {
-            "label": "Temperature Trigger ON value",
-            "description": "Temperature level when a ON command is sent out. Set to 99 to disable.",
+            "label": "Temperature On Trigger",
+            "description": "Temperature level to trigger when a ON command is sent out. 99 will clear the value.",
             "valueSize": 1,
             "minValue": -20,
-            "maxValue": 50,
-            "defaultValue": 99,
+            "maxValue": 99,
+            "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true,
@@ -60,15 +59,16 @@
                     "label": "Disable",
                     "value": 99
                 }
-            ]
+            ],
+            "units": "degrees"
         },
         "3": {
-            "label": "Temperature Trigger OFF value",
-            "description": "Temperature level when a OFF command is sent out. Set to 99 to disable.",
+            "label": "Temperature Off Trigger",
+            "description": "Temperature level to trigger when an OFF command is sent out. 99 will clear the value.",
             "valueSize": 1,
             "minValue": -20,
-            "maxValue": 50,
-            "defaultValue": 99,
+            "maxValue": 99,
+            "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true,
@@ -77,32 +77,16 @@
                     "label": "Disable",
                     "value": 99
                 }
-            ]
+            ],
+            "units": "degrees"
         },
         "4": {
-            "label": "Humidity Trigger ON value",
-            "description": "Humidity level when a ON command is sent out. Set to 99 to disable.",
-            "valueSize": 1,
-            "minValue": 20,
-            "maxValue": 90,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 99
-                }
-            ]
-        },
-        "5": {
-            "label": "Humidity Trigger OFF value",
-            "description": "Humidity level when a OFF command is sent out. Set to 99 to disable.",
+            "label": "Humidity On Trigger",
+            "description": "Humidity level to trigger when a ON command is sent out. 99 will clear the value.",
             "valueSize": 1,
             "minValue": 20,
             "maxValue": 99,
-            "defaultValue": 99,
+            "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true,
@@ -111,11 +95,30 @@
                     "label": "Disable",
                     "value": 99
                 }
-            ]
+            ],
+            "units": "%"
+        },
+        "5": {
+            "label": "Humidity Off Trigger",
+            "description": "Humidity level to trigger when a OFF command is sent out. 99 will clear the value.",
+            "valueSize": 1,
+            "minValue": 20,
+            "maxValue": 99,
+            "defaultValue": 40,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 99
+                }
+            ],
+            "units": "%"
         },
         "6": {
-            "label": "Auto report time",
-            "description": "Sets the time interval when a sensor report is sent",
+            "label": "Auto Report Time",
+            "description": "Sets the auto report time interval. 0 disables.",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 1439,
@@ -128,11 +131,12 @@
                     "label": "Disable",
                     "value": 0
                 }
-            ]
+            ],
+            "units": "minutes"
         },
         "7": {
-            "label": "Auto report temperature",
-            "description": "Sets the temperature change causing a sensor report.",
+            "label": "Auto Report Temperature",
+            "description": "Sets the auto report temperature trigger interval. 0 disables.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 70,
@@ -145,13 +149,14 @@
                     "label": "Disable",
                     "value": 0
                 }
-            ]
+            ],
+            "units": "degrees"
         },
         "8": {
-            "label": "Auto report humidity",
-            "description": "Sets the humidity change causing a sensor report.",
+            "label": "Auto Report Humidity",
+            "description": "Sets the auto report humidity trigger interval. 0 disables.",
             "valueSize": 1,
-            "minValue": 5,
+            "minValue": 0,
             "maxValue": 70,
             "defaultValue": 0,
             "readOnly": false,
@@ -162,7 +167,8 @@
                     "label": "Disable",
                     "value": 0
                 }
-            ]
+            ],
+            "units": "%"
         }
     }
 }

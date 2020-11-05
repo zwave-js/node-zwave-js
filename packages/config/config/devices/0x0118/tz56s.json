@@ -1,0 +1,85 @@
+{
+    "_approved": true,
+    "manufacturer": "TKB Home",
+    "manufacturerId": "0x0118",
+    "label": "TZ56S",
+    "description": "TZ56S On/Off wall switch",
+    "devices": [
+        {
+            "productType": "0x0311",
+            "productId": "0x0202"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Night light",
+            "description": "The LED on the TZ56S will by default, turn ON when the load attached is turned OFF. To make the LED turn ON when the load attached is turned ON instead, set parameter to a value of 1.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "2": {
+            "label": "Memory Function",
+            "description": "Stated in the above form,switch by default value is 1,when the value is 0,switch memory function not open; when the value is 1,open switch memory function",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "3": {
+            "label": "Invert switch",
+            "description": "To change the top of the switch to OFF and the bottom of the switch ON , set parameter 4 to 1.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "4": {
+            "label": "LED Transmission indication",
+            "description": "The TZ56-D will flicker its LED when it is transmitting to any of its 4 groups. This flickering can be set to not flicker at all (set to 0), to flicker the entire time it is transmitting (set to 1), or to flicker for only 1 second when it begins transmitting (set to 2). By default, the TZ56S is set to flicker for only 1 second.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "5": {
+            "label": "Suspend Group 4",
+            "description": "Setting this parameter to the value of 1 will stop the TZ56S from transmitting to devices that are associated into Group 4.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "4": {
+            "label": "Wireless",
+            "maxNodes": 5
+        }
+    }
+}

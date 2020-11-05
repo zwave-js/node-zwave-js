@@ -1,0 +1,427 @@
+{
+    "_approved": true,
+    "manufacturer": "Qubino (Goap)",
+    "manufacturerId": "0x0159",
+    "label": "ZMNHVDX",
+    "description": "ZMNHVDx Flush Dimmer 0-10V",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0053"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Input 1 type",
+            "description": "NOTE: After parameter change to value 3, 4 or 5 first exclude module (without setting parameters to default value) then wait at least 30s and then re include the module!",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Mono-stable switch",
+                    "value": 0
+                },
+                {
+                    "label": "Bi-stable switch",
+                    "value": 1
+                },
+                {
+                    "label": "Potentiometer",
+                    "value": 2
+                },
+                {
+                    "label": "Temperature sensor",
+                    "value": 3
+                },
+                {
+                    "label": "Illumination sensor",
+                    "value": 4
+                },
+                {
+                    "label": "General purpose sensor",
+                    "value": 5
+                }
+            ]
+        },
+        "10": {
+            "label": "Activate / deactivate functions ALL ON/ALL OFF",
+            "description": "Responds to commands ALL ON / ALL OFF that may be sent by the main controller or by other controller belonging to the system.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 255,
+            "options": [
+                {
+                    "label": "ALL ON active, ALL OFF active",
+                    "value": 255
+                },
+                {
+                    "label": "ALL ON is not active ALL OFF is not active",
+                    "value": 0
+                },
+                {
+                    "label": "ALL ON is not active ALL OFF active",
+                    "value": 1
+                },
+                {
+                    "label": "ALL ON active ALL OFF is not active",
+                    "value": 2
+                }
+            ]
+        },
+        "11": {
+            "label": "Automatic turning off output after set time",
+            "description": "0 => Auto OFF disabled. 1 - 32535  => 1 second (0,01s) - 32535 seconds (325,35s). Auto OFF enabled with define time, step is 1s or 10ms according to parameter 15. Default value 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "12": {
+            "label": "Automatic turning on output after set time",
+            "description": "0 - Auto OFF disabled. 1 - 32535  => 1 second (0,01s) - 32535 seconds (325,35s). Auto ON enabled with define time, step is 1s or 10ms according to parameter 15. Default value 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "21": {
+            "label": "Double click function",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "30": {
+            "label": "Saving the state of the device after a power failure",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Saves state before power failure",
+                    "value": 0
+                },
+                {
+                    "label": "After a power failure, it returns to off position",
+                    "value": 1
+                }
+            ]
+        },
+        "52": {
+            "label": "Auto or manual selection",
+            "description": "This parameter is influencing on the software only when the value of parameter number 1 is set to value 3, 4 or 5.\n\t\t\tIn manual mode regulation (how the input influence on output) is disabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Manual",
+                    "value": 0
+                },
+                {
+                    "label": "Auto",
+                    "value": 1
+                }
+            ]
+        },
+        "53": {
+            "label": "PID value inside deadband",
+            "description": "NOTE: When ZERO PID inside deadband is forced to zero. \n\t\t\tLast value means that PID remains on same level as was before entering into deadband.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Zero",
+                    "value": 0
+                },
+                {
+                    "label": "Last value",
+                    "value": 1
+                }
+            ]
+        },
+        "54": {
+            "label": "PID deadband",
+            "description": "0 to 100 => 0 to 100%, step is 1%. \n\t\t\tDefault value 1.\n\t\t\tNOTE: This parameter defines the zone where PID is not active. If the temperature difference between actual and setpoint is bigger than PID deadband, then the PID will start to regulate the system, otherwise the PID is zero or fixed.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1,
+            "units": "%"
+        },
+        "55": {
+            "label": "- Integral sampling time",
+            "description": "0 to 127 => 0 to 127s, step is 1s. \n\t\t\tDefault value 1.\n\t\t\tParameter defines the time between samples. On each sample the controller capture difference between SP-act.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5,
+            "units": "seconde"
+        },
+        "56": {
+            "label": "P parameter",
+            "description": "0 to 1000, step is 1. \n\t\t\tDefault value 100.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 100
+        },
+        "57": {
+            "label": "I parameter",
+            "description": "0 to 1000, step is 1. \n\t\t\tDefault value 1.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "58": {
+            "label": "D parameter",
+            "description": "0 to 1000, step is 1. \n\t\t\tDefault value 1.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "60": {
+            "label": "Minimum dimming value",
+            "description": "1 - 98 = 1% - 98%, step is 1%. Minimum dimming values is set by entered value.\n\t\t\tDefault value 1 (Minimum dimming value is 1%).",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 98,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "61": {
+            "label": "Maximum dimming value",
+            "description": "2 - 99 = 2% - 99%, step is 1%. Maximum dimming values is set by entered value.\n\t\t\tDefault value 99 (Maximum dimming value is 99%).",
+            "valueSize": 1,
+            "minValue": 2,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "65": {
+            "label": "Dimming time (soft on/off)",
+            "description": "Set value means time of moving the Dimmer between min. and max. dimming values by short press of push button I1 or controlled through.\n\t\t\t1- 255 = 10mseconds - 2550mseconds (2,55s), step is 10mseconds.\n\t\t\tDefault value 100 (Dimming time between min. and max. dimming values is 1s).",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 100
+        },
+        "66": {
+            "label": "Dimming time when key pressed",
+            "description": "Time of moving the Dimmer between min. and max dimming values by continues hold of push button I1.\n\t\t\t1- 255 = 1 second - 255 seconds.\n\t\t\tDefault value 3 (Dimming time between min. and max. dimming values is 3s).",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "67": {
+            "label": "Ignore start level",
+            "description": "This parameter is used with association group 4.\n\t\t\t\tA receiving device SHOULD respect the start level if the Ignore Start Level bit is 0.\n\t\t\t\tA receiving device MUST ignore the start level if the Ignore Start Level bit is 1.\n\t\t\t\tDefault value 0.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "respect start level",
+                    "value": 0
+                },
+                {
+                    "label": "ignore start level",
+                    "value": 1
+                }
+            ]
+        },
+        "68": {
+            "label": "Dimming duration",
+            "description": "This parameter is used with association group 3.\n\t\t\t\tThe Duration field MUST specify the time that the transition should take from the current value to the new target value.\n\t\t\t\tA supporting device SHOULD respect the specified Duration value.\n\t\t\t\tDefault value 0.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Respect start level",
+                    "value": 0
+                },
+                {
+                    "label": "Ignore start level",
+                    "value": 1
+                }
+            ]
+        },
+        "110": {
+            "label": "Temperature sensor offset settings",
+            "description": "From 1 to 100 - value from 0.1 C to 10.0 C is added to actual measured temperature.\n                From 1001 to 1100 - value from -0.1 C to -10.0 C is subtracted to actual measured temperature.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 1100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 32536
+        },
+        "120": {
+            "label": "Digital temperature sensor reporting",
+            "description": "If digital temperature sensor is connected, module reports measured temperature on temperature change defined by this parameter.\n                Available settings: 0 - Reporting disabled.\n                1 - 127 = 0,1C - 12,7C, step is 0,1C.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        },
+        "140": {
+            "label": "Input I1 Sensor reporting",
+            "description": "If analogue sensor is connected, module reports measured value on change defined by this parameter.\n\t\t\t0 - Reporting disabled.\n\t\t\t1 to 10000, step is 0.1. \t\t\t\n\t\t\tDefault value 5 => 0.5C.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 10000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        },
+        "141": {
+            "label": "1 Input I1 0-10V reporting threshold",
+            "description": "Parameter is associated with Association group No. 2.\n\t\t\tBelow this value, the Association No. 2 will report Basic Set 0xFF and above this value will report Basic Set 0xFF.\n\t\t\tBasic Set is reported only, when the input value changes for more than 10% (1V). \n\t\t\tDefault setting: 5 (0.5V)\n\t\t\t1 to 100 => (0,1 to 10V)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        },
+        "143": {
+            "label": "Minimum sensor range value",
+            "description": "Value that must correspond to minimum sensor range value.\n\t\t\tValid only if parameter 1 is set to values 3, 4 or 5).\n\t\t\tdefault value 0 = 0.0C / 0Lux / 0.0%rh\n\t\t\t0 to 10000 => value from 0 to 1000 (resolution 0,1)\n\t\t\t10001 to 20000 => value from -0,1 to -1000 (resolution 0,1)\n\t\t\tNOTE: Minimum value must not be higher than maximum value!",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 20000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "144": {
+            "label": "Maximum sensor range value",
+            "description": "Value that must correspond to maximum sensor range value.\n\t\t\tValid only if parameter 1 is set to values 3, 4 or 5).\n\t\t\tdefault value 1000 = 100.0C / 100Lux / 100.0%rh\n\t\t\t0 to 10000 => value from 0 to 1000 (resolution 0,1)\n\t\t\t10001 to 20000 => value from -0,1 to -1000 (resolution 0,1)\n\t\t\tNOTE: Maximum value must not be lower than minimum value!",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 20000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1000
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic on/off of the input I1 state",
+            "maxNodes": 16
+        },
+        "3": {
+            "label": "Level change I1",
+            "maxNodes": 16
+        },
+        "4": {
+            "label": "Multilevel set of the Flush Dimmer",
+            "maxNodes": 16
+        },
+        "5": {
+            "label": "Multilevel sensor report analogue sensor",
+            "maxNodes": 16
+        },
+        "6": {
+            "label": "Multilevel sensor report temperature sensor",
+            "maxNodes": 16
+        }
+    }
+}

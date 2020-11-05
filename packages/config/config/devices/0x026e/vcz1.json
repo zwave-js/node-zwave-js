@@ -1,11 +1,9 @@
-// Springs Window Fashions VCZ1
-// Two Button Remote
 {
     "_approved": true,
-    "manufacturer": "Springs Window Fashions",
+    "manufacturer": "Springs Window Fashions (Graber)",
     "manufacturerId": "0x026e",
     "label": "VCZ1",
-    "description": "Two Button Remote",
+    "description": "VCZ1 Virtual Cord Remote Control",
     "devices": [
         {
             "productType": "0x5643",
@@ -16,5 +14,15 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Slave Shades",
+            "maxNodes": 12
+        }
+    }
 }

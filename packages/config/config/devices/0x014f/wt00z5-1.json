@@ -1,0 +1,90 @@
+{
+    "_approved": true,
+    "manufacturer": "Linear (Nortek Security Control LLC)",
+    "manufacturerId": "0x014f",
+    "label": "WT00Z5-1",
+    "description": "WT00Z5-1 Smart 3-Way Switch/Dimmer",
+    "devices": [
+        {
+            "productType": "0x5754",
+            "productId": "0x3530"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Night Light",
+            "description": "By default, the LED on the WT00Z5-1 will turn OFF when the Associated device is turned ON.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "LED OFF when the load is on",
+                    "value": 0
+                },
+                {
+                    "label": "LED ON when the load is on",
+                    "value": 1
+                },
+                {
+                    "label": "LED is always ON",
+                    "value": 2
+                },
+                {
+                    "label": "LED is always OFF",
+                    "value": 3
+                },
+                {
+                    "label": "LED blinks during RF transmissions",
+                    "value": 4
+                }
+            ]
+        },
+        "4": {
+            "label": "Invert Switch",
+            "description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "false",
+                    "value": 0
+                },
+                {
+                    "label": "true",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "BASIC On/Off",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Multilevel Switch",
+            "maxNodes": 5
+        }
+    }
+}

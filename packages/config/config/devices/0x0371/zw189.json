@@ -1,0 +1,36 @@
+{
+    "_approved": true,
+    "manufacturer": "Aeotec Limited",
+    "manufacturerId": "0x0371",
+    "label": "ZW189",
+    "description": "ZW189 Range Extender 7",
+    "devices": [
+        {
+            "productType": "0x0404",
+            "productId": "0x00bd"
+        },
+        {
+            "productType": "0x0204",
+            "productId": "0x00bd"
+        },
+        {
+            "productType": "0x0104",
+            "productId": "0x00bd"
+        },
+        {
+            "productType": "0x0004",
+            "productId": "0x00bd"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

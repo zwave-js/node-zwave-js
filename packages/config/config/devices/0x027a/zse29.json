@@ -1,11 +1,9 @@
-// Zooz ZSE29
-// Outdoor Motion Sensor
 {
     "_approved": true,
     "manufacturer": "Zooz",
     "manufacturerId": "0x027a",
     "label": "ZSE29",
-    "description": "Outdoor Motion Sensor",
+    "description": "ZSE29 Outdoor Motion Sensor",
     "devices": [
         {
             "productType": "0x0001",
@@ -16,5 +14,95 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true
+    "paramInformation": {
+        "1": {
+            "label": "Basic Set Report Value Sent to Associated Devices",
+            "description": "Set the value of basic set report sent to the light associated with the sensor in Group 2 (so the light turns on to the selected brightness level). 99 is the equivalent of full brightness in Z-Wave terms.\n      default: 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "2": {
+            "label": "Enable / Disable Motion Reports",
+            "description": "Enable or disable motion reports completely. If motion sensor is disabled, the device will not report motion at all to your hub.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled (default)",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Motion Sensativity",
+            "description": "Adjust motion sensitivity where 10 is the most sensative setting.\n      default: 10",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10
+        },
+        "4": {
+            "label": "Lux Level Trigger",
+            "description": "Set lux level trigger with 10 being the lowest reported value.  The sensor will report motion to the hub and associated devices only if lux level is below the set value.\n      0 - set manually by lux knob; (default)\n      1 - ignore lux and always report motion;",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 900,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "5": {
+            "label": "Motion Re-trigger Time",
+            "description": "Set motion re-trigger time for the delay before the sensor reports no motion to the hub and associated devices after detecting the last motion activity.\n      0 - set manually by timer knob; (default)\n      5-720 (seconds) - set customer re-trigger time;",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 720,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "6": {
+            "label": "Lux Reporting Frequency",
+            "description": "Set lux reporting frequency to decide how often the snesor will measure and send brightness level data to the hub and associated devices.\n      default: 30 (minutes)",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 1440,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30,
+            "units": "minutes"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "PIR Control",
+            "maxNodes": 4
+        }
+    }
 }

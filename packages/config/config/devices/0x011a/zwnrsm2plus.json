@@ -1,0 +1,46 @@
+{
+    "_approved": true,
+    "manufacturer": "Enerwave",
+    "manufacturerId": "0x011a",
+    "label": "ZWNRSM2PLUS",
+    "description": "ZWN-RSM2-PLUS Smart Single Relay Switch Module",
+    "devices": [
+        {
+            "productType": "0x0111",
+            "productId": "0x0606"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Unsolicited Report Configuration",
+            "description": "ZWN-RSM2-PLUS can send unsolicited status reports to the primary controller (Node ID 0x1) when the switch is toggled if the controller is designed as a gateway.  If your controller is not a gateway or does not need the status reported or you think it could confuse your Z-Wave network, you can use Command_Class_Configuration to disable this function.  By default this function is disabled. ZWM-RSM2 disabled=0, enabled=255.  ZWN-RSM2-PLUS disabled=0, enabled=1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "StatusReport_EP1: Switch Binary Report",
+            "maxNodes": 3
+        },
+        "3": {
+            "label": "StatusReport_EP2: Switch Binary Report",
+            "maxNodes": 3
+        }
+    }
+}

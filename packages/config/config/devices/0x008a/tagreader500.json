@@ -1,0 +1,145 @@
+{
+    "_approved": true,
+    "manufacturer": "BeNext",
+    "manufacturerId": "0x008a",
+    "label": "TAGREADER500",
+    "description": "Tag Reader 500",
+    "devices": [
+        {
+            "productType": "0x0007",
+            "productId": "0x0200"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Set to Default",
+            "description": "To configure the always awake mode.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 170,
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 170
+                },
+                {
+                    "label": "Set all parameters to default",
+                    "value": 255
+                }
+            ]
+        },
+        "2": {
+            "label": "Feedback Time",
+            "description": "To configure the time the beep is automatically turned off in seconds.\n                0x00: Disable, 0x01 - 0xFE: Value in seconds",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 15,
+            "units": "seconds"
+        },
+        "3": {
+            "label": "Feedback Timeout",
+            "description": "To configure the timeout to wait for a WAKEUP_NO_MORE_INFORMATION before the error beep\n                is automatically sound. The error beeps are fixed 8 beeps shortly after each other.\n                0x00: Disabled, 0x01 - 0xFF: Value in seconds",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "4": {
+            "label": "Feedback beeps per second",
+            "description": "To configure the number of beeps per second. Every beep is fixed about 10ms.\n                0x00 - 0xFF: Number of beeps per second",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 2
+        },
+        "5": {
+            "label": "Always awake mode",
+            "description": "To configure the always awake mode.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Normal operating",
+                    "value": 1
+                },
+                {
+                    "label": "Always awake",
+                    "value": 3
+                }
+            ]
+        },
+        "7": {
+            "label": "Operation mode",
+            "description": "The mode that the Tag Reader 500 communicates with the associated gateway.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Gateway mode",
+                    "value": 0
+                },
+                {
+                    "label": "Local mode",
+                    "value": 1
+                }
+            ]
+        },
+        "8": {
+            "label": "Gateway confirmation",
+            "description": "In gateway mode it is possible to let the gateway decide if the Tag Reader 500 can arm to home or away.\n                If gateway indication is disabled the Tag Reader 500 automatically assumes that it can arm and will wait\n                for a user input of RFID TAG or numeric code.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

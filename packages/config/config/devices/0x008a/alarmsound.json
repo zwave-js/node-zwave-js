@@ -1,0 +1,1406 @@
+{
+    "_approved": true,
+    "manufacturer": "BeNext",
+    "manufacturerId": "0x008a",
+    "label": "ALARMSOUND",
+    "description": "Alarm Sound",
+    "devices": [
+        {
+            "productType": "0x0005",
+            "productId": "0x0101"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Set to Default",
+            "description": "Set all configuration values to default values (factory settings)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": -1
+        },
+        "2": {
+            "label": "Destination routine enabled",
+            "description": "Enables an internal routine that periodically checks the Z-Wave device in assocication group 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "3": {
+            "label": "Destination routine success time",
+            "description": "Configure the time that the AlarmSound sends a new frame when previous frame was send successful",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60
+        },
+        "4": {
+            "label": "Destination routine failed time",
+            "description": "Configure the time that the AlarmSound sends a few frame when previous frame was send not successful",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 240
+        },
+        "5": {
+            "label": "Temperature calibration offset (byte 1)",
+            "description": "A (signed) offset to calibrate the onboard temperature sensor",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "6": {
+            "label": "Temperature calibration offset (byte 2)",
+            "description": "A (signed) offset to calibrate the onboard temperature sensor",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "7": {
+            "label": "Select index sound/light mode",
+            "description": "The index of the sound mode when a switch binary/basic set frame is received",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disabled.",
+                    "value": 0
+                },
+                {
+                    "label": "Sound/Light index 1",
+                    "value": 1
+                },
+                {
+                    "label": "Sound/Light index 2",
+                    "value": 2
+                },
+                {
+                    "label": "Sound/Light index 3",
+                    "value": 3
+                },
+                {
+                    "label": "Sound/Light index 4",
+                    "value": 4
+                },
+                {
+                    "label": "Sound/Light index 5",
+                    "value": 5
+                },
+                {
+                    "label": "Sound/Light index 6",
+                    "value": 6
+                }
+            ]
+        },
+        "8": {
+            "label": "Power offline sound/light mode",
+            "description": "The index of the sound mode when the AlarmSound will start when it is unplugged",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 6,
+            "options": [
+                {
+                    "label": "Disabled.",
+                    "value": 0
+                },
+                {
+                    "label": "Sound/Light index 1",
+                    "value": 1
+                },
+                {
+                    "label": "Sound/Light index 2",
+                    "value": 2
+                },
+                {
+                    "label": "Sound/Light index 3",
+                    "value": 3
+                },
+                {
+                    "label": "Sound/Light index 4",
+                    "value": 4
+                },
+                {
+                    "label": "Sound/Light index 5",
+                    "value": 5
+                },
+                {
+                    "label": "Sound/Light index 6",
+                    "value": 6
+                }
+            ]
+        },
+        "9": {
+            "label": "Error sound/light mode",
+            "description": "The index of the sound mode when the AlarmSound will play when it is unable to reach the device in association group 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 5,
+            "options": [
+                {
+                    "label": "Disabled.",
+                    "value": 0
+                },
+                {
+                    "label": "Sound/Light index 1",
+                    "value": 1
+                },
+                {
+                    "label": "Sound/Light index 2",
+                    "value": 2
+                },
+                {
+                    "label": "Sound/Light index 3",
+                    "value": 3
+                },
+                {
+                    "label": "Sound/Light index 4",
+                    "value": 4
+                },
+                {
+                    "label": "Sound/Light index 5",
+                    "value": 5
+                },
+                {
+                    "label": "Sound/Light index 6",
+                    "value": 6
+                }
+            ]
+        },
+        "10": {
+            "label": "Sound [index 1] : Volume",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "11": {
+            "label": "Sound [index 1] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "12": {
+            "label": "Sound [index 1] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "13": {
+            "label": "Sound [index 1] : Max/min Frequency",
+            "description": "Default value : 161",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 161
+        },
+        "14": {
+            "label": "Sound [index 1] : Freq. direction/time",
+            "description": "Default value : 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "15": {
+            "label": "Sound [index 1] : Sound time",
+            "description": "Default value : 200",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 200
+        },
+        "16": {
+            "label": "Sound [index 1] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "17": {
+            "label": "Sound [index 1] : Repeats / Pause time ",
+            "description": "Default value : 26",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 26
+        },
+        "18": {
+            "label": "Light [index 1] : Intensity",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "19": {
+            "label": "Light [index 1] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "20": {
+            "label": "Light [index 1] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "21": {
+            "label": "Light [index 1] : Time / LED ",
+            "description": "Default value : 20",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20
+        },
+        "22": {
+            "label": "Light [index 1] : Light time",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "23": {
+            "label": "Light [index 1] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "24": {
+            "label": "Light [index 1] : Repeats / Pause time ",
+            "description": "Default value : 16",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 16
+        },
+        "25": {
+            "label": "Sequence [index 1] : Sequence repeats",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "26": {
+            "label": "Sequence [index 1] : Steps",
+            "description": "Default value : 66\n\t\t\t\tBit 7: reserved\n\t\t\t\tBit 6: step1: sound on\n\t\t\t\tBit 5: step1: leds on\n\t\t\t\tBit 4: step1: pause on\n\t\t\t\tBit 3: reserved\n\t\t\t\tBit 2: step2: sound on\n\t\t\t\tBit 1: step2: leds on\n\t\t\t\tBit 0: step2: pause on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 66
+        },
+        "27": {
+            "label": "Sequence [index 1] : Pause time",
+            "description": "Default value : 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "28": {
+            "label": "Sound [index 2] : Volume",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "29": {
+            "label": "Sound [index 2] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "30": {
+            "label": "Sound [index 2] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "31": {
+            "label": "Sound [index 2] : Max/min Frequency",
+            "description": "Default value : 161",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 161
+        },
+        "32": {
+            "label": "Sound [index 2] : Freq. direction/time",
+            "description": "Default value : 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "33": {
+            "label": "Sound [index 2] : Sound time",
+            "description": "Default value : 200",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 200
+        },
+        "34": {
+            "label": "Sound [index 2] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "35": {
+            "label": "Sound [index 2] : Repeats / Pause time ",
+            "description": "Default value : 26",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 26
+        },
+        "36": {
+            "label": "Light [index 2] : Intensity",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "37": {
+            "label": "Light [index 2] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "38": {
+            "label": "Light [index 2] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "39": {
+            "label": "Light [index 2] : Time / LED ",
+            "description": "Default value : 20",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20
+        },
+        "40": {
+            "label": "Light [index 2] : Light time",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "41": {
+            "label": "Light [index 2] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "42": {
+            "label": "Light [index 2] : Repeats / Pause time ",
+            "description": "Default value : 16",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 16
+        },
+        "43": {
+            "label": "Sequence [index 2] : Sequence repeats",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "44": {
+            "label": "Sequence [index 2] : Steps",
+            "description": "Default value : 66\n\t\t\t\tBit 7: reserved\n\t\t\t\tBit 6: step1: sound on\n\t\t\t\tBit 5: step1: leds on\n\t\t\t\tBit 4: step1: pause on\n\t\t\t\tBit 3: reserved\n\t\t\t\tBit 2: step2: sound on\n\t\t\t\tBit 1: step2: leds on\n\t\t\t\tBit 0: step2: pause on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 66
+        },
+        "45": {
+            "label": "Sequence [index 2] : Pause time",
+            "description": "Default value : 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "46": {
+            "label": "Sound [index 3] : Volume",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "47": {
+            "label": "Sound [index 3] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "48": {
+            "label": "Sound [index 3] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "49": {
+            "label": "Sound [index 3] : Max/min Frequency",
+            "description": "Default value : 161",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 161
+        },
+        "50": {
+            "label": "Sound [index 3] : Freq. direction/time",
+            "description": "Default value : 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "51": {
+            "label": "Sound [index 3] : Sound time",
+            "description": "Default value : 200",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 200
+        },
+        "52": {
+            "label": "Sound [index 3] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "53": {
+            "label": "Sound [index 3] : Repeats / Pause time ",
+            "description": "Default value : 26",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 26
+        },
+        "54": {
+            "label": "Light [index 3] : Intensity",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "55": {
+            "label": "Light [index 3] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "56": {
+            "label": "Light [index 3] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "57": {
+            "label": "Light [index 3] : Time / LED ",
+            "description": "Default value : 20",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20
+        },
+        "58": {
+            "label": "Light [index 3] : Light time",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "59": {
+            "label": "Light [index 3] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "60": {
+            "label": "Light [index 3] : Repeats / Pause time ",
+            "description": "Default value : 16",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 16
+        },
+        "61": {
+            "label": "Sequence [index 3] : Sequence repeats",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "62": {
+            "label": "Sequence [index 3] : Steps",
+            "description": "Default value : 66\n\t\t\t\tBit 7: reserved\n\t\t\t\tBit 6: step1: sound on\n\t\t\t\tBit 5: step1: leds on\n\t\t\t\tBit 4: step1: pause on\n\t\t\t\tBit 3: reserved\n\t\t\t\tBit 2: step2: sound on\n\t\t\t\tBit 1: step2: leds on\n\t\t\t\tBit 0: step2: pause on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 66
+        },
+        "63": {
+            "label": "Sequence [index 3] : Pause time",
+            "description": "Default value : 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "64": {
+            "label": "Sound [index 4] : Volume",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "65": {
+            "label": "Sound [index 4] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "66": {
+            "label": "Sound [index 4] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "67": {
+            "label": "Sound [index 4] : Max/min Frequency",
+            "description": "Default value : 161",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 161
+        },
+        "68": {
+            "label": "Sound [index 4] : Freq. direction/time",
+            "description": "Default value : 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "69": {
+            "label": "Sound [index 4] : Sound time",
+            "description": "Default value : 200",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 200
+        },
+        "70": {
+            "label": "Sound [index 4] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "71": {
+            "label": "Sound [index 4] : Repeats / Pause time ",
+            "description": "Default value : 26",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 26
+        },
+        "72": {
+            "label": "Light [index 4] : Intensity",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "73": {
+            "label": "Light [index 4] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "74": {
+            "label": "Light [index 4] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "75": {
+            "label": "Light [index 4] : Time / LED ",
+            "description": "Default value : 20",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20
+        },
+        "76": {
+            "label": "Light [index 4] : Light time",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "77": {
+            "label": "Light [index 4] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "78": {
+            "label": "Light [index 4] : Repeats / Pause time ",
+            "description": "Default value : 16",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 16
+        },
+        "79": {
+            "label": "Sequence [index 4] : Sequence repeats",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "80": {
+            "label": "Sequence [index 4] : Steps",
+            "description": "Default value : 66\n\t\t\t\tBit 7: reserved\n\t\t\t\tBit 6: step1: sound on\n\t\t\t\tBit 5: step1: leds on\n\t\t\t\tBit 4: step1: pause on\n\t\t\t\tBit 3: reserved\n\t\t\t\tBit 2: step2: sound on\n\t\t\t\tBit 1: step2: leds on\n\t\t\t\tBit 0: step2: pause on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 66
+        },
+        "81": {
+            "label": "Sequence [index 4] : Pause time",
+            "description": "Default value : 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "82": {
+            "label": "Sound [index 5] : Volume",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "83": {
+            "label": "Sound [index 5] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "84": {
+            "label": "Sound [index 5] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "85": {
+            "label": "Sound [index 5] : Max/min Frequency",
+            "description": "Default value : 161",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 161
+        },
+        "86": {
+            "label": "Sound [index 5] : Freq. direction/time",
+            "description": "Default value : 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "87": {
+            "label": "Sound [index 5] : Sound time",
+            "description": "Default value : 200",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 200
+        },
+        "88": {
+            "label": "Sound [index 5] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "89": {
+            "label": "Sound [index 5] : Repeats / Pause time ",
+            "description": "Default value : 26",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 26
+        },
+        "90": {
+            "label": "Light [index 5] : Intensity",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "91": {
+            "label": "Light [index 5] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "92": {
+            "label": "Light [index 5] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "93": {
+            "label": "Light [index 5] : Time / LED ",
+            "description": "Default value : 20",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20
+        },
+        "94": {
+            "label": "Light [index 5] : Light time",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "95": {
+            "label": "Light [index 5] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "96": {
+            "label": "Light [index 5] : Repeats / Pause time ",
+            "description": "Default value : 16",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 16
+        },
+        "97": {
+            "label": "Sequence [index 5] : Sequence repeats",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "98": {
+            "label": "Sequence [index 5] : Steps",
+            "description": "Default value : 66\n\t\t\t\tBit 7: reserved\n\t\t\t\tBit 6: step1: sound on\n\t\t\t\tBit 5: step1: leds on\n\t\t\t\tBit 4: step1: pause on\n\t\t\t\tBit 3: reserved\n\t\t\t\tBit 2: step2: sound on\n\t\t\t\tBit 1: step2: leds on\n\t\t\t\tBit 0: step2: pause on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 66
+        },
+        "99": {
+            "label": "Sequence [index 5] : Pause time",
+            "description": "Default value : 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "100": {
+            "label": "Sound [index 6] : Volume",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "101": {
+            "label": "Sound [index 6] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "102": {
+            "label": "Sound [index 6] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "103": {
+            "label": "Sound [index 6] : Max/min Frequency",
+            "description": "Default value : 161",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 161
+        },
+        "104": {
+            "label": "Sound [index 6] : Freq. direction/time",
+            "description": "Default value : 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "105": {
+            "label": "Sound [index 6] : Sound time",
+            "description": "Default value : 200",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 200
+        },
+        "106": {
+            "label": "Sound [index 6] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "107": {
+            "label": "Sound [index 6] : Repeats / Pause time ",
+            "description": "Default value : 26",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 26
+        },
+        "108": {
+            "label": "Light [index 6] : Intensity",
+            "description": "Default value : 99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "109": {
+            "label": "Light [index 6] : Duration msb",
+            "description": "Default value : 03",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "110": {
+            "label": "Light [index 6] : duration lsb",
+            "description": "Default value : 232",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 232
+        },
+        "111": {
+            "label": "Light [index 6] : Time / LED ",
+            "description": "Default value : 20",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20
+        },
+        "112": {
+            "label": "Light [index 6] : Light time",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "113": {
+            "label": "Light [index 6] : Interval time",
+            "description": "Default value : 00",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "114": {
+            "label": "Light [index 6] : Repeats / Pause time ",
+            "description": "Default value : 16",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 16
+        },
+        "115": {
+            "label": "Sequence [index 6] : Sequence repeats",
+            "description": "Default value : 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "116": {
+            "label": "Sequence [index 6] : Steps",
+            "description": "Default value : 66\n\t\t\t\tBit 7: reserved\n\t\t\t\tBit 6: step1: sound on\n\t\t\t\tBit 5: step1: leds on\n\t\t\t\tBit 4: step1: pause on\n\t\t\t\tBit 3: reserved\n\t\t\t\tBit 2: step2: sound on\n\t\t\t\tBit 1: step2: leds on\n\t\t\t\tBit 0: step2: pause on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 66
+        },
+        "117": {
+            "label": "Sequence [index 6] : Pause time",
+            "description": "Default value : 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 1
+        },
+        "2": {
+            "label": "Group 2",
+            "maxNodes": 1
+        }
+    }
+}

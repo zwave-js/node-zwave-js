@@ -1,0 +1,332 @@
+{
+    "_approved": true,
+    "manufacturer": "FIBARO System",
+    "manufacturerId": "0x010f",
+    "label": "FGSD002",
+    "description": "FGSD002 Smoke Sensor",
+    "devices": [
+        {
+            "productType": "0x0c02",
+            "productId": "0x1003"
+        },
+        {
+            "productType": "0x0c02",
+            "productId": "0x1002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Fire Alarm",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Tamper",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Fire Alarm Report",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Tamper Report",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Fibaro Smoke Sensor sensitivity",
+            "description": "There are 3 levels of sensitivity to smoke presence. Level 1 means the highest sensitivity. Rising the parameter value lowers the sensitivity to smoke presence.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "options": [
+                {
+                    "label": "HIGH Sensitivity",
+                    "value": 1
+                },
+                {
+                    "label": "MEDIUM Sensitivity",
+                    "value": 2
+                },
+                {
+                    "label": "LOW Sensitivity",
+                    "value": 3
+                }
+            ]
+        },
+        "2": {
+            "label": "Z-Wave notifications status",
+            "description": "This parameter allows to activate excess temperature and/or enclosure opening notifications sent to the main controller.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "all notifications disabled",
+                    "value": 0
+                },
+                {
+                    "label": "enclosure opening notification enabled",
+                    "value": 1
+                },
+                {
+                    "label": "exceeding temperature threshold notification enabled",
+                    "value": 2
+                },
+                {
+                    "label": "all notifications enabled",
+                    "value": 3
+                }
+            ]
+        },
+        "3": {
+            "label": "Visual indicator notifications status",
+            "description": "This parameter allows to activate visual indications but does not apply to major alarms, such as FIRE, TROUBLE and LOW BATTERY ALARM.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "all notifications disabled",
+                    "value": 0
+                },
+                {
+                    "label": "enclosure opening notification enabled",
+                    "value": 1
+                },
+                {
+                    "label": "exceeding temperature threshold notification enabled",
+                    "value": 2
+                },
+                {
+                    "label": "enclosure opening and exceeding temperature threshold notifications enabled",
+                    "value": 3
+                },
+                {
+                    "label": "lack of Z-Wave range notification",
+                    "value": 4
+                },
+                {
+                    "label": "enclosure opening and lack of Z-Wave range notifications enabled",
+                    "value": 5
+                },
+                {
+                    "label": "exceeding temperature threshold and lack of Z-Wave range notifications enabled",
+                    "value": 6
+                },
+                {
+                    "label": "all notifications enabled",
+                    "value": 7
+                }
+            ]
+        },
+        "4": {
+            "label": "Sound notifications status",
+            "description": "This parameter allows to activate sound signals but does not apply to major alarms, such as FIRE, TROUBLE and LOW BATTERY ALARM.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "all notifications disabled",
+                    "value": 0
+                },
+                {
+                    "label": "enclosure opening notification enabled",
+                    "value": 1
+                },
+                {
+                    "label": "exceeding temperature threshold notification enabled",
+                    "value": 2
+                },
+                {
+                    "label": "enclosure opening and exceeding temperature threshold notifications enabled",
+                    "value": 3
+                },
+                {
+                    "label": "lack of Z-Wave range notification",
+                    "value": 4
+                },
+                {
+                    "label": "enclosure opening and lack of Z-Wave range notifications enabled",
+                    "value": 5
+                },
+                {
+                    "label": "exceeding temperature threshold and lack of Z-Wave range notifications enabled",
+                    "value": 6
+                },
+                {
+                    "label": "all notifications enabled",
+                    "value": 7
+                }
+            ]
+        },
+        "10": {
+            "label": "Configuration of control frames in BASIC command class",
+            "description": "This parameter defines which frames will be sent in the 2-nd Association Group (FIRE ALARM).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "BASIC ON - BASIC OFF enabled",
+                    "value": 0
+                },
+                {
+                    "label": "BASIC ON enabled",
+                    "value": 1
+                },
+                {
+                    "label": "BASIC OFF enabled",
+                    "value": 2
+                }
+            ]
+        },
+        "11": {
+            "label": "BASIC ON frame value",
+            "description": "BASIC ON frame is sent in case of smoke presence detection and FIRE ALARM triggering. Available settings: 0,(1 - 99) or 255. Default setting: 255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "12": {
+            "label": "BASIC OFF frame value",
+            "description": "BASIC OFF frame is sent in case of FIRE ALARM cancellation. Available settings: 0,(1 - 99) or 255. Default setting: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "13": {
+            "label": "Alarm broadcast",
+            "description": "A value other than 0 means that alarms are being sent in broadcast mode, i.e. to all devices within a Fibaro Smoke Sensor's range.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Broadcasts INACTIVE",
+                    "value": 0
+                },
+                {
+                    "label": "Smoke ACTIVE, tamper INACTIVE",
+                    "value": 1
+                },
+                {
+                    "label": "Smoke INACTIVE, tamper ACTIVE",
+                    "value": 2
+                },
+                {
+                    "label": "Smoke ACTIVE, tamper ACTIVE",
+                    "value": 3
+                }
+            ]
+        },
+        "14": {
+            "label": "Associations in Z-Wave network security mode",
+            "description": "This parameter defines how commands are sent in specified association groups: as secure or non-secure. Parameter is active only in Z-Wave network security mode. It doesn't apply to 1st Lifeline group.\n\t\t\t\tAvailable settings: 0 - 15\n\t\t\t\t0 - all groups sent as non-secure\n\t\t\t\t1 - 2nd group sent as secure\n\t\t\t\t2 - 3rd group sent as secure\n\t\t\t\t4 - 4th group sent as secure\n\t\t\t\t8 - 5th group sent as secure\n\t\t\t\tParameter values may be combined, e.g. 1+2=3 means that 2nd and 3rd group are sent as secure.\n\t\t\t\tDefault setting: 15 (all groups sent as secure)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "20": {
+            "label": "Temperature report interval",
+            "description": "Time interval between consecutive temperature reports. Report is sent when new temperature value is different from the one previously reported - according to the set hysteresis (parameter 21). Available settings: 0,1-8640 (multiply by 10 seconds) [10s-24h]. Default setting: 1 (10s)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 8640,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "21": {
+            "label": "Temperature report hysteresis",
+            "description": "The temperature report will only be sent if there is a difference in temperature value from the previous value reported, defined in this parameter (hysteresis). Available settings: 1 to 100 (in 0,1C steps). Default setting: 10 (1C)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10
+        },
+        "30": {
+            "label": "Temperature threshold",
+            "description": "Temperature value measured by the built-in temperature sensor above which the excess temperature notification is sent. Available settings: 1 to 100. Default setting: 55 (55C)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 55
+        },
+        "31": {
+            "label": "Excess temperature signaling interval",
+            "description": "Time interval of signaling (visual indication/sound) excess temperature level. Available settings: 1 to 8640 (multiply by 10 seconds) [10s-24h]. Default setting: 1 (10s)",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 8640,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "32": {
+            "label": "Lack of Z-Wave range indication interval",
+            "description": "Time interval of signaling (visual indication/sound) lack of Z-Wave range. Available settings: 1 to 8640 (multiply by 10 seconds) [10s-24h]. Default setting: 180 (30min)",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 8640,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 180
+        }
+    }
+}

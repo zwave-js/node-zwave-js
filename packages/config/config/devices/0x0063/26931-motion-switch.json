@@ -1,0 +1,228 @@
+{
+    "_approved": true,
+    "manufacturer": "GE (Jasco Products)",
+    "manufacturerId": "0x0063",
+    "label": "26931-MOTION-SWITCH",
+    "description": "26931 Smart Motion Switch",
+    "devices": [
+        {
+            "productType": "0x494d",
+            "productId": "0x3032"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Timeout Duration",
+            "description": "Amount of time the light stays on after motion stops",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 5,
+            "options": [
+                {
+                    "label": "5 seconds",
+                    "value": 0
+                },
+                {
+                    "label": "1 minute",
+                    "value": 1
+                },
+                {
+                    "label": "5 minutes",
+                    "value": 5
+                },
+                {
+                    "label": "15 minutes",
+                    "value": 15
+                },
+                {
+                    "label": "30 minutes",
+                    "value": 30
+                },
+                {
+                    "label": "Disable timeout",
+                    "value": 255
+                }
+            ]
+        },
+        "2": {
+            "label": "Brightness",
+            "description": "Valid values are 0-99 or 255 for last dimming level",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "3": {
+            "label": "Operation Mode",
+            "description": "Motion-sensing mode of operation.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "options": [
+                {
+                    "label": "Manual",
+                    "value": 1
+                },
+                {
+                    "label": "Vacancy",
+                    "value": 2
+                },
+                {
+                    "label": "Occupancy",
+                    "value": 3
+                }
+            ]
+        },
+        "5": {
+            "label": "Invert Switch",
+            "description": "In a three-way configuration, change the top of the add-on switch to OFF and the bottom of the switch to ON, if the switch was installed upside down.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Motion Sensor",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "13": {
+            "label": "Motion sensing sensitivity",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "options": [
+                {
+                    "label": "High",
+                    "value": 1
+                },
+                {
+                    "label": "Medium",
+                    "value": 2
+                },
+                {
+                    "label": "Low",
+                    "value": 3
+                }
+            ]
+        },
+        "14": {
+            "label": "Light Sensing",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "15": {
+            "label": "Reset cycle",
+            "description": "0 = disable\n\t\t\t\t1 = 10 seconds\n\t\t\t\t2 = 20 seconds\n\t\t\t\t3 = 30 seconds\n\t\t\t\t4 = 45 seconds\n\t\t\t\t...\n\t\t\t\t110 = 27 minutes 15 seconds",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 110,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 2,
+            "units": ""
+        },
+        "19": {
+            "label": "Exclusion Mode",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Press any button",
+                    "value": 0
+                },
+                {
+                    "label": "Press X then press ON",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Set local load",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Basic Set buttons",
+            "maxNodes": 5
+        }
+    }
+}

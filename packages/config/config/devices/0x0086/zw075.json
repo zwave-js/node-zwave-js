@@ -1,0 +1,346 @@
+{
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "ZW075",
+    "description": "ZW075 Smart Switch Gen5",
+    "devices": [
+        {
+            "productType": "0x0203",
+            "productId": "0x004b"
+        },
+        {
+            "productType": "0x0103",
+            "productId": "0x004b"
+        },
+        {
+            "productType": "0x0003",
+            "productId": "0x004b"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Retransmit Switch CC",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Blinking behavior",
+            "description": "Configuration Value 1: 1-255\n      Configuration Value 1  is to Specify the time that Smart Switch need blink, The unit is Second;\n      Configuration Value 2: 1-255\n      Configuration Value 2  is to Specify the Cycle of on/off, the unit of it is 0.1 second.",
+            "valueSize": 2,
+            "minValue": 257,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3850,
+            "units": ""
+        },
+        "3": {
+            "label": "Current Overload Protection",
+            "description": "Load will be closed when the Current overruns (EU 16.2A) for more than 2 minutes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Deactivate Overload Protection (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Active Overload Protection",
+                    "value": 1
+                }
+            ]
+        },
+        "20": {
+            "label": "Output Load Status",
+            "description": "Configure the output load status after re-power on.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Last status (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Always on",
+                    "value": 1
+                },
+                {
+                    "label": "Always off",
+                    "value": 2
+                }
+            ]
+        },
+        "80": {
+            "label": "Notification status",
+            "description": "Defines the automated status notification of an associated device when status changes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Nothing",
+                    "value": 0
+                },
+                {
+                    "label": "Hail",
+                    "value": 1
+                },
+                {
+                    "label": "Basic",
+                    "value": 2
+                }
+            ]
+        },
+        "81": {
+            "label": "Configure the state of the LED",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "The LED will follow the status (on/off) of its load. (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "When the state of the Switch changes, the LED will follow the status (on/off) of its load, but the LED will turn off after 5 seconds.",
+                    "value": 1
+                }
+            ]
+        },
+        "90": {
+            "label": "Enables/disables parameter 91/92",
+            "description": "Enable/disable Wattage threshold and percent.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "91": {
+            "label": "Minimum Change to send Report (Watt)",
+            "description": "The value represents the minimum change in wattage for a Report to be sent (default 25 W)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 25,
+            "units": "watts"
+        },
+        "92": {
+            "label": "Minimum Change to send Report (%)",
+            "description": "The value represents the minimum percentage change in wattage for a Report to be sent (Default 5)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5,
+            "units": "%"
+        },
+        "100": {
+            "label": "Default Group Reports",
+            "description": "Set report types for groups 1, 2 and 3 to default.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "101": {
+            "label": "Report type sent in Reporting Group 1",
+            "description": "Defines the type of report sent for reporting group 1.\n          1 is meter report for voltage.\n          2 is meter report for current.\n          4 is meter report for watts.\n          8 is meter report for kilowatts.\n\t Value 1 (msb) Reserved\n\t Value 2 Reserved\n\t Value 3 Reserved\n\t Value 4 (lsb) bits 7-4 reserved\n          bit 3 kWh\n          bit 2 watt\n          bit 1 current\n          bit 0 voltage",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 4,
+            "units": ""
+        },
+        "102": {
+            "label": "Report type sent in Reporting Group 2",
+            "description": "Defines the type of report sent for reporting group 2.\n          1 is meter report for voltage.\n          2 is meter report for current.\n          4 is meter report for watts.\n          8 is meter report for kilowatts.\n\t Value 1 (msb) Reserved\n\t Value 2 Reserved\n\t Value 3 Reserved\n\t Value 4 (lsb) bits 7-4 reserved\n          bit 3 kWh\n          bit 2 watt\n          bit 1 current\n          bit 0 voltage",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 8,
+            "units": ""
+        },
+        "103": {
+            "label": "Report type sent in Reporting Group 3",
+            "description": "Defines the type of report sent for reporting group 3.\n          1 is meter report for voltage.\n          2 is meter report for current.\n          4 is meter report for watts.\n          8 is meter report for kilowatts.\n\t Value 1 (msb) Reserved\n\t Value 2 Reserved\n\t Value 3 Reserved\n\t Value 4 (lsb) bits 7-4 reserved\n          bit 3 kWh\n          bit 2 watt\n          bit 1 current\n          bit 0 voltage",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "110": {
+            "label": "Set 111-113 to default",
+            "description": "Set time interval for sending reports for groups 1, 2 and 3 to default.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "111": {
+            "label": "Send Interval for Reporting Group 1",
+            "description": "Defines the time interval when the defined report for group 1 is sent.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "seconds"
+        },
+        "112": {
+            "label": "Send Interval for Reporting Group 2",
+            "description": "Defines the time interval when the defined report for group 2 is sent.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "seconds"
+        },
+        "113": {
+            "label": "Send Interval for Reporting Group 3",
+            "description": "Defines the time interval when the defined report for group 3 is sent.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "seconds"
+        },
+        "200": {
+            "label": "Partner ID",
+            "description": "Partner ID",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Aeon Labs Standard (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "AT&T",
+                    "value": 1
+                }
+            ]
+        },
+        "252": {
+            "label": "Configuration Locked",
+            "description": "Enable/disable Configuration Locked",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "254": {
+            "label": "Device tag",
+            "description": "Device tag.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "255": {
+            "label": "Reset device",
+            "description": "Reset to the default configuration.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        }
+    }
+}

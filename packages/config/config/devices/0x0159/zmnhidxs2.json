@@ -1,0 +1,636 @@
+{
+    "_approved": true,
+    "manufacturer": "Qubino (Goap)",
+    "manufacturerId": "0x0159",
+    "label": "ZMNHIDXS2",
+    "description": "ZMNHIDx Flush on/off thermostat (H1S2P1)",
+    "devices": [
+        {
+            "productType": "0x0005",
+            "productId": "0x0051"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Input I1 switch type",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Mono-stable",
+                    "value": 0
+                },
+                {
+                    "label": "Bi-stable",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Input I2 switch type",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Mono-stable",
+                    "value": 0
+                },
+                {
+                    "label": "Bi-stable",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Input I3 switch type",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Mono-stable",
+                    "value": 0
+                },
+                {
+                    "label": "Bi-stable",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Input 1 contact type",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "NO (normally open) input type",
+                    "value": 0
+                },
+                {
+                    "label": "NC (normally close) input type",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Input 2 contact type",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "NO (normally open) input type",
+                    "value": 0
+                },
+                {
+                    "label": "NC (normally close) input type",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Input 3 contact type",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "NO (normally open) input type",
+                    "value": 0
+                },
+                {
+                    "label": "NC (normally close) input type",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Activate / deactivate functions ALL ON/ALL OFF",
+            "description": "Flush on off thermostat module responds to commands ALL ON / ALL OFF that may be sent by the main\n                controller or by other controller belonging to the system.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 255,
+            "options": [
+                {
+                    "label": "ALL ON active, ALL OFF active",
+                    "value": 255
+                },
+                {
+                    "label": "ALL ON is not active ALL OFF is not active",
+                    "value": 0
+                },
+                {
+                    "label": "ALL ON is not active ALL OFF active",
+                    "value": 1
+                },
+                {
+                    "label": "ALL ON active ALL OFF is not active",
+                    "value": 2
+                }
+            ]
+        },
+        "11": {
+            "label": "Set point set by I1",
+            "description": "When I1 is pressed set point will be set according to the value of this parameter.\n                Default value 1.\n                32767 - input I1 does not influence on the set point\n                From 0 to 990 - set point from 0.0 C to 99.0 C\n                From 1001 to 1150 - set point from -0.1 C to -15.0 C",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "12": {
+            "label": "Set point set by I2",
+            "description": "When I3 is pressed set point will be set according to the value of this parameter.\n                Default value 32767.\n                32767 - input I2 does not influence on the set point\n                From 0 to 990 - set point from 0.0 C to 99.0 C\n                From 1001 to 1150 - set point from -0.1 C to -15.0 C",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 32767
+        },
+        "13": {
+            "label": "Set point set by I3",
+            "description": "When I3 is pressed set point will be set according to the value of this parameter.\n                Default value 32767.\n                32767 - input I3 does not influence on the set point\n                From 0 to 990 - set point from 0.0 C to 99.0 C\n                From 1001 to 1150 - set point from -0.1 C to -15.0 C",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 32767
+        },
+        "40": {
+            "label": "Power reporting in Watts on power change",
+            "description": "Set value from 0 - 100 (0% - 100%). 0 - Reporting Disabled. 1 - 100 = 1% - 100% Reporting enabled.\n                Power report is send (push) only when actual power in Watts in real time change for more than set\n                percentage comparing to previous actual power in Watts, step is 1%. Default value 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "42": {
+            "label": "Power reporting in Watts by time interval",
+            "description": "Set value means time interval (0 - 65535) in seconds, when power report is send. 0 - Reporting\n                Disabled.\n                1 - 65535 = 1 second - 65535 seconds.\n                Reporting enabled.\n                Power report is send with time interval set by entered value.\n                Default value 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "43": {
+            "label": "Hysteresis On",
+            "description": "This parameter defines temperature min difference between real measured temperature and set-point\n                temperature to turn heating on.\n                The parameter can be set from 0 to 1127 where 0 to 127 means from 0.0 C to 12.7 C and from 1001 to 1127\n                means from - 0.1 C to -12.7 C.\n                Default value 132 (-0.5 C)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1005
+        },
+        "44": {
+            "label": "Hysteresis Off",
+            "description": "This parameter defines temperature min difference between real measured temperature and set-point\n                temperature to turn heating off.\n                The parameter can be set from 0 to 1127 where 0 to 127 means from 0.0 C to 12.7 C and from 1001 to 1127\n                means from - 0.1 C to -12.7 C.\n                Default value 5 (+0.5 C)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        },
+        "45": {
+            "label": "Antifreeze",
+            "description": "Set value means at which temperature the device will be turned on even if the thermostat was manually\n                set to off.\n                0 - 127 = 0.0C - 12.7 C.\n                1001 - 1127 = -0.1C - 12.6 C.\n                255 - Antifreeze functionality disabled.\n                Default value 50 (5.0 C).",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50
+        },
+        "59": {
+            "label": "Thermostat mode",
+            "description": "This parameter determines how the device will operate if it will operate in the heating mode or in the\n                cooling mode.\n                The range of the hysteresis will remain the same, only operation will change from heating to cooling and\n                vice versa",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Heat",
+                    "value": 0
+                },
+                {
+                    "label": "Cool",
+                    "value": 1
+                }
+            ]
+        },
+        "60": {
+            "label": "Too low temperature limit",
+            "description": "Default value 50 (Minimum Temperature alarm is 5.0C)\n                1 - 1000 = 0.1C - 100.0C, step is 0.1C.\n                1001 - 1150 = -0.1 C - 15 C\n                Too low temperature limit is set by entered value. In case is set value out of this range, module is\n                changing set value automatically to default value.",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 1150,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50
+        },
+        "61": {
+            "label": "Too high temperature limit",
+            "description": "Default value 700 (Minimum Temperature alarm is 70.0C)\n                1 - 1000 = 0.1C - 100.0C, step is 0.1C.\n                Too high temperature limit is set by entered value. In case is set value out of this range, module is\n                changing automatically set value to default value.",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 1000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 700
+        },
+        "63": {
+            "label": "Switch selection",
+            "description": "Set value means the type of the device that is connected to the relay output. The device type can be\n                normally open (NO) or normally close (NC).\n                Available config. parameters (data type is 1 Byte DEC):\n                default value 0\n                0 - When system is turned off the output is 0 V.\n                1 - When system is turned off the output is 230 V.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "0V",
+                    "value": 0
+                },
+                {
+                    "label": "230V",
+                    "value": 1
+                }
+            ]
+        },
+        "70": {
+            "label": "Input 1 status on delay",
+            "description": "Default value 0\n                1 - 32000 seconds\n                If the value of the parameter is different to 0, means that the influence of this input to heating or\n                cooling will react after inserted time.\n                This parameter has influence only when the window sensor functionality is selected by the parameter no.\n                11.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "71": {
+            "label": "Input 1 status off delay",
+            "description": "Default value 0\n                1 - 32000 seconds\n                If the value of the parameter is different to 0, means that the influence of this input to heating or\n                cooling will react after inserted time.\n                This parameter has influence only when the window sensor functionality is selected by the parameter no.\n                11.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "72": {
+            "label": "Input 2 status on delay",
+            "description": "Default value 0\n                1 - 32000 seconds\n                If the value of the parameter is different to 0, means that the influence of this input to heating or\n                cooling will react after inserted time.\n                This parameter has influence only when the condense sensor functionality is selected by the parameter\n                no. 12.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "73": {
+            "label": "Input 2 status off delay",
+            "description": "Default value 0\n                1 - 32000 seconds\n                If the value of the parameter is different to 0, means that the influence of this input to heating or\n                cooling will react after inserted time.\n                This parameter has influence only when the condense sensor functionality is selected by the parameter\n                no. 12.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "74": {
+            "label": "Input 3 status on delay",
+            "description": "Default value 0\n                1 - 32000 seconds\n                If the value of the parameter is different to 0, means that the influence of this input to heating or\n                cooling will react after inserted time.\n                This parameter has influence only when the flood sensor functionality is selected by the parameter no.\n                13.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "75": {
+            "label": "Input 3 status off delay",
+            "description": "Default value 0\n                1 - 32000 seconds\n                If the value of the parameter is different to 0, means that the influence of this input to heating or\n                cooling will react after inserted time.\n                This parameter has influence only when the flood sensor functionality is selected by the parameter no.\n                13.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "100": {
+            "label": "Enable / Disable Endpoints I1 or select notification type and event",
+            "description": "Enabling I1 means that Endpoint (I1) will be present on UI.\n                Disabling it will result in hiding the endpoint according to the parameter set value.\n                Additionally, a Notification Type and Event can be selected for the endpoint.\n                NOTE 1: After parameter change, first exclude module (without setting parameters to default value) and\n                then re include the module!\n                NOTE 2: When the parameter is set to value 9 the notifications are send for Home Security.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 9,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Home Security; Motion Detection",
+                    "value": 1
+                },
+                {
+                    "label": "Carbon Monoxide; Carbon Monoxide detected",
+                    "value": 2
+                },
+                {
+                    "label": "Carbon Dioxide; Carbon Dioxide detected",
+                    "value": 3
+                },
+                {
+                    "label": "Water Alarm; Water Leak detected",
+                    "value": 4
+                },
+                {
+                    "label": "Heat Alarm; Overheat detected",
+                    "value": 5
+                },
+                {
+                    "label": "Smoke Alarm; Smoke detected",
+                    "value": 6
+                },
+                {
+                    "label": "Sensor binary",
+                    "value": 9
+                }
+            ]
+        },
+        "101": {
+            "label": "Enable / Disable Endpoints I2 or select notification type and event",
+            "description": "Enabling I2 means that Endpoint (I2) will be present on UI.\n                Disabling it will result in hiding the endpoint according to the parameter set value.\n                Additionally, a Notification Type and Event can be selected for the endpoint.\n                NOTE 1: After parameter change, first exclude module (without setting parameters to default value) and\n                then re include the module!\n                NOTE 2: When the parameter is set to value 9 the notifications are send for Home Security.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 9,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Home Security; Motion Detection",
+                    "value": 1
+                },
+                {
+                    "label": "Carbon Monoxide; Carbon Monoxide detected",
+                    "value": 2
+                },
+                {
+                    "label": "Carbon Dioxide; Carbon Dioxide detected",
+                    "value": 3
+                },
+                {
+                    "label": "Water Alarm; Water Leak detected",
+                    "value": 4
+                },
+                {
+                    "label": "Heat Alarm; Overheat detected",
+                    "value": 5
+                },
+                {
+                    "label": "Smoke Alarm; Smoke detected",
+                    "value": 6
+                },
+                {
+                    "label": "Sensor binary",
+                    "value": 9
+                }
+            ]
+        },
+        "102": {
+            "label": "Enable / Disable Endpoints I3 or select notification type and event",
+            "description": "Enabling I3 means that Endpoint (I3) will be present on UI.\n                Disabling it will result in hiding the endpoint according to the parameter set value.\n                Additionally, a Notification Type and Event can be selected for the endpoint.\n                NOTE 1: After parameter change, first exclude module (without setting parameters to default value) and\n                then re include the module!\n                NOTE 2: When the parameter is set to value 9 the notifications are send for Home Security.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 9,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Home Security; Motion Detection",
+                    "value": 1
+                },
+                {
+                    "label": "Carbon Monoxide; Carbon Monoxide detected",
+                    "value": 2
+                },
+                {
+                    "label": "Carbon Dioxide; Carbon Dioxide detected",
+                    "value": 3
+                },
+                {
+                    "label": "Water Alarm; Water Leak detected",
+                    "value": 4
+                },
+                {
+                    "label": "Heat Alarm; Overheat detected",
+                    "value": 5
+                },
+                {
+                    "label": "Smoke Alarm; Smoke detected",
+                    "value": 6
+                },
+                {
+                    "label": "Sensor binary",
+                    "value": 9
+                }
+            ]
+        },
+        "110": {
+            "label": "Temperature sensor offset settings",
+            "description": "Set value is added or subtracted to actual measured value by sensor.\n                From 1 to 100 = value from 0.1C to 10.0C is added to actual measured temperature.\n                From 1001 to 1100 = value from -0.1 C to -10.0 C is subtracted to actual measured temperature.\n                Default value 32536. 32536 offset is 0.0C.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32536,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 32536
+        },
+        "120": {
+            "label": "Digital temperature sensor reporting",
+            "description": "If digital temperature sensor is connected, module reports measured temperature on temperature change\n                defined by this parameter.\n                0 = reporting disabled.\n                1 to 127 = 0,1C to 12,7C, step is 0,1C.\n                Default value is 5 = 0,5C",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        },
+        "121": {
+            "label": "Digital temperature sensor / setpoint selector",
+            "description": "If digital temperature sensor is not connected, module can grab measured temperature from external\n                secondary module.\n                Default value is 0.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "internal digital temperature sensor is mounted, setpoint is set by controller",
+                    "value": 0
+                },
+                {
+                    "label": "(bit 0) temperature is grabbed from external always on sensor with sensor_multilevel_get sent by association 3",
+                    "value": 1
+                },
+                {
+                    "label": "(bit 1) temperature is grabbed from external battery powered room sensor declared in parameter 122",
+                    "value": 2
+                },
+                {
+                    "label": "(bit 2) setpoint is grabbed from external always on module with thermostat_setpoint_get by association 5",
+                    "value": 4
+                },
+                {
+                    "label": "(bit 3) setpoint is grabbed from external battery powered room sensor declared in parameter 122",
+                    "value": 8
+                },
+                {
+                    "label": "(bit 1 and bit 3) temperature AND setpoint are grabbed from external battery powered sensor declared in parameter 122",
+                    "value": 10
+                }
+            ]
+        },
+        "122": {
+            "label": "Node ID of external battery powered room sensor",
+            "description": "If digital temperature sensor is not connected, module can grab measured temperature from external\n                battery powered room sensor defined by this paramater.\n                0 = external battery powered room sensor not in function.\n                1 to 254 = Node ID of external battery powered room sensor.\n                Default value is 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 254,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic on/off (triggered at change of the output Q state and reflecting its state) up to 16 nodes",
+            "maxNodes": 16
+        },
+        "3": {
+            "label": "SENSOR_MULTILEVEL_GET (triggered once per minute if Parameter 121 is not 0) up to 16 nodes",
+            "maxNodes": 16
+        },
+        "4": {
+            "label": "Basic on/off (triggered by Too high temperature limit, it send FF) up to 16 nodes",
+            "maxNodes": 16
+        },
+        "5": {
+            "label": "THERMOSTAT_SETPOINT_GET (triggered once per minute if Parameter 121 is not 0) up to 16 nodes",
+            "maxNodes": 16
+        },
+        "6": {
+            "label": "Basic on/off (trigged by change of I1) up to 16 nodes",
+            "maxNodes": 16
+        },
+        "7": {
+            "label": "Basic on/off (trigged by change of I2) up to 16 nodes",
+            "maxNodes": 16
+        },
+        "8": {
+            "label": "Basic on/off (trigged by change of I3) up to 16 nodes",
+            "maxNodes": 16
+        },
+        "9": {
+            "label": "Sensor multilevel (trigged by change of temperature)",
+            "maxNodes": 16
+        }
+    }
+}

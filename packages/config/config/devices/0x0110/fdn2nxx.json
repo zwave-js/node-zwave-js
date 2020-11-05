@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "Frostdale",
+    "manufacturerId": "0x0110",
+    "label": "FDN2NXX",
+    "description": "Nanogrid: FDN2nxx light switch - where n is 1, 2, 3 or 4 buttons",
+    "devices": [
+        {
+            "productType": "0x7333",
+            "productId": "0x0031"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

@@ -1,0 +1,184 @@
+{
+    "_approved": true,
+    "manufacturer": "Elexa Consumer Products Inc. (Dome)",
+    "manufacturerId": "0x021f",
+    "label": "0083",
+    "description": "Motion Detector",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0083"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Sensitivity Level",
+            "description": "This parameter sets the sensitivity of the Motion Detector.\n        It is a unitless parameter ranging in values from 8 up to 255, with 8 being the highest sensitivity level and 255 being the lowest.\n        After physical installation, make sure the farthest part of the coverage area is still visible to the Motion Detector by adjusting this parameter.",
+            "valueSize": 1,
+            "minValue": 8,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 8
+        },
+        "2": {
+            "label": "Motion Cleared Time Delay",
+            "description": "This parameters sets the amount of time after a motion event before the Motion Detector reports no activity to the main controller.\n        This also sets the amount of time before a BASIC_SET(00) command is sent to Association Group 2 to turn off any activated devices.\n        This value must be higher than the value of Parameter 6, and if this parameter is reset to default settings, Parameter 6 will also be reset.\n        See Group 2 on page for more information.",
+            "valueSize": 2,
+            "minValue": 5,
+            "maxValue": 600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30,
+            "units": "Seconds"
+        },
+        "3": {
+            "label": "Basic Set Level",
+            "description": "This parameter sets the value sent by the BASIC_SET command to Association Group 2.\n        0 Turn Off Device.\n        1 to 99 Set Device to Value.\n        255 Turn On Device.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "4": {
+            "label": "Motion Detection",
+            "description": "This setting enables or disables motion detection and light reporting.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Group 2 Ambient Light Threshold",
+            "description": "If Parameter 8 is enabled, this setting sets the light level below which the Motion Detector will send BASIC_SET commands to Association Group 2 when motion is detected.",
+            "valueSize": 2,
+            "minValue": 5,
+            "maxValue": 1000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 100,
+            "units": "Lux"
+        },
+        "6": {
+            "label": "Retrigger Interval",
+            "description": "After each motion event, the Motion Detector is disabled for the amount of time set by this parameter before it can send out another Motion Detected Notification Report/Binary Sensor Report.\n        This value must be lower than the value of Parameter 2, and if this parameter is reset to default settings, Parameter 2 will also be reset.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 8,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 8,
+            "units": "Seconds"
+        },
+        "7": {
+            "label": "Light Sensing Interval",
+            "description": "This parameter sets the amount of time between each successive ambient light level reading that is sent.\n        This value must be less than the Wakeup Interval Time (which is 43,200 seconds or 12 hours by default.)",
+            "valueSize": 2,
+            "minValue": 60,
+            "maxValue": 3600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 180,
+            "units": "Seconds"
+        },
+        "8": {
+            "label": "Group 2 Ambient Light Threshold",
+            "description": "If this parameter is enabled, the Motion Detector will only send Basic Set commands to Associon Group 2 if the ambient light level is below the value set in Parameter 05.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "9": {
+            "label": "Ambient Light Sensitivity Level",
+            "description": "This Parameter sets the minimum change in ambient light level (in lux) the Motion Detector must detect before a Multilevel Sensor Report is sent to the main controller.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 100,
+            "units": "Lux"
+        },
+        "10": {
+            "label": "Indicator LED",
+            "description": "If this parameter is enabled, the LED INDICATOR will flash everytime there motion is detected.\n        If this is disabled, the LED INDICATOR will not flash to indicate motion events.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "units": "level",
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Set",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Notification Report",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Sensor Binary Report",
+            "maxNodes": 5
+        }
+    }
+}

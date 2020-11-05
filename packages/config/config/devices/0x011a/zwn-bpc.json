@@ -1,0 +1,37 @@
+{
+    "_approved": true,
+    "manufacturer": "Enerwave",
+    "manufacturerId": "0x011a",
+    "label": "ZWN-BPC",
+    "description": "ZWN-BPC Ceiling Mounted PIR Motion Sensor",
+    "devices": [
+        {
+            "productType": "0x0601",
+            "productId": "0x0901"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "0": {
+            "label": "Off time",
+            "description": "Sets the time after triggering the sensor to send the Basic OFF command. 0: Don't send Basic OFF. 1-240: N minutes. 241-255: 15 seconds.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Reports",
+            "maxNodes": 5
+        }
+    }
+}

@@ -1,11 +1,9 @@
-// Devolo MT2756
-// MT2756 Flood Sensor
 {
     "_approved": true,
-    "manufacturer": "Devolo",
+    "manufacturer": "devolo Home Control",
     "manufacturerId": "0x0175",
     "label": "MT2756",
-    "description": "MT2756 Flood Sensor",
+    "description": "Flood Sensor MT02756",
     "devices": [
         {
             "productType": "0x0002",
@@ -16,11 +14,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Basic Set OFF Level",
-            "description": "Basic Set OFF Level",
+            "description": "Setting the BASIC command value.\n                When the flood trigger off(0x00), send the BASIC CC to the group 2",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -32,7 +29,7 @@
         },
         "2": {
             "label": "Basic Set ON Level",
-            "description": "Basic Set ON Level",
+            "description": "Setting the BASIC command value.\n                When the flood trigger on(0xFF), send the BASIC CC to the group 2",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -43,11 +40,11 @@
             "allowManualEntry": true
         },
         "5": {
-            "label": "Disable the Flood function",
-            "description": "Disable the Flood function",
+            "label": "Operation Mode",
+            "description": "",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -55,18 +52,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Flood function is enabled",
+                    "label": "Normal",
                     "value": 0
                 },
                 {
-                    "label": "Flood function is disabled",
-                    "value": 1
+                    "label": "Disable the Flood function",
+                    "value": 33
                 }
             ]
         },
         "7": {
-            "label": "Customer Function",
-            "description": "Customer Function",
+            "label": "Costumer Function",
+            "description": "8  Disable send out BASIC OFF after the flood event cleared.\n                16 Notification Type, 0:Using Notification Report. 16:Using Sensor Binary Report.\n                32 Disable Multi CC in auto report.\n                64 Disable to report battery state when the device triggered.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -74,33 +71,36 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "10": {
             "label": "Auto Report Battery Time",
-            "description": "Auto Report Battery Time",
+            "description": "The interval time for auto report the battery level.\n                0 means turn off auto report.\n                The default value is 12.\n                The tick time can be set by the configuration No.20.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "15": {
             "label": "Auto Report Flood Time",
-            "description": "Auto Report Flood Time",
+            "description": "The interval time for auto report the flood state.\n                0 means turn off auto report.\n                The default value is 12.\n                The tick time can be set by the configuration No.20.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
         "20": {
             "label": "Auto Report Tick Interval",
-            "description": "Auto Report Tick Interval",
+            "description": "The interval time for auto report each tick.\n                Setting this configuration will effect configuration No.10, No.13, No.14 and No.15.\n                Units of one minute.\n                Caution1: Setting to 0 means turn off all auto report function.\n                Caution2: The value is unsigned byte",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
@@ -108,7 +108,19 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "minute"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 8,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Set",
+            "maxNodes": 8
         }
     }
 }

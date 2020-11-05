@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "Vitrum (VDA)",
+    "manufacturerId": "0x010a",
+    "label": "VITRUMII-ROLLERBLIND",
+    "description": "Vitrum II EU Roller Blind Control",
+    "devices": [
+        {
+            "productType": "0x1300",
+            "productId": "0x5A00"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

@@ -1,19 +1,17 @@
-// BeNext Molite
-// Movement sensor with temperature and light sensor
 {
     "_approved": true,
     "manufacturer": "BeNext",
     "manufacturerId": "0x008a",
-    "label": "Molite",
-    "description": "Movement sensor with temperature and light sensor",
+    "label": "MOLITE",
+    "description": "DHS-ZW-SNMT-01 Multi Sensor",
     "devices": [
         {
             "productType": "0x0003",
-            "productId": "0x0100"
+            "productId": "0x0101"
         },
         {
             "productType": "0x0003",
-            "productId": "0x0101"
+            "productId": "0x0100"
         }
     ],
     "firmwareVersion": {
@@ -22,18 +20,18 @@
     },
     "associations": {
         "1": {
-            "label": "Devices to be switched on when motion detected",
+            "label": "LifeLine",
             "maxNodes": 5,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Reset to factory settings",
+            "label": "Set to Default",
             "description": "Set all configuration values to default values (factory settings).",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -42,29 +40,31 @@
         },
         "2": {
             "label": "Mode timeout",
-            "description": "Mode timeout",
+            "description": "The time used in mode 2 to turn the sensor off. This Time will start running as soon as detection is seen.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 900,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 900,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "3": {
             "label": "Switch off time",
-            "description": "Switch off time",
+            "description": "The switch off time will start running as soon as mode timeout is done. Motion sensor is turned on and when movement is detected again the mode timeout (cfg param 1) will start running all over again. When switch off time is done a basic off message is sent to the associated node.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 2700,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 2700,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "4": {
-            "label": "sensitivity",
-            "description": "the sensitivity of the motion circuit",
+            "label": "Sensitivity",
+            "description": "Sensitivity value between 0 and 127 (values above 127 will be reported as the set value but will be handled in SW as 127).",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
@@ -75,145 +75,145 @@
         },
         "5": {
             "label": "The mode",
-            "description": "The mode that is entered after detection",
+            "description": "The mode that is entered after detection. If mode is 0 or higher then 3, that value will be reported after a get but will be handled in SW as mode 2.",
             "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
+            "minValue": 0,
+            "maxValue": 100,
             "defaultValue": 2,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Mode 1: no detection possible. Battery save mode.",
+                    "label": "no detection possible. Battery save mode",
                     "value": 1
                 },
                 {
-                    "label": "Mode 2: normal operation mode:",
+                    "label": "normal operation mode: send on after detection and off after given time no detection",
                     "value": 2
                 },
                 {
-                    "label": "Z-Wave chip is always on to request",
+                    "label": "Z-Wave chip is always on to request e.g. version or manufacturer id",
                     "value": 3
                 }
             ]
         },
         "6": {
             "label": "The temperature offset",
-            "description": "An offset for the temperature.",
+            "description": "An offset for the temperature",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 0,
+            "maxValue": 32767,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "7": {
-            "label": "Light table 100 %",
-            "description": "Light table 100 %",
+            "label": "Light Table 100",
+            "description": "If a LDR resistance measured lower than this value the returned light percentage is 100%. See chapter light table for more information.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 17,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 17,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "8": {
-            "label": "Light table 90 %",
-            "description": "Light table 90 %",
+            "label": "Light Table 90",
+            "description": "If a LDR resistance measured lower than this value the returned light percentage is 90%. See chapter light table for more information.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 38,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 38,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "9": {
-            "label": "Light table 80 %",
-            "description": "Light table 80 %",
+            "label": "Light Table 80",
+            "description": "If a LDR resistance measured lower than this value the returned light percentage is 80%. See chapter light table for more information.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 85,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 85,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "10": {
-            "label": "Light table 70 %",
-            "description": "Light table 70 %",
+            "label": "Light Table 70",
+            "description": "If a LDR resistance measured lower than this value the returned light percentage is 70%. See chapter light table for more information.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 186,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 186,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "11": {
-            "label": "Light table 60 %",
-            "description": "Light table 60 %",
+            "label": "Light Table 60",
+            "description": "If a LDR resistance measured lower than this value the returned light percentage is 60%. See chapter light table for more information.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 407,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 407,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "12": {
-            "label": "Light table 50 %",
-            "description": "Light table 50 %",
+            "label": "Light Table 50",
+            "description": "If a LDR resistance measured lower than this value the returned light percentage is 50%. See chapter light table for more information.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 891,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 891,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "13": {
-            "label": "Light table 40 %",
-            "description": "Light table 40 %",
+            "label": "Light Table 40",
+            "description": "If a LDR resistance measured lower than this value the returned light percentage is 40%. See chapter light table for more information.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1949,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 1949,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "14": {
-            "label": "Light table 30 %",
-            "description": "Light table 30 %",
+            "label": "Light Table 30",
+            "description": "If a LDR resistance measured lower than this value the returned light percentage is 30%. See chapter light table for more information.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 4265,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 4265,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "15": {
-            "label": "Light table 20 %",
-            "description": "Light table 20 %",
+            "label": "Light Table 20",
+            "description": "If a LDR resistance measured lower than this value the returned light percentage is 20%. See chapter light table for more information.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 9332,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 9332,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "16": {
-            "label": "Light table 10 %",
-            "description": "Light table 10 %",
+            "label": ". Light Table 10",
+            "description": "If a LDR resistance measured lower than this value the returned light percentage is 10%. See chapter light table for more information.",
             "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 20417,
+            "minValue": 1,
+            "maxValue": 32767,
             "defaultValue": 20417,
             "readOnly": false,
             "writeOnly": false,

@@ -1,0 +1,98 @@
+{
+    "_approved": true,
+    "manufacturer": "McoHome Technology Co Ltd",
+    "manufacturerId": "0x015f",
+    "label": "MH9CO2",
+    "description": "MH9-CO2-WD CO2 Monitor",
+    "devices": [
+        {
+            "productType": "0x0902",
+            "productId": "0x5102"
+        },
+        {
+            "productType": "0x0901",
+            "productId": "0x3102"
+        },
+        {
+            "productType": "0x0905",
+            "productId": "0x0201"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Notification",
+            "maxNodes": 5
+        },
+        "2": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "CO2 Notification threshold",
+            "description": "CO2 Notification threshold 1 to 2000ppm",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 1200,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1000,
+            "units": "ppm"
+        },
+        "2": {
+            "label": "CO2 reporting threshold",
+            "description": "0 report disabled, base on 5ppm unit, 10 by default, 10*5ppm=50ppm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": ""
+        },
+        "3": {
+            "label": "Temperature reporting threshold",
+            "description": "0 report disabled, base on 0.5C unit, 1 by default, 1*0.5C=0.5C",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1,
+            "units": ""
+        },
+        "4": {
+            "label": "Humidity reporting threshold",
+            "description": "0 report disabled, base on 1% unit, 2 by default, 2*1C=2C",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 2,
+            "units": ""
+        },
+        "255": {
+            "label": "Factory setting",
+            "description": "Restore the factory setting - write only, set to 85 to reset",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        }
+    }
+}

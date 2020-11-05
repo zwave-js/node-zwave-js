@@ -1,74 +1,82 @@
-// D-Link DCH-Z510
-// Siren
 {
-	"_approved": true,
-	"manufacturer": "D-Link",
-	"manufacturerId": "0x0108",
-	"label": "DCH-Z510",
-	"description": "Siren",
-	"devices": [
-		{
-			"productType": "0x0004",
-			"productId": "0x000a"
-		}
-	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"29": {
-			"label": "Disable Alarm",
-			"unit": "disable_alarm",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Enable Alarm",
-					"value": 0
-				},
-				{
-					"label": "Disable Alarm",
-					"value": 1
-				}
-			]
-		},
-		"31": {
-			"label": "Alarm Duration",
-			"description": "Play alarm sound duration, 1 tick is 30 seconds. 0 means never auto stop.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"7": {
-			"label": "Customer Function",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Using Notification Report",
-					"value": 0
-				},
-				{
-					"label": "Using Sensor Binary Report",
-					"value": 16
-				}
-			]
-		}
-	}
+    "_approved": true,
+    "manufacturer": "D-Link Corporation",
+    "manufacturerId": "0x0108",
+    "label": "DCH-Z510",
+    "description": "DCH-Z510 Siren",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x000a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "7": {
+            "label": "Customer Function",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "Using Notification Report",
+                    "value": 0
+                },
+                {
+                    "label": "Using Sensor Binary Report",
+                    "value": 16
+                }
+            ],
+            "description": "Bit 0: Reserved \n          Bit 1: Reserved \n          Bit 2: Reserved \n          Bit 3: Reserved \n          Bit 4: Notification type (0: Using Notification Report, 1: Using sensor Binary Report). \n          Bit 5: Reserved\n          Bit 6: Reserved\n          Bit 7: Reserved"
+        },
+        "29": {
+            "label": "Disable Alarm",
+            "unit": "disable_alarm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enable Alarm",
+                    "value": 0
+                },
+                {
+                    "label": "Disable Alarm",
+                    "value": 1
+                }
+            ],
+            "description": "Disable the alarm function.\n          0: Enable Alarm, 1:Disable Alarm,\n          Caution: After the power up, this configuration always be 0.",
+            "units": ""
+        },
+        "31": {
+            "label": "31. Alarm Duration",
+            "description": "Play alarm sound duration.\n          1 tick is 30 second. Default is 3 minutes, maximum is 63.5 minutes.\n          0: means never auto stop",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 12,
+            "defaultValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "30 sec"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 8,
+            "isLifeline": true
+        }
+    }
 }

@@ -1,0 +1,175 @@
+{
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "DSC08101",
+    "description": "DSC08101 Smart Energy Illuminator",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0008"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Multilevel Sensor Report Command",
+            "description": "The content of \"Multilevel Sensor Report Command\" after SEI receives \"Multilevel Sensor Get Command\".",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Power",
+                    "value": 0
+                },
+                {
+                    "label": "Voltage",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Make SEI blink",
+            "description": "Configuration Value 1 is to Specify the time that SEI need blink (0-255), the unit is second;\n\t  Configuration Value 2 is to Specify the Cycle of on/off (0-255), the unit of it is 0.1 second.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "100": {
+            "label": "Default Group Reports",
+            "description": "Set report types for groups 1, 2 and 3 to default.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "101": {
+            "label": "Report type sent in Reporting Group 1",
+            "description": "Defines the type of report sent for reporting group 1. 2 is multisensor report. 4 is meter report for watts. 8 is meter report for kilowatts.\n\t Value 1 (msb) Reserved\n\t Value 2 Reserved\n\t Value 3 Reserved\n\t Value 4(lsb) \n\t\t\tbits 7-4 reserved\n            bit 3 MRC(KWH)\n\t\t    bit 2 MRC(watt)\n\t\t    bit 1 MSRC\n\t\t    bit 0 reserved\n\n\tThe MRC(KWH) flag signals that Report Group 1 send(1) or don't send(0)\n\tMeter Report Command(KWh) automatically.\n\n\tThe MRC(Watt) flag signals that Report Group 1 send(1) or don't send(0)\n\tMeter Report Command(wattage) automatically.\n\n\tThe MSRC flag signals that Report Group 1 send(1) or don't send(0)\n\tMultilevel Sensor Report Command(wattage) automatically.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "102": {
+            "label": "Report type sent in Reporting Group 2",
+            "description": "Defines the type of report sent for reporting group 2. 2 is multisensor report. 4 is meter report for watts. 8 is meter report for kilowatts.\n\t Value 1 (msb) Reserved\n\t Value 2 Reserved\n\t Value 3 Reserved\n\t Value 4 lsb) \n\t        bits 7-4 reserved\n            bit 3 MRC(KWH)\n\t\t    bit 2 MRC(watt)\n\t\t    bit 1 MSRC\n\t\t    bit 0 reserved\n\n\tThe MRC(KWH) flag signals that Report Group 1 send(1) or don't send(0)\n\tMeter Report Command(KWh) automatically.\n\n\tThe MRC(Watt) flag signals that Report Group 1 send(1) or don't send(0)\n\tMeter Report Command(wattage) automatically.\n\n\tThe MSRC flag signals that Report Group 1 send(1) or don't send(0)\n\tMultilevel Sensor Report Command(wattage) automatically.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "103": {
+            "label": "Report type sent in Reporting Group 3",
+            "description": "Defines the type of report sent for reporting group 3. 2 is multisensor report. 4 is meter report for watts. 8 is meter report for kilowatts.\n\t Value 1 (msb) Reserved\n\t Value 2 Reserved\n\t Value 3 Reserved\n\t Value 4 (lsb) \n\t\t\tbits 7-4 reserved\n            bit 3 MRC(KWH)\n\t\t    bit 2 MRC(watt)\n\t\t    bit 1 MSRC\n\t\t    bit 0 reserved\n\n\tThe MRC(KWH) flag signals that Report Group 1 send(1) or don't send(0)\n\tMeter Report Command(KWh) automatically.\n\n\tThe MRC(Watt) flag signals that Report Group 1 send(1) or don't send(0)\n\tMeter Report Command(wattage) automatically.\n\n\tThe MSRC flag signals that Report Group 1 send(1) or don't send(0)\n\tMultilevel Sensor Report Command(wattage) automatically.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "110": {
+            "label": "Set 111-113 to default",
+            "description": "Set time interval for sending reports for groups 1, 2 and 3 to default.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "111": {
+            "label": "Send Interval for Reporting Group 1",
+            "description": "Defines the time interval when the defined report for group 1 is sent.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "seconds"
+        },
+        "112": {
+            "label": "Send Interval for Reporting Group 2",
+            "description": "Defines the time interval when the defined report for group 2 is sent.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "seconds"
+        },
+        "113": {
+            "label": "Send Interval for Reporting Group 3",
+            "description": "Defines the time interval when the defined report for group 3 is sent.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "seconds"
+        },
+        "254": {
+            "label": "Device tag",
+            "description": "Device tag.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "255": {
+            "label": "Reset device",
+            "description": "Reset to the default configuration.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

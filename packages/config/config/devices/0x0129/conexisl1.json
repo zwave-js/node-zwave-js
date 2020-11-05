@@ -1,0 +1,189 @@
+{
+    "_approved": true,
+    "manufacturer": "Assa Abloy",
+    "manufacturerId": "0x0129",
+    "label": "CONEXISL1",
+    "description": "Yale Conexis L1 (SD-L1000-CH)",
+    "devices": [
+        {
+            "productType": "0x6600",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Volume",
+            "description": "Volume of the keypad tones and any voice prompts (default = 3, high)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "options": [
+                {
+                    "label": "Silent",
+                    "value": 1
+                },
+                {
+                    "label": "Low",
+                    "value": 2
+                },
+                {
+                    "label": "High",
+                    "value": 3
+                }
+            ]
+        },
+        "2": {
+            "label": "Auto Relock",
+            "description": "Enable or disable the Auto relock feature (default = 255, enable)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "On",
+                    "value": 255
+                },
+                {
+                    "label": "Off",
+                    "value": 0
+                }
+            ]
+        },
+        "3": {
+            "label": "Auto-re-lock Time",
+            "description": "After successful local unlock, automatically relock after the specified time (default = 7 seconds)",
+            "valueSize": 1,
+            "minValue": 7,
+            "maxValue": 60,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30,
+            "units": "seconds"
+        },
+        "4": {
+            "label": "Wrong Tag Limit",
+            "description": "Number of incorrect tags before lock will accept before sending TAMPER Alarm. \n\t\t\tWhen number of wrong code entries is exceeded, lock will disable for the time specified by Wrong tag timeout parameter. (5 = default)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 20,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 5,
+            "options": [
+                {
+                    "label": "1",
+                    "value": 1
+                },
+                {
+                    "label": "2",
+                    "value": 2
+                },
+                {
+                    "label": "3",
+                    "value": 3
+                },
+                {
+                    "label": "4",
+                    "value": 4
+                },
+                {
+                    "label": "5",
+                    "value": 5
+                },
+                {
+                    "label": "6",
+                    "value": 6
+                },
+                {
+                    "label": "7",
+                    "value": 7
+                },
+                {
+                    "label": "8",
+                    "value": 8
+                },
+                {
+                    "label": "9",
+                    "value": 9
+                },
+                {
+                    "label": "10",
+                    "value": 10
+                },
+                {
+                    "label": "11",
+                    "value": 11
+                },
+                {
+                    "label": "12",
+                    "value": 12
+                },
+                {
+                    "label": "13",
+                    "value": 13
+                },
+                {
+                    "label": "14",
+                    "value": 14
+                },
+                {
+                    "label": "15",
+                    "value": 15
+                },
+                {
+                    "label": "16",
+                    "value": 16
+                },
+                {
+                    "label": "17",
+                    "value": 17
+                },
+                {
+                    "label": "18",
+                    "value": 18
+                },
+                {
+                    "label": "19",
+                    "value": 19
+                },
+                {
+                    "label": "20",
+                    "value": 20
+                }
+            ]
+        },
+        "7": {
+            "label": "Wrong tag timeout",
+            "description": "Number of seconds unit will be inoperable after number of Wrong tag attempts is exceeded (30 = default)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 250,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30,
+            "units": "seconds"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

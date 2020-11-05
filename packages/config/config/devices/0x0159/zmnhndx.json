@@ -1,0 +1,286 @@
+{
+    "_approved": true,
+    "manufacturer": "Qubino (Goap)",
+    "manufacturerId": "0x0159",
+    "label": "ZMNHNDX",
+    "description": "ZMNHND1 Flush 1D relay",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0053"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Input 1 switch type",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Mono-stable switch type (push button)",
+                    "value": 0
+                },
+                {
+                    "label": "Bi-stable switch type",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Input 2 contact type",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "NO (normaly open) input type",
+                    "value": 0
+                },
+                {
+                    "label": "NC (normaly close) input type",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Activate / deactivate functions ALL ON/ALL OFF",
+            "description": "Flush 1 relay module responds to commands ALL ON / ALL OFF that may be sent by the main controller or by other controller belonging to the system",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 255,
+            "options": [
+                {
+                    "label": "ALL ON active, ALL OFF active",
+                    "value": 255
+                },
+                {
+                    "label": "ALL ON is not active ALL OFF is not active",
+                    "value": 0
+                },
+                {
+                    "label": "ALL ON is not active ALL OFF active",
+                    "value": 1
+                },
+                {
+                    "label": "ALL ON active ALL OFF is not active",
+                    "value": 2
+                }
+            ]
+        },
+        "11": {
+            "label": "Automatic turning off relay after set time",
+            "description": "0 => Auto OFF disabled. \n\t\t\t1 - 32535  => 1 second (0,01s) - 32535 seconds (325,35s). \n\t\t\tAuto OFF enabled with define time, step is 1s or 10ms according to parameter 15. Default value 0",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "12": {
+            "label": "Automatic turning on relay after set time",
+            "description": "0 - Auto OFF disabled. \n\t\t\t1 - 32535  => 1 second (0,01s) - 32535 seconds (325,35s).\n\t\t\tAuto ON enabled with define time, step is 1s or 10ms according to parameter 15. Default value 0",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "15": {
+            "label": "Automatic turning on/off seconds or milliseconds selection",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "seconds",
+                    "value": 0
+                },
+                {
+                    "label": "milliseconds",
+                    "value": 1
+                }
+            ]
+        },
+        "30": {
+            "label": "Saving the state of the relay after a power failure",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Flush 1 relay module saves its state before power failure (it returns to the last position saved before a power failure)",
+                    "value": 0
+                },
+                {
+                    "label": "Flush 1 relay module does not save the state after a power failure, it returns to off position.",
+                    "value": 1
+                }
+            ]
+        },
+        "63": {
+            "label": "Output switch selection",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "When system is turned off the output is 0V (NC)",
+                    "value": 0
+                },
+                {
+                    "label": "When system is turned off the output is 230V or 24V (NO)",
+                    "value": 1
+                }
+            ]
+        },
+        "80": {
+            "label": "Reporting to controller",
+            "description": "Available from SW version S1 Only \n\t\t\tThis parameter defines if reporting regarding power level, multilevel, etc, are reported to controller or not. \n\t\t\tNOTE: Disabling reporting is recommended in case Z-wave modules communicate in association groups without using main controller.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "100": {
+            "label": "Enable / Disable Endpoints I2 or select notification type and event",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 9,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Endpoint, I2 disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Home Security; Motion Detection, unknown location",
+                    "value": 1
+                },
+                {
+                    "label": "Carbon Monoxide; Carbon Monoxide detected, unknown location",
+                    "value": 2
+                },
+                {
+                    "label": "Carbon Dioxide; Carbon Dioxide detected, unknown location",
+                    "value": 3
+                },
+                {
+                    "label": "Water Alarm; Water Leak detected, unknown location",
+                    "value": 4
+                },
+                {
+                    "label": "Heat Alarm; Overheat detected, unknown location",
+                    "value": 5
+                },
+                {
+                    "label": "Smoke Alarm; Smoke detected, unknown location",
+                    "value": 6
+                },
+                {
+                    "label": "Sensor binary",
+                    "value": 9
+                }
+            ]
+        },
+        "110": {
+            "label": "Temperature sensor offset settings",
+            "description": "Set value is added or subtracted to actual measured value by sensor. \n\t\t\tAvailable configuration parameters : default value 32536. 32536  offset is 0.0C. \n\t\t\tFrom 1 to 100 = value from 0.1C to 10.0C is added to actual measured temperature.\n\t\t\tFrom 1001 to 1100 = value from -0.1 C to -10.0 C is subtracted to actual measured temperature.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 32535
+        },
+        "120": {
+            "label": "Digital temperature sensor reporting",
+            "description": "If digital temperature sensor is connected, module reports measured temperature on temperature change defined by this parameter. \n\t\t\tAvailable configuration parameters : 0 = reporting disabled. 1 to 127 = 0,1C to 12,7C, step is 0,1C. Default value is 5 = 0,5C",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic on/off of the output state",
+            "maxNodes": 16
+        },
+        "3": {
+            "label": "Basic on/off of the input I2 state",
+            "maxNodes": 16
+        },
+        "4": {
+            "label": "Binary Sensor Report of the input I2 state",
+            "maxNodes": 16
+        },
+        "5": {
+            "label": "Notification Report of the input I2 state",
+            "maxNodes": 16
+        }
+    }
+}

@@ -1,0 +1,632 @@
+{
+    "_approved": true,
+    "manufacturer": "FIBARO System",
+    "manufacturerId": "0x010f",
+    "label": "FGMSZW5",
+    "description": "FGMS001-ZW5 Motion Sensor",
+    "devices": [
+        {
+            "productType": "0x0801",
+            "productId": "0x3002"
+        },
+        {
+            "productType": "0x0801",
+            "productId": "0x3001"
+        },
+        {
+            "productType": "0x0801",
+            "productId": "0x2002"
+        },
+        {
+            "productType": "0x0801",
+            "productId": "0x2001"
+        },
+        {
+            "productType": "0x0801",
+            "productId": "0x1002"
+        },
+        {
+            "productType": "0x0801",
+            "productId": "0x1001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Motion",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Tamper",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Motion BC",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Tamper BC",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Motion detection - sensitivity",
+            "description": "The lower the value, the more sensitive the PIR sensor is.\n\t\t\t\tAvailable settings: 8 - 255\n\t\t\t\tDefault setting: 15",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 15
+        },
+        "2": {
+            "label": "Motion detection - blind time",
+            "description": "PIR sensor is blind (insensitive) to motion after last detection for the amount of time specified in this parameter.\n\t\t\t\tShorter time periods allow to detect motion more frequently, but the battery will be drained faster.\n\t\t\t\tAvailable settings: 0 - 15 (0.5-8 seconds).\n\t\t\t\tFormula to calculate the time: time [s] = 0.5 x (value+1))\n\t\t\t\tDefault setting: 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "3": {
+            "label": "Motion detection - pulse counter",
+            "description": "This parameter determines the number of moves required for the PIR sensor to report motion. The higher the value, the less sensitive the PIR sensor is.\n\t\t\t\tIt is not recommended to modify this parameter settings!\n\t\t\t\tDefault setting: 1 (2 pulses)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "1 pulse",
+                    "value": 0
+                },
+                {
+                    "label": "2 pulses",
+                    "value": 1
+                },
+                {
+                    "label": "3 pulses",
+                    "value": 2
+                },
+                {
+                    "label": "4 pulses",
+                    "value": 3
+                }
+            ]
+        },
+        "4": {
+            "label": "Motion detection - window time",
+            "description": "Period of time during which the number of moves set in parameter 3 must be detected in order for the PIR sensor to report motion.\n\t\t\t\tThe higher the value, the more sensitive the PIR sensor is.\n\t\t\t\tIt is not recommended to modify this parameter setting!\n\t\t\t\tDefault setting: 2 (12 seconds)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "options": [
+                {
+                    "label": "4 seconds",
+                    "value": 0
+                },
+                {
+                    "label": "8 seconds",
+                    "value": 1
+                },
+                {
+                    "label": "12 seconds",
+                    "value": 2
+                },
+                {
+                    "label": "16 seconds",
+                    "value": 3
+                }
+            ]
+        },
+        "6": {
+            "label": "Motion detection - alarm cancellation delay",
+            "description": "Time period after which the motion alarm will be cancelled in the main controller and associated devices.\n\t\t\t\tAny motion detected during this period resets the timer.\n\t\t\t\tAvailable settings: 1 - 65535\n\t\t\t\tDefault setting: 30 (30 seconds)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30,
+            "units": "seconds"
+        },
+        "8": {
+            "label": "Motion detection - operating mode",
+            "description": "This parameter determines in which part of day the PIR sensor will be active.\n\t\t\t\tThis parameter influences only the motion reports and associations.\n\t\t\t\tTamper, light intensity and temperature measurements will be still active, regardless of this parameter settings.\n\t\t\t\tDefault setting: 0 (always active)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "PIR sensor always active",
+                    "value": 0
+                },
+                {
+                    "label": "PIR sensor active during the day only",
+                    "value": 1
+                },
+                {
+                    "label": "PIR sensor active during the night only",
+                    "value": 2
+                }
+            ]
+        },
+        "9": {
+            "label": "Motion detection - night/day",
+            "description": "This parameter defines the difference between night and day in terms of light intensity, used in parameter 8.\n\t\t\t\tAvailable settings: 1 - 65535\n\t\t\t\tDefault setting: 200 (200 lux)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 200,
+            "units": "lux"
+        },
+        "12": {
+            "label": "BASIC command class configuration",
+            "description": "This parameter determines the command frames sent to 2nd association group (assigned to PIR sensor).\n\t\t\t\tDefault setting: 0 (ON and OFF)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "BASIC On and OFF",
+                    "value": 0
+                },
+                {
+                    "label": "Only the BASIC On",
+                    "value": 1
+                },
+                {
+                    "label": "Only the BASIC OFF",
+                    "value": 2
+                }
+            ]
+        },
+        "14": {
+            "label": "BASIC ON command frame value",
+            "description": "The command frame sent at the moment of motion detection.\n\t\t\t\tFurther motion detections, during the cancellation time, will not result in sending the association.\n\t\t\t\tAvailable settings: 0 - 255\n\t\t\t\tDefault setting: 255",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "16": {
+            "label": "BASIC OFF command frame value",
+            "description": "The command frame sent at the moment of motion alarm cancellation, after cancellation delay time specified in parameter 6.\n\t\t\t\tAvailable settings: 0 - 255\n\t\t\t\tDefault setting: 0",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "18": {
+            "label": "Associations in Z-Wave network security mode",
+            "description": "This parameter defines how commands are sent in specified association groups: as secure or non-secure.\n\t\t\t\tParameter is active only in Z-Wave network security mode. It does not apply to 1st group Lifeline.\n\t\t\t\tAvailable settings 0 - 15:\n\t\t\t\t0 - none of the groups sent as secure 1 - 2nd group sent as secure.\n\t\t\t\t2 - 3rd group sent as secure.\n\t\t\t\t4 - 4th group sent as secure.\n\t\t\t\t8 - 5th group sent as secure.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 15
+        },
+        "20": {
+            "label": "Tamper - sensitivity",
+            "description": "This parameter determines the change in force acting on the device, that will result in reporting tamper alarm - g-force acceleration.\n\t\t\t\tAvailable settings: 0 - 121 (0.08 - 2g; multiply by 0.016g; 0 = tamper inactive)\n\t\t\t\tDefault setting: 20 (0.4g)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 121,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20
+        },
+        "22": {
+            "label": "Tamper - alarm cancellation delay",
+            "description": "Time period after which a tamper alarm will be cancelled in the main controller and associated devices.\n\t\t\t\tAny tampering detected during this period will not extend the delay.\n\t\t\t\tAvailable settings: 1 - 65535\n\t\t\t\tDefault setting: 30 (seconds)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30,
+            "units": "seconds"
+        },
+        "24": {
+            "label": "Tamper - operating modes",
+            "description": "This parameter determines function of the tamper and sent reports.\n\t\t\t\tIt is an advanced feature serving much more functions than just detection of tampering.\n\t\t\t\tDefault setting: 0 (Tamper)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Tamper only",
+                    "value": 0
+                },
+                {
+                    "label": "Tamper and earthquake detector",
+                    "value": 1
+                },
+                {
+                    "label": "Tamper and orientation in space",
+                    "value": 2
+                }
+            ]
+        },
+        "25": {
+            "label": "Tamper - alarm cancellation",
+            "description": "This parameter allows to disable cancellation of the tamper alarm.\n\t\t\t\tDefault setting: 0 (Tamper).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Do not send tamper cancellation report",
+                    "value": 0
+                },
+                {
+                    "label": "Send tamper cancellation report",
+                    "value": 1
+                }
+            ]
+        },
+        "28": {
+            "label": "Tamper alarm broadcast mode",
+            "description": "The parameter determines whether the tamper alarm frame will or will not be sent in broadcast mode.\n\t\t\t\tAlarm frames sent in broadcast mode can be received by all of the devices within range (if they accept such frames), but not repeated by them.\n\t\t\t\tDefault setting: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Tamper alarm sent to 3rd association group",
+                    "value": 0
+                },
+                {
+                    "label": "Tamper alarm sent in broadcast mode",
+                    "value": 1
+                }
+            ]
+        },
+        "29": {
+            "label": "Tamper - backward compatible broadcast mode",
+            "description": "The parameter determines whether the backward compatible tamper alarm frame will or will not be sent in broadcast mode.\n\t\t\t\tAlarm frames sent in broadcast mode can be received by all of the devices within range (if they accept such frames), but not repeated by them.\n\t\t\t\tThis parameter provides backward compatibility with controllers not supporting Z-Wave+.\n\t\t\t\tDefault setting: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Backward compatible tamper alarm sent to 5th association group",
+                    "value": 0
+                },
+                {
+                    "label": "Backward compatible tamper alarm sent in broadcast mode",
+                    "value": 1
+                }
+            ]
+        },
+        "40": {
+            "label": "Luminance report - threshold",
+            "description": "This parameter determines the change in light intensity level resulting in luminance report being sent to the main controller.\n\t\t\t\tAvailable settings:\n\t\t\t\t0 - reports are not sent.\n\t\t\t\t1-32767 (luminance in lux).\n\t\t\t\tDefault setting: 200 (200 lux).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 200,
+            "units": "lux"
+        },
+        "42": {
+            "label": "Luminance reports - interval",
+            "description": "Time interval between consecutive luminance reports.\n\t\t\t\tThe reports are sent even if there is no change in the light intensity.\n\t\t\t\tAvailable settings: 0 - 32767.\n\t\t\t\t0 - periodical reports are not sent.\n\t\t\t\t1-32767 (in seconds).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "60": {
+            "label": "Temperature report - threshold",
+            "description": "This parameter determines the change in measured temperature that will result in new temperature report being sent to the main controller.\n\t\t\t\tAvailable settings: 0 - 255 (0.1 - 25.5C; 0 = reports are not sent)\n\t\t\t\tDefault setting: 10 (1C)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10
+        },
+        "62": {
+            "label": "Temperature measuring - interval",
+            "description": "Time interval between consecutive temperature measurements.\n\t\t\t\tThe shorter the time, the more frequently the temperature will be measured, but the battery life will shorten.\n\t\t\t\tAvailable settings: 0 - 32767 (1 - 32767 seconds; 0 = temperature is not measured)\n\t\t\t\tDefault setting: 900 (900 seconds).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 900,
+            "units": "seconds"
+        },
+        "64": {
+            "label": "Temperature report - interval",
+            "description": "Time interval between consecutive temperature reports. The reports are sent even if there is no change in the temperature.\n\t\t\t\tAvailable settings: 0 - 32767 (1 - 32767 seconds; 0 = periodical reports are not sent)\n\t\t\t\tDefault setting: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "66": {
+            "label": "Temperature offset",
+            "description": "The value to be added to the actual temperature, measured by the sensor (temperature compensation).\n\t\t\t\tAvailable settings: 0 - 100 (0 to 100C) or 64536 - 65535 (-100 to -0.10C)\n\t\t\t\tDefault setting: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "80": {
+            "label": "Visual LED indicator - signalling mode",
+            "description": "This parameter determines the way in which visual indicator behaves after motion has been detected.\n\t\t\t\tDefault setting: 10 (Flashlight mode)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 26,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 10,
+            "options": [
+                {
+                    "label": "LED inactive.",
+                    "value": 0
+                },
+                {
+                    "label": "1 long blink, LED colour depends on the temperature. Set by parameters 86 and 87.",
+                    "value": 1
+                },
+                {
+                    "label": "Flashlight mode - LED glows in white for 10 seconds.",
+                    "value": 2
+                },
+                {
+                    "label": "Long blink White.",
+                    "value": 3
+                },
+                {
+                    "label": "Long blink Red.",
+                    "value": 4
+                },
+                {
+                    "label": "Long blink Green.",
+                    "value": 5
+                },
+                {
+                    "label": "Long blink Blue.",
+                    "value": 6
+                },
+                {
+                    "label": "Long blink Yellow.",
+                    "value": 7
+                },
+                {
+                    "label": "Long blink Cyan.",
+                    "value": 8
+                },
+                {
+                    "label": "Long blink Magenta.",
+                    "value": 9
+                },
+                {
+                    "label": "Long blink, then short blink, LED colour depends on the temperature. Set by parameters 86 and 87.",
+                    "value": 10
+                },
+                {
+                    "label": "Flashlight mode - LED glows in white through 10 seconds.  Each next detected motion extends the glowing by next 10 seconds.",
+                    "value": 11
+                },
+                {
+                    "label": "Long blink, then short blinks White.",
+                    "value": 12
+                },
+                {
+                    "label": "Long blink, then short blinks Red.",
+                    "value": 13
+                },
+                {
+                    "label": "Long blink, then short blinks Green.",
+                    "value": 14
+                },
+                {
+                    "label": "Long blink, then short blinks Blue.",
+                    "value": 15
+                },
+                {
+                    "label": "Long blink, then short blinks Yellow.",
+                    "value": 16
+                },
+                {
+                    "label": "Long blink, then short blinks Cyan",
+                    "value": 17
+                },
+                {
+                    "label": "Long blink, then short blinks Magenta",
+                    "value": 18
+                },
+                {
+                    "label": "Long blink, then 2 short blinks, LED colour depends on the temperature. Set by parameters 86 and 87.",
+                    "value": 19
+                },
+                {
+                    "label": "Long blink, then 2 short blinks White",
+                    "value": 20
+                },
+                {
+                    "label": "Long blink, then 2 short blinks Red",
+                    "value": 21
+                },
+                {
+                    "label": "Long blink, then 2 short blinks Green",
+                    "value": 22
+                },
+                {
+                    "label": "Long blink, then 2 short blinks Blue",
+                    "value": 23
+                },
+                {
+                    "label": "Long blink, then 2 short blinks Yellow",
+                    "value": 24
+                },
+                {
+                    "label": "Long blink, then 2 short blinks Cyan",
+                    "value": 25
+                },
+                {
+                    "label": "Long blink, then 2 short blinks Magenta",
+                    "value": 26
+                }
+            ]
+        },
+        "81": {
+            "label": "Visual LED indicator - brightness",
+            "description": "This parameter determines the brightness of the visual LED indicator when indicating motion.\n\t\t\t\tAvailable settings: 0 - brightness determined by the luminance (parameters 82 and 83).\n\t\t\t\t1-100 (1-100%)\n\t\t\t\tDefault setting: 50 (50 %)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50,
+            "units": "%"
+        },
+        "82": {
+            "label": "Visual LED indicator - luminance for low indicator brightness",
+            "description": "Light intensity level below which brightness of visual indicator is set to 1%.\n\t\t\t\tAvailable settings: 0 to value of parameter 83 (in lux).\n\t\t\t\tDefault setting: 100.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 100,
+            "units": "lux"
+        },
+        "83": {
+            "label": "Visual LED indicator - luminance for high indicator brightness",
+            "description": "Light intensity level above which brightness of visual indicator is set to 100%.\n\t\t\t\tAvailable settings: value of parameter 82 to 32767 (in lux)\n\t\t\t\tDefault setting: 1000 (1000 lux)\n\t\t\t\tNOTE\n\t\t\t\tThe value of the parameter 83 must be higher than the value of the parameter 82.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1000,
+            "units": "lux"
+        },
+        "86": {
+            "label": "Visual LED indicator - temperature for blue colour",
+            "description": "This parameter is determines minimal temperature that will result in blue visual indicator colour.\n\t\t\t\tRelevant only when parameter 80 has been properly configured.\n\t\t\t\tAvailable settings: 0 to value of parameter 87 (in Celsius degree)\n\t\t\t\tDefault setting: 18 (18C)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 18,
+            "units": "Celsius"
+        },
+        "87": {
+            "label": "Visual LED indicator - temperature for red colour",
+            "description": "This parameter is determines minimal temperature that will result in red visual indicator colour.\n\t\t\t\tRelevant only when parameter 80 has been properly configured.\n\t\t\t\tAvailable settings: value of parameter 86 to 255 (in Celsius degree)\n\t\t\t\tDefault setting: 28 (28C)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 28,
+            "units": "Celsius"
+        },
+        "89": {
+            "label": "Visual LED indicator - tamper alarm",
+            "description": "Indicating mode resembles a police car (white, red and blue).\n\t\t\t\tDefault setting: 1 (on)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Tamper alarm is not indicated",
+                    "value": 0
+                },
+                {
+                    "label": "Tamper alarm is indicated",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

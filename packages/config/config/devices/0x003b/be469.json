@@ -1,11 +1,9 @@
-// Allegion BE469
-// Touchscreen Deadbolt
 {
     "_approved": true,
-    "manufacturer": "Allegion",
+    "manufacturer": "Schlage (Allegion)",
     "manufacturerId": "0x003b",
     "label": "BE469",
-    "description": "Touchscreen Deadbolt",
+    "description": "BE469 Touchscreen Deadbolt",
     "devices": [
         {
             "productType": "0x6341",
@@ -43,7 +41,8 @@
                     "label": "Enable Beeper",
                     "value": 255
                 }
-            ]
+            ],
+            "description": "Enable or disable the beeper."
         },
         "4": {
             "label": "Vacation Mode",
@@ -64,14 +63,15 @@
                     "label": "Enable Vacation Mode",
                     "value": 255
                 }
-            ]
+            ],
+            "description": "Prevents all user codes from unlocking the deadbolt.\n\t\t\t\tEnable for extra security while you are away for\n\t\t\t\tan extended period of time."
         },
         "5": {
             "label": "Lock & Leave",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
-            "defaultValue": 0,
+            "defaultValue": 255,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
@@ -85,7 +85,9 @@
                     "label": "Enable Lock & Leave",
                     "value": 255
                 }
-            ]
+            ],
+            "description": "When enabled: Press the Outside Schlage Button to lock the\n\t\t\t\tdeadbolt. (Default setting).\n\t\t\t\tWhen disabled: Press the Outside Schlage Button and then enter\n\t\t\t\ta user code to lock the deadbolt.",
+            "units": ""
         },
         "6": {
             "label": "User Slot Status",
@@ -99,11 +101,11 @@
             "allowManualEntry": true
         },
         "7": {
-            "label": "Lock Specific Alarm Mode",
-            "description": "BE469 Only",
+            "label": "Lock Alarm Mode",
+            "description": "The alarm is turned off by default. After installation,\n\t\t\t\tyou will need to turn on your alarm.\n\n\t\t\t\tActivity\n\t\t\t\t Alarms when the door opens or closes.\n\t\t\t\t Perfect for monitoring doors while you re at home.\n\t\t\t\t After the alarm is triggered, there is a built-in 3-second\n\t\t\t\t delay for it to reset.\n\t\t\t\t Sounds two short beeps.\n\n\t\t\t\tTamper\n\t\t\t\t Alarms when the lock is disturbed, while locked.\n\t\t\t\t Senses subtle activity at the lock.\n\t\t\t\t Sounds 15 second Alarm (90 dB)\n\n\t\t\t\tForced Entry\n\t\t\t\t Alarms when significant force pushes against the\n\t\t\t\t door, while locked. Perfect for nighttime or\n\t\t\t\t when you re away from home.\n\t\t\t\t   Least sensitive mode\n\t\t\t\t Sounds three-minute shrill, steady alarm (90 dB)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 3,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
@@ -114,7 +116,7 @@
                     "value": 0
                 },
                 {
-                    "label": "Alert",
+                    "label": "Activity",
                     "value": 1
                 },
                 {
@@ -128,26 +130,22 @@
             ]
         },
         "8": {
-            "label": "Lock Specific Alarm Alert Sensitivity",
+            "label": "Activity Alarm Sensitivity",
             "unit": "BE469 Only",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
+            "maxValue": 100,
+            "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Not Supported",
-                    "value": 0
-                },
-                {
                     "label": "Most Sensitive",
                     "value": 1
                 },
                 {
-                    "label": "More Sensitive",
+                    "label": "Medium/high Sensitivity",
                     "value": 2
                 },
                 {
@@ -155,35 +153,32 @@
                     "value": 3
                 },
                 {
-                    "label": "Less Sensitive",
+                    "label": "Medium/low Sensitivity",
                     "value": 4
                 },
                 {
-                    "label": "Least Sensitive",
+                    "label": "Least Sensitivity",
                     "value": 5
                 }
-            ]
+            ],
+            "description": "Each alarm mode is preset to a sensitivity level of three.\n\t\t\t\tIf your alarm is sounding too frequently, or not frequently enough,\n\t\t\t\ttry changing this setting.\n\t\t\t\tIf you change the alarm mode, the sensitivity will revert\n\t\t\t\tback to the default setting."
         },
         "9": {
-            "label": "Lock Specific Alarm Tamper Sensitivity",
+            "label": "Tamper Alarm Sensitivity",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
+            "maxValue": 100,
+            "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Not Supported",
-                    "value": 0
-                },
-                {
                     "label": "Most Sensitive",
                     "value": 1
                 },
                 {
-                    "label": "More Sensitive",
+                    "label": "Medium/high Sensitivity",
                     "value": 2
                 },
                 {
@@ -191,36 +186,33 @@
                     "value": 3
                 },
                 {
-                    "label": "Less Sensitive",
+                    "label": "Medium/low Sensitivity",
                     "value": 4
                 },
                 {
-                    "label": "Least Sensitive",
+                    "label": "Least Sensitivity",
                     "value": 5
                 }
-            ]
+            ],
+            "description": "Each alarm mode is preset to a sensitivity level of three.\n\t\t\t\tIf your alarm is sounding too frequently, or not frequently enough,\n\t\t\t\ttry changing this setting.\n\t\t\t\tIf you change the alarm mode, the sensitivity will revert\n\t\t\t\tback to the default setting."
         },
         "10": {
-            "label": "Lock Specific Alarm Kick Sensitivity",
-            "description": "BE469 Only",
+            "label": "Forced Entry Alarm Sensitivity",
+            "description": "Each alarm mode is preset to a sensitivity level of three.\n\t\t\t\tIf your alarm is sounding too frequently, or not frequently enough,\n\t\t\t\ttry changing this setting.\n\t\t\t\tIf you change the alarm mode, the sensitivity will revert\n\t\t\t\tback to the default setting.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
+            "maxValue": 100,
+            "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Not Supported",
-                    "value": 0
-                },
-                {
                     "label": "Most Sensitive",
                     "value": 1
                 },
                 {
-                    "label": "More Sensitive",
+                    "label": "Medium/high Sensitivity",
                     "value": 2
                 },
                 {
@@ -228,72 +220,76 @@
                     "value": 3
                 },
                 {
-                    "label": "Less Sensitive",
+                    "label": "Medium/low Sensitivity",
                     "value": 4
                 },
                 {
-                    "label": "Least Sensitive",
+                    "label": "Least Sensitivity",
                     "value": 5
                 }
             ]
         },
         "11": {
-            "label": "Lock Specific Alarm Disable—Local Controls",
+            "label": "Disable Local Alarm Controls",
             "unit": "BE469 Only",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
+            "maxValue": 100,
+            "defaultValue": 255,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable Local Control",
+                    "label": "Disable local alarm controls",
                     "value": 0
                 },
                 {
-                    "label": "Enable Local Control",
+                    "label": "Enable local alarm controls",
                     "value": 255
                 }
-            ]
+            ],
+            "description": "Enables/Disables local alarm on/off, mode change, sensitivity changes"
         },
         "12": {
-            "label": "Electronic Transition Count",
+            "label": "Electronic transition count",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 2147483647,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "description": ""
         },
         "13": {
-            "label": "Mechanical Transition Count",
+            "label": "Mechanical transition count",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 2147483647,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "description": ""
         },
         "14": {
-            "label": "Electronic Failed Count",
+            "label": "Electronic failed count",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 2147483647,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "description": "Each failed electronic attempt increments this count by one."
         },
         "15": {
-            "label": "Auto Lock",
+            "label": "Auto lock",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -301,25 +297,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable Auto Lock",
+                    "label": "Disable auto lock",
                     "value": 0
                 },
                 {
-                    "label": "Enable Auto Lock",
+                    "label": "Enable auto lock",
                     "value": 255
                 }
-            ]
+            ],
+            "description": "When enabled, the lock will automatically relock 30 seconds\n\t\t\t\tafter unlocking. (Disabled by default.)"
         },
         "16": {
-            "label": "User Code PIN Length",
-            "description": "User Code PIN length, a value between 4 and 8 (default 4)",
+            "label": "User code pin length",
+            "description": "User Code PIN length, a value between 4 and 8. \n\t\t\t\tIMPORTANT: All user codes must be the same length.",
             "valueSize": 1,
             "minValue": 4,
             "maxValue": 8,
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Four Digits",
@@ -343,16 +340,28 @@
                 }
             ]
         },
-        "18": {
-            "label": "Get Bootloader Version",
+        "17": {
+            "label": "Electrical High Preload Transition Count",
+            "description": "A subset of Electronic transition count, the number of transitions\n\t\t\t\twith high preload.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "18": {
+            "label": "Bootloader Version",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "description": "The version of the bootloader"
         }
     }
 }

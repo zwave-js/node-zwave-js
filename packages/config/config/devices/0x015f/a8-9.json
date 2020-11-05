@@ -1,0 +1,371 @@
+{
+    "_approved": true,
+    "manufacturer": "McoHome Technology Co Ltd",
+    "manufacturerId": "0x015f",
+    "label": "A8-9",
+    "description": "A8-9 Multi-sensor",
+    "devices": [
+        {
+            "productType": "0xa803",
+            "productId": "0x1352"
+        },
+        {
+            "productType": "0xa800",
+            "productId": "0x1352"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "PM 2.5 Delta Level",
+            "description": "=0 Turn off report\n          >=2 Report when change >\n              n * 1ug/m3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "2": {
+            "label": "CO2 Delta Level",
+            "description": "=0 Turn off report\n          >=2 Report when change >\n              n * 5ppm",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "3": {
+            "label": "Temperature Delta Level",
+            "description": "=0 Turn off report\n          >=1 Report when change >\n              n * 0.5 C",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "4": {
+            "label": "Humidity Delta Level",
+            "description": "=0 Turn off report\n          >=3 Report when change > n%",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "5": {
+            "label": "VOC Delta Level",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Turn off report",
+                    "value": 0
+                },
+                {
+                    "label": "Report level change",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Lux Delta Level",
+            "description": "=0 Turn off report\n          >=20 Report when change >\n               n * 1 lux",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "7": {
+            "label": "dB Delta Level",
+            "description": "=0 Turn off report\n          >=5 Report when change >\n               n * 1dB",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "8": {
+            "label": "PIR Delta Level",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Turn off report",
+                    "value": 0
+                },
+                {
+                    "label": "Report change",
+                    "value": 1
+                }
+            ]
+        },
+        "9": {
+            "label": "Smoke Delta Level",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "10": {
+            "label": "Smoke Timer",
+            "description": "=0 Turn off report\n          >10 Report every n * 1s interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "11": {
+            "label": "PIR Timer",
+            "description": "=0 Turn off report\n          >10 Report every n * 1s interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "12": {
+            "label": "PM 2.5 Timer",
+            "description": "=0 Turn off report\n          >10 Report every n * 1s interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60
+        },
+        "13": {
+            "label": "CO2 Timer",
+            "description": "=0 Turn off report\n          >10 Report every n * 1s interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60
+        },
+        "14": {
+            "label": "Temperature Timer",
+            "description": "=0 Turn off report\n          >10 Report every n * 1s interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60
+        },
+        "15": {
+            "label": "Humidity Timer",
+            "description": "=0 Turn off report\n          >10 Report every n * 1s interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60
+        },
+        "16": {
+            "label": "VOC Timer",
+            "description": "=0 Turn off report\n          >10 Report every n * 1s interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60
+        },
+        "17": {
+            "label": "Lux Timer",
+            "description": "=0 Turn off report\n          >10 Report every n * 1s interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60
+        },
+        "18": {
+            "label": "dB Timer",
+            "description": "=0 Turn off report\n          >10 Report every n * 1s interval",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60
+        },
+        "19": {
+            "label": "Temperature Unit",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "C",
+                    "value": 0
+                },
+                {
+                    "label": "F",
+                    "value": 1
+                }
+            ]
+        },
+        "20": {
+            "label": "Temperature Offset",
+            "description": "0 ~ 200\n          -10.0 ~ 10.0C",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 100
+        },
+        "21": {
+            "label": "Humidity Offset",
+            "description": "0 ~ 40\n          -20.0 ~ 20.0%",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20
+        },
+        "22": {
+            "label": "CO2 Offset",
+            "description": "0 ~ 1000\n          -500 ~ 500ppm",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 500
+        },
+        "23": {
+            "label": "PM 2.5 Offset",
+            "description": "0 ~ 200\n          -100 ~ 100ug/m3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 100
+        },
+        "24": {
+            "label": "Lux Offset",
+            "description": "0 ~ 10000\n          -5000 ~ 5000lux",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5000
+        },
+        "25": {
+            "label": "VOC Correct",
+            "description": "0 ~ 10\n          -5 ~ 5",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        },
+        "26": {
+            "label": "dB Correct",
+            "description": "0 ~ 100\n          -50 ~ 50",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50
+        },
+        "27": {
+            "label": "Write Only",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 255,
+            "options": [
+                {
+                    "label": "Restore factory settin",
+                    "value": 85
+                },
+                {
+                    "label": "Restore default parameters",
+                    "value": 170
+                },
+                {
+                    "label": "Reset",
+                    "value": 255
+                }
+            ]
+        }
+    }
+}

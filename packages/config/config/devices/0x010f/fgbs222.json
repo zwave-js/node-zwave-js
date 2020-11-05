@@ -1,428 +1,450 @@
-// Fibargroup FGBS222
-// Smart Implant
 {
-	"_approved": true,
-	"manufacturer": "Fibargroup",
-	"manufacturerId": "0x010f",
-	"label": "FGBS222",
-	"description": "Smart Implant",
-	"devices": [
-		{
-			"productType": "0x0502",
-			"productId": "0x1000"
-		},
-		{
-			"productType": "0x0502",
-			"productId": "0x2000"
-		},
-		{
-			"productType": "0x0502",
-			"productId": "0x3000"
-		}
-	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"20": {
-			"label": "Input 1 - operating mode",
-			"description": "mode of 1st input",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normally closed alarm input",
-					"value": 0
-				},
-				{
-					"label": "Normally open alarm input",
-					"value": 1
-				},
-				{
-					"label": "Monostable button",
-					"value": 2
-				},
-				{
-					"label": "Bistable button",
-					"value": 3
-				},
-				{
-					"label": "Analog input without internal pull-up",
-					"value": 4
-				},
-				{
-					"label": "Analog input with internal pull-up",
-					"value": 5
-				}
-			]
-		},
-		"21": {
-			"label": "Input 2 - operating mode",
-			"description": "mode of 2nd input",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 2,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normally closed alarm input",
-					"value": 0
-				},
-				{
-					"label": "Normally open alarm input",
-					"value": 1
-				},
-				{
-					"label": "Monostable button",
-					"value": 2
-				},
-				{
-					"label": "Bistable button",
-					"value": 3
-				},
-				{
-					"label": "Analog input without internal pull-up",
-					"value": 4
-				},
-				{
-					"label": "Analog input with internal pull-up",
-					"value": 5
-				}
-			]
-		},
-		"24": {
-			"label": "Inputs orientation",
-			"description": "reversing operation of IN1 and IN2 inputs",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "default",
-					"value": 0
-				},
-				{
-					"label": "reversed",
-					"value": 1
-				}
-			]
-		},
-		"25": {
-			"label": "Outputs orientation",
-			"description": "reversing operation of OUT1 and OUT2 outputs",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "default",
-					"value": 0
-				},
-				{
-					"label": "reversed",
-					"value": 1
-				}
-			]
-		},
-		"47": {
-			"label": "Input 1 - 2nd group, activated",
-			"description": "value sent to 2nd association group when activated",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"49": {
-			"label": "Input 1 - 2nd group, deactivated",
-			"description": "value sent to 2nd association group when deactivated",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"52": {
-			"label": "Input 2 - 3rd group, activated",
-			"description": "value sent to 3rd association group when activated",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"54": {
-			"label": "Input 2 - 3rd group, deactivated",
-			"description": "value sent to 3rd association group when deactivated",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"63": {
-			"label": "Analog inputs - minimal change to report",
-			"description": "minimal change",
-			"unit": "deciVolts",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"64": {
-			"label": "Analog inputs - periodical reports",
-			"description": "reporting period of analog inputs value",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"65": {
-			"label": "Temperature sensor threshold",
-			"description": "Internal temperature sensor - minimal change to report",
-			"unit": "deciGrades",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"66": {
-			"label": "Temperatur sensor period",
-			"description": "Internal temperature sensor - periodical reports",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"67": {
-			"label": "External sensors threshold",
-			"description": "External sensors - minimal change to report",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"68": {
-			"label": "External sensors - periodical reports",
-			"description": "reporting period of analog inputs value",
-			"unit": "seconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 32400,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"150": {
-			"label": "Input 1 - sensitivity",
-			"description": "inertia time of IN1 input in alarm modes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"151": {
-			"label": "Input 2 - sensitivity",
-			"description": "inertia time of IN2 input in alarm modes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 100,
-			"defaultValue": 10,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"152": {
-			"label": "Input 1 - delay of alarm cancellation",
-			"description": "additional delay of cancelling the alarm on IN1 input",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3600,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"153": {
-			"label": "Input 2 - delay of alarm cancellation",
-			"description": "additional delay of cancelling the alarm on IN2 input",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 3600,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"154": {
-			"label": "Output 1 - logic of operation",
-			"description": "logic of OUT1 output operation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "normally open",
-					"value": 0
-				},
-				{
-					"label": "normally closed",
-					"value": 1
-				}
-			]
-		},
-		"155": {
-			"label": "Output 2 - logic of operation",
-			"description": "OUT2 output operation",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "normally open",
-					"value": 0
-				},
-				{
-					"label": "normally closed",
-					"value": 1
-				}
-			]
-		},
-		"156": {
-			"label": "Output 1 - auto off",
-			"description": "OUT1 automatically deactivated",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 27000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"157": {
-			"label": "Output 2 - auto off",
-			"description": "OUT2 automatically deactivated",
-			"unit": "deciseconds",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 27000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"40": {
-			"label": "Input 1 - sent scenes",
-			"description": "sending scene ID",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Key pressed 1 time",
-					"value": 1
-				},
-				{
-					"label": "Key pressed 2 times",
-					"value": 2
-				},
-				{
-					"label": "Key pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key hold down and key released",
-					"value": 8
-				}
-			]
-		},
-		"41": {
-			"label": "Input 2 - sent scenes",
-			"description": "sending scene ID",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Key pressed 1 time",
-					"value": 1
-				},
-				{
-					"label": "Key pressed 2 times",
-					"value": 2
-				},
-				{
-					"label": "Key pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key hold down and key released",
-					"value": 8
-				}
-			]
-		}
-	}
+    "_approved": true,
+    "manufacturer": "FIBARO System",
+    "manufacturerId": "0x010f",
+    "label": "FGBS222",
+    "description": "FGBS222 Smart Implant",
+    "devices": [
+        {
+            "productType": "0x0502",
+            "productId": "0x3000"
+        },
+        {
+            "productType": "0x0502",
+            "productId": "0x2000"
+        },
+        {
+            "productType": "0x0502",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Input IN1",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Input IN2",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "20": {
+            "label": "Input 1 operating mode",
+            "description": "This parameter allows to choose mode of 1st input (IN1). \n        Change it depending on connected device.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normally closed alarm input",
+                    "value": 0
+                },
+                {
+                    "label": "Normally open alarm input",
+                    "value": 1
+                },
+                {
+                    "label": "Monostable button",
+                    "value": 2
+                },
+                {
+                    "label": "Bistable button",
+                    "value": 3
+                },
+                {
+                    "label": "Analog input without internal pull-up",
+                    "value": 4
+                },
+                {
+                    "label": "Analog input with internal pullup",
+                    "value": 5
+                }
+            ]
+        },
+        "21": {
+            "label": "Input 2 operating mode",
+            "description": "This parameter allows to choose mode of 2nd input (IN2). \n        Change it depending on connected device.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normally closed alarm input",
+                    "value": 0
+                },
+                {
+                    "label": "Normally open alarm input",
+                    "value": 1
+                },
+                {
+                    "label": "Monostable button",
+                    "value": 2
+                },
+                {
+                    "label": "Bistable button",
+                    "value": 3
+                },
+                {
+                    "label": "Analog input without internal pull-up",
+                    "value": 4
+                },
+                {
+                    "label": "Analog input with internal pullup",
+                    "value": 5
+                }
+            ]
+        },
+        "24": {
+            "label": "Inputs orientation",
+            "description": "This parameter allows reversing operation of IN1 and IN2 inputs without changing the wiring. \n        Use in case of incorrect wiring.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Default (IN1 - 1st input, IN2 - 2nd input)",
+                    "value": 0
+                },
+                {
+                    "label": "Reversed (IN1 - 2nd input, IN2 - 1st input)",
+                    "value": 1
+                }
+            ]
+        },
+        "25": {
+            "label": "Outputs orientation",
+            "description": "This parameter allows reversing operation of OUT1 and OUT2 inputs without changing the wiring. \n        Use in case of incorrect wiring.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Default (OUT1 - 1st output, OUT2 - 2nd output)",
+                    "value": 0
+                },
+                {
+                    "label": "Reversed (OUT1 - 2nd output, OUT2 - 1st output)",
+                    "value": 1
+                }
+            ]
+        },
+        "40": {
+            "label": "Input 1 sent scenes",
+            "description": "This parameter defines which actions result in sending scene ID and attribute assigned to them. \n        Parameter is relevant only if parameter 20 is set to 2 or 3. bitmask.\n        0 => No scenes sent.\n        1 => Key pressed 1 time.\n        2 => Key pressed 2 times.\n        4 => Key pressed 3 times.\n        8 => Key hold down and key released.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "Key pressed 1 time",
+                    "value": 1
+                },
+                {
+                    "label": "Key pressed 2 times",
+                    "value": 2
+                },
+                {
+                    "label": "Key pressed 3 times",
+                    "value": 4
+                },
+                {
+                    "label": "Key hold down and key released",
+                    "value": 8
+                }
+            ]
+        },
+        "41": {
+            "label": "Input 2 sent scenes",
+            "description": "This parameter defines which actions result in sending scene ID and attribute assigned to them. \n        Parameter is relevant only if parameter 21 is set to 2 or 3. bitmask.\n        0 => No scenes sent.\n        1 => Key pressed 1 time.\n        2 => Key pressed 2 times.\n        4 => Key pressed 3 times.\n        8 => Key hold down and key released.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "Key pressed 1 time",
+                    "value": 1
+                },
+                {
+                    "label": "Key pressed 2 times",
+                    "value": 2
+                },
+                {
+                    "label": "Key pressed 3 times",
+                    "value": 4
+                },
+                {
+                    "label": "Key hold down and key released",
+                    "value": 8
+                }
+            ]
+        },
+        "47": {
+            "label": "Input 1 value sent to 2nd association group when activated",
+            "description": "This parameter defines value sent to devices in 2nd association group when IN1 input is triggered (using Basic Command Class).\n        Available settings: 0-255.\n        Default setting: 255.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "49": {
+            "label": "Input 1 value sent to 2nd association group when deactivated",
+            "description": "This parameter defines value sent to devices in 2nd association group when IN1 input is deactivated (using Basic Command Class).\n        Available settings: 0-255.\n        Default setting: 255.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "52": {
+            "label": "Input 2 value sent to 3rd association group when activated",
+            "description": "This parameter defines value sent to devices in 3rd association group when IN2 input is triggered (using Basic Command Class).\n        Available settings: 0-255.\n        Default setting: 255.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "54": {
+            "label": "Input 2 value sent to 3rd association group when deactivated",
+            "description": "This parameter defines value sent to devices in 3rd association group when IN2 input is deactivated (using Basic Command Class).\n        Available settings: 0-255.\n        Default setting: 255.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "63": {
+            "label": "Analog inputs minimal change to report",
+            "description": "This parameter defines minimal change (from the last reported) of\n        analog input value that results in sending new report. Parameter is\n        relevant only for analog inputs (parameter 20 or 21 set to 4 or 5).\n        Available settings:\n          0 - (reporting on change disabled).\n          1-100 (0.1-10V, 0.1V step).\n        Default setting: 5 (0.5V).",
+            "unit": "deciVolts",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "0.1v"
+        },
+        "64": {
+            "label": "Analog inputs periodical reports",
+            "description": "This parameter defines reporting period of analog inputs value.\n        Periodical reports are independent from changes in value (parameter 63). Parameter is relevant only for analog inputs (parameter\n        20 or 21 set to 4 or 5).\n        Available settings:\n          0 (periodical reports disabled).\n          60-32400 (60s-9h).\n        Default setting: 0 (periodical reports disabled).",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        },
+        "65": {
+            "label": "Internal temperature sensor minimal change to report",
+            "description": "This parameter defines minimal change (from the last reported)\n        of internal temperature sensor value that results in sending new\n        report.\n        Available settings:\n          0 - (reporting on change disabled).\n          1-255 (0.1-25.5C).\n        Default setting: 5 (0.5C).",
+            "unit": "deciGrades",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "66": {
+            "label": "Internal temperature sensor periodical reports",
+            "description": "This parameter defines reporting period of internal temperature\n        sensor value. Periodical reports are independent from changes in\n        value (parameter 65).\n        Available settings:\n          0 (periodical reports disabled).\n          60-32400 (60s-9h).\n        Default setting: 0 (periodical reports disabled).",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        },
+        "67": {
+            "label": "External sensors minimal change to report",
+            "description": "This parameter defines minimal change (from the last reported) of\n        external sensors values (DS18B20 or DHT22) that results in sending new\n        report. Parameter is relevant only for connected DS18B20 or DHT22\n        sensors.\n        Available settings:\n          0 - (reporting on change disabled).\n          1-255 (0.1-25.5 units).\n        Default setting: 5 (0.5 units)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "68": {
+            "label": "External sensors periodical reports",
+            "description": "This parameter defines reporting period of analog inputs value.\n        Periodical reports are independent from changes in value (parameter 67).\n        Parameter is relevant only for connected DS18B20 or DHT22 sensors.\n        Available settings:\n          0 - (periodical reports disabled).\n          60-32400 (60s-9h).\n        Default setting: 0 (periodical reports disabled).",
+            "unit": "seconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        },
+        "150": {
+            "label": "Input 1 sensitivity",
+            "description": "This parameter defines the inertia time of IN1 input in alarm modes.\n        Adjust this parameter to prevent bouncing or signal disruptions. \n        Parameter is relevant only if parameter 20 is set to 0 or 1 (alarm mode).\n        Available settings: 1-100 (10ms-1000ms, 10ms step).\n        Default setting: 10 (100ms).",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "10ms"
+        },
+        "151": {
+            "label": "Input 2 sensitivity",
+            "description": "This parameter defines the inertia time of IN2 input in alarm modes.\n        Adjust this parameter to prevent bouncing or signal disruptions. Parameter is relevant only if parameter 21 is set to 0 or 1 (alarm mode).\n        Available settings: 1-100 (10ms-1000ms, 10ms step).\n        Default setting: 10 (100ms).",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "10ms"
+        },
+        "152": {
+            "label": "Input 1 delay of alarm cancellation",
+            "description": "This parameter defines additional delay of cancelling the alarm on IN1 input. \n        Parameter is relevant only if parameter 20 is set to 0 or 1 (alarm mode).\n        Available settings:\n          0 - no delay.\n          1-3600s.\n        Default setting: 0 (no delay).",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 3600,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        },
+        "153": {
+            "label": "Input 2 delay of alarm cancellation",
+            "description": "This parameter defines additional delay of cancelling the alarm on IN2 input. \n        Parameter is relevant only if parameter 21 is set to 0 or 1 (alarm mode).\n        Available settings:\n          0 - no delay.\n          1-3600s.\n        Default setting: 0 (no delay).",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 3600,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        },
+        "154": {
+            "label": "Output 1 logic of operation",
+            "description": "This parameter defines logic of OUT1 output operation.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "contacts normally open",
+                    "value": 0
+                },
+                {
+                    "label": "contacts normally closed",
+                    "value": 1
+                }
+            ]
+        },
+        "155": {
+            "label": "Output 2 logic of operation",
+            "description": "This parameter defines logic of OUT2 output operation.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "contacts normally open",
+                    "value": 0
+                },
+                {
+                    "label": "contacts normally closed",
+                    "value": 1
+                }
+            ]
+        },
+        "156": {
+            "label": "Output 1 auto off",
+            "description": "This parameter defines time after which OUT1 will be automatically deactivated.\n        Available settings:\n          0 - auto off disabled.\n          1-27000 (0.1s-45min, 0.1s step).\n        Default setting: 0 (auto off disabled).",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 27000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "0.1s"
+        },
+        "157": {
+            "label": "Output 2 auto off",
+            "description": "This parameter defines time after which OUT2 will be automatically deactivated.\n        Available settings:\n          0 - auto off disabled.\n          1-27000 (0.1s-45min, 0.1s step).\n        Default setting: 0 (auto off disabled).",
+            "unit": "deciseconds",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 27000,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "0.1s"
+        }
+    }
 }

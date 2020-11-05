@@ -1,0 +1,197 @@
+{
+    "_approved": true,
+    "manufacturer": "Aeotec Limited",
+    "manufacturerId": "0x0371",
+    "label": "ZW187",
+    "description": "ZW187 Recessed Door Sensor 7",
+    "devices": [
+        {
+            "productType": "0x0202",
+            "productId": "0x00bb"
+        },
+        {
+            "productType": "0x0102",
+            "productId": "0x00bb"
+        },
+        {
+            "productType": "0x0002",
+            "productId": "0x00bb"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Set",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Sensor Binary Report",
+            "description": "Enable/Disable Binary Sensor Report. Allow for backward compatibility to report Binary if Notification Report cannot be used for status changes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Reverse Sensor Reports",
+            "description": "Reverse Sensor Reports (both Sensor Binary Report and Notification Report.)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Open Status when Magnet is away, Close Status when magnet is near",
+                    "value": 0
+                },
+                {
+                    "label": "Close Status when Magnet is away, Open Status when magnet is near",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Association Group 2 Settings",
+            "description": "Configure the Basic Set value. Determine the Basic Set value to control other Z-Wave devices directly when Magnet is away or near.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disable completely",
+                    "value": 0
+                },
+                {
+                    "label": "Send Basic SET 0xFF when Magnet is away, and send Basic SET 0x00 when Magnet is near",
+                    "value": 1
+                },
+                {
+                    "label": "Send Basic SET 0x00 when Magnet is away, and send Basic Set 0xFF when Magnet is near",
+                    "value": 2
+                },
+                {
+                    "label": "Only send Basic SET 0xFF when Magnet is away",
+                    "value": 3
+                },
+                {
+                    "label": "Only send Basic SET 0x00 when Magnet is near",
+                    "value": 4
+                },
+                {
+                    "label": "Only send Basic SET 0x00 when Magnet is away",
+                    "value": 5
+                },
+                {
+                    "label": "Only send Basic SET 0xFF when Magnet is near",
+                    "value": 6
+                }
+            ]
+        },
+        "4": {
+            "label": "Application Layer Retry",
+            "description": "Configure retry number and wait time.\n          The device supports an application retry mechanism when the application of the device has detected a transmission error when Basic Set, Sensor Binary Report or Notification Report (Access Control) message is sent out but fails to result in an ACK or a Supervision Report.\n          The Byte 1 is used to configure the number of retries. The valid value is 0-5. 0 means disable retry.\n          The Byte 2 is used to configure the wait time between retries. The valid value is 0-255. Unit is 100ms.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "5": {
+            "label": "Supervision Report Wait Time",
+            "description": "Configure Supervision Report Wait Time.\n          Unit is 100ms.\n          Note: Issuing Basic Set, Sensor Binary Report or Notification Report(Access Control) via association groups uses Supervision encapsulation only if sending commands with S2(or higher security) encapsulation.\n          In other word, this parameter can be configured in any network, but works only in S2 (or higher security) network.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 15,
+            "units": "0.1s"
+        },
+        "81": {
+            "label": "Led Indicator",
+            "description": "Control LED Indicator. Determine whether the LED flash or not when sending Basic Set, Sensor Binary Report, Notification Report (Access Control) or Wake Up Notification.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "options": [
+                {
+                    "label": "Completely disable LED",
+                    "value": 0
+                },
+                {
+                    "label": "LED quickly flashes only when sending Basic Set, Sensor Binary Report or Notification Report",
+                    "value": 1
+                },
+                {
+                    "label": "LED activates only when sending Wake Up Notification",
+                    "value": 2
+                },
+                {
+                    "label": "LED quickly flashes when sending Basic Set, Sensor Binary Report or Notification Report (Access Control), and activates when sending Wake Up Notification.",
+                    "value": 3
+                }
+            ]
+        },
+        "90": {
+            "label": "Low battery threshold",
+            "description": "Configure the low battery threshold. Induce battery report when battery level is less than or equal to threshold. Forward low battery report.",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30,
+            "units": "%"
+        },
+        "101": {
+            "label": "Timed battery report",
+            "description": "Set how often battery is reported in minutes.",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 14400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 70,
+            "units": "minutes"
+        }
+    }
+}

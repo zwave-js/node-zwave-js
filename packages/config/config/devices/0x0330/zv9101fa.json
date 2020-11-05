@@ -1,0 +1,171 @@
+{
+    "_approved": true,
+    "manufacturer": "Sunricher",
+    "manufacturerId": "0x0330",
+    "label": "ZV9101FA",
+    "description": "Dimmer ZV-9101FA",
+    "devices": [
+        {
+            "productType": "0x0200",
+            "productId": "0xd002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Saving state before power failure",
+            "description": "Saving state before power failure. Default Not saved.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "State NOT saved at power failure, all outputs are set to OFF upon power restore",
+                    "value": 0
+                },
+                {
+                    "label": "State NOT saved at power failure, all outputs are set to ON upon power restore",
+                    "value": 1
+                },
+                {
+                    "label": "State saved at power failure, all outputs are set to previous state upon power restore",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "Send the basic report",
+            "description": "Enable/disable to send the basic report to the Lifeline when the load state changed.\n              When value set as 1, re-power on the dimmer, it will send Basic report automatically.\n            Default Enabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Choose a cool light stage mode",
+            "description": "Choose a cool light stage mode (when receiving Command Class Switch Color, it recovers to normal lighting mode.)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Inactive of light stage mode",
+                    "value": 0
+                },
+                {
+                    "label": "Fade in and fade out mode, colors set by parameter 8",
+                    "value": 1
+                },
+                {
+                    "label": "Flash mode, colors set by parameter 8",
+                    "value": 2
+                },
+                {
+                    "label": "Rainbow mode, system fixed changing effect",
+                    "value": 3
+                },
+                {
+                    "label": "Fade in and fade out mode, color changes randomly",
+                    "value": 4
+                },
+                {
+                    "label": "Flash mode, color changes randomly",
+                    "value": 5
+                },
+                {
+                    "label": "Rainbow mode, color changes randomly",
+                    "value": 6
+                },
+                {
+                    "label": "Random mode, the colors switch randomly",
+                    "value": 7
+                }
+            ]
+        },
+        "6": {
+            "label": "Speed of stage mode",
+            "description": "Speed of stage mode. 0 is the slowest, 255 is the fastest",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 243
+        },
+        "7": {
+            "label": "Execution times of stage mode",
+            "description": "Execution times of stage mode.\n          0: unlimited times.\n          1~255: execution times 1~255",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "8": {
+            "label": "The hue of stage mode",
+            "description": "The hue of stage mode. The hue is only valid for fade in and fade out mode, flash mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "9": {
+            "label": "Enable/disable external switch to be added to and removed from a network",
+            "description": "Enable/disable external switch to be added to and removed from a network (when enables this function, triple press the external switch within 1.5 seconds to be added to or removed from a network)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

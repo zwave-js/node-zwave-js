@@ -1,17 +1,16 @@
-// AEON Labs ZW129
-// Dual Wallmote
 {
     "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "ZW129",
-    "description": "Dual Wallmote",
+    "description": "ZW129 WallMote Duo",
     "devices": [
         {
-            "productType": "0x0002",
+            "productType": "0x1D02",
+            "productId": "0x0081"
+        },
+        {
+            "productType": "0x0202",
             "productId": "0x0081"
         },
         {
@@ -19,7 +18,7 @@
             "productId": "0x0081"
         },
         {
-            "productType": "0x0202",
+            "productType": "0x0002",
             "productId": "0x0081"
         }
     ],
@@ -35,22 +34,22 @@
             "isLifeline": true
         },
         "2": {
-            "label": "Button 1 basic",
+            "label": "On/Off control via Button 1",
             "description": "On/off control via button 1",
             "maxNodes": 5
         },
         "3": {
-            "label": "Button 1 multilevel",
+            "label": "Dimmer control via Button 1",
             "description": "Dim control via button 1",
             "maxNodes": 5
         },
         "4": {
-            "label": "Button 2 basic",
+            "label": "On/Off control via Button 2",
             "description": "On/off control via button 2",
             "maxNodes": 5
         },
         "5": {
-            "label": "Button 2 multilevel",
+            "label": "Dimmer control via Button 2",
             "description": "Dim control via button 2",
             "maxNodes": 5
         }
@@ -58,7 +57,7 @@
     "paramInformation": {
         "1": {
             "label": "Touch sound",
-            "description": "Enable/disable the touch sound.",
+            "description": "This will enable or disable the sound effects when you press or touch  the sensing area",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -79,7 +78,7 @@
         },
         "2": {
             "label": "Touch vibration",
-            "description": "Enable/disable the touch vibration.",
+            "description": "This will enable or disable the vibration effects when you press or  touch the sensing area",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -99,8 +98,8 @@
             ]
         },
         "3": {
-            "label": "Button slide",
-            "description": "Enable/disable the function of button slide.",
+            "label": "Button slide function",
+            "description": "This will enable or disable control by sliding the button area",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -120,65 +119,87 @@
             ]
         },
         "4": {
-            "label": "Notification report",
-            "description": "Which notification to be sent to the associated devices.",
+            "label": "Report type",
+            "description": "To configure which report will be sent when pressing the buttons",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 3,
+            "maxValue": 1,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Central scene",
+                    "label": "Send nothing",
+                    "value": 0
+                },
+                {
+                    "label": "Send Central Scene Command Notification",
                     "value": 1
                 },
                 {
-                    "label": "Central scene and config",
+                    "label": "Send Central Scene Command Notification and Configuration report",
                     "value": 3
                 }
             ]
         },
         "5": {
-            "label": "Color",
-            "description": "Configure which color will be displayed when a button is pressed",
+            "label": "Color when button is pressed",
+            "description": "To configure which color will be displayed when the button is pressed.\n                Value 1: (msb) Red.\n                Value 2: Green.\n                Value 3: Blue.\n                Value 4: Reserved",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 2147483647,
+            "maxValue": 100,
             "defaultValue": 65280,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
         },
-        "39": {
-            "label": "Low battery value",
-            "description": "Set the low battery value",
+        "33": {
+            "label": "Test the LED, buzzer and vibrator",
+            "description": "Get the LED Strip color value\n                Value 1: (msb) Red.\n                Value 2: Green.\n                Value 3: Blue.\n                Value 4: buzzer and vibrator. (1=ON, 0=OFF)",
             "valueSize": 1,
             "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "39": {
+            "label": "Set the low battery value",
+            "description": "Set the low battery value.\n                Range: 10% - 50%.",
+            "valueSize": 1,
+            "minValue": 10,
             "maxValue": 50,
-            "defaultValue": 5,
+            "defaultValue": 20,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "%"
         },
         "255": {
-            "label": "Reset the WallMote Quad",
-            "description": "Reset the WallMote Quad to factory default.",
+            "label": "Reset To Factory Defaults",
+            "description": "Reset to factory defaults",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
+            "maxValue": 100,
+            "defaultValue": 1,
             "readOnly": false,
             "writeOnly": true,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Reset to factory default",
+                    "label": "Reset to factory default setting",
                     "value": 0
                 },
                 {
-                    "label": "Reset and remove",
+                    "label": "Normal",
+                    "value": 1
+                },
+                {
+                    "label": "Reset to factory default setting and removed from the z-wave network",
                     "value": 1431655765
                 }
             ]

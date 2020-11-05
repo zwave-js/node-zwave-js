@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "Vision Security",
+    "manufacturerId": "0x0109",
+    "label": "1701",
+    "description": "ZM1702 Electronic Deadbolt Door Lock with Handle",
+    "devices": [
+        {
+            "productType": "0x2006",
+            "productId": "0x0620"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

@@ -1,14 +1,12 @@
-// AEON Labs ZW112
-// Door/Window Sensor 6
 {
     "_approved": true,
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "ZW112",
-    "description": "Door/Window Sensor 6",
+    "description": "ZW112 Door Window Sensor 6",
     "devices": [
         {
-            "productType": "0x0002",
+            "productType": "0x0202",
             "productId": "0x0070"
         },
         {
@@ -16,7 +14,7 @@
             "productId": "0x0070"
         },
         {
-            "productType": "0x0202",
+            "productType": "0x0002",
             "productId": "0x0070"
         },
         {
@@ -32,10 +30,16 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
     "paramInformation": {
         "1": {
-            "label": "Value that will be sent on open/close events",
+            "label": "Value when the Magnet is triggered",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -45,18 +49,19 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "On for opened, Off for closed",
+                    "label": "Open: 0xFF, Close: 0x00",
                     "value": 0
                 },
                 {
-                    "label": "Off for opened, On for closed",
+                    "label": "Open: 0x00, Close: 0xFF",
                     "value": 1
                 }
-            ]
+            ],
+            "description": "Which value of the Sensor Binary Report or Basic Set will be sent when the door is Opened/Closed"
         },
         "39": {
-            "label": "Low battery threshold (10% to 50%)",
-            "description": "The value the sensor will use to determine a low battery level",
+            "label": "Set the low battery value",
+            "description": "10% to 50%",
             "unit": "%",
             "valueSize": 1,
             "minValue": 10,
@@ -67,40 +72,40 @@
             "allowManualEntry": true
         },
         "101": {
-            "label": "Low battery voltage check",
-            "description": "Enable or disables the low battery voltage check",
+            "label": "Low Battery Check",
+            "description": "Enable/disable the low battery checking",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
-            "defaultValue": 1,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disabled",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enabled",
                     "value": 1
                 }
             ]
         },
         "111": {
-            "label": "Low battery voltage check time",
-            "description": "Sets the value of the interval for the low battery check time (in seconds)",
+            "label": "Interval time of low battery checking",
+            "description": "The minimum interval is 4 minutes",
             "unit": "Seconds",
             "valueSize": 4,
-            "minValue": 240,
-            "maxValue": 134217727,
+            "minValue": 0,
+            "maxValue": 2147483647,
             "defaultValue": 86640,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "121": {
-            "label": "Reporting mode on open/close event",
+            "label": "Report Type to Send",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
@@ -110,25 +115,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Send nothing",
+                    "label": "Disabled",
                     "value": 0
                 },
                 {
-                    "label": "Send Basic Set CC",
+                    "label": "Basic Set",
                     "value": 1
                 },
                 {
-                    "label": "Send Sensor Binary Report CC",
+                    "label": "Sensor Binary Report",
                     "value": 2
                 },
                 {
-                    "label": "Send Basic Set CC and Sensor Binary Report CC",
+                    "label": "Basic Set and Sensor Binary Report",
                     "value": 3
                 }
-            ]
+            ],
+            "description": "Configure which sensor report will be sent when the door is Opened/Closed"
         },
         "252": {
-            "label": "Lock/Unlock all configuration parameters",
+            "label": "Lock/Unlock Configuration",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -145,18 +151,33 @@
                     "label": "Lock",
                     "value": 1
                 }
-            ]
+            ],
+            "description": "Lock/ unlock all configuration parameters"
         },
         "255": {
-            "label": "Reset to factory default & /or exclude",
-            "description": "Reset sensor to factory default and remove from network",
+            "label": "Reset To Factory Defaults",
+            "description": "Reset to factory defaults",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 2147483647,
+            "maxValue": 100,
             "defaultValue": 1,
             "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Reset to factory default setting",
+                    "value": 0
+                },
+                {
+                    "label": "Normal",
+                    "value": 1
+                },
+                {
+                    "label": "Reset to factory default setting and removed from the z-wave network",
+                    "value": 1431655765
+                }
+            ]
         }
     }
 }

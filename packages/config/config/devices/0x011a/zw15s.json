@@ -1,11 +1,9 @@
-// Wenzhou MTLC Electric Appliances Co., Ltd. ZW15S
-// Binary Switch
 {
     "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
+    "manufacturer": "Enerwave",
     "manufacturerId": "0x011a",
     "label": "ZW15S",
-    "description": "Binary Switch",
+    "description": "ZW15S 15A On/Off Switch",
     "devices": [
         {
             "productType": "0x0101",
@@ -18,21 +16,22 @@
     },
     "associations": {
         "1": {
-            "label": "Group 1",
-            "maxNodes": 5
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "LED State",
-            "description": "LED State",
+            "label": "Toggle LED mode",
+            "description": "Set to 1 for LED to be in sync with switch.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Power on, LED off",
@@ -43,6 +42,17 @@
                     "value": 1
                 }
             ]
+        },
+        "2": {
+            "label": "Toggle button reverse",
+            "description": "Set to 1 for \"up\" to turn the load off.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
         }
     }
 }

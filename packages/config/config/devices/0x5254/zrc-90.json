@@ -1,14 +1,12 @@
-// Remotec ZRC-90
-// Scene master 8 button remote
 {
     "_approved": true,
     "manufacturer": "Remotec",
     "manufacturerId": "0x5254",
     "label": "ZRC-90",
-    "description": "Scene master 8 button remote",
+    "description": "ZRC-90",
     "devices": [
         {
-            "productType": "0x0000",
+            "productType": "0x0002",
             "productId": "0x8510"
         },
         {
@@ -16,7 +14,7 @@
             "productId": "0x8510"
         },
         {
-            "productType": "0x0002",
+            "productType": "0x0000",
             "productId": "0x8510"
         }
     ],
@@ -24,5 +22,11 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    }
 }

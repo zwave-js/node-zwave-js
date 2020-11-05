@@ -1,0 +1,50 @@
+{
+    "_approved": true,
+    "manufacturer": "Vision Security",
+    "manufacturerId": "0x0109",
+    "label": "ZL7261",
+    "description": "ZL7261 Plug-in Power Monitor",
+    "devices": [
+        {
+            "productType": "0x201a",
+            "productId": "0x1aa4"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Auto Report Timing",
+            "description": "Choose how often you want to send automatic reports, in seconds.\n                Defaults to 60 seconds.",
+            "valueSize": 1,
+            "minValue": 60,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 60,
+            "units": "seconds"
+        },
+        "2": {
+            "label": "Wattage Threshold",
+            "description": "Minimum change in wattage to induce an automatic report.\n                Defaults to 50 watts.",
+            "valueSize": 1,
+            "minValue": 5,
+            "maxValue": 3600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50,
+            "units": "watts"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

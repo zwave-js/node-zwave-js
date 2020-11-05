@@ -1,0 +1,104 @@
+{
+    "_approved": true,
+    "manufacturer": "Assa Abloy",
+    "manufacturerId": "0x0129",
+    "label": "KEYFREECONNECTED-PLUS",
+    "description": "Yale Keyfree Connected Smart Lock (YKFCON)",
+    "devices": [
+        {
+            "productType": "0x0600",
+            "productId": "0x0000"
+        },
+        {
+            "productType": "0x0006",
+            "productId": "0x0001"
+        },
+        {
+            "productType": "0x0007",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Volume Level",
+            "description": "Volume of the keypad tones and any voice prompts (default = 3, high)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "options": [
+                {
+                    "label": "Silent",
+                    "value": 1
+                },
+                {
+                    "label": "Low",
+                    "value": 2
+                },
+                {
+                    "label": "High",
+                    "value": 3
+                }
+            ]
+        },
+        "2": {
+            "label": "Auto Relock",
+            "description": "Enable or disable the Auto relock feature (default = 255, enable)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Enable",
+                    "value": 255
+                },
+                {
+                    "label": "Disable",
+                    "value": 0
+                }
+            ]
+        },
+        "3": {
+            "label": "Relock Time",
+            "description": "After successful local unlock, automatically relock after the specified time (default = 7 seconds)",
+            "valueSize": 1,
+            "minValue": 7,
+            "maxValue": 60,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 7,
+            "units": "seconds"
+        },
+        "6": {
+            "label": "Remote Relock Time",
+            "description": "After successful remote unlock, automatically relock after the specified time (default = 10 seconds)",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 90,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "seconds"
+        }
+    }
+}

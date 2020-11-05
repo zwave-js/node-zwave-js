@@ -1,0 +1,84 @@
+{
+    "_approved": true,
+    "manufacturer": "Popp & Co",
+    "manufacturerId": "0x0154",
+    "label": "009501",
+    "description": "009501 Flow Stop",
+    "devices": [
+        {
+            "productType": "0x0005",
+            "productId": "0x0003"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "0": {
+            "label": "LED status",
+            "description": "Status of the LED indicator during normal operation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "LED always on",
+                    "value": 0
+                },
+                {
+                    "label": "LED always off",
+                    "value": 1
+                }
+            ]
+        },
+        "1": {
+            "label": "Controller behavior",
+            "description": "Limit the operations that can be performed locally and/or over the Z-Wave network",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Remote and manual open/close",
+                    "value": 0
+                },
+                {
+                    "label": "Remote open/close only",
+                    "value": 1
+                },
+                {
+                    "label": "Remote open, manual close only",
+                    "value": 2
+                },
+                {
+                    "label": "Manual open, remote close only",
+                    "value": 3
+                },
+                {
+                    "label": "Manual open/close only",
+                    "value": 4
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 10,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Local valve operation",
+            "maxNodes": 10
+        }
+    }
+}

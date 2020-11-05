@@ -1,0 +1,211 @@
+{
+    "_approved": true,
+    "manufacturer": "Qubino (Goap)",
+    "manufacturerId": "0x0159",
+    "label": "ZMNKADX",
+    "description": "ZMNKADx LUXY Smart Switch",
+    "devices": [
+        {
+            "productType": "0x0008",
+            "productId": "0x0052"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Relay contact type",
+            "description": "Relay contact type.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "NO (normally open) output type",
+                    "value": 0
+                },
+                {
+                    "label": "NC (normally close) output type",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Turning off alarming",
+            "description": "With this parameter, you can determine, how to turn off the alarm.\n\t\t\t\t\n\t\t\t\t0 => only by z-wave command (basic set, switch multilevel set, switch multilevel start/stop level change, sound switch play tone, sound switch\n\t\t\t\tconfiguration, switch color set, switch color start/stop level change, notification report idle)\n\t\t\t\t\n\t\t\t\t1 => capacitive input (up, down, left, right) or z-wave command (basic set, switch multilevel set, switch multilevel start/stop level change, sound\n\t\t\t\tswitch play tone, sound switch configuration, switch color set, switch color start/stop level change, notification report idle)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "With a Z-Wave command",
+                    "value": 0
+                },
+                {
+                    "label": "With the capacitive input or a Z-Wave command",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Auto on timer",
+            "description": "Default value = 0\n                0 => Disabled\n                30 to 32535 => 30 - 32535 seconds after which the device turns on.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "second"
+        },
+        "11": {
+            "label": "Auto off timer",
+            "description": "Default value = 0\n                0 => Disabled\n                30 to 32535 => 30 - 32535 seconds after which the device turns off.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "second"
+        },
+        "12": {
+            "label": "Auto on timer relay",
+            "description": "Default value = 0\n                0 => Disabled\n                30 to 32535 => 30 - 32535 seconds after which the device turns on.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "second"
+        },
+        "13": {
+            "label": "Auto off timer relay",
+            "description": "Default value = 0\n                0 => Disabled\n                30 to 32535 => 30 - 32535 seconds after which the device turns off.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "second"
+        },
+        "30": {
+            "label": "Restore state on power failure",
+            "description": "With this parameter, the user can select if the state of the device (color, brightness) should be restored, after a power failure.\n\t\t\t\t\n\t\t\t\tDefault value = 1\n\t\t\t\t1 – Enabled (the device will restore state on power failure)\n\t\t\t\t0 – Disabled (the device will not restore state on power failure and will remain off)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "31": {
+            "label": "Restore relay state on power failure",
+            "description": "With this parameter, the user can select if the state of the built-in relay should be restored, after a power failure.\n\t\t\t\t\t\n\t\t\t\tDefault value = 1\n\t\t\t\t1 – Enabled (the device will restore state on power failure)\n\t\t\t\t0 – Disabled (the device will not restore state on power failure and will remain off)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "40": {
+            "label": "Watt Power Consumption Reporting Threshold for Load",
+            "description": "Choose by how much the power consumption needs to increase or decrease to be reported. \n\t\t\t\tValues correspond to percentages, so if 10 is set (by default), the device will report any power consumption changes of 10% or more compared to the last reading.\n\n\t\t\t\tDefault value = 10\n\t\t\t\t0 => Power consumption reporting disabled\n\t\t\t\t1 to 100 => 1% - 100% Power consumption reporting enabled. \n\t\t\t\t\n\t\t\t\tNew value is reported only when Wattage in real time changes by more than the percentage value set in this parameter compared to the previous Wattage reading, starting at 1% (the lowest value possible).\n\t\t\t\tNOTE: Power consumption needs to increase or decrease by at least 1 Watt to be reported, REGARDLESS of percentage set in this parameter.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": ""
+        },
+        "42": {
+            "label": "Watt Power Consumption Reporting Time Threshold for Load",
+            "description": "Set value refers to the time interval for power consumption reporting (Watts). \n\t\t\t\t\n\t\t\t\tDefault value = 0\n\t\t\t\t0 => Power consumption reporting disabled\n\t\t\t\t30 to 32535 => 30 - 32535 seconds. Power consumption reporting enabled. Report is sent according to time interval (value) set here.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "second"
+        },
+        "70": {
+            "label": "Overload safety switch",
+            "description": "The function allows turning off the controlled device in case of exceeding the defined power for more than 5s. \n\t\t\t\tThe controlled device can be turned back on by input I1 or by sending an actuation command.\n\n\t\t\t\tDefault value = 2300\n\t\t\t\t0 => function not active\n\t\t\t\t1 to 2300 => 1 W – 2300W\n\n\t\t\t\tNOTE: This functionality is not an overload safety protection, please check the technical specifications chapter for more details in the official manual.\n\n\t\t\t\tIn case of an overload event, the device will send the following message to the gateway/controller:\n\t\t\t\tNOTIFICATION_REPORT_V8(type=0x08=POWER_MANAGEMENT, event=0x08=Overload detected)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 2300,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 2300,
+            "units": ""
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "LEDs on/off",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Change of brightness",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Change of color",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Relay on/off",
+            "maxNodes": 5
+        }
+    }
+}

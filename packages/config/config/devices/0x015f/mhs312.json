@@ -1,0 +1,55 @@
+{
+    "_approved": true,
+    "manufacturer": "McoHome Technology Co Ltd",
+    "manufacturerId": "0x015f",
+    "label": "MHS312",
+    "description": "MH-S312 Two-load",
+    "devices": [
+        {
+            "productType": "0x3102",
+            "productId": "0x0202"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Saving state before power failure",
+            "description": "Switch state saved or not when power down",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Button1",
+            "maxNodes": 5
+        },
+        "2": {
+            "label": "Button2",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    }
+}

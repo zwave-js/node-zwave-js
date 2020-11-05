@@ -1,0 +1,1218 @@
+{
+    "_approved": true,
+    "manufacturer": "Honeywell",
+    "manufacturerId": "0x0039",
+    "label": "TH6320ZW2003",
+    "description": "TH6320ZW2003 T6 Pro Series Thermostat",
+    "devices": [
+        {
+            "productType": "0x0011",
+            "productId": "0x0008"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Schedule Type",
+            "description": "Schedule Type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "units": "",
+            "options": [
+                {
+                    "label": "No schedule/Occupancy based schedule",
+                    "value": 0
+                },
+                {
+                    "label": "Every day the same",
+                    "value": 1
+                },
+                {
+                    "label": "5-2 Schedule",
+                    "value": 2
+                },
+                {
+                    "label": "5-1-1 Schedule",
+                    "value": 3
+                },
+                {
+                    "label": "Every day individual",
+                    "value": 4
+                }
+            ]
+        },
+        "2": {
+            "label": "Temperature Scale",
+            "description": "Temperature Scale",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Fahrenheit",
+                    "value": 0
+                },
+                {
+                    "label": "Celsius",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Outdoor Temperature",
+            "description": "Outdoor Temperature Sensor",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Wired",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Equipment Type",
+            "description": "Equipment Type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 9,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "units": "",
+            "options": [
+                {
+                    "label": "None",
+                    "value": 0
+                },
+                {
+                    "label": "Standard Gas",
+                    "value": 1
+                },
+                {
+                    "label": "High Efficiency Gas",
+                    "value": 2
+                },
+                {
+                    "label": "Oil",
+                    "value": 3
+                },
+                {
+                    "label": "Electric",
+                    "value": 4
+                },
+                {
+                    "label": "Fan Coil",
+                    "value": 5
+                },
+                {
+                    "label": "Air to Air Heat pump",
+                    "value": 6
+                },
+                {
+                    "label": "Geothermal Heat Pump",
+                    "value": 7
+                },
+                {
+                    "label": "Hot Water",
+                    "value": 8
+                },
+                {
+                    "label": "Steam",
+                    "value": 9
+                }
+            ]
+        },
+        "5": {
+            "label": "Reversing Valve",
+            "description": "Reversing Valve",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "O/B on Cool",
+                    "value": 0
+                },
+                {
+                    "label": "O/B on Heat",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Cool Stages",
+            "description": "Stages",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1,
+            "units": ""
+        },
+        "7": {
+            "label": "Heat Stages Auxiliary/Emergency stages",
+            "description": "Stages",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1,
+            "units": ""
+        },
+        "8": {
+            "label": "Auxiliary/Emergency Control",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Both Aux and E",
+                    "value": 0
+                },
+                {
+                    "label": "Either Aux/E",
+                    "value": 1
+                }
+            ]
+        },
+        "9": {
+            "label": "Auxiliary Heat Type",
+            "description": "Auxiliary Heat Control",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Electric",
+                    "value": 0
+                },
+                {
+                    "label": "Gas/Oil",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Emergency Heat Type",
+            "description": "Emergency Heat Type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Electric",
+                    "value": 0
+                },
+                {
+                    "label": "Gas/Oil",
+                    "value": 1
+                }
+            ]
+        },
+        "11": {
+            "label": "Fossil Kit Control",
+            "description": "Fossil Kit Control",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Thermostat",
+                    "value": 0
+                },
+                {
+                    "label": "External",
+                    "value": 1
+                }
+            ]
+        },
+        "12": {
+            "label": "Auto Changeover",
+            "description": "ADVANCED PARAMETER SHOULD ONLY BE CHANGED FROM ITS DEFAULT VALUE BY A QUALIFIED HVAC PROFESSIONAL",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "On",
+                    "value": 1
+                }
+            ]
+        },
+        "13": {
+            "label": "Auto Differential",
+            "description": "Auto Differential in degrees Fahrenheit",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "F"
+        },
+        "14": {
+            "label": "High Cool Stage Finish",
+            "description": "High Cool Stage Finish",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "15": {
+            "label": "High Heat Stage Finish",
+            "description": "High Heat Stage Finish",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        },
+        "16": {
+            "label": "Auxiliary Heat Droop",
+            "description": "0 = Comfort (1 is not accepted) Integer from 2 to 15 degrees of Fahrenheit from setpoint",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "F",
+            "options": [
+                {
+                    "label": "Comfort",
+                    "value": 0
+                },
+                {
+                    "label": "2F",
+                    "value": 2
+                },
+                {
+                    "label": "3F",
+                    "value": 3
+                },
+                {
+                    "label": "4F",
+                    "value": 4
+                },
+                {
+                    "label": "5F",
+                    "value": 5
+                },
+                {
+                    "label": "6F",
+                    "value": 6
+                },
+                {
+                    "label": "7F",
+                    "value": 7
+                },
+                {
+                    "label": "8F",
+                    "value": 8
+                },
+                {
+                    "label": "9F",
+                    "value": 9
+                },
+                {
+                    "label": "10F",
+                    "value": 10
+                },
+                {
+                    "label": "11F",
+                    "value": 11
+                },
+                {
+                    "label": "12F",
+                    "value": 12
+                },
+                {
+                    "label": "13F",
+                    "value": 13
+                },
+                {
+                    "label": "14F",
+                    "value": 14
+                },
+                {
+                    "label": "15F",
+                    "value": 15
+                }
+            ]
+        },
+        "17": {
+            "label": "Up Stage Timer Aux Heat",
+            "description": "Up Stage Timer Auxiliary Heat",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "30 minutes",
+                    "value": 1
+                },
+                {
+                    "label": "45 minutes",
+                    "value": 2
+                },
+                {
+                    "label": "60 minutes",
+                    "value": 3
+                },
+                {
+                    "label": "75 minutes",
+                    "value": 4
+                },
+                {
+                    "label": "90 minutes",
+                    "value": 5
+                },
+                {
+                    "label": "2 hours",
+                    "value": 6
+                },
+                {
+                    "label": "3 hours",
+                    "value": 7
+                },
+                {
+                    "label": "4 hours",
+                    "value": 8
+                },
+                {
+                    "label": "5 hours",
+                    "value": 9
+                },
+                {
+                    "label": "6 hours",
+                    "value": 10
+                },
+                {
+                    "label": "8 hours",
+                    "value": 11
+                },
+                {
+                    "label": "10 hours",
+                    "value": 12
+                },
+                {
+                    "label": "12 hours",
+                    "value": 13
+                },
+                {
+                    "label": "14 hours",
+                    "value": 14
+                },
+                {
+                    "label": "16 hours",
+                    "value": 15
+                }
+            ]
+        },
+        "18": {
+            "label": "Balance Point (Compressor Lockout)",
+            "description": "0 = Off integer from 5 to 65 degrees Fahrenheit in only 5 degrees increments. Other values not accepted.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 65,
+            "units": "",
+            "options": [
+                {
+                    "label": "Balance Point Off",
+                    "value": 0
+                },
+                {
+                    "label": "Balance Point 5 degrees Fahrenheit",
+                    "value": 5
+                },
+                {
+                    "label": "Balance Point 10 degrees Fahrenheit",
+                    "value": 10
+                },
+                {
+                    "label": "Balance Point 15 degrees Fahrenheit",
+                    "value": 15
+                },
+                {
+                    "label": "Balance Point 20 degrees Fahrenheit",
+                    "value": 20
+                },
+                {
+                    "label": "Balance Point 25 degrees Fahrenheit",
+                    "value": 25
+                },
+                {
+                    "label": "Balance Point 30 degrees Fahrenheit",
+                    "value": 30
+                },
+                {
+                    "label": "Balance Point 35 degrees Fahrenheit",
+                    "value": 35
+                },
+                {
+                    "label": "Balance Point 40 degrees Fahrenheit",
+                    "value": 40
+                },
+                {
+                    "label": "Balance Point 55 degrees Fahrenheit",
+                    "value": 55
+                },
+                {
+                    "label": "Balance Point 60 degrees Fahrenheit",
+                    "value": 60
+                },
+                {
+                    "label": "Balance Point 65 degrees Fahrenheit",
+                    "value": 65
+                }
+            ]
+        },
+        "19": {
+            "label": "Aux Heat Lock Out (Aux Heat Outdoor Lockout)",
+            "description": "0 = Off integer from 5 to 65 degrees Fahrenheit in only 5 degrees increments. Other values not accepted.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Aux Heat Lockout Off",
+                    "value": 0
+                },
+                {
+                    "label": "Aux Heat Lockout 5 degrees Fahrenheit",
+                    "value": 5
+                },
+                {
+                    "label": "Aux Heat Lockout 10 degrees Fahrenheit",
+                    "value": 10
+                },
+                {
+                    "label": "Aux Heat Lockout 15 degrees Fahrenheit",
+                    "value": 15
+                },
+                {
+                    "label": "Aux Heat Lockout 20 degrees Fahrenheit",
+                    "value": 20
+                },
+                {
+                    "label": "Aux Heat Lockout 25 degrees Fahrenheit",
+                    "value": 25
+                },
+                {
+                    "label": "Aux Heat Lockout 30 degrees Fahrenheit",
+                    "value": 30
+                },
+                {
+                    "label": "Aux Heat Lockout 35 degrees Fahrenheit",
+                    "value": 35
+                },
+                {
+                    "label": "Aux Heat Lockout 40 degrees Fahrenheit",
+                    "value": 40
+                },
+                {
+                    "label": "Aux Heat Lockout 55 degrees Fahrenheit",
+                    "value": 55
+                },
+                {
+                    "label": "Aux Heat Lockout 60 degrees Fahrenheit",
+                    "value": 60
+                },
+                {
+                    "label": "Aux Heat Lockout 65 degrees Fahrenheit",
+                    "value": 65
+                }
+            ]
+        },
+        "20": {
+            "label": "Cool 1 CPH (Cooling cycle rate stage 1)",
+            "description": "Cycle rates per hour",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3,
+            "units": ""
+        },
+        "21": {
+            "label": "Cool 2 CPH (Cooling cycle rate stage 2)",
+            "description": "Cycle rates per hour",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3,
+            "units": ""
+        },
+        "22": {
+            "label": "Heat 1 CPH (Heating cycle rate stage 1)",
+            "description": "Cycle rates per hour",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3,
+            "units": ""
+        },
+        "23": {
+            "label": "Heat 2 CPH (Heating cycle rate stage 2)",
+            "description": "Cycle rates per hour",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3,
+            "units": ""
+        },
+        "24": {
+            "label": "Aux Heat CPH (Heating cycle rate Auxiliary Heat)",
+            "description": "Cycle rates per hour",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 9,
+            "units": ""
+        },
+        "25": {
+            "label": "EM Heat CPH (Heating cycle rate Emergency Heat)",
+            "description": "Cycle rates per hour",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 9,
+            "units": ""
+        },
+        "26": {
+            "label": "Compressor Protection",
+            "description": "0 = Off Integer from 1-5 minutes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5,
+            "units": ""
+        },
+        "27": {
+            "label": "Adaptive Intelligent Recovery",
+            "description": "Adaptive Intelligent Recovery",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "units": "",
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "On",
+                    "value": 1
+                }
+            ]
+        },
+        "28": {
+            "label": "Minimum Cool Temperature",
+            "description": "Degrees Fahrenheit",
+            "valueSize": 1,
+            "minValue": 50,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50,
+            "units": "F"
+        },
+        "29": {
+            "label": "Maximum Heat Temperature",
+            "description": "Degrees Fahrenheit",
+            "valueSize": 1,
+            "minValue": 40,
+            "maxValue": 90,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 90,
+            "units": "F"
+        },
+        "30": {
+            "label": "Air Filters",
+            "description": "Number of air filters",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "31": {
+            "label": "Air Filter 1 Reminder",
+            "description": "Air Filter 1 Reminder",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 19,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "10 Run time Days",
+                    "value": 1
+                },
+                {
+                    "label": "20 Run time Days",
+                    "value": 2
+                },
+                {
+                    "label": "30 Run time Days",
+                    "value": 3
+                },
+                {
+                    "label": "45 Run time Days",
+                    "value": 4
+                },
+                {
+                    "label": "60 Run time Days",
+                    "value": 5
+                },
+                {
+                    "label": "90 Run time Days",
+                    "value": 6
+                },
+                {
+                    "label": "120 Run time Days",
+                    "value": 7
+                },
+                {
+                    "label": "150 Run time Days",
+                    "value": 8
+                },
+                {
+                    "label": "30 Days",
+                    "value": 9
+                },
+                {
+                    "label": "45 Days",
+                    "value": 10
+                },
+                {
+                    "label": "60 Days",
+                    "value": 11
+                },
+                {
+                    "label": "75 Days",
+                    "value": 12
+                },
+                {
+                    "label": "3 Months",
+                    "value": 13
+                },
+                {
+                    "label": "4 Months",
+                    "value": 14
+                },
+                {
+                    "label": "5 Months",
+                    "value": 15
+                },
+                {
+                    "label": "6 Months",
+                    "value": 16
+                },
+                {
+                    "label": "9 Months",
+                    "value": 17
+                },
+                {
+                    "label": "12 Months",
+                    "value": 18
+                },
+                {
+                    "label": "15 Months",
+                    "value": 19
+                }
+            ]
+        },
+        "32": {
+            "label": "Air Filter 2 Reminder",
+            "description": "Air Filter 2 Reminder",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 19,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "10 Run time Days",
+                    "value": 1
+                },
+                {
+                    "label": "20 Run time Days",
+                    "value": 2
+                },
+                {
+                    "label": "30 Run time Days",
+                    "value": 3
+                },
+                {
+                    "label": "45 Run time Days",
+                    "value": 4
+                },
+                {
+                    "label": "60 Run time Days",
+                    "value": 5
+                },
+                {
+                    "label": "90 Run time Days",
+                    "value": 6
+                },
+                {
+                    "label": "120 Run time Days",
+                    "value": 7
+                },
+                {
+                    "label": "150 Run time Days",
+                    "value": 8
+                },
+                {
+                    "label": "30 Days",
+                    "value": 9
+                },
+                {
+                    "label": "45 Days",
+                    "value": 10
+                },
+                {
+                    "label": "60 Days",
+                    "value": 11
+                },
+                {
+                    "label": "75 Days",
+                    "value": 12
+                },
+                {
+                    "label": "3 Months",
+                    "value": 13
+                },
+                {
+                    "label": "4 Months",
+                    "value": 14
+                },
+                {
+                    "label": "5 Months",
+                    "value": 15
+                },
+                {
+                    "label": "6 Months",
+                    "value": 16
+                },
+                {
+                    "label": "9 Months",
+                    "value": 17
+                },
+                {
+                    "label": "12 Months",
+                    "value": 18
+                },
+                {
+                    "label": "15 Months",
+                    "value": 19
+                }
+            ]
+        },
+        "33": {
+            "label": "Humidification Pad Reminder",
+            "description": "Humidification Pad Reminder",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "6 Calendar Months",
+                    "value": 1
+                },
+                {
+                    "label": "12 Calendar Months",
+                    "value": 2
+                }
+            ]
+        },
+        "34": {
+            "label": "Dehumidification Filter Reminder",
+            "description": "0 = Off, 1-12 Calendar Months",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "35": {
+            "label": "Ventilation Filter Reminder",
+            "description": "integer from 0 to 12 months. 0 = Off 3 = 3 Months 6 = 6 Months 9 = 9 Months 12 = 12 Months Other values not accepted.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 12,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "No Ventilation Filter Reminder",
+                    "value": 0
+                },
+                {
+                    "label": "Reminder in 3 Months",
+                    "value": 3
+                },
+                {
+                    "label": "Reminder in 6 Months",
+                    "value": 6
+                },
+                {
+                    "label": "Reminder in 9 Months",
+                    "value": 9
+                },
+                {
+                    "label": "Reminder in 12 Months",
+                    "value": 12
+                }
+            ]
+        },
+        "36": {
+            "label": "UV Devices",
+            "description": "UV Devices",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "37": {
+            "label": "UV Bulb 1 Reminder",
+            "description": "integer from 0 to 24 months. 0 = Off 6 = 6 Months 12 = 12 Months 24 = 24 Months Other values not accepted.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 24,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "UV Bulb 1 Reminder Off",
+                    "value": 0
+                },
+                {
+                    "label": "Reminder in 6 Months",
+                    "value": 6
+                },
+                {
+                    "label": "Reminder in 12 Months",
+                    "value": 12
+                },
+                {
+                    "label": "Reminder in 24 Months",
+                    "value": 24
+                }
+            ]
+        },
+        "38": {
+            "label": "UV Bulb 2 Reminder",
+            "description": "integer from 0 to 24 months. 0 = Off 6 = 6 Months 12 = 12 Months 24 = 24 Months Other values not accepted.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 24,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "UV Bulb 2 Reminder Off",
+                    "value": 0
+                },
+                {
+                    "label": "Reminder in 6 Months",
+                    "value": 6
+                },
+                {
+                    "label": "Reminder in 12 Months",
+                    "value": 12
+                },
+                {
+                    "label": "Reminder in 24 Months",
+                    "value": 24
+                }
+            ]
+        },
+        "39": {
+            "label": "Idle Brightness",
+            "description": "Brightness level",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "40": {
+            "label": "Clock Format",
+            "description": "Clock Format",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "12 hour",
+                    "value": 0
+                },
+                {
+                    "label": "24 hour",
+                    "value": 1
+                }
+            ]
+        },
+        "41": {
+            "label": "Daylight Saving",
+            "description": "Daylight Saving",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "units": "",
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "On",
+                    "value": 1
+                }
+            ]
+        },
+        "42": {
+            "label": "Temperature Offset",
+            "description": "-3 = -3 deg Fahrenheit -2 = -2 deg Fahrenheit -1 = -1 deg Fahrenheit 0 = Off 1 = +1 deg Fahrenheit 2 = +2 deg Fahrenheit 3 = +3 deg Fahrenheit",
+            "valueSize": 1,
+            "minValue": -3,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "-3",
+                    "value": -3
+                },
+                {
+                    "label": "-2",
+                    "value": -2
+                },
+                {
+                    "label": "-1",
+                    "value": -1
+                },
+                {
+                    "label": "0",
+                    "value": 0
+                },
+                {
+                    "label": "1",
+                    "value": 1
+                },
+                {
+                    "label": "2",
+                    "value": 2
+                },
+                {
+                    "label": "3",
+                    "value": 3
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    }
+}

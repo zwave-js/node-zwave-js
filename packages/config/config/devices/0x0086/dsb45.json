@@ -1,11 +1,9 @@
-// AEON Labs DSB45
-// Water Sensor
 {
     "_approved": true,
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "DSB45",
-    "description": "Water Sensor",
+    "description": "DSB45 Water Sensor",
     "devices": [
         {
             "productType": "0x0002",
@@ -18,15 +16,15 @@
     },
     "associations": {
         "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
+            "label": "Lifeline",
+            "maxNodes": 4,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Sensor Binary Report",
-            "description": "Toggle the sensor binary report value",
+            "label": "Sensor Binary Report Toggle",
+            "description": "Toggle the sensor binary report value when the Water Sensor is Triggered",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -36,17 +34,17 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Open: 00, Close: FF",
+                    "label": "Normal",
                     "value": 0
                 },
                 {
-                    "label": "Open: FF, Close: 00",
+                    "label": "Inverse",
                     "value": 1
                 }
             ]
         },
         "2": {
-            "label": "Wake up",
+            "label": "Wake Up on Power On",
             "description": "Enable wake up 10 minutes when the power is switched on.",
             "valueSize": 1,
             "minValue": 0,
@@ -67,8 +65,8 @@
             ]
         },
         "3": {
-            "label": "Basic set value",
-            "description": "Toggle the basic set value when the Magnet switch is opened /closed.",
+            "label": "Basic Set Toggle",
+            "description": "Toggle the basic set value when the Water Sensor is Triggered",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -78,14 +76,36 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Open: 00, Close: FF",
+                    "label": "Normal",
                     "value": 0
                 },
                 {
-                    "label": "Open: FF, Close: 00",
+                    "label": "Inverse",
                     "value": 1
                 }
             ]
+        },
+        "121": {
+            "label": "Report Type to Send",
+            "description": "To set which command will be sent to the associated nodes when the Water Sensor is triggered.\n\t            \tBitsets:\n\t         \t1 -> Battery\n\t                4 -> Sensor Binary\n\t                8 -> Basic Set\n\t                12 -> Alarm\n\t              \tDefault setting: 0x100 (Basic Set)\n              \t\tOZW Ideal Setting: 0x1011 (Battery, Sensor Binary Report, Alarm)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4369,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 256
+        },
+        "255": {
+            "label": "Reset to default",
+            "description": "Reset to factory defaults.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0
         },
         "121[0xff]": {
             "label": "Reports that will be sent",

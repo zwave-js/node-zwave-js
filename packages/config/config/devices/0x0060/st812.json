@@ -1,11 +1,9 @@
-// Everspring ST812
-// Flood Sensor
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "ST812",
-    "description": "Flood Sensor",
+    "description": "ST812 Flood Detector",
     "devices": [
         {
             "productType": "0x000b",
@@ -18,27 +16,28 @@
     },
     "associations": {
         "1": {
-            "label": "Power applied and Sensor Alarm",
+            "label": "Reports",
             "maxNodes": 1,
             "isLifeline": true
         },
         "2": {
-            "label": "Device control",
+            "label": "Basic",
             "description": "Group to send trigger value to",
             "maxNodes": 3
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Basic Level Set",
-            "description": "The value sent with Basic commands in case of detected flood",
+            "label": "Basic Set Level",
+            "description": "Defines the level in the Basic Set event sent to group 2 when the sensor is triggered.  Default is 99 (full brightness for a Z-Wave dimmer). 0 disables.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
             "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "%"
         }
     }
 }

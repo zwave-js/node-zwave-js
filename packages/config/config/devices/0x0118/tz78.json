@@ -1,11 +1,9 @@
-// TKB Home TZ78
-// In Wall Micro Switch
 {
     "_approved": true,
     "manufacturer": "TKB Home",
     "manufacturerId": "0x0118",
     "label": "TZ78",
-    "description": "In Wall Micro Switch",
+    "description": "TZ78 In-Wall Single Relay Switch",
     "devices": [
         {
             "productType": "0x0003",
@@ -20,11 +18,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Change the state of indicator light",
-            "description": "Default status of socket LED is on as indicator when the load is off",
+            "label": "Night light",
+            "description": "The LED on the TZ78 will by default, turn ON when the load attached is turned OFF. To make the LED turn ON when the load attached is turned ON instead, set parameter to a value of 0.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -34,18 +31,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "LED ON when load is ON",
+                    "label": "The LED is ON when the load is ON",
                     "value": 0
                 },
                 {
-                    "label": "LED ON when load is OFF",
+                    "label": "The LED is ON when the load is OFF",
                     "value": 1
                 }
             ]
         },
         "2": {
             "label": "Memory Function",
-            "description": "Default with memory: the socket status is same as before when power on",
+            "description": "switch memory function",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -55,18 +52,18 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "No state memory after pwr failure",
+                    "label": "no switch memory function",
                     "value": 0
                 },
                 {
-                    "label": "State memory after pwr failure",
+                    "label": "The socket status is same as before when power ON",
                     "value": 1
                 }
             ]
         },
         "3": {
-            "label": "Switch Mode",
-            "description": "Edge or Pulse mode or EdgeToggle mode",
+            "label": "Edge or Pulse mode",
+            "description": "switch mode",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 3,
@@ -76,18 +73,29 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Edge mode",
+                    "label": "Edge Mode",
                     "value": 1
                 },
                 {
-                    "label": "Pulse mode",
+                    "label": "Pulse Mode",
                     "value": 2
                 },
                 {
-                    "label": "Edge-Toggle mode",
+                    "label": "Edge-toggle Mode",
                     "value": 3
                 }
             ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "On/Off",
+            "maxNodes": 5
         }
     }
 }

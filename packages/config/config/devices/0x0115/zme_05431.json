@@ -1,11 +1,9 @@
-// Z-Wave.Me ZME_05431
-// Flush mountable switch
 {
     "_approved": true,
     "manufacturer": "Z-Wave.Me",
     "manufacturerId": "0x0115",
     "label": "ZME_05431",
-    "description": "Flush mountable switch",
+    "description": "ZME_054313Z Flush-Mountable Switch",
     "devices": [
         {
             "productType": "0x1000",
@@ -18,24 +16,25 @@
     },
     "associations": {
         "1": {
-            "label": "Group 1",
+            "label": "Group 1 Single press and hold of up/down buttons",
             "maxNodes": 8
         },
         "2": {
-            "label": "Group 2",
+            "label": "Group 2 Double press and press-hold of up/down buttons",
             "maxNodes": 8
         },
         "3": {
-            "label": "Group 3",
-            "maxNodes": 8
+            "label": "Lifeline",
+            "maxNodes": 8,
+            "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
             "label": "Set LED indication mode",
             "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
+            "minValue": 1,
+            "maxValue": 99,
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
@@ -46,22 +45,28 @@
                     "value": 0
                 },
                 {
-                    "label": "Show switch state",
+                    "label": "Show switch/dimmer state / when in motion or inactive (for blinds)",
                     "value": 1
                 },
                 {
-                    "label": "Night mode",
+                    "label": "Night mode (inverted switch state)",
                     "value": 2
                 },
                 {
-                    "label": "Remote by indicator command class",
+                    "label": "Operated by Indicator Command Class (default)",
                     "value": 3
+                },
+                {
+                    "label": "Show if not closed (for blinds only)",
+                    "value": 4
                 }
-            ]
+            ],
+            "description": "",
+            "units": ""
         },
         "2": {
-            "label": "Automatic switch off",
-            "description": "If not zero, automatically switch off after a user defined time",
+            "label": "Automatically switch off after",
+            "description": "If not zero, automatically switch off/close blind after a user defined time",
             "valueSize": 2,
             "minValue": 0,
             "maxValue": 65535,
@@ -69,21 +74,22 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "3": {
-            "label": "Function of RF off command",
-            "description": "Function of RF off command",
+            "label": "What to do on RF off command",
+            "description": "If not zero, automatically switch off/close blind after a user defined time",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 3,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Switch OFF",
+                    "label": "Switch off (default)",
                     "value": 0
                 },
                 {
@@ -91,7 +97,7 @@
                     "value": 1
                 },
                 {
-                    "label": "Switch ON",
+                    "label": "Switch on",
                     "value": 2
                 },
                 {
@@ -101,11 +107,11 @@
             ]
         },
         "4": {
-            "label": "Switch on dimming by buttons",
-            "description": "Switch on dimming by buttons",
+            "label": "Ignore Start Level",
+            "description": "Defines if the dimmer shall ignore start level in StartLevelChange command despite it is specified or not.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
@@ -116,69 +122,71 @@
                     "value": 0
                 },
                 {
-                    "label": "Yes (Default)",
+                    "label": "Yes (default)",
                     "value": 1
                 }
             ]
         },
         "5": {
             "label": "Restore switch state after power cycle",
-            "description": "Restore switch state after power cycle",
+            "description": "Defines if the switch should restore switch state to the last state prior to device power off (power cycle).",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "No, turn off",
+                    "label": "No, turn OFF",
                     "value": 0
                 },
                 {
-                    "label": "Yes (Default)",
+                    "label": "Yes (default)",
                     "value": 1
                 }
             ]
         },
         "10": {
             "label": "Typical click timeout",
-            "description": "Typical click timeout",
+            "description": "Typical time used to differentiate click, hold, double and triple clicks.",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 100,
             "defaultValue": 50,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "x 10 milliseconds"
         },
         "11": {
             "label": "Invert buttons",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "No",
+                    "label": "No default)",
                     "value": 0
                 },
                 {
                     "label": "Yes",
                     "value": 1
                 }
-            ]
+            ],
+            "description": ""
         },
         "12": {
             "label": "Switch by buttons",
-            "description": "Switch by buttons",
+            "description": "If disabled, the local operations by buttons will not switch the load, but only send commands to On/Off association group. In  this mode buttons are not linked with the switch anymore. They can be used separately: buttons to control remote device, switch will operate by RF commands only.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 2,
+            "maxValue": 100,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
@@ -189,7 +197,7 @@
                     "value": 0
                 },
                 {
-                    "label": "By single press and hold",
+                    "label": "By single press and hold (default)",
                     "value": 1
                 },
                 {
@@ -200,10 +208,10 @@
         },
         "13": {
             "label": "Action on button single press or hold",
-            "description": "Action on button single press or hold",
+            "description": "Defines which command should be sent on button single press or hold. Basic commands are sent to Association group. Switch All commands are sent broadcast.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 5,
+            "maxValue": 100,
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
@@ -214,11 +222,15 @@
                     "value": 0
                 },
                 {
+                    "label": "Switch On/Off and Dim (send Basic Set and Switch Multilevel) (Default)",
+                    "value": 4
+                },
+                {
                     "label": "Switch On, Off and dim using Basic Set",
                     "value": 1
                 },
                 {
-                    "label": "Switch All",
+                    "label": "Switch All On/Off",
                     "value": 2
                 },
                 {
@@ -226,36 +238,36 @@
                     "value": 3
                 },
                 {
-                    "label": "Switch On/Off and Dim",
-                    "value": 4
-                },
-                {
-                    "label": "Send Preconfigured Scenes",
+                    "label": "Send Predefined Scenes",
                     "value": 5
                 }
             ]
         },
         "14": {
             "label": "Action on button double press or hold",
-            "description": "Action on button double press or hold",
+            "description": "Defines which command should be sent on button double press or press-hold. Basic commands are sent to Association group.   Switch   All commands are sent broadcast. If not disabled, the device will wait for a click timeout to see if the second click would be pressed. This will introduce a small delay for single click commands.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 5,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disabled (Default)",
+                    "label": "Disabled (don't wait for double click,default)",
                     "value": 0
+                },
+                {
+                    "label": "Switch On/Off and Dim (send Basic Set and Switch Multilevel)",
+                    "value": 4
                 },
                 {
                     "label": "Switch On, Off and dim using Basic Set",
                     "value": 1
                 },
                 {
-                    "label": "Switch All",
+                    "label": "Switch All On/Off",
                     "value": 2
                 },
                 {
@@ -263,20 +275,16 @@
                     "value": 3
                 },
                 {
-                    "label": "Switch On/Off and Dim",
-                    "value": 4
-                },
-                {
-                    "label": "Send Preconfigured Scenes",
+                    "label": "Send Predefined Scenes",
                     "value": 5
                 }
             ]
         },
         "15": {
-            "label": "Send the following switch all commands",
+            "label": "Send the following Switch All commands",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
@@ -284,25 +292,26 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Switch all on and off",
-                    "value": -1
-                },
-                {
-                    "label": "Switch off only",
-                    "value": 0
-                },
-                {
-                    "label": "Switch on only",
+                    "label": "Switch All Off only (default)",
                     "value": 1
+                },
+                {
+                    "label": "Switch All On only",
+                    "value": 2
+                },
+                {
+                    "label": "Switch All On and Off",
+                    "value": 255
                 }
-            ]
+            ],
+            "description": ""
         },
         "16": {
             "label": "What to do on button Down press",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
+            "maxValue": 100,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
@@ -312,14 +321,15 @@
                     "value": 0
                 },
                 {
-                    "label": "Switch On if load is Off, else switch Off",
+                    "label": "Switch All On only",
                     "value": 1
                 },
                 {
                     "label": "Switch on",
                     "value": 2
                 }
-            ]
+            ],
+            "description": ""
         }
     }
 }

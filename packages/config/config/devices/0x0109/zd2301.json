@@ -1,0 +1,82 @@
+{
+    "_approved": true,
+    "manufacturer": "Vision Security",
+    "manufacturerId": "0x0109",
+    "label": "ZD2301",
+    "description": "ZD2301 Multisensor 4in1",
+    "devices": [
+        {
+            "productType": "0x201f",
+            "productId": "0x1f20"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Temperature unity",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Celsius",
+                    "value": 0
+                },
+                {
+                    "label": "Fahrenheit",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Temperature Reporting Threshold",
+            "description": "Threshold change in temperature to induce an automatic report.\n            1 to 50 ( Set up from 0.1C to 5C)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "3": {
+            "label": "Humidity Reporting Threshold",
+            "description": "Threshold change in humidity to induce an automatic report.\n            1 to 50 ( Set up from 1%-50%)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "%"
+        },
+        "4": {
+            "label": "Luminance Reporting Threshold",
+            "description": "Threshold change in luminance to induce an automatic report.\n                0 is disabled.\n                5 to 50 ( Set up from 5%-50%)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "%"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

@@ -1,0 +1,102 @@
+{
+    "_approved": true,
+    "manufacturer": "Poly-control",
+    "manufacturerId": "0x010e",
+    "label": "POLYLOCK",
+    "description": "Polylock",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "0": {
+            "label": "Invert Lock Direction",
+            "description": "0=The motor goes clockwise when unlatched; 1= The motor goes counterclockwise when unlatched",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "1": {
+            "label": "Run time Lock",
+            "description": "Motor/relay run time LOCK in sec 1-15",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        },
+        "2": {
+            "label": "Run time UnLock",
+            "description": "Motor/relay run time UNLOCK in sec 1-15",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        },
+        "3": {
+            "label": "Motor speed",
+            "description": "Value 0-15/0=fastest 15=slowest",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 9
+        },
+        "4": {
+            "label": "Step Motor drive mode",
+            "description": "How the motor will turn according to torque and speed",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "(Step motor) Wave drive mode.(Less torque, min. power usage, full rotation speed.)",
+                    "value": 0
+                },
+                {
+                    "label": "(Step motor) Full drive mode.  (Medium torque, max. power usage, full rotation speed.)",
+                    "value": 1
+                },
+                {
+                    "label": "(Step motor) HalfFstep drive mode. (Max. torque, max. power usage, half rotation speed.)",
+                    "value": 2
+                },
+                {
+                    "label": "(Relay) Puts DC on connector pin 1 & 2 for the duration of parameter #2 or #3. The polarity of pin 1 & 2 are reversed with respect to  open / close command. A close command would set p1+ and p2F, open is p1F and   p2+",
+                    "value": 3
+                },
+                {
+                    "label": "(Relay) Lock open sets p1+, p2F, p3z, p4z for parameter #3 seconds. Lock close sets p1z, p2z, p3+, p4F.",
+                    "value": 4
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 1
+        }
+    }
+}

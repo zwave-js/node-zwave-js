@@ -1,0 +1,109 @@
+{
+    "_approved": true,
+    "manufacturer": "Horstmann (Secure Meters)",
+    "manufacturerId": "0x0059",
+    "label": "SIR321",
+    "description": "SIR321 RF Countdown Timer with temperature",
+    "devices": [
+        {
+            "productType": "0x0010",
+            "productId": "0x0002"
+        },
+        {
+            "productType": "0x0010",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 4,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Unsolicited Sensor Multilevel Reports",
+            "maxNodes": 4
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Enable Fails Safe Timer",
+            "description": "Enables or not the Fails Safe Timer",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 255
+                }
+            ]
+        },
+        "2": {
+            "label": "Temperature Scale",
+            "description": "Controls the temperature sensor scale",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Celsius",
+                    "value": 0
+                },
+                {
+                    "label": "Fahrenheit",
+                    "value": 255
+                }
+            ]
+        },
+        "3": {
+            "label": "Temperature reporting intervals",
+            "description": "Time interval to trigger a temperature report (step 1s) (Default 0 = disabled)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65534,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "4": {
+            "label": "Delta T: Temperature change",
+            "description": "Change between temperatures to trigger a temperature report (step 0.1) (Default 0 = disabled)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "5": {
+            "label": "Temperature Cutoff",
+            "description": "Temperature that when reached will cut off the switch",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        }
+    }
+}

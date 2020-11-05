@@ -1,0 +1,119 @@
+{
+    "_approved": true,
+    "manufacturer": "HANK Electronics Ltd",
+    "manufacturerId": "0x0208",
+    "label": "HKZW-MS02-300",
+    "description": "HKZW-MS02 Motion Sensor",
+    "devices": [
+        {
+            "productType": "0x0300",
+            "productId": "0x0012"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "12": {
+            "label": "Motion sensor's sensitivity",
+            "description": "Level 1 to 8. The higher the value, the more sensitive the PIR sensor.\n                0 Disabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 8,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 8,
+            "units": "%"
+        },
+        "14": {
+            "label": "Enable/disable basic set command",
+            "description": "Enable/disable basic set command",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "15": {
+            "label": "Value of the basic set",
+            "description": "Send basic set value = 255 to nodes associated with group 2 when motion alarm is triggered. Send basic set value = 0 to nodes associated with group 2 when motion alarm is canceled.\n                Send basic set value = 0 to nodes associated with group 2 when motion alarm is triggered. Send basic set value = 255 to nodes associated with group 2 when motion alarm is canceled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Basic On",
+                    "value": 0
+                },
+                {
+                    "label": "Basic Off",
+                    "value": 1
+                }
+            ]
+        },
+        "17": {
+            "label": "Enable/disable shock alarm",
+            "description": "when the value is 0, the product will not sends a vibration alarm after moving or shaking; when the value is 1, the product will sends a vibration alarm after moving or shaking",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "18": {
+            "label": "Motion alarm cancellation delay",
+            "description": "The number of seconds to delay the alarm cancellation after motion has not been detected any longer.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30,
+            "units": "seconds"
+        },
+        "32": {
+            "label": "Level of low battery",
+            "description": "The low level from 10% to 50%",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20,
+            "units": "%"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic set command",
+            "maxNodes": 5
+        }
+    }
+}

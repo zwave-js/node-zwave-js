@@ -1,0 +1,230 @@
+{
+    "_approved": true,
+    "manufacturer": "Aeotec Limited",
+    "manufacturerId": "0x0371",
+    "label": "ZWA006",
+    "description": "ZWA006 Smart Boost Timer Switch",
+    "devices": [
+        {
+            "productType": "0x0103",
+            "productId": "0x00b4"
+        },
+        {
+            "productType": "0x0003",
+            "productId": "0x00b4"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "BasicSet",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Power out action",
+            "description": "Action in case of power out. This parameter is used to configure the device state after power on.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "options": [
+                {
+                    "label": "Keep the last state when re-power on",
+                    "value": 0
+                },
+                {
+                    "label": "Power on",
+                    "value": 1
+                },
+                {
+                    "label": "Power off",
+                    "value": 2
+                },
+                {
+                    "label": "Return to standard schedule",
+                    "value": 3
+                }
+            ]
+        },
+        "2": {
+            "label": "LED status",
+            "description": "Configure LED (except boost) to be off irrespective of switch status.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "units": "",
+            "options": [
+                {
+                    "label": "Disable all LED except for boost",
+                    "value": 0
+                },
+                {
+                    "label": "Enable all LED indication",
+                    "value": 1
+                },
+                {
+                    "label": "Momentary mode",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "Auto off timer",
+            "description": "Timer acts as auto off after specified minutes, setting is set in seconds.\n\t\t\t\t0 - no auto off with timer.\n\t\t\t\t1 ~ 86400 auto off after this specified time, unit second.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "second"
+        },
+        "4": {
+            "label": "Current overload protection",
+            "description": "Current and overload protection",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Boost time",
+            "description": "Configure boost time interval, unit minute.\n\t\t\t\tWhen user press the boost button one time, the boost time will increase 30 (the value can be changed) minutes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30,
+            "units": "minute"
+        },
+        "7": {
+            "label": "LED threshold setting",
+            "description": "This parameter is used to configure the power led threshold, unit W.\n\t\t\t\tWhen the load <= 100W, the power led will indicate yellow.\n\t\t\t\tWhen the load > 100W, the power led will indicate orange.\n\t\t\t\tWhen no load, the power led will indicate white.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 100,
+            "units": "watt"
+        },
+        "20": {
+            "label": "kWh threshold setting",
+            "description": "Threshold settings for energy kWh. When the energy above the threshold, it will send a meter report command to gateway.\n\t\t\t\t0 - disable report.\n\t\t\t\t1 ~ 10000 - enable report.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 10000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 100,
+            "units": "kWh"
+        },
+        "21": {
+            "label": "Watt threshold setting",
+            "description": "Threshold settings for Watt automatic report, unit W. When Watt above the threshold, it will send a meter report command to gateway.\n\t\t\t\t0 - disable report.\n\t\t\t\t1 ~ 2500 - enable report.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 100,
+            "units": "watt"
+        },
+        "22": {
+            "label": "Current threshold setting",
+            "description": "Threshold settings for Current automatic report, unit 0.1A. When current above the threshold, it will send a meter report command to gateway.\n\t\t\t\t0 - disable report.\n\t\t\t\t1 ~ 150 - enable report.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 150,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "0.1A"
+        },
+        "23": {
+            "label": "Watt report interval",
+            "description": "Watt automatic report interval, unit second.\n\t\t\t\t0 - disable.\n\t\t\t\t65535 - enable.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "second"
+        },
+        "24": {
+            "label": "kWh report interval",
+            "description": "kWh automatic report interval, unit second.\n\t\t\t\t0 - disable.\n\t\t\t\t65535 - enable.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "second"
+        },
+        "25": {
+            "label": "Voltage report interval",
+            "description": "Voltage automatic report interval, unit second.\n\t\t\t\t0 - disable.\n\t\t\t\t65535 - enable.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "second"
+        },
+        "26": {
+            "label": "Current report interval",
+            "description": "Current automatic report interval, unit second.\n\t\t\t\t0 - disable.\n\t\t\t\t65535 - enable.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "second"
+        }
+    }
+}

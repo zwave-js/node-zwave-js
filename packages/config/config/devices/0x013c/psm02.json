@@ -1,11 +1,9 @@
-// Philio Technology Corp PSM02
-// Slim Multi-Sensor
 {
     "_approved": true,
     "manufacturer": "Philio Technology Corp",
     "manufacturerId": "0x013c",
     "label": "PSM02",
-    "description": "Slim Multi-Sensor",
+    "description": "PSM02-1 Slim Multi-Sensor",
     "devices": [
         {
             "productType": "0x0002",
@@ -18,29 +16,30 @@
     },
     "associations": {
         "1": {
-            "label": "Reports",
-            "maxNodes": 7
+            "label": "Lifeline",
+            "maxNodes": 7,
+            "isLifeline": true
         },
         "2": {
-            "label": "Light Control",
+            "label": "Light control",
             "maxNodes": 7
         }
     },
     "paramInformation": {
         "2": {
             "label": "Basic Set Level",
-            "description": "Basic Set Level",
+            "description": "Setting the BASIC command value to turn on the light. The 0xFF (255) means turn on the light. \n          For dimmer equipment 1 to 100 means the light strength.",
             "valueSize": 1,
-            "minValue": -1,
-            "maxValue": 100,
-            "defaultValue": -1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "3": {
             "label": "PIR Sensitivity",
-            "description": "PIR Sensitivity",
+            "description": "PIR sensitivity settings. \n          0 means disable the PIR motion.\n          1 means the lowest sensitivity.\n          99 means the highest sensitivity.\n          High sensitivity means can detect long distance, but if there is more noise signal in the environment, it will re-trigger too frequently.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
@@ -50,19 +49,19 @@
             "allowManualEntry": true
         },
         "4": {
-            "label": "Light Threshold",
-            "description": "Light Threshold",
+            "label": "Light threshold",
+            "description": "Setting the illumination threshold to turn on the light. When the event triggered and the environment illumination lower than \n          the threshold, the device will turn on the light.\n          0 means turn off illumination detected function and never turn on the light.\n          1 means darkest.\n          99 means brightest.\n          100 means turn off illumination detected function. And always turn on the light.\n          * Notice * in none test mode, only the value in 1 to 99 will enable the illumination detected function and update the illumination value.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 100,
-            "defaultValue": 100,
+            "defaultValue": 99,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "5": {
             "label": "Operation Mode",
-            "description": "Operation Mode",
+            "description": "Bit 0: 1 means security mode; 0 means home automation mode.\n          Bit 1: 1 means enable test mode; 0 means disable test mode\n          * Notice * Bit 0 and bit 1 will effect when the DIP Switch setting to program mode. If bit1 is enabled, the bit0 is useless.\n          Bit 2: Reserved, always 1.\n          Bit 3: Setting the temperature scale; 0: Fahrenheit, 1:Celsius\n          Bit 4: Disable illumination report after event triggered.\n          Bit 5: Disable temperature report after event triggered",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
@@ -73,7 +72,7 @@
         },
         "6": {
             "label": "Multi-Sensor Function Switch",
-            "description": "Multi-Sensor Function Switch",
+            "description": "Multi-Sensor Function switch. Using bit to control.\n          Bit 0: Reserved, always 1.\n          Bit 1: Disable PIR integrate Illumination.\n          Bit 2: Reserved, always 1.\n          Bit 3: Reserved.\n          Bit 4: Reserved.\n          Bit 5: Reserved.\n          Bit 6: Enable temperature monitoring. When this bit enabled, the temperature changed 3 degree Fahrenheit, it will report. \n          And also the temperature over 140 degree Fahrenheit, it will report every 64 seconds.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 127,
@@ -82,38 +81,52 @@
             "writeOnly": false,
             "allowManualEntry": true
         },
+        "7": {
+            "label": "Customer Function",
+            "description": "Customer function switch, using bit control. \n          Bit 0: Reserve. \n          Bit 1: Enable sending motion OFF report (0:Disable, 1:Enable). \n\t\t\t\t Note: Depends on the Bit4, 0: Report Notification CC, Type: 0x07, Event: 0xFE 1: Sensor Binary Report, Type: 0x0C, Value: 0x00. \n          Bit 2: Enable PIR super sensitivity mode (0:Disable, 1:Enable).\n          Bit 3: Disable send out BASIC OFF after door closed (1:Disable, 0:Enable). \n          Bit 4: Notification Type (0: Notification Report, 1: Sensor Binary Report).\n          Bit 5: Disable Multi CC in auto report (1:Disable, 0:Enable).\n          Bit 6: Disable to report battery state when the device triggered (1:Disable, 0:Enable)\n          Bit 7: Reserve.\n\t\t  ozw recommended setting: 00010110 : 22",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 4
+        },
         "8": {
-            "label": "PIR Re-Detect Interval Time",
-            "description": "PIR Re-Detect Interval Time",
+            "label": "PIR re-detect interval time",
+            "description": "In the security mode, after the PIR report motion detected, setting the re-detect time. 8 seconds per tick, and minimum time is 24 seconds, default tick is 3 (24 seconds).\n          Setting the suitable value to prevent received the trigger signal too frequency. Also can save the battery energy.\n          * Notice * If this value bigger than the configuration setting NO. 9. There is a period after the light turned off and the PIR not detecting.",
             "valueSize": 1,
             "minValue": 3,
-            "maxValue": 127,
+            "maxValue": 27,
             "defaultValue": 3,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "8 sec"
         },
         "9": {
             "label": "Turn Off Light Time",
-            "description": "Turn Off Light Time",
+            "description": "After turn on the light, setting the delay time to turn off the light when the PIR motion is not detected.\n          8 seconds per tick, and minimum time is 32 seconds, default tick is 4 (32 seconds).",
             "valueSize": 1,
             "minValue": 4,
             "maxValue": 127,
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "8 sec"
         },
         "10": {
             "label": "Auto Report Battery Time",
-            "description": "Auto Report Battery Time",
+            "description": "The interval time for auto report the battery level.\n         30 minutes per tick and minimum time is 30 minutes, default tick is 12 (6 hours)",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 127,
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "30 min"
         },
         "11": {
             "label": "Auto Report Door/Window State Time",
@@ -128,25 +141,27 @@
         },
         "12": {
             "label": "Auto Report Illumination Time",
-            "description": "Auto Report Illumination Time",
+            "description": "The interval time for auto report the illumination.\n         30 minutes per tick and minimum time is 30 minutes, default tick is 12 (6 hours)",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 127,
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "30 min"
         },
         "13": {
-            "label": "Auto Report Temperature Time",
-            "description": "Auto Report Temperature Time",
+            "label": "Auto Report Temperature time",
+            "description": "The interval time for auto report the temperature.\n         30 minutes per tick and minimum time is 30 minutes, default tick is 12 (6 hours)",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 127,
             "defaultValue": 12,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "30 min"
         }
     }
 }

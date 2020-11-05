@@ -1,112 +1,152 @@
-// Zooz ZSE30
-// Water Sensor
 {
-	"_approved": true,
-	"manufacturer": "Zooz",
-	"manufacturerId": "0x027a",
-	"label": "ZSE30",
-	"description": "Water Sensor",
-	"devices": [
-		{
-			"productType": "0x0003",
-			"productId": "0x0000"
-		},
-		{
-			"productType": "0x0003",
-			"productId": "0x0085"
-		}
-	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"1": {
-			"label": "Total Alarm Duration",
-			"description": "Total duration of audio and visual alarm when water is detected.",
-			"unit": "Minutes",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 120,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"2": {
-			"label": "Audio Alarm: Beep Interval",
-			"description": "Interval length between beeps",
-			"unit": "Minutes",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"3": {
-			"label": "Audio Alarm: First Beep Duration",
-			"description": "Duration of First Beep",
-			"unit": "Seconds",
-			"valueSize": 1,
-			"minValue": 10,
-			"maxValue": 255,
-			"defaultValue": 60,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"4": {
-			"label": "Audio Alarm: Beep Duration",
-			"description": "Beep Duration after first Beep",
-			"unit": "seconds",
-			"valueSize": 1,
-			"minValue": 5,
-			"maxValue": 255,
-			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"5": {
-			"label": "Enable/Disable Audio Alarm",
-			"description": "Visual alarm will NOT be disabled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"6": {
-			"label": "Enable/Disable Water Detection",
-			"description": "Enable/Disable Water Detection",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"7": {
-			"label": "Trigger Action",
-			"description": "Send command to associated device.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 255,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		}
-	}
+    "_approved": true,
+    "manufacturer": "Zooz",
+    "manufacturerId": "0x027a",
+    "label": "ZSE30",
+    "description": "ZSE30 Water Sensor",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0085"
+        },
+        {
+            "productType": "0x0003",
+            "productId": "0x0000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Alarm Duration",
+            "description": "Use this parameter to set the total duration of audio and visual alarm each time water is detected. \n            If the value is set to 0, the alarm will continue until water is no longer detected.",
+            "unit": "Minutes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 120,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "minutes"
+        },
+        "2": {
+            "label": "Audio Alarm Beep Interval",
+            "description": "Set the beeping frequency for the sensors audio alarm.\n            The interval between beeps can be as low as 1 minute.",
+            "unit": "Minutes",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "minutes"
+        },
+        "3": {
+            "label": "Audio Alarm First Beep Duration",
+            "description": "Adjust the duration of the initial sound the alarm will produce after a leak is detected.",
+            "unit": "Seconds",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 255,
+            "defaultValue": 60,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        },
+        "4": {
+            "label": "Audio Alarm Beep Duration",
+            "description": "Adjust the duration of the beeps the alarm will sound after a leak is detected and the first \"long\" beep is produced.",
+            "unit": "seconds",
+            "valueSize": 1,
+            "minValue": 5,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        },
+        "5": {
+            "label": "Audio Alarm",
+            "description": "Enable or disable the audio alarm by adjusting this parameter setting. \n        The visual alarm will NOT be disabled and the LED indicator will always light up each time water is detected",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Water Detection",
+            "description": "Enable or disable water detection for the sensor by adjusting this parameter setting..",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "Trigger Action",
+            "description": "You can choose if your Water Sensor turns an associated device on or off when sending the basic set command. \n        Use value 0 to turn the associated device OFF and value 255 to turn it ON.\n        Adjust brightness level for a Z-Wave dimmer (Multilevel switch) by putting in any value between 1 and 99. \n        Values: 0 - OFF; 1 - 99 (% of light); 255 - ON (default).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Control Command",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Notification report",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Binary sensor report",
+            "maxNodes": 5
+        }
+    }
 }

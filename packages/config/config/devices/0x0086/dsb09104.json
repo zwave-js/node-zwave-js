@@ -1,0 +1,302 @@
+{
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "DSB09104",
+    "description": "DSB09104 Home Energy Meter",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0009"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Country Voltage",
+            "description": "Voltage to calculate wattage from amperage. US=120. EU,ANZ=240.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 240,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 120,
+            "units": "volts"
+        },
+        "3": {
+            "label": "Power changed",
+            "description": "Automatic report only when power is changed.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "4": {
+            "label": "Wattage Threshold",
+            "description": "Threshold change in wattage to induce a automatic report (whole HEM).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50,
+            "units": "watts"
+        },
+        "5": {
+            "label": "Wattage Threshold C1",
+            "description": "Threshold change in wattage to induce a automatic report (Clamp 1).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50,
+            "units": "watts"
+        },
+        "6": {
+            "label": "Wattage Threshold C2",
+            "description": "Threshold change in wattage to induce a automatic report (Clamp 2).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50,
+            "units": "watts"
+        },
+        "7": {
+            "label": "Wattage Threshold C3",
+            "description": "Threshold change in wattage to induce a automatic report (Clamp 3).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50,
+            "units": "watts"
+        },
+        "8": {
+            "label": "Wattage Percentage Change",
+            "description": "Percentage change in wattage to induce a automatic report (whole HEM).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "%"
+        },
+        "9": {
+            "label": "Wattage Percentage Change C1",
+            "description": "Percentage change in wattage to induce a automatic report (Clamp 1).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "%"
+        },
+        "10": {
+            "label": "Wattage Percentage Change C2",
+            "description": "Percentage change in wattage to induce a automatic report (Clamp 2).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "%"
+        },
+        "11": {
+            "label": "Wattage Percentage Change C3",
+            "description": "Percentage change in wattage to induce a automatic report (Clamp 3).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "%"
+        },
+        "12": {
+            "label": "Accumulate energy",
+            "description": "Accumulate energy when Battery Powered.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "20": {
+            "label": "USB powered",
+            "description": "This byte denotes whether the product is using batteries (value = 0) or using USB power (value = 1).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "100": {
+            "label": "Reset #101-103",
+            "description": "Reset to default parameters number 101-103. Any value other then 0 will initiate this reset.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "101": {
+            "label": "Group 1 Reports",
+            "description": "Which reports need to send in group1. Format is as follows:\n\tByte 1 (msb): Reserved\n\tByte 2: Reserved\n\tByte 3: Bit 7: reserved\n                Bit 6: reserved\n                Bit 5: Auto Send Meter Report (for kWh) at the group time interval (Clamp 3)\n                Bit 4: Auto Send Meter Report (for kWh) at the group time interval (Clamp 2)\n                Bit 3: Auto Send Meter Report (for kWh) at the group time interval (Clamp 1)\n                Bit 2: Auto Send Meter Report (for watts) at the group time interval (Clamp 3)\n                Bit 1: Auto Send Meter Report (for watts) at the group time interval (Clamp 2)\n                Bit 0: Auto Send Meter Report (for watts) at the group time interval (Clamp 1)\n\tByte 4 (lsb): Bit 7: reserved\n                Bit 6: reserved\n                Bit 5: reserved\n                Bit 4: reserved\n                Bit 3: Auto Send Meter Report (for kWh) at the group time interval (whole HEM)\n                Bit 2: Auto Send Meter Report (for watts) at the group time interval (whole HEM)\n                Bit 1: Auto Send Multilevel Sensor Report (for watts) at the group time interval (whole HEM)\n                Bit 0: Auto Send Battery Report at the group time interval (whole HEM)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "102": {
+            "label": "Group 2 Reports",
+            "description": "Which reports need to send in group2. Format is as follows:\n\tByte 1 (msb): Reserved\n\tByte 2: Reserved\n\tByte 3: Bit 7: reserved\n                Bit 6: reserved\n                Bit 5: Auto Send Meter Report (for kWh) at the group time interval (Clamp 3)\n                Bit 4: Auto Send Meter Report (for kWh) at the group time interval (Clamp 2)\n                Bit 3: Auto Send Meter Report (for kWh) at the group time interval (Clamp 1)\n                Bit 2: Auto Send Meter Report (for watts) at the group time interval (Clamp 3)\n                Bit 1: Auto Send Meter Report (for watts) at the group time interval (Clamp 2)\n                Bit 0: Auto Send Meter Report (for watts) at the group time interval (Clamp 1)\n\tByte 4 (lsb): Bit 7: reserved\n                Bit 6: reserved\n                Bit 5: reserved\n                Bit 4: reserved\n                Bit 3: Auto Send Meter Report (for kWh) at the group time interval (whole HEM)\n                Bit 2: Auto Send Meter Report (for watts) at the group time interval (whole HEM)\n                Bit 1: Auto Send Multilevel Sensor Report (for watts) at the group time interval (whole HEM)\n                Bit 0: Auto Send Battery Report at the group time interval (whole HEM)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "103": {
+            "label": "Group 3 Reports",
+            "description": "Which reports need to send in group3. Format is as follows:\n\tByte 1 (msb): Reserved\n\tByte 2: Reserved\n\tByte 3: Bit 7: reserved\n\tBit 6: reserved\n                Bit 5: Auto Send Meter Report (for kWh) at the group time interval (Clamp 3)\n                Bit 4: Auto Send Meter Report (for kWh) at the group time interval (Clamp 2)\n                Bit 3: Auto Send Meter Report (for kWh) at the group time interval (Clamp 1)\n                Bit 2: Auto Send Meter Report (for watts) at the group time interval (Clamp 3)\n                Bit 1: Auto Send Meter Report (for watts) at the group time interval (Clamp 2)\n                Bit 0: Auto Send Meter Report (for watts) at the group time interval (Clamp 1)\n\tByte 4 (lsb): Bit 7: reserved\n                Bit 6: reserved\n                Bit 5: reserved\n                Bit 4: reserved\n                Bit 3: Auto Send Meter Report (for kWh) at the group time interval (whole HEM)\n                Bit 2: Auto Send Meter Report (for watts) at the group time interval (whole HEM)\n                Bit 1: Auto Send Multilevel Sensor Report (for watts) at the group time interval (whole HEM)\n                Bit 0: Auto Send Battery Report at the group time interval (whole HEM)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "110": {
+            "label": "Reset #111-113",
+            "description": "Reset to default parameters number 111-113. Any value other then 0 will initiate this reset.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "111": {
+            "label": "Group 1 Interval",
+            "description": "The interval of sending report group 1.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 720,
+            "units": "seconds"
+        },
+        "112": {
+            "label": "Group 2 Interval",
+            "description": "The interval of sending report group 2.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 720,
+            "units": "seconds"
+        },
+        "113": {
+            "label": "Group 3 Interval",
+            "description": "The interval of sending report group 3.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 720,
+            "units": "seconds"
+        },
+        "253": {
+            "label": "Unit Recalibration (dangerous)",
+            "description": "Re-calibrate (will destroy factory calibration). CONTACT AEON LABS before using.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "254": {
+            "label": "Device Tag",
+            "description": "Device tag.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "255": {
+            "label": "Reset default configuration",
+            "description": "Reset to the default configuration.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

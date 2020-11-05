@@ -1,19 +1,17 @@
-// BeNext doorSensor
-// Door Sensor
 {
     "_approved": true,
     "manufacturer": "BeNext",
     "manufacturerId": "0x008a",
-    "label": "doorSensor",
+    "label": "DOORSENSOR",
     "description": "Door Sensor",
     "devices": [
         {
             "productType": "0x0004",
-            "productId": "0x0100"
+            "productId": "0x0101"
         },
         {
             "productType": "0x0004",
-            "productId": "0x0101"
+            "productId": "0x0100"
         }
     ],
     "firmwareVersion": {
@@ -22,34 +20,34 @@
     },
     "associations": {
         "1": {
-            "label": "Send frame to (internal contact) nodes",
+            "label": "Internal door contact",
             "maxNodes": 5,
             "isLifeline": true
         },
         "2": {
-            "label": "Send frame to external contact nodes",
+            "label": "External door contact",
             "maxNodes": 5
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Reset to factory settings",
+            "label": "Set to Default",
             "description": "Set all configuration values to default values (factory settings).",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
+            "maxValue": 100,
+            "defaultValue": -1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "2": {
-            "label": "External contact behavior",
-            "description": "Configure what the external contact sends when triggered.",
+            "label": "External Contact",
+            "description": "Configure what the external contact sends when triggered. (Default: 0)",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
@@ -57,26 +55,48 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Send alarm",
+                    "label": "Send a alarm report with type 2.",
                     "value": 0
                 },
                 {
-                    "label": "Send basic frame",
+                    "label": "Send a Basic set frame to all nodes in association group 2.",
                     "value": 1
                 }
             ]
         },
-        "5": {
-            "label": "Operating mode.",
-            "description": "The main operating mode for the device.",
+        "3": {
+            "label": "Not used",
+            "description": "Is not used but can still be set and requested.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "4": {
+            "label": "Not used",
+            "description": "Is not used but can still be set and requested.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "5": {
+            "label": "The Mode",
+            "description": "To configure the operating mode. (Default: 1)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
             "defaultValue": 1,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Normal",
@@ -94,14 +114,47 @@
         },
         "6": {
             "label": "Temperature offset",
-            "description": "An offset for the temperature.",
+            "description": "A signed integer to determine the offset of the temperature. (Default: 0)",
             "valueSize": 2,
-            "minValue": -32768,
-            "maxValue": 32767,
+            "minValue": 0,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
+        },
+        "7": {
+            "label": "Extern Contact Debounce ON",
+            "description": "Debounce time when the external contact is opened. (Default: 0)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "8": {
+            "label": "Extern Contact Debounce OFF",
+            "description": "Debounce time when the external contact is opened. (Default 0)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "9": {
+            "label": "Wake up delay",
+            "description": "A delay from the wake up time to give the external contact a chance to change his status. (Default 0, value * 100 ms, 0 - 25,5 seconds)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
         }
     }
 }

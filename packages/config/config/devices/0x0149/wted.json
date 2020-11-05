@@ -1,0 +1,144 @@
+{
+    "_approved": true,
+    "manufacturer": "wiDom",
+    "manufacturerId": "0x0149",
+    "label": "WTED",
+    "description": "WTED Smart TE Dimmer",
+    "devices": [
+        {
+            "productType": "0x1214",
+            "productId": "0x0A00"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Start-up Status",
+            "description": "Defines the status of the device, in term of light level, following a restart.\n        0-99: 0-99% dimming level after device restart  \n        -1: (Defaukt Value) At device’s restart it restores the same dimming level at the moment of power failure.",
+            "valueSize": 1,
+            "minValue": -1,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": -1
+        },
+        "2": {
+            "label": "Fade On Time",
+            "description": "Defines the time spent to switch the load from complete OFF to complete ON.\n        1 to 127 : Expresses in seconds the time spent to switch the load from complete OFF to complete ON\n        -1 to -126: Expresses in minutes the time spent to switch the load from complete OFF to complete ON\n        (Default Value: 1)",
+            "valueSize": 1,
+            "minValue": -126,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "3": {
+            "label": "Fade Off Time",
+            "description": "Defines the time spent to switch the load from complete ON to complete OFF.\n        1 to 127 : Expresses in seconds the time spent to switch the load from complete ON to complete OFF.\n        -1 to -126: Expresses in minutes the time spent to switch the load from complete ON to complete OFF.\n        (Default Value: 1)",
+            "valueSize": 1,
+            "minValue": -126,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "4": {
+            "label": "Local Dimming Time",
+            "description": "Defines the time spent to switch the controlled load when the external switch is hold down.\n        0: Applies the timing spent to switch the controlled load to Fade On and Fade Off as defined in parameters 2 and 3.\n        1-60: Expresses in seconds the time spent to switch the load.\n        (Default value: 5)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 60,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5
+        },
+        "10": {
+            "label": "Minimum Light Level",
+            "description": "Defines the light level that will correspond to the 1% of dimming.\n        1 to 98: Defines which light level will correspond to 1% in the range between 1 and 98%\n        (Default Value: 1)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 98,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1,
+            "units": "%"
+        },
+        "11": {
+            "label": " Maximum Light Level",
+            "description": "Defines the light level that will correspond to the 99% of dimming.\n        2 to 99: Defines which light level will correspond to 99% in the range between 2 and 99%\n        (Default Value: 99)",
+            "valueSize": 1,
+            "minValue": 2,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99,
+            "units": "%"
+        },
+        "20": {
+            "label": "Dimmable Load",
+            "description": "Define how to reset the overvoltage alarm and breaks off the blue blinking. (Defaukt Value: 1)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "NON DIMMABLE LOAD ",
+                    "value": 0
+                },
+                {
+                    "label": "DIMMABLE LOAD",
+                    "value": 1
+                }
+            ]
+        },
+        "62": {
+            "label": "Type of external switch",
+            "description": "Defines the type of external switch connected to the device (Default Value: 1 )",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Ignore",
+                    "value": 0
+                },
+                {
+                    "label": "Button",
+                    "value": 1
+                },
+                {
+                    "label": "Bistable switch",
+                    "value": 2
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 8,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Dimming",
+            "maxNodes": 8
+        }
+    }
+}

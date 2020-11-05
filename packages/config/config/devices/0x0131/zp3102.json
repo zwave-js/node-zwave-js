@@ -1,11 +1,9 @@
-// Zipato ZP3102
-// Multi Sensor Dual: motion and temperature sensor
 {
     "_approved": true,
     "manufacturer": "Zipato",
     "manufacturerId": "0x0131",
     "label": "ZP3102",
-    "description": "Multi Sensor Dual: motion and temperature sensor",
+    "description": "ZP3102-EU Multisensor Duo",
     "devices": [
         {
             "productType": "0x2002",
@@ -16,11 +14,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "On time in minutes",
-            "description": "Delay before sending OFF",
+            "label": "Re-Trigger Waiting Time",
+            "description": "Time until an associated device will turn off if no new movement is detected",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 255,
@@ -28,11 +25,12 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "minutes"
         },
         "2": {
-            "label": "Celsius / Fahrenheit",
-            "description": "0 = Celsius, 1 = Fahrenheit",
+            "label": "Celcius/Fahrenheit",
+            "description": "Report temperature in Celcius or Fahrenheit",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -42,7 +40,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Celsius",
+                    "label": "Celcius",
                     "value": 0
                 },
                 {
@@ -52,15 +50,34 @@
             ]
         },
         "3": {
-            "label": "Infrared sensor sensitivity adjustment",
-            "description": "1 is most sensitive, 7 is least",
+            "label": "Sensitivity",
+            "description": "Sensitivity 1-7 (1 = most sensitive, 7 = most insensitive. 4 is default)",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 7,
             "defaultValue": 4,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": ""
+        },
+        "4": {
+            "label": "Temperature adjustment",
+            "description": "-10 to -1, 0 to 10 (Signed decimal: 246 to 255, 0 to 10)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "Degrees Celsius"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Basic on/off group for detecting movements",
+            "maxNodes": 5
         }
     }
 }

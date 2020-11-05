@@ -1,0 +1,107 @@
+{
+    "_approved": true,
+    "manufacturer": "Aeotec Limited",
+    "manufacturerId": "0x0371",
+    "label": "ZWA003",
+    "description": "ZWA003 NanoMote Quad",
+    "devices": [
+        {
+            "productType": "0x0102",
+            "productId": "0x0003"
+        },
+        {
+            "productType": "0x0002",
+            "productId": "0x0003"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "On/Off control via Button 1",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Dimmer control via Button 1",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "On/Off control via Button 2",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Dimmer control via Button 2",
+            "maxNodes": 5
+        },
+        "6": {
+            "label": "On/Off control via Button 3",
+            "maxNodes": 5
+        },
+        "7": {
+            "label": "Dimmer control via Button 3",
+            "maxNodes": 5
+        },
+        "8": {
+            "label": "On/Off control via Button 4",
+            "maxNodes": 5
+        },
+        "9": {
+            "label": "Dimmer control via Button 4",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "32": {
+            "label": "Low battery level",
+            "description": "Set the low battery value.\n\t\t\t\tRange: 10% - 50%.",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20,
+            "units": "%"
+        },
+        "42": {
+            "label": "Duration of the command switch multilevel",
+            "description": "Setting the duration value of the command switch multilevel.\n\t\t\t\tAvailable settings: 0-255.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255,
+            "units": ""
+        },
+        "43": {
+            "label": "Battery low buzzer alarm",
+            "description": "Enable/disable the buzzer alarm when battery is running low",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

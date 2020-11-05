@@ -1,14 +1,12 @@
-// AEON Labs ZW097
-// Dry Contact Sensor
 {
     "_approved": true,
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "ZW097",
-    "description": "Dry Contact Sensor",
+    "description": "ZW097 Dry Contact Sensor Gen5",
     "devices": [
         {
-            "productType": "0x0002",
+            "productType": "0x0202",
             "productId": "0x0061"
         },
         {
@@ -16,7 +14,7 @@
             "productId": "0x0061"
         },
         {
-            "productType": "0x0202",
+            "productType": "0x0002",
             "productId": "0x0061"
         }
     ],
@@ -24,10 +22,16 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
     "paramInformation": {
         "1": {
-            "label": "Send Sensor binary report on open/close events",
+            "label": "Sensor Binary Report",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -37,37 +41,39 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "On for opened, Off for closed",
+                    "label": "Open: 0xFF, Close: 0x00",
                     "value": 0
                 },
                 {
-                    "label": "Off for opened, On for closed",
+                    "label": "Open: 0x00, Close: 0xFF",
                     "value": 1
                 }
-            ]
+            ],
+            "description": "Which value of the Sensor Binary Report will be sent when the door is Opened/Closed"
         },
         "2": {
-            "label": "Enable wake up 10 minutes when power on",
+            "label": "Wakeup at Poweron",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
-            "defaultValue": 0,
+            "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "No",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
-                    "label": "Yes",
+                    "label": "Enable",
                     "value": 1
                 }
-            ]
+            ],
+            "description": "Enable/disable wake up 10 minutes when re-power on the Sensor.\n        Default setting: Enable"
         },
         "3": {
-            "label": "Send Basic Set on open/close event",
+            "label": "Basic Set Report",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -77,28 +83,30 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "On for opened, Off for closed",
+                    "label": "Open: 0xFF, Close: 0x00",
                     "value": 0
                 },
                 {
-                    "label": "Off for opened, On for closed",
+                    "label": "Open: 0x00, Close: 0xFF",
                     "value": 1
                 }
-            ]
+            ],
+            "description": "Which value of the Basic Set will be sent when the door is Opened/Closed"
         },
         "39": {
-            "label": "Send battery report when less than percentage",
+            "label": "Set the low battery value",
             "valueSize": 1,
             "minValue": 10,
             "maxValue": 50,
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "description": "10% to 50%"
         },
         "111": {
-            "label": "Set the interval time of battery report",
-            "description": "Value is specified in number of seconds.",
+            "label": "Interval time of battery report",
+            "description": "Set the interval time of battery report.\n        Value=0, disable the battery report for a interval time.\n        Value=1 to 0x7FFFFFFF, the interval time of battery report is set.\n        Note:\n        1, if the value is less than 10, the time unit is second.\n        If the value is more than 10, the time unit is 4 minutes, which means if the value is more than 10 and less than 240, the interval time is 4 minutes.\n        If the value is more than 240 and less than 480, the interval is 8 minutes.\n        2, if the current battery report falls below the low battery value (configurable parameter 39), it will send battery report=0xFF.",
             "unit": "seconds",
             "valueSize": 4,
             "minValue": 0,
@@ -107,6 +115,35 @@
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
+        },
+        "121": {
+            "label": "Report Type",
+            "description": "Configure which sensor report will be sent when the sensor is Opened/Closed",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 256,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Basic Set",
+                    "value": 256
+                },
+                {
+                    "label": "Sensor Binary Report",
+                    "value": 16
+                },
+                {
+                    "label": "Basic Set and Sensor Binary Report",
+                    "value": 272
+                }
+            ]
         },
         "122": {
             "label": "Notification type to send",
@@ -161,6 +198,31 @@
                 {
                     "label": "Timer ended",
                     "value": 11
+                }
+            ]
+        },
+        "255": {
+            "label": "Reset To Factory Defaults",
+            "description": "Reset to factory defaults",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Reset to factory default setting",
+                    "value": 0
+                },
+                {
+                    "label": "Normal",
+                    "value": 1
+                },
+                {
+                    "label": "Reset to factory default setting and removed from the z-wave network",
+                    "value": 1431655765
                 }
             ]
         },

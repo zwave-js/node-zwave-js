@@ -1,0 +1,226 @@
+{
+    "_approved": true,
+    "manufacturer": "HANK Electronics Ltd",
+    "manufacturerId": "0x0208",
+    "label": "HKZW-MS01",
+    "description": "HKZW-MS01 Multisensor",
+    "devices": [
+        {
+            "productType": "0x0200",
+            "productId": "0x0006"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "12": {
+            "label": "Motion sensors sensitivity",
+            "description": "Level 0 to 8.\n                0 Disabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 8,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 8,
+            "units": "%"
+        },
+        "13": {
+            "label": "Motion detection blind time",
+            "description": "Insensitivity",
+            "valueSize": 2,
+            "minValue": 3,
+            "maxValue": 28800,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30,
+            "units": "seconds"
+        },
+        "14": {
+            "label": "BASIC SET command",
+            "description": "Enable/Disable BASIC SET command",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "15": {
+            "label": "Value of the BASIC SET",
+            "description": "Send BASIC SET VALUE = 255 to nodes associated with group 2 when door/window is opened.\n                Send BASIC SET VALUE = 0 to nodes associated with group 2 when door/window is closed.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Basic On",
+                    "value": 0
+                },
+                {
+                    "label": "Basic Off",
+                    "value": 1
+                }
+            ]
+        },
+        "32": {
+            "label": "Level of low battery",
+            "description": "The low level from 10% to 50%",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20,
+            "units": "%"
+        },
+        "170": {
+            "label": "Reset param 171 to 174",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 85,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 0
+                },
+                {
+                    "label": "Do reset",
+                    "value": 85
+                }
+            ]
+        },
+        "171": {
+            "label": "Battery report interval",
+            "description": "The interval of sending battery report",
+            "valueSize": 4,
+            "minValue": 5,
+            "maxValue": 2678400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1800,
+            "units": "seconds"
+        },
+        "172": {
+            "label": "Temperature report interval",
+            "description": "The interval of sending temperature report",
+            "valueSize": 4,
+            "minValue": 5,
+            "maxValue": 2678400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1800,
+            "units": "seconds"
+        },
+        "173": {
+            "label": "Humidity report interval",
+            "description": "The interval of sending Humidity report",
+            "valueSize": 4,
+            "minValue": 5,
+            "maxValue": 2678400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1800,
+            "units": "seconds"
+        },
+        "174": {
+            "label": "Luminance report interval",
+            "description": "The interval of sending luminance report",
+            "valueSize": 4,
+            "minValue": 5,
+            "maxValue": 2678400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1800,
+            "units": "seconds"
+        },
+        "181": {
+            "label": "Battery report threshold",
+            "description": "The change in battery level resulting in battery report being sent to the main controller.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "%"
+        },
+        "182": {
+            "label": "Temperature report threshold",
+            "description": "0 reports are not sent.\n                1 to 255 the change in temperature level resulting in temperature report being sent to the main controller.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 20,
+            "units": "degree/10"
+        },
+        "183": {
+            "label": "Humidity report threshold",
+            "description": "0 reports are not sent.\n                1 to 100 the change in humidity level resulting in humidity report being sent to the main controller.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 5,
+            "units": "%"
+        },
+        "184": {
+            "label": "Luminance report threshold",
+            "description": "0 Reports are not sent.\n                1 to 65535 the change in luminance level resulting in luminance report being sent to the main controller.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 200,
+            "units": "lux"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "BASIC SET command",
+            "maxNodes": 5
+        }
+    }
+}

@@ -1,0 +1,23 @@
+{
+    "_approved": true,
+    "manufacturer": "Poly-control",
+    "manufacturerId": "0x010e",
+    "label": "KEYPAD",
+    "description": "Danalock Keypad",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 1
+        }
+    }
+}

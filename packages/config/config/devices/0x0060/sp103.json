@@ -1,11 +1,9 @@
-// Everspring SP103
-// Motion Detector
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "SP103",
-    "description": "Motion Detector",
+    "description": "SP103 PIR Motion Sensor",
     "devices": [
         {
             "productType": "0x0101",
@@ -18,23 +16,23 @@
     },
     "associations": {
         "1": {
-            "label": "Triggered Report",
+            "label": "Motion",
             "maxNodes": 5,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Phase level on command",
-            "description": "Defines which command to send when sensor triggers",
+            "label": "ON Phase Level",
+            "description": "Phase Level of ON Command\n\t\t\t\tThe Configuration parameter that can be used to adjust the phase level of ON command is transmitted is Configuration Parameter # 1.\n\t\t\t\tThis parameter can be configured with the value of 0 through 127.\n\t\t\t\tValue 0: Set Device OFF(0x00)\n\t\t\t\tValue 1-99: Set Device On (1-99)\n\t\t\t\tValue 100-127: Set Device On to the last phase (0xFF)\n\t\t\t\tNote: 0xFF means the device will be on to the last phase before the device was turned off.\n\t\t\t\tInformation reproduced from: http://www.techstyleuk.co.uk/index_files/sp103_manual.pdf",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 255,
+            "maxValue": 127,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
+            "allowManualEntry": true,
             "options": [
                 {
                     "label": "Set OFF",
@@ -48,7 +46,8 @@
                     "label": "Set LAST Level",
                     "value": 9
                 }
-            ]
+            ],
+            "units": ""
         },
         "2": {
             "label": "Enable/Disable Sleeping",
@@ -71,6 +70,18 @@
                     "value": 1
                 }
             ]
+        },
+        "3": {
+            "label": "Power Saving",
+            "description": "Enabling/Disabling Power Saving Function (for testing)\n\t\t\t\tWhen no movement has been detected for 10 seconds, the SP103 will enter the power saving mode.\n\t\t\t\tIt can be disabled or enabled power saving function by setting Configuration Parameter # 3.\n\t\t\t\tThis parameter can be configured with the value of 0 through 127, where 0 means power saving being enabled and others mean power saving being disabled.\n\t\t\t\tPS : As long as the batteries have been refitted, the Detector will enable the power saving function automatically.\n\t\t\t\tInformation reproduced from: http://www.techstyleuk.co.uk/index_files/sp103_manual.pdf",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1,
+            "units": ""
         }
     }
 }

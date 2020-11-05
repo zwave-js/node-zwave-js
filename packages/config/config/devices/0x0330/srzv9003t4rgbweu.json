@@ -1,0 +1,40 @@
+{
+    "_approved": true,
+    "manufacturer": "Sunricher",
+    "manufacturerId": "0x0330",
+    "label": "SRZV9003T4RGBWEU",
+    "description": "Z-Wave Wall Controller - SR-ZV9003T4-RGBW-EU",
+    "devices": [
+        {
+            "productType": "0x0300",
+            "productId": "0xa107"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Launch 1. Press button 1 to activate group.",
+            "maxNodes": 12
+        },
+        "3": {
+            "label": "Launch 2. Press button 2 to activate group.",
+            "maxNodes": 12
+        },
+        "4": {
+            "label": "Launch 3. Press button 3 to activate group.",
+            "maxNodes": 12
+        },
+        "5": {
+            "label": "Launch 4. Press button 4 to activate group.",
+            "maxNodes": 12
+        }
+    }
+}

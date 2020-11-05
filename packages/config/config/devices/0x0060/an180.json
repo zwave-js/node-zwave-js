@@ -1,11 +1,9 @@
-// Everspring AN180
-// Switch without metering
 {
     "_approved": true,
     "manufacturer": "Everspring",
     "manufacturerId": "0x0060",
     "label": "AN180",
-    "description": "Switch without metering",
+    "description": "AN180 Plug-in ON/OFF Module",
     "devices": [
         {
             "productType": "0x0004",
@@ -16,14 +14,13 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "Basic Set Command value",
-            "description": "Defines value for Basic Set command",
+            "label": "Basic Set",
+            "description": "Basic Set Command value",
             "valueSize": 2,
             "minValue": 0,
-            "maxValue": 99,
+            "maxValue": 255,
             "defaultValue": 255,
             "readOnly": false,
             "writeOnly": false,
@@ -36,10 +33,10 @@
             ]
         },
         "2": {
-            "label": "Delaying time Group 1",
+            "label": "Delay",
             "description": "The delaying time to report to Group 1",
             "unit": "seconds",
-            "valueSize": 1,
+            "valueSize": 2,
             "minValue": 3,
             "maxValue": 25,
             "defaultValue": 3,
@@ -48,15 +45,36 @@
             "allowManualEntry": true
         },
         "3": {
-            "label": "Remember the last status",
-            "description": "Remember the last status",
+            "label": "Remember Last",
+            "description": "Remember the last status on plug",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Do not remember",
+                    "value": 0
+                },
+                {
+                    "label": "Remember",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Set",
+            "maxNodes": 4
         }
     }
 }

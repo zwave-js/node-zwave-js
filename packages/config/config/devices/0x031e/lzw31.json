@@ -1,0 +1,450 @@
+{
+    "_approved": true,
+    "manufacturer": "Inovelli",
+    "manufacturerId": "0x031e",
+    "label": "LZW31",
+    "description": "LZW31 Dimmer",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Dimming Speed",
+            "description": "This changes the speed in which the attached light dims up or down. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed.\n      Range:0-100\n      Default: 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3
+        },
+        "2": {
+            "label": "Dimming Speed (From Switch)",
+            "description": "This changes the speed in which the attached light dims up or down when controlled from the physical switch. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 101 should keep this in sync with parameter 1.\n      Range:0-101\n      Default: 101",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 101,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 101
+        },
+        "3": {
+            "label": "Ramp Rate",
+            "description": "This changes the speed in which the attached light turns on or off. For example, when a user sends the switch a basicSet(value: 0xFF) or basicSet(value: 0x00), this is the speed in which those actions take place. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 101 should keep this in sync with parameter 1.\n      Range:0-101\n      Default: 101",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 101,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 101
+        },
+        "4": {
+            "label": "Ramp Rate (From Switch)",
+            "description": "This changes the speed in which the attached light turns on or off from the physical switch. For example, when a user presses the up or down button, this is the speed in which those actions take place. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 101 should keep this in sync with parameter 1.\n      Range:0-101\n      Default: 101",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 101,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 101
+        },
+        "5": {
+            "label": "Minimum Level",
+            "description": "The minimum level that the dimmer allows the bulb to be dimmed to. Useful when the user has an LED bulb that does not turn on or flickers at a lower level.\n      Range:1-45\n      Default: 1",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 45,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "6": {
+            "label": "Maximum Level",
+            "description": "The maximum level that the dimmer allows the bulb to be dimmed to. Useful when the user has an LED bulb that reaches its maximum level before the dimmer value of 99.\n      Range:55-99\n      Default: 99",
+            "valueSize": 1,
+            "minValue": 55,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "7": {
+            "label": "Invert Switch",
+            "description": "Inverts the orientation of the switch. Useful when the switch is installed upside down. Essentially up becomes down and down becomes up.\n      Range: 0-1\n      Default: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Yes",
+                    "value": 1
+                },
+                {
+                    "label": "No",
+                    "value": 0
+                }
+            ]
+        },
+        "8": {
+            "label": "Auto Off Timer",
+            "description": "Automatically turns the switch off after this many seconds. When the switch is turned on a timer is started that is the duration of this setting. When the timer expires, the switch is turned off.\n      Range:0-32767\n      Default: 0",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "9": {
+            "label": "Default Level (Local)",
+            "description": "Default level for the dimmer when it is powered on from the local switch. A setting of 0 means that the switch will return to the level that it was on before it was turned off.\n      Range:0-99\n      Default: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "10": {
+            "label": "Default Level (Z-Wave)",
+            "description": "Default level for the dimmer when it is powered on from a Z-Wave command. A setting of 0 means that the switch will return to the level that it was on before it was turned off.\n      Range:0-99\n      Default: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "11": {
+            "label": "State After Power Restored",
+            "description": "The state the switch should return to once power is restored after power failure. 0 = off, 1-99 = level, 100=previous.\n      Range:0-100\n      Default: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "12": {
+            "label": "Association Behavior",
+            "description": "When should the switch send commands to associated devices?  01 - local 02 - 3way 03 - 3way & local 04 - z-wave hub 05 - z-wave hub & local 06 - z-wave hub & 3-way 07 - z-wave hub & local & 3way 08 - timer 09 - timer & local 10 - timer & 3-way 11 - timer & 3-way & local 12 - timer & z-wave hub 13 - timer & z-wave hub & local 14 - timer & z-wave hub & 3-way 15 - all\n      Range: 0-15\n      Default: 15",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 15,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 15
+        },
+        "13": {
+            "label": "LED Indicator Color",
+            "description": "This is the color of the LED strip.\n      Range: 0 to 255\n      Default: 170",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 170
+        },
+        "14": {
+            "label": "LED Strip Intensity",
+            "description": "This is the intensity of the LED strip.\n      Range: 0-10\n      Default: 5",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 5,
+            "options": [
+                {
+                    "label": "0%",
+                    "value": 0
+                },
+                {
+                    "label": "10%",
+                    "value": 1
+                },
+                {
+                    "label": "20%",
+                    "value": 2
+                },
+                {
+                    "label": "30%",
+                    "value": 3
+                },
+                {
+                    "label": "40%",
+                    "value": 4
+                },
+                {
+                    "label": "50%",
+                    "value": 5
+                },
+                {
+                    "label": "60%",
+                    "value": 6
+                },
+                {
+                    "label": "70%",
+                    "value": 7
+                },
+                {
+                    "label": "80%",
+                    "value": 8
+                },
+                {
+                    "label": "90%",
+                    "value": 9
+                },
+                {
+                    "label": "100%",
+                    "value": 10
+                }
+            ]
+        },
+        "15": {
+            "label": "LED Strip Intensity (When OFF)",
+            "description": "This is the intensity of the LED strip when the switch is off. This is useful for users to see the light switch location when the lights are off.\n      Range: 0-10\n      Default: 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "0%",
+                    "value": 0
+                },
+                {
+                    "label": "10%",
+                    "value": 1
+                },
+                {
+                    "label": "20%",
+                    "value": 2
+                },
+                {
+                    "label": "30%",
+                    "value": 3
+                },
+                {
+                    "label": "40%",
+                    "value": 4
+                },
+                {
+                    "label": "50%",
+                    "value": 5
+                },
+                {
+                    "label": "60%",
+                    "value": 6
+                },
+                {
+                    "label": "70%",
+                    "value": 7
+                },
+                {
+                    "label": "80%",
+                    "value": 8
+                },
+                {
+                    "label": "90%",
+                    "value": 9
+                },
+                {
+                    "label": "100%",
+                    "value": 10
+                }
+            ]
+        },
+        "17": {
+            "label": "LED Strip Timeout",
+            "description": "When the LED strip is disabled (LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted.\n      Range: 0-10\n      Default: 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 10,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "options": [
+                {
+                    "label": "Stay Off",
+                    "value": 0
+                },
+                {
+                    "label": "1 Second",
+                    "value": 1
+                },
+                {
+                    "label": "2 Seconds",
+                    "value": 2
+                },
+                {
+                    "label": "3 Seconds",
+                    "value": 3
+                },
+                {
+                    "label": "4 Seconds",
+                    "value": 4
+                },
+                {
+                    "label": "5 Seconds",
+                    "value": 5
+                },
+                {
+                    "label": "6 Seconds",
+                    "value": 6
+                },
+                {
+                    "label": "7 Seconds",
+                    "value": 7
+                },
+                {
+                    "label": "8 Seconds",
+                    "value": 8
+                },
+                {
+                    "label": "9 Seconds",
+                    "value": 9
+                },
+                {
+                    "label": "10 Seconds",
+                    "value": 10
+                }
+            ]
+        },
+        "21": {
+            "label": "AC Power Type",
+            "description": "Configure the switch to use a neutral wire.\n      Range: 0-1\n      Default: 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Non Neutral",
+                    "value": 0
+                },
+                {
+                    "label": "Neutral",
+                    "value": 1
+                }
+            ]
+        },
+        "22": {
+            "label": "Switch Type",
+            "description": "Configure the type of 3-way switch connected to the dimmer.\n      Range: 0-2\n      Default: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Load Only",
+                    "value": 0
+                },
+                {
+                    "label": "3-way Toggle",
+                    "value": 1
+                },
+                {
+                    "label": "3-way Momentary",
+                    "value": 2
+                }
+            ]
+        },
+        "51": {
+            "label": "Instant On",
+            "description": "Enables instant on (ie: disables the 700ms button delay). Note, if you disable the delay, it will also disable scene control except for the following: Up pres\nsed, held, released, Down pressed, held, released & config button pressed.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Enabled (no delay)",
+                    "value": 0
+                },
+                {
+                    "label": "Disabled (700ms delay)",
+                    "value": 1
+                }
+            ]
+        },
+        "52": {
+            "label": "Smart Bulb Mode",
+            "description": "Optimize power output to be more compatible with smart bulbs. This prevents the dimmer from being able to dim and makes it act like an ON / OFF switch. (firmware 1.47+)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Smart Bulb Mode Disabled (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Smart Bulb Mode Enabled",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic_Set",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Switch_MultiLevel_Set",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Switch_MultiLevel_Start/Stop",
+            "maxNodes": 5
+        }
+    }
+}

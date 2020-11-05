@@ -1,0 +1,28 @@
+{
+    "_approved": true,
+    "manufacturer": "Domux Shenzhen iSurpass Technology Co.",
+    "manufacturerId": "0x021c",
+    "label": "DX1CG-Z",
+    "description": "Combustible Gas Sensor DX1CG-Z",
+    "devices": [
+        {
+            "productType": "0x8003",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Notification",
+            "maxNodes": 5
+        }
+    }
+}

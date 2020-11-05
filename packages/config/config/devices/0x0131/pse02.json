@@ -1,0 +1,87 @@
+{
+    "_approved": true,
+    "manufacturer": "Zipato",
+    "manufacturerId": "0x0131",
+    "label": "PSE02",
+    "description": "Indoor Siren",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x000a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "7": {
+            "label": "Customer Function",
+            "description": "bit 0 Notification Type: 0: Using Notification Report, 1: Using Sensor Binary Report.\n\t\t\t\tbit 7 Other sounds: 0: Disabled, 1: Enable.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Using Notification Report",
+                    "value": 0
+                },
+                {
+                    "label": "Using Sensor Binary Report",
+                    "value": 1
+                },
+                {
+                    "label": "Using Notification Report with other sounds",
+                    "value": 128
+                },
+                {
+                    "label": "Using Sensor Binary Report with other sounds",
+                    "value": 129
+                }
+            ]
+        },
+        "29": {
+            "label": "Disable Alarm",
+            "description": "Disable the alarm function.\n\t\t\t\t1: Disable Alarm,\n\t\t\t\t0: Enable Alarm.\n\t\t\t\tCaution: After the power up, this configuration is always 0.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Enable Alarm",
+                    "value": 0
+                },
+                {
+                    "label": "Disable Alarm",
+                    "value": 1
+                }
+            ]
+        },
+        "31": {
+            "label": "Basic Set Off Level",
+            "description": "Play alarm sound duration,\n\t\t\t\t1 tick is 30 seconds. Default is 3 minutes, maximum is 63.5 minutes.\n\t\t\t\t0 means never auto stop.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 6
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 8,
+            "isLifeline": true
+        }
+    }
+}

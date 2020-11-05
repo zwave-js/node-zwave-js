@@ -1,0 +1,190 @@
+{
+    "_approved": true,
+    "manufacturer": "BeNext",
+    "manufacturerId": "0x008a",
+    "label": "P1DONGLE",
+    "description": "P1 Dongle",
+    "devices": [
+        {
+            "productType": "0x002f",
+            "productId": "0x0100"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Set to Default",
+            "description": "Set all configuration values to default values (factory settings).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "3": {
+            "label": "HW Pullup",
+            "description": "For some Smart meters you will need an external pullup resistor to receive the data, one of it is the Kaifa meter. 0x00: disabled. 0x01-0xFF: enabled (default 0x00)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "4": {
+            "label": "Baud rate",
+            "description": "value x 100 = baud rate",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1152
+        },
+        "5": {
+            "label": "Data validation",
+            "description": "Settings for data validation LED. Bit 7-4: Data received timeout (x 10). Bit 3-0: Framecount when data is valid (default 0x33 (0x30|0x03))",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 51
+        },
+        "6": {
+            "label": "CRC check",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "CRC check enabled",
+                    "value": 1
+                },
+                {
+                    "label": "CRC check disabled",
+                    "value": 0
+                }
+            ]
+        },
+        "72": {
+            "label": "Channel 1 auto Meter report usage W",
+            "description": "Conditions current usage will be automatically reported. Param 1-3: Difference in absolute value. Param 4: Difference in percentage between previous and current value. (default 0x0000050A (5Watt and 10%))",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1290
+        },
+        "73": {
+            "label": "Channel 1 auto Meter report usage kWh",
+            "description": "Conditions current usage will be automatically reported. Param 1-3: Difference in absolute value. Param 4: Difference in percentage between previous and current value. (default 0x00006400 (0.1kWh and 0%))",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 25600
+        },
+        "74": {
+            "label": "Channel 1 auto Meter report delivered W",
+            "description": "Conditions current delivered will be automatically reported. Param 1-3: Difference in absolute value. Param 4: Difference in percentage between previous and current value. (default 0x0000050A (5Watt and 10%))",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1290
+        },
+        "75": {
+            "label": "Channel 1 auto Meter report delivered kWh",
+            "description": "Conditions current delivered will be automatically reported. Param 1-3: Difference in absolute value. Param 4: Difference in percentage between previous and current value. (default 0x00006400 (0.1kWh and 0%))",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 25600
+        },
+        "76": {
+            "label": "Channel 2 auto Meter report usage W",
+            "description": "Conditions current usage will be automatically reported. Param 1-3: Difference in absolute value. Param 4: Difference in percentage between previous and current value. (default 0x0000050A (5Watt and 10%))",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1290
+        },
+        "77": {
+            "label": "Channel 2 auto Meter report usage kWh",
+            "description": "Conditions current usage will be automatically reported. Param 1-3: Difference in absolute value. Param 4: Difference in percentage between previous and current value. (default 0x00006400 (0.1kWh and 0%))",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 25600
+        },
+        "78": {
+            "label": "Channel 2 auto Meter report delivered W",
+            "description": "Conditions current delivered will be automatically reported. Param 1-3: Difference in absolute value. Param 4: Difference in percentage between previous and current value. (default 0x0000050A (5Watt and 10%))",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1290
+        },
+        "79": {
+            "label": "Channel 2 auto Meter report delivered kWh",
+            "description": "Conditions current delivered will be automatically reported. Param 1-3: Difference in absolute value. Param 4: Difference in percentage between previous and current value. (default 0x00006400 (0.1kWh and 0%))",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 25600
+        },
+        "81": {
+            "label": "Channel 3 auto Meter report usage m3",
+            "description": "Conditions total used will be automatically reported. Param 1-3: Difference in absolute value. Param 4: Difference in percentage between previous and current value. (default 0x00006400 (0.1m3 and 0%))",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 25600
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    }
+}

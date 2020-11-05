@@ -1,14 +1,16 @@
-// AEON Labs ZW121
-// Aeotec LED Strip
 {
     "_approved": true,
     "manufacturer": "AEON Labs",
     "manufacturerId": "0x0086",
     "label": "ZW121",
-    "description": "Aeotec LED Strip",
+    "description": "ZW121 LED Strip",
     "devices": [
         {
-            "productType": "0x0003",
+            "productType": "0x0A03",
+            "productId": "0x0079"
+        },
+        {
+            "productType": "0x0203",
             "productId": "0x0079"
         },
         {
@@ -16,7 +18,7 @@
             "productId": "0x0079"
         },
         {
-            "productType": "0x0203",
+            "productType": "0x0003",
             "productId": "0x0079"
         }
     ],
@@ -24,11 +26,219 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Retransmit",
+            "maxNodes": 5
+        }
+    },
     "paramInformation": {
+        "20": {
+            "label": "Re-power On state",
+            "description": "The LED Strip state after re-power on it.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "The last state before re-power on",
+                    "value": 0
+                },
+                {
+                    "label": "Always On",
+                    "value": 1
+                },
+                {
+                    "label": "Always Off",
+                    "value": 2
+                }
+            ]
+        },
+        "32": {
+            "label": "Report when the color is changed",
+            "description": "Enable/disable to send out a report when the color is changed",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Hail CC",
+                    "value": 1
+                }
+            ]
+        },
+        "33": {
+            "label": "Get the LED Strip color value",
+            "description": "Get the LED Strip color value\n                Value 1: (msb) Reserved\n                Value 2: Red color value\n                Value 3: Green color value\n                Value 4: Blue color value",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "34": {
+            "label": "Restore last brightness level",
+            "description": "Enable/disable to turn on the last brightness level of the LED Strip when using the Color Switch Set CC to change its color",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "35": {
+            "label": "Configure the display mode of Cold/Warm white",
+            "description": "Configure the display mode of Cold/Warm white",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Arbitrary combination",
+                    "value": 0
+                },
+                {
+                    "label": "Complementary combination",
+                    "value": 1
+                }
+            ]
+        },
+        "36": {
+            "label": "Colorful mode",
+            "description": "Reboot/save/exit Colorful mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Un-reboot",
+                    "value": 0
+                },
+                {
+                    "label": "Reboot",
+                    "value": 1
+                },
+                {
+                    "label": "Exit",
+                    "value": 2
+                },
+                {
+                    "label": "Save and exit",
+                    "value": 3
+                }
+            ]
+        },
+        "37": {
+            "label": "Colorful mode configuration",
+            "description": "Will set the LED Strip into different modes.\n                See the table in documentation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 157483008,
+            "units": ""
+        },
+        "38": {
+            "label": "Change speed",
+            "description": "Value 1: (msb) The speed from OFF to ON.\n                Value 2: The speed from ON to OFF.\n                Value 3: Pause time of ON.\n                Value 4: Pause time of OFF.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 50332416,
+            "units": ""
+        },
+        "39": {
+            "label": "Color index configuration in Multi color mode",
+            "description": "Can be used to set the 8 color index when the Bulb is in Multi color mode.\n                See the table in documentation",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 805306368,
+            "units": ""
+        },
+        "40": {
+            "label": "Colorful mode",
+            "description": "Reboot/save/exit Colorful mode",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Rainbow mode",
+                    "value": 1
+                },
+                {
+                    "label": "Mutil color mode",
+                    "value": 2
+                },
+                {
+                    "label": "Fade out and fade in (Red)",
+                    "value": 3
+                },
+                {
+                    "label": "Fade out and fade in (Green)",
+                    "value": 4
+                },
+                {
+                    "label": "Fade out and fade in (Blue)",
+                    "value": 5
+                }
+            ]
+        },
         "80": {
-            "label": "Notifications for Association Group 1",
-            "description": "Send notifications about strip state changes to association group 1",
+            "label": "Send notifications Group 1",
+            "description": "Enable to send notifications to associated devices (Group 1) when the state of LED Strip is changedd",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 2,
@@ -38,7 +248,7 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "No notifications",
+                    "label": "Disable",
                     "value": 0
                 },
                 {
@@ -48,6 +258,82 @@
                 {
                     "label": "Basic CC report",
                     "value": 2
+                }
+            ]
+        },
+        "112": {
+            "label": "Dimmer mode",
+            "description": "",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "options": [
+                {
+                    "label": "Parabolic curve",
+                    "value": 0
+                },
+                {
+                    "label": "Index curve",
+                    "value": 1
+                },
+                {
+                    "label": "(Parabolic + Index)/2",
+                    "value": 2
+                },
+                {
+                    "label": "Linear",
+                    "value": 3
+                }
+            ]
+        },
+        "252": {
+            "label": "Configuration Locked",
+            "description": "Enable/disable Configuration Locked",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "255": {
+            "label": "Reset To Factory Defaults",
+            "description": "Reset to factory defaults",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Reset to factory default setting",
+                    "value": 0
+                },
+                {
+                    "label": "Normal",
+                    "value": 1
+                },
+                {
+                    "label": "Reset to factory default setting and removed from the z-wave network",
+                    "value": 1431655765
                 }
             ]
         },

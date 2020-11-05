@@ -1,12 +1,14 @@
-// Philio Technology Corp PAN08
-// Relay Insert for Blind Control
 {
     "_approved": true,
     "manufacturer": "Philio Technology Corp",
     "manufacturerId": "0x013c",
     "label": "PAN08",
-    "description": "Relay Insert for Blind Control",
+    "description": "PAN08-1 In Wall Roller Shutter Controller",
     "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0015"
+        },
         {
             "productType": "0x0001",
             "productId": "0x0006"
@@ -18,15 +20,15 @@
     },
     "associations": {
         "1": {
-            "label": "Blind Control",
+            "label": "Lifeline",
             "maxNodes": 1,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "Watt meter report interval (5s)",
-            "description": "Interval (x5 seconds) to send out watt meter report",
+            "label": "Watt meter report period",
+            "description": "Watt Meter Report Period. Unit: 5 seconds.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 32767,
@@ -36,8 +38,8 @@
             "allowManualEntry": true
         },
         "2": {
-            "label": "KWH Meter Report Interval (10min)",
-            "description": "Interval (x10 minutes) to send out KWH Meter Report",
+            "label": "kWh meter report period",
+            "description": "kWH Meter Report Period. Unit: 10 minutes.",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 32767,
@@ -47,10 +49,10 @@
             "allowManualEntry": true
         },
         "3": {
-            "label": "Threshold for Load Caution (10mA)",
-            "description": "Threshold (x0.01A) of current for Load Caution",
+            "label": "Threshold of Watt for Load Caution",
+            "description": "Threshold of Watt for Load Caution. Unit: 1 watt",
             "valueSize": 2,
-            "minValue": 1,
+            "minValue": 10,
             "maxValue": 1100,
             "defaultValue": 1100,
             "readOnly": false,
@@ -58,14 +60,37 @@
             "allowManualEntry": true
         },
         "4": {
-            "label": "Threshold of KWh for Load Caution",
+            "label": "Threshold of kWh for Load Caution",
             "valueSize": 2,
             "minValue": 1,
             "maxValue": 10000,
             "defaultValue": 10000,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "description": "Threshold of kWH for Load Caution. Unit: 1 kWH"
+        },
+        "5": {
+            "label": "External switch type",
+            "description": "External switch type: 1-> One Push button, 2->Two Push button",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
+        },
+        "6": {
+            "label": "Level report mode",
+            "description": "Level report mode: 1-> Report destination level in 5s, 2-> Report 10 percent level while running",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 2,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 1
         }
     }
 }

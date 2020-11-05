@@ -1,0 +1,166 @@
+{
+    "_approved": true,
+    "manufacturer": "Qubino (Goap)",
+    "manufacturerId": "0x0159",
+    "label": "ZMNHQDX",
+    "description": "ZMNHQDx LUXY Smart Light",
+    "devices": [
+        {
+            "productType": "0x0008",
+            "productId": "0x0051"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Digital input type",
+            "description": "Defines the type of input device, connected to digital input.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Push-button",
+                    "value": 0
+                },
+                {
+                    "label": "OnOff toggle switch",
+                    "value": 1
+                },
+                {
+                    "label": "Motion sensor",
+                    "value": 2
+                },
+                {
+                    "label": "Motion sensor with memory",
+                    "value": 3
+                }
+            ]
+        },
+        "3": {
+            "label": "Turning off alarming",
+            "description": "With this parameter, you can determine, how to turn off the alarm.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Only by Z-Wave alarm",
+                    "value": 0
+                },
+                {
+                    "label": "Capacitive input or Z-Wave command",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Motion sensor memory timer",
+            "description": "Defines the time after which the output triggered by motion sensor is turned off.\n                Default value = 10.\n                0 to 32534 => 0-32534 seconds after which the LED will be turned off.\n                32535 => never turns off.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": "second"
+        },
+        "10": {
+            "label": "Auto on timer",
+            "description": "Default value = 0\n                0 => Disabled\n                30 to 32767 => 30 - 32767 seconds after which the device turns on.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "second"
+        },
+        "11": {
+            "label": "Auto off timer",
+            "description": "Default value = 0\n                0 => Disabled\n                30 to 32767 => 30 - 32767 seconds after which the device turns off.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "second"
+        },
+        "30": {
+            "label": "Restore state on power failure",
+            "description": "With this parameter, the user can select if the state of the device should be restored, after a power failure.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "50": {
+            "label": "Beeper",
+            "description": "With this parameter, the user can select the operating mode of the beeper.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic OnOff",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "StartStop level change",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Multilevel set",
+            "maxNodes": 5
+        }
+    }
+}

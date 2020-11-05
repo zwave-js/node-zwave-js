@@ -1,0 +1,80 @@
+{
+    "_approved": true,
+    "manufacturer": "Kwikset (Spectrum Brands)",
+    "manufacturerId": "0x0090",
+    "label": "914C",
+    "description": "Convert 914",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0446"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "31": {
+            "label": "Dipswitches state",
+            "description": "Bit mask field that returns the state of the user accessible Dipswitches on the door look.\n\t\t\tBit 0 Lock LED Status (1: enable)\n\t\t\tBit 1 Autolock (1: enable)\n\t\t\tBit 2 Buzzer (1: enable)\n\t\t\tBit 3 Handing Invert (1: enable)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "33": {
+            "label": "MSB SKU part numbers",
+            "description": "The Configuration Parameter 33 and 34 are used to set the SKU part numbers to the Kwikset locks. \n\t\t\tIs the first four most significant bytes (MSB). \n\t\t\tBelow describes how Configuration Parameter 33 and 34 are being used.\n\t\t\t* For a ZW Configuration Set, the DLM will first do a GET_SKU_ID to retrieve the full SKU from the lock, and the lock will respond with all 8 bytes. (If it not yet set, the DLM will consider that as all 0x30s.) \n\t\t\t  The DLM changes only the appropriate 4 bytes in its local copy of the SKU, and it then sends the full 8 bytes down to the lock in a SET_SKU_ID.\n\t\t\t* For a ZW Configuration Get, the DLM will do a GET_SKU_ID down to the lock, to which the lock will respond with all 8 bytes. \n\t\t\t  The DLM will return the requested 4 bytes via ZW. If the SKU is not set, it will return all 0x30s (ASCII 0s).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "34": {
+            "label": "LSB SKU part numbers",
+            "description": "The Configuration Parameter 33 and 34 are used to set the SKU part numbers to the Kwikset locks. \n\t\t\tIs the least four significant bytes (LSB).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "40": {
+            "label": "Reset To Factory Defaults",
+            "description": "Reset to factory defaults",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Perform Factory Reset",
+                    "value": 1
+                },
+                {
+                    "label": "Normal",
+                    "value": 0
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

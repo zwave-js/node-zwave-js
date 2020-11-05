@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "Schlage Link (Wintop)",
+    "manufacturerId": "0x0097",
+    "label": "41",
+    "description": "LE120 Appliance Module",
+    "devices": [
+        {
+            "productType": "0x6941",
+            "productId": "0x5501"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

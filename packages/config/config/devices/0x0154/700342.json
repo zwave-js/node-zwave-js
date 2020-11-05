@@ -1,0 +1,56 @@
+{
+    "_approved": true,
+    "manufacturer": "Popp & Co",
+    "manufacturerId": "0x0154",
+    "label": "700342",
+    "description": "700342 10-Year Smoke Detector",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x0010"
+        },
+        {
+            "productType": "0x0004",
+            "productId": "0x000d"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 10,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Switching Command when Alarm",
+            "maxNodes": 10
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Value of On-Command",
+            "description": "This value is sent as BASIC Set to Association Group 3 when an Smoke Alarm occurs.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        },
+        "4": {
+            "label": "Value of Off-Command",
+            "description": "This value is sent as BASIC Set to Association Group 3 when an Smoke Alarm is cleared.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99
+        }
+    }
+}

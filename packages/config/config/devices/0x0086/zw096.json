@@ -1,510 +1,590 @@
-// AEON Labs ZW096
-// Smart Switch 6
 {
-	"_approved": true,
-	"manufacturer": "AEON Labs",
-	"manufacturerId": "0x0086",
-	"label": "ZW096",
-	"description": "Smart Switch 6",
-	"devices": [
-		{
-			"productType": "0x0003",
-			"productId": "0x0060"
-		},
-		{
-			"productType": "0x0103",
-			"productId": "0x0060"
-		},
-		{
-			"productType": "0x0203",
-			"productId": "0x0060"
-		},
-		{
-			"productType": "0x1d03",
-			"productId": "0x0060"
-		}
-	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
-	"associations": {
-		"1": {
-			"label": "Group 1",
-			"description": "load notification type (lifeline)",
-			"maxNodes": 5,
-			"isLifeline": true
-		},
-		"2": {
-			"label": "Group 2",
-			"description": "forwarding basic set (retransmit)",
-			"maxNodes": 5
-		}
-	},
-	"paramInformation": {
-		"3": {
-			"label": "Current overload protection enable",
-			"description": "Current overload protection enable",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
-		},
-		"20": {
-			"label": "Output load after re-power",
-			"description": "Configure the output load status after re‐power",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "last status",
-					"value": 0
-				},
-				{
-					"label": "always on",
-					"value": 1
-				},
-				{
-					"label": "always off",
-					"value": 2
-				}
-			]
-		},
-		"33": {
-			"label": "RGB LED color testing",
-			"description": "Set the RGB LED color value for testing.",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
-		},
-		"80": {
-			"label": "Enable send to associated devices",
-			"description": "Enable to send notifications to Group 1",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "nothing",
-					"value": 0
-				},
-				{
-					"label": "hail CC",
-					"value": 1
-				},
-				{
-					"label": "basic CC report",
-					"value": 2
-				}
-			]
-		},
-		"81": {
-			"label": "Configure LED state",
-			"description": "Configure the state of the LED",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "LED follows load",
-					"value": 0
-				},
-				{
-					"label": "LED follows load for 5 seconds",
-					"value": 1
-				},
-				{
-					"label": "Night light mode",
-					"value": 2
-				}
-			]
-		},
-		"83": {
-			"label": "Color in night light mode",
-			"valueSize": 3,
-			"minValue": 0,
-			"maxValue": 16777215,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"84": {
-			"label": "Color in energy mode",
-			"valueSize": 3,
-			"minValue": 0,
-			"maxValue": 16777215,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"90": {
-			"label": "Enable items 91 and 92",
-			"description": "Enables/disables parameter 91 and 92",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
-		},
-		"91": {
-			"label": "Wattage Threshold",
-			"description": "minimum change in wattage to trigger",
-			"unit": "W",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 60000,
-			"defaultValue": 25,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"92": {
-			"label": "Wattage Percent Change",
-			"description": "minimum change in wattage percent",
-			"unit": "%",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 5,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"100": {
-			"label": "Set 101‐103 to default.",
-			"description": "Set 101‐103 to default.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "False",
-					"value": 0
-				},
-				{
-					"label": "True",
-					"value": 1
-				}
-			]
-		},
-		"101": {
-			"label": "Values to send to group 1",
-			"description": "Which reports need to send in Report group 1",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Nothing",
-					"value": 0
-				},
-				{
-					"label": "Voltage",
-					"value": 1
-				},
-				{
-					"label": "Current",
-					"value": 2
-				},
-				{
-					"label": "Wattage",
-					"value": 4
-				},
-				{
-					"label": "kWh",
-					"value": 8
-				},
-				{
-					"label": "All Values",
-					"value": 15
-				}
-			]
-		},
-		"102": {
-			"label": "Values to send to group 2",
-			"description": "Which reports need to send in Report group 2",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Nothing",
-					"value": 0
-				},
-				{
-					"label": "Voltage",
-					"value": 1
-				},
-				{
-					"label": "Current",
-					"value": 2
-				},
-				{
-					"label": "Wattage",
-					"value": 4
-				},
-				{
-					"label": "kWh",
-					"value": 8
-				},
-				{
-					"label": "All Values",
-					"value": 15
-				}
-			]
-		},
-		"103": {
-			"label": "Values to send to group 3",
-			"description": "Which reports need to send in Report group 3",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Nothing",
-					"value": 0
-				},
-				{
-					"label": "Voltage",
-					"value": 1
-				},
-				{
-					"label": "Current",
-					"value": 2
-				},
-				{
-					"label": "Wattage",
-					"value": 4
-				},
-				{
-					"label": "kWh",
-					"value": 8
-				},
-				{
-					"label": "All Values",
-					"value": 15
-				}
-			]
-		},
-		"110": {
-			"label": "Set 111‐113 to default.",
-			"description": "Set 111‐113 to default.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "False",
-					"value": 0
-				},
-				{
-					"label": "True",
-					"value": 1
-				}
-			]
-		},
-		"111": {
-			"label": "Time interval for sending to group 1",
-			"description": "Group 1 automatic update interval",
-			"unit": "seconds",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2147483647,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"112": {
-			"label": "Time interval for sending to group 2",
-			"description": "Group 2 automatic update interval",
-			"unit": "seconds",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2147483647,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"113": {
-			"label": "Time interval for sending to group 3",
-			"description": "Group 3 automatic update interval",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 2147483647,
-			"defaultValue": 600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"252": {
-			"label": "Configuration Locked",
-			"description": "Enable/disable Configuration Locked (0 =disable, 1 = enable).",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disabled",
-					"value": 0
-				},
-				{
-					"label": "enabled",
-					"value": 1
-				}
-			]
-		},
-		"255": {
-			"label": "RESET",
-			"description": "Reset the device to defaults",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
-		},
-		"83[0xff]": {
-			"label": "Blue night light color value",
-			"description": "Blue night light color value",
-			"valueSize": 3,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 221,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"83[0xff00]": {
-			"label": "Green night light color value",
-			"description": "Green night light color value",
-			"valueSize": 3,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 160,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"83[0xff0000]": {
-			"label": "Red night light color value",
-			"description": "Configure the RGB value when it is in Night light mode",
-			"valueSize": 3,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 221,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"84[0xff]": {
-			"label": "Green brightness in energy mode (%)",
-			"description": "Green brightness in energy mode (%)",
-			"unit": "percent",
-			"valueSize": 3,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"84[0xff00]": {
-			"label": "Yellow brightness in energy mode (%)",
-			"description": "Yellow brightness in energy mode (%)",
-			"unit": "percent",
-			"valueSize": 3,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"84[0xff0000]": {
-			"label": "Red brightness in energy mode (%)",
-			"description": "Red brightness in energy mode (%)",
-			"unit": "percent",
-			"valueSize": 3,
-			"minValue": 0,
-			"maxValue": 100,
-			"defaultValue": 50,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		}
-	}
+    "_approved": true,
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "ZW096",
+    "description": "ZW096 Smart Switch 6",
+    "devices": [
+        {
+            "productType": "0x0203",
+            "productId": "0x0060"
+        },
+        {
+            "productType": "0x0103",
+            "productId": "0x0060"
+        },
+        {
+            "productType": "0x0003",
+            "productId": "0x0060"
+        },
+        {
+            "productType": "0x1d03",
+            "productId": "0x0060"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "description": "load notification type (lifeline)",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Retransmit Switch CC",
+            "description": "forwarding basic set (retransmit)",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Current Overload Protection",
+            "description": "Load will be closed when the Current overruns (US 15.5A, Others 16.2) for more than 2 minutes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Deactivate Overload Protection",
+                    "value": 0
+                },
+                {
+                    "label": "Active Overload Protection (Default)",
+                    "value": 1
+                }
+            ],
+            "units": ""
+        },
+        "20": {
+            "label": "Output Load Status",
+            "description": "Configure the output load status after re-power on.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Last status (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Always on",
+                    "value": 1
+                },
+                {
+                    "label": "Always off",
+                    "value": 2
+                }
+            ],
+            "units": ""
+        },
+        "21": {
+            "label": "RGB Led Color for Testing",
+            "description": "Configure the RGB Led Color for Testing",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "units": "",
+            "options": [
+                {
+                    "label": "Reserved",
+                    "value": 1
+                },
+                {
+                    "label": "Red",
+                    "value": 2
+                },
+                {
+                    "label": "Green",
+                    "value": 3
+                },
+                {
+                    "label": "Blue",
+                    "value": 4
+                }
+            ]
+        },
+        "33": {
+            "label": "RGB LED color testing",
+            "description": "Set the RGB LED color value for testing.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 0,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true
+        },
+        "80": {
+            "label": "Notification status",
+            "description": "Defines the automated status notification of an associated device when status changes",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Nothing (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Hail",
+                    "value": 1
+                },
+                {
+                    "label": "Basic",
+                    "value": 2
+                }
+            ],
+            "units": ""
+        },
+        "81": {
+            "label": "Configure the state of the LED",
+            "description": "Configure the state of the LED",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "The LED will follow the status (on/off) of its load. (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "When the state of the Switch changes, the LED will follow the status (on/off) of its load, but the LED will turn off after 5 seconds.",
+                    "value": 1
+                },
+                {
+                    "label": "Night Light Mode",
+                    "value": 2
+                }
+            ],
+            "units": ""
+        },
+        "83": {
+            "label": "Night Light Color",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 16777215,
+            "defaultValue": 14524637,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "description": "Configure the RGB Value when in Night Light Mode.\n    \tByte 1: Red Color\n    \tByte 2: Green Color\n    \tByte 3: Blue Color",
+            "units": ""
+        },
+        "84": {
+            "label": "RGB Brightness in Energy Mode",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 16777215,
+            "defaultValue": 5263440,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "description": "Configure the brightness level of RGB LED (0%-100%) when it is in Energy Mode/momentary indicate mode.\n    \tByte 1: Red Color\n    \tByte 2: Green Color\n    \tByte 3: Blue Color",
+            "units": ""
+        },
+        "90": {
+            "label": "Enables/disables parameter 91/92",
+            "description": "Enable/disable Wattage threshold and percent.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "disabled",
+                    "value": 0
+                },
+                {
+                    "label": "enabled",
+                    "value": 1
+                }
+            ],
+            "units": ""
+        },
+        "91": {
+            "label": "Minimum Change to send Report (Watt)",
+            "description": "The value represents the minimum change in wattage for a Report to be sent (default 25 W)",
+            "unit": "W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32000,
+            "defaultValue": 25,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "watts"
+        },
+        "92": {
+            "label": "Minimum Change to send Report (%)",
+            "description": "The value represents the minimum percentage change in wattage for a Report to be sent (Default 5)",
+            "unit": "%",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 5,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "%"
+        },
+        "100": {
+            "label": "Default Group Reports",
+            "description": "Set report types for groups 1, 2 and 3 to default.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "False",
+                    "value": 0
+                },
+                {
+                    "label": "True",
+                    "value": 1
+                }
+            ],
+            "units": ""
+        },
+        "101": {
+            "label": "Report type sent in Reporting Group 1",
+            "description": "Defines the type of report sent for reporting group 1. 2 is multisensor report. 4 is meter report for watts. 8 is meter report for kilowatts.\n\t Value 1 (msb) Reserved\n\t Value 2 Reserved\n\t Value 3 Reserved\n\t Value 4 (lsb) bits 7-4 reserved\n                     bit 3 KWH\n\t\t     bit 2 Watt\n\t\t     bit 1 Current\n\t\t     bit 0 Voltage",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "Nothing",
+                    "value": 0
+                },
+                {
+                    "label": "Voltage",
+                    "value": 1
+                },
+                {
+                    "label": "Current",
+                    "value": 2
+                },
+                {
+                    "label": "Wattage",
+                    "value": 4
+                },
+                {
+                    "label": "kWh",
+                    "value": 8
+                },
+                {
+                    "label": "All Values",
+                    "value": 15
+                }
+            ]
+        },
+        "102": {
+            "label": "Report type sent in Reporting Group 2",
+            "description": "Defines the type of report sent for reporting group 1. 2 is multisensor report. 4 is meter report for watts. 8 is meter report for kilowatts.\n\t Value 1 (msb) Reserved\n\t Value 2 Reserved\n\t Value 3 Reserved\n\t Value 4 (lsb) bits 7-4 reserved\n                     bit 3 KWH\n\t\t     bit 2 Watt\n\t\t     bit 1 Current\n\t\t     bit 0 Voltage",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "Nothing",
+                    "value": 0
+                },
+                {
+                    "label": "Voltage",
+                    "value": 1
+                },
+                {
+                    "label": "Current",
+                    "value": 2
+                },
+                {
+                    "label": "Wattage",
+                    "value": 4
+                },
+                {
+                    "label": "kWh",
+                    "value": 8
+                },
+                {
+                    "label": "All Values",
+                    "value": 15
+                }
+            ]
+        },
+        "103": {
+            "label": "Report type sent in Reporting Group 3",
+            "description": "Defines the type of report sent for reporting group 1. 2 is multisensor report. 4 is meter report for watts. 8 is meter report for kilowatts.\n\t Value 1 (msb) Reserved\n\t Value 2 Reserved\n\t Value 3 Reserved\n\t Value 4 (lsb) bits 7-4 reserved\n                     bit 3 KWH\n\t\t     bit 2 Watt\n\t\t     bit 1 Current\n\t\t     bit 0 Voltage",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "Nothing",
+                    "value": 0
+                },
+                {
+                    "label": "Voltage",
+                    "value": 1
+                },
+                {
+                    "label": "Current",
+                    "value": 2
+                },
+                {
+                    "label": "Wattage",
+                    "value": 4
+                },
+                {
+                    "label": "kWh",
+                    "value": 8
+                },
+                {
+                    "label": "All Values",
+                    "value": 15
+                }
+            ]
+        },
+        "110": {
+            "label": "Set 111 to 113 to default",
+            "description": "Set time interval for sending reports for groups 1, 2 and 3 to default.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "options": [
+                {
+                    "label": "False",
+                    "value": 0
+                },
+                {
+                    "label": "True",
+                    "value": 1
+                }
+            ],
+            "units": ""
+        },
+        "111": {
+            "label": "Send Interval for Reporting Group 1",
+            "description": "Defines the time interval when the defined report for group 1 is sent.",
+            "unit": "seconds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 3,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        },
+        "112": {
+            "label": "Send Interval for Reporting Group 2",
+            "description": "Defines the time interval when the defined report for group 2 is sent.",
+            "unit": "seconds",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        },
+        "113": {
+            "label": "Send Interval for Reporting Group 3",
+            "description": "Defines the time interval when the defined report for group 3 is sent.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 600,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "units": "seconds"
+        },
+        "200": {
+            "label": "Partner ID",
+            "description": "Partner ID",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Aeon Labs Standard (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Others",
+                    "value": 1
+                }
+            ]
+        },
+        "252": {
+            "label": "Configuration Locked",
+            "description": "Enable/disable Configuration Locked",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ],
+            "units": ""
+        },
+        "254": {
+            "label": "Device tag",
+            "description": "Device tag.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "255": {
+            "label": "Reset device",
+            "description": "Reset to the default configuration.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true,
+            "units": ""
+        },
+        "83[0xff]": {
+            "label": "Blue night light color value",
+            "description": "Blue night light color value",
+            "valueSize": 3,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 221,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "83[0xff00]": {
+            "label": "Green night light color value",
+            "description": "Green night light color value",
+            "valueSize": 3,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 160,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "83[0xff0000]": {
+            "label": "Red night light color value",
+            "description": "Configure the RGB value when it is in Night light mode",
+            "valueSize": 3,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 221,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "84[0xff]": {
+            "label": "Green brightness in energy mode (%)",
+            "description": "Green brightness in energy mode (%)",
+            "unit": "percent",
+            "valueSize": 3,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "84[0xff00]": {
+            "label": "Yellow brightness in energy mode (%)",
+            "description": "Yellow brightness in energy mode (%)",
+            "unit": "percent",
+            "valueSize": 3,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "84[0xff0000]": {
+            "label": "Red brightness in energy mode (%)",
+            "description": "Red brightness in energy mode (%)",
+            "unit": "percent",
+            "valueSize": 3,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
 }

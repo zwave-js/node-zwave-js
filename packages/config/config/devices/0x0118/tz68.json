@@ -1,19 +1,17 @@
-// TKB Home TZ68
-// Wall Plug
 {
     "_approved": true,
     "manufacturer": "TKB Home",
     "manufacturerId": "0x0118",
     "label": "TZ68",
-    "description": "Wall Plug",
+    "description": "TZ68 On/Off Switch Socket",
     "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0002"
-        },
         {
             "productType": "0x0101",
             "productId": "0x0103"
+        },
+        {
+            "productType": "0x0003",
+            "productId": "0x0002"
         }
     ],
     "firmwareVersion": {
@@ -22,29 +20,29 @@
     },
     "associations": {
         "1": {
-            "label": "Group1",
+            "label": "Lifeline",
             "maxNodes": 5,
             "isLifeline": true
         }
     },
     "paramInformation": {
         "1": {
-            "label": "LED Behavior",
-            "description": "defines the behavior of the blue LED",
+            "label": "LED behavior",
+            "description": "Defines the behavior of the blue LED.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
+            "maxValue": 100,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "blue indicates off (default)",
+                    "label": "Night light",
                     "value": 0
                 },
                 {
-                    "label": "blue indicates on",
+                    "label": "On indicator",
                     "value": 1
                 }
             ]

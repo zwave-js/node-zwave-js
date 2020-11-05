@@ -1,12 +1,18 @@
-// NIE Technology Co., Ltd. NZW30
-// In-Wall Switch (On/Off)
 {
     "_approved": true,
-    "manufacturer": "NIE Technology Co., Ltd.",
+    "manufacturer": "Inovelli",
     "manufacturerId": "0x0312",
     "label": "NZW30",
-    "description": "In-Wall Switch (On/Off)",
+    "description": "NZW30 Smart Toggle Switch (w/Scene)",
     "devices": [
+        {
+            "productType": "0x1e02",
+            "productId": "0x1e02"
+        },
+        {
+            "productType": "0x1e00",
+            "productId": "0x1e00"
+        },
         {
             "productType": "0x1e01",
             "productId": "0x1e01"
@@ -16,61 +22,69 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic_Set",
+            "maxNodes": 5
+        }
+    },
     "paramInformation": {
         "3": {
-            "label": "ledIndicator",
-            "description": "Set the LED light behavior",
+            "label": "LED Indicator Control",
+            "description": "Choose if you want the LED indicator to turn on when switch is on or off or disable completely.",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 3,
+            "maxValue": 255,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Turn LED indicator on when switch is off",
+                    "label": "LED on when switch is off",
                     "value": 0
                 },
                 {
-                    "label": "Turn LED indicator on when switch is on",
+                    "label": "LED on when switch is on",
                     "value": 1
                 },
                 {
-                    "label": "Indicator LED is always off",
+                    "label": "LED is disabled",
                     "value": 2
-                },
-                {
-                    "label": "Indicator LED is always on",
-                    "value": 3
                 }
-            ]
+            ],
+            "units": ""
         },
         "4": {
-            "label": "invert",
-            "description": "Invert on & off on the physical switch",
+            "label": "Orientation",
+            "description": "Controls the on/off orientation of the rocker switch",
             "valueSize": 1,
             "minValue": 0,
-            "maxValue": 1,
+            "maxValue": 255,
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "No",
+                    "label": "Normal",
                     "value": 0
                 },
                 {
-                    "label": "Yes",
+                    "label": "Inverted",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "5": {
-            "label": "autoOff",
-            "description": "Automatically turn switch off after this number of seconds",
+            "label": "Automatically turn switch off after interval",
+            "description": "Automatically turn the switch off after this many seconds. 0 is disabled",
             "unit": "seconds",
             "valueSize": 2,
             "minValue": 0,
@@ -78,7 +92,8 @@
             "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         }
     }
 }

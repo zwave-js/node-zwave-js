@@ -1,11 +1,9 @@
-// Nexia Home Intelligence DB100Z
-// Doorbell
 {
     "_approved": true,
-    "manufacturer": "Nexia Home Intelligence",
+    "manufacturer": "Nexia",
     "manufacturerId": "0x0178",
     "label": "DB100Z",
-    "description": "Doorbell",
+    "description": "DB100Z Doorbell Sensor",
     "devices": [
         {
             "productType": "0x4442",
@@ -16,11 +14,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
             "label": "Send Battery Report with Notification Report",
-            "description": "Send Battery Report with Notification Report",
+            "description": "Send a battery report in addition to the alarm report when the alarm report is triggered",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -30,14 +27,21 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Do not send battery report",
+                    "label": "No (default)",
                     "value": 0
                 },
                 {
-                    "label": "Send Battery Report",
+                    "label": "Yes (recommended)",
                     "value": 1
                 }
             ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
         }
     }
 }

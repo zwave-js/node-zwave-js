@@ -1,11 +1,9 @@
-// Zooz ZEN25
-// Double Plug
 {
     "_approved": true,
     "manufacturer": "Zooz",
     "manufacturerId": "0x027a",
     "label": "ZEN25",
-    "description": "Double Plug",
+    "description": "ZEN25 S2 Double Plug with USB Port",
     "devices": [
         {
             "productType": "0xa000",
@@ -16,11 +14,10 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
     "paramInformation": {
         "1": {
-            "label": "On/Off After Power",
-            "description": "On/Off Status After Power Failure",
+            "label": "On/Off Status Recovery After Power Failure",
+            "description": "Recovery state for the Double Plug's outlets if power outage occurs",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 2,
@@ -30,27 +27,28 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Previous State",
+                    "label": "Previous state",
                     "value": 0
                 },
                 {
-                    "label": "On",
+                    "label": "ON",
                     "value": 1
                 },
                 {
-                    "label": "Off",
+                    "label": "OFF",
                     "value": 2
                 }
-            ]
+            ],
+            "units": ""
         },
         "2": {
-            "label": "Wattage Threshold",
-            "description": "Power Wattage Report Value Threshold",
+            "label": "Power Wattage Report Value Threshold",
+            "description": "Minimum change in watts to report",
             "unit": "Watta",
             "valueSize": 4,
             "minValue": 0,
             "maxValue": 65535,
-            "defaultValue": 10,
+            "defaultValue": 5,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true,
@@ -59,11 +57,12 @@
                     "label": "Disable",
                     "value": 0
                 }
-            ]
+            ],
+            "units": "Watts"
         },
         "3": {
-            "label": "Wattage Frequency",
-            "description": "Power Wattage Report Frequency",
+            "label": "Power Wattage Report Frequency",
+            "description": "How often to report power consumption (W) in seconds",
             "unit": "Seconds",
             "valueSize": 4,
             "minValue": 30,
@@ -71,47 +70,51 @@
             "defaultValue": 30,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "4": {
-            "label": "Energy Frequency",
-            "description": "Energy (kWh) Report Frequency",
+            "label": "Energy (kWh) Report Frequency ",
+            "description": "How often to report energy usage (kWh)in seconds",
             "unit": "Seconds",
             "valueSize": 4,
-            "minValue": 30,
+            "minValue": 5,
             "maxValue": 2678400,
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "5": {
-            "label": "Voltage Frequency",
-            "description": "Voltage (V) Report Frequency",
+            "label": "Voltage Report Frequency ",
+            "description": "How often to report voltage (V) in seconds",
             "unit": "Seconds",
             "valueSize": 4,
-            "minValue": 30,
+            "minValue": 5,
             "maxValue": 2678400,
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "6": {
-            "label": "Current Frequency",
-            "description": "Electrical Current (A) Report Frequency",
+            "label": "Electrical Current Report Frequency",
+            "description": "How often to report electrical current (A) in seconds",
             "unit": "Seconds",
             "valueSize": 4,
-            "minValue": 30,
+            "minValue": 5,
             "maxValue": 2678400,
             "defaultValue": 300,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "seconds"
         },
         "7": {
             "label": "Overload Protection",
-            "description": "Overload Protection",
+            "description": "Turns off once amperage exceeds specified amount (both outlets combined)",
             "unit": "Amps",
             "valueSize": 1,
             "minValue": 1,
@@ -119,11 +122,12 @@
             "defaultValue": 10,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "Amps"
         },
         "8": {
-            "label": "Enable Auto-Off (Left)",
-            "description": "Enable Auto Turn-Off Timer for Left Outlet",
+            "label": "Auto Turn-Off Timer - Left (CH1) outlet",
+            "description": "Enable (or disable) the auto turn-off timer for the left (CH1) outlet.  See parameter 9 to set the amount of time.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -133,18 +137,19 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disabled",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enabled",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "9": {
-            "label": "Turn-Off Time (Left)",
-            "description": "Auto Turn-Off Time for Left Outlet",
+            "label": "Auto Turn-Off Timer Interval - Left (CH1) outlet",
+            "description": "Set the time (in minutes) to turn off the left (CH1) outlet if the Auto Turn-Off Timer - Left is enabled (see parameter 8).",
             "unit": "Minutes",
             "valueSize": 4,
             "minValue": 1,
@@ -152,11 +157,12 @@
             "defaultValue": 60,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "minutes"
         },
         "10": {
-            "label": "Enable Auto-On (Left)",
-            "description": "Enable Auto Turn-On Timer for Left Outlet",
+            "label": "Auto Turn-On Timer - Left (CH1) outlet",
+            "description": "Enable (or disable) the auto turn-on timer for the left (CH1) outlet.  See parameter 11 to set the amount of time since the device was turned off before it turns back on.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -166,18 +172,19 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disabled",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enabled",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "11": {
-            "label": "Turn-On Time (Left)",
-            "description": "Auto Turn-On Time for Left Outlet",
+            "label": "Auto Turn-On Timer Interval - Left (CH1) outlet",
+            "description": "Set the time (in minutes) to turn on the left (CH1) outlet after it is turned off.  Requires the \"Auto Turn-On Timer - Left\" parameter (10) to be enabled.",
             "unit": "Minutes",
             "valueSize": 4,
             "minValue": 1,
@@ -185,11 +192,12 @@
             "defaultValue": 60,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "minutes"
         },
         "12": {
-            "label": "Enable Auto-Off (Right)",
-            "description": "Enable Auto Turn-Off Timer for Right Outlet",
+            "label": "Auto Turn-Off Timer - Right (CH2) outlet",
+            "description": "Enable (or disable) the auto turn-off timer for the right (CH2) outlet.  See parameter 13 to set the amount of time.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -199,29 +207,31 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disabled",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enabled",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "13": {
-            "label": "Turn-Off Time (Right)",
-            "description": "Auto Turn-Off Time for Right Outlet",
+            "label": "Auto Turn-Off Timer Interval - Right (CH2) outlet",
+            "description": "Set the time (in minutes) to turn off the right (CH2) outlet if the Auto Turn-Off Timer - Right is enabled (see parameter 12).",
             "valueSize": 4,
             "minValue": 1,
             "maxValue": 65535,
             "defaultValue": 60,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "minutes"
         },
         "14": {
-            "label": "Enable Auto-On (Right)",
-            "description": "Enable Auto Turn-On Timer for Right Outlet",
+            "label": "Auto Turn-On Timer - Right (CH2) outlet",
+            "description": "Enable (or disable) the auto turn-on timer for the right (CH2) outlet.  See parameter 15 to set the amount of time since the device was turned off before it turns back on.",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -231,29 +241,31 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disabled",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enabled",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "15": {
-            "label": "Turn-On Time (Right)",
-            "description": "Auto Turn-On Time for Right Outlet",
+            "label": "Auto Turn-On Timer Interval - Right (CH2) outlet",
+            "description": "Set the time (in minutes) to turn on the right (CH2) outlet after it is turned off.  Requires the \"Auto Turn-On Timer - Right\" parameter (14) to be enabled.",
             "valueSize": 4,
             "minValue": 1,
             "maxValue": 65535,
             "defaultValue": 60,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": true,
+            "units": "minutes"
         },
         "16": {
             "label": "Manual Control",
-            "description": "Enable/Disable Manual Control",
+            "description": "Enable (or disable) manual control of the outlets using the Z-Wave button on the double plug",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 1,
@@ -263,43 +275,90 @@
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Disable",
+                    "label": "Disabled for both outlets",
                     "value": 0
                 },
                 {
-                    "label": "Enable",
+                    "label": "Enabled for both outlets",
                     "value": 1
                 }
-            ]
+            ],
+            "units": ""
         },
         "17": {
-            "label": "LED Mode",
-            "description": "LED Indicator Mode",
+            "label": "LED Indicator Mode",
+            "description": "Enable (or disable) LED indicators next to each outlet",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 3,
-            "defaultValue": 1,
+            "defaultValue": 0,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": false,
             "options": [
                 {
-                    "label": "Always On",
+                    "label": "LED displays power consumption whenever device is plugged in (LED stays on at all times even if plug is off)",
                     "value": 0
                 },
                 {
-                    "label": "Follow Outlet",
+                    "label": "LED displays power consumption whenever device is plugged in (LED is only on if outlet is ON)",
                     "value": 1
                 },
                 {
-                    "label": "Momentary",
+                    "label": "LED displays power consumption for 5 seconds when device is turned on or off",
                     "value": 2
                 },
                 {
-                    "label": "Always Off",
+                    "label": "LED is OFF at all times except for inclusion, exclusion and Z-Wave range test",
                     "value": 3
                 }
+            ],
+            "units": ""
+        },
+        "18": {
+            "label": "Enable/Disable Power Reports",
+            "description": "Enable (or disable) power reports sent to the hub (requires firmware version 2 or higher)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "Enable power monitoring and reports from USB port",
+                    "value": 0
+                },
+                {
+                    "label": "Disable power monitoring on both outlets and reports from USB port",
+                    "value": 1
+                },
+                {
+                    "label": "Disable power monitoring of left outlet",
+                    "value": 2
+                },
+                {
+                    "label": "Disable power monitoring of right outlet",
+                    "value": 3
+                },
+                {
+                    "label": "Disable reports from USB port only",
+                    "value": 4
+                }
             ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Notifications",
+            "maxNodes": 5
         }
     }
 }

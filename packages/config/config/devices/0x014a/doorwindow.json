@@ -1,0 +1,32 @@
+{
+    "_approved": true,
+    "manufacturer": "Ecolink",
+    "manufacturerId": "0x014a",
+    "label": "DOORWINDOW",
+    "description": "Door/Window Sensor",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x0002"
+        },
+        {
+            "productType": "0x0001",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Report",
+            "maxNodes": 5
+        }
+    }
+}

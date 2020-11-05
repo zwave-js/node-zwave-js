@@ -1,0 +1,965 @@
+{
+    "_approved": true,
+    "manufacturer": "Kwikset (Spectrum Brands)",
+    "manufacturerId": "0x0090",
+    "label": "916",
+    "description": "SmartCode 916",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0642"
+        },
+        {
+            "productType": "0x0001",
+            "productId": "0x0642"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "1 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "2": {
+            "label": "2 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "3": {
+            "label": "3 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "4": {
+            "label": "4 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "5": {
+            "label": "5 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "6": {
+            "label": "6 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "7": {
+            "label": "7 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "8": {
+            "label": "8 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "9": {
+            "label": "9 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "10": {
+            "label": "10 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "11": {
+            "label": "11 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "12": {
+            "label": "12 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "13": {
+            "label": "13 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "14": {
+            "label": "14 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "15": {
+            "label": "15 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "16": {
+            "label": "16 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "17": {
+            "label": "17 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "18": {
+            "label": "18 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "19": {
+            "label": "19 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "20": {
+            "label": "20 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "21": {
+            "label": "21 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "22": {
+            "label": "22 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "23": {
+            "label": "23 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "24": {
+            "label": "24 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "25": {
+            "label": "25 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "26": {
+            "label": "26 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "27": {
+            "label": "27 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "28": {
+            "label": "28 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "29": {
+            "label": "29 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "30": {
+            "label": "30 User Code Type",
+            "description": "set the User Code Type for their corresponding user codes.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Owner",
+                    "value": 1
+                },
+                {
+                    "label": "Guest (Required for Year Day Schedules)",
+                    "value": 3
+                },
+                {
+                    "label": "Worker (Required for Week Day Schedules)",
+                    "value": 4
+                },
+                {
+                    "label": "No corresponding user code",
+                    "value": 255
+                }
+            ]
+        },
+        "31": {
+            "label": "Dipswitches state",
+            "description": "Bit mask field that returns the state of the user accessible Dipswitches on the door look.\n\t\t\tBit 0 Lock LED Status (1: enable)\n\t\t\tBit 1 Auto lock (1: enable)\n\t\t\tBit 2 Auto Buzzer (1: enable)\n\t\t\tBit 3 Secure Screen (1: enable) *Only for MB 916",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "33": {
+            "label": "MSB SKU part numbers",
+            "description": "The Configuration Parameter 33 and 34 are used to set the SKU part numbers to the Kwikset locks. \n\t\t\tIs the first four most significant bytes (MSB). \n\t\t\tBelow describes how Configuration Parameter 33 and 34 are being used.\n\t\t\t* For a ZW Configuration Set, the DLM will first do a GET_SKU_ID to retrieve the full SKU from the lock, and the lock will respond with all 8 bytes. (If it not yet set, the DLM will consider that as all 0x30s.) \n\t\t\t  The DLM changes only the appropriate 4 bytes in its local copy of the SKU, and it then sends the full 8 bytes down to the lock in a SET_SKU_ID.\n\t\t\t* For a ZW Configuration Get, the DLM will do a GET_SKU_ID down to the lock, to which the lock will respond with all 8 bytes. \n\t\t\t  The DLM will return the requested 4 bytes via ZW. If the SKU is not set, it will return all 0x30s (ASCII 0s).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "34": {
+            "label": "LSB SKU part numbers",
+            "description": "The Configuration Parameter 33 and 34 are used to set the SKU part numbers to the Kwikset locks. \n\t\t\tIs the least four significant bytes (LSB).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "35": {
+            "label": "lock type",
+            "description": "Unique ID of the lock type\n\t\t\t910 Z-Wave (Legacy, FW 3.4) 0x00 0x00\n\t\t\t912 Z-Wave (Legacy, FW 3.2) 0x00 0x00\n\t\t\t910 Z-Wave 0x02 0x36\n\t\t\t912 Z-Wave 0x03 0x36\n\t\t\t914 Z-Wave 0x04 0x36\n\t\t\t916 Z-Wave 0x06 0x42",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "40": {
+            "label": "Reset To Factory Defaults",
+            "description": "Reset to factory defaults",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Do reset",
+                    "value": 1
+                },
+                {
+                    "label": "Normal",
+                    "value": 0
+                }
+            ]
+        }
+    }
+}

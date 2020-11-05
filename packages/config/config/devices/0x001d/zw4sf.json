@@ -1,0 +1,110 @@
+{
+    "_approved": true,
+    "manufacturer": "Leviton",
+    "manufacturerId": "0x001d",
+    "label": "ZW4SF",
+    "description": "ZW4SF-1BW Decora Smart 4 Speed Fan Controller",
+    "devices": [
+        {
+            "productType": "0x0038",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Min Level",
+            "description": "Minimum Fan Speed level allowed",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10,
+            "units": ""
+        },
+        "4": {
+            "label": "Max Level",
+            "description": "Maximum Fan Speed level allowed",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 99,
+            "units": ""
+        },
+        "5": {
+            "label": "Preset Level",
+            "description": "Preset Level for On",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": ""
+        },
+        "6": {
+            "label": "LED Dim Level Indicator Timeout",
+            "description": "The length of time in seconds that the level indicators should stay illuminated after the dimming level is changed.  A value of 0 means the indicator is always off, and a value of 255 means the indicators are always on.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "units": "",
+            "options": [
+                {
+                    "label": "Level Indicators Always Off",
+                    "value": 0
+                },
+                {
+                    "label": "Level Indicators Always On",
+                    "value": 255
+                }
+            ]
+        },
+        "7": {
+            "label": "Locator LED Status",
+            "description": "Change the mode of the LED to Status Mode where the LED is illuminated when the load is On, Locator Mode where the LED is illuminated when the Load is Off, or turns off the LED completely for any other setting values.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 255,
+            "units": "",
+            "options": [
+                {
+                    "label": "LED Off",
+                    "value": 0
+                },
+                {
+                    "label": "Status Mode",
+                    "value": 254
+                },
+                {
+                    "label": "Locator Mode",
+                    "value": 255
+                }
+            ]
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

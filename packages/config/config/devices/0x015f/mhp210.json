@@ -1,0 +1,53 @@
+{
+    "_approved": true,
+    "manufacturer": "McoHome Technology Co Ltd",
+    "manufacturerId": "0x015f",
+    "label": "MHP210",
+    "description": "MH-P210 Mini Energy Dimmer",
+    "devices": [
+        {
+            "productType": "0x210a",
+            "productId": "0x1302"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Report",
+            "description": "Bit 0: KWH Report\n                Bit 1: Voltage Report\n                Bit 2: Current Report\n                Bit 3: Watt Report\n                (Bit Set to 1: enable 0:disable)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "3": {
+            "label": "Interval time",
+            "description": "0 to 65535 second.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600,
+            "units": "second"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Unsolicited report",
+            "maxNodes": 5
+        },
+        "2": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    }
+}

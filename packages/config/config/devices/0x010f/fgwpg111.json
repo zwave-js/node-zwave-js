@@ -1,0 +1,455 @@
+{
+    "_approved": true,
+    "manufacturer": "FIBARO System",
+    "manufacturerId": "0x010f",
+    "label": "FGWPG111",
+    "description": "FGWPG111 UK Wall Plug",
+    "devices": [
+        {
+            "productType": "0x1801",
+            "productId": "0x1000"
+        },
+        {
+            "productType": "0x1701",
+            "productId": "0x2000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "BasicSet forward relay status on local Button event",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "BasicSet base on Plug power",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Remember device status after a power failure",
+            "description": "This parameter determines how the Wall Plug will react in the event of power supply failure (e.g. taking out from the electrical outlet).\n                After the power supply is back on, the Wall Plug can be restored to previous state or remain switched off.\n                This parameter is ignored in Always On mode - the device automatically turns ON after plugging it into the socket.\n                Default setting: 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Device remains switched off",
+                    "value": 0
+                },
+                {
+                    "label": "Device restores the state from before the power failure",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Overload safety switch",
+            "description": "This function allows to turning off the controlled device in case of exceeding the defined power.\n                Controlled device can be turned back on via button or sending a control frame.\n                Available settings: 10 - 30000 (1,0W - 3000,0W step 0,1W).\n                Default setting: 0 (function inactive)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 30000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "11": {
+            "label": "Power reporting",
+            "description": "This parameter determines the minimum percentage change inactive power consumption (in relation to the previously reported) that will result in sending new power report.\n                Available settings: 1-100. 0 - power reports inactive.\n                Default Setting: 15 (%)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 15
+        },
+        "12": {
+            "label": "Energy reporting threshold",
+            "description": "This parameter determines the minimum change in energy consumption (in relation to the previously reported), that will result in sending a new report.\n                Available settings: 1-500 (0,01kWh - 5kWh). 0 - energy reports inactive.\n                Default Setting: 10 (0,1 kWh)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 500,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 10
+        },
+        "13": {
+            "label": "Periodic power reporting",
+            "description": "This parameter defines time period between reports sent when changes in power load have not been record if changes are smaller than defined in parameter 11.\n                By default reports are sent every hour.\n                Available settings: 0 - 32400 (s). 0 - periodic reports inactive.\n                Default setting: 3600",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3600
+        },
+        "14": {
+            "label": "Periodic energy reporting",
+            "description": "This parameter defines time period between reports sent when changes in power load have not been recorded or if changes are smaller than in paramater 11.\n                By default reports are sent every hour.\n                Available settings: 0 - 32400 (s). 0 - periodic reports inactive.\n                Default setting: 3600",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 3600
+        },
+        "15": {
+            "label": "Measuring energy consumed by the Wall Plug itself",
+            "description": "This parameter determines whether power metering should include the amount of power consumed by the Wall Plug itself.\n                Results are being added to the value of power consumed by controlled device.\n                Default setting: 0 Inactive",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "Inactive",
+                    "value": 0
+                },
+                {
+                    "label": "Active",
+                    "value": 1
+                }
+            ]
+        },
+        "21": {
+            "label": "UP value association group 3",
+            "description": "Upper power threshold, used in parameter 23. Up value cannot be lower than a value specified in parameter 22.\n                Available settings: 100 - 30000 (10,0W - 30000,0W).\n                Default setting: 500 (50W)",
+            "valueSize": 2,
+            "minValue": 100,
+            "maxValue": 30000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 500
+        },
+        "22": {
+            "label": "DOWN value association group 3",
+            "description": "Lower power threshold, used in parameter 23.\n                DOWN value cannot be higher than a value specified in parameter 21.\n                Available settings: 0 - 29900 (0,0W - 2990,0W step 0,1W).\n                Default setting: 300 (30W)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 29900,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 300
+        },
+        "23": {
+            "label": "Controlling association group 3",
+            "description": "This parameter defines the way that 3rd association group devices are controlled.\n                Depends on the actual measured power(according to parameters 21 and 22 settings).\n                Default setting: 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 3,
+            "options": [
+                {
+                    "label": "Send frame (with value set in parameter 26) only if power exceeded value of parameter 21 turn the associated devices ON, once the power drops below DOWN value (parameter 21)",
+                    "value": 1
+                },
+                {
+                    "label": "Send frame (with value set in parameter 27) only if power dropped below value of paramater 22",
+                    "value": 2
+                },
+                {
+                    "label": "Send frame in both cases",
+                    "value": 3
+                }
+            ]
+        },
+        "24": {
+            "label": "Switch ON value - association group 2",
+            "description": "The value of BASIC SET command frame sent to the devices associated in 2nd group On/Off (Button) when turning the device ON using the button.\n                Available settings: 0-99 or 255.\n                Default setting: 255",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "25": {
+            "label": "Switch OFF value - association group 2",
+            "description": "The value of BASIC SET command frame sent to the devices associated in 2nd group On/Off (Button) when turning the device OFF using the button.\n                Available settings: 0-99 or 255.\n                Default setting: 0",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "26": {
+            "label": "THRESHOLD UP value - association group 3",
+            "description": "The value of BASIC SET command frame sent to the devices associated in 3rd group On/Off (Power) if power exceeded value of parameter 21.\n                Available settings: 0-99 or 255.\n                Default setting: 255",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "27": {
+            "label": "THRESHOLD DOWN value - association group 3",
+            "description": "The value of BASIC SET command frame sent to the devices associated in 3rd group On/Off (Power) if power dropped below value of parameter 22.\n                Available settings: 0-99 or 255.\n                Default setting: 0",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 255
+        },
+        "30": {
+            "label": "Active Alarms",
+            "description": "Define Z-Wave network alarms to which the Wall Plug will respond.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 63,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 63,
+            "options": [
+                {
+                    "label": "General alarm",
+                    "value": 1
+                },
+                {
+                    "label": "Smoke alarm",
+                    "value": 2
+                },
+                {
+                    "label": "CO alarm",
+                    "value": 4
+                },
+                {
+                    "label": "CO2 alarm",
+                    "value": 8
+                },
+                {
+                    "label": "High temperature alarm",
+                    "value": 16
+                },
+                {
+                    "label": "Flood alarm",
+                    "value": 32
+                },
+                {
+                    "label": "All alarms",
+                    "value": 63
+                }
+            ]
+        },
+        "31": {
+            "label": "Response to alarm frames",
+            "description": "This parameter defines how the Wall Plug will respond to alarms (device's status change).\n                In case of values 1 or 2 the Wall Plug is operating normally and LED frame signals an alarm through time defined in parameter 32 or until the alarm is cancelled.\n                In case of values 5 to 50 the Wall Plug does not report status change, power changes, ignores BASIC SET command frames.\n                After time defined in parameter 32 or after the alarm cancellation, connected device is set to the previous state.\n                0 - no reaction 1-turn connected device on 2-turn connected device off 5-50(0,5-50,0s step 0,1s)-cyclically change device state with set period.\n                Default setting:0-no reaction",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 50,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0
+        },
+        "32": {
+            "label": "Alarm state duration",
+            "description": "This parameter specifies the duration of alarm state.\n                If a device sending an alarm frame through the Z-Wave network sets alarm duration as well, this settings are ignored.\n                Available settings 1-32400(s)\n                Default setting: 600",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 32400,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 600
+        },
+        "40": {
+            "label": "Power load for violet colour",
+            "description": "This parameter determines maximum active power value, which when exceeded, causes the LED frame to flash violet. Function is active only when parameter 41 is set to 1 or 2.\n                Available settings: 1000 - 30000 (100,0W - 3000,0W, step 0,1W).\n                Default setting: 30000 (3000W)",
+            "valueSize": 2,
+            "minValue": 1000,
+            "maxValue": 30000,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 30000
+        },
+        "41": {
+            "label": "LED frame colour when controlled device is on",
+            "description": "When set to 1 or 2, LED frame colour will change depending on active power and parameter 40.\n                Other colours are set permanently and do not depend on power consumption",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 1,
+            "options": [
+                {
+                    "label": "Illumination turned off completely",
+                    "value": 0
+                },
+                {
+                    "label": "Colour changes smoothly depending on active power",
+                    "value": 1
+                },
+                {
+                    "label": "Colour changes in steps depending on active power",
+                    "value": 2
+                },
+                {
+                    "label": "White illumination",
+                    "value": 3
+                },
+                {
+                    "label": "Red illumination",
+                    "value": 4
+                },
+                {
+                    "label": "Green illumination",
+                    "value": 5
+                },
+                {
+                    "label": "Blue illumination",
+                    "value": 6
+                },
+                {
+                    "label": "Yellow illumination",
+                    "value": 7
+                },
+                {
+                    "label": "Cyan illumination",
+                    "value": 8
+                },
+                {
+                    "label": "Magenta illumination",
+                    "value": 9
+                }
+            ]
+        },
+        "42": {
+            "label": "LED frame colour when controlled device is off",
+            "description": "This parameter defines the illumination colour after turning off.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "options": [
+                {
+                    "label": "illumination turned off completely",
+                    "value": 0
+                },
+                {
+                    "label": "LED frame is illuminated with a colour corresponding to the last measured power, before the controlled device was turned off",
+                    "value": 1
+                },
+                {
+                    "label": "White illumination",
+                    "value": 3
+                },
+                {
+                    "label": "Red illumination",
+                    "value": 4
+                },
+                {
+                    "label": "Green illumination",
+                    "value": 5
+                },
+                {
+                    "label": "Blue illumination",
+                    "value": 6
+                },
+                {
+                    "label": "Yellow illumination",
+                    "value": 7
+                },
+                {
+                    "label": "Cyan illumination",
+                    "value": 8
+                },
+                {
+                    "label": "Magenta illumination",
+                    "value": 9
+                }
+            ]
+        },
+        "43": {
+            "label": "LED frame colour at the Z-Wave network alarm detection",
+            "description": "This parameter defines the illumination colour in case of Z-Wave alarm.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 2,
+            "options": [
+                {
+                    "label": "Illumination turned off completely",
+                    "value": 0
+                },
+                {
+                    "label": "No change in colour. LED frame colour is determined by settings of parameters 41 or 42",
+                    "value": 1
+                },
+                {
+                    "label": "LED frame flashes red / blue / white",
+                    "value": 2
+                },
+                {
+                    "label": "White illumination",
+                    "value": 3
+                },
+                {
+                    "label": "Red illumination",
+                    "value": 4
+                },
+                {
+                    "label": "Green illumination",
+                    "value": 5
+                },
+                {
+                    "label": "Blue illumination",
+                    "value": 6
+                },
+                {
+                    "label": "Yellow illumination",
+                    "value": 7
+                },
+                {
+                    "label": "Cyan illumination",
+                    "value": 8
+                },
+                {
+                    "label": "Magenta illumination",
+                    "value": 9
+                }
+            ]
+        }
+    }
+}

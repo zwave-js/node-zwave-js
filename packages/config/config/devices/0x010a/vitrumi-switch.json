@@ -1,0 +1,21 @@
+{
+    "_approved": true,
+    "manufacturer": "Vitrum (VDA)",
+    "manufacturerId": "0x010a",
+    "label": "VITRUMI-SWITCH",
+    "description": "Vitrum I EU Wireless On-off",
+    "devices": [
+        {
+            "productType": "0x1400",
+            "productId": "0x6100"
+        },
+        {
+            "productType": "0x1200",
+            "productId": "0x5100"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "_approved": true,
+    "manufacturer": "Honeywell",
+    "manufacturerId": "0x0039",
+    "label": "LYNX-TOUCH-L5100",
+    "description": "Lynx Touch L5100 / L7000",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0003"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

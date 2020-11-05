@@ -1,11 +1,9 @@
-// NIE Technology Co., Ltd. NZW37
-// 2-Channel Dual Smart Plug
 {
     "_approved": true,
-    "manufacturer": "NIE Technology Co., Ltd.",
+    "manufacturer": "Inovelli",
     "manufacturerId": "0x0312",
     "label": "NZW37",
-    "description": "2-Channel Dual Smart Plug",
+    "description": "NZW37 2-Channel Smart Plug (w/Scene)",
     "devices": [
         {
             "productType": "0x2500",
@@ -24,5 +22,63 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true
+    "paramInformation": {
+        "1": {
+            "label": "LED Indicator Control",
+            "description": "Choose if you want the LED indicator to turn on when switch is on or off or disable completely.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "defaultValue": 0,
+            "units": "",
+            "options": [
+                {
+                    "label": "LED on when switch is off",
+                    "value": 0
+                },
+                {
+                    "label": "LED on when switch is on",
+                    "value": 1
+                },
+                {
+                    "label": "LED is disabled",
+                    "value": 2
+                }
+            ]
+        },
+        "2": {
+            "label": "Automatically turn channel 1 off after interval",
+            "description": "Automatically turn channel 1 off after this many seconds. 0 is disabled",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        },
+        "3": {
+            "label": "Automatically turn channel 2 off after interval",
+            "description": "Automatically turn channel 2 off after this many seconds. 0 is disabled",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true,
+            "defaultValue": 0,
+            "units": "seconds"
+        }
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
 }

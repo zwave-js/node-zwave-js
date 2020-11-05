@@ -1,0 +1,24 @@
+{
+    "_approved": true,
+    "manufacturer": "Horstmann (Secure Meters)",
+    "manufacturerId": "0x0059",
+    "label": "SSR302",
+    "description": "SSR 302 2-zone Thermostat Receiver",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 4,
+            "isLifeline": true
+        }
+    }
+}

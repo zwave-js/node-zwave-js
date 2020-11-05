@@ -1,12 +1,14 @@
-// Fibargroup FGT001
-// Thermostatic Valve
 {
     "_approved": true,
-    "manufacturer": "Fibargroup",
+    "manufacturer": "FIBARO System",
     "manufacturerId": "0x010f",
     "label": "FGT001",
-    "description": "Thermostatic Valve",
+    "description": "FGT001 Heat Controller",
     "devices": [
+        {
+            "productType": "0x1301",
+            "productId": "0x1001"
+        },
         {
             "productType": "0x1301",
             "productId": "0x1000"
@@ -16,11 +18,17 @@
         "min": "0.0",
         "max": "255.255"
     },
-    "supportsZWavePlus": true,
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
     "paramInformation": {
         "1": {
             "label": "Override Schedule duration",
-            "description": "Duration of Override Schedule after turning knob",
+            "description": "This parameter determines duration of Override Schedule after turning the knob while normal schedule is active (set by Schedule CC).",
             "unit": "minutes",
             "valueSize": 4,
             "minValue": 10,
@@ -32,25 +40,43 @@
         },
         "2": {
             "label": "Additional functions",
-            "description": "This parameter allows to enable different additional functions of the device.",
+            "description": "This parameter allows to enable different additional functions of the device.\n                1) Enable open window detector\n                2) Enable fast open window detector\n                4) Increase receiver sensitivity (shortens battery life)\n                8) Enable LED indications when controlling remotely\n                16) Protect from setting Full ON and Full OFF mode by turning the knob manually\n                NOTE: Parameter values may be combined, e.g. 1+8=9 means than open window detector and LED indications when controlling remotely are enabled.",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 31,
+            "maxValue": 100,
             "defaultValue": 1,
             "readOnly": false,
             "writeOnly": false,
             "allowManualEntry": true
         },
         "3": {
-            "label": "Additional functions status (READ-ONLY)",
-            "description": "This parameter allows to check statuses of different additional functions.",
+            "label": "Additional functions status",
+            "description": "This parameter allows to check status of different additional functions.\n                1) Optional temperature sensor connected and operational\n                2) Open window detected\n                NOTE: Parameter values may be combined, e.g. 1+2=3 means than optional sensor works properly and open window detection was triggered.",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 3,
+            "maxValue": 100,
             "defaultValue": 0,
             "readOnly": true,
             "writeOnly": false,
-            "allowManualEntry": true
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "None",
+                    "value": 0
+                },
+                {
+                    "label": "Optional temperature sensor connected and operational",
+                    "value": 1
+                },
+                {
+                    "label": "Open window detected",
+                    "value": 2
+                },
+                {
+                    "label": "Optional temperature sensor and Open window detected",
+                    "value": 3
+                }
+            ]
         }
     }
 }
