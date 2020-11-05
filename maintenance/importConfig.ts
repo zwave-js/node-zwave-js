@@ -381,9 +381,19 @@ async function parseOzwProduct(
 		commandClasses.find((c: any) => c.id === 133)?.Associations?.Group ||
 		[];
 
+	let multiInstanceAssociations =
+		commandClasses.find((c: any) => c.id === 142)?.Associations?.Group ||
+		[];
+
 	if (!Array.isArray(associations)) {
 		associations = [associations];
 	}
+
+	if (!Array.isArray(multiInstanceAssociations)) {
+		multiInstanceAssociations = [multiInstanceAssociations];
+	}
+
+	associations.push(...multiInstanceAssociations);
 
 	for (const ass of associations) {
 		const parsedAssociation = ret.associations[ass.index] || {};
