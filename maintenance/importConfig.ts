@@ -285,6 +285,20 @@ async function parseOzwProduct(
 		},
 	};
 
+	if (existingDevice) {
+		for (const device of existingDevice.devices) {
+			if (
+				!ret.devices.find(
+					(d: any) =>
+						d.productType === device.productType &&
+						d.productId === device.productId,
+				)
+			) {
+				ret.devices.push(device);
+			}
+		}
+	}
+
 	let parameters = commandClasses.find((c: any) => c.id === 112)?.Value || [];
 
 	if (!Array.isArray(parameters)) {
