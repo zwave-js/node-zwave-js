@@ -7,12 +7,13 @@ import {
 } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { pathExists, readFile } from "fs-extra";
+import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import log from "./Logger";
 import {
 	configDir,
+	formatId,
 	getDeviceEntryPredicate,
 	hexKeyRegex4Digits,
 	throwInvalidConfig,
@@ -37,7 +38,7 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 >;
 
 const indexPath = path.join(configDir, "devices/index.json");
-let index: readonly DeviceConfigIndexEntry[] | undefined;
+let index: DeviceConfigIndexEntry[] | undefined;
 
 /** @internal */
 export async function loadDeviceIndexInternal(): Promise<typeof index> {
@@ -82,6 +83,53 @@ export async function loadDeviceIndex(): Promise<void> {
 			throw e;
 		}
 	}
+}
+
+export async function writeIndexToFile(): Promise<void> {
+	if (!index) {
+		throw new ZWaveError(
+			"The config has not been loaded yet!",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	}
+
+	await writeFile(indexPath, JSON.stringify(index, undefined, 4));
+}
+
+/**
+ * Looks up the definition of a given device in the configuration DB
+ * @param manufacturerId The manufacturer id of the device
+ * @param productType The product type of the device
+ * @param productId The product id of the device
+ * @param firmwareVersion If known, configuration for a specific firmware version can be loaded
+ */
+export function addDeviceToIndex(
+	manufacturerId: number,
+	productType: number,
+	productId: number,
+	filename: string,
+	firmwareVersionMin?: string,
+	firmwareVersionMax?: string,
+): void {
+	if (!index) {
+		throw new ZWaveError(
+			"The config has not been loaded yet!",
+			ZWaveErrorCodes.Driver_NotReady,
+		);
+	}
+	// Look up the device in the index
+	const indexEntry: DeviceConfigIndexEntry = {
+		manufacturerId: formatId(manufacturerId),
+		productId: formatId(productId),
+		productType: formatId(productType),
+		firmwareVersion: {
+			min: firmwareVersionMin || "0.0",
+			max: firmwareVersionMax || "255.255",
+		},
+		filename: filename,
+	};
+
+	index.push(indexEntry);
 }
 
 /**

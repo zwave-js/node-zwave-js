@@ -11,11 +11,15 @@ process.on("unhandledRejection", (r) => {
 });
 
 import {
+	addDeviceToIndex,
 	DeviceConfig,
 	DeviceConfigIndexEntry,
+	loadDeviceIndex,
 	loadManufacturers,
+	lookupDevice,
 	lookupManufacturer,
 	setManufacturer,
+	writeIndexToFile,
 	writeManufacturersToJson,
 } from "@zwave-js/config";
 import { num2hex } from "@zwave-js/shared";
@@ -173,6 +177,7 @@ async function parseOzwConfig(): Promise<void> {
 	);
 
 	await loadManufacturers();
+	await loadDeviceIndex();
 
 	// @ts-ignore
 	for (const man of manufacturerJson.ManufacturerSpecificData.Manufacturer) {
@@ -194,20 +199,23 @@ async function parseOzwConfig(): Promise<void> {
 
 		if (man.Product !== undefined && Array.isArray(man.Product)) {
 			for (const product of man.Product) {
-				await parseOzwProduct(product, name, hexId);
+				if (product.config !== undefined) {
+					await parseOzwProduct(product, name, hexId, intId);
+				}
 			}
 		}
 	}
 
 	await writeManufacturersToJson();
+	await writeIndexToFile();
 }
 
 async function parseOzwProduct(
 	product: any,
 	manufacturer: string | undefined,
 	manufacturerId: string,
+	manufacturerIdInt: number,
 ): Promise<void> {
-	if (product.config === undefined) return;
 	const productFile = await fs.readFile(
 		path.join(ozwConfigFolder, product.config),
 		"utf8",
@@ -221,6 +229,23 @@ async function parseOzwProduct(
 
 	const productId = "0x" + padStart(product.id, 4);
 	const productType = "0x" + padStart(product.type, 4);
+
+	const existingDevice = await lookupDevice(
+		manufacturerIdInt,
+		parseInt(product.type, 16),
+		parseInt(product.id, 16),
+	);
+
+	const fileName = `${manufacturerId}/${labelToFilename(productName)}.json`;
+
+	if (existingDevice === undefined) {
+		addDeviceToIndex(
+			manufacturerIdInt,
+			parseInt(product.type, 16),
+			parseInt(product.id, 16),
+			fileName,
+		);
+	}
 
 	// @ts-ignore
 	const json: Record<string, any> = xml2json.toJson(productFile, {
@@ -251,8 +276,8 @@ async function parseOzwProduct(
 			},
 		],
 		firmwareVersion: {
-			min: "0.0.0",
-			max: "255.255.255",
+			min: existingDevice?.firmwareVersion.min || "0.0",
+			max: existingDevice?.firmwareVersion.max || "255.255",
 		},
 	};
 
@@ -314,6 +339,14 @@ async function parseOzwProduct(
 
 		ret.associations[ass.index] = parsedAssociation;
 	}
+
+	const manufacturerDir = path.join(processedDir, manufacturerId);
+
+	await fs.ensureDir(manufacturerDir);
+	await fs.writeFile(
+		path.join(processedDir, fileName),
+		JSON.stringify(ret, undefined, 4),
+	);
 
 	// console.log(ret);
 
