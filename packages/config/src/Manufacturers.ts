@@ -127,7 +127,11 @@ export async function writeManufacturersToJson(): Promise<void> {
 
 	const data: Record<string, string> = {};
 
-	for (const [id, name] of manufacturers) {
+	const orderedMap = new Map(
+		[...manufacturers].sort((a, b) => (a[0] > b[0] ? 1 : -1)),
+	);
+
+	for (const [id, name] of orderedMap) {
 		const hexId = "0x" + padStart(id.toString(16), 4, "0").toUpperCase();
 		data[hexId] = name;
 	}
