@@ -449,6 +449,8 @@ async function parseOzwProduct(
 				const label = ensureArray(bitSet.Label)[0];
 				const desc = ensureArray(bitSet.Help)[0];
 
+				// this values are all parsed as switches but could be transformed to
+				// list with two options: `Enable` and `Disable`
 				parsedParam.label = label;
 				parsedParam.description = desc;
 				parsedParam.valueSize = 1;
