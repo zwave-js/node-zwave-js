@@ -37,8 +37,90 @@ import * as path from "path";
 import * as qs from "querystring";
 import { promisify } from "util";
 import xml2json from "xml2json";
+import yargs from "yargs";
 
 const execPromise = promisify(child.exec);
+
+yargs
+	.option("source", {
+		description: "source of the import",
+		alias: "s",
+		type: "array",
+		choices: ["oh", "ozw"], // oh: openhub, ozw: openzwave
+		default: ["oh"],
+	})
+	.option("ids", {
+		description: "devices ids to download",
+		type: "array",
+		default: [],
+	})
+	.option("download", {
+		alias: "D",
+		description: "Download devices DB from <source>",
+		type: "boolean",
+		default: false,
+	})
+	.option("clean", {
+		alias: "C",
+		description: "Clean temprorary directory",
+		type: "boolean",
+		default: false,
+	})
+	.option("manufacturers", {
+		alias: "m",
+		description: "Parse and update manufacturers.json",
+		type: "boolean",
+		default: false,
+	})
+	.option("index", {
+		alias: "i",
+		description: "Parse and update devices index.json",
+		type: "boolean",
+		default: false,
+	})
+	.option("devices", {
+		alias: "d",
+		description: "Parse and update devices configurations",
+		type: "boolean",
+		default: false,
+	})
+	.example(
+		"import -s ozw -Dmid",
+		"Download and parse OpenZwave db (manufacturers, index, devices)",
+	)
+	.example(
+		"import -s oh -Dmid",
+		"Download and parse OpenHub db (manufacturers, index, devices)",
+	)
+	.example(
+		"import -s oh -D --ids 1234 5678",
+		"Download OpenHub devices with ids `1234` and `5678`",
+	)
+	.help()
+	.version(false)
+	.alias("h", "help");
+
+class Program {
+	public source: string[];
+	public ids: string[];
+	public download: boolean;
+	public clean: boolean;
+	public manufacturers: boolean;
+	public index: boolean;
+	public devices: boolean;
+
+	constructor(json: any) {
+		this.source = json.source;
+		this.ids = json.ids;
+		this.download = json.download;
+		this.clean = json.clean;
+		this.manufacturers = json.manufacturers;
+		this.index = json.index;
+		this.devices = json.devices;
+	}
+}
+
+const program: Program = new Program(yargs.parse(process.argv.slice(2)));
 
 // Where the files are located
 const importDir = path.join(__dirname, "../packages/config", "config/import");
@@ -172,7 +254,10 @@ async function parseOzwConfig(): Promise<void> {
 	);
 
 	await loadManufacturers();
-	await loadDeviceIndex();
+
+	if (program.index || program.devices) {
+		await loadDeviceIndex();
+	}
 
 	for (const man of manufacturerJson.ManufacturerSpecificData.Manufacturer) {
 		const intId = parseInt(man.id);
@@ -185,23 +270,31 @@ async function parseOzwConfig(): Promise<void> {
 		if (name === undefined && man.name !== undefined) {
 			// add manufacturer to manufacturers.json
 			console.log(`Adding missing manufacturer: ${man.name}`);
-
+			// let this here, if program.manufacturers is false it will not
+			// write the manufacturers to file
 			setManufacturer(intId, man.name);
 		}
 
 		name = man.name;
 
-		if (man.Product !== undefined && isArray(man.Product)) {
-			for (const product of man.Product) {
-				if (product.config !== undefined) {
-					await parseOzwProduct(product, name, hexId, intId);
-				}
+		if (!program.index && !program.devices) continue;
+
+		const products = ensureArray(man.Product);
+
+		for (const product of products) {
+			if (product.config !== undefined) {
+				await parseOzwProduct(product, name, hexId, intId);
 			}
 		}
 	}
 
-	await writeManufacturersToJson();
-	await writeIndexToFile();
+	if (program.manufacturers) {
+		await writeManufacturersToJson();
+	}
+
+	if (program.index) {
+		await writeIndexToFile();
+	}
 }
 
 /**
@@ -270,6 +363,8 @@ async function parseOzwProduct(
 			parseInt(product.id, 16),
 		))
 	) {
+		// let this here, if program.index is false it will not
+		// write the device index to file
 		addDeviceToIndex(
 			manufacturerIdInt,
 			parseInt(product.type, 16),
@@ -277,6 +372,9 @@ async function parseOzwProduct(
 			fileName,
 		);
 	}
+
+	// stop here, don't parse the device
+	if (!program.devices) return;
 
 	let existingDevice;
 
@@ -827,33 +925,36 @@ async function updateManufacturerNames(): Promise<void> {
 }
 
 void (async () => {
-	if (process.argv.includes("clean")) {
+	if (program.clean) {
 		await cleanTmpDirectory();
-	} else if (process.argv.includes("ozw")) {
-		if (process.argv.includes("download")) {
-			await downloadOzwConfig();
-			await extractConfigFromTar();
+	} else {
+		if (program.source.includes("ozw")) {
+			if (program.download) {
+				await downloadOzwConfig();
+				await extractConfigFromTar();
+			}
+
+			if (program.manufacturers || program.devices || program.index)
+				await parseOzwConfig();
 		}
 
-		if (process.argv.includes("manufacturers")) {
-			await parseOzwConfig();
+		if (program.source.includes("oh")) {
+			if (program.download) {
+				await downloadManufacturers();
+				await downloadDevices(program.ids);
+			}
+
+			if (program.manufacturers) {
+				await updateManufacturerNames();
+			}
+
+			if (program.index) {
+				await generateDeviceIndex();
+			}
+
+			if (program.devices) {
+				await importConfigFiles();
+			}
 		}
-	} else if (process.argv.includes("manufacturers")) {
-		await downloadManufacturers();
-	} else if (process.argv.includes("manufacturerNames")) {
-		await updateManufacturerNames();
-	} else if (process.argv.includes("download")) {
-		const id = process.argv[process.argv.indexOf("download") + 1];
-		if (!id || id === "all") {
-			await downloadManufacturers();
-			await downloadDevices();
-		} else {
-			await downloadDevices(id.split(","));
-		}
-	} else if (process.argv.includes("import")) {
-		await importConfigFiles();
-		await generateDeviceIndex();
-	} else if (process.argv.includes("index")) {
-		await generateDeviceIndex();
 	}
 })();
