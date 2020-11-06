@@ -255,7 +255,7 @@ async function parseOzwConfig(): Promise<void> {
 
 	await loadManufacturers();
 
-	if (program.index || program.devices) {
+	if (program.devices) {
 		await loadDeviceIndex();
 	}
 
@@ -277,7 +277,7 @@ async function parseOzwConfig(): Promise<void> {
 
 		name = man.name;
 
-		if (!program.index && !program.devices) continue;
+		if (!program.devices) continue;
 
 		const products = ensureArray(man.Product);
 
@@ -359,8 +359,6 @@ async function parseOzwProduct(
 			parseInt(product.id, 16),
 		))
 	) {
-		// let this here, if program.index is false it will not
-		// write the device index to file
 		addDeviceToIndex(
 			manufacturerIdInt,
 			parseInt(product.type, 16),
@@ -969,7 +967,7 @@ void (async () => {
 				await extractConfigFromTar();
 			}
 
-			if (program.manufacturers || program.devices || program.index)
+			if (program.manufacturers || program.devices)
 				await parseOzwConfig();
 		}
 
