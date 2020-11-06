@@ -10,20 +10,6 @@ process.on("unhandledRejection", (r) => {
 	throw r;
 });
 
-import {
-	addDeviceToIndex,
-	DeviceConfig,
-	DeviceConfigIndexEntry,
-	loadDeviceIndex,
-	loadManufacturers,
-	lookupDevice,
-	lookupManufacturer,
-	setManufacturer,
-	writeManufacturersToJson,
-} from "@zwave-js/config";
-import { formatId } from "@zwave-js/config/src/utils";
-import { CommandClasses } from "@zwave-js/core";
-import { num2hex } from "@zwave-js/shared";
 import { composeObject, entries } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import { isArray } from "alcalzone-shared/typeguards";
@@ -38,10 +24,24 @@ import * as qs from "querystring";
 import { promisify } from "util";
 import xml2json from "xml2json";
 import yargs from "yargs";
+import {
+	addDeviceToIndex,
+	DeviceConfig,
+	DeviceConfigIndexEntry,
+	loadDeviceIndex,
+	loadManufacturers,
+	lookupDevice,
+	lookupManufacturer,
+	setManufacturer,
+	writeManufacturersToJson,
+} from "../packages/config/src";
+import { formatId } from "../packages/config/src/utils";
+import { CommandClasses } from "../packages/core/src";
+import { num2hex } from "../packages/shared/src";
 
 const execPromise = promisify(child.exec);
 
-yargs
+const program = yargs
 	.option("source", {
 		description: "source of the import",
 		alias: "s",
@@ -52,6 +52,7 @@ yargs
 	.option("ids", {
 		description: "devices ids to download",
 		type: "array",
+		array: true,
 	})
 	.option("download", {
 		alias: "D",
@@ -98,29 +99,7 @@ yargs
 	.example("import -i", "Update devices index")
 	.help()
 	.version(false)
-	.alias("h", "help");
-
-class Program {
-	public source: string[];
-	public ids: string[] | undefined;
-	public download: boolean;
-	public clean: boolean;
-	public manufacturers: boolean;
-	public index: boolean;
-	public devices: boolean;
-
-	constructor(json: any) {
-		this.source = json.source;
-		this.ids = json.ids;
-		this.download = json.download;
-		this.clean = json.clean;
-		this.manufacturers = json.manufacturers;
-		this.index = json.index;
-		this.devices = json.devices;
-	}
-}
-
-const program: Program = new Program(yargs.parse(process.argv.slice(2)));
+	.alias("h", "help").argv;
 
 // Where the files are located
 const importDir = path.join(__dirname, "../packages/config", "config/import");
@@ -971,7 +950,7 @@ void (async () => {
 		if (program.source.includes("oh")) {
 			if (program.download) {
 				await downloadManufacturers();
-				await downloadDevices(program.ids);
+				await downloadDevices(program.ids?.map(String));
 			}
 
 			if (program.manufacturers) {

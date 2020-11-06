@@ -115,7 +115,8 @@
     "release": "lerna version --no-commit-hooks",
     "preversion": "release-script --lerna-check",
     "version": "release-script --lerna",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "config": "ts-node maintenance/importConfig.ts"
   },
   "readme": "README.md",
   "husky": {
