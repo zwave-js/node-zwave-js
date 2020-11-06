@@ -61,7 +61,7 @@ yargs
 	})
 	.option("clean", {
 		alias: "C",
-		description: "Clean temprorary directory",
+		description: "Clean temporary directory",
 		type: "boolean",
 		default: false,
 	})
@@ -947,12 +947,12 @@ void (async () => {
 				await updateManufacturerNames();
 			}
 
-			if (program.index) {
-				await generateDeviceIndex();
-			}
-
 			if (program.devices) {
 				await importConfigFiles();
+			}
+
+			if (program.index) {
+				await generateDeviceIndex();
 			}
 		}
 	}
