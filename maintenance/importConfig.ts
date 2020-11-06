@@ -440,8 +440,20 @@ async function parseOzwProduct(
 
 		if (param.type === "bitset") {
 			const bitSetIds = ensureArray(param.BitSet);
+			let value = param.value || 0;
+
+			if (typeof value !== "number") value = 0;
+
+			const size = param.size || 1;
+
+			const bitArray = padStart(value.toString(2), size * 8, "0")
+				.split("")
+				.reverse()
+				.map((b) => parseInt(b));
+
 			for (const bitSet of bitSetIds) {
-				let id = (parseInt(bitSet.id) - 1).toString(16);
+				const bit = (bitSet.id || 0) - 1;
+				let id = bit.toString(16);
 				id = `${param.index}[0x${padStart(id, 2, "0")}]`;
 
 				const parsedParam = ret.paramInformation[id] ?? {};
@@ -456,7 +468,7 @@ async function parseOzwProduct(
 				parsedParam.valueSize = 1;
 				parsedParam.minValue = 0;
 				parsedParam.maxValue = 1;
-				parsedParam.defaultValue = 0;
+				parsedParam.defaultValue = bitArray[bit];
 				parsedParam.readOnly = false;
 				parsedParam.writeOnly = false;
 				parsedParam.allowManualEntry = true;
