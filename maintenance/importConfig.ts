@@ -342,15 +342,17 @@ async function parseOzwProduct(
 
 		const parsedParam = ret.paramInformation[param.index] ?? {};
 
-		parsedParam.label = param.label ?? parsedParam.label;
-		parsedParam.description = param.Help ?? parsedParam.description;
-		parsedParam.valueSize = param.size ?? parsedParam.valueSize ?? 1;
-		parsedParam.minValue = param.min ?? parsedParam.min ?? 0;
-		parsedParam.maxValue = param.max ?? parsedParam.max ?? 100;
+		// don't use ?? here, some fields could be empty strings and ?? operator
+		// will not work
+		parsedParam.label = param.label || parsedParam.label;
+		parsedParam.description = param.Help || parsedParam.description;
+		parsedParam.valueSize = param.size || parsedParam.valueSize || 1;
+		parsedParam.minValue = param.min || parsedParam.min || 0;
+		parsedParam.maxValue = param.max || parsedParam.max || 100;
 		parsedParam.readOnly = Boolean(param.read_only);
 		parsedParam.writeOnly = Boolean(param.write_only);
 		parsedParam.allowManualEntry = param.type !== "list";
-		parsedParam.defaultValue = param.value ?? parsedParam.value ?? 0;
+		parsedParam.defaultValue = param.value || parsedParam.value || 0;
 
 		if (param.units !== undefined) {
 			parsedParam.units = param.units;
