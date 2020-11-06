@@ -201,7 +201,7 @@ async function downloadOzwConfig(): Promise<string> {
 	// create tmp directory if missing
 	await fs.ensureDir(tmpDir);
 
-	// this will return a strem in `data` that we pipe into write stream
+	// this will return a stream in `data` that we pipe into write stream
 	// to store the file in `tmpDir`
 	const data = (await axios({ url: ozwTarUrl, responseType: "stream" })).data;
 
