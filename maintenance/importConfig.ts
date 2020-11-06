@@ -19,7 +19,6 @@ import {
 	lookupDevice,
 	lookupManufacturer,
 	setManufacturer,
-	writeIndexToFile,
 	writeManufacturersToJson,
 } from "@zwave-js/config";
 import { formatId } from "@zwave-js/config/src/utils";
@@ -74,7 +73,7 @@ yargs
 	})
 	.option("index", {
 		alias: "i",
-		description: "Parse and update devices index.json",
+		description: "Update devices index.json by reading devices config",
 		type: "boolean",
 		default: false,
 	})
@@ -86,16 +85,17 @@ yargs
 	})
 	.example(
 		"import -s ozw -Dmid",
-		"Download and parse OpenZwave db (manufacturers, index, devices)",
+		"Download and parse OpenZwave db (manufacturers, devices) and update the index",
 	)
 	.example(
 		"import -s oh -Dmid",
-		"Download and parse openhab db (manufacturers, index, devices)",
+		"Download and parse openhab db (manufacturers, devices) and update the index",
 	)
 	.example(
 		"import -s oh -D --ids 1234 5678",
 		"Download openhab devices with ids `1234` and `5678`",
 	)
+	.example("import -i", "Update devices index")
 	.help()
 	.version(false)
 	.alias("h", "help");
@@ -290,10 +290,6 @@ async function parseOzwConfig(): Promise<void> {
 
 	if (program.manufacturers) {
 		await writeManufacturersToJson();
-	}
-
-	if (program.index) {
-		await writeIndexToFile();
 	}
 }
 
@@ -990,10 +986,10 @@ void (async () => {
 			if (program.devices) {
 				await importConfigFiles();
 			}
+		}
 
-			if (program.index) {
-				await generateDeviceIndex();
-			}
+		if (program.index) {
+			await generateDeviceIndex();
 		}
 	}
 })();
