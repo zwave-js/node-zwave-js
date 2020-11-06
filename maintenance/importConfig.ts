@@ -453,8 +453,8 @@ async function parseOzwProduct(
 
 			for (const bitSet of bitSetIds) {
 				const bit = (bitSet.id || 0) - 1;
-				let id = bit.toString(16);
-				id = `${param.index}[0x${padStart(id, 2, "0")}]`;
+				const mask = (2 ** bit).toString(16);
+				const id = `${param.index}[0x${padStart(mask, 2, "0")}]`;
 
 				const parsedParam = ret.paramInformation[id] ?? {};
 
