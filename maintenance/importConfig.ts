@@ -26,6 +26,7 @@ import { formatId } from "@zwave-js/config/src/utils";
 import { CommandClasses } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { composeObject, entries } from "alcalzone-shared/objects";
+import { padStart } from "alcalzone-shared/strings";
 import { isArray } from "alcalzone-shared/typeguards";
 import { red } from "ansi-colors";
 import { AssertionError, ok } from "assert";
@@ -437,59 +438,84 @@ async function parseOzwProduct(
 	for (const param of parameters) {
 		if (isNaN(param.index)) continue;
 
-		const parsedParam = ret.paramInformation[param.index] ?? {};
+		if (param.type === "bitset") {
+			const bitSetIds = ensureArray(param.BitSet);
+			for (const bitSet of bitSetIds) {
+				let id = parseInt(bitSet.id).toString(16);
+				id = `${param.index}[0x${padStart(id, 2, "0")}]`;
 
-		// don't use ?? here, some fields could be empty strings and ?? operator
-		// will not work
-		parsedParam.label = param.label || parsedParam.label;
-		parsedParam.description = param.Help || parsedParam.description;
-		parsedParam.valueSize = param.size || parsedParam.valueSize || 1;
-		parsedParam.minValue = param.min || parsedParam.min || 0;
-		parsedParam.maxValue = param.max || parsedParam.max || 100;
-		parsedParam.readOnly = Boolean(param.read_only);
-		parsedParam.writeOnly = Boolean(param.write_only);
-		parsedParam.allowManualEntry = param.type !== "list";
-		parsedParam.defaultValue = param.value || parsedParam.value || 0;
+				const parsedParam = ret.paramInformation[id] ?? {};
 
-		if (param.units !== undefined) {
-			parsedParam.units = param.units;
-		}
+				const label = ensureArray(bitSet.Label)[0];
+				const desc = ensureArray(bitSet.Help)[0];
 
-		// could have multiple translations, if so it's an array, the first
-		// is the english one
-		if (isArray(parsedParam.description)) {
-			parsedParam.description = parsedParam.description[0];
-		}
+				parsedParam.label = label;
+				parsedParam.description = desc;
+				parsedParam.valueSize = 1;
+				parsedParam.minValue = 0;
+				parsedParam.maxValue = 1;
+				parsedParam.defaultValue = 0;
+				parsedParam.readOnly = false;
+				parsedParam.writeOnly = false;
+				parsedParam.allowManualEntry = true;
 
-		if (typeof parsedParam.description !== "string") {
-			parsedParam.description = "";
-		}
-
-		if (typeof parsedParam.defaultValue !== "number") {
-			parsedParam.defaultValue = 0;
-		}
-
-		// some values have typos, this fixes them
-		if (typeof parsedParam.maxValue === "string") {
-			parsedParam.maxValue = parseInt(
-				parsedParam.maxValue.replace(/[^0-9]/g, ""),
-			);
-		}
-
-		const items = ensureArray(param.Item);
-
-		if (param.type === "list" && items.length > 0) {
-			parsedParam.options = [];
-			for (const item of items) {
-				const opt = {
-					label: item.label.toString(),
-					value: parseInt(item.value),
-				};
-				parsedParam.options.push(opt);
+				ret.paramInformation[id] = parsedParam;
 			}
-		}
+		} else {
+			const parsedParam = ret.paramInformation[param.index] ?? {};
 
-		ret.paramInformation[param.index] = parsedParam;
+			// don't use ?? here, some fields could be empty strings and ?? operator
+			// will not work
+			parsedParam.label = param.label || parsedParam.label;
+			parsedParam.description = param.Help || parsedParam.description;
+			parsedParam.valueSize = param.size || parsedParam.valueSize || 1;
+			parsedParam.minValue = param.min || parsedParam.min || 0;
+			parsedParam.maxValue = param.max || parsedParam.max || 100;
+			parsedParam.readOnly = Boolean(param.read_only);
+			parsedParam.writeOnly = Boolean(param.write_only);
+			parsedParam.allowManualEntry = param.type !== "list";
+			parsedParam.defaultValue = param.value || parsedParam.value || 0;
+
+			if (param.units !== undefined) {
+				parsedParam.units = param.units;
+			}
+
+			// could have multiple translations, if so it's an array, the first
+			// is the english one
+			if (isArray(parsedParam.description)) {
+				parsedParam.description = parsedParam.description[0];
+			}
+
+			if (typeof parsedParam.description !== "string") {
+				parsedParam.description = "";
+			}
+
+			if (typeof parsedParam.defaultValue !== "number") {
+				parsedParam.defaultValue = 0;
+			}
+
+			// some values have typos, this fixes them
+			if (typeof parsedParam.maxValue === "string") {
+				parsedParam.maxValue = parseInt(
+					parsedParam.maxValue.replace(/[^0-9]/g, ""),
+				);
+			}
+
+			const items = ensureArray(param.Item);
+
+			if (param.type === "list" && items.length > 0) {
+				parsedParam.options = [];
+				for (const item of items) {
+					const opt = {
+						label: item.label.toString(),
+						value: parseInt(item.value),
+					};
+					parsedParam.options.push(opt);
+				}
+			}
+
+			ret.paramInformation[param.index] = parsedParam;
+		}
 	}
 
 	const associations = ensureArray(
