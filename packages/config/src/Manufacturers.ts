@@ -1,12 +1,16 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import { entries } from "alcalzone-shared/objects";
-import { padStart } from "alcalzone-shared/strings";
 import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import log from "./Logger";
-import { configDir, hexKeyRegex4Digits, throwInvalidConfig } from "./utils";
+import {
+	configDir,
+	formatId,
+	hexKeyRegex4Digits,
+	throwInvalidConfig,
+} from "./utils";
 
 const configPath = path.join(configDir, "manufacturers.json");
 let manufacturers: Map<number, string> | undefined;
@@ -132,8 +136,7 @@ export async function writeManufacturersToJson(): Promise<void> {
 	);
 
 	for (const [id, name] of orderedMap) {
-		const hexId = "0x" + padStart(id.toString(16), 4, "0").toUpperCase();
-		data[hexId] = name;
+		data[formatId(id)] = name;
 	}
 
 	await writeFile(configPath, JSON.stringify(data, undefined, 4));

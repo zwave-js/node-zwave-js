@@ -22,19 +22,23 @@ import {
 	writeIndexToFile,
 	writeManufacturersToJson,
 } from "@zwave-js/config";
+import { CommandClasses } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { composeObject, entries } from "alcalzone-shared/objects";
-import { padStart } from "alcalzone-shared/strings";
 import { isArray } from "alcalzone-shared/typeguards";
 import { red } from "ansi-colors";
 import { AssertionError, ok } from "assert";
 import axios from "axios";
 import * as child from "child_process";
+import { formatId } from "config/src/utils";
 import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
+import { promisify } from "util";
 import xml2json from "xml2json";
+
+const execPromise = promisify(child.exec);
 
 // Where the files are located
 const importDir = path.join(__dirname, "../packages/config", "config/import");
@@ -111,6 +115,12 @@ async function fetchDevice(id: string): Promise<string> {
 /** Downloads ozw master archive and store it on `tmpDir` */
 async function downloadOzwConfig(): Promise<string> {
 	console.log("downloading ozw archive...");
+
+	// create tmp directory if missing
+	await fs.ensureDir(tmpDir);
+
+	// this will return a strem in `data` that we pipe into write stream
+	// to store the file in `tmpDir`
 	const data = (await axios({ url: ozwTarUrl, responseType: "stream" })).data;
 
 	return new Promise((resolve, reject) => {
@@ -134,35 +144,18 @@ async function downloadOzwConfig(): Promise<string> {
 }
 
 /** Extract `config` folder from ozw archive in `tmpDir` */
-function extractConfigFromTar(): Promise<void> {
-	return new Promise((resolve, reject) => {
-		console.log("extracting config folder from ozw archive...");
-		child.exec(
-			`tar -xzf ${ozwTarName} open-zwave-master/config  --strip-components=1`,
-			{ cwd: tmpDir },
-			function (error) {
-				if (error) {
-					reject(error);
-				} else {
-					resolve();
-				}
-			},
-		);
-	});
+async function extractConfigFromTar(): Promise<void> {
+	console.log("extracting config folder from ozw archive...");
+	await execPromise(
+		`tar -xzf ${ozwTarName} open-zwave-master/config  --strip-components=1`,
+		{ cwd: tmpDir },
+	);
 }
 
 /** Delete all files in `tmpDir` */
-function cleanTmpDirectory(): Promise<void> {
-	return new Promise((resolve, reject) => {
-		child.exec("rm -rf *", { cwd: tmpDir }, function (error) {
-			if (error) {
-				reject(error);
-			} else {
-				resolve();
-				console.log("temporary directory cleaned");
-			}
-		});
-	});
+async function cleanTmpDirectory(): Promise<void> {
+	await fs.remove(tmpDir);
+	console.log("temporary directory cleaned");
 }
 
 /** Reads OZW `manufacturer_specific.xml` */
@@ -171,22 +164,23 @@ async function parseOzwConfig(): Promise<void> {
 		ozwConfigFolder,
 		"manufacturer_specific.xml",
 	);
-	const manufacturerJson = xml2json.toJson(
+	const manufacturerJson: Record<string, any> = xml2json.toJson(
 		await fs.readFile(manufacturerFile, "utf8"),
-		{ object: true },
+		{
+			object: true,
+		},
 	);
 
 	await loadManufacturers();
 	await loadDeviceIndex();
 
-	// @ts-ignore
 	for (const man of manufacturerJson.ManufacturerSpecificData.Manufacturer) {
 		const intId = parseInt(man.id);
 
 		let name = lookupManufacturer(intId);
 
 		// manufacturers ids are lower case in both folders and devices ids
-		const hexId = "0x" + padStart(man.id, 4, "0").toLowerCase();
+		const hexId = formatId(man.id);
 
 		if (name === undefined && man.name !== undefined) {
 			// add manufacturer to manufacturers.json
@@ -197,7 +191,7 @@ async function parseOzwConfig(): Promise<void> {
 
 		name = man.name;
 
-		if (man.Product !== undefined && Array.isArray(man.Product)) {
+		if (man.Product !== undefined && isArray(man.Product)) {
 			for (const product of man.Product) {
 				if (product.config !== undefined) {
 					await parseOzwProduct(product, name, hexId, intId);
@@ -214,12 +208,10 @@ async function parseOzwConfig(): Promise<void> {
  * When using xml2json some fields expected as array are parsed as objects
  * when there is only one element. This method ensures that them are arrays
  *
- * @param {any} json
- * @returns {Array<any>}
  */
-function ensureArray(json: any): Array<any> {
-	json = json || [];
-	return Array.isArray(json) ? json : [json];
+function ensureArray(json: any): any[] {
+	json = json ?? [];
+	return isArray(json) ? json : [json];
 }
 
 /**
@@ -227,11 +219,11 @@ function ensureArray(json: any): Array<any> {
  * create/update device json config and validate the newly added
  * device
  *
- * @param {any} product the parsed product json entry from manufacturer.xml
- * @param {(string | undefined)} manufacturer manufacturer name string
- * @param {string} manufacturerId manufacturer hex id `0xXXXX`
- * @param {number} manufacturerIdInt manufacturer integer id
- * @returns {Promise<void>} fulfilled once the parsing ends
+ * @param product the parsed product json entry from manufacturer.xml
+ * @param manufacturer manufacturer name string
+ * @param manufacturerId manufacturer hex id `0xXXXX`
+ * @param manufacturerIdInt manufacturer integer id
+ * @returns promise fulfilled once the parsing ends
  */
 async function parseOzwProduct(
 	product: any,
@@ -251,40 +243,32 @@ async function parseOzwProduct(
 	const productName = product.name;
 
 	// for some reasons some products already have the prefix `0x`, remove it
-	product.id = product.id.replace("0x", "");
-	product.type = product.type.replace("0x", "");
+	product.id = product.id.replace(/^0x/, "");
+	product.type = product.type.replace(/^0x/, "");
 
-	const productId = "0x" + padStart(product.id, 4);
-	const productType = "0x" + padStart(product.type, 4);
+	const productId = formatId(product.id);
+	const productType = formatId(product.type);
 
 	const fileName = `${manufacturerId}/${labelToFilename(productLabel)}.json`;
 	const filePath = path.join(processedDir, fileName);
 
-	let existingDevice;
-
-	try {
-		existingDevice = JSON5.parse(await fs.readFile(filePath, "utf8"));
-	} catch (error) {
-		// device doesn't exists
-	}
-
-	// @ts-ignore
-	const json: Record<string, any> = xml2json.toJson(productFile, {
+	let json: Record<string, any> = xml2json.toJson(productFile, {
 		object: true,
-		coerce: true,
-	}).Product;
+		coerce: true, // coerce types
+	});
 
-	// let metadata = json.MetaData?.MetaDataItem || [];
-	// metadata = Array.isArray(metadata) ? metadata : [metadata];
+	json = json.Product;
+
+	// const metadata = ensureArray(json.MetaData?.MetaDataItem);
 	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
 	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
 
 	if (
-		(await lookupDevice(
+		!(await lookupDevice(
 			manufacturerIdInt,
 			parseInt(product.type, 16),
 			parseInt(product.id, 16),
-		)) === undefined
+		))
 	) {
 		addDeviceToIndex(
 			manufacturerIdInt,
@@ -294,10 +278,15 @@ async function parseOzwProduct(
 		);
 	}
 
-	const commandClasses = ensureArray(json.CommandClass);
+	let existingDevice;
+
+	try {
+		existingDevice = JSON5.parse(await fs.readFile(filePath, "utf8"));
+	} catch (error) {
+		// device doesn't exists
+	}
 
 	const ret: Record<string, any> = {
-		_approved: true,
 		manufacturer: manufacturer,
 		manufacturerId: manufacturerId,
 		label: productLabel,
@@ -309,8 +298,8 @@ async function parseOzwProduct(
 			},
 		],
 		firmwareVersion: {
-			min: existingDevice?.firmwareVersion.min || "0.0",
-			max: existingDevice?.firmwareVersion.max || "255.255",
+			min: existingDevice?.firmwareVersion.min ?? "0.0",
+			max: existingDevice?.firmwareVersion.max ?? "255.255",
 		},
 	};
 
@@ -336,8 +325,11 @@ async function parseOzwProduct(
 		}
 	}
 
+	const commandClasses = ensureArray(json.CommandClass);
+
 	const parameters = ensureArray(
-		commandClasses.find((c: any) => c.id === 112)?.Value,
+		commandClasses.find((c: any) => c.id === CommandClasses.Configuration)
+			?.Value,
 	);
 
 	if (parameters.length > 0 && ret.paramInformation === undefined) {
@@ -348,17 +340,17 @@ async function parseOzwProduct(
 	for (const param of parameters) {
 		if (isNaN(param.index)) continue;
 
-		const parsedParam = ret.paramInformation[param.index] || {};
+		const parsedParam = ret.paramInformation[param.index] ?? {};
 
-		parsedParam.label = param.label || parsedParam.label;
-		parsedParam.description = param.Help || parsedParam.description;
-		parsedParam.valueSize = param.size || parsedParam.valueSize || 1;
-		parsedParam.minValue = param.min || parsedParam.min || 0;
-		parsedParam.maxValue = param.max || parsedParam.max || 100;
+		parsedParam.label = param.label ?? parsedParam.label;
+		parsedParam.description = param.Help ?? parsedParam.description;
+		parsedParam.valueSize = param.size ?? parsedParam.valueSize ?? 1;
+		parsedParam.minValue = param.min ?? parsedParam.min ?? 0;
+		parsedParam.maxValue = param.max ?? parsedParam.max ?? 100;
 		parsedParam.readOnly = Boolean(param.read_only);
 		parsedParam.writeOnly = Boolean(param.write_only);
 		parsedParam.allowManualEntry = param.type !== "list";
-		parsedParam.defaultValue = param.value || parsedParam.value || 0;
+		parsedParam.defaultValue = param.value ?? parsedParam.value ?? 0;
 
 		if (param.units !== undefined) {
 			parsedParam.units = param.units;
@@ -366,7 +358,7 @@ async function parseOzwProduct(
 
 		// could have multiple translations, if so it's an array, the first
 		// is the english one
-		if (Array.isArray(parsedParam.description)) {
+		if (isArray(parsedParam.description)) {
 			parsedParam.description = parsedParam.description[0];
 		}
 
@@ -402,11 +394,14 @@ async function parseOzwProduct(
 	}
 
 	const associations = ensureArray(
-		commandClasses.find((c: any) => c.id === 133)?.Associations?.Group,
+		commandClasses.find((c: any) => c.id === CommandClasses.Association)
+			?.Associations?.Group,
 	);
 
 	const multiInstanceAssociations = ensureArray(
-		commandClasses.find((c: any) => c.id === 142)?.Associations?.Group,
+		commandClasses.find(
+			(c: any) => c.id === CommandClasses["Multi Channel Association"],
+		)?.Associations?.Group,
 	);
 
 	associations.push(...multiInstanceAssociations);
@@ -417,7 +412,7 @@ async function parseOzwProduct(
 
 	// parse associations contained in command class 133 and 142
 	for (const ass of associations) {
-		const parsedAssociation = ret.associations[ass.index] || {};
+		const parsedAssociation = ret.associations[ass.index] ?? {};
 
 		parsedAssociation.label = ass.label;
 		parsedAssociation.maxNodes = ass.max_associations;
@@ -516,7 +511,7 @@ async function downloadManufacturers(): Promise<void> {
 				.replace(/&quot;/g, `"`)
 				.replace(/&amp;/g, "&")
 				.trim(),
-			`0x${padStart(id.trim(), 4, "0").toLowerCase()}`,
+			formatId(id.trim()),
 		]),
 	);
 
@@ -537,7 +532,7 @@ function findManufacturerId(
 ): string | undefined {
 	for (const re of manufacturerIdRegexes) {
 		const match = input.match(re);
-		if (match) return "0x" + padStart(match[1], 4, "0").toLowerCase();
+		if (match) return formatId(match[1]);
 	}
 	const imported = require(importedManufacturersPath);
 	const manufacturerName = inputAsJson.manufacturer;
@@ -596,7 +591,7 @@ async function parseConfigFile(filename: string): Promise<Record<string, any>> {
 				const [productType, productId] = ref
 					.trim()
 					.split(":")
-					.map((str) => "0x" + padStart(str, 4, "0").toLowerCase());
+					.map((str) => formatId(str));
 				return { productType, productId };
 			}),
 		firmwareVersion: {
@@ -774,11 +769,9 @@ async function generateDeviceIndex(): Promise<void> {
 			// Add the file to the index
 			index.push(
 				...config.devices.map((dev: any) => ({
-					manufacturerId: `0x${padStart(
+					manufacturerId: formatId(
 						config.manufacturerId.toString(16),
-						4,
-						"0",
-					).toLowerCase()}`,
+					),
 					...dev,
 					firmwareVersion: config.firmwareVersion,
 					filename: relativePath,

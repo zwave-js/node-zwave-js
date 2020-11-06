@@ -101,7 +101,10 @@ export async function writeIndexToFile(): Promise<void> {
  * @param manufacturerId The manufacturer id of the device
  * @param productType The product type of the device
  * @param productId The product id of the device
- * @param firmwareVersion If known, configuration for a specific firmware version can be loaded
+ * @param filename The path to the json configuration of this device
+ * @param firmwareVersionMin Min firmware version
+ * @param firmwareVersionMax Max firmware version
+ *
  */
 export function addDeviceToIndex(
 	manufacturerId: number,
