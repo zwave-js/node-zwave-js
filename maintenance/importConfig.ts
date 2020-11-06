@@ -22,6 +22,7 @@ import {
 	writeIndexToFile,
 	writeManufacturersToJson,
 } from "@zwave-js/config";
+import { formatId } from "@zwave-js/config/src/utils";
 import { CommandClasses } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { composeObject, entries } from "alcalzone-shared/objects";
@@ -30,7 +31,6 @@ import { red } from "ansi-colors";
 import { AssertionError, ok } from "assert";
 import axios from "axios";
 import * as child from "child_process";
-import { formatId } from "config/src/utils";
 import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
