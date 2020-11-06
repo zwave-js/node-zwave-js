@@ -46,7 +46,7 @@ yargs
 		description: "source of the import",
 		alias: "s",
 		type: "array",
-		choices: ["oh", "ozw"], // oh: openhub, ozw: openzwave
+		choices: ["oh", "ozw"], // oh: openhab, ozw: openzwave
 		default: ["oh"],
 	})
 	.option("ids", {
@@ -89,11 +89,11 @@ yargs
 	)
 	.example(
 		"import -s oh -Dmid",
-		"Download and parse OpenHub db (manufacturers, index, devices)",
+		"Download and parse openhab db (manufacturers, index, devices)",
 	)
 	.example(
 		"import -s oh -D --ids 1234 5678",
-		"Download OpenHub devices with ids `1234` and `5678`",
+		"Download openhab devices with ids `1234` and `5678`",
 	)
 	.help()
 	.version(false)
