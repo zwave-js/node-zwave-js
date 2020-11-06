@@ -367,9 +367,6 @@ async function parseOzwProduct(
 		);
 	}
 
-	// stop here, don't parse the device
-	if (!program.devices) return;
-
 	let existingDevice;
 
 	try {
