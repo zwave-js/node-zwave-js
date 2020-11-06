@@ -52,7 +52,6 @@ yargs
 	.option("ids", {
 		description: "devices ids to download",
 		type: "array",
-		default: [],
 	})
 	.option("download", {
 		alias: "D",
@@ -102,7 +101,7 @@ yargs
 
 class Program {
 	public source: string[];
-	public ids: string[];
+	public ids: string[] | undefined;
 	public download: boolean;
 	public clean: boolean;
 	public manufacturers: boolean;
