@@ -20,6 +20,7 @@ import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	ignoreTimeout,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -237,23 +238,45 @@ export class CentralSceneCC extends CommandClass {
 				}
 			}
 
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "Querying supported scenes...",
-				direction: "outbound",
-			});
-			const ccSupported = await api.getSupported();
-			const logMessage = `received supported scenes:
+			let ccSupported:
+				| {
+						sceneCount: number;
+						supportsSlowRefresh: boolean;
+						supportedKeyAttributes: ReadonlyMap<
+							number,
+							readonly CentralSceneKeys[]
+						>;
+				  }
+				| undefined;
+			if (
+				!(await ignoreTimeout(async () => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: "Querying supported scenes...",
+						direction: "outbound",
+					});
+					ccSupported = await api.getSupported();
+					const logMessage = `received supported scenes:
 # of scenes:           ${ccSupported.sceneCount}
 supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				}))
+			) {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying supported scenes timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
 
 			// The slow refresh capability should be enabled whenever possible
-			if (this.version >= 3 && ccSupported.supportsSlowRefresh) {
+			if (this.version >= 3 && ccSupported?.supportsSlowRefresh) {
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "Enabling slow refresh capability...",
