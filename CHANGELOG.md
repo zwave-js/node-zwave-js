@@ -12,6 +12,7 @@
 * The `Central Scene CC` interview is now skipped if a device does not respond to the supported scenes request
 * Empty user codes are now also handled as strings instead of Buffer objects
 * The `targetValue` property for the `Binary Switch`, `Multilevel Switch` and `Basic` CCs is now created, even if is `undefined`.
+* The type `CommandClass` is now exported from `zwave-js/CommandClass`
 
 ## 5.3.6 (2020-11-04)
 ### Bugfixes

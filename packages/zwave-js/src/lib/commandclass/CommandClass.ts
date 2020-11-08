@@ -81,6 +81,7 @@ export type CommandClassOptions =
 	| CommandClassCreationOptions
 	| CommandClassDeserializationOptions;
 
+// @publicAPI
 export class CommandClass {
 	// empty constructor to parse messages
 	public constructor(driver: Driver, options: CommandClassOptions) {
