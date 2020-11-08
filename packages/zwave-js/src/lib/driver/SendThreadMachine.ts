@@ -692,7 +692,7 @@ export function createSendThreadMachine(
 								{
 									name: "commandQueue",
 								},
-							),
+							) as any,
 					}),
 					// Spawn the command queue when starting the send thread
 					always: "idle",
