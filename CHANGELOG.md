@@ -11,6 +11,7 @@
 * The `duration` property for the `Binary Switch`, `Color Switch`, `Multilevel Switch` and `Scene Activation` CCs is now writeable
 * The `Central Scene CC` interview is now skipped if a device does not respond to the supported scenes request
 * Empty user codes are now also handled as strings instead of Buffer objects
+* The `targetValue` property for the `Binary Switch`, `Multilevel Switch` and `Basic` CCs is now created, even if is `undefined`.
 
 ## 5.3.6 (2020-11-04)
 ### Bugfixes

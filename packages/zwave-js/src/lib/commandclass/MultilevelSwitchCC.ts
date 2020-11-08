@@ -478,7 +478,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	}
 
 	private _targetValue: number | undefined;
-	@ccValue()
+	@ccValue({ forceCreation: true })
 	@ccValueMetadata({
 		...ValueMetadata.Level,
 		label: "Target value",

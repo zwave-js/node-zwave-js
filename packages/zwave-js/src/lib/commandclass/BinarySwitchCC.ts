@@ -253,7 +253,7 @@ export class BinarySwitchCCReport extends BinarySwitchCC {
 	}
 
 	private _targetValue: boolean | undefined;
-	@ccValue()
+	@ccValue({ forceCreation: true })
 	@ccValueMetadata({
 		...ValueMetadata.Boolean,
 		label: "Target value",
