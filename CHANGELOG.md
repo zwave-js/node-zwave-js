@@ -7,6 +7,7 @@
 ## __WORK IN PROGRESS__
 ### Bugfixes
 * If a node association is duplicated between `Association CC` and `Multi Channel Association CC`, it is now removed from both when using `Controller.removeAssociations`
+* Empty user codes are now also handled as strings instead of Buffer objects
 
 ## 5.3.6 (2020-11-04)
 ### Bugfixes
