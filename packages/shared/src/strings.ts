@@ -28,5 +28,5 @@ export function buffer2hex(buffer: Buffer, uppercase: boolean = false): string {
 }
 
 export function isPrintableASCII(text: string): boolean {
-	return /^[\u0020-\u007e]+$/.test(text);
+	return /^[\u0020-\u007e]*$/.test(text);
 }
