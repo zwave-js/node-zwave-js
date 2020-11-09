@@ -29,6 +29,7 @@ import {
 	addDeviceToIndex,
 	DeviceConfig,
 	DeviceConfigIndexEntry,
+	getIndex,
 	loadDeviceIndex,
 	loadManufacturers,
 	lookupDevice,
@@ -447,17 +448,32 @@ async function parseOzwProduct(
 
 	const manufacturerDir = path.join(processedDir, manufacturerId);
 
-	const latestConfigFile = await getLatestConfigVersion(
-		manufacturerDir,
-		labelToFilename(productLabel),
-	);
+	const deviceConfigs =
+		getIndex()?.filter(
+			(f: DeviceConfigIndexEntry) =>
+				f.manufacturerId === manufacturerId &&
+				f.productType === productType &&
+				f.productId === productId,
+		) ?? [];
 
-	const fileName = `${manufacturerId}/${
-		latestConfigFile ?? labelToFilename(productLabel) + ".json"
-	}`;
+	const latestConfig = getLatestConfigVersion(deviceConfigs);
+
+	const fileName =
+		latestConfig?.filename ??
+		`${manufacturerId}/${labelToFilename(productLabel)}.json`;
+
+	if (deviceConfigs.length === 0) {
+		addDeviceToIndex(
+			manufacturerIdInt,
+			parseInt(product.type, 16),
+			parseInt(product.id, 16),
+			fileName,
+		);
+	}
+
 	const filePath = path.join(processedDir, fileName);
 
-	const existingDevice = latestConfigFile
+	const existingDevice = latestConfig
 		? JSON5.parse(await fs.readFile(filePath, "utf8"))
 		: null;
 
@@ -471,21 +487,6 @@ async function parseOzwProduct(
 	// const metadata = ensureArray(json.MetaData?.MetaDataItem);
 	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
 	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
-
-	if (
-		!(await lookupDevice(
-			manufacturerIdInt,
-			parseInt(product.type, 16),
-			parseInt(product.id, 16),
-		))
-	) {
-		addDeviceToIndex(
-			manufacturerIdInt,
-			parseInt(product.type, 16),
-			parseInt(product.id, 16),
-			fileName,
-		);
-	}
 
 	const ret: Record<string, any> = {
 		manufacturer: manufacturer,
@@ -989,29 +990,19 @@ function parseFileName(fileName: string): SemVer | string | null {
 
 /**
  * Get latest device configuration file version
- * @param manufacturerDir manufacturer folder
- * @param productName  product name
+ * @param configs list of device config index entries
  */
-async function getLatestConfigVersion(
-	manufacturerDir: string,
-	productName: string,
-): Promise<string | undefined> {
-	// get all files in manufacturer dir related to this product
-	// could be none, one, or multiple files if there are many versions
-	const files = (await fs.readdir(manufacturerDir)).filter(
-		(f) => f === `${productName}.json` || f.startsWith(productName + "_"),
-	);
-
-	// sort the files by parsing the version range
-	// <productname>_<minVersion?>-<maxVersion>.json
-	files.sort((a, b) => {
-		const vA = parseFileName(a) ?? "0.0.0";
-		const vB = parseFileName(b) ?? "0.0.0";
+function getLatestConfigVersion(
+	configs: DeviceConfigIndexEntry[],
+): DeviceConfigIndexEntry {
+	configs.sort((a, b) => {
+		const vA = coerce(a.firmwareVersion.max) || "0.0.0";
+		const vB = coerce(b.firmwareVersion.max) || "0.0.0";
 
 		return compare(vA, vB);
 	});
 
-	return files[files.length - 1];
+	return configs[configs.length - 1];
 }
 
 async function enumFilesRecursive(

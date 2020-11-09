@@ -135,6 +135,10 @@ export function addDeviceToIndex(
 	index.push(indexEntry);
 }
 
+export function getIndex(): DeviceConfigIndexEntry[] | undefined {
+	return index;
+}
+
 /**
  * Looks up the definition of a given device in the configuration DB
  * @param manufacturerId The manufacturer id of the device
