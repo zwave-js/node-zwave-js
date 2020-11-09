@@ -285,6 +285,8 @@ function ensureArray(json: any): any[] {
 }
 
 function normalizeUnits(unit: string) {
+	if (!unit) return undefined;
+
 	if (/minutes/i.test(unit)) {
 		return "minutes";
 	} else if (/seconds/i.test(unit)) {
@@ -377,7 +379,7 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 				delete param.unsigned;
 			}
 
-			if (!param.units) {
+			if (!param.unit) {
 				delete param.unit;
 			}
 
@@ -385,9 +387,9 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 				delete param.description;
 			}
 
-			if (!param.options) {
+			if (!param.options || param.options.length === 0) {
 				delete param.options;
-			} else if (param.options.length > 0) {
+			} else {
 				const values = param.options.map((o: any) => o.value);
 				const max = Math.max(...values);
 				const min = Math.min(...values);
