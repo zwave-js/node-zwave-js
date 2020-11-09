@@ -543,6 +543,10 @@ async function parseOzwProduct(
 
 			const size = param.size || 1;
 
+			param.label = ensureArray(param.label)[0];
+
+			const paramLabel = param.label ? `${param.label}. ` : "";
+
 			const bitArray = padStart(value.toString(2), size * 8, "0")
 				.split("")
 				.reverse()
@@ -560,7 +564,7 @@ async function parseOzwProduct(
 
 				// this values are all parsed as switches but could be transformed to
 				// list with two options: `Enable` and `Disable`
-				parsedParam.label = label;
+				parsedParam.label = `${paramLabel}${label}`;
 				parsedParam.description = desc;
 				parsedParam.valueSize = 1;
 				parsedParam.minValue = 0;
@@ -577,8 +581,10 @@ async function parseOzwProduct(
 
 			// don't use ?? here, some fields could be empty strings and ?? operator
 			// will not work
-			parsedParam.label = param.label || parsedParam.label;
-			parsedParam.description = param.Help || parsedParam.description;
+			parsedParam.label =
+				ensureArray(param.label)[0] || parsedParam.label;
+			parsedParam.description =
+				ensureArray(param.Help)[0] || parsedParam.description;
 			parsedParam.valueSize = param.size || parsedParam.valueSize || 1;
 			parsedParam.minValue = param.min || parsedParam.min || 0;
 			parsedParam.maxValue = param.max || parsedParam.max || 100;
