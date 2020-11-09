@@ -81,6 +81,7 @@ export type CommandClassOptions =
 	| CommandClassCreationOptions
 	| CommandClassDeserializationOptions;
 
+// @publicAPI
 export class CommandClass {
 	// empty constructor to parse messages
 	public constructor(driver: Driver, options: CommandClassOptions) {
@@ -563,6 +564,22 @@ export class CommandClass {
 		return false;
 	}
 
+	/** Determines if the given value should always be persisted */
+	public shouldValueAlwaysBeCreated(property: keyof this): boolean {
+		// A value is internal if any of the possible definitions say so (true)
+		if (this._registeredCCValues.get(property as string) === true)
+			return true;
+		const ccValueDefinition = getCCValueDefinitions(this).get(
+			property as string,
+		);
+		if (ccValueDefinition?.forceCreation === true) return true;
+		const ccKeyValuePairDefinition = getCCKeyValuePairDefinitions(this).get(
+			property as string,
+		);
+		if (ccKeyValuePairDefinition?.forceCreation === true) return true;
+		return false;
+	}
+
 	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
 	public persistValues(valueNames?: (keyof this)[]): boolean {
 		// In order to avoid cluttering applications with heaps of unsupported properties,
@@ -601,7 +618,12 @@ export class CommandClass {
 			if (variable === "interviewComplete") continue;
 			// Only persist non-undefined values
 			const sourceValue = this[variable as keyof this];
-			if (sourceValue == undefined) continue;
+			if (
+				sourceValue == undefined &&
+				!this.shouldValueAlwaysBeCreated(variable as keyof this)
+			) {
+				continue;
+			}
 
 			if (keyValuePairDefinitions.has(variable)) {
 				// This value is one or more key value pair(s) to be stored in a map
@@ -1201,6 +1223,10 @@ export interface CCValueOptions {
 	 * The minimum CC version required for this value to exist.
 	 */
 	minVersion?: number;
+	/**
+	 * Whether this value should always be created/persisted, even if it is undefined. Default: false
+	 */
+	forceCreation?: boolean;
 }
 
 /**
@@ -1214,6 +1240,7 @@ export function ccValue(options?: CCValueOptions): PropertyDecorator {
 		if (!options) options = {};
 		if (options.internal == undefined) options.internal = false;
 		if (options.minVersion == undefined) options.minVersion = 1;
+		if (options.forceCreation == undefined) options.forceCreation = false;
 		// get the class constructor
 		const constr = target.constructor as typeof CommandClass;
 		const cc = getCommandClassStatic(constr);
@@ -1256,6 +1283,7 @@ export function ccKeyValuePair(options?: CCValueOptions): PropertyDecorator {
 		if (!options) options = {};
 		if (options.internal == undefined) options.internal = false;
 		if (options.minVersion == undefined) options.minVersion = 1;
+		if (options.forceCreation == undefined) options.forceCreation = false;
 		// get the class constructor
 		const constr = target.constructor as typeof CommandClass;
 		const cc = getCommandClassStatic(constr);

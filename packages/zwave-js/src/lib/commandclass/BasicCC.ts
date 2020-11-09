@@ -239,7 +239,7 @@ export class BasicCCReport extends BasicCC {
 	}
 
 	private _targetValue: number | undefined;
-	@ccValue()
+	@ccValue({ forceCreation: true })
 	@ccValueMetadata({
 		...ValueMetadata.Level,
 		label: "Target value",
