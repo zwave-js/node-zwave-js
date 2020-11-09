@@ -567,10 +567,16 @@ export class ConfigurationCC extends CommandClass {
 					message: `querying parameter #${param} information...`,
 					direction: "outbound",
 				});
+
 				// Query name and info
-				const name = await api.getName(param);
-				// This is probably long, should we log it?
-				await api.getInfo(param);
+				let name = "(unknown)";
+				// let info = "(unknown)";
+				await ignoreTimeout(async () => {
+					name = await api.getName(param);
+				});
+				await ignoreTimeout(async () => {
+					await api.getInfo(param);
+				});
 
 				// Query properties and the next param
 				const {
