@@ -508,6 +508,7 @@ async function parseOzwProduct(
 			min: existingDevice?.firmwareVersion.min ?? "0.0",
 			max: existingDevice?.firmwareVersion.max ?? "255.255",
 		},
+		compat: existingDevice?.compat,
 	};
 
 	if (existingDevice) {
@@ -684,8 +685,10 @@ async function parseOzwProduct(
 		.filter((c) => c.action === "remove")
 		.map((c) => c.id);
 
+	const compat = ret.compat ?? {};
+
 	if (toAdd.length > 0 || toRemove.length > 0) {
-		const cc: Record<string, any> = {};
+		const cc: Record<string, any> = compat.cc ?? {};
 
 		if (toAdd.length > 0) {
 			cc.add = toAdd;
@@ -695,9 +698,9 @@ async function parseOzwProduct(
 			cc.remove = toRemove;
 		}
 
-		ret.compat = {
-			cc: cc,
-		};
+		compat.cc = cc;
+
+		ret.compat = compat;
 	}
 	// create manufacturer dir if doesn't exists
 	await fs.ensureDir(manufacturerDir);
