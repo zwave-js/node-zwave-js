@@ -109,6 +109,8 @@ const processedDir = path.join(
 	"config/devices",
 );
 
+const paramsRegex = /\[0x([0-9]+)\]/g;
+
 const tmpDir = path.join(__dirname, "../.tmp");
 const ozwTarName = "openzwave.tar.gz";
 const ozwTarUrl =
@@ -282,6 +284,126 @@ function ensureArray(json: any): any[] {
 	return isArray(json) ? json : [json];
 }
 
+function normalizeUnits(unit: string) {
+	if (/minutes/i.test(unit)) {
+		return "minutes";
+	} else if (/seconds/i.test(unit)) {
+		return "seconds";
+	} else if (/fahrenheit|\bF\b/i.test(unit)) {
+		return "°F";
+	} else if (/degrees celsius|celsius|\bc\b/i.test(unit)) {
+		return "°C";
+	} else if (/\bwatt/i.test(unit)) {
+		return "W";
+	} else if (/\bvolt/i.test(unit)) {
+		return "V";
+	} else if (/percent|dimmer level|%/i.test(unit)) {
+		return "%";
+	} else if (/degrees/i.test(unit)) {
+		return "°";
+	}
+
+	return undefined;
+}
+
+/**
+ * Normalize a device JSON configuration to ensure all keys have the same order
+ * and fix some parameters if needed
+ *
+ * @param config Device JSON configuration
+ */
+function normalizeConfig(config: Record<string, any>): Record<string, any> {
+	const normalized: Record<string, any> = {
+		manufacturer: config.manufacturer,
+		manufacturerId: config.manufacturerId,
+		label: config.label,
+		description: config.description,
+		devices: config.devices,
+		firmwareVersion: config.firmwareVersion,
+		associations: config.associations,
+		paramInformation: {},
+	};
+
+	if (!normalized.associations) {
+		delete normalized.associations;
+	}
+
+	if (config.paramInformation) {
+		const paramKeys = Object.keys(config.paramInformation);
+
+		// ensure paramKeys respect the order: 100, 101[0x01], 101[0x02], 102 etc...
+		paramKeys.sort((a, b) => {
+			const aMask = paramsRegex.exec(a) ?? [];
+			const bMask = paramsRegex.exec(b) ?? [];
+
+			if (aMask.length > 1) {
+				a = a.replace(aMask[0], "");
+			}
+
+			if (bMask.length > 1) {
+				b = b.replace(aMask[0], "");
+			}
+
+			if (a === b) {
+				return parseInt(aMask[1], 16) - parseInt(bMask[1], 16);
+			} else {
+				return parseInt(a) - parseInt(b);
+			}
+		});
+
+		const paramInformation: Record<string, any> = {};
+
+		for (const key of paramKeys) {
+			const toEdit = config.paramInformation[key];
+
+			const param: Record<string, any> = {
+				label: toEdit.label,
+				description: toEdit.description,
+				valueSize: toEdit.valueSize,
+				unit: normalizeUnits(toEdit.unit),
+				minValue: toEdit.minValue,
+				maxValue: toEdit.maxValue,
+				defaultValue: toEdit.defaultValue,
+				unsigned: toEdit.unsigned,
+				readOnly: toEdit.readOnly,
+				writeOnly: toEdit.writeOnly,
+				allowManualEntry: toEdit.allowManualEntry,
+				options: toEdit.options,
+			};
+
+			if (!param.unsigned) {
+				delete param.unsigned;
+			}
+
+			if (!param.units) {
+				delete param.unit;
+			}
+
+			if (!param.description) {
+				delete param.description;
+			}
+
+			if (!param.options) {
+				delete param.options;
+			} else if (param.options.length > 0) {
+				const values = param.options.map((o: any) => o.value);
+				const max = Math.max(...values);
+				const min = Math.min(...values);
+				param.minValue = min;
+				param.maxValue = max;
+			}
+
+			paramInformation[key] = param;
+		}
+
+		normalized.paramInformation = paramInformation;
+	} else {
+		delete normalized.paramInformation;
+	}
+
+	return normalized;
+}
+
 /**
  * Read and parse the product xml, add it to index if missing,
  * create/update device json config and validate the newly added
@@ -308,7 +430,8 @@ async function parseOzwProduct(
 		.basename(product.config, ".xml")
 		.toLocaleUpperCase();
 
-	const productName = product.name;
+	// any products descriptions have productName in it, remove it
+	const productName = product.name.replace(productLabel, "");
 
 	// for some reasons some products already have the prefix `0x`, remove it
 	product.id = product.id.replace(/^0x/, "");
@@ -358,7 +481,7 @@ async function parseOzwProduct(
 		manufacturer: manufacturer,
 		manufacturerId: manufacturerId,
 		label: productLabel,
-		description: productName,
+		description: existingDevice?.description ?? productName, // don't override the descrition
 		devices: [
 			{
 				productType: productType,
@@ -460,8 +583,8 @@ async function parseOzwProduct(
 			parsedParam.allowManualEntry = param.type !== "list";
 			parsedParam.defaultValue = param.value || parsedParam.value || 0;
 
-			if (param.units !== undefined) {
-				parsedParam.units = param.units;
+			if (param.units) {
+				parsedParam.unit = param.units;
 			}
 
 			// could have multiple translations, if so it's an array, the first
@@ -538,7 +661,10 @@ async function parseOzwProduct(
 	await fs.ensureDir(manufacturerDir);
 
 	// write the updated configuration file
-	await fs.writeFile(filePath, JSON.stringify(ret, undefined, 4));
+	await fs.writeFile(
+		filePath,
+		JSON.stringify(normalizeConfig(ret), undefined, 4),
+	);
 
 	// validate the newly added device
 	await lookupDevice(
