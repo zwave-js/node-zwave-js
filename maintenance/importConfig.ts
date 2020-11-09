@@ -21,6 +21,7 @@ import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
+import { coerce, compare, SemVer } from "semver";
 import { promisify } from "util";
 import xml2json from "xml2json";
 import yargs from "yargs";
@@ -444,8 +445,21 @@ async function parseOzwProduct(
 	const productId = formatId(product.id);
 	const productType = formatId(product.type);
 
-	const fileName = `${manufacturerId}/${labelToFilename(productLabel)}.json`;
+	const manufacturerDir = path.join(processedDir, manufacturerId);
+
+	const latestConfigFile = await getLatestConfigVersion(
+		manufacturerDir,
+		labelToFilename(productLabel),
+	);
+
+	const fileName = `${manufacturerId}/${
+		latestConfigFile ?? labelToFilename(productLabel) + ".json"
+	}`;
 	const filePath = path.join(processedDir, fileName);
+
+	const existingDevice = latestConfigFile
+		? JSON5.parse(await fs.readFile(filePath, "utf8"))
+		: null;
 
 	let json: Record<string, any> = xml2json.toJson(productFile, {
 		object: true,
@@ -471,14 +485,6 @@ async function parseOzwProduct(
 			parseInt(product.id, 16),
 			fileName,
 		);
-	}
-
-	let existingDevice;
-
-	try {
-		existingDevice = JSON5.parse(await fs.readFile(filePath, "utf8"));
-	} catch (error) {
-		// device doesn't exists
 	}
 
 	const ret: Record<string, any> = {
@@ -664,8 +670,6 @@ async function parseOzwProduct(
 		}
 		ret.associations[ass.index] = parsedAssociation;
 	}
-
-	const manufacturerDir = path.join(processedDir, manufacturerId);
 
 	// create manufacturer dir if doesn't exists
 	await fs.ensureDir(manufacturerDir);
@@ -969,6 +973,45 @@ async function importConfigFiles(): Promise<void> {
 ${JSON.stringify(parsed, undefined, 4)}`;
 		await fs.writeFile(outFilename, output, "utf8");
 	}
+}
+
+/** Get the latest version from file name */
+function parseFileName(fileName: string): SemVer | string | null {
+	fileName = path.basename(fileName, ".json");
+
+	const versionRange = fileName.split("_")[1]?.split("-");
+
+	const min = versionRange ? coerce(versionRange[0]) : "0.0.0";
+	const max = versionRange ? coerce(versionRange[1]) : null;
+
+	return max ?? min;
+}
+
+/**
+ * Get latest device configuration file version
+ * @param manufacturerDir manufacturer folder
+ * @param productName  product name
+ */
+async function getLatestConfigVersion(
+	manufacturerDir: string,
+	productName: string,
+): Promise<string | undefined> {
+	// get all files in manufacturer dir related to this product
+	// could be none, one, or multiple files if there are many versions
+	const files = (await fs.readdir(manufacturerDir)).filter(
+		(f) => f === `${productName}.json` || f.startsWith(productName + "_"),
+	);
+
+	// sort the files by parsing the version range
+	// <productname>_<minVersion?>-<maxVersion>.json
+	files.sort((a, b) => {
+		const vA = parseFileName(a) ?? "0.0.0";
+		const vB = parseFileName(b) ?? "0.0.0";
+
+		return compare(vA, vB);
+	});
+
+	return files[files.length - 1];
 }
 
 async function enumFilesRecursive(
