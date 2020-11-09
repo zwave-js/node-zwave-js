@@ -326,10 +326,15 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		firmwareVersion: config.firmwareVersion,
 		associations: config.associations,
 		paramInformation: {},
+		compat: config.compat,
 	};
 
 	if (!normalized.associations) {
 		delete normalized.associations;
+	}
+
+	if (!normalized.compat) {
+		delete normalized.compat;
 	}
 
 	if (config.paramInformation) {
@@ -672,6 +677,28 @@ async function parseOzwProduct(
 		ret.associations[ass.index] = parsedAssociation;
 	}
 
+	const toAdd = commandClasses
+		.filter((c) => c.action === "add")
+		.map((c) => c.id);
+	const toRemove = commandClasses
+		.filter((c) => c.action === "remove")
+		.map((c) => c.id);
+
+	if (toAdd.length > 0 || toRemove.length > 0) {
+		const cc: Record<string, any> = {};
+
+		if (toAdd.length > 0) {
+			cc.add = toAdd;
+		}
+
+		if (toRemove.length > 0) {
+			cc.remove = toRemove;
+		}
+
+		ret.compat = {
+			cc: cc,
+		};
+	}
 	// create manufacturer dir if doesn't exists
 	await fs.ensureDir(manufacturerDir);
 
