@@ -109,7 +109,7 @@ const processedDir = path.join(
 	"config/devices",
 );
 
-const paramsRegex = /\[0x([0-9]+)\]/g;
+const paramsRegex = /\[0x([0-9]+)\]/;
 
 const tmpDir = path.join(__dirname, "../.tmp");
 const ozwTarName = "openzwave.tar.gz";
@@ -345,7 +345,9 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 			}
 
 			if (a === b) {
-				return parseInt(aMask[1], 16) - parseInt(bMask[1], 16);
+				return (
+					parseInt(aMask[1] ?? 0, 16) - parseInt(bMask[1] ?? 0, 16)
+				);
 			} else {
 				return parseInt(a) - parseInt(b);
 			}
