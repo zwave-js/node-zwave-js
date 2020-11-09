@@ -110,7 +110,7 @@ const processedDir = path.join(
 	"config/devices",
 );
 
-const paramsRegex = /\[0x([0-9]+)\]/;
+const paramsRegex = /\[0x([0-9a-f]+)\]/i;
 
 const tmpDir = path.join(__dirname, "../.tmp");
 const ozwTarName = "openzwave.tar.gz";
@@ -292,7 +292,7 @@ function normalizeUnits(unit: string) {
 		return "minutes";
 	} else if (/seconds/i.test(unit)) {
 		return "seconds";
-	} else if (/fahrenheit|\bF\b/i.test(unit)) {
+	} else if (/fahrenheit|\bf\b/i.test(unit)) {
 		return "°F";
 	} else if (/degrees celsius|celsius|\bc\b/i.test(unit)) {
 		return "°C";
