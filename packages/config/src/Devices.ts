@@ -16,6 +16,7 @@ import {
 	formatId,
 	getDeviceEntryPredicate,
 	hexKeyRegex4Digits,
+	stringify,
 	throwInvalidConfig,
 } from "./utils";
 
@@ -93,7 +94,7 @@ export async function writeIndexToFile(): Promise<void> {
 		);
 	}
 
-	await writeFile(indexPath, JSON.stringify(index, undefined, 4));
+	await writeFile(indexPath, stringify(index));
 }
 
 /**

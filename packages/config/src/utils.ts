@@ -48,3 +48,7 @@ export function formatId(id: number | string): string {
 export function padVersion(version: string): string {
 	return version + ".0";
 }
+
+export function stringify(data: any, beautify: boolean = true): string {
+	return JSON.stringify(data, undefined, beautify ? 4 : 0);
+}

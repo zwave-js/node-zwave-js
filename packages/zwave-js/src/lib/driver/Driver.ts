@@ -10,6 +10,7 @@ import {
 	loadNotifications,
 	loadSensorTypes,
 } from "@zwave-js/config";
+import { stringify } from "@zwave-js/config/build/utils";
 import {
 	CommandClasses,
 	deserializeCacheValue,
@@ -2246,7 +2247,7 @@ ${handlers.length} left`,
 		);
 
 		const serializedObj = this.controller.serialize();
-		const jsonString = JSON.stringify(serializedObj, undefined, 4);
+		const jsonString = stringify(serializedObj);
 		await this.options.fs.writeFile(cacheFile, jsonString, "utf8");
 	}
 

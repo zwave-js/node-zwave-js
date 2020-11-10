@@ -9,6 +9,7 @@ import {
 	configDir,
 	formatId,
 	hexKeyRegex4Digits,
+	stringify,
 	throwInvalidConfig,
 } from "./utils";
 
@@ -139,5 +140,5 @@ export async function writeManufacturersToJson(): Promise<void> {
 		data[formatId(id)] = name;
 	}
 
-	await writeFile(configPath, JSON.stringify(data, undefined, 4));
+	await writeFile(configPath, stringify(data));
 }

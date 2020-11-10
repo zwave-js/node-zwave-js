@@ -21,7 +21,7 @@ import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
-import { coerce, compare, SemVer } from "semver";
+import { coerce, compare } from "semver";
 import { promisify } from "util";
 import xml2json from "xml2json";
 import yargs from "yargs";
@@ -37,7 +37,7 @@ import {
 	setManufacturer,
 	writeManufacturersToJson,
 } from "../packages/config/src";
-import { formatId } from "../packages/config/src/utils";
+import { formatId, stringify } from "../packages/config/src/utils";
 import { CommandClasses } from "../packages/core/src";
 import { num2hex } from "../packages/shared/src";
 
@@ -174,7 +174,7 @@ async function fetchIDs(): Promise<string[]> {
 /** Retrieves the definition for a specific device */
 async function fetchDevice(id: string): Promise<string> {
 	const source = (await axios({ url: urlDevice(id) })).data;
-	return JSON.stringify(source, null, "\t");
+	return stringify(source);
 }
 
 /** Downloads ozw master archive and store it on `tmpDir` */
@@ -713,10 +713,7 @@ async function parseOzwProduct(
 	await fs.ensureDir(manufacturerDir);
 
 	// write the updated configuration file
-	await fs.writeFile(
-		filePath,
-		JSON.stringify(normalizeConfig(ret), undefined, 4),
-	);
+	await fs.writeFile(filePath, stringify(normalizeConfig(ret)));
 
 	// validate the newly added device
 	await lookupDevice(
@@ -805,7 +802,7 @@ async function downloadManufacturers(): Promise<void> {
 	await fs.ensureDir(importDir);
 	await fs.writeFile(
 		importedManufacturersPath,
-		JSON.stringify(manufacturers, undefined, 4),
+		stringify(manufacturers),
 		"utf8",
 	);
 
@@ -1008,21 +1005,9 @@ async function importConfigFiles(): Promise<void> {
 		// prettier-ignore
 		const output = `// ${parsed.manufacturer} ${parsed.label}${parsed.description ? (`
 // ${parsed.description}`) : ""}
-${JSON.stringify(parsed, undefined, 4)}`;
+${stringify(parsed)}`;
 		await fs.writeFile(outFilename, output, "utf8");
 	}
-}
-
-/** Get the latest version from file name */
-function parseFileName(fileName: string): SemVer | string | null {
-	fileName = path.basename(fileName, ".json");
-
-	const versionRange = fileName.split("_")[1]?.split("-");
-
-	const min = versionRange ? coerce(versionRange[0]) : "0.0.0";
-	const max = versionRange ? coerce(versionRange[1]) : null;
-
-	return max ?? min;
 }
 
 /**
@@ -1105,7 +1090,7 @@ async function generateDeviceIndex(): Promise<void> {
 	await fs.writeFile(
 		path.join(processedDir, "index.json"),
 		`// This file is auto-generated using "npm run config index"
-${JSON.stringify(index, undefined, 4)}`,
+${stringify(index)}`,
 		"utf8",
 	);
 }
