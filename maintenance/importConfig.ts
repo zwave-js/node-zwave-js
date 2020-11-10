@@ -157,6 +157,24 @@ function matchAll(regex: RegExp, string: string) {
 	return ret;
 }
 
+function isUndefined(value: any): boolean {
+	return value === null || value === undefined || value === "";
+}
+
+function getNumber(
+	newN: number | string,
+	oldN: number | string,
+	defaultN: number,
+): number | undefined {
+	let toReturn = sanitizeNumber(newN);
+
+	if (isUndefined(toReturn)) {
+		toReturn = sanitizeNumber(oldN);
+	}
+
+	return isUndefined(toReturn) ? defaultN : toReturn;
+}
+
 /** Retrieves the list of database IDs */
 async function fetchIDs(): Promise<string[]> {
 	const sources: string = (await axios({ url: urlIDs })).data;
@@ -321,8 +339,8 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 	const normalized: Record<string, any> = {
 		manufacturer: config.manufacturer,
 		manufacturerId: config.manufacturerId,
-		label: sanitizeText(config.label),
-		description: sanitizeText(config.description),
+		label: sanitizeText(config.label) ?? "",
+		description: sanitizeText(config.description) ?? "",
 		devices: config.devices.sort(
 			(a: any, b: any) =>
 				a.productType.localeCompare(b.productType) ||
@@ -605,15 +623,15 @@ async function parseOzwProduct(
 		parsedParam.label = ensureArray(param.label)[0] || parsedParam.label;
 		parsedParam.description =
 			ensureArray(param.Help)[0] || parsedParam.description;
-		parsedParam.valueSize = param.size || parsedParam.valueSize || 1;
-		parsedParam.minValue = param.min || parsedParam.min || 0;
+		parsedParam.valueSize = getNumber(param.size, parsedParam.valueSize, 1);
+		parsedParam.minValue = getNumber(param.min, parsedParam.min, 0);
 		parsedParam.maxValue = isBitSet
-			? param.bitmask
-			: param.max || parsedParam.max || 100;
+			? getNumber(param.bitmask, parsedParam.max, 100)
+			: getNumber(param.max, parsedParam.max, 100);
 		parsedParam.readOnly = Boolean(param.read_only);
 		parsedParam.writeOnly = Boolean(param.write_only);
 		parsedParam.allowManualEntry = param.type !== "list";
-		parsedParam.defaultValue = param.value || parsedParam.value || 0;
+		parsedParam.defaultValue = getNumber(param.value, parsedParam.value, 0);
 
 		if (param.units) {
 			parsedParam.unit = param.units;
@@ -627,10 +645,6 @@ async function parseOzwProduct(
 
 		if (typeof parsedParam.description !== "string") {
 			parsedParam.description = "";
-		}
-
-		if (typeof parsedParam.defaultValue !== "number") {
-			parsedParam.defaultValue = 0;
 		}
 
 		// some values have typos, this fixes them
@@ -843,6 +857,21 @@ function assertValid(json: any) {
 /** Removes unnecessary whitespace from imported text */
 function sanitizeText(text: string): string | undefined {
 	return text ? text.trim().replace(/[\t\r\n]+/g, " ") : undefined;
+}
+
+function sanitizeNumber(value: number | string): number | undefined {
+	if (isUndefined(value)) return undefined;
+
+	if (typeof value === "number") return value;
+
+	let toReturn = Number(value);
+
+	if (isNaN(toReturn)) {
+		value = value.replace(/[^0-9-\.\,]/g, "");
+		toReturn = Number(value);
+	}
+
+	return toReturn;
 }
 
 /** Converts a device label to a valid filename */
