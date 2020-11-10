@@ -659,11 +659,17 @@ async function parseOzwProduct(
 		if (param.type === "list" && items.length > 0) {
 			parsedParam.options = [];
 			for (const item of items) {
-				const opt = {
-					label: item.label.toString(),
-					value: parseInt(item.value),
-				};
-				parsedParam.options.push(opt);
+				if (
+					!parsedParam.options.find(
+						(v: any) => v.value === item.value,
+					)
+				) {
+					const opt = {
+						label: item.label.toString(),
+						value: parseInt(item.value),
+					};
+					parsedParam.options.push(opt);
+				}
 			}
 		}
 
