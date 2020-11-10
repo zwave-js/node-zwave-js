@@ -320,8 +320,8 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 	const normalized: Record<string, any> = {
 		manufacturer: config.manufacturer,
 		manufacturerId: config.manufacturerId,
-		label: config.label,
-		description: config.description,
+		label: sanitizeText(config.label),
+		description: sanitizeText(config.description),
 		devices: config.devices.sort(
 			(a: any, b: any) =>
 				a.productType.localeCompare(b.productType) ||
@@ -843,8 +843,8 @@ function assertValid(json: any) {
 }
 
 /** Removes unnecessary whitespace from imported text */
-function sanitizeText(text: string): string {
-	return text.trim().replace(/[\t\r\n]+/g, " ");
+function sanitizeText(text: string): string | undefined {
+	return text ? text.trim().replace(/[\t\r\n]+/g, " ") : undefined;
 }
 
 /** Converts a device label to a valid filename */
