@@ -27,7 +27,7 @@ import {
 	ZWaveSerialPortBase,
 	ZWaveSocket,
 } from "@zwave-js/serial";
-import { DeepPartial, num2hex, pick } from "@zwave-js/shared";
+import { DeepPartial, num2hex, pick, stringify } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
@@ -2246,7 +2246,7 @@ ${handlers.length} left`,
 		);
 
 		const serializedObj = this.controller.serialize();
-		const jsonString = JSON.stringify(serializedObj, undefined, 4);
+		const jsonString = stringify(serializedObj);
 		await this.options.fs.writeFile(cacheFile, jsonString, "utf8");
 	}
 

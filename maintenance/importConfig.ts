@@ -37,9 +37,10 @@ import {
 	setManufacturer,
 	writeManufacturersToJson,
 } from "../packages/config/src";
-import { formatId, stringify } from "../packages/config/src/utils";
+import { formatId } from "../packages/config/src/utils";
 import { CommandClasses } from "../packages/core/src";
 import { num2hex } from "../packages/shared/src";
+import { stringify } from "../packages/shared/src/strings";
 
 const execPromise = promisify(child.exec);
 

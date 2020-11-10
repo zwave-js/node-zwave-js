@@ -1,4 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { stringify } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile, writeFile } from "fs-extra";
@@ -9,7 +10,6 @@ import {
 	configDir,
 	formatId,
 	hexKeyRegex4Digits,
-	stringify,
 	throwInvalidConfig,
 } from "./utils";
 

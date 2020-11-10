@@ -4,6 +4,7 @@ import {
 	JSONObject,
 	ObjectKeyMap,
 	ReadonlyObjectKeyMap,
+	stringify,
 } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
@@ -16,7 +17,6 @@ import {
 	formatId,
 	getDeviceEntryPredicate,
 	hexKeyRegex4Digits,
-	stringify,
 	throwInvalidConfig,
 } from "./utils";
 
