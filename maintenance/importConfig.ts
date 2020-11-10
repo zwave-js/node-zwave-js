@@ -373,7 +373,7 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 			}
 
 			if (bMask.length > 1) {
-				b = b.replace(aMask[0], "");
+				b = b.replace(bMask[0], "");
 			}
 
 			if (a === b) {
