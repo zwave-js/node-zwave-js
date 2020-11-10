@@ -632,6 +632,7 @@ async function parseOzwProduct(
 		parsedParam.writeOnly = Boolean(param.write_only);
 		parsedParam.allowManualEntry = param.type !== "list";
 		parsedParam.defaultValue = getNumber(param.value, parsedParam.value, 0);
+		parsedParam.unsigned = true; // ozw values are all unsigned
 
 		if (param.units) {
 			parsedParam.unit = param.units;
