@@ -20,6 +20,7 @@ import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
+import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import {
@@ -162,10 +163,16 @@ export type SendThreadMachineParams = {
 // These actions must be assign actions or they will be executed out of order
 
 const setCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
-	(ctx) => ({
-		...ctx,
-		currentTransaction: ctx.queue.shift()!,
-	}),
+	(ctx) => {
+		console.log("setCurrentTransaction");
+		const queue = ctx.queue;
+		const next = ctx.queue.shift()!;
+		return {
+			...ctx,
+			queue,
+			currentTransaction: next,
+		};
+	},
 );
 
 const deleteCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
@@ -239,6 +246,8 @@ const every = (...guards: string[]) => ({
 });
 const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	maySendFirstMessage: (ctx) => {
+		console.log(`maySendFirstMessage >`);
+		log.driver.sendQueue(ctx.queue);
 		const nextTransaction = ctx.queue.peekStart();
 		// We can't send anything if the queue is empty
 		if (!nextTransaction) return false;
@@ -524,6 +533,7 @@ export function createSendThreadMachine(
 
 	const reduce: AssignAction<SendThreadContext, any> = assign({
 		queue: (ctx, evt) => {
+			console.warn("in reduce action");
 			const { queue, currentTransaction } = ctx;
 
 			const drop: Transaction[] = [];
@@ -575,6 +585,8 @@ export function createSendThreadMachine(
 			// Now we know what to do with the transactions
 			queue.remove(...drop, ...requeue);
 			queue.add(...requeue);
+
+			log.driver.sendQueue(queue);
 
 			return queue;
 		},
@@ -735,6 +747,7 @@ export function createSendThreadMachine(
 								// );
 							],
 							target: "sending.done",
+							internal: true,
 						},
 						reduce: [
 							// If the current transaction should not be kept, go back to idle
@@ -742,6 +755,7 @@ export function createSendThreadMachine(
 								cond: "shouldNotKeepCurrentTransaction",
 								actions: reduce,
 								target: "sending.done",
+								internal: true,
 							},
 							{ actions: reduce },
 						],

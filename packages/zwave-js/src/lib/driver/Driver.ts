@@ -444,7 +444,7 @@ export class Driver extends EventEmitter {
 			defaultOptions,
 		) as ZWaveOptions;
 		// And make sure they contain valid values
-		checkOptions(this.options);
+		// checkOptions(this.options);
 		this.cacheDir = this.options.cacheDir;
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
@@ -492,13 +492,16 @@ export class Driver extends EventEmitter {
 			pick(this.options, ["timeouts", "attempts"]),
 		);
 		this.sendThread = interpret(sendThreadMachine);
-		// this.sendThread.onTransition((state) => {
-		// 	if (state.changed)
-		// 		log.driver.print(
-		// 			`send thread state: ${state.toStrings().slice(-1)[0]}`,
-		// 			"verbose",
-		// 		);
-		// });
+		this.sendThread.onEvent((e) => {
+			console.dir(e);
+		});
+		this.sendThread.onTransition((state) => {
+			if (state.changed)
+				log.driver.print(
+					`send thread state: ${state.toStrings().slice(-1)[0]}`,
+					"verbose",
+				);
+		});
 	}
 
 	/** Enumerates all existing serial ports */
