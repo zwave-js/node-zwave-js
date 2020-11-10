@@ -322,7 +322,11 @@ function normalizeConfig(config: Record<string, any>): Record<string, any> {
 		manufacturerId: config.manufacturerId,
 		label: config.label,
 		description: config.description,
-		devices: config.devices,
+		devices: config.devices.sort(
+			(a: any, b: any) =>
+				a.productType.localeCompare(b.productType) ||
+				a.productId.localeCompare(b.productId),
+		),
 		firmwareVersion: config.firmwareVersion,
 		associations: config.associations,
 		paramInformation: {},
@@ -548,7 +552,9 @@ async function parseOzwProduct(
 	for (const param of parameters) {
 		if (isNaN(param.index)) continue;
 
-		if (param.type === "bitset") {
+		const isBitSet = param.type === "bitset";
+
+		if (isBitSet) {
 			const bitSetIds = ensureArray(param.BitSet);
 			let value = param.value || 0;
 
@@ -589,63 +595,64 @@ async function parseOzwProduct(
 
 				ret.paramInformation[id] = parsedParam;
 			}
-		} else {
-			const parsedParam = ret.paramInformation[param.index] ?? {};
-
-			// don't use ?? here, some fields could be empty strings and ?? operator
-			// will not work
-			parsedParam.label =
-				ensureArray(param.label)[0] || parsedParam.label;
-			parsedParam.description =
-				ensureArray(param.Help)[0] || parsedParam.description;
-			parsedParam.valueSize = param.size || parsedParam.valueSize || 1;
-			parsedParam.minValue = param.min || parsedParam.min || 0;
-			parsedParam.maxValue = param.max || parsedParam.max || 100;
-			parsedParam.readOnly = Boolean(param.read_only);
-			parsedParam.writeOnly = Boolean(param.write_only);
-			parsedParam.allowManualEntry = param.type !== "list";
-			parsedParam.defaultValue = param.value || parsedParam.value || 0;
-
-			if (param.units) {
-				parsedParam.unit = param.units;
-			}
-
-			// could have multiple translations, if so it's an array, the first
-			// is the english one
-			if (isArray(parsedParam.description)) {
-				parsedParam.description = parsedParam.description[0];
-			}
-
-			if (typeof parsedParam.description !== "string") {
-				parsedParam.description = "";
-			}
-
-			if (typeof parsedParam.defaultValue !== "number") {
-				parsedParam.defaultValue = 0;
-			}
-
-			// some values have typos, this fixes them
-			if (typeof parsedParam.maxValue === "string") {
-				parsedParam.maxValue = parseInt(
-					parsedParam.maxValue.replace(/[^0-9]/g, ""),
-				);
-			}
-
-			const items = ensureArray(param.Item);
-
-			if (param.type === "list" && items.length > 0) {
-				parsedParam.options = [];
-				for (const item of items) {
-					const opt = {
-						label: item.label.toString(),
-						value: parseInt(item.value),
-					};
-					parsedParam.options.push(opt);
-				}
-			}
-
-			ret.paramInformation[param.index] = parsedParam;
 		}
+
+		const parsedParam = ret.paramInformation[param.index] ?? {};
+
+		// don't use ?? here, some fields could be empty strings and ?? operator
+		// will not work
+		parsedParam.label = ensureArray(param.label)[0] || parsedParam.label;
+		parsedParam.description =
+			ensureArray(param.Help)[0] || parsedParam.description;
+		parsedParam.valueSize = param.size || parsedParam.valueSize || 1;
+		parsedParam.minValue = param.min || parsedParam.min || 0;
+		parsedParam.maxValue = isBitSet
+			? param.bitmask
+			: param.max || parsedParam.max || 100;
+		parsedParam.readOnly = Boolean(param.read_only);
+		parsedParam.writeOnly = Boolean(param.write_only);
+		parsedParam.allowManualEntry = param.type !== "list";
+		parsedParam.defaultValue = param.value || parsedParam.value || 0;
+
+		if (param.units) {
+			parsedParam.unit = param.units;
+		}
+
+		// could have multiple translations, if so it's an array, the first
+		// is the english one
+		if (isArray(parsedParam.description)) {
+			parsedParam.description = parsedParam.description[0];
+		}
+
+		if (typeof parsedParam.description !== "string") {
+			parsedParam.description = "";
+		}
+
+		if (typeof parsedParam.defaultValue !== "number") {
+			parsedParam.defaultValue = 0;
+		}
+
+		// some values have typos, this fixes them
+		if (typeof parsedParam.maxValue === "string") {
+			parsedParam.maxValue = parseInt(
+				parsedParam.maxValue.replace(/[^0-9]/g, ""),
+			);
+		}
+
+		const items = ensureArray(param.Item);
+
+		if (param.type === "list" && items.length > 0) {
+			parsedParam.options = [];
+			for (const item of items) {
+				const opt = {
+					label: item.label.toString(),
+					value: parseInt(item.value),
+				};
+				parsedParam.options.push(opt);
+			}
+		}
+
+		ret.paramInformation[param.index] = parsedParam;
 	}
 
 	const associations = ensureArray(
