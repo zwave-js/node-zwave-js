@@ -580,7 +580,7 @@ async function parseOZWProduct(
 				const parsedParam = newConfig.paramInformation[id] ?? {};
 
 				parsedParam.label = `${paramLabel}${label}`;
-				parsedParam.description = desc;
+				parsedParam.description = sanitizeText(desc);
 				parsedParam.valueSize = valueSize; // The partial param must have the same value size as the original param
 				// OZW only supports single-bit "partial" params, so we only have 0 and 1 as possible values
 				parsedParam.minValue = 0;
@@ -597,10 +597,12 @@ async function parseOZWProduct(
 
 			// By default, update existing properties with new descriptions
 			// OZW's config fields could be empty strings, so we need to use || instead of ??
-			parsedParam.label =
-				ensureArray(param.label)[0] || parsedParam.label;
-			parsedParam.description =
-				ensureArray(param.Help)[0] || parsedParam.description;
+			parsedParam.label = sanitizeText(
+				ensureArray(param.label)[0] || parsedParam.label,
+			);
+			parsedParam.description = sanitizeText(
+				ensureArray(param.Help)[0] || parsedParam.description,
+			);
 			parsedParam.valueSize = updateNumberOrDefault(
 				param.size,
 				parsedParam.valueSize,
@@ -644,7 +646,9 @@ async function parseOZWProduct(
 
 			// could have multiple translations, if so it's an array, the first is the english one
 			if (isArray(parsedParam.description)) {
-				parsedParam.description = parsedParam.description[0];
+				parsedParam.description = sanitizeText(
+					parsedParam.description[0],
+				);
 			}
 
 			if (typeof parsedParam.description !== "string") {
@@ -696,7 +700,7 @@ async function parseOZWProduct(
 		for (const ass of associations) {
 			const parsedAssociation = newConfig.associations[ass.index] ?? {};
 
-			parsedAssociation.label = ass.label;
+			parsedAssociation.label = sanitizeText(ass.label);
 			parsedAssociation.maxNodes = ass.max_associations;
 			// Only set the isLifeline key if its true
 			const isLifeline =
@@ -860,8 +864,9 @@ function assertValid(json: any) {
 }
 
 /** Removes unnecessary whitespace from imported text */
-function sanitizeText(text: string): string | undefined {
-	return text ? text.trim().replace(/[\t\r\n]+/g, " ") : undefined;
+function sanitizeText(text: unknown): string | undefined {
+	if (typeof text !== "string") return undefined;
+	return text.trim().replace(/[\t\r\n ]+/g, " ");
 }
 
 /** Tries to coerce the input value into an integer */
