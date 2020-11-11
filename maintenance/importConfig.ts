@@ -631,7 +631,12 @@ async function parseOZWProduct(
 				parsedParam.value,
 				parsedParam.minValue, // choose the smallest possible number if no default is given
 			);
-			parsedParam.unsigned = true; // ozw values are all unsigned
+			// ozw values are all unsigned unless min/max/default value is negative
+			parsedParam.unsigned = !(
+				parsedParam.minValue < 0 ||
+				parsedParam.maxValue < 0 ||
+				parsedParam.defaultValue < 0
+			);
 
 			if (param.units) {
 				parsedParam.unit = param.units;
