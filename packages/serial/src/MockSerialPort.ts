@@ -77,7 +77,7 @@ export class MockSerialPort extends ZWaveSerialPort {
 	public readonly closeStub: jest.Mock = jest.fn(() => Promise.resolve());
 
 	public receiveData(data: Buffer): void {
-		this["parser"].push(data);
+		this["serial"].push(data);
 	}
 
 	public raiseError(err: Error): void {

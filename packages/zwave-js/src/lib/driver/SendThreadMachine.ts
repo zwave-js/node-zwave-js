@@ -164,7 +164,6 @@ export type SendThreadMachineParams = {
 
 const setCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
 	(ctx) => {
-		console.log("setCurrentTransaction");
 		const queue = ctx.queue;
 		const next = ctx.queue.shift()!;
 		return {
@@ -229,6 +228,10 @@ const sendCurrentTransactionToCommandQueue = send<SendThreadContext, any>(
 	{ to: (ctx) => ctx.commandQueue as any },
 );
 
+const resetCommandQueue = send<SendThreadContext, any>("reset", {
+	to: (ctx) => ctx.commandQueue as any,
+});
+
 const sortQueue: AssignAction<SendThreadContext, any> = assign({
 	queue: (ctx) => {
 		const queue = ctx.queue;
@@ -246,7 +249,6 @@ const every = (...guards: string[]) => ({
 });
 const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	maySendFirstMessage: (ctx) => {
-		console.log(`maySendFirstMessage >`);
 		log.driver.sendQueue(ctx.queue);
 		const nextTransaction = ctx.queue.peekStart();
 		// We can't send anything if the queue is empty
@@ -533,7 +535,6 @@ export function createSendThreadMachine(
 
 	const reduce: AssignAction<SendThreadContext, any> = assign({
 		queue: (ctx, evt) => {
-			console.warn("in reduce action");
 			const { queue, currentTransaction } = ctx;
 
 			const drop: Transaction[] = [];
@@ -750,10 +751,10 @@ export function createSendThreadMachine(
 							internal: true,
 						},
 						reduce: [
-							// If the current transaction should not be kept, go back to idle
+							// If the current transaction should not be kept, tell the send queue to abort it and go back to idle
 							{
 								cond: "shouldNotKeepCurrentTransaction",
-								actions: reduce,
+								actions: [resetCommandQueue, reduce],
 								target: "sending.done",
 								internal: true,
 							},

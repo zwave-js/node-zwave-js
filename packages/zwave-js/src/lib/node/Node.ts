@@ -2515,7 +2515,7 @@ version:               ${this.version}`;
 
 		// Refresh the get timeout
 		if (this._firmwareUpdateStatus.getTimeout) {
-			console.warn("refreshed get timeout");
+			// console.warn("refreshed get timeout");
 			this._firmwareUpdateStatus.getTimeout = this._firmwareUpdateStatus.getTimeout
 				.refresh()
 				.unref();

@@ -315,7 +315,7 @@ ${logFilename}`);
 export function createConsoleTransport(): Transport {
 	return new winston.transports.Console({
 		level: getTransportLoglevel(),
-		// silent: process.env.NODE_ENV === "test",
+		silent: process.env.NODE_ENV === "test",
 	});
 }
 

@@ -339,19 +339,19 @@ describe("lib/driver/Driver => ", () => {
 			});
 
 			// Receive a CAN to trigger the resend check
-			expect(async () => {
-				await serialport.receiveData(req.serialize());
+			expect(() => {
+				serialport.receiveData(req.serialize());
 				jest.runAllTimers();
 			}).not.toThrow();
 		});
 
-		it("should correctly handle multiple messages in the receive buffer", async () => {
+		it("should correctly handle multiple messages in the receive buffer", () => {
 			// This buffer contains a SendData transmit report and a ManufacturerSpecific report
 			const data = Buffer.from(
 				"010700130f000002e6010e000400020872050086000200828e",
 				"hex",
 			);
-			await serialport.receiveData(data);
+			serialport.receiveData(data);
 
 			// Ensure the driver ACKed two messages
 			expect(serialport.writeStub).toBeCalledTimes(2);
@@ -455,6 +455,7 @@ describe("lib/driver/Driver => ", () => {
 			expect(driver.computeNetCCPayloadSize(testMsg3)).toBe(46 - 20 - 2);
 		});
 	});
+
 	it("passes errors from the serialport through", async () => {
 		const { driver, serialport } = await createAndStartDriver();
 		const errorSpy = jest.fn();
@@ -767,17 +768,7 @@ describe("lib/driver/Driver => ", () => {
 		process.env.LOGLEVEL = "debug";
 
 		beforeEach(async () => {
-			({ driver, serialport } = await createAndStartDriver({
-				timeouts: {
-					ack: 1000000000,
-					byte: 1000000000,
-					nodeAwake: 1000000000,
-					nonce: 1000000000,
-					report: 1000000000,
-					response: 1000000000,
-					sendDataCallback: 1000000000,
-				},
-			}));
+			({ driver, serialport } = await createAndStartDriver());
 
 			driver["_controller"] = {
 				ownNodeId: 1,
@@ -791,7 +782,7 @@ describe("lib/driver/Driver => ", () => {
 			driver.removeAllListeners();
 		});
 
-		it.only("marking a node with a pending message as asleep does not mess up the remaining transactions", async () => {
+		it("marking a node with a pending message as asleep does not mess up the remaining transactions", async () => {
 			jest.setTimeout(5000);
 			jest.useRealTimers();
 			// Repro from #1107
@@ -824,10 +815,10 @@ describe("lib/driver/Driver => ", () => {
 			expect(serialport.lastWrite).toEqual(
 				Buffer.from("010800130a01002503c9", "hex"),
 			);
-			await wait(10);
-			serialport.receiveData(MessageHeaders.ACK as any);
+			await wait(1);
+			serialport.receiveData(ACK);
 
-			await wait(100);
+			await wait(15);
 
 			// « [RES] [SendData]
 			//     was sent: true
@@ -835,15 +826,36 @@ describe("lib/driver/Driver => ", () => {
 			// » [ACK]
 			expect(serialport.lastWrite).toEqual(ACK);
 
-			await wait(100);
+			await wait(15);
 
 			node10.markAsAsleep();
 			expect(node10.status).toBe(NodeStatus.Asleep);
 
-			await wait(100);
+			// The command queue should now abort the ongoing transaction
+			// » [REQ] [SendDataAbort]
+			expect(serialport.lastWrite).toEqual(
+				Buffer.from("01030016ea", "hex"),
+			);
+			await wait(1);
+			serialport.receiveData(ACK);
 
+			// Abort was acknowledged, Ping for 10 should be failed
+			await wait(15);
 			await expect(pingPromise10).resolves.toBe(false);
 
+			// Now the Ping for 17 should go out
+			// » [Node 017] [REQ] [SendData]
+			//   │ transmit options: 0x25
+			//   │ callback id:      4
+			//   └─[NoOperationCC]
+			expect(serialport.lastWrite).toEqual(
+				Buffer.from("010800131101002504d5", "hex"),
+			);
+			serialport.receiveData(ACK);
+
+			await wait(15);
+
+			// Callback for previous message comes and should be ignored
 			// « [REQ] [SendData]
 			//     callback id:     3
 			//     transmit status: NoAck
@@ -855,17 +867,33 @@ describe("lib/driver/Driver => ", () => {
 			);
 			expect(serialport.lastWrite).toEqual(ACK);
 
-			await wait(100);
+			await wait(1);
 
-			// » [Node 017] [REQ] [SendData]
-			//   │ transmit options: 0x25
-			//   │ callback id:      4
-			//   └─[NoOperationCC]
-			expect(serialport.lastWrite).toEqual(
-				Buffer.from("010800131101002504d5", "hex"),
+			// Ping 17 does not get resolved by the other callback
+			await expect(Promise.race([pingPromise17, wait(15)])).resolves.toBe(
+				undefined,
 			);
 
-			await expect(pingPromise17).not.toResolve();
+			// « [RES] [SendData]
+			//     was sent: true
+			serialport.receiveData(Buffer.from("0104011301e8", "hex"));
+			// » [ACK]
+			expect(serialport.lastWrite).toEqual(ACK);
+
+			await wait(15);
+
+			// Callback for ping node 17 (failed)
+			// « [REQ] [SendData]
+			//     callback id:     4
+			//     transmit status: NoAck
+			serialport.receiveData(
+				Buffer.from(
+					"011800130401019d007f7f7f7f7f010107000000000204000013",
+					"hex",
+				),
+			);
+			expect(serialport.lastWrite).toEqual(ACK);
+			await expect(pingPromise17).resolves.toBeFalse();
 		});
 	});
 });

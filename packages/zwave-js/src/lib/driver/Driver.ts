@@ -40,6 +40,7 @@ import fsExtra from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
 import { URL } from "url";
+import * as util from "util";
 import { interpret } from "xstate";
 import { FirmwareUpdateStatus } from "../commandclass";
 import {
@@ -444,7 +445,7 @@ export class Driver extends EventEmitter {
 			defaultOptions,
 		) as ZWaveOptions;
 		// And make sure they contain valid values
-		// checkOptions(this.options);
+		checkOptions(this.options);
 		this.cacheDir = this.options.cacheDir;
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
@@ -492,9 +493,6 @@ export class Driver extends EventEmitter {
 			pick(this.options, ["timeouts", "attempts"]),
 		);
 		this.sendThread = interpret(sendThreadMachine);
-		this.sendThread.onEvent((e) => {
-			console.dir(e);
-		});
 		this.sendThread.onTransition((state) => {
 			if (state.changed)
 				log.driver.print(
@@ -2363,5 +2361,10 @@ ${handlers.length} left`,
 				: new SendDataRequest(this, { command: commandOrMsg });
 		this.encapsulateCommands(msg);
 		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
+	}
+
+	// This does not all need to be printed to the console
+	public [util.inspect.custom](): string {
+		return "[Driver]";
 	}
 }
