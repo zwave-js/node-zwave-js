@@ -4,13 +4,30 @@ import { distinct } from "alcalzone-shared/arrays";
 import { green, red, white, yellow } from "ansi-colors";
 import { readFile } from "fs-extra";
 import * as path from "path";
-import { DeviceConfig, loadDeviceIndexInternal } from "../src/Devices";
+import * as semver from "semver";
+import {
+	DeviceConfig,
+	DeviceConfigIndexEntry,
+	loadDeviceIndexInternal,
+} from "../src/Devices";
 import { loadIndicatorsInternal } from "../src/Indicators";
 import { loadManufacturersInternal } from "../src/Manufacturers";
 import { loadNotificationsInternal } from "../src/Notifications";
 import { loadNamedScales, loadNamedScalesInternal } from "../src/Scales";
 import { loadSensorTypesInternal } from "../src/SensorTypes";
-import { configDir, getDeviceEntryPredicate } from "../src/utils";
+import { configDir, getDeviceEntryPredicate, padVersion } from "../src/utils";
+
+function firmwareVersionOverlaps(
+	e1: DeviceConfigIndexEntry,
+	e2: DeviceConfigIndexEntry,
+): boolean {
+	const min1 = padVersion(e1.firmwareVersion.min);
+	const min2 = padVersion(e2.firmwareVersion.min);
+	const max1 = padVersion(e1.firmwareVersion.max);
+	const max2 = padVersion(e2.firmwareVersion.max);
+
+	return semver.lt(min1, max2) && semver.lt(min2, max1);
+}
 
 async function lintNotifications(): Promise<void> {
 	await loadNotificationsInternal();
@@ -39,6 +56,9 @@ async function lintDevices(): Promise<void> {
 	const index = (await loadDeviceIndexInternal())!;
 	// Device config files are lazy-loaded, so we need to parse them all
 	const uniqueFiles = distinct(index.map((e) => e.filename)).sort();
+	const indexEntriesWithoutDuplicateFileReferences = index.filter(
+		(e, i, arr) => arr.findIndex((ee) => ee.filename === e.filename) === i,
+	);
 
 	const errors = new Map<string, string[]>();
 	function addError(filename: string, error: string): void {
@@ -403,6 +423,83 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 		}
 	}
 
+	// Check for potentially duplicate definitions
+	const uIndex = indexEntriesWithoutDuplicateFileReferences;
+	for (let i = 0; i < uIndex.length; i++) {
+		const entry = { ...uIndex[i], label: "" };
+
+		if (
+			entry.manufacturerId === "0x0086" &&
+			entry.productId === "0x006f" &&
+			entry.productType === "0x1d03"
+		) {
+			debugger;
+		}
+
+		// Same manufacturer, different filename, either different product id or type
+		let potentialDuplicateEntries = uIndex
+			.filter(
+				(e) =>
+					// Same manufacturer
+					e.manufacturerId === entry.manufacturerId &&
+					// different filename
+					e.filename !== entry.filename &&
+					// either different product id or type
+					((e.productId === entry.productId &&
+						e.productType !== entry.productType) ||
+						(e.productId !== entry.productId &&
+							e.productType === entry.productType)) &&
+					// firmware version overlaps
+					firmwareVersionOverlaps(e, entry),
+			)
+			// Remove duplicated filenames
+			.filter(
+				(e, index, arr) =>
+					arr.findIndex((ee) => ee.filename === e.filename) === index,
+			)
+			.map((e) => ({ ...e, label: "" }));
+
+		// Read the label for each potential duplicate, so we can use it for our check
+		const readLabel = async (
+			e: typeof potentialDuplicateEntries[number],
+		) => {
+			const filePath = path.join(configDir, "devices", e.filename);
+			const fileContents = await readFile(filePath, "utf8");
+			// Try parsing the file
+			let config: DeviceConfig;
+			try {
+				config = new DeviceConfig(e.filename, fileContents);
+			} catch (e) {
+				// File is malformed, ignore it for this check
+				return;
+			}
+			e.label = config.label;
+		};
+		for (const e of potentialDuplicateEntries) {
+			await readLabel(e);
+		}
+		await readLabel(entry);
+
+		// Now only look for the ones with the same label
+		potentialDuplicateEntries = potentialDuplicateEntries.filter(
+			(e) => e.label === entry.label,
+		);
+		if (potentialDuplicateEntries.length > 0) {
+			// This is VERY LIKELY a duplicate!
+			addWarning(
+				entry.filename,
+				`Potentially duplicate config file detected for device (manufacturer id = ${
+					entry.manufacturerId
+				}, product type = ${entry.productType}, product id = ${
+					entry.productId
+				}):
+${potentialDuplicateEntries
+	.map((e) => `·  config/devices/${e.filename}`)
+	.join("\n")}`,
+			);
+		}
+	}
+
 	if (warnings.size) {
 		for (const [filename, fileWarnings] of warnings.entries()) {
 			console.warn(`config/devices/${filename}:`);
@@ -412,7 +509,7 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 					.filter((line) => !line.endsWith(filename + ":"));
 				console.warn(yellow("[WARN] " + lines.join("\n")));
 			}
-			console.warn();
+			console.warn(" ");
 		}
 	}
 
@@ -423,9 +520,9 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 				const lines = error
 					.split("\n")
 					.filter((line) => !line.endsWith(filename + ":"));
-				console.error("[ERR] " + red(lines.join("\n")));
+				console.error(red("[ERR] " + lines.join("\n")));
 			}
-			console.error();
+			console.error(" ");
 		}
 		process.exit(1);
 	}
