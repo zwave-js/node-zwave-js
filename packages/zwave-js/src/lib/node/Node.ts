@@ -1697,6 +1697,10 @@ version:               ${this.version}`;
 			ZWaveErrorCodes.Controller_MessageDropped,
 		);
 
+		// And also delete all previous nonces we sent the node since they
+		// should no longer be used
+		this.driver.securityManager.deleteAllNoncesForReceiver(this.id);
+
 		// Now send the current nonce
 		try {
 			await this.commandClasses.Security.sendNonce();
@@ -1718,11 +1722,14 @@ version:               ${this.version}`;
 
 		secMan.setNonce(
 			{
-				nodeId: this.id,
+				issuer: this.id,
 				nonceId: secMan.getNonceId(command.nonce),
 			},
-			command.nonce,
-			true,
+			{
+				nonce: command.nonce,
+				receiver: this.driver.controller.ownNodeId!,
+			},
+			{ free: true },
 		);
 	}
 

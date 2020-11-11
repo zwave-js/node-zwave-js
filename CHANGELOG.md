@@ -5,8 +5,8 @@
 -->
 
 ## __WORK IN PROGRESS__
-### Config changes
-* The entire configuration database can now be synchronized with the one from OpenZWave. Big shoutout to @robertsLando for the work!
+### Features
+* Added the compat config option `keepS0NonceUntilNext` to disable automatic nonce invalidation for bugged devices (e.g. ID Lock) which reuse nonces in some situations
 
 ### Bugfixes
 * If a node association is duplicated between `Association CC` and `Multi Channel Association CC`, it is now removed from both when using `Controller.removeAssociations`
@@ -19,6 +19,10 @@
 * The interview process for `Configuration CC V3+` now continues even if the response to `NameGet` and/or `InfoGet` commands is missing or incomplete
 * Multi Channel Lifeline Associations are no longer created automatically if the device does not support the `Multi Channel CC`
 * Fixed an issue where marking nodes with active transaction as asleep would mess up the serial communication with the controller
+* The receiver of an S0 nonce is now stored and after a successful reply, all nonces for said issuer are now invalidated
+
+### Changes under the hood
+* The entire configuration database can now be synchronized with the one from OpenZWave. Big shoutout to @robertsLando for the work!
 
 ## 5.3.6 (2020-11-04)
 ### Bugfixes

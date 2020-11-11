@@ -14,14 +14,26 @@ export function generateEncryptionKey(networkKey: Buffer): Buffer {
 }
 
 interface NonceKey {
-	nodeId: number;
+	/** The node that has created this nonce */
+	issuer: number;
 	nonceId: number;
+}
+
+interface NonceEntry {
+	nonce: Buffer;
+	/** The node this nonce was created for */
+	receiver: number;
 }
 
 export interface SecurityManagerOptions {
 	networkKey: Buffer;
 	ownNodeId: number;
 	nonceTimeout: number;
+}
+
+export interface SetNonceOptions {
+	free?: boolean;
+	expire?: boolean;
 }
 
 export class SecurityManager {
@@ -60,7 +72,7 @@ export class SecurityManager {
 		return this._encryptionKey;
 	}
 
-	private _nonceStore = new Map<string, Buffer>();
+	private _nonceStore = new Map<string, NonceEntry>();
 	private _freeNonceIDs = new Set<string>();
 	private _nonceTimers = new Map<string, NodeJS.Timeout>();
 
@@ -68,12 +80,12 @@ export class SecurityManager {
 		let ret: NonceKey;
 		if (typeof id === "number") {
 			ret = {
-				nodeId: this.ownNodeId,
+				issuer: this.ownNodeId,
 				nonceId: id,
 			};
 		} else {
 			ret = {
-				nodeId: id.nodeId,
+				issuer: id.issuer,
 				nonceId: id.nonceId,
 			};
 		}
@@ -81,16 +93,20 @@ export class SecurityManager {
 	}
 
 	/** Generates a nonce for the current node */
-	public generateNonce(length: number): Buffer {
-		let ret: Buffer;
+	public generateNonce(
+		receiver: number,
+		length: number,
+		expire: boolean = true,
+	): Buffer {
+		let nonce: Buffer;
 		let nonceId: number;
 		do {
-			ret = randomBytes(length);
-			nonceId = this.getNonceId(ret);
+			nonce = randomBytes(length);
+			nonceId = this.getNonceId(nonce);
 		} while (this.hasNonce(nonceId));
 
-		this.setNonce(nonceId, ret, false);
-		return ret;
+		this.setNonce(nonceId, { receiver, nonce }, { free: false, expire });
+		return nonce;
 	}
 
 	public getNonceId(nonce: Buffer): number {
@@ -99,25 +115,46 @@ export class SecurityManager {
 
 	public setNonce(
 		id: number | NonceKey,
-		nonce: Buffer,
-		free: boolean = true,
+		entry: NonceEntry,
+		{ free = true, expire = true }: SetNonceOptions = {},
 	): void {
 		const key = this.normalizeId(id);
 		if (this._nonceTimers.has(key)) {
 			clearTimeout(this._nonceTimers.get(key)!);
 		}
-		this._nonceStore.set(key, nonce);
+		this._nonceStore.set(key, entry);
 		if (free) this._freeNonceIDs.add(key);
-		this._nonceTimers.set(
-			key,
-			setTimeout(() => {
-				this.expireNonce(key);
-			}, this.nonceTimeout),
-		);
+		if (expire) {
+			this._nonceTimers.set(
+				key,
+				setTimeout(() => {
+					this.expireNonce(key);
+				}, this.nonceTimeout),
+			);
+		}
+	}
+
+	/** Deletes ALL nonces that were issued for a given node */
+	public deleteAllNoncesForReceiver(receiver: number): void {
+		for (const [key, entry] of this._nonceStore) {
+			if (entry.receiver === receiver) {
+				this.deleteNonceInternal(key);
+			}
+		}
 	}
 
 	public deleteNonce(id: number | NonceKey): void {
 		const key = this.normalizeId(id);
+		const nonceReceiver = this._nonceStore.get(key)?.receiver;
+		// Delete the nonce that was requested to be deleted
+		this.deleteNonceInternal(key);
+		// And all others for the same receiver aswell
+		if (nonceReceiver) {
+			this.deleteAllNoncesForReceiver(nonceReceiver);
+		}
+	}
+
+	private deleteNonceInternal(key: string) {
 		if (this._nonceTimers.has(key)) {
 			clearTimeout(this._nonceTimers.get(key)!);
 		}
@@ -127,13 +164,11 @@ export class SecurityManager {
 	}
 
 	private expireNonce(key: string): void {
-		this._nonceStore.delete(key);
-		this._nonceTimers.delete(key);
-		this._freeNonceIDs.delete(key);
+		this.deleteNonceInternal(key);
 	}
 
 	public getNonce(id: number | NonceKey): Buffer | undefined {
-		return this._nonceStore.get(this.normalizeId(id));
+		return this._nonceStore.get(this.normalizeId(id))?.nonce;
 	}
 
 	public hasNonce(id: number | NonceKey): boolean {
@@ -144,9 +179,9 @@ export class SecurityManager {
 		// Iterate through the known free nonce IDs to find one for the given node
 		for (const key of this._freeNonceIDs) {
 			const nonceKey = JSON.parse(key) as NonceKey;
-			if (nonceKey.nodeId === nodeId) {
+			if (nonceKey.issuer === nodeId) {
 				this._freeNonceIDs.delete(key);
-				return this._nonceStore.get(key);
+				return this._nonceStore.get(key)?.nonce;
 			}
 		}
 	}
