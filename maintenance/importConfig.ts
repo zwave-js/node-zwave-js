@@ -514,7 +514,7 @@ async function parseOZWProduct(
 	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
 	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
 
-	const newConfig: Record<string, any> = {
+	let newConfig: Record<string, any> = {
 		manufacturer,
 		manufacturerId: manufacturerIdHex,
 		label: productLabel,
@@ -733,7 +733,14 @@ async function parseOZWProduct(
 	await fs.ensureDir(manufacturerDir);
 
 	// write the updated configuration file
-	await fs.writeFile(fileNameAbsolute, stringify(normalizeConfig(newConfig)));
+	newConfig = normalizeConfig(newConfig);
+
+	// Add a comment explaining which device this is
+	// prettier-ignore
+	const output = `// ${newConfig.manufacturer} ${newConfig.label}${newConfig.description ? (`
+// ${newConfig.description}`) : ""}
+${stringify(newConfig)}`;
+	await fs.writeFile(fileNameAbsolute, output, "utf8");
 }
 
 /**
