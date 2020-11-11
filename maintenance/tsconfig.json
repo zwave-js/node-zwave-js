@@ -8,5 +8,8 @@
 		"target": "es2015",
 		"rootDir": "../"
 	},
-	"include": ["*.ts", "../packages/*/src/**/*.ts"]
+	"include": [
+		"*.ts",
+		"../packages/*/src/**/*.ts"
+	]
 }

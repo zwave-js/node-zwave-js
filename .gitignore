@@ -15,3 +15,5 @@ zwave-js-*.tgz
 **/build
 **/*.tsbuildinfo
 *.map
+
+.tmp

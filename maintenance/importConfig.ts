@@ -10,23 +10,96 @@ process.on("unhandledRejection", (r) => {
 	throw r;
 });
 
-import {
-	DeviceConfig,
-	DeviceConfigIndexEntry,
-	loadManufacturers,
-	lookupManufacturer,
-} from "@zwave-js/config";
-import { num2hex } from "@zwave-js/shared";
 import { composeObject, entries } from "alcalzone-shared/objects";
-import { padStart } from "alcalzone-shared/strings";
 import { isArray } from "alcalzone-shared/typeguards";
 import { red } from "ansi-colors";
 import { AssertionError, ok } from "assert";
 import axios from "axios";
+import * as child from "child_process";
 import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
 import * as qs from "querystring";
+import { compare } from "semver";
+import { promisify } from "util";
+import xml2json from "xml2json";
+import yargs from "yargs";
+import {
+	DeviceConfig,
+	DeviceConfigIndexEntry,
+	getIndex,
+	loadDeviceIndex,
+	loadManufacturers,
+	lookupManufacturer,
+	setManufacturer,
+	writeManufacturersToJson,
+} from "../packages/config/src";
+import { formatId, padVersion } from "../packages/config/src/utils";
+import { CommandClasses, getIntegerLimits } from "../packages/core/src";
+import { num2hex } from "../packages/shared/src";
+import { stringify } from "../packages/shared/src/strings";
+
+const execPromise = promisify(child.exec);
+
+const program = yargs
+	.option("source", {
+		description: "source of the import",
+		alias: "s",
+		type: "array",
+		choices: ["oh", "ozw"], // oh: openhab, ozw: openzwave
+		default: ["oh"],
+	})
+	.option("ids", {
+		description: "devices ids to download",
+		type: "array",
+		array: true,
+	})
+	.option("download", {
+		alias: "D",
+		description: "Download devices DB from <source>",
+		type: "boolean",
+		default: false,
+	})
+	.option("clean", {
+		alias: "C",
+		description: "Clean temporary directory",
+		type: "boolean",
+		default: false,
+	})
+	.option("manufacturers", {
+		alias: "m",
+		description: "Parse and update manufacturers.json",
+		type: "boolean",
+		default: false,
+	})
+	.option("index", {
+		alias: "i",
+		description: "Update devices index.json by reading devices config",
+		type: "boolean",
+		default: false,
+	})
+	.option("devices", {
+		alias: "d",
+		description: "Parse and update devices configurations",
+		type: "boolean",
+		default: false,
+	})
+	.example(
+		"import -s ozw -Dmid",
+		"Download and parse OpenZwave db (manufacturers, devices) and update the index",
+	)
+	.example(
+		"import -s oh -Dmid",
+		"Download and parse openhab db (manufacturers, devices) and update the index",
+	)
+	.example(
+		"import -s oh -D --ids 1234 5678",
+		"Download openhab devices with ids `1234` and `5678`",
+	)
+	.example("import -i", "Update devices index")
+	.help()
+	.version(false)
+	.alias("h", "help").argv;
 
 // Where the files are located
 const importDir = path.join(__dirname, "../packages/config", "config/import");
@@ -35,6 +108,15 @@ const processedDir = path.join(
 	"../packages/config",
 	"config/devices",
 );
+
+const paramsRegex = /\[0x([0-9a-f]+)\]/i;
+
+const tmpDir = path.join(__dirname, "../.tmp");
+const ozwTarName = "openzwave.tar.gz";
+const ozwTarUrl =
+	"https://github.com/OpenZWave/open-zwave/archive/master.tar.gz";
+const ozwConfigFolder = path.join(tmpDir, "./config");
+
 const importedManufacturersPath = path.join(importDir, "manufacturers.json");
 const ownManufacturersPath = path.join(importDir, "../manufacturers.json");
 const ownManufacturers = JSON5.parse(
@@ -72,6 +154,29 @@ function matchAll(regex: RegExp, string: string) {
 	return ret;
 }
 
+function isNullishOrEmptyString(
+	value: number | string | null | undefined,
+): value is "" | null | undefined {
+	return value == undefined || value === "";
+}
+
+/** Updates a numeric value with a new value, sanitizing the input. Falls back to the previous value (if it exists) or a default one */
+function updateNumberOrDefault(
+	newN: number | string,
+	oldN: number | string,
+	defaultN: number,
+): number | undefined {
+	// Try new value first
+	let ret = sanitizeNumber(newN);
+	if (typeof ret === "number") return ret;
+
+	// Fallback to old value
+	ret = sanitizeNumber(oldN);
+	if (typeof ret === "number") return ret;
+
+	return defaultN;
+}
+
 /** Retrieves the list of database IDs */
 async function fetchIDs(): Promise<string[]> {
 	const sources: string = (await axios({ url: urlIDs })).data;
@@ -90,7 +195,540 @@ async function fetchIDs(): Promise<string[]> {
 /** Retrieves the definition for a specific device */
 async function fetchDevice(id: string): Promise<string> {
 	const source = (await axios({ url: urlDevice(id) })).data;
-	return JSON.stringify(source, null, "\t");
+	return stringify(source);
+}
+
+/** Downloads ozw master archive and store it on `tmpDir` */
+async function downloadOZWConfig(): Promise<string> {
+	console.log("downloading ozw archive...");
+
+	// create tmp directory if missing
+	await fs.ensureDir(tmpDir);
+
+	// this will return a stream in `data` that we pipe into write stream
+	// to store the file in `tmpDir`
+	const data = (await axios({ url: ozwTarUrl, responseType: "stream" })).data;
+
+	return new Promise((resolve, reject) => {
+		const fileDest = path.join(tmpDir, ozwTarName);
+		const stream = fs.createWriteStream(fileDest);
+		data.pipe(stream);
+		let hasError = false;
+		stream.on("error", (err) => {
+			hasError = true;
+			stream.close();
+			reject(err);
+		});
+
+		stream.on("close", () => {
+			if (!hasError) {
+				resolve(fileDest);
+				console.log("ozw archive stored in temporary directory");
+			}
+		});
+	});
+}
+
+/** Extract `config` folder from ozw archive in `tmpDir` */
+async function extractConfigFromTar(): Promise<void> {
+	console.log("extracting config folder from ozw archive...");
+	await execPromise(
+		`tar -xzf ${ozwTarName} open-zwave-master/config  --strip-components=1`,
+		{ cwd: tmpDir },
+	);
+}
+
+/** Delete all files in `tmpDir` */
+async function cleanTmpDirectory(): Promise<void> {
+	await fs.remove(tmpDir);
+	console.log("temporary directory cleaned");
+}
+
+/** Reads OZW `manufacturer_specific.xml` */
+async function parseOZWConfig(): Promise<void> {
+	// The manufacturer_specific.xml is OZW's index file and contains all devices, their type, ID and name (label)
+	const manufacturerFile = path.join(
+		ozwConfigFolder,
+		"manufacturer_specific.xml",
+	);
+	const manufacturerJson: Record<string, any> = xml2json.toJson(
+		await fs.readFile(manufacturerFile, "utf8"),
+		{
+			object: true,
+		},
+	);
+
+	// Load our existing config files to cross-reference
+	await loadManufacturers();
+	if (program.devices) {
+		await loadDeviceIndex();
+	}
+
+	for (const man of manufacturerJson.ManufacturerSpecificData.Manufacturer) {
+		// <Manufacturer id="012A" name="ManufacturerName">... products ...</Manufacturer>
+		const manufacturerId = parseInt(man.id, 16);
+		let manufacturerName = lookupManufacturer(manufacturerId);
+
+		// Add the manufacturer to our manufacturers.json if it is missing
+		if (manufacturerName === undefined && man.name !== undefined) {
+			console.log(`Adding missing manufacturer: ${man.name}`);
+			// let this here, if program.manufacturers is false it will not
+			// write the manufacturers to file
+			setManufacturer(manufacturerId, man.name);
+		}
+		manufacturerName = man.name;
+
+		if (program.devices) {
+			// Import all device config files of this manufacturer if requested
+			const products = ensureArray(man.Product);
+			for (const product of products) {
+				if (product.config !== undefined) {
+					await parseOZWProduct(
+						product,
+						manufacturerId,
+						manufacturerName,
+					);
+				}
+			}
+		}
+	}
+
+	if (program.manufacturers) {
+		await writeManufacturersToJson();
+	}
+}
+
+/**
+ * When using xml2json some fields expected as array are parsed as objects
+ * when there is only one element. This method ensures that they are arrays
+ *
+ */
+function ensureArray(json: any): any[] {
+	json = json ?? [];
+	return isArray(json) ? json : [json];
+}
+
+function normalizeUnits(unit: string) {
+	if (!unit) return undefined;
+
+	if (/minutes/i.test(unit)) {
+		return "minutes";
+	} else if (/seconds/i.test(unit)) {
+		return "seconds";
+	} else if (/fahrenheit|\bf\b/i.test(unit)) {
+		return "°F";
+	} else if (/degrees celsius|celsius|\bc\b/i.test(unit)) {
+		return "°C";
+	} else if (/\bwatt/i.test(unit)) {
+		return "W";
+	} else if (/\bvolt/i.test(unit)) {
+		return "V";
+	} else if (/percent|dimmer level|%/i.test(unit)) {
+		return "%";
+	} else if (/degrees/i.test(unit)) {
+		return "°";
+	}
+
+	return undefined;
+}
+
+/**
+ * Normalize a device JSON configuration to ensure all keys have the same order
+ * and fix some parameters if needed
+ *
+ * @param config Device JSON configuration
+ */
+function normalizeConfig(config: Record<string, any>): Record<string, any> {
+	const normalized: Record<string, any> = {
+		manufacturer: config.manufacturer,
+		manufacturerId: config.manufacturerId,
+		label: sanitizeText(config.label) ?? "",
+		description: sanitizeText(config.description) ?? "",
+		devices: config.devices.sort(
+			(a: any, b: any) =>
+				a.productType.localeCompare(b.productType) ||
+				a.productId.localeCompare(b.productId),
+		),
+		firmwareVersion: config.firmwareVersion,
+		associations: config.associations,
+		paramInformation: {},
+		compat: config.compat,
+	};
+
+	// Delete optional properties if they have no relevant entry
+	if (
+		!normalized.associations ||
+		Object.keys(normalized.associations).length === 0
+	) {
+		delete normalized.associations;
+	}
+	if (!normalized.compat || Object.keys(normalized.compat).length === 0) {
+		delete normalized.compat;
+	}
+
+	if (
+		config.paramInformation &&
+		Object.keys(config.paramInformation).length > 0
+	) {
+		// TODO: Sorting object keys is useless while we have a mix of integer and string keys,
+		// since the ES2015 specs define the order
+
+		// const paramKeys = Object.keys(config.paramInformation);
+
+		// // ensure paramKeys respect the order: 100, 101[0x01], 101[0x02], 102 etc...
+		// paramKeys.sort((a, b) => {
+		// 	const aMask = paramsRegex.exec(a) ?? [];
+		// 	const bMask = paramsRegex.exec(b) ?? [];
+
+		// 	if (aMask.length > 1) {
+		// 		a = a.replace(aMask[0], "");
+		// 	}
+
+		// 	if (bMask.length > 1) {
+		// 		b = b.replace(bMask[0], "");
+		// 	}
+
+		// 	if (a === b) {
+		// 		return (
+		// 			parseInt(aMask[1] ?? 0, 16) - parseInt(bMask[1] ?? 0, 16)
+		// 		);
+		// 	} else {
+		// 		return parseInt(a) - parseInt(b);
+		// 	}
+		// });
+
+		const normalizedParamInfo: Record<string, any> = {};
+		// Filter out duplicates between partial and non-partial params
+		const entries = Object.entries<any>(config.paramInformation).filter(
+			([key], _, arr) =>
+				// Allow partial params
+				!/^\d+$/.test(key) ||
+				// and non-partial params without a corresponding partial param
+				!arr.some(([otherKey]) => otherKey.startsWith(`${key}[`)),
+		);
+
+		for (const [key, original] of entries) {
+			const param: Record<string, any> = {
+				label: original.label,
+				description: original.description,
+				valueSize: original.valueSize,
+				unit: normalizeUnits(original.unit),
+				minValue: original.minValue,
+				maxValue: original.maxValue,
+				defaultValue: original.defaultValue,
+				unsigned: original.unsigned,
+				readOnly: original.readOnly,
+				writeOnly: original.writeOnly,
+				allowManualEntry: original.allowManualEntry,
+				options: original.options,
+			};
+
+			if (!param.unsigned) delete param.unsigned;
+			if (!param.unit) delete param.unit;
+			if (!param.description) delete param.description;
+
+			if (!param.options || param.options.length === 0) {
+				delete param.options;
+			} else {
+				const values = param.options.map((o: any) => o.value);
+				param.minValue = Math.min(...values);
+				param.maxValue = Math.max(...values);
+			}
+
+			normalizedParamInfo[key] = param;
+		}
+
+		normalized.paramInformation = normalizedParamInfo;
+	} else {
+		delete normalized.paramInformation;
+	}
+
+	return normalized;
+}
+
+/**
+ * Read and parse the product xml, add it to index if missing,
+ * create/update device json config and validate the newly added
+ * device
+ *
+ * @param product the parsed product json entry from manufacturer.xml
+ */
+async function parseOZWProduct(
+	product: any,
+	manufacturerId: number,
+	manufacturer: string | undefined,
+): Promise<void> {
+	const productFile = await fs.readFile(
+		path.join(ozwConfigFolder, product.config),
+		"utf8",
+	);
+
+	// TODO: Parse the label from XML metadata, e.g.
+	// <MetaDataItem id="0100" name="Identifier" type="2002">CT32 </MetaDataItem>
+	const productLabel = path
+		.basename(product.config, ".xml")
+		.toLocaleUpperCase();
+
+	// any products descriptions have productName in it, remove it
+	const productName = product.name.replace(productLabel, "");
+
+	// for some reasons some products already have the prefix `0x`, remove it
+	product.id = product.id.replace(/^0x/, "");
+	product.type = product.type.replace(/^0x/, "");
+
+	// Format the device IDs like we expect them
+	const productId = formatId(product.id);
+	const productType = formatId(product.type);
+	const manufacturerIdHex = formatId(manufacturerId);
+
+	const deviceConfigs =
+		getIndex()?.filter(
+			(f: DeviceConfigIndexEntry) =>
+				f.manufacturerId === manufacturerIdHex &&
+				f.productType === productType &&
+				f.productId === productId,
+		) ?? [];
+	const latestConfig = getLatestConfigVersion(deviceConfigs);
+
+	// Determine where the config file should be
+	const fileNameRelative =
+		latestConfig?.filename ??
+		`${manufacturerIdHex}/${labelToFilename(productLabel)}.json`;
+	const fileNameAbsolute = path.join(processedDir, fileNameRelative);
+
+	// Load the existing config so we can merge it with the updated information
+	let existingDevice: Record<string, any> | undefined;
+	if (latestConfig) {
+		existingDevice = JSON5.parse(
+			await fs.readFile(fileNameAbsolute, "utf8"),
+		);
+	}
+
+	// Parse the OZW xml file
+	const json = xml2json.toJson(productFile, {
+		object: true,
+		coerce: true, // coerce types
+	}).Product as Record<string, any>;
+
+	// const metadata = ensureArray(json.MetaData?.MetaDataItem);
+	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
+	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
+
+	const newConfig: Record<string, any> = {
+		manufacturer,
+		manufacturerId: manufacturerIdHex,
+		label: productLabel,
+		description: existingDevice?.description ?? productName, // don't override the descrition
+		devices: [{ productType, productId }],
+		firmwareVersion: {
+			min: existingDevice?.firmwareVersion.min ?? "0.0",
+			max: existingDevice?.firmwareVersion.max ?? "255.255",
+		},
+		associations: existingDevice?.associations ?? {},
+		paramInformation: existingDevice?.paramInformation ?? {},
+		compat: existingDevice?.compat,
+	};
+
+	// Merge the devices array with a potentially existing one
+	if (existingDevice) {
+		for (const device of existingDevice.devices) {
+			if (
+				!newConfig.devices.some(
+					(d: any) =>
+						d.productType === device.productType &&
+						d.productId === device.productId,
+				)
+			) {
+				newConfig.devices.push(device);
+			}
+		}
+	}
+
+	const commandClasses = ensureArray(json.CommandClass);
+
+	// parse config params: <CommandClass id="112"> ...values... </CommandClass>
+	const parameters = ensureArray(
+		commandClasses.find((c: any) => c.id === CommandClasses.Configuration)
+			?.Value,
+	);
+	for (const param of parameters) {
+		if (isNaN(param.index)) continue;
+
+		const isBitSet = param.type === "bitset";
+
+		if (isBitSet) {
+			// BitSets are split into multiple partial parameters
+			const bitSetIds = ensureArray(param.BitSet);
+			const defaultValue =
+				typeof param.value === "number" ? param.value : 0;
+			const valueSize = param.size || 1;
+
+			// Partial params share the first part of the label
+			param.label = ensureArray(param.label)[0];
+			const paramLabel = param.label ? `${param.label}. ` : "";
+
+			for (const bitSet of bitSetIds) {
+				// OZW has 1-based bit indizes, we are 0-based
+				const bit = (bitSet.id || 1) - 1;
+				const mask = 2 ** bit;
+				const id = `${param.index}[${num2hex(mask)}]`;
+
+				// Parse the label for this bit
+				const label = ensureArray(bitSet.Label)[0] ?? "";
+				const desc = ensureArray(bitSet.Help)[0] ?? "";
+
+				const parsedParam = newConfig.paramInformation[id] ?? {};
+
+				parsedParam.label = `${paramLabel}${label}`;
+				parsedParam.description = desc;
+				parsedParam.valueSize = valueSize; // The partial param must have the same value size as the original param
+				// OZW only supports single-bit "partial" params, so we only have 0 and 1 as possible values
+				parsedParam.minValue = 0;
+				parsedParam.maxValue = 1;
+				parsedParam.defaultValue = !!(defaultValue & mask) ? 1 : 0;
+				parsedParam.readOnly = false;
+				parsedParam.writeOnly = false;
+				parsedParam.allowManualEntry = true;
+
+				newConfig.paramInformation[id] = parsedParam;
+			}
+		} else {
+			const parsedParam = newConfig.paramInformation[param.index] ?? {};
+
+			// By default, update existing properties with new descriptions
+			// OZW's config fields could be empty strings, so we need to use || instead of ??
+			parsedParam.label =
+				ensureArray(param.label)[0] || parsedParam.label;
+			parsedParam.description =
+				ensureArray(param.Help)[0] || parsedParam.description;
+			parsedParam.valueSize = updateNumberOrDefault(
+				param.size,
+				parsedParam.valueSize,
+				1,
+			);
+			parsedParam.minValue = updateNumberOrDefault(
+				param.min,
+				parsedParam.min,
+				0,
+			);
+			try {
+				parsedParam.maxValue = updateNumberOrDefault(
+					param.max,
+					parsedParam.max,
+					getIntegerLimits(parsedParam.valueSize, false).max, // choose the biggest possible number if no max is given
+				);
+			} catch {
+				// some config params have absurd value sizes, ignore them
+				parsedParam.maxValue = parsedParam.minValue;
+			}
+			parsedParam.readOnly =
+				param.read_only === true || param.read_only === "true";
+			parsedParam.writeOnly =
+				param.write_only === true || param.write_only === "true";
+			parsedParam.allowManualEntry = param.type !== "list";
+			parsedParam.defaultValue = updateNumberOrDefault(
+				param.value,
+				parsedParam.value,
+				parsedParam.minValue, // choose the smallest possible number if no default is given
+			);
+			parsedParam.unsigned = true; // ozw values are all unsigned
+
+			if (param.units) {
+				parsedParam.unit = param.units;
+			}
+
+			// could have multiple translations, if so it's an array, the first is the english one
+			if (isArray(parsedParam.description)) {
+				parsedParam.description = parsedParam.description[0];
+			}
+
+			if (typeof parsedParam.description !== "string") {
+				parsedParam.description = "";
+			}
+
+			const items = ensureArray(param.Item);
+
+			// Parse options list
+			// <Item label="Option 1" value="1"/>
+			// <Item label="Option 2" value="2"/>
+			if (param.type === "list" && items.length > 0) {
+				parsedParam.options = [];
+				for (const item of items) {
+					if (
+						!parsedParam.options.find(
+							(v: any) => v.value === item.value,
+						)
+					) {
+						const opt = {
+							label: item.label.toString(),
+							value: parseInt(item.value),
+						};
+						parsedParam.options.push(opt);
+					}
+				}
+			}
+
+			newConfig.paramInformation[param.index] = parsedParam;
+		}
+	}
+
+	// parse associations contained in command class 133 and 142
+	const associations = [
+		...ensureArray(
+			commandClasses.find((c: any) => c.id === CommandClasses.Association)
+				?.Associations?.Group,
+		),
+		...ensureArray(
+			commandClasses.find(
+				(c: any) =>
+					c.id === CommandClasses["Multi Channel Association"],
+			)?.Associations?.Group,
+		),
+	];
+
+	if (associations.length > 0) {
+		newConfig.associations ??= {};
+		for (const ass of associations) {
+			const parsedAssociation = newConfig.associations[ass.index] ?? {};
+
+			parsedAssociation.label = ass.label;
+			parsedAssociation.maxNodes = ass.max_associations;
+			// Only set the isLifeline key if its true
+			const isLifeline =
+				/lifeline/i.test(ass.label) ||
+				ass.auto === "true" ||
+				ass.auto === true;
+			if (isLifeline) parsedAssociation.isLifeline = true;
+
+			newConfig.associations[ass.index] = parsedAssociation;
+		}
+	}
+
+	// Some devices report other CCs than they support, add this information to the compat field
+	const toAdd = commandClasses
+		.filter((c) => c.action === "add")
+		.map((c) => c.id);
+	const toRemove = commandClasses
+		.filter((c) => c.action === "remove")
+		.map((c) => c.id);
+
+	if (toAdd.length > 0 || toRemove.length > 0) {
+		newConfig.compat ??= {};
+		newConfig.compat.cc ??= {};
+
+		if (toAdd.length > 0) {
+			newConfig.compat.cc.add = toAdd;
+		}
+		if (toRemove.length > 0) {
+			newConfig.compat.cc.remove = toRemove;
+		}
+	}
+	// create the target dir for this config file if doesn't exists
+	const manufacturerDir = path.join(processedDir, manufacturerIdHex);
+	await fs.ensureDir(manufacturerDir);
+
+	// write the updated configuration file
+	await fs.writeFile(fileNameAbsolute, stringify(normalizeConfig(newConfig)));
 }
 
 /**
@@ -165,14 +803,14 @@ async function downloadManufacturers(): Promise<void> {
 				.replace(/&quot;/g, `"`)
 				.replace(/&amp;/g, "&")
 				.trim(),
-			`0x${padStart(id.trim(), 4, "0").toLowerCase()}`,
+			formatId(id.trim()),
 		]),
 	);
 
 	await fs.ensureDir(importDir);
 	await fs.writeFile(
 		importedManufacturersPath,
-		JSON.stringify(manufacturers, undefined, 4),
+		stringify(manufacturers),
 		"utf8",
 	);
 
@@ -186,7 +824,7 @@ function findManufacturerId(
 ): string | undefined {
 	for (const re of manufacturerIdRegexes) {
 		const match = input.match(re);
-		if (match) return "0x" + padStart(match[1], 4, "0").toLowerCase();
+		if (match) return formatId(match[1]);
 	}
 	const imported = require(importedManufacturersPath);
 	const manufacturerName = inputAsJson.manufacturer;
@@ -210,8 +848,23 @@ function assertValid(json: any) {
 }
 
 /** Removes unnecessary whitespace from imported text */
-function sanitizeText(text: string): string {
-	return text.trim().replace(/[\t\r\n]+/g, " ");
+function sanitizeText(text: string): string | undefined {
+	return text ? text.trim().replace(/[\t\r\n]+/g, " ") : undefined;
+}
+
+/** Tries to coerce the input value into an integer */
+function sanitizeNumber(
+	value: number | string | null | undefined,
+): number | undefined {
+	if (typeof value === "number") return value;
+	if (isNullishOrEmptyString(value)) return undefined;
+
+	let ret = Number(value);
+	if (isNaN(ret)) {
+		value = value.replace(/[^0-9-\.\,]/g, "");
+		ret = Number(value);
+	}
+	return ret;
 }
 
 /** Converts a device label to a valid filename */
@@ -225,7 +878,9 @@ function labelToFilename(label: string): string {
 }
 
 /** Parses a downloaded config file into something we understand */
-async function parseConfigFile(filename: string): Promise<Record<string, any>> {
+async function parseOHConfigFile(
+	filename: string,
+): Promise<Record<string, any>> {
 	const content = await fs.readFile(filename, "utf8");
 	const json = JSON.parse(content);
 	assertValid(json);
@@ -245,7 +900,7 @@ async function parseConfigFile(filename: string): Promise<Record<string, any>> {
 				const [productType, productId] = ref
 					.trim()
 					.split(":")
-					.map((str) => "0x" + padStart(str, 4, "0").toLowerCase());
+					.map((str) => formatId(str));
 				return { productType, productId };
 			}),
 		firmwareVersion: {
@@ -337,7 +992,7 @@ async function importConfigFiles(): Promise<void> {
 		const inPath = path.join(importDir, file);
 		let parsed: Record<string, any>;
 		try {
-			parsed = await parseConfigFile(inPath);
+			parsed = await parseOHConfigFile(inPath);
 			if (!parsed.manufacturerId) {
 				console.error(`${file} has no manufacturer ID!`);
 			}
@@ -375,9 +1030,26 @@ async function importConfigFiles(): Promise<void> {
 		// prettier-ignore
 		const output = `// ${parsed.manufacturer} ${parsed.label}${parsed.description ? (`
 // ${parsed.description}`) : ""}
-${JSON.stringify(parsed, undefined, 4)}`;
+${stringify(parsed)}`;
 		await fs.writeFile(outFilename, output, "utf8");
 	}
+}
+
+/**
+ * Get latest device configuration file version
+ * @param configs list of device config index entries
+ */
+function getLatestConfigVersion(
+	configs: DeviceConfigIndexEntry[],
+): DeviceConfigIndexEntry | undefined {
+	configs.sort((a, b) => {
+		const vA = padVersion(a.firmwareVersion.max);
+		const vB = padVersion(b.firmwareVersion.max);
+
+		return compare(vA, vB);
+	});
+
+	return configs[configs.length - 1];
 }
 
 async function enumFilesRecursive(
@@ -423,11 +1095,9 @@ async function generateDeviceIndex(): Promise<void> {
 			// Add the file to the index
 			index.push(
 				...config.devices.map((dev: any) => ({
-					manufacturerId: `0x${padStart(
+					manufacturerId: formatId(
 						config.manufacturerId.toString(16),
-						4,
-						"0",
-					).toLowerCase()}`,
+					),
 					...dev,
 					firmwareVersion: config.firmwareVersion,
 					filename: relativePath,
@@ -445,7 +1115,7 @@ async function generateDeviceIndex(): Promise<void> {
 	await fs.writeFile(
 		path.join(processedDir, "index.json"),
 		`// This file is auto-generated using "npm run config index"
-${JSON.stringify(index, undefined, 4)}`,
+${stringify(index)}`,
 		"utf8",
 	);
 }
@@ -481,22 +1151,36 @@ async function updateManufacturerNames(): Promise<void> {
 }
 
 void (async () => {
-	if (process.argv.includes("manufacturers")) {
-		await downloadManufacturers();
-	} else if (process.argv.includes("manufacturerNames")) {
-		await updateManufacturerNames();
-	} else if (process.argv.includes("download")) {
-		const id = process.argv[process.argv.indexOf("download") + 1];
-		if (!id || id === "all") {
-			await downloadManufacturers();
-			await downloadDevices();
-		} else {
-			await downloadDevices(id.split(","));
+	if (program.clean) {
+		await cleanTmpDirectory();
+	} else {
+		if (program.source.includes("ozw")) {
+			if (program.download) {
+				await downloadOZWConfig();
+				await extractConfigFromTar();
+			}
+
+			if (program.manufacturers || program.devices)
+				await parseOZWConfig();
 		}
-	} else if (process.argv.includes("import")) {
-		await importConfigFiles();
-		await generateDeviceIndex();
-	} else if (process.argv.includes("index")) {
-		await generateDeviceIndex();
+
+		if (program.source.includes("oh")) {
+			if (program.download) {
+				await downloadManufacturers();
+				await downloadDevices(program.ids?.map(String));
+			}
+
+			if (program.manufacturers) {
+				await updateManufacturerNames();
+			}
+
+			if (program.devices) {
+				await importConfigFiles();
+			}
+		}
+
+		if (program.index) {
+			await generateDeviceIndex();
+		}
 	}
 })();
