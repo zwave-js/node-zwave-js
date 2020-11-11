@@ -13,6 +13,7 @@
 * Empty user codes are now also handled as strings instead of Buffer objects
 * The `targetValue` property for the `Binary Switch`, `Multilevel Switch` and `Basic` CCs is now created, even if is `undefined`.
 * The type `CommandClass` is now exported from `zwave-js/CommandClass`
+* The interview process for `Configuration CC V3+` now continues even if the response to `NameGet` and/or `InfoGet` commands is missing or incomplete
 
 ## 5.3.6 (2020-11-04)
 ### Bugfixes
