@@ -40,6 +40,7 @@ import fsExtra from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
 import { URL } from "url";
+import * as util from "util";
 import { interpret } from "xstate";
 import { FirmwareUpdateStatus } from "../commandclass";
 import {
@@ -492,13 +493,13 @@ export class Driver extends EventEmitter {
 			pick(this.options, ["timeouts", "attempts"]),
 		);
 		this.sendThread = interpret(sendThreadMachine);
-		// this.sendThread.onTransition((state) => {
-		// 	if (state.changed)
-		// 		log.driver.print(
-		// 			`send thread state: ${state.toStrings().slice(-1)[0]}`,
-		// 			"verbose",
-		// 		);
-		// });
+		this.sendThread.onTransition((state) => {
+			if (state.changed)
+				log.driver.print(
+					`send thread state: ${state.toStrings().slice(-1)[0]}`,
+					"verbose",
+				);
+		});
 	}
 
 	/** Enumerates all existing serial ports */
@@ -2360,5 +2361,10 @@ ${handlers.length} left`,
 				: new SendDataRequest(this, { command: commandOrMsg });
 		this.encapsulateCommands(msg);
 		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
+	}
+
+	// This does not all need to be printed to the console
+	public [util.inspect.custom](): string {
+		return "[Driver]";
 	}
 }
