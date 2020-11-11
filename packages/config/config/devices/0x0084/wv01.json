@@ -42,7 +42,7 @@
         },
         "1": {
             "label": "Water Level timeout",
-            "valueSize": 1,
+			"valueSize": 2,
             "unit": "minutes",
             "minValue": 0,
             "maxValue": 32767,

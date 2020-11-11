@@ -66,7 +66,8 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+			"allowManualEntry": true
+			// Try to find out what this does - it should probably have options
         },
         "34": {
             "label": "Blade turn time",
@@ -444,18 +445,7 @@
                 }
             ]
         },
-        "243": {
-            "label": "DSK",
-            "description": "Get the DSK from the product",
-            "valueSize": 16,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
+		// Parameter 243 is not spec-compliant (value size 16)
         "248": {
             "label": "S1 and S2 operation",
             "description": "Set the operation of external switches S1 and S2",

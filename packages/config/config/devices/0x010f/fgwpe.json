@@ -155,7 +155,7 @@
             "description": "Wall Plug's alarm mode duration. If a device sending an alarm frame through the Z-Wave network sets alarm duration as well, this parameter's settings are ignored. Default setting: 600",
             "valueSize": 2,
             "minValue": 1,
-            "maxValue": 65536,
+			"maxValue": 65535,
             "defaultValue": 600,
             "unsigned": true,
             "readOnly": false,

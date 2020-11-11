@@ -70,7 +70,7 @@
         "5": {
             "label": "Led Flash Period",
             "description": "Led Flash Period (0 to 65535 seconds)",
-            "valueSize": 1,
+			"valueSize": 2,
             "minValue": 0,
             "maxValue": 65535,
             "defaultValue": 1,

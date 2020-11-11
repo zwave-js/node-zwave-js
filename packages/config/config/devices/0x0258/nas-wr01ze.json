@@ -1,0 +1,208 @@
+// Shenzhen Neo Electronics Co Ltd NAS-WR01ZE
+// Power plug 12A
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Shenzhen Neo Electronics Co Ltd",
+    "manufacturerId": "0x0258",
+    "label": "NAS-WR01ZE",
+    "description": "Power plug 12A",
+    "devices": [
+        {
+            "productType": "0x0200",
+            "productId": "0x1027"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Over-load current",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Send Notification",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Remember Relay ON/OFF status",
+            "description": "This parameter defined the relay status if remember or not. If remembered, the plug will restore the relay status last power off when the plug supply power next time.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Button On/Off",
+            "description": "This parameter defines the button on/off function is enabled or not on the top of the wall plug. If enabled, users can turn on and off the wall plug by pressing the button on the top of the wall plug. If disabled, the wall plug cannot be turned on and off by pressing the button.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Led Display",
+            "description": "This parameter defines the LED indication Function ON/OFF. If disabled, then LED indication Function and will always be turn-off, while enabled means LED Function is on.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Configure Plug Time switch Function",
+            "description": "This parameter defines the timer function Enable/Disable. If disabled, then time switch function is not available. The time period will be defined in parameter #5. If enabled, and when turn the plug relay on, the timer in plug start run with time period defined in parameter #5 and the plug will turn the relay off.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Configure Time switch Period",
+            "description": "This parameter defines the time period that plug time switch off. This parameter can be configured 0 - 32767(in minutes). If Parameter #4 is enabled, and relay is turn-on, the relay will be turn-off after delay this parameter.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "defaultValue": 120,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Send Meter Report",
+            "description": "This parameter defines Disable/Enable meter report measure data to controller. When device is detected an OCP event or the relay turned on or turned off, device still will report all meter values once if this configuration is disabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "Meter Report Interval",
+            "description": "This parameter defines interval time (30-32767 seconds) that Meter report data to main controller .",
+            "valueSize": 2,
+            "minValue": 30,
+            "maxValue": 32767,
+            "defaultValue": 300,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Configure maximum over-load current",
+            "description": "This parameter defines maximum current (in Amperes) the plug can provide to load that be connected to plug. If the current consumed by load is greater than maximum current, the plug will cut off power, and send NOTIFICATION_EVENT_POWER_MANAGEMENT_OVER_LOAD_DETECTED to associated devices in lifeline. Red Led will blink every seconds until current is normal (less than Parameter #8). You must remove the loader and turn on the Plug (press the button once) to enable current monitor and clear NOTIFICATION ALARM. This parameter value must be great than #10. If user set this parameter to default by Configure CC, the parameter #10 will be set to default value.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 16,
+            "defaultValue": 16,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "9": {
+            "label": "Configure power report",
+            "description": "This parameter defines by how much power consumed must change to be reported to the Z-Wave Controller or Z-Wave Gateway, in centiAmperes (1-1600). If the rate of power consumed change ratio is greater than this parameter, the plug will report the results, voltage, current, power and energy, that plug measure to Z-Wave Controller or Z-Wave Gateway The changed value = [Value] x 0.01A",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 1600,
+            "defaultValue": 50,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Configure maximum Alarm current",
+            "description": "This parameter defines maximum current (in Amperes), if the current plug provide to load is greater than this parameter, the plug will send over-current notification to the controller and the LED will turn RED, but plug cannot cut-off power. This parameter value must be less than parameter #8. If user set this parameter to default by Configure CC, the parameter #8 will be set to default value.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 16,
+            "defaultValue": 13,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

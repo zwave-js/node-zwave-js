@@ -48,7 +48,7 @@
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false
+			"allowManualEntry": true
         },
         "2": {
             "label": "Motion detection ON time",

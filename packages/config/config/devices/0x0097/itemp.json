@@ -88,7 +88,7 @@
         "6": {
             "label": "6. Temperature Offset",
             "description": "Offset to the temperature. This parameter can be used to calibrate the temperature sensor function if needed. Note. As factory default the temperature sensor function is calibrated. 0 = 0K (default), not 0 = Temperature Offset in K",
-            "valueSize": 1,
+			"valueSize": 2,
             "minValue": 0,
             "maxValue": 65535,
             "defaultValue": 0,

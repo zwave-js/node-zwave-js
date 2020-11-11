@@ -99,7 +99,7 @@
         "254": {
             "label": "Device tag",
             "description": "Device tag.",
-            "valueSize": 1,
+			"valueSize": 2,
             "minValue": 0,
             "maxValue": 65535,
             "defaultValue": 0,

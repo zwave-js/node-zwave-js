@@ -37,7 +37,7 @@
         "1": {
             "label": "IN1 Alarm Cancellation Delay",
             "description": "Input I alarm cancellation delay. Additional delay after an alarm from input IN1 has ceased. The parameter allows you to specify additional time, after which the input no. 1 alarm is cancelled once its violation has ceased.",
-            "valueSize": 1,
+			"valueSize": 2,
             "minValue": 0,
             "maxValue": 65535,
             "defaultValue": 0,

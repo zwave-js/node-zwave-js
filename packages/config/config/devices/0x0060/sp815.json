@@ -1,72 +1,72 @@
 // Everspring SP815
 // Pet Immune Pir Motion Detector
 {
-    "revision": {
-        "ozw": 3
-    },
-    "manufacturer": "Everspring",
-    "manufacturerId": "0x0060",
-    "label": "SP815",
-    "description": "Pet Immune Pir Motion Detector",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0004"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Pir Control",
-            "maxNodes": 4
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Temperature and Humidity Auto Report period setting",
-            "valueSize": 1,
-            "unit": "minutes",
-            "minValue": 0,
-            "maxValue": 1440,
-            "defaultValue": 30,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Re-trigger Interval Setting",
-            "description": "The parameter adjusts the sleep period after the detector has been triggered. No response will be made during this interval if a movement is presented. Longer re-trigger interval will result in longer battery life.",
-            "valueSize": 1,
-            "unit": "seconds",
-            "minValue": 10,
-            "maxValue": 3600,
-            "defaultValue": 180,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Trigger Off Interval Setting",
-            "description": "This controls how long the connected lighting will stay on after the motion is detected. This is useful for Group 2 associations where the detector is connected directly to another device such as smartplugs.",
-            "valueSize": 1,
-            "unit": "seconds",
-            "minValue": 10,
-            "maxValue": 3600,
-            "defaultValue": 15,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"revision": {
+		"ozw": 3
+	},
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "SP815",
+	"description": "Pet Immune Pir Motion Detector",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Pir Control",
+			"maxNodes": 4
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Temperature and Humidity Auto Report period setting",
+			"valueSize": 2,
+			"unit": "minutes",
+			"minValue": 0,
+			"maxValue": 1440,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Re-trigger Interval Setting",
+			"description": "The parameter adjusts the sleep period after the detector has been triggered. No response will be made during this interval if a movement is presented. Longer re-trigger interval will result in longer battery life.",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 10,
+			"maxValue": 3600,
+			"defaultValue": 180,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Trigger Off Interval Setting",
+			"description": "This controls how long the connected lighting will stay on after the motion is detected. This is useful for Group 2 associations where the detector is connected directly to another device such as smartplugs.",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 10,
+			"maxValue": 3600,
+			"defaultValue": 15,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

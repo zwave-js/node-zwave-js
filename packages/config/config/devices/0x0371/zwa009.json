@@ -198,7 +198,7 @@
             "description": "This parameter helps reset configuration parameters and the device to factory defaults",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 14294967295,
+			"maxValue": 4294967295,
             "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,

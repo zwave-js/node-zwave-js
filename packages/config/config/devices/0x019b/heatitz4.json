@@ -49,8 +49,8 @@
         "1": {
             "label": "Factory reset",
             "description": "Set to 21930 to factory reset the device.",
-            "valueSize": 1,
-            "minValue": 21930,
+			"valueSize": 2,
+			"minValue": 0,
             "maxValue": 21930,
             "defaultValue": 0,
             "unsigned": true,
