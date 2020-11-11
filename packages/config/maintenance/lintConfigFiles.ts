@@ -428,14 +428,6 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 	for (let i = 0; i < uIndex.length; i++) {
 		const entry = { ...uIndex[i], label: "" };
 
-		if (
-			entry.manufacturerId === "0x0086" &&
-			entry.productId === "0x006f" &&
-			entry.productType === "0x1d03"
-		) {
-			debugger;
-		}
-
 		// Same manufacturer, different filename, either different product id or type
 		let potentialDuplicateEntries = uIndex
 			.filter(

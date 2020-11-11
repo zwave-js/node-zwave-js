@@ -340,6 +340,7 @@ function normalizeUnits(unit: string) {
  */
 function normalizeConfig(config: Record<string, any>): Record<string, any> {
 	const normalized: Record<string, any> = {
+		revision: config.revision,
 		manufacturer: config.manufacturer,
 		manufacturerId: config.manufacturerId,
 		label: sanitizeText(config.label) ?? "",
@@ -515,6 +516,9 @@ async function parseOZWProduct(
 	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
 
 	let newConfig: Record<string, any> = {
+		revision: {
+			ozw: json.Revision,
+		},
 		manufacturer,
 		manufacturerId: manufacturerIdHex,
 		label: productLabel,
