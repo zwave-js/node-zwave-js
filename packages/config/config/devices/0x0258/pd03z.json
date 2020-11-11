@@ -141,10 +141,11 @@
 			"label": "Lux Level Changed Report",
 			"description": "How much the Lux Level must change",
 			"unit": "LUX",
-			"valueSize": 2,
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 100,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
