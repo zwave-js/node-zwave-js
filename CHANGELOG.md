@@ -14,6 +14,7 @@
 * The `targetValue` property for the `Binary Switch`, `Multilevel Switch` and `Basic` CCs is now created, even if is `undefined`.
 * The type `CommandClass` is now exported from `zwave-js/CommandClass`
 * The interview process for `Configuration CC V3+` now continues even if the response to `NameGet` and/or `InfoGet` commands is missing or incomplete
+* Fixed an issue where marking nodes with active transaction as asleep would mess up the serial communication with the controller
 
 ## 5.3.6 (2020-11-04)
 ### Bugfixes
