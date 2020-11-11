@@ -131,6 +131,7 @@ jobs:
   deploy:
     # Trigger this step only when a commit on any branch is tagged with a version number
     if: |
+      github.actor == 'AlCalzone' &&
       contains(github.event.head_commit.message, '[skip ci]') == false &&
       github.event_name == 'push' &&
       startsWith(github.ref, 'refs/tags/v')
