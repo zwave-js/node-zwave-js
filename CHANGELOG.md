@@ -5,6 +5,9 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Config changes
+* The entire configuration database can now be synchronized with the one from OpenZWave. Big shoutout to @robertsLando for the work!
+
 ### Bugfixes
 * If a node association is duplicated between `Association CC` and `Multi Channel Association CC`, it is now removed from both when using `Controller.removeAssociations`
 * Add missing production dependency `semver` to `@zwave-js/config`
