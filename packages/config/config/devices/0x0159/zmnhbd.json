@@ -21,7 +21,6 @@
 			"label": "Default Reporting Group",
 			"maxNodes": 1,
 			"isLifeline": true,
-			"noEndpoint": true
 		},
 		"2": {
 			"label": "Q1 basic on/off",
@@ -51,7 +50,6 @@
 			"label": "Multilevel sensor",
 			"maxNodes": 16,
 			"isLifeline": true,
-			"noEndpoint": true
 		}
 	},
 	"paramInformation": {

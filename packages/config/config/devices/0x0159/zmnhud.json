@@ -21,8 +21,7 @@
 			"label": "Lifeline",
 			"description": "Reserved for communication with the main controller",
 			"maxNodes": 1,
-			"isLifeline": true,
-			"noEndpoint": true
+			"isLifeline": true
 		},
 		"2": {
 			"label": "Multilevel",

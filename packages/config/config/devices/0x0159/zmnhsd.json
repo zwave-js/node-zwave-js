@@ -23,8 +23,7 @@
 		"1": {
 			"label": "Controller Updates",
 			"maxNodes": 1,
-			"isLifeline": true,
-			"noEndpoint": true
+			"isLifeline": true
 		},
 		"2": {
 			"label": "I1 basic on/off",
@@ -41,8 +40,7 @@
 		"5": {
 			"label": "Multilevel sensor report",
 			"maxNodes": 16,
-			"isLifeline": true,
-			"noEndpoint": true
+			"isLifeline": true
 		}
 	},
 	"paramInformation": {

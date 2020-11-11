@@ -29,7 +29,6 @@
 			"label": "Default Reporting Group",
 			"maxNodes": 4,
 			"isLifeline": true,
-			"noEndpoint": true
 		}
 	},
 	"paramInformation": {

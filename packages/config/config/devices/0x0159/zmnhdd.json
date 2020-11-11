@@ -25,8 +25,7 @@
 			"label": "Controller Updates",
 			"description": "Lifeline group",
 			"maxNodes": 1,
-			"isLifeline": true,
-			"noEndpoint": true
+			"isLifeline": true
 		},
 		"2": {
 			"label": "I1 basic on/off",
@@ -77,8 +76,7 @@
 			"label": "Multilevel sensor",
 			"description": "Triggered at change of temperature sensor",
 			"maxNodes": 16,
-			"isLifeline": true,
-			"noEndpoint": true
+			"isLifeline": true
 		}
 	},
 	"paramInformation": {

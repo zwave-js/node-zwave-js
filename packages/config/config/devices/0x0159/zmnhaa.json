@@ -36,7 +36,6 @@
 			"label": "Controller Updates",
 			"maxNodes": 1,
 			"isLifeline": true,
-			"noEndpoint": true
 		}
 	},
 	"paramInformation": {
