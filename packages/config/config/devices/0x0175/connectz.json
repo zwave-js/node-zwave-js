@@ -1,0 +1,28 @@
+// devolo Home Control CONNECTZ
+// Thermostats Danfoss Connect Z
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "devolo Home Control",
+    "manufacturerId": "0x0175",
+    "label": "CONNECTZ",
+    "description": "Thermostats Danfoss Connect Z",
+    "devices": [
+        {
+            "productType": "0x0005",
+            "productId": "0x0175"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "compat": {
+        "cc": {
+            "remove": [
+                32
+            ]
+        }
+    }
+}

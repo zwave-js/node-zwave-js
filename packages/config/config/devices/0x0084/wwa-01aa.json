@@ -1,0 +1,21 @@
+// FortrezZ WWA-01AA
+// - Wireless Water and Freeze Alarm
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "FortrezZ",
+    "manufacturerId": "0x0084",
+    "label": "WWA-01AA",
+    "description": "- Wireless Water and Freeze Alarm",
+    "devices": [
+        {
+            "productType": "0x0013",
+            "productId": "0x0210"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

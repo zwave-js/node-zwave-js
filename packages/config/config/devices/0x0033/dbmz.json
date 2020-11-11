@@ -1,0 +1,93 @@
+// Electronic Solutions Inc DBMZ
+// Motor Control
+{
+    "revision": {
+        "ozw": 4
+    },
+    "manufacturer": "Electronic Solutions Inc",
+    "manufacturerId": "0x0033",
+    "label": "DBMZ",
+    "description": "Motor Control",
+    "devices": [
+        {
+            "productType": "0x5250",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Calibration",
+            "description": "Unit calibration state",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 129,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 0
+                },
+                {
+                    "label": "Calibration",
+                    "value": 1
+                },
+                {
+                    "label": "Factory default",
+                    "value": 129
+                }
+            ]
+        },
+        "2": {
+            "label": "Motor direction",
+            "description": "Unit motor direction state",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 0
+                },
+                {
+                    "label": "Reversed",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Tilt feature",
+            "description": "Unit tilt feature state",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

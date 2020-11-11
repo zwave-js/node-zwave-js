@@ -1,0 +1,21 @@
+// Vitrum (VDA) VITRUMIV-SWITCH
+// Vitrum IV EU Wireless On-off
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Vitrum (VDA)",
+    "manufacturerId": "0x010a",
+    "label": "VITRUMIV-SWITCH",
+    "description": "Vitrum IV EU Wireless On-off",
+    "devices": [
+        {
+            "productType": "0x4400",
+            "productId": "0x6400"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

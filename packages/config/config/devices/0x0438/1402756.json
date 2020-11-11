@@ -1,0 +1,170 @@
+// Namron 1402756
+// LED Dimmer Z-Wave 200W
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Namron",
+    "manufacturerId": "0x0438",
+    "label": "1402756",
+    "description": "LED Dimmer Z-Wave 200W",
+    "devices": [
+        {
+            "productType": "0x0202",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Set",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Switch Multilevel",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "External Button",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Saving state before power failure",
+            "description": "Saving state before power failure. Default Not saved.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "State NOT saved at power failure, switch are set to OFF upon power restore",
+                    "value": 0
+                },
+                {
+                    "label": "State NOT saved at power failure, switch are set to ON upon power restore",
+                    "value": 1
+                },
+                {
+                    "label": "State saved at power failure, switch are set to previous state upon power restore",
+                    "value": 2
+                }
+            ]
+        },
+        "2": {
+            "label": "Send the notification",
+            "description": "Enable/disable to send notification to the Group Lifeline when the load state changed. When value set as 1, re-power on the dimmer, it will send Basic report automatically. Default Enabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Send Switch Multilevel Report",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Dimming speed",
+            "description": "Dimming speed in seconds. Valid values is 0-100. Default 5.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "External switch",
+            "description": "Enable or Disable external switch to pair network",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Dimming mode",
+            "description": "Set the Dimming mode to be Linear or Logaritmic",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Linear",
+                    "value": 0
+                },
+                {
+                    "label": "Logaritmic",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "Dimming brightness when dimmer is turned on",
+            "description": "Setting brightness when turn on dimmer from off status. Setting of 0 means that the dimmer will use parameter 1. Valid values: 0-99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Delay time when turned off",
+            "description": "Setting delay time in seconds when load is turned off. Valid values : 0-60 seconds",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 60,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

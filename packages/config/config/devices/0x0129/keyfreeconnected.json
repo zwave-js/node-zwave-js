@@ -1,0 +1,21 @@
+// Assa Abloy KEYFREECONNECTED
+// Yale Keyless Connected Smart Lock (YSL)
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Assa Abloy",
+    "manufacturerId": "0x0129",
+    "label": "KEYFREECONNECTED",
+    "description": "Yale Keyless Connected Smart Lock (YSL)",
+    "devices": [
+        {
+            "productType": "0x1bef",
+            "productId": "0x9230"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

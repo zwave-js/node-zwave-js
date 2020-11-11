@@ -1,0 +1,818 @@
+// Aeotec Limited ZW162
+// Doorbell 6
+{
+    "revision": {
+        "ozw": 8
+    },
+    "manufacturer": "Aeotec Limited",
+    "manufacturerId": "0x0371",
+    "label": "ZW162",
+    "description": "Doorbell 6",
+    "devices": [
+        {
+            "productType": "0x1d03",
+            "productId": "0x00a2"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Browse",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Tampering",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Doorbell 1",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Doorbell 2",
+            "maxNodes": 5
+        },
+        "6": {
+            "label": "Doorbell 3",
+            "maxNodes": 5
+        },
+        "7": {
+            "label": "Environment",
+            "maxNodes": 5
+        },
+        "8": {
+            "label": "Security",
+            "maxNodes": 5
+        },
+        "9": {
+            "label": "Emergency",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Light Effect and Tone Effect for Tampering",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 16777217,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "3": {
+            "label": "Light Effect and Tone Effect for Doorbell 1",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 33554433,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "4": {
+            "label": "Light Effect and Tone Effect for Doorbell 2",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 33554433,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Light Effect and Tone Effect for Doorbell 3",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 33554433,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Light Effect and Tone Effect for Environment",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 67108864,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "Light Effect and Tone Effect for Security",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 67108864,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Light Effect and Tone Effect for Endpoint Emergency",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 67108864,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "16": {
+            "label": "Light Effect 1",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 2519864323,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "17": {
+            "label": "Light Effect 2",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1684275203,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "18": {
+            "label": "Light Effect 3",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 4325635,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "19": {
+            "label": "Light Effect 4",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1107296259,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "20": {
+            "label": "Light Effect 5",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "21": {
+            "label": "Light Effect 6",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 2560,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "22": {
+            "label": "Light Effect 7",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1107296257,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "32": {
+            "label": "Basic Set to nodes in Group 2",
+            "description": "Configure how to send Basic Set to nodes in Group 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Don't send Basic Set",
+                    "value": 0
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, don't send Basic Set",
+                    "value": 1
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, don't send Basic Set",
+                    "value": 2
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, send Basic Set 0x00",
+                    "value": 3
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, send Basic Set 0xFF",
+                    "value": 4
+                }
+            ]
+        },
+        "33": {
+            "label": "Basic Set to nodes in Group 3",
+            "description": "Configure how to send Basic Set to nodes in Group 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Don't send Basic Set",
+                    "value": 0
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, don't send Basic Set",
+                    "value": 1
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, don't send Basic Set",
+                    "value": 2
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, send Basic Set 0x00",
+                    "value": 3
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, send Basic Set 0xFF",
+                    "value": 4
+                }
+            ]
+        },
+        "34": {
+            "label": "Basic Set to nodes in Group 4",
+            "description": "Configure how to send Basic Set to nodes in Group 4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Don't send Basic Set",
+                    "value": 0
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, don't send Basic Set",
+                    "value": 1
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, don't send Basic Set",
+                    "value": 2
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, send Basic Set 0x00",
+                    "value": 3
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, send Basic Set 0xFF",
+                    "value": 4
+                }
+            ]
+        },
+        "35": {
+            "label": "Basic Set to nodes in Group 5",
+            "description": "Configure how to send Basic Set to nodes in Group 5",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Don't send Basic Set",
+                    "value": 0
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, don't send Basic Set",
+                    "value": 1
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, don't send Basic Set",
+                    "value": 2
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, send Basic Set 0x00",
+                    "value": 3
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, send Basic Set 0xFF",
+                    "value": 4
+                }
+            ]
+        },
+        "36": {
+            "label": "Basic Set to nodes in Group 6",
+            "description": "Configure how to send Basic Set to nodes in Group 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Don't send Basic Set",
+                    "value": 0
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, don't send Basic Set",
+                    "value": 1
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, don't send Basic Set",
+                    "value": 2
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, send Basic Set 0x00",
+                    "value": 3
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, send Basic Set 0xFF",
+                    "value": 4
+                }
+            ]
+        },
+        "38": {
+            "label": "Basic Set to nodes in Group 8",
+            "description": "Configure how to send Basic Set to nodes in Group 8",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Don't send Basic Set",
+                    "value": 0
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, don't send Basic Set",
+                    "value": 1
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, don't send Basic Set",
+                    "value": 2
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, send Basic Set 0x00",
+                    "value": 3
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, send Basic Set 0xFF",
+                    "value": 4
+                }
+            ]
+        },
+        "39": {
+            "label": "Basic Set to nodes in Group 9",
+            "description": "Configure how to send Basic Set to nodes in Group 9",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Don't send Basic Set",
+                    "value": 0
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, don't send Basic Set",
+                    "value": 1
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, don't send Basic Set",
+                    "value": 2
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0xFF. When Chime stops playing tone, send Basic Set 0x00",
+                    "value": 3
+                },
+                {
+                    "label": "When Chime starts playing tone, send Basic Set 0x00. When Chime stops playing tone, send Basic Set 0xFF",
+                    "value": 4
+                }
+            ]
+        },
+        "48": {
+            "label": "Trigger Unpairing Button Mode",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 7,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Trigger Unpairing #1 Button Mode",
+                    "value": 1
+                },
+                {
+                    "label": "Trigger Unpairing #2 Button Mode",
+                    "value": 2
+                },
+                {
+                    "label": "Trigger Unpairing #2 and #1 Button Mode",
+                    "value": 3
+                },
+                {
+                    "label": "Trigger Unpairing #3 Button Mode",
+                    "value": 4
+                },
+                {
+                    "label": "Trigger Unpairing #3 and #1 Button Mode",
+                    "value": 5
+                },
+                {
+                    "label": "Trigger Unpairing #3 and #2 Button Mode",
+                    "value": 6
+                },
+                {
+                    "label": "Trigger Unpairing #3, #2 and #1 Button Mode",
+                    "value": 7
+                }
+            ]
+        },
+        "49": {
+            "label": "Trigger pairing Button Mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Exit Pairing Button Mode",
+                    "value": 0
+                },
+                {
+                    "label": "Trigger Pairing #1 Button Mode",
+                    "value": 1
+                },
+                {
+                    "label": "Trigger Pairing #2 Button Mode",
+                    "value": 2
+                },
+                {
+                    "label": "Trigger Pairing #3 Button Mode",
+                    "value": 4
+                }
+            ]
+        },
+        "50": {
+            "label": "Report which Pairing Button Mode is triggered",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "There is no Pairing Button Mode being triggered",
+                    "value": 0
+                },
+                {
+                    "label": "Pairing #1 Button Mode is triggered",
+                    "value": 1
+                },
+                {
+                    "label": "Pairing #1 Button Mode is triggered",
+                    "value": 2
+                },
+                {
+                    "label": "Pairing #1 Button Mode is triggered",
+                    "value": 4
+                }
+            ]
+        },
+        "51": {
+            "label": "Report which Buttons had been paired",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "There is no paired Button",
+                    "value": 0
+                },
+                {
+                    "label": "#1 Button had been paired",
+                    "value": 1
+                },
+                {
+                    "label": "#2 Button had been paired",
+                    "value": 2
+                },
+                {
+                    "label": "#2 and #1 Button had been paired",
+                    "value": 3
+                },
+                {
+                    "label": "#3 Button had been paired",
+                    "value": 4
+                },
+                {
+                    "label": "#3 and #1 Button had been paired",
+                    "value": 5
+                },
+                {
+                    "label": "#3 and #2 Button had been paired",
+                    "value": 6
+                },
+                {
+                    "label": "#3x #2 and #1 Button had been paired",
+                    "value": 7
+                }
+            ]
+        },
+        "52": {
+            "label": "Get the information of #1 Button",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "53": {
+            "label": "Get the information of #2 Button",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "54": {
+            "label": "Get the information of #3 Button",
+            "description": "Please Refer to Engineering Specification - Aeotec Doorbell 6",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "96": {
+            "label": "Allow stopping chime with the action button",
+            "description": "Enable or Disable the ability that click the Action Button to stop a playing tone.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "255": {
+            "label": "Reset To Factory Defaults",
+            "description": "Reset to factory defaults",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1431655765,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Reset to factory default setting",
+                    "value": 0
+                },
+                {
+                    "label": "Normal",
+                    "value": 1
+                },
+                {
+                    "label": "Reset to factory default setting and removed from the z-wave network",
+                    "value": 1431655765
+                }
+            ]
+        },
+        "1[0x80000000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. Last Valid Configuration (Light Effect)",
+            "description": "Use the Last Valid Configuration Value for the Light Effect",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x40000000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. Light Effect #7",
+            "description": "Use Light Effect #7, Defined in Parameter 22",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x20000000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. Light Effect #6",
+            "description": "Use Light Effect #6, Defined in Parameter 21",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x10000000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. Light Effect #5",
+            "description": "Use Light Effect #5, Defined in Parameter 20",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x08000000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. Light Effect #4",
+            "description": "Use Light Effect #4, Defined in Parameter 19",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x04000000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. Light Effect #3",
+            "description": "Use Light Effect #3, Defined in Parameter 18",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x02000000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. Light Effect #2",
+            "description": "Use Light Effect #2, Defined in Parameter 17",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x01000000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. Light Effect #1",
+            "description": "Use Light Effect #1, Defined in Parameter 16",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x800000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. Last Valid Configuration (Tone Mode)",
+            "description": "Use the Last Valid Configuration Value for the Tone",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x040000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. List Random Playback",
+            "description": "If you’re not sure which tone to use, you can configure the value of Tone Play Mode to be 3. Then send Basic Set 0xFF to Endpoint 1 or Root Device to trigger auto-selecting tone function. Chime will play built-in tones randomly and the Default Tone Identifier will be changed each time a new tone is played. When send Basic Set 0x00 to Endpoint 1 or Root Device to stop playing tone, the Default Tone Identifier will store, which means the tone has been selected. Please note that the Tone Play Mode needs to be configured to be 0 or 1 after the tone is selected, otherwise the automatic selection tone function will be retriggered when the Endpoint 1 or Root Device is triggered to play tone and light again.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x020000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. List Loop Playback",
+            "description": "If you’re not sure which tone to use, you can configure the value of Tone Play Mode to be 2. Then send Basic Set 0xFF to Endpoint 1 or Root Device to trigger auto-selecting tone function. Chime will play built-in tones in order and the Default Tone Identifier will be changed each time a new tone is played. When send Basic Set 0x00 to Endpoint 1 or Root Device to stop playing tone, the Default Tone Identifier will store, which means the tone has been selected. Please note that the Tone Play Mode needs to be configured to be 0 or 1 after the tone is selected, otherwise the automatic selection tone function will be retriggered when the Endpoint 1 or Root Device is triggered to play tone and light again.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "1[0x010000]": {
+            "label": "Light Effect and Tone Play Mode for Browse. Single Loop Playback",
+            "description": "Use a single loop playback for the Tone",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

@@ -1,0 +1,80 @@
+// Qolsys QZ2140-840
+// Plug-In Dimmer
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Qolsys",
+    "manufacturerId": "0x012a",
+    "label": "QZ2140-840",
+    "description": "Plug-In Dimmer",
+    "devices": [
+        {
+            "productType": "0x4744",
+            "productId": "0x3032"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Night Light",
+            "description": "When value =0 the LED indicator will be OFF when the the connected light is ON, and the LED will be ON when the connected light is OFF. If value =1 the LED indicator will be ON when the connected light is ON, and the LED indicator will be OFF when the connected light is OFF. If value =2 the LED indicator will always be OFF regardless of the load status",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "0: The LED indicator will be ON when the connected light is OFF.",
+                    "value": 0
+                },
+                {
+                    "label": "1: The LED indicator will be ON when the connected light is ON.",
+                    "value": 1
+                },
+                {
+                    "label": "2: The LED indicator will always be OFF regardless of the load status.",
+                    "value": 2
+                }
+            ]
+        },
+        "9": {
+            "label": "Dimming Resolution Level",
+            "description": "Valid Values: 1-99, indicates the number of dimming levels.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Dimming Resolution Speed",
+            "description": "Valid Values: 1-255, indicates the time duration of each level.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

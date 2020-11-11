@@ -1,0 +1,21 @@
+// MSK Miyakawa Seisakusho ME-D101
+// Electric Power Measuring Instrument
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "MSK Miyakawa Seisakusho",
+    "manufacturerId": "0x0122",
+    "label": "ME-D101",
+    "description": "Electric Power Measuring Instrument",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

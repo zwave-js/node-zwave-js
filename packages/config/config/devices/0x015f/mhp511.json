@@ -1,0 +1,365 @@
+// McoHome Technology Co Ltd MHP511
+// Dimmer Touch Panel Switch MH-P511
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "McoHome Technology Co Ltd",
+    "manufacturerId": "0x015f",
+    "label": "MHP511",
+    "description": "Dimmer Touch Panel Switch MH-P511",
+    "devices": [
+        {
+            "productType": "0x511a",
+            "productId": "0x1453"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Dimmer State",
+            "maxNodes": 1
+        },
+        "2": {
+            "label": "S1 Basic Set Command",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "S1 Multi-level Set Command",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Dimmer state saved or not when power down",
+            "description": "Dimmer state saved or not when power down",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Not Saved. Dimmer will be off when powered again",
+                    "value": 0
+                },
+                {
+                    "label": "Saved. Dimmer will keep the same state when powered again",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Beep",
+            "description": "Beep",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Beep disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Beep enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "LED Backlit brightness level",
+            "description": "LED Backlit brightness level. 0 = Off; 10 = Max brightness",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 0,
+            "maxValue": 10,
+            "defaultValue": 10,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "4": {
+            "label": "All On / All Off",
+            "description": "All On / All Off",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "forbid ALL ON, forbid ALL OFF",
+                    "value": 0
+                },
+                {
+                    "label": "forbid ALL ON, allow ALL OFF",
+                    "value": 1
+                },
+                {
+                    "label": "allow ALL ON, forbid ALL OFF",
+                    "value": 2
+                },
+                {
+                    "label": "allow ALL ON, allow ALL OFF",
+                    "value": 255
+                }
+            ]
+        },
+        "5": {
+            "label": "Minimum brightness level",
+            "description": "Minimum brightness level (should be less than Maximum brightness level)",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 98,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Maximum brightness level",
+            "description": "Maximum brightness level (should be greater than Minimum brightness level)",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 2,
+            "maxValue": 99,
+            "defaultValue": 99,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "Manual single dimming step time",
+            "description": "Manual single dimming step time, in 10ms steps. Manual control achieved by holding external button.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Manual single dimming step size",
+            "description": "Manual single dimming step size. Manual control achieved by holding external button. Modification isn’t recommended!",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "9": {
+            "label": "Auto single dimming step time",
+            "description": "Auto single dimming step time, in 10ms steps. Auto control achieved by double click external button.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Auto single dimming step size",
+            "description": "Auto single dimming step size. Auto control achieved by double click external button. Modification isn’t recommended!",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "Timer function (Auto-off)",
+            "description": "Timer function (Auto-off). 0 = function disabled 1 - 255 = 1s - 255s auto-off delay",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "13": {
+            "label": "One click of S1",
+            "description": "One click of external button (S1). 0 = either (switch Off) or (switch On to last saved brightness level) 1 - 99 = either (switch Off) or (switch On to set percentage brightness level)",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 99,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "14": {
+            "label": "Double click of S1",
+            "description": "Double click of external button (S1)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Function disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Goto maximum brightness level",
+                    "value": 1
+                }
+            ]
+        },
+        "15": {
+            "label": "Operation report from S1 to association group 2 & 3",
+            "description": "Operation report from external button (S1) to Association Group 2 & 3 Device send Basic Set to AG2; Send Multilevel Set to AG3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 130,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Report all operations to association groups 2 & 3, but not while dimming",
+                    "value": 0
+                },
+                {
+                    "label": "Only report when switching OFF, but not while dimming",
+                    "value": 1
+                },
+                {
+                    "label": "Only report when switching ON, but not while dimming",
+                    "value": 2
+                },
+                {
+                    "label": "Report all operations to association groups 2 & 3, including while dimming",
+                    "value": 128
+                },
+                {
+                    "label": "Only report when switching OFF, including while dimming",
+                    "value": 129
+                },
+                {
+                    "label": "Only report when switching ON, including while dimming",
+                    "value": 130
+                }
+            ]
+        },
+        "16": {
+            "label": "Operation report from S1 to association group 2",
+            "description": "Operation report from external button (S1) to Association Group 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "When Basic Set On sent, Brightness value is 0xFF",
+                    "value": 0
+                },
+                {
+                    "label": "When Basic Set On sent, Brightness value is Current Dimmer Value",
+                    "value": 1
+                }
+            ]
+        },
+        "19": {
+            "label": "Scene ID sent to AG1 when one click of S1",
+            "description": "0 = Scene Activation disabled 1 - 255 = send Activation CC to AG1 with specified Scene ID",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "20": {
+            "label": "Scene ID sent to AG1 when double click of S1",
+            "description": "For momentary button only 0 = Scene Activation disabled 1 - 255 = send Activation CC to AG1 with specified Scene ID",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "21": {
+            "label": "Scene ID sent to AG1 when hold S1",
+            "description": "For momentary button only 0 = Scene Activation disabled 1 - 255 = send Activation CC to AG1 with specified Scene ID",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "255": {
+            "label": "Restore factory setting",
+            "description": "Restore factory setting",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 85,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 0
+                },
+                {
+                    "label": "Reset to factory defaults",
+                    "value": 85
+                }
+            ]
+        }
+    }
+}

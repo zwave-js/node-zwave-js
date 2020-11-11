@@ -1,0 +1,36 @@
+// EcoNet Controls EZW1204
+// Water Leak Sensor
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "EcoNet Controls",
+    "manufacturerId": "0x015d",
+    "label": "EZW1204",
+    "description": "Water Leak Sensor",
+    "devices": [
+        {
+            "productType": "0x2003",
+            "productId": "0xc41c"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Water leak send basic Set",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Cover plate open send basic Set",
+            "maxNodes": 5
+        }
+    }
+}

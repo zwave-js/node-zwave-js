@@ -1,0 +1,782 @@
+// HELTUN HE-ZW-THERM-FC1
+// Fan Coil Thermostat
+{
+    "revision": {
+        "ozw": 3
+    },
+    "manufacturer": "HELTUN",
+    "manufacturerId": "0x0344",
+    "label": "HE-ZW-THERM-FC1",
+    "description": "Fan Coil Thermostat",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Realy 1 Basic Set (On/Off)",
+            "maxNodes": 10,
+            "isLifeline": true
+        },
+        "3": {
+            "label": "Realy 2 Basic Set (On/Off)",
+            "maxNodes": 10,
+            "isLifeline": true
+        },
+        "4": {
+            "label": "Realy 3 Basic Set (On/Off)",
+            "maxNodes": 10,
+            "isLifeline": true
+        },
+        "5": {
+            "label": "Realy 4 Basic Set (On/Off)",
+            "maxNodes": 10,
+            "isLifeline": true
+        },
+        "6": {
+            "label": "Realy 5 Basic Set (On/Off)",
+            "maxNodes": 10,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Degree mode",
+            "description": "Degree Mode 0=C, 1=F",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Celsius",
+                    "value": 0
+                },
+                {
+                    "label": "Farenheit",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Air temp calibration",
+            "description": "Air Temperature Calibration in degree x10",
+            "valueSize": 1,
+            "minValue": -95,
+            "maxValue": 95,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "3": {
+            "label": "Temp hysteresis",
+            "description": "Temperature Hysteresis in degree, x10",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 95,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "4": {
+            "label": "Temp diff to send values",
+            "description": "Temperature difference to send to controller, value x10",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 10,
+            "defaultValue": 2,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Time by controller",
+            "description": "Time correction by controller",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Manual",
+                    "value": 0
+                },
+                {
+                    "label": "Auto(via gateway)",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Time format",
+            "description": "Time format 0=24hour, 1=12hour (AM/PM)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "24 hour",
+                    "value": 0
+                },
+                {
+                    "label": "12 hour",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "Week day",
+            "description": "Manually set week day",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 7,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "MON",
+                    "value": 1
+                },
+                {
+                    "label": "TUE",
+                    "value": 2
+                },
+                {
+                    "label": "WED",
+                    "value": 3
+                },
+                {
+                    "label": "THU",
+                    "value": 4
+                },
+                {
+                    "label": "FRI",
+                    "value": 5
+                },
+                {
+                    "label": "SAT",
+                    "value": 6
+                },
+                {
+                    "label": "SUN",
+                    "value": 7
+                }
+            ]
+        },
+        "8": {
+            "label": "Time Hour",
+            "description": "Manually set time hour",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 23,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "9": {
+            "label": "Time Minute",
+            "description": "Maually set time minute",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 59,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Active display brightnes",
+            "description": "The brightness level can be selected in the active state from values 1 (lowest brightness) to 4 (highest brightness) but the level cannot be lower than the level of brightness for the inactive state (param 11).",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 4,
+            "defaultValue": 4,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "Inactive display brightness",
+            "description": "This parameter defines the brightness level of the display in the inactive state. The level can be selected from values 1 to 4 but the level cannot be higher than the level of brightness for the active state (param 10).",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 4,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "Auto LCD brightness",
+            "description": "Auto LCD brightness control",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Inactive the function",
+                    "value": 0
+                },
+                {
+                    "label": "Active the function",
+                    "value": 1
+                }
+            ]
+        },
+        "13": {
+            "label": "Auto bright level 1",
+            "description": "Auto brightness level 1 max lumens",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 30,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "14": {
+            "label": "Auto bright level 2",
+            "description": "Auto brightness level 2 max lumens",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "15": {
+            "label": "Auto bright level 3",
+            "description": "Auto brightness level 3 max lumens",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 3000,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "16": {
+            "label": "Gateway",
+            "description": "If Fibaro Home Center Lite or Fibaro Home Center 2 is used as a gateway for correct communication of the devices set this parameter 1. For other gateways choose 0. Factory default value: 0.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Default",
+                    "value": 0
+                },
+                {
+                    "label": "Fibaro Home Center2",
+                    "value": 1
+                }
+            ]
+        },
+        "51": {
+            "label": "Touch sensitivity",
+            "description": "Touch buttons sensitivity. 20=Super sensitive. 70=lowest sensitivity.",
+            "valueSize": 1,
+            "minValue": 20,
+            "maxValue": 70,
+            "defaultValue": 50,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "52": {
+            "label": "Power of the Relay 1 load in W",
+            "description": "Power of the Relay 1 load in W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "53": {
+            "label": "Power of the Relay 2 load in W",
+            "description": "Power of the Relay 2 load in W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "54": {
+            "label": "Power of the Relay 3 load in W",
+            "description": "Power of the Relay 3 load in W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "55": {
+            "label": "Power of the Relay 4 load in W",
+            "description": "Power of the Relay 4 load in W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "56": {
+            "label": "Power of the Relay 5 load in W",
+            "description": "Power of the Relay 5 load in W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "57": {
+            "label": "Morning start time",
+            "description": "Morning start time. Format: HHMM. e.g.08:00 should be sent as 0800",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 2359,
+            "defaultValue": 600,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "58": {
+            "label": "Day start time",
+            "description": "Day start time. Format: HHMM.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 2359,
+            "defaultValue": 900,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "59": {
+            "label": "Evening start time",
+            "description": "Evening start time. Format: HHMM.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 2359,
+            "defaultValue": 1800,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "60": {
+            "label": "Night Start time",
+            "description": "Night start time. Format: HHMM.",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 2359,
+            "defaultValue": 2300,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "61": {
+            "label": "Monday morning temp",
+            "description": "Monday morning temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 240,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "62": {
+            "label": "Monday day temp",
+            "description": "Monday day temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "63": {
+            "label": "Monday evening temp",
+            "description": "Monday evening temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 230,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "64": {
+            "label": "Monday night temp",
+            "description": "Monday night temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 180,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "65": {
+            "label": "Tuesday morning temp",
+            "description": "Tuesday morning temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 240,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "66": {
+            "label": "Tuesday day temp",
+            "description": "Tuesday day temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "67": {
+            "label": "Tuesday evening temp",
+            "description": "Tuesday evening temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 230,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "68": {
+            "label": "Tuesday night temp",
+            "description": "Tuesday night temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 180,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "69": {
+            "label": "Wednesday morning temp",
+            "description": "Wednesday morning temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 240,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "70": {
+            "label": "Wednesday day temp",
+            "description": "Wednesday day temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "71": {
+            "label": "Wednesday evening temp",
+            "description": "Wednesday evening temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 230,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "72": {
+            "label": "Wednesday night temp",
+            "description": "Wednesday night temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 180,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "73": {
+            "label": "Thursday morning temp",
+            "description": "Thursday morning temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 240,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "74": {
+            "label": "Thursday day temp",
+            "description": "Thursday day temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "75": {
+            "label": "Thursday evening temp",
+            "description": "Thursday evening temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 230,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "76": {
+            "label": "Thursday night temp",
+            "description": "Thursday night temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 180,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "77": {
+            "label": "Friday morning temp",
+            "description": "Friday morning temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 240,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "78": {
+            "label": "Friday day temp",
+            "description": "Friday day temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "79": {
+            "label": "Friday evening temp",
+            "description": "Friday evening temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 230,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "80": {
+            "label": "Friday night temp",
+            "description": "Friday night temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 180,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "81": {
+            "label": "Saturday morning temp",
+            "description": "Saturday morning temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 240,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "82": {
+            "label": "Saturday day temp",
+            "description": "Saturday day temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "83": {
+            "label": "Saturday evening temp",
+            "description": "Saturday evening temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 230,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "84": {
+            "label": "Saturday night temp",
+            "description": "Saturday night temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 180,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "85": {
+            "label": "Sunday morning temp",
+            "description": "Sunday morning temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 240,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "86": {
+            "label": "Sunday day temp",
+            "description": "Sunday day temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "87": {
+            "label": "Sunday evening temp",
+            "description": "Sunday evening temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 230,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "88": {
+            "label": "Sunday night temp",
+            "description": "Sunday night temperature, value x10",
+            "valueSize": 2,
+            "minValue": 40,
+            "maxValue": 370,
+            "defaultValue": 180,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

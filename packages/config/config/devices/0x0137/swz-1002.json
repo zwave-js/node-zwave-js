@@ -1,0 +1,21 @@
+// FollowGood Technology Company SWZ-1002
+// Binary Power Switch
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "FollowGood Technology Company",
+    "manufacturerId": "0x0137",
+    "label": "SWZ-1002",
+    "description": "Binary Power Switch",
+    "devices": [
+        {
+            "productType": "0x3001",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

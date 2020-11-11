@@ -1,0 +1,21 @@
+// Tell It Online ZW-66
+// Switchkeeper Plug-in Appliance Module
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Tell It Online",
+    "manufacturerId": "0x0012",
+    "label": "ZW-66",
+    "description": "Switchkeeper Plug-in Appliance Module",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

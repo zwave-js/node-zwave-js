@@ -1,0 +1,48 @@
+// Sunricher SRZV9001K12DIMZ5
+// SR-ZV9001 5 Channel Dimmer Remote Control
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Sunricher",
+    "manufacturerId": "0x0330",
+    "label": "SRZV9001K12DIMZ5",
+    "description": "SR-ZV9001 5 Channel Dimmer Remote Control",
+    "devices": [
+        {
+            "productType": "0x0302",
+            "productId": "0xb301"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Launch 1",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Launch 2",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Launch 3",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Launch 4",
+            "maxNodes": 5
+        },
+        "6": {
+            "label": "Launch 5",
+            "maxNodes": 5
+        }
+    }
+}

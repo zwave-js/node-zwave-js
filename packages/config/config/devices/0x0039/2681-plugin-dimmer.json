@@ -1,0 +1,131 @@
+// Honeywell 2681-PLUGIN-DIMMER
+// 39336 / ZW3104 Plug-in Dimmer
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Honeywell",
+    "manufacturerId": "0x0039",
+    "label": "2681-PLUGIN-DIMMER",
+    "description": "39336 / ZW3104 Plug-in Dimmer",
+    "devices": [
+        {
+            "productType": "0x5044",
+            "productId": "0x3038"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "LED Light",
+            "description": "Sets when the LED on the switch is lit.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "LED on when light off",
+                    "value": 0
+                },
+                {
+                    "label": "LED on when light on",
+                    "value": 1
+                },
+                {
+                    "label": "LED always off",
+                    "value": 2
+                }
+            ]
+        },
+        "7": {
+            "label": "Z-Wave Command Dim Step",
+            "description": "Indicates how many levels the dimmer will change for each dimming step.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Z-Wave Command Dim Rate",
+            "description": "This value indicates in 10 millisecond resolution, how often the dim level will change. For example, if you set this parameter to 1, then every 10ms the dim level will change. If you set it to 255, then every 2.55 seconds the dim level will change.",
+            "valueSize": 1,
+            "unit": "seconds",
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "9": {
+            "label": "Local Control Dim Step",
+            "description": "Indicates how many levels the dimmer will change for each dimming step.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Local Control Dim Rate",
+            "description": "This value indicates in 10 millisecond resolution, how often the dim level will change. For example, if you set this parameter to 1, then every 10ms the dim level will change. If you set it to 255, then every 2.55 seconds the dim level will change.",
+            "valueSize": 1,
+            "unit": "seconds",
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "ALL ON/ALL OFF Dim Step",
+            "description": "Indicates how many levels the dimmer will change for each dimming step.",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 99,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "ALL ON/ALL OFF Dim Rate",
+            "description": "This value indicates in 10 millisecond resolution, how often the dim level will change. For example, if you set this parameter to 1, then every 10ms the dim level will change. If you set it to 255, then every 2.55 seconds the dim level will change.",
+            "valueSize": 1,
+            "unit": "seconds",
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

@@ -1,0 +1,62 @@
+// ThermoFloor AS HEATITZ4
+// Heatit Z-Push Button 4
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "ThermoFloor AS",
+    "manufacturerId": "0x019b",
+    "label": "HEATITZ4",
+    "description": "Heatit Z-Push Button 4",
+    "devices": [
+        {
+            "productType": "0x0300",
+            "productId": "0xa306"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Launch 1",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "3": {
+            "label": "Launch 2",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "4": {
+            "label": "Launch 3",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "5": {
+            "label": "Launch 4",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Factory reset",
+            "description": "Set to 21930 to factory reset the device.",
+            "valueSize": 1,
+            "minValue": 21930,
+            "maxValue": 21930,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true
+        }
+    }
+}

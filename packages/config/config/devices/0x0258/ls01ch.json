@@ -1,0 +1,100 @@
+// Shenzhen Neo Electronics Co Ltd LS01CH
+// Wall Switch (1 channel)
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Shenzhen Neo Electronics Co Ltd",
+    "manufacturerId": "0x0258",
+    "label": "LS01CH",
+    "description": "Wall Switch (1 channel)",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x008c"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Sending Report Endpoint 1",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Save On/Off status",
+            "description": "This parameter defines the on/off status of relay needs saving or not. The status will be saved when relay status is changed if this parameter is set to '1'. Otherwise the relay status is not saved. The Light Switch will restore the relay On/Off status when it's powered again.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Backlight",
+            "description": "This parameter defines the back light state of the touch button.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Relay On/Off Indicate",
+            "description": "This Parameter defines the relay state. The led will be turned on with pink color when the button is touched to turn on relay if this parameter is set to '1'. Otherwise the LED is off.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

@@ -1,0 +1,368 @@
+// Namron 4512724
+// Z-Wave Dimmer 2 400W
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Namron",
+    "manufacturerId": "0x0438",
+    "label": "4512724",
+    "description": "Z-Wave Dimmer 2 400W",
+    "devices": [
+        {
+            "productType": "0x0200",
+            "productId": "0xd00c"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Saving load state before power failure",
+            "description": "Saving state before power failure.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Shutoff load",
+                    "value": 0
+                },
+                {
+                    "label": "Turn on load",
+                    "value": 1
+                },
+                {
+                    "label": "Save load state before power failure",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "Send Basic report",
+            "description": "Enable/disable to send the basic report to the Lifeline when the load state changed（When value set as 1, repower on the dimmer, it will send Basic report automatically）",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable to send Basic report",
+                    "value": 0
+                },
+                {
+                    "label": "Enable to send Basic report",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Fade time",
+            "description": "Default fade time (unit is second, this value has the same function as Duration of Multilevel). Valid value: 0~127",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Minimum brightness",
+            "description": "Setting minimum brightness value. Valid value: 0~50, the bigger the value is, the higher the load’s minimum brightness is.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 15,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Maximum brightness",
+            "description": "Setting maximum brightness value. Valid value: 0~100",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 100,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "MOSFET driving type",
+            "description": "Choose MOSFET driving type.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Trailing edge",
+                    "value": 0
+                },
+                {
+                    "label": "Leading edge",
+                    "value": 1
+                }
+            ]
+        },
+        "8": {
+            "label": "External switch type",
+            "description": "External switch type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Push button switch",
+                    "value": 0
+                },
+                {
+                    "label": "Normal on/off switch",
+                    "value": 1
+                },
+                {
+                    "label": "3-way switch",
+                    "value": 2
+                }
+            ]
+        },
+        "9": {
+            "label": "Add/remove through external switch",
+            "description": "Added to and removed from a network through external switch (when enables this function, triple press the external switch within 1.5 seconds to be added to or removed from a network)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "11": {
+            "label": "Wiring type (read only)",
+            "description": "Wiring type (Read only)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unknown",
+                    "value": 0
+                },
+                {
+                    "label": "2 wire with no neutral",
+                    "value": 1
+                },
+                {
+                    "label": "3 wire with neutral",
+                    "value": 2
+                }
+            ]
+        },
+        "12": {
+            "label": "Load type (read only)",
+            "description": "Wiring type (Read only)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unknown",
+                    "value": 0
+                },
+                {
+                    "label": "resistive",
+                    "value": 1
+                },
+                {
+                    "label": "inductive",
+                    "value": 2
+                },
+                {
+                    "label": "capacitive",
+                    "value": 3
+                }
+            ]
+        },
+        "13": {
+            "label": "Over current protection",
+            "description": "Enable/disable over current protection (over 2.1A for 20 seconds continuously)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "14": {
+            "label": "Power automatic report absolute threshold",
+            "description": "Power automatic report absolute threshold, unit is W. When power changes above the absolute threshold, immediately report current power value",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "15": {
+            "label": "Power automatic report percentage threshold",
+            "description": "Power automatic report percentage threshold, unit is %. When power changes above the percentage threshold, immediately report current power value",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 20,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "21": {
+            "label": "Power metering automatic report time cycle",
+            "description": "Power metering automatic report time cycle, unit is second. Valid time cycle value: 5~2678400, when set as 0, report function disabled",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 600,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "22": {
+            "label": "Energy metering automatic report time cycle",
+            "description": "Energy metering automatic report time cycle, unit is second Valid time cycle value: 5~2678400, when set as 0, report function disabled",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1800,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "23": {
+            "label": "Voltage metering automatic report time cycle",
+            "description": "Voltage metering automatic report time cycle, unit is second Valid time cycle value: 5~2678400, when set as 0, report function disabled",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 3600,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "24": {
+            "label": "Current metering automatic report time cycle, unit is second",
+            "description": "Current metering automatic report time cycle, unit is second Valid time cycle value: 5~2678400, when set as 0, report function disabled",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 3600,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "31": {
+            "label": "Dimming curve",
+            "description": "Setting dimming curve",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "linear dimming",
+                    "value": 0
+                },
+                {
+                    "label": "logarithmic dimming",
+                    "value": 1
+                }
+            ]
+        },
+        "32": {
+            "label": "Startup brightness of load",
+            "description": "Setting startup brightness of the load Valid value: 0~99 Note: every time when turn on the load from OFF status, if the target brightness is lower than the startup brightness, the brightness will first go to the startup brightness value then fall down to the target brightness",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

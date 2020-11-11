@@ -1,0 +1,56 @@
+// Sunricher SRZV9001TCCTEU
+// Z-Wave Wall Controller - SR-ZV9001T-CCT-EU
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Sunricher",
+    "manufacturerId": "0x0330",
+    "label": "SRZV9001TCCTEU",
+    "description": "Z-Wave Wall Controller - SR-ZV9001T-CCT-EU",
+    "devices": [
+        {
+            "productType": "0x0300",
+            "productId": "0xa104"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Launch 1",
+            "maxNodes": 12
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Choose working mode of the remote control",
+            "description": "Choose working mode of the remote control.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Choose activation of scenes in gateway mode",
+                    "value": 0
+                },
+                {
+                    "label": "Choose direct control of associated devices mode",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

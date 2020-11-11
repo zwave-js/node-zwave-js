@@ -1,0 +1,80 @@
+// Inovelli LZW42
+// Multi-Color Bulb
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Inovelli",
+    "manufacturerId": "0x031e",
+    "label": "LZW42",
+    "description": "Multi-Color Bulb",
+    "devices": [
+        {
+            "productType": "0x0005",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Default State",
+            "description": "When Power is restored Range: 0-2 Default: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Previous",
+                    "value": 0
+                },
+                {
+                    "label": "On",
+                    "value": 1
+                },
+                {
+                    "label": "Off",
+                    "value": 2
+                }
+            ]
+        },
+        "81": {
+            "label": "Color Adjustment (Warm White)",
+            "description": "Changes the Kelvin from 2700k (1387) to 4999k (4999) Range: 1387-4999 Default: 2700",
+            "valueSize": 2,
+            "minValue": 1387,
+            "maxValue": 4999,
+            "defaultValue": 2700,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "82": {
+            "label": "Color Adjustment (Cool White)",
+            "description": "Changes the Kelvin from 5000k (5000) to 6500k (6500) Range: 5000-6500 Default: 6500",
+            "valueSize": 2,
+            "minValue": 5000,
+            "maxValue": 6500,
+            "defaultValue": 6500,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

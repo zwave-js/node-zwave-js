@@ -1,0 +1,788 @@
+// Cyberhouse (GoControl) GC-TBZ48L
+// Battery Powered Z-Wave Plus Thermostat
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Cyberhouse (GoControl)",
+    "manufacturerId": "0x0014",
+    "label": "GC-TBZ48L",
+    "description": "Battery Powered Z-Wave Plus Thermostat",
+    "devices": [
+        {
+            "productType": "0x5442",
+            "productId": "0x5436"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "System Type",
+            "description": "0 = Standard, 1 = Heat Pump",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Standard",
+                    "value": 0
+                },
+                {
+                    "label": "Heat Pump",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Fan Type",
+            "description": "0 = Gas (no fan w/Heat), 1 = Electric (Fan w/Heat)",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Gas",
+                    "value": 0
+                },
+                {
+                    "label": "Electric",
+                    "value": 1
+                }
+            ]
+        },
+        "3": {
+            "label": "Change Over Type",
+            "description": "0 = w/Cool, 1 = w/Heat",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "w/Cool",
+                    "value": 0
+                },
+                {
+                    "label": "w/Heat",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "2nd Stage Heat Enable",
+            "description": "0 = no 2nd stage heat, 1 = 2nd stage heat",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "w/Cool",
+                    "value": 0
+                },
+                {
+                    "label": "w/Heat",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Aux Heat Enable",
+            "description": "0 = no aux heat, 1 = aux heat enabled",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "2nd Stage Cool Enable",
+            "description": "0 = no 2nd stage cool, 1 = 2nd stage cool",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "Temperature Unit",
+            "description": "0 = Celsius, 1 = Fahrenheit",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Celsius",
+                    "value": 0
+                },
+                {
+                    "label": "Fahrenheit",
+                    "value": 1
+                }
+            ]
+        },
+        "8": {
+            "label": "Minimum Off Time",
+            "description": "Sets the Minimum Off Time (MOT) delay before another heating/cooling cycle can begin",
+            "valueSize": 1,
+            "unit": "minutes",
+            "minValue": 5,
+            "maxValue": 9,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "9": {
+            "label": "Minimum Run Time",
+            "description": "Sets the Minimum Run Time (MRT) delay before a heating/cooling cycle can turn of",
+            "valueSize": 1,
+            "unit": "minutes",
+            "minValue": 3,
+            "maxValue": 9,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Setpoint H/C Delta",
+            "description": "Sets the minimum separation between heating and cooling setpoints",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 3,
+            "maxValue": 15,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "H Delta Stage 1 ON",
+            "description": "Sets the delta from setpoint that stage 1 heating starts",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 1,
+            "maxValue": 6,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "H Delta Stage 1 OFF",
+            "description": "Sets the delta from setpoint that stage 1 heating stops",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 0,
+            "maxValue": 5,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "13": {
+            "label": "H Delta Stage 2 ON",
+            "description": "Sets the delta from setpoint that stage 2 heating starts",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 2,
+            "maxValue": 7,
+            "defaultValue": 2,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "14": {
+            "label": "H Delta Stage 2 OFF",
+            "description": "Sets the delay from setpoint that stage 2 heating stops",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 0,
+            "maxValue": 6,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "15": {
+            "label": "H Delta Aux ON",
+            "description": "Sets the delta from setpoint that stage 3 heating starts",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 3,
+            "maxValue": 8,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "16": {
+            "label": "H Delta Stage 2 OFF",
+            "description": "Sets the delta from setpoint that stage 3 heating stops",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 0,
+            "maxValue": 7,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "17": {
+            "label": "C Delta Stage 1 ON",
+            "description": "Sets the delta from setpoint that stage 1 cooling starts",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 1,
+            "maxValue": 6,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "18": {
+            "label": "C Delta Stage 1 OFF",
+            "description": "Sets the delta from setpoint that stage 1 cooling stops",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 0,
+            "maxValue": 5,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "19": {
+            "label": "C Delta Stage 2 ON",
+            "description": "Sets the delta from setpoint that stage 2 cooling starts",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 2,
+            "maxValue": 7,
+            "defaultValue": 2,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "20": {
+            "label": "C Delta Stage 2 OFF",
+            "description": "Sets the delta from setpoint that stage 2 cooling stops",
+            "valueSize": 1,
+            "unit": "°F",
+            "minValue": 0,
+            "maxValue": 6,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "21": {
+            "label": "Mechanical Status",
+            "description": "Mechanical Status",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 256,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "MECH_H1",
+                    "value": 1
+                },
+                {
+                    "label": "MECH_H2",
+                    "value": 2
+                },
+                {
+                    "label": "MECH_H3",
+                    "value": 4
+                },
+                {
+                    "label": "MECH_C1",
+                    "value": 8
+                },
+                {
+                    "label": "MECH_C2",
+                    "value": 16
+                },
+                {
+                    "label": "PHANTOM_F",
+                    "value": 32
+                },
+                {
+                    "label": "MECH_F",
+                    "value": 64
+                },
+                {
+                    "label": "MANUAL_F",
+                    "value": 128
+                },
+                {
+                    "label": "reserved",
+                    "value": 256
+                }
+            ]
+        },
+        "22": {
+            "label": "SCP Status",
+            "description": "SCP Status",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 128,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "STATE_HEAT",
+                    "value": 1
+                },
+                {
+                    "label": "STATE_COOL",
+                    "value": 2
+                },
+                {
+                    "label": "STATE_2ND",
+                    "value": 4
+                },
+                {
+                    "label": "STATE_3RD",
+                    "value": 8
+                },
+                {
+                    "label": "STATE_FAN",
+                    "value": 16
+                },
+                {
+                    "label": "STATE_LAST",
+                    "value": 32
+                },
+                {
+                    "label": "STATE_MOT",
+                    "value": 64
+                },
+                {
+                    "label": "STATE_MRT",
+                    "value": 128
+                }
+            ]
+        },
+        "23": {
+            "label": "Autosend Enable Bits",
+            "description": "Autosend Enable Bits",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 32768,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Temperature",
+                    "value": 1
+                },
+                {
+                    "label": "Setpoint H",
+                    "value": 2
+                },
+                {
+                    "label": "Setpoint C",
+                    "value": 4
+                },
+                {
+                    "label": "Mode",
+                    "value": 8
+                },
+                {
+                    "label": "Fan Mode",
+                    "value": 16
+                },
+                {
+                    "label": "Fan State",
+                    "value": 32
+                },
+                {
+                    "label": "Operating State",
+                    "value": 64
+                },
+                {
+                    "label": "Schedule Enable",
+                    "value": 128
+                },
+                {
+                    "label": "Setback",
+                    "value": 256
+                },
+                {
+                    "label": "Runhold",
+                    "value": 512
+                },
+                {
+                    "label": "Display Lock",
+                    "value": 1024
+                },
+                {
+                    "label": "Battery",
+                    "value": 8192
+                },
+                {
+                    "label": "Mechanical Status",
+                    "value": 16384
+                },
+                {
+                    "label": "SCP Status",
+                    "value": 32768
+                }
+            ]
+        },
+        "24": {
+            "label": "Display Lock",
+            "description": "Display Lock",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unlocked",
+                    "value": 0
+                },
+                {
+                    "label": "Locked",
+                    "value": 1
+                }
+            ]
+        },
+        "26": {
+            "label": "Backlight Timer",
+            "description": "Sets the time from last button press that the backlight will turn OFF",
+            "valueSize": 1,
+            "unit": "seconds",
+            "minValue": 10,
+            "maxValue": 30,
+            "defaultValue": 20,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "33": {
+            "label": "Max Heat Setpoint",
+            "description": "Sets the maximum heating setpoint value",
+            "valueSize": 1,
+            "unit": "°",
+            "minValue": 30,
+            "maxValue": 109,
+            "defaultValue": 90,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "34": {
+            "label": "Min Cool Setpoint",
+            "description": "Sets the minimum cooling setpoint value",
+            "valueSize": 1,
+            "unit": "°",
+            "minValue": 33,
+            "maxValue": 112,
+            "defaultValue": 60,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "38": {
+            "label": "Schedule Enable",
+            "description": "Enable or disable thermostat's local scheduler",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "39": {
+            "label": "Run/Hold Mode",
+            "description": "0 = Hold, 1 = Run",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Hold",
+                    "value": 0
+                },
+                {
+                    "label": "Run",
+                    "value": 1
+                }
+            ]
+        },
+        "40": {
+            "label": "Setback Mode",
+            "description": "0 = No setback, 2 = Un-occupied mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No Setback",
+                    "value": 0
+                },
+                {
+                    "label": "Unoccupied Mode",
+                    "value": 2
+                }
+            ]
+        },
+        "41": {
+            "label": "Un-Occupied HSP",
+            "description": "Heat Setpoint for Unoccupied mode",
+            "valueSize": 1,
+            "unit": "°",
+            "minValue": 30,
+            "maxValue": 109,
+            "defaultValue": 70,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "42": {
+            "label": "Un-Occupied CSP",
+            "description": "Cool Setpoint for Unoccupied mode",
+            "valueSize": 1,
+            "unit": "°",
+            "minValue": 33,
+            "maxValue": 112,
+            "defaultValue": 80,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "43": {
+            "label": "Remote Sensor 1 Node Number",
+            "description": "Node number for Remote Sensor 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 252,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "46": {
+            "label": "Remote Sensor 1 Temperature",
+            "description": "Temperature of Remote Sensor 1",
+            "valueSize": 1,
+            "unit": "°",
+            "minValue": 0,
+            "maxValue": 112,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "48": {
+            "label": "Internal Sensor Temp Offset",
+            "description": "Internal Sensor Temperature Offset",
+            "valueSize": 1,
+            "unit": "°",
+            "minValue": -7,
+            "maxValue": 7,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "49": {
+            "label": "R1 Sensor Temp Offset",
+            "description": "R1 Sensor Temperature Offset",
+            "valueSize": 1,
+            "unit": "°",
+            "minValue": -7,
+            "maxValue": 7,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "52": {
+            "label": "Filter Timer",
+            "description": "Timer to let know when to change or clean the filter",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4000,
+            "defaultValue": 4000,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "53": {
+            "label": "Max Filter Timer",
+            "description": "Maximum allowed value for filter timer",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4000,
+            "defaultValue": 44,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "54": {
+            "label": "Heat Timer",
+            "description": "Heat Timer in hours",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "55": {
+            "label": "Cool Timer",
+            "description": "Cool Timer in hours",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 4000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "61": {
+            "label": "Fan Purge Heat",
+            "description": "Fan purge period for Heat mode",
+            "valueSize": 1,
+            "unit": "seconds",
+            "minValue": 0,
+            "maxValue": 90,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "62": {
+            "label": "Fan Purge Cool",
+            "description": "Fan purge period for Cool mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 90,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

@@ -1,0 +1,850 @@
+// AEON Labs ZW111
+// Nano Dimmer
+{
+    "revision": {
+        "ozw": 6
+    },
+    "manufacturer": "AEON Labs",
+    "manufacturerId": "0x0086",
+    "label": "ZW111",
+    "description": "Nano Dimmer",
+    "devices": [
+        {
+            "productType": "0x1d03",
+            "productId": "0x006f"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Retransmit",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Control Key1",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Control Key2",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Over current protection",
+            "description": "Output Load will be turned off automatically after 30 seconds and if the current overrun 1.5A.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Over heat protection",
+            "description": "Output load will be closed after 30 seconds if the temperature inside the product exceeds 100C.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "20": {
+            "label": "Status re-power on",
+            "description": "Configure the output load status after re-power on",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "The last status before the power outage",
+                    "value": 0
+                },
+                {
+                    "label": "Always on",
+                    "value": 1
+                },
+                {
+                    "label": "Always off",
+                    "value": 2
+                }
+            ]
+        },
+        "21": {
+            "label": "WallSwipe IR sensor",
+            "description": "Enable/disable the IR sensor of WallSwipe. (LSB) Value 1. Value 1 = 0, disable the IR Sensor. Value 1 = 1, enable the IR Sensor. Value 2 = 0, Wave Option 1 is selected. Value 2 = 1, Wave Option 2 is selected. Value 3 = 0, disable the scene control functionality for Left/Right wave. Value 3 = 1, enable the scene control functionality for Left/Right wave Value 4 = 0, disable the scene control functionality for all wave actions. Value 4 = 1, enable the scene control functionality for all wave actions.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 80,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "64": {
+            "label": "WallSwipe button color",
+            "description": "Set the button color of WallSwipe. Value 1= Level. Value 2= the color value of Red. Value 3= the color value of Green. Value 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 184549375,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "65": {
+            "label": "WallSwipe LED Up gesture action",
+            "description": "Set the LED indication color of WallSwipe when the gesture action is UP. Value 1= Reserved. Value 2= the color value of Red. Value 3= the color value of Green. Value 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 855638015,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "66": {
+            "label": "WallSwipe LED Down gesture action",
+            "description": "Set the LED indication color of WallSwipe when the gesture action is Down. Value 1= Level. Value 2= the color value of Red. Value 3= the color value of Green. Value 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 855638015,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "67": {
+            "label": "WallSwipe LED Left gesture action",
+            "description": "Set the LED indication color of WallSwipe when the gesture action is Left. Value 1= Level. Value 2= the color value of Red. Value 3= the color value of Green. Value 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 855638015,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "68": {
+            "label": "WallSwipe LED Right gesture action",
+            "description": "Set the LED indication color of WallSwipe when the gesture action is Right. Value 1= Level. Value 2= the color value of Red. Value 3= the color value of Green. Value 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 855638015,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "69": {
+            "label": "WallSwipe Night light",
+            "description": "Set the LED indication color of WallSwipe when it is in Night light state. Value 1= Level. Value 2= the color value of Red. Value 3= the color value of Green. Value 4= the color value of Blue.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 184483840,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "71": {
+            "label": "WallSwipe sensitivity",
+            "description": "Set the sensitivity of WallSwipe.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "80": {
+            "label": "Notification report association group 1",
+            "description": "To set which notification would be sent to the associated nodes in association group 1 when the state of output load is changed",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "None",
+                    "value": 0
+                },
+                {
+                    "label": "Hail",
+                    "value": 1
+                },
+                {
+                    "label": "Basic",
+                    "value": 2
+                },
+                {
+                    "label": "Send Multilevel Switch report",
+                    "value": 3
+                },
+                {
+                    "label": "Send Hail CC when using the manual switch to change the load state",
+                    "value": 4
+                }
+            ]
+        },
+        "81": {
+            "label": "Notification report using the external switch 1",
+            "description": "To set which notification would be sent to the associated nodes in association group 3 when using the external switch 1 to switch the loads",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "None",
+                    "value": 0
+                },
+                {
+                    "label": "Basic",
+                    "value": 1
+                },
+                {
+                    "label": "Switch Multilevel Set",
+                    "value": 2
+                }
+            ]
+        },
+        "82": {
+            "label": "Notification report using the external switch 2",
+            "description": "To set which notification would be sent to the associated nodes in association group 4 when using the external switch 2 to switch the loads",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "None",
+                    "value": 0
+                },
+                {
+                    "label": "Basic",
+                    "value": 1
+                },
+                {
+                    "label": "Switch Multilevel Set",
+                    "value": 2
+                }
+            ]
+        },
+        "83": {
+            "label": "LED status",
+            "description": "Configure the state of LED when it is in 3 modes below",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "The LED will follow the status",
+                    "value": 0
+                },
+                {
+                    "label": "LED will follow the status (on/off) of its load but the LED will turn off after 5 seconds",
+                    "value": 1
+                },
+                {
+                    "label": "Night light mode",
+                    "value": 2
+                }
+            ]
+        },
+        "84": {
+            "label": "Time set for Night light mode",
+            "description": "Value1: Hour of ON. Value2: Minute of ON. Value3: Hour of OFF. Value4: Minute of OFF. E.g. The default setting is the Night light mode is enabled at 12: 00 and disabled at 8:00 0x12000800.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 301991936,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "85": {
+            "label": "State appointment 1",
+            "description": "State appointment Set the ON time of output load. Value1 = 0, disable or = non zero, enable (day, bit0 - bit6 represent Mon to Sun). Value2 = ON (hour) Value3 = ON (minute) Value4 = ON (brightness level)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1179747,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "86": {
+            "label": "State appointment 2",
+            "description": "State appointment Set the ON time of output load. Value1 = 0, disable or = non zero, enable (day, bit0 - bit6 represent Mon to Sun). Value2 = ON (hour) Value3 = ON (minute) Value4 = ON (brightness level)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1507328,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "90": {
+            "label": "Enable/disable the parameter 91 and 92",
+            "description": "Enables/disables parameter 91 and 92",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "91": {
+            "label": "Minimum Change to send Report (Watt)",
+            "description": "The value represents the minimum change in wattage for a Report to be sent (default 25 W)",
+            "valueSize": 2,
+            "unit": "W",
+            "minValue": 0,
+            "maxValue": 6000,
+            "defaultValue": 25,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "92": {
+            "label": "Minimum Change to send Report (%)",
+            "description": "The value represents the minimum percentage change in wattage for a Report to be sent (Default 5)",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "100": {
+            "label": "Default Group Reports",
+            "description": "Set report types for groups 1, 2 and 3 to default.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true
+        },
+        "101": {
+            "label": "Report type sent in Reporting Group 1",
+            "description": "Defines the type of report sent for reporting group 1. 1 is meter report for voltage. 2 is meter report for current. 4 is meter report for watts. 8 is meter report for kilowatts. Value 1 (msb) Reserved Value 2 Reserved Value 3 Reserved Value 4 (lsb) bits 7-4 reserved bit 3 kWh bit 2 watt bit 1 current bit 0 voltage",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "102": {
+            "label": "Report type sent in Reporting Group 2",
+            "description": "Defines the type of report sent for reporting group 2. 1 is meter report for voltage. 2 is meter report for current. 4 is meter report for watts. 8 is meter report for kilowatts. Value 1 (msb) Reserved Value 2 Reserved Value 3 Reserved Value 4 (lsb) bits 7-4 reserved bit 3 kWh bit 2 watt bit 1 current bit 0 voltage",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "103": {
+            "label": "Report type sent in Reporting Group 3",
+            "description": "Defines the type of report sent for reporting group 3. 1 is meter report for voltage. 2 is meter report for current. 4 is meter report for watts. 8 is meter report for kilowatts. Value 1 (msb) Reserved Value 2 Reserved Value 3 Reserved Value 4 (lsb) bits 7-4 reserved bit 3 kWh bit 2 watt bit 1 current bit 0 voltage",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "110": {
+            "label": "Set 111-113 to default",
+            "description": "Set time interval for sending reports for groups 1, 2 and 3 to default.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true
+        },
+        "111": {
+            "label": "Send Interval for Reporting Group 1",
+            "description": "Defines the time interval when the defined report for group 1 is sent.",
+            "valueSize": 1,
+            "unit": "seconds",
+            "minValue": 0,
+            "maxValue": 2147483647,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "112": {
+            "label": "Send Interval for Reporting Group 2",
+            "description": "Defines the time interval when the defined report for group 2 is sent.",
+            "valueSize": 1,
+            "unit": "seconds",
+            "minValue": 0,
+            "maxValue": 2147483647,
+            "defaultValue": 600,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "113": {
+            "label": "Send Interval for Reporting Group 3",
+            "description": "Defines the time interval when the defined report for group 3 is sent.",
+            "valueSize": 1,
+            "unit": "seconds",
+            "minValue": 0,
+            "maxValue": 2147483647,
+            "defaultValue": 600,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "120": {
+            "label": "Set the external switch mode for S1",
+            "description": "When the mode is determined, this mode value will not be reset after exclusion",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unidentified",
+                    "value": 0
+                },
+                {
+                    "label": "2-state switch",
+                    "value": 1
+                },
+                {
+                    "label": "3-way switch",
+                    "value": 2
+                },
+                {
+                    "label": "Push button",
+                    "value": 3
+                },
+                {
+                    "label": "Automatic identification mode",
+                    "value": 4
+                }
+            ]
+        },
+        "121": {
+            "label": "Set the external switch mode for S2",
+            "description": "When the mode is determined, this mode value will not be reset after exclusion",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unidentified",
+                    "value": 0
+                },
+                {
+                    "label": "2-state switch",
+                    "value": 1
+                },
+                {
+                    "label": "3-way switch",
+                    "value": 2
+                },
+                {
+                    "label": "Push button",
+                    "value": 3
+                },
+                {
+                    "label": "Automatic identification mode",
+                    "value": 4
+                }
+            ]
+        },
+        "122": {
+            "label": "WallSwipe",
+            "description": "Get the state of touch panel port",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "123": {
+            "label": "Control destination for external switch S1",
+            "description": "Set the control destination for external switch S1",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Output loads of itself",
+                    "value": 1
+                },
+                {
+                    "label": "Other nodes",
+                    "value": 2
+                },
+                {
+                    "label": "Output loads of itself and other nodes",
+                    "value": 3
+                }
+            ]
+        },
+        "124": {
+            "label": "Control destination for external switch S2",
+            "description": "Set the control destination for external switch S2",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 3,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Output loads of itself",
+                    "value": 1
+                },
+                {
+                    "label": "Other nodes",
+                    "value": 2
+                },
+                {
+                    "label": "Output loads of itself and other nodes",
+                    "value": 3
+                }
+            ]
+        },
+        "125": {
+            "label": "Default dimming rate",
+            "description": "Set the default dimming rate",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "128": {
+            "label": "Current working mode",
+            "description": "Get the current working mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unknown",
+                    "value": 0
+                },
+                {
+                    "label": "2-wire mode",
+                    "value": 1
+                },
+                {
+                    "label": "3-wire mode",
+                    "value": 2
+                }
+            ]
+        },
+        "129": {
+            "label": "Dimming principle",
+            "description": "Set the dimming principle",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Trailing edge mode",
+                    "value": 0
+                },
+                {
+                    "label": "Leading edge mode",
+                    "value": 1
+                }
+            ]
+        },
+        "130": {
+            "label": "Type of load",
+            "description": "To get what type of load the Dimmer is connected to",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unknown",
+                    "value": 0
+                },
+                {
+                    "label": "Resistive load",
+                    "value": 1
+                },
+                {
+                    "label": "Capacitive load",
+                    "value": 2
+                },
+                {
+                    "label": "Inductive load",
+                    "value": 3
+                }
+            ]
+        },
+        "131": {
+            "label": "Min brightness level",
+            "description": "Set the min brightness level that the load can reach to",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "132": {
+            "label": "Max brightness level",
+            "description": "Set the max brightness level that the load can reach to",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 0,
+            "maxValue": 99,
+            "defaultValue": 99,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "247": {
+            "label": "Working way for S1/S2",
+            "description": "Set the working way for S1/S2 when the Switch mode is 2 state switch mode. Bit 0 =0, S1 is a toggle switch. Bit 0 =1, S1 is an On/Off switch, the out load state and S1 switch state would be in sync when using S1 to control the output load. Bit 1 =0, S2 is a toggle switch. Bit 1 =1, S2 is an On/Off switch, the out load state and S2 switch state would be in sync when using S2 to control the output load. Bit 2- Bit 7, reserved.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "248": {
+            "label": "Function of S1/S2",
+            "description": "Set the function of S1/S2. Bit 0 = 0, the function of sending NIF is disabled. Bit 0 = 1, the function of sending NIF is enabled. Bit 1 = 0, the function of entering RF power level test mode is disabled. Bit 1 = 1, the function of entering RF power level test mode is enabled. Bit 2 = 0, the function of factory reset is disabled. Bit 2 = 1, the function of factory reset is enabled. Bit 3- Bit 6 = reserved. Bit 7 = 0, the setting for Bit 0 -Bit 2 are ineffective. Bit 7 = 1, the setting for Bit 0 -Bit 2 are effective.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 131,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "249": {
+            "label": "Recognition way of load",
+            "description": "Set the recognition way of load",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 2,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Never recognize the load when power on",
+                    "value": 0
+                },
+                {
+                    "label": "Only recognize once when first power on",
+                    "value": 1
+                },
+                {
+                    "label": "Recognize the load once power on",
+                    "value": 2
+                }
+            ]
+        },
+        "252": {
+            "label": "Configuration Locked",
+            "description": "Enable/disable Configuration Locked",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "255": {
+            "label": "Reset To Factory Defaults",
+            "description": "Reset to factory defaults",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1431655765,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Reset to factory default setting",
+                    "value": 0
+                },
+                {
+                    "label": "Normal",
+                    "value": 1
+                },
+                {
+                    "label": "Reset to factory default setting and removed from the z-wave network",
+                    "value": 1431655765
+                }
+            ]
+        }
+    }
+}

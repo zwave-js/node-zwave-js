@@ -1,0 +1,138 @@
+// Fantem (Oomi) FT118
+// Range extender 6
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Fantem (Oomi)",
+    "manufacturerId": "0x016a",
+    "label": "FT118",
+    "description": "Range extender 6",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x0076"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Retransmit",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "82": {
+            "label": "LED when the Range Extender relays Z-Wave message",
+            "description": "Set the default status of the LED when the Range Extender relays Z-Wave message.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "On for 2 seconds",
+                    "value": 0
+                },
+                {
+                    "label": "Off",
+                    "value": 1
+                }
+            ]
+        },
+        "200": {
+            "label": "Partner ID",
+            "description": "Partner ID",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Aeon Labs Standard (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Others",
+                    "value": 1
+                }
+            ]
+        },
+        "252": {
+            "label": "Configuration Locked",
+            "description": "Enable/disable Configuration Locked",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "254": {
+            "label": "Device tag",
+            "description": "Device tag.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "255": {
+            "label": "Reset To Factory Defaults",
+            "description": "Reset to factory defaults",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 1431655765,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Reset to factory default setting",
+                    "value": 0
+                },
+                {
+                    "label": "Normal",
+                    "value": 1
+                },
+                {
+                    "label": "Reset to factory default setting and removed from the z-wave network",
+                    "value": 1431655765
+                }
+            ]
+        }
+    }
+}

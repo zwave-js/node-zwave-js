@@ -13528,27 +13528,44 @@
             "min": "0.0",
             "max": "255.255"
         },
+<<<<<<< HEAD
         "filename": "0x0258/nas-wr01ze.json"
+=======
+        "filename": "0x0258/nas-wr01z.json"
+>>>>>>> 88268f95... fix(config): fix errors in new config files
     },
     {
         "manufacturerId": "0x0258",
         "productType": "0x0003",
         "productId": "0x1087",
+<<<<<<< HEAD
+=======
         "firmwareVersion": {
             "min": "0.0",
             "max": "255.255"
         },
-        "filename": "0x0258/nas-wr01ze.json"
+        "filename": "0x0258/nas-wr01z.json"
     },
     {
         "manufacturerId": "0x0258",
         "productType": "0x0003",
         "productId": "0x1483",
+>>>>>>> 88268f95... fix(config): fix errors in new config files
         "firmwareVersion": {
             "min": "0.0",
             "max": "255.255"
         },
-        "filename": "0x0258/nas-wr01ze.json"
+        "filename": "0x0258/nas-wr01z.json"
+    },
+    {
+        "manufacturerId": "0x0258",
+        "productType": "0x0003",
+        "productId": "0x2087",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0258/nas-wr01z.json"
     },
     {
         "manufacturerId": "0x0258",

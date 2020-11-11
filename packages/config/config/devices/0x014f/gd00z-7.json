@@ -1,0 +1,21 @@
+// Linear (Nortek Security Control LLC) GD00Z-7
+// Garage Door Opener Remote Controller
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Linear (Nortek Security Control LLC)",
+    "manufacturerId": "0x014f",
+    "label": "GD00Z-7",
+    "description": "Garage Door Opener Remote Controller",
+    "devices": [
+        {
+            "productType": "0x4744",
+            "productId": "0x3531"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

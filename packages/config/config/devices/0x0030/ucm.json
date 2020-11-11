@@ -1,0 +1,21 @@
+// Cytech Technology Pre Ltd. UCM
+// Comfort 9000 with /Zwave
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Cytech Technology Pre Ltd.",
+    "manufacturerId": "0x0030",
+    "label": "UCM",
+    "description": "Comfort 9000 with /Zwave",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

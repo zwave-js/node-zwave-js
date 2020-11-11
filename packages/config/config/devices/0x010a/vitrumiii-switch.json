@@ -1,0 +1,21 @@
+// Vitrum (VDA) VITRUMIII-SWITCH
+// Vitrum III EU Wireless On-off
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Vitrum (VDA)",
+    "manufacturerId": "0x010a",
+    "label": "VITRUMIII-SWITCH",
+    "description": "Vitrum III EU Wireless On-off",
+    "devices": [
+        {
+            "productType": "0x1200",
+            "productId": "0x5300"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

@@ -1,0 +1,21 @@
+// FortrezZ GDC1_FORTREZZ_1501
+// GDC1 Siren/Strobe Light Alarm
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "FortrezZ",
+    "manufacturerId": "0x0084",
+    "label": "GDC1_FORTREZZ_1501",
+    "description": "GDC1 Siren/Strobe Light Alarm",
+    "devices": [
+        {
+            "productType": "0x0513",
+            "productId": "0x0111"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

@@ -1,0 +1,28 @@
+// Domux Shenzhen iSurpass Technology Co. DX2SK-Z
+// Smart Plug
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Domux Shenzhen iSurpass Technology Co.",
+    "manufacturerId": "0x021c",
+    "label": "DX2SK-Z",
+    "description": "Smart Plug",
+    "devices": [
+        {
+            "productType": "0x8008",
+            "productId": "0x1000"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    }
+}

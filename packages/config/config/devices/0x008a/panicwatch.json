@@ -1,0 +1,81 @@
+// BeNext PANICWATCH
+// Panic Watch
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "BeNext",
+    "manufacturerId": "0x008a",
+    "label": "PANICWATCH",
+    "description": "Panic Watch",
+    "devices": [
+        {
+            "productType": "0x0015",
+            "productId": "0x0101"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Report",
+            "maxNodes": 8
+        },
+        "2": {
+            "label": "Not used",
+            "maxNodes": 8
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Set to Default",
+            "description": "Set all configuration values to default values (factory settings).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "2": {
+            "label": "Time to press the panic Watch",
+            "description": "The time that the panic pushbutton must be pressed before a (panic) message is sent out to the controller. 0: send directly the panic message when pressed. 1-255: send a panic message after you keep holding the button pressed for this value x 10ms.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 100,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "3": {
+            "label": "Min led feedback time panic",
+            "description": "Minimum time that led feedback is shown after a panic message. 0: led only stays on during the send time. 1-255: led stays on during send time + this value*10ms.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 100,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "4": {
+            "label": "Buttons mapped",
+            "description": "With this config parameter you can map the buttons to send different Z-Wave messages. 0: SOS button sends an ALARM_REPORT to nodes group 1. 1-255: SOS button sends an BASIC_SET, 0xFF to nodes group 1.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

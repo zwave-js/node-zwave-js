@@ -1,0 +1,27 @@
+// Vision Security ZS5101EU
+// ZS5101 Shock and Vibration Sensor
+{
+    "revision": {
+        "ozw": 3
+    },
+    "manufacturer": "Vision Security",
+    "manufacturerId": "0x0109",
+    "label": "ZS5101EU",
+    "description": "ZS5101 Shock and Vibration Sensor",
+    "devices": [
+        {
+            "productType": "0x2003",
+            "productId": "0x0301"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Send Command when shock is detected",
+            "maxNodes": 5
+        }
+    }
+}

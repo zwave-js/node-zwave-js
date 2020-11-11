@@ -1,0 +1,21 @@
+// Vision Security ZR1202US
+// ZR1202 Repeater
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Vision Security",
+    "manufacturerId": "0x0109",
+    "label": "ZR1202US",
+    "description": "ZR1202 Repeater",
+    "devices": [
+        {
+            "productType": "0x2012",
+            "productId": "0x1203"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

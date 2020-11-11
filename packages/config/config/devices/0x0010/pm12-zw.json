@@ -1,0 +1,28 @@
+// Residential Control Systems PM12-ZW
+// Z-Wave Power Monitoring Module
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Residential Control Systems",
+    "manufacturerId": "0x0010",
+    "label": "PM12-ZW",
+    "description": "Z-Wave Power Monitoring Module",
+    "devices": [
+        {
+            "productType": "0x504d",
+            "productId": "0x3132"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "compat": {
+        "cc": {
+            "remove": [
+                119
+            ]
+        }
+    }
+}

@@ -1,0 +1,60 @@
+// GE (Jasco Products) 14292-TOGGLE-SWITCH
+// 14293 In-Wall Smart Toggle Switch
+{
+    "revision": {
+        "ozw": 4
+    },
+    "manufacturer": "GE (Jasco Products)",
+    "manufacturerId": "0x0063",
+    "label": "14292-TOGGLE-SWITCH",
+    "description": "14293 In-Wall Smart Toggle Switch",
+    "devices": [
+        {
+            "productType": "0x4952",
+            "productId": "0x3038"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic - Local Load",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Basic - Double Tap",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "4": {
+            "label": "Invert Switch",
+            "description": "Change the top of the switch to OFF and the bottom of the switch to ON, if the switch was installed upside down.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "No",
+                    "value": 0
+                },
+                {
+                    "label": "Yes",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

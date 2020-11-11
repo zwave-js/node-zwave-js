@@ -1,0 +1,104 @@
+// EUROtronic EUR_TEMPHUMIN
+// Temperature and Humidity Sensor
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "EUROtronic",
+    "manufacturerId": "0x0148",
+    "label": "EUR_TEMPHUMIN",
+    "description": "Temperature and Humidity Sensor",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Temperature",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Temperature on Change Reporting",
+            "description": "0: Don't report temperature changes 1-50: Report temperature changes from 0,1°C - 5,0°C Default: 5",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 50,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "2": {
+            "label": "Humidity on Change Reporting",
+            "description": "0: Don't report humidity changes 1-10: report humidity changes in 1% steps Default: 5",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 10,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "3": {
+            "label": "Temperature Scale",
+            "description": "0: Temperature in Degrees Celcius 1: Temperature in Degrees Fahrenheit Default: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Celsius",
+                    "value": 0
+                },
+                {
+                    "label": "Fahrenheit",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Temperature Resolution",
+            "description": "0: no decimal places 1: one decimal place 2: two decimal places Default: 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Humidity Resolution",
+            "description": "0: no decimal places 1: one decimal place 2: two decimal places Default: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

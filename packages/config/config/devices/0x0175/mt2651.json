@@ -1,0 +1,28 @@
+// devolo Home Control MT2651
+// Smoke Detector
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "devolo Home Control",
+    "manufacturerId": "0x0175",
+    "label": "MT2651",
+    "description": "Smoke Detector",
+    "devices": [
+        {
+            "productType": "0x2004",
+            "productId": "0x2004"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    }
+}

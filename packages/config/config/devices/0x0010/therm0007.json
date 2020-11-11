@@ -1,0 +1,27 @@
+// Residential Control Systems THERM0007
+// TZ45-IHD SMUD Thermostat
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Residential Control Systems",
+    "manufacturerId": "0x0010",
+    "label": "THERM0007",
+    "description": "TZ45-IHD SMUD Thermostat",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0007"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 5
+        }
+    }
+}

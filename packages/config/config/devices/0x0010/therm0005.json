@@ -1,0 +1,40 @@
+// Residential Control Systems THERM0005
+// TZ43-IHD SMUD Thermostat
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Residential Control Systems",
+    "manufacturerId": "0x0010",
+    "label": "THERM0005",
+    "description": "TZ43-IHD SMUD Thermostat",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0005"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "23": {
+            "label": "Autosend enable",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

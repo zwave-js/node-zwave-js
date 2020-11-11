@@ -1,0 +1,21 @@
+// Homeseer (Express Controls) ZTROLLER
+// ZTroller
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Homeseer (Express Controls)",
+    "manufacturerId": "0x001e",
+    "label": "ZTROLLER",
+    "description": "ZTroller",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

@@ -1,0 +1,89 @@
+// Zipato ZD2301
+// Multisensor 4in1
+{
+    "revision": {
+        "ozw": 4
+    },
+    "manufacturer": "Zipato",
+    "manufacturerId": "0x0131",
+    "label": "ZD2301",
+    "description": "Multisensor 4in1",
+    "devices": [
+        {
+            "productType": "0x201f",
+            "productId": "0x1f20"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Temperature unity",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Celsius",
+                    "value": 0
+                },
+                {
+                    "label": "Fahrenheit",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Temperature Reporting Threshold",
+            "description": "Threshold change in temperature to induce an automatic report. 1 to 50 ( Set up from 0.1C to 5C)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 50,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "3": {
+            "label": "Humidity Reporting Threshold",
+            "description": "Threshold change in humidity to induce an automatic report. 1 to 50 ( Set up from 1%-50%)",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 50,
+            "defaultValue": 10,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "4": {
+            "label": "Luminance Reporting Threshold",
+            "description": "Threshold change in luminance to induce an automatic report. 0 is disabled. 5 to 50 ( Set up from 5%-50%)",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 0,
+            "maxValue": 50,
+            "defaultValue": 10,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

@@ -1,0 +1,100 @@
+// BeNext ENERGYSWITCH
+// Energy Switch
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "BeNext",
+    "manufacturerId": "0x008a",
+    "label": "ENERGYSWITCH",
+    "description": "Energy Switch",
+    "devices": [
+        {
+            "productType": "0x0006",
+            "productId": "0x0200"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Group 1",
+            "maxNodes": 1
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Set to Default",
+            "description": "Set all configuration values to default values (factory settings).",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": -1,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "2": {
+            "label": "Startup with last known socket status",
+            "description": "The state in what the switch is when power is supplied.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Previous state",
+                    "value": 1
+                }
+            ]
+        },
+        "9": {
+            "label": "Relay delay time",
+            "description": "When the relay is switched it can't be switched again until the configured time has passed.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 50,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Led indicator",
+            "description": "Show the led state compared to the relay state.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Led off",
+                    "value": 0
+                },
+                {
+                    "label": "Led on / Relay on",
+                    "value": 1
+                },
+                {
+                    "label": "Led on / Relay off",
+                    "value": 2
+                }
+            ]
+        }
+    }
+}

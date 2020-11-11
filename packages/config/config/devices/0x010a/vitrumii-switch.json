@@ -1,0 +1,21 @@
+// Vitrum (VDA) VITRUMII-SWITCH
+// Vitrum II BS Wireless On-off
+{
+    "revision": {
+        "ozw": 3
+    },
+    "manufacturer": "Vitrum (VDA)",
+    "manufacturerId": "0x010a",
+    "label": "VITRUMII-SWITCH",
+    "description": "Vitrum II BS Wireless On-off",
+    "devices": [
+        {
+            "productType": "0x2200",
+            "productId": "0x9200"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

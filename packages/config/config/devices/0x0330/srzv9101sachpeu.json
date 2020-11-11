@@ -1,0 +1,369 @@
+// Sunricher SRZV9101SACHPEU
+// Dimmer ZV9040
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Sunricher",
+    "manufacturerId": "0x0330",
+    "label": "SRZV9101SACHPEU",
+    "description": "Dimmer ZV9040",
+    "devices": [
+        {
+            "productType": "0x0200",
+            "productId": "0xd00c"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "On/Off",
+            "maxNodes": 8
+        },
+        "3": {
+            "label": "Dimmer",
+            "maxNodes": 8
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Saving state before power failure",
+            "description": "Saving state before power failure. Default Not saved.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "State NOT saved at power failure, all outputs are set to OFF upon power restore",
+                    "value": 0
+                },
+                {
+                    "label": "State NOT saved at power failure, all outputs are set to ON upon power restore",
+                    "value": 1
+                },
+                {
+                    "label": "State saved at power failure, all outputs are set to previous state upon power restore",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "Send the basic report",
+            "description": "Enable/disable to send the basic report to the Lifeline when the load state changed. When value set as 1, re-power on the dimmer, it will send Basic report automatically. Default Enabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Fade time",
+            "description": "Fade time (units between 1-127 represent 1-127 seconds. Units Betwen 128-244 represent minutes, 128 = 1 minute, 129 = 2 minutes. This value has the same function as Duration of Multilevel). Default 1.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Setting minimum brightness value",
+            "description": "Setting minimum brightness value. Valid value: 0 - 50, the bigger the value is, the higher the loads minimum brightness is. Note: when configure this value, the value of Multilevel will be configured as 1 automatically so that users can preview the corresponding effect of minimum brightness value",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 50,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Setting maximum brightness value",
+            "description": "Setting maximum brightness value. Valid value: 0 - 100, the bigger the value is, the higher the load maximum brightness is.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 100,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "Choose MOSFET driving type",
+            "description": "Choose MOSFET driving type\". Default trailing edge.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Trailing edge",
+                    "value": 0
+                },
+                {
+                    "label": "Leading edge",
+                    "value": 1
+                }
+            ]
+        },
+        "8": {
+            "label": "External switch type",
+            "description": "Choose external switch type. Default normal on/off switch.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Push button switch",
+                    "value": 0
+                },
+                {
+                    "label": "normal on/off switch",
+                    "value": 1
+                },
+                {
+                    "label": "3-way switch",
+                    "value": 2
+                }
+            ]
+        },
+        "9": {
+            "label": "External switch to be added to and removed from a network",
+            "description": "Enable/disable external switch to be added to and removed from a network. When enables this function, triple press the external switch within 1.5 seconds to be added to or removed from a net-work. Default Enabled.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "10": {
+            "label": "Detect load after re-power on",
+            "description": "Enable/disable to detect load after re-power on (detect load type, minimum brightness, maximum brightness)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable to detect every time after re-power on",
+                    "value": 1
+                },
+                {
+                    "label": "Enable to detect only after first re-power on",
+                    "value": 2
+                }
+            ]
+        },
+        "11": {
+            "label": "Wiring type",
+            "description": "Wiring type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unknown",
+                    "value": 0
+                },
+                {
+                    "label": "2 Wire With No Neutral",
+                    "value": 1
+                },
+                {
+                    "label": "3 Wire With Neutral",
+                    "value": 2
+                }
+            ]
+        },
+        "12": {
+            "label": "Load type",
+            "description": "Load type",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Unknown",
+                    "value": 0
+                },
+                {
+                    "label": "Resistive",
+                    "value": 1
+                },
+                {
+                    "label": "Inductive",
+                    "value": 2
+                },
+                {
+                    "label": "Capacitive",
+                    "value": 3
+                }
+            ]
+        },
+        "13": {
+            "label": "Over current protection",
+            "description": "Enable/disable over current protection (over 1.5A for 20 seconds continuously)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "14": {
+            "label": "Power automatic report absolute threshold",
+            "description": "Power automatic report absolute threshold, unit is W. When power changes above the absolute threshold, immediately report current power value",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 10,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "15": {
+            "label": "Power automatic report percentage threshold",
+            "description": "Power automatic report percentage threshold, unit is %. When power changes above the percentage threshold, immediately report current power value",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 20,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "21": {
+            "label": "Power metering automatich report time cycle",
+            "description": "Power metering automatic report time cycle, unit is second. Valid time cycle value: 5-2678400, when set as 0 report function is disabled",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 600,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "22": {
+            "label": "Energy metering automatich report time cycle",
+            "description": "Energy metering automatic report time cycle, unit is second. Valid time cycle value: 5-2678400, when set as 0 report function is disabled",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 1800,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "23": {
+            "label": "Energy metering automatich report time cycle",
+            "description": "Voltage metering automatic report time cycle, unit is second. Valid time cycle value: 5-2678400, when set as 0 report function is disabled",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "24": {
+            "label": "Current metering automatich report time cycle",
+            "description": "Current metering automatic report time cycle, unit is second. Valid time cycle value: 5-2678400, when set as 0 report function is disabled",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

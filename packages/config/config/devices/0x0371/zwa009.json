@@ -1,0 +1,209 @@
+// Aeotec Limited ZWA009
+// AërQ Temperature & Humidity Sensor
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Aeotec Limited",
+    "manufacturerId": "0x0371",
+    "label": "ZWA009",
+    "description": "AërQ Temperature & Humidity Sensor",
+    "devices": [
+        {
+            "productType": "0x0202",
+            "productId": "0x0009"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "High Temperature Notification",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Low Temperature Notification",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "High Humidity Notification",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Low Humidity Notification",
+            "maxNodes": 5
+        },
+        "6": {
+            "label": "Air Temperature",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Minimum Temperature change to report",
+            "description": "This value defines the minimum change of temperature to cause an unsolicited report of humidity to the central controller using Lifeline. If the value is set to 0, there will be no reports sent to the controller, when the temperature changes. However, periodic reports, managed by configuration parameter 4, may still be active.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 20,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "2": {
+            "label": "Minimum humidity change to report",
+            "description": "This value defines the minimum change of humidity to cause an unsolicited report of humidity to the central controller using Lifeline. If the value is set to 0, there will be no reports sent to the controller, when the humidity changes. However, periodic reports, managed by configuration parameter 4, may still be active.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 20,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "4": {
+            "label": "Periodic Reports",
+            "description": "This parameter defines the time interval to send an unsolicited report. If the value is set to 0, there will be no periodic reports sent to the controller. However, reports on temperature/humidity changes, managed by configuration parameters 1 and 2, may still be active.",
+            "valueSize": 2,
+            "unit": "seconds",
+            "minValue": 0,
+            "maxValue": 65535,
+            "defaultValue": 43200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Temperature Upper Watermark value",
+            "description": "This parameter defines a temperature. If the measured temperature surpasses this watermark a BASIC command is sent into Association Group 2",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Temperature Lower Watermark value",
+            "description": "This parameter defines a temperature. If the measured temperature dropps below this watermark a BASIC command is sent into Association Group 3",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "Humidity Upper Watermark value",
+            "description": "This parameter defines a relative humidity. If the measured relative humidity surpasses this watermark a BASIC command is sent into Association Group 4",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 0,
+            "maxValue": 90,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Humidity Lower Watermark value",
+            "description": "This parameter defines a relative humidity. If the measured temperature drops below this relative humidity a BASIC command is sent into Association Group 5",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 0,
+            "maxValue": 90,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "9": {
+            "label": "Low Temperature Trigger BASIC Set Command Value",
+            "description": "This defines what BASIC command shall be sent out into association group 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "High Temperature Trigger BASIC Set Command Value",
+            "description": "This defines what BASIC command shall be sent out into association group 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "Low Humidity Trigger BASIC Set Command Value",
+            "description": "This defines what BASIC command shall be sent out into association group 5",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "High Humidity Trigger BASIC Set Command Value",
+            "description": "This defines what BASIC command shall be sent out into association group 4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "13": {
+            "label": "Offset value for Mould danger notification",
+            "description": "This value allows to increase the humidity threshold for mould danger notification by max 10%",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 10,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "255": {
+            "label": "Reset Parameter",
+            "description": "This parameter helps reset configuration parameters and the device to factory defaults",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 14294967295,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": true,
+            "allowManualEntry": true
+        }
+    }
+}

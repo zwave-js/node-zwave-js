@@ -1,0 +1,239 @@
+// Shenzhen Neo Electronics Co Ltd NAS-PD03Z
+// Battery Powered PIR Sensor V2
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Shenzhen Neo Electronics Co Ltd",
+    "manufacturerId": "0x0258",
+    "label": "NAS-PD03Z",
+    "description": "Battery Powered PIR Sensor V2",
+    "devices": [
+        {
+            "productType": "0x0200",
+            "productId": "0x1031"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 4,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Control Commands BASIC_SET",
+            "maxNodes": 4
+        },
+        "3": {
+            "label": "Send Notification Report",
+            "maxNodes": 4
+        },
+        "4": {
+            "label": "Send Sensor Binary Report",
+            "maxNodes": 4
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Motion detection sensitivity",
+            "description": "Adapt the sensitivity of the motion detection where 8 means highest sensibility and 255 lowest.",
+            "valueSize": 1,
+            "minValue": 8,
+            "maxValue": 255,
+            "defaultValue": 12,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false
+        },
+        "2": {
+            "label": "Motion detection ON time",
+            "description": "This parameter can be determined how long the associated devices should stay ON status. For instance, this parameter is set to 30(second), the PIR detector will send a BASIC_SET Command to an associated device with value basic set level if PIR detector is triggered and the associated device will be turned on 30(second) before it is turned off. This Parameter value must be large than Parameter 6# - Retrigger interval. Available Settings:5 to 600(second).",
+            "valueSize": 2,
+            "minValue": 5,
+            "maxValue": 600,
+            "defaultValue": 30,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "3": {
+            "label": "Basic Set Level",
+            "description": "Basic Set Command will be sent, on the associated devices (group 2), where contains a value when PIR detector is triggered, the receiver will take it for consideration; for instance, if a lamp module is received the Basic Set Command of which value is decisive as to how bright of dim level of lamp module shall be. This Parameter is used to some associated devices. Available Settings: 0, 1 to 99 or 255.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "4": {
+            "label": "Motion detection function",
+            "description": "Enable the motion detection (PIR) function. This parameter does not effect the luminance reporting.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 255
+                }
+            ]
+        },
+        "5": {
+            "label": "Ambient Illumination Lux Level",
+            "description": "Define the illumination level value which determines when the 'Illumination switch ON function' is activated. If the illumination level falls below this value and a person moves across or within the detected area, the motion sensor will switch on the associated device (group 2). 0 to 1000(Lux).",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 1000,
+            "defaultValue": 100,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Retrigger interval",
+            "description": "Period after motion detection in which the sensor is insensitive for new motion detection. This value must be less than the 'Motion detection ON time'. Available Settings: 1 to 8(s).",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 8,
+            "defaultValue": 8,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "Illumination reporting interval",
+            "description": "Determine the time between illumination reports, even when value has not changed. NOTE: This Value Must Be less than Wakeup Interval Time. Available Settings: 60 ~ 36000(second).",
+            "valueSize": 2,
+            "minValue": 60,
+            "maxValue": 36000,
+            "defaultValue": 180,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Illumination function",
+            "description": "Enable the function to switch on a associated device (group 2) once motion has been detected and the illumination level will be less than the value specified in 'Illumination switch ON level'.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "9": {
+            "label": "Illumination report threshold",
+            "description": "This parameter defines by how much Lux Level must change, in lux, to be reported to the main controller.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 100,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Ambient Temperature Differential Level Report",
+            "description": "This parameter is configured the value that differential between current measured and previous report value. If the differential value larger than the settings, device will report this measured temperature value to nodes associated in lifeline.",
+            "valueSize": 1,
+            "unit": "°C",
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "Led Blink Enable",
+            "description": "This parameter can enabled or disable the PIR led blinking function.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "12": {
+            "label": "Motion Event Report One Time Enable (temperature reporting version)",
+            "description": "The motion detected event can be sent multiple times/only once until device report motion cleared event.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "multiple times",
+                    "value": 0
+                },
+                {
+                    "label": "only once",
+                    "value": 1
+                }
+            ]
+        },
+        "99": {
+            "label": "Ambient Light Intensity Calibration",
+            "description": "This parameter defines the calibrated scale for ambient light intensity.",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 65535,
+            "defaultValue": 1000,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

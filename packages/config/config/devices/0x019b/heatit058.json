@@ -1,0 +1,366 @@
+// ThermoFloor AS HEATIT058
+// Heatit Thermostat TF 058
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "ThermoFloor AS",
+    "manufacturerId": "0x019b",
+    "label": "HEATIT058",
+    "description": "Heatit Thermostat TF 058",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0203"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "On/Off switch of internal relay",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Multilevel sensor reports - Internal sensor",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "Multilevel sensor reports - External sensor",
+            "maxNodes": 5
+        },
+        "5": {
+            "label": "Multilevel sensor reports - Floor sensor",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Operation mode",
+            "description": "Set operation mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Off",
+                    "value": 0
+                },
+                {
+                    "label": "Heat",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "Sensor mode",
+            "description": "Set sensor mode",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 4,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "F - Floor sensor",
+                    "value": 0
+                },
+                {
+                    "label": "A - Internal room sensor",
+                    "value": 1
+                },
+                {
+                    "label": "AF - Internal room sensor with floor limitation",
+                    "value": 2
+                },
+                {
+                    "label": "A2 - External room sensor",
+                    "value": 3
+                },
+                {
+                    "label": "A2F - External sensor with floor limitation",
+                    "value": 4
+                }
+            ]
+        },
+        "3": {
+            "label": "Floor sensor type",
+            "description": "Floor sensor type (10K NTC Default)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "10k ntc",
+                    "value": 0
+                },
+                {
+                    "label": "12k ntc",
+                    "value": 1
+                },
+                {
+                    "label": "15k ntc",
+                    "value": 2
+                },
+                {
+                    "label": "22k ntc",
+                    "value": 3
+                },
+                {
+                    "label": "33k ntc",
+                    "value": 4
+                },
+                {
+                    "label": "47k ntc",
+                    "value": 5
+                }
+            ]
+        },
+        "4": {
+            "label": "Temperature control Hysteresis",
+            "description": "3-30 (0.3C - 3.0C) Default is 5 (0.5C)",
+            "valueSize": 1,
+            "minValue": 3,
+            "maxValue": 30,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Floor minimum temperature limit",
+            "description": "50-400 (5.0C - 40.0C) Default is 50 (5.0C)",
+            "valueSize": 2,
+            "minValue": 50,
+            "maxValue": 400,
+            "defaultValue": 50,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Floor maximum temperature limit",
+            "description": "50-400 (5.0C - 40.0C) Default is 400 (40.0C)",
+            "valueSize": 2,
+            "minValue": 50,
+            "maxValue": 400,
+            "defaultValue": 400,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "Air (A2) minimum temperature limit",
+            "description": "50-400 (5.0C - 40.0C) Default is 50 (5.0C)",
+            "valueSize": 2,
+            "minValue": 50,
+            "maxValue": 400,
+            "defaultValue": 50,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Air (A2) maximum temperature limit",
+            "description": "50-400 (5.0C - 40.0C) Default is 400 (40.0C)",
+            "valueSize": 2,
+            "minValue": 50,
+            "maxValue": 400,
+            "defaultValue": 400,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "9": {
+            "label": "Heating mode setpoint",
+            "description": "50 - 400 (5.0C - 40.0C) Default is 210 (21.0C)",
+            "valueSize": 2,
+            "minValue": 50,
+            "maxValue": 400,
+            "defaultValue": 210,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Room sensor calibration (A)",
+            "description": "-60 - 60 (-6.0C - 6.0C) Default is 0 (0.0C) To set a negative value, use 255 and subtract the desired value.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "Floor sensor calibration",
+            "description": "-60 - 60 (-6.0C - 6.0C) Default is 0 (0.0C) To set a negative value, use 255 and subtract the desired value.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "External sensor calibration",
+            "description": "-60 - 60 (-6.0C - 6.0C) Default is 0 (0.0C) To set a negative value, use 255 and subtract the desired value.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "13": {
+            "label": "Temperature display",
+            "description": "Show setpoint or calculated temperature on display(",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Display setpoint temperature (Default)",
+                    "value": 0
+                },
+                {
+                    "label": "Display measured temperature",
+                    "value": 1
+                }
+            ]
+        },
+        "14": {
+            "label": "Button brightness - Dimmed state",
+            "description": "0-100 (0 - 100%)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 50,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "15": {
+            "label": "Button brightness - Active state",
+            "description": "0-100 (0 - 100%)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 100,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "16": {
+            "label": "Display brightness - Dimmed state",
+            "description": "0-100 (0 - 100%)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 50,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "17": {
+            "label": "Display brightness - Active state",
+            "description": "0-100 (0 - 100%)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 100,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "18": {
+            "label": "Temperature report interval",
+            "description": "0 (Report disabled) 30-32767 (30-32767 seconds)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "defaultValue": 60,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "19": {
+            "label": "Temperature report hysteresis",
+            "description": "0-100 (0.1C - 10.0C) Default is 10 (1.0C)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 100,
+            "defaultValue": 10,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "20": {
+            "label": "Meter report interval",
+            "description": "0 (Report disabled) 30-32767 (30-32767 seconds)",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 32767,
+            "defaultValue": 90,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "21": {
+            "label": "Meter report delta value",
+            "description": "0-255 A delta value of 0 - 25.5 kWh will result in a metering report. Default is 10 (1.0 kWh)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 10,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

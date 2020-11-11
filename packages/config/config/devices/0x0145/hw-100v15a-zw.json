@@ -1,0 +1,21 @@
+// Buffalo HW-100V15A-ZW
+// Measure Power Monitor
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Buffalo",
+    "manufacturerId": "0x0145",
+    "label": "HW-100V15A-ZW",
+    "description": "Measure Power Monitor",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0004"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

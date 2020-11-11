@@ -1,0 +1,1117 @@
+// HELTUN HE-ZW-SW-5A-1
+// Touch Panel Switch
+{
+    "revision": {
+        "ozw": 3
+    },
+    "manufacturer": "HELTUN",
+    "manufacturerId": "0x0344",
+    "label": "HE-ZW-SW-5A-1",
+    "description": "Touch Panel Switch",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0003"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Touch button 1 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "3": {
+            "label": "Touch button 1 Multilevel Set",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "4": {
+            "label": "Touch button 2 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "5": {
+            "label": "Touch button 2 Multilevel Set",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "6": {
+            "label": "Touch button 3 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "7": {
+            "label": "Touch button 3 Multilevel Set",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "8": {
+            "label": "Touch button 4 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "9": {
+            "label": "Touch button 4 Multilevel Set",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "10": {
+            "label": "Touch button 5 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "11": {
+            "label": "Touch button 5 Multilevel Set",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "12": {
+            "label": "Backlight 1 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "13": {
+            "label": "Backlight 2 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "14": {
+            "label": "Backlight 3 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "15": {
+            "label": "Backlight 4 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "16": {
+            "label": "Backlight 5 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "17": {
+            "label": "Realy 1 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "18": {
+            "label": "Realy 2 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "19": {
+            "label": "Realy 3 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "20": {
+            "label": "Realy 4 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        },
+        "21": {
+            "label": "Realy 5 Basic Set (On/Off)",
+            "maxNodes": 3,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Backlight 1 control source",
+            "description": "Backlight 1 control source",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Backlight is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Controlled by touch button",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by gateway or associated device",
+                    "value": 2
+                }
+            ]
+        },
+        "2": {
+            "label": "Backlight 2 control source",
+            "description": "Backlight 2 control source",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Backlight is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Controlled by touch button",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by gateway or associated device",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "Backlight 3 control source",
+            "description": "Backlight 3 control source",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Backlight is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Controlled by touch button",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by gateway or associated device",
+                    "value": 2
+                }
+            ]
+        },
+        "4": {
+            "label": "Backlight 4 control source",
+            "description": "Backlight 4 control source",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Backlight is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Controlled by touch button",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by gateway or associated device",
+                    "value": 2
+                }
+            ]
+        },
+        "5": {
+            "label": "Backlight 5 control source",
+            "description": "Backlight 5 control source",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Backlight is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Controlled by touch button",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by gateway or associated device",
+                    "value": 2
+                }
+            ]
+        },
+        "6": {
+            "label": "Relay 1 control source",
+            "description": "Relay 1 control source",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Controlled by gateway or associated device",
+                    "value": 0
+                },
+                {
+                    "label": "Controlled by touch button N1 (Top Left)",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by touch button N2 (Top Right)",
+                    "value": 2
+                },
+                {
+                    "label": "Controlled by touch button N3 (Bottom Left)",
+                    "value": 3
+                },
+                {
+                    "label": "Controlled by touch button N4 (Bottom Right)",
+                    "value": 4
+                },
+                {
+                    "label": "Controlled by touch button N5 (Center)",
+                    "value": 5
+                }
+            ]
+        },
+        "7": {
+            "label": "Relay 2 control source",
+            "description": "Relay 2 control source",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "defaultValue": 2,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Controlled by gateway or associated device",
+                    "value": 0
+                },
+                {
+                    "label": "Controlled by touch button N1 (Top Left)",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by touch button N2 (Top Right)",
+                    "value": 2
+                },
+                {
+                    "label": "Controlled by touch button N3 (Bottom Left)",
+                    "value": 3
+                },
+                {
+                    "label": "Controlled by touch button N4 (Bottom Right)",
+                    "value": 4
+                },
+                {
+                    "label": "Controlled by touch button N5 (Center)",
+                    "value": 5
+                }
+            ]
+        },
+        "8": {
+            "label": "Relay 3 control source",
+            "description": "Relay 3 control source",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "defaultValue": 3,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Controlled by gateway or associated device",
+                    "value": 0
+                },
+                {
+                    "label": "Controlled by touch button N1 (Top Left)",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by touch button N2 (Top Right)",
+                    "value": 2
+                },
+                {
+                    "label": "Controlled by touch button N3 (Bottom Left)",
+                    "value": 3
+                },
+                {
+                    "label": "Controlled by touch button N4 (Bottom Right)",
+                    "value": 4
+                },
+                {
+                    "label": "Controlled by touch button N5 (Center)",
+                    "value": 5
+                }
+            ]
+        },
+        "9": {
+            "label": "Relay 4 control source",
+            "description": "Relay 4 control source",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "defaultValue": 4,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Controlled by gateway or associated device",
+                    "value": 0
+                },
+                {
+                    "label": "Controlled by touch button N1 (Top Left)",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by touch button N2 (Top Right)",
+                    "value": 2
+                },
+                {
+                    "label": "Controlled by touch button N3 (Bottom Left)",
+                    "value": 3
+                },
+                {
+                    "label": "Controlled by touch button N4 (Bottom Right)",
+                    "value": 4
+                },
+                {
+                    "label": "Controlled by touch button N5 (Center)",
+                    "value": 5
+                }
+            ]
+        },
+        "10": {
+            "label": "Relay 5 control source",
+            "description": "Relay 5 control source",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 5,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Controlled by gateway or associated device",
+                    "value": 0
+                },
+                {
+                    "label": "Controlled by touch button N1 (Top Left)",
+                    "value": 1
+                },
+                {
+                    "label": "Controlled by touch button N2 (Top Right)",
+                    "value": 2
+                },
+                {
+                    "label": "Controlled by touch button N3 (Bottom Left)",
+                    "value": 3
+                },
+                {
+                    "label": "Controlled by touch button N4 (Bottom Right)",
+                    "value": 4
+                },
+                {
+                    "label": "Controlled by touch button N5 (Center)",
+                    "value": 5
+                }
+            ]
+        },
+        "11": {
+            "label": "Click control mode for touch button 1",
+            "description": "Click control mode for touch button 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Click function is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Inverts relay state regarding touch button state",
+                    "value": 1
+                },
+                {
+                    "label": "Inverts relay state regarding button backlight state",
+                    "value": 2
+                },
+                {
+                    "label": "press the button and the relay goes to ON state only",
+                    "value": 3
+                },
+                {
+                    "label": "press the button and the relay goes to OFF state only",
+                    "value": 4
+                },
+                {
+                    "label": "Timer mode ON-OFF",
+                    "value": 5
+                },
+                {
+                    "label": "Timer mode OFF-ON",
+                    "value": 6
+                }
+            ]
+        },
+        "12": {
+            "label": "Click control mode for touch button 2",
+            "description": "Click control mode for touch button 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Click function is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Inverts relay state regarding touch button state",
+                    "value": 1
+                },
+                {
+                    "label": "Inverts relay state regarding button backlight state",
+                    "value": 2
+                },
+                {
+                    "label": "press the button and the relay goes to ON state only",
+                    "value": 3
+                },
+                {
+                    "label": "press the button and the relay goes to OFF state only",
+                    "value": 4
+                },
+                {
+                    "label": "Timer mode ON-OFF",
+                    "value": 5
+                },
+                {
+                    "label": "Timer mode OFF-ON",
+                    "value": 6
+                }
+            ]
+        },
+        "13": {
+            "label": "Click control mode for touch button 3",
+            "description": "Click control mode for touch button 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Click function is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Inverts relay state regarding touch button state",
+                    "value": 1
+                },
+                {
+                    "label": "Inverts relay state regarding button backlight state",
+                    "value": 2
+                },
+                {
+                    "label": "press the button and the relay goes to ON state only",
+                    "value": 3
+                },
+                {
+                    "label": "press the button and the relay goes to OFF state only",
+                    "value": 4
+                },
+                {
+                    "label": "Timer mode ON-OFF",
+                    "value": 5
+                },
+                {
+                    "label": "Timer mode OFF-ON",
+                    "value": 6
+                }
+            ]
+        },
+        "14": {
+            "label": "Click control mode for touch button 4",
+            "description": "Click control mode for touch button 4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Click function is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Inverts relay state regarding touch button state",
+                    "value": 1
+                },
+                {
+                    "label": "Inverts relay state regarding button backlight state",
+                    "value": 2
+                },
+                {
+                    "label": "press the button and the relay goes to ON state only",
+                    "value": 3
+                },
+                {
+                    "label": "press the button and the relay goes to OFF state only",
+                    "value": 4
+                },
+                {
+                    "label": "Timer mode ON-OFF",
+                    "value": 5
+                },
+                {
+                    "label": "Timer mode OFF-ON",
+                    "value": 6
+                }
+            ]
+        },
+        "15": {
+            "label": "Click control mode for touch button 5",
+            "description": "Click control mode for touch button 5",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 6,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Click function is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Inverts relay state regarding touch button state",
+                    "value": 1
+                },
+                {
+                    "label": "Inverts relay state regarding button backlight state",
+                    "value": 2
+                },
+                {
+                    "label": "press the button and the relay goes to ON state only",
+                    "value": 3
+                },
+                {
+                    "label": "press the button and the relay goes to OFF state only",
+                    "value": 4
+                },
+                {
+                    "label": "Timer mode ON-OFF",
+                    "value": 5
+                },
+                {
+                    "label": "Timer mode OFF-ON",
+                    "value": 6
+                }
+            ]
+        },
+        "16": {
+            "label": "Hold control mode for touch button 1",
+            "description": "Hold control mode for touch button 1",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Hold function is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Operate like click",
+                    "value": 1
+                },
+                {
+                    "label": "Switched from ON state to OFF",
+                    "value": 2
+                },
+                {
+                    "label": "Switched from OFF state to ON",
+                    "value": 3
+                }
+            ]
+        },
+        "17": {
+            "label": "Hold control mode for touch button 2",
+            "description": "Hold control mode for touch button 2",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Hold function is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Operate like click",
+                    "value": 1
+                },
+                {
+                    "label": "Switched from ON state to OFF",
+                    "value": 2
+                },
+                {
+                    "label": "Switched from OFF state to ON",
+                    "value": 3
+                }
+            ]
+        },
+        "18": {
+            "label": "Hold control mode for touch button 3",
+            "description": "Hold control mode for touch button 3",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Hold function is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Operate like click",
+                    "value": 1
+                },
+                {
+                    "label": "Switched from ON state to OFF",
+                    "value": 2
+                },
+                {
+                    "label": "Switched from OFF state to ON",
+                    "value": 3
+                }
+            ]
+        },
+        "19": {
+            "label": "Hold control mode for touch button 4",
+            "description": "Hold control mode for touch button 4",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Hold function is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Operate like click",
+                    "value": 1
+                },
+                {
+                    "label": "Switched from ON state to OFF",
+                    "value": 2
+                },
+                {
+                    "label": "Switched from OFF state to ON",
+                    "value": 3
+                }
+            ]
+        },
+        "20": {
+            "label": "Hold control mode for touch button 5",
+            "description": "Hold control mode for touch button 5",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Hold function is disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Operate like click",
+                    "value": 1
+                },
+                {
+                    "label": "Switched from ON state to OFF",
+                    "value": 2
+                },
+                {
+                    "label": "Switched from OFF state to ON",
+                    "value": 3
+                }
+            ]
+        },
+        "21": {
+            "label": "Timer mode duration for button 1",
+            "description": "Timer mode duration for button 1",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "22": {
+            "label": "Timer mode duration for button 2",
+            "description": "Timer mode duration for button 2",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "23": {
+            "label": "Timer mode duration for button 3",
+            "description": "Timer mode duration for button 3",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "24": {
+            "label": "Timer mode duration for button 4",
+            "description": "Timer mode duration for button 4",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "25": {
+            "label": "Timer mode duration for button 5",
+            "description": "Timer mode duration for button 5",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "26": {
+            "label": "Power of the Relay 1 load in W",
+            "description": "Power of the Relay 1 load in W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "27": {
+            "label": "Power of the Relay 2 load in W",
+            "description": "Power of the Relay 2 load in W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "28": {
+            "label": "Power of the Relay 3 load in W",
+            "description": "Power of the Relay 3 load in W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "29": {
+            "label": "Power of the Relay 4 load in W",
+            "description": "Power of the Relay 4 load in W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "30": {
+            "label": "Power of the Relay 5 load in W",
+            "description": "Power of the Relay 5 load in W",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "31": {
+            "label": "Red colour backlight brightness",
+            "description": "Red colour backlight brightness",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Auto",
+                    "value": 0
+                },
+                {
+                    "label": "Level 1 (Min)",
+                    "value": 1
+                },
+                {
+                    "label": "Level 2",
+                    "value": 2
+                },
+                {
+                    "label": "Level 3 (Max)",
+                    "value": 3
+                }
+            ]
+        },
+        "32": {
+            "label": "Blue colour backlight brightness",
+            "description": "Blue colour backlight brightness",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Auto",
+                    "value": 0
+                },
+                {
+                    "label": "Level 1 (Min)",
+                    "value": 1
+                },
+                {
+                    "label": "Level 2",
+                    "value": 2
+                },
+                {
+                    "label": "Level 3 (Max)",
+                    "value": 3
+                }
+            ]
+        },
+        "33": {
+            "label": "Red color level 1",
+            "description": "Red colour auto brightness level 1 max lumens",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 30,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "34": {
+            "label": "Red color level 2",
+            "description": "Red colour auto brightness level 2 max lumens",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "35": {
+            "label": "Blue color level 1",
+            "description": "Blue colour auto brightness level 1 max lumens",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 30,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "36": {
+            "label": "Blue color level 2",
+            "description": "Blue colour auto brightness level 2 max lumens",
+            "valueSize": 2,
+            "minValue": 0,
+            "maxValue": 5000,
+            "defaultValue": 200,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "37": {
+            "label": "Active state backlight colour",
+            "description": "Active state backlight colour",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Active Red",
+                    "value": 0
+                },
+                {
+                    "label": "Active Blue",
+                    "value": 1
+                }
+            ]
+        },
+        "38": {
+            "label": "Temperature sensor calibration",
+            "description": "Temperature sensor calibration",
+            "valueSize": 2,
+            "minValue": -95,
+            "maxValue": 95,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "39": {
+            "label": "Temperature difference to send to controller, value X 10",
+            "description": "Temperature difference to send to controller, value X 10",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 10,
+            "defaultValue": 2,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "40": {
+            "label": "Touch buttons sensitivity",
+            "description": "Touch buttons sensitivity. 10=Supper sensitive. 60=lowest sensitivity.",
+            "valueSize": 1,
+            "minValue": 10,
+            "maxValue": 60,
+            "defaultValue": 20,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "41": {
+            "label": "Gateway",
+            "description": "If Fibaro Home Center Lite or Fibaro Home Center 2 is used as a gateway for correct communication of the devices set this parameter 1. For other gateways choose 0. Factory default value: 0.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Default",
+                    "value": 0
+                },
+                {
+                    "label": "Fibaro Home Center2",
+                    "value": 1
+                }
+            ]
+        }
+    }
+}

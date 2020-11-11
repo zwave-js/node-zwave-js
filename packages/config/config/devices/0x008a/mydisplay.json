@@ -1,0 +1,21 @@
+// BeNext MYDISPLAY
+// myDisplay
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "BeNext",
+    "manufacturerId": "0x008a",
+    "label": "MYDISPLAY",
+    "description": "myDisplay",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0100"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

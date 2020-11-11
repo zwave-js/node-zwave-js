@@ -1,0 +1,110 @@
+// HAB Home Intelligence LLC IBLINDSV3
+// iblinds V3
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "HAB Home Intelligence LLC",
+    "manufacturerId": "0x0287",
+    "label": "IBLINDSV3",
+    "description": "iblinds V3",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x0071"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Close Interval",
+            "description": "Auto Calibration Tightness Lower value = tighter Higher value = looser MUST BE RECALIBRATED Range:16-32 Default: 22",
+            "valueSize": 1,
+            "minValue": 16,
+            "maxValue": 32,
+            "defaultValue": 22,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "2": {
+            "label": "Reverse Direction",
+            "description": "Reverse closing direction",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "false",
+                    "value": 0
+                },
+                {
+                    "label": "true",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Default ON Value",
+            "description": "Value that iblinds will open to by Default Default: 50",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 50,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Reset Button Disable",
+            "description": "Will disable the reset button on the motor, preventing it from accidentally being pressed",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "false",
+                    "value": 0
+                },
+                {
+                    "label": "true",
+                    "value": 1
+                }
+            ]
+        },
+        "6": {
+            "label": "Speed",
+            "description": "How fast iblinds will close in seconds Default:0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

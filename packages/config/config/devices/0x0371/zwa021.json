@@ -1,0 +1,168 @@
+// Aeotec Limited ZWA021
+// Thermostatic Valve
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Aeotec Limited",
+    "manufacturerId": "0x0371",
+    "label": "ZWA021",
+    "description": "Thermostatic Valve",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0015"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "paramInformation": {
+        "1": {
+            "label": "LCD Invert",
+            "description": "Allows rotating the LCD contents by 180 degrees. Default: Normal",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Normal",
+                    "value": 0
+                },
+                {
+                    "label": "Upside Down",
+                    "value": 1
+                }
+            ]
+        },
+        "2": {
+            "label": "LCD Timeout",
+            "description": "0: No Timeout, LCD always on. 5-30: Timeout after 5-30s. Default: 0 (LCD always on)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 30,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "3": {
+            "label": "Backlight",
+            "description": "Default: Backlight enabled",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Backlight disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Backlight enabled",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Battery Report",
+            "description": "Default: Send once a day",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Only send battery status as notification",
+                    "value": 0
+                },
+                {
+                    "label": "Send once a day",
+                    "value": 1
+                }
+            ]
+        },
+        "5": {
+            "label": "Temperature Report Threshold",
+            "description": "0: Don't send temperature automatically. 1-50: Report temperature at 0.1-5.0°C temperature difference. Default: 5 (Delta = 0.5°C)",
+            "valueSize": 1,
+            "unit": "°C",
+            "minValue": 0,
+            "maxValue": 50,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Valve Opening Percentage Report",
+            "description": "0: Don't send Valve opening percentage automatically. 1-100: Report valve opening percentage at a delta of 1-100%. Default: 0",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "Open Window Detection",
+            "description": "Default: Medium sensibility",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 3,
+            "defaultValue": 2,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disabled",
+                    "value": 0
+                },
+                {
+                    "label": "Low sensibility",
+                    "value": 1
+                },
+                {
+                    "label": "Medium sensibility",
+                    "value": 2
+                },
+                {
+                    "label": "High sensibility",
+                    "value": 3
+                }
+            ]
+        },
+        "8": {
+            "label": "Measured Temperature Offset",
+            "description": "206-255: -5.0 to -0.1°C. 0-50: 0°C-5°C. 128: External Temperature Sensor. Default: 0 (0.0°C Offset)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

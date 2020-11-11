@@ -1,0 +1,128 @@
+// EcoDim 0.7
+// ECO-DIM.07 Z-Wave LED dimmer
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "EcoDim",
+    "manufacturerId": "0x0431",
+    "label": "0.7",
+    "description": "ECO-DIM.07 Z-Wave LED dimmer",
+    "devices": [
+        {
+            "productType": "0x0202",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Basic Set",
+            "maxNodes": 5
+        },
+        "3": {
+            "label": "Switch Multilevel",
+            "maxNodes": 5
+        },
+        "4": {
+            "label": "External Button",
+            "maxNodes": 5
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "State after power restore",
+            "description": "State After Power Restored: The state the switch should return to once power is restored after power failure. Default value: 0 0 - Off. 1 - On. 2 - Returns to level before Power Outage",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "2": {
+            "label": "Notification when Load status change",
+            "description": "Notification when Load status change: The Dimmer will send notification to associated device (Group Lifeline) when the status of Dimmer load is changed. Default value: 1 0 - The function is disabled. 1 - Send Switch Multilevel Report.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "3": {
+            "label": "Dimming speed",
+            "description": "Default dimming speed，unit is second. Valid values: 0-100. Default value: 5 0 - Instanly. 1 - Fast. ... 100 - Slow.",
+            "valueSize": 1,
+            "unit": "seconds",
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Enable or Disable external switch to pair network",
+            "description": "Enable or Disable external switch to pair network. Default value: 0 0 - Disable. 1 - Enable.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Dimming algorithm",
+            "description": "Setting dimming way. Default value: 0 0 - Linear dimming. 1 - Logarithmic dimming.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "Default brightness",
+            "description": "Setting default brightness when turn on the dimmer from off status. Setting of 0 means that the dimmer will use parameter 1. Default value: 0 Valid values: 0-99",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 100,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Turn off delay",
+            "description": "Setting delay time when turn off, unit is second. Default value: 0 Valid values: 0-60",
+            "valueSize": 1,
+            "unit": "seconds",
+            "minValue": 0,
+            "maxValue": 60,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

@@ -1,0 +1,180 @@
+// Namron 4512710
+// Z-Wave Dimmer 400W
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Namron",
+    "manufacturerId": "0x0438",
+    "label": "4512710",
+    "description": "Z-Wave Dimmer 400W",
+    "devices": [
+        {
+            "productType": "0x0200",
+            "productId": "0xd005"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 5,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "2": {
+            "label": "Saving load state before power failure",
+            "description": "Saving state before power failure.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 2,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Shutoff load",
+                    "value": 0
+                },
+                {
+                    "label": "Turn on load",
+                    "value": 1
+                },
+                {
+                    "label": "Save load state before power failure",
+                    "value": 2
+                }
+            ]
+        },
+        "3": {
+            "label": "Send Basic report",
+            "description": "Enable/disable to send the basic report to the Lifeline when the load state changed（When value set as 1, repower on the dimmer, it will send Basic report automatically）",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable to send Basic report",
+                    "value": 0
+                },
+                {
+                    "label": "Enable to send Basic report",
+                    "value": 1
+                }
+            ]
+        },
+        "4": {
+            "label": "Fade time",
+            "description": "Default fade time (unit is second, this value has the same function as Duration of Multilevel). Valid value: 0~127",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Minimum brightness",
+            "description": "Setting minimum brightness value. Valid value: 0~50, the bigger the value is, the higher the load’s minimum brightness is.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 5,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "MOSFET driving type",
+            "description": "Choose MOSFET driving type.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Trailing edge",
+                    "value": 0
+                },
+                {
+                    "label": "Leading edge",
+                    "value": 1
+                }
+            ]
+        },
+        "7": {
+            "label": "Add/remove through external switch",
+            "description": "Added to and removed from a network through external switch (when enables this function, triple press the external switch within 1.5 seconds to be added to or removed from a network)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Disable",
+                    "value": 0
+                },
+                {
+                    "label": "Enable",
+                    "value": 1
+                }
+            ]
+        },
+        "8": {
+            "label": "Dimming curve",
+            "description": "Setting dimming curve",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "linear dimming",
+                    "value": 0
+                },
+                {
+                    "label": "logarithmic dimming",
+                    "value": 1
+                }
+            ]
+        },
+        "9": {
+            "label": "Startup brightness of load",
+            "description": "Setting startup brightness of the load Valid value: 0~99 Note: every time when turn on the load from OFF status, if the target brightness is lower than the startup brightness, the brightness will first go to the startup brightness value then fall down to the target brightness",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

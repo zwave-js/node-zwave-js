@@ -1,0 +1,32 @@
+// Springs Window Fashions (Graber) MCZ1
+// Multi-Channel Remote
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Springs Window Fashions (Graber)",
+    "manufacturerId": "0x026e",
+    "label": "MCZ1",
+    "description": "Multi-Channel Remote",
+    "devices": [
+        {
+            "productType": "0x4d43",
+            "productId": "0x5a31"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "maxNodes": 1,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "Slave Shade Group",
+            "maxNodes": 12
+        }
+    }
+}

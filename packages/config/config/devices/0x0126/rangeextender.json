@@ -1,0 +1,28 @@
+// Alertme (Iris) RANGEEXTENDER
+// Range Extender
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "Alertme (Iris)",
+    "manufacturerId": "0x0126",
+    "label": "RANGEEXTENDER",
+    "description": "Range Extender",
+    "devices": [
+        {
+            "productType": "0x0002",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "compat": {
+        "cc": {
+            "remove": [
+                32
+            ]
+        }
+    }
+}

@@ -1,0 +1,21 @@
+// GreenWave Reality Inc GS1110-1-GR-1
+// One Gateway
+{
+    "revision": {
+        "ozw": 1
+    },
+    "manufacturer": "GreenWave Reality Inc",
+    "manufacturerId": "0x0099",
+    "label": "GS1110-1-GR-1",
+    "description": "One Gateway",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0002"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    }
+}

@@ -1,0 +1,265 @@
+// Vero Duco DUCOBOX
+// DucoBox Motor
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Vero Duco",
+    "manufacturerId": "0x0080",
+    "label": "DUCOBOX",
+    "description": "DucoBox Motor",
+    "devices": [
+        {
+            "productType": "0x0003",
+            "productId": "0x0001"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "Duco control",
+            "maxNodes": 20
+        },
+        "2": {
+            "label": "Temp Basic set (on)",
+            "maxNodes": 20,
+            "isLifeline": true
+        },
+        "3": {
+            "label": "Temp Basic set (off)",
+            "maxNodes": 20,
+            "isLifeline": true
+        },
+        "4": {
+            "label": "Temperature delta",
+            "maxNodes": 20,
+            "isLifeline": true
+        },
+        "5": {
+            "label": "RH Basic set (on)",
+            "maxNodes": 20,
+            "isLifeline": true
+        },
+        "6": {
+            "label": "RH Basic set (off)",
+            "maxNodes": 20,
+            "isLifeline": true
+        },
+        "7": {
+            "label": "RH delta",
+            "maxNodes": 20,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "1": {
+            "label": "Measure Level",
+            "description": "How often the value is measured(example: if value=60, the sensor value is measured every 60 seconds)",
+            "valueSize": 1,
+            "minValue": 1,
+            "maxValue": 127,
+            "defaultValue": 60,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "2": {
+            "label": "CO² set point",
+            "description": "Set point CO2: Used in ‘automatic mode’. (button 4) if the device is a CO2 sensor. The CO2 level in a room is a good indication of the air quality in this room. When the CO2 level is above this set point, the room needs more ventilation. Consequently, the CO2 sensor will open the associated grating unit.",
+            "valueSize": 2,
+            "minValue": 1,
+            "maxValue": 32767,
+            "defaultValue": 1000,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "3": {
+            "label": "CO² set point",
+            "description": "Set point CO2: Used in ‘automatic mode’. (button 4) if the device is a CO2 sensor. The CO2 level in a room is a good indication of the air quality in this room. When the CO2 level is above this set point, the room needs more ventilation. Consequently, the CO2 sensor will open the associated grating unit.",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 127,
+            "defaultValue": 70,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "4": {
+            "label": "Button 1",
+            "description": "The value when button1 is pressed. Values above 99 will be capped to 99 (maximum) used in association group 1",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 127,
+            "defaultValue": 15,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "5": {
+            "label": "Button 2",
+            "description": "The value when button2 is pressed. Values above 99 will be capped to 99 (maximum) used in association group 1",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 127,
+            "defaultValue": 50,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "6": {
+            "label": "Button 3",
+            "description": "The value when button3 is pressed. Values above 99 will be capped to 99 (maximum) used in association group 1",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 127,
+            "defaultValue": 99,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "7": {
+            "label": "Min automatic level",
+            "description": "The minimum value that can be send by the CO2 sensor when it is in automatic mode.",
+            "valueSize": 1,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 127,
+            "defaultValue": 15,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "8": {
+            "label": "Temperature high setpoint",
+            "description": "Temperature high set point: used in association group 2 or 3",
+            "valueSize": 2,
+            "unit": "°C",
+            "minValue": 1,
+            "maxValue": 32767,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "9": {
+            "label": "Temperature low setpoint",
+            "description": "Temperature low set point: used in association group 2 or 3",
+            "valueSize": 2,
+            "unit": "°C",
+            "minValue": 1,
+            "maxValue": 32767,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "10": {
+            "label": "Temperature delta setpoint",
+            "description": "Temperature delta set point: used in association group 4",
+            "valueSize": 2,
+            "unit": "°C",
+            "minValue": 1,
+            "maxValue": 32767,
+            "defaultValue": 2,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "11": {
+            "label": "RH high setpoint",
+            "description": "RH high set point: used in association group 5 or 6",
+            "valueSize": 2,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 32767,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "12": {
+            "label": "RH low setpoint",
+            "description": "RH low set point: used in group5 or 6",
+            "valueSize": 2,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 32767,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "13": {
+            "label": "RH delta setpoint",
+            "description": "RH delta set point: used in group7",
+            "valueSize": 2,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 32767,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "14": {
+            "label": "CO2 high setpoint",
+            "description": "CO2 high set point: not available in RH sensor",
+            "valueSize": 2,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 32767,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "15": {
+            "label": "CO2 low setpoint",
+            "description": "CO2 low set point: not available in RH sensor",
+            "valueSize": 2,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 32767,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "16": {
+            "label": "CO2 delta setpoint",
+            "description": "CO2 delta set point: not available in RH sensor",
+            "valueSize": 2,
+            "unit": "%",
+            "minValue": 1,
+            "maxValue": 32767,
+            "defaultValue": 500,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}

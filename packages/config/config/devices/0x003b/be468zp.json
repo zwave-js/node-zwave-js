@@ -1,0 +1,190 @@
+// Schlage (Allegion) BE468ZP
+// Connect Smart Deadbolt
+{
+    "revision": {
+        "ozw": 2
+    },
+    "manufacturer": "Schlage (Allegion)",
+    "manufacturerId": "0x003b",
+    "label": "BE468ZP",
+    "description": "Connect Smart Deadbolt",
+    "devices": [
+        {
+            "productType": "0x0001",
+            "productId": "0x0468"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "associations": {
+        "1": {
+            "label": "LifeLine",
+            "maxNodes": 2,
+            "isLifeline": true
+        }
+    },
+    "paramInformation": {
+        "3": {
+            "label": "Beeper",
+            "description": "Enable or disable the keypad beeper.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enable",
+                    "value": 255
+                },
+                {
+                    "label": "Disable",
+                    "value": 0
+                }
+            ]
+        },
+        "4": {
+            "label": "Vacation Mode",
+            "description": "Enable or disable vacation mode. Disables all user codes, preventing all codes from unlocking the deadbolt. Enable for extra security while you are away for an extended period of time.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enable",
+                    "value": 255
+                },
+                {
+                    "label": "Disable",
+                    "value": 0
+                }
+            ]
+        },
+        "5": {
+            "label": "Lock and Leave Mode",
+            "description": "Enable or disable Lock and Leave Mode. When enabled: Press the Schlage button on the keypad to lock the deadbolt (Default setting). When disabled: Press the Schlage button on the keypad and then enter a user code to lock the deadbolt.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 255,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enable",
+                    "value": 255
+                },
+                {
+                    "label": "Disable",
+                    "value": 0
+                }
+            ]
+        },
+        "12": {
+            "label": "Electronic transition count",
+            "description": "Indicates the number of transitions from locked to unlocked or unlocked to locked state via electronic activation.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "13": {
+            "label": "Mechanical transition count",
+            "description": "Indicates the number of transitions from locked to unlocked or unlocked to locked state via mechanical activation.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "14": {
+            "label": "Electronic failed count",
+            "description": "Indicates the number of failed electronic activation attempts for this lock.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "15": {
+            "label": "Auto Lock",
+            "description": "When enabled, the lock will automatically relock 30 seconds after unlocking. (Disabled by default.)",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": false,
+            "options": [
+                {
+                    "label": "Enable",
+                    "value": 255
+                },
+                {
+                    "label": "Disable",
+                    "value": 0
+                }
+            ]
+        },
+        "16": {
+            "label": "User code legnth",
+            "description": "Choose user code length between 4 and 8 digits. IMPORTANT: All user codes must be the same length.",
+            "valueSize": 1,
+            "minValue": 4,
+            "maxValue": 8,
+            "defaultValue": 4,
+            "unsigned": true,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "17": {
+            "label": "Electrical High Preload Transition Count",
+            "description": "Indicates the number of transitions from locked to unlocked or unlocked to locked state via electronic activation that indicated a high preload on the deadbolt. This is a subset of Electronic transition count. High preload occurs when the bolt is obstructed and the motor needs to use more power to throw the bolt. Adjust door and strike plate to ensure the bolt can move freely. This will save battery power.",
+            "valueSize": 4,
+            "minValue": 0,
+            "maxValue": 4294967295,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "18": {
+            "label": "Bootloader Version",
+            "description": "The version of the bootloader in the lock.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 255,
+            "defaultValue": 0,
+            "unsigned": true,
+            "readOnly": true,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
+}
