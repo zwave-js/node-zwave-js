@@ -156,6 +156,23 @@ function matchAll(regex: RegExp, string: string) {
 	return ret;
 }
 
+// try to guess the size based on param type
+// list of available ozw types: https://github.com/OpenZWave/open-zwave/blob/master/config/device_configuration.xsd#L217-L229
+function ozwTypeSize(type: string | undefined): number | undefined {
+	switch (type) {
+		case "byte":
+		case "bool":
+		case "button":
+			return 1;
+		case "short":
+			return 2;
+		case "int":
+			return 4;
+	}
+
+	return undefined;
+}
+
 function isNullishOrEmptyString(
 	value: number | string | null | undefined,
 ): value is "" | null | undefined {
@@ -609,6 +626,10 @@ async function parseOZWProduct(
 			parsedParam.description = sanitizeText(
 				ensureArray(param.Help)[0] || parsedParam.description,
 			);
+
+			// sometimes size could be undefined, in such cases try to guess it from the param type
+			param.size == param.size > 0 ? param.size : ozwTypeSize(param.type);
+
 			parsedParam.valueSize = updateNumberOrDefault(
 				param.size,
 				parsedParam.valueSize,
