@@ -2,7 +2,7 @@
 
 Z-Wave is a complex protocol and many things can go wrong in the communication. While there may be a problem with `zwave-js`, many issues are due to misbehaving or misconfigured devices and/or network connectivity problems. Please follow this guide before opening issues.
 
-## Some states are missing
+## Some values are missing
 
 It is very likely that the interview is not yet completed. Check if the `ready` event has been emitted for the node in question. If not, have patience - the first interview of battery-powered nodes may take several hours. If the interview never gets completed, please consider opening an issue.
 
