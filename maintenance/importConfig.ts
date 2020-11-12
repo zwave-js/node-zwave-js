@@ -628,7 +628,7 @@ async function parseOZWProduct(
 			);
 
 			// sometimes size could be undefined, in such cases try to guess it from the param type
-			param.size == param.size > 0 ? param.size : ozwTypeSize(param.type);
+			param.size = param.size > 0 ? param.size : ozwTypeSize(param.type);
 
 			parsedParam.valueSize = updateNumberOrDefault(
 				param.size,
