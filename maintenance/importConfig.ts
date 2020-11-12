@@ -116,6 +116,8 @@ const ozwTarName = "openzwave.tar.gz";
 const ozwTarUrl =
 	"https://github.com/OpenZWave/open-zwave/archive/master.tar.gz";
 const ozwConfigFolder = path.join(tmpDir, "./config");
+const ozwConfigBaseUrl =
+	"https://github.com/OpenZWave/open-zwave/tree/master/config";
 
 const importedManufacturersPath = path.join(importDir, "manufacturers.json");
 const ownManufacturersPath = path.join(importDir, "../manufacturers.json");
@@ -746,7 +748,8 @@ async function parseOZWProduct(
 	// Add a comment explaining which device this is
 	// prettier-ignore
 	const output = `// ${newConfig.manufacturer} ${newConfig.label}${newConfig.description ? (`
-// ${newConfig.description}`) : ""}
+// ${newConfig.description}
+// OZW Config: ${ozwConfigBaseUrl}/${product.config}`) : ""}
 ${stringify(newConfig)}`;
 	await fs.writeFile(fileNameAbsolute, output, "utf8");
 }
