@@ -17,3 +17,5 @@ zwave-js-*.tgz
 *.map
 
 .tmp
+
+/**/package-lock.json
