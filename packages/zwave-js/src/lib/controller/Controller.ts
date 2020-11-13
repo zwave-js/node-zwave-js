@@ -1838,7 +1838,7 @@ ${associatedNodes.join(", ")}`,
 			let message = `The node removal process could not be started due to the following reasons:`;
 			if (
 				!!(
-					result.removeStatus &
+					result.replaceStatus &
 					ReplaceFailedNodeStartFlags.NotPrimaryController
 				)
 			) {
@@ -1846,7 +1846,7 @@ ${associatedNodes.join(", ")}`,
 			}
 			if (
 				!!(
-					result.removeStatus &
+					result.replaceStatus &
 					ReplaceFailedNodeStartFlags.NodeNotFound
 				)
 			) {
@@ -1854,7 +1854,7 @@ ${associatedNodes.join(", ")}`,
 			}
 			if (
 				!!(
-					result.removeStatus &
+					result.replaceStatus &
 					ReplaceFailedNodeStartFlags.RemoveProcessBusy
 				)
 			) {
@@ -1862,7 +1862,7 @@ ${associatedNodes.join(", ")}`,
 			}
 			if (
 				!!(
-					result.removeStatus &
+					result.replaceStatus &
 					ReplaceFailedNodeStartFlags.RemoveFailed
 				)
 			) {
@@ -1873,7 +1873,7 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.ReplaceFailedNode_Failed,
 			);
 		} else {
-			switch (result.removeStatus) {
+			switch (result.replaceStatus) {
 				case ReplaceFailedNodeStatus.NodeOK:
 					throw new ZWaveError(
 						`The node could not be replaced because it has responded`,

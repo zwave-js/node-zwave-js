@@ -98,17 +98,18 @@ export class ReplaceFailedNodeRequestStatusReport
 		super(driver, options);
 
 		this.callbackId = this.payload[0];
-		this._removeStatus = this.payload[1];
+		this._replaceStatus = this.payload[1];
 	}
 
-	private _removeStatus: ReplaceFailedNodeStatus;
-	public get removeStatus(): ReplaceFailedNodeStatus {
-		return this._removeStatus;
+	private _replaceStatus: ReplaceFailedNodeStatus;
+	public get replaceStatus(): ReplaceFailedNodeStatus {
+		return this._replaceStatus;
 	}
 
 	public isOK(): boolean {
 		return (
-			this._removeStatus === ReplaceFailedNodeStatus.FailedNodeReplaceDone
+			this._replaceStatus ===
+			ReplaceFailedNodeStatus.FailedNodeReplaceDone
 		);
 	}
 }
@@ -119,15 +120,15 @@ export class ReplaceFailedNodeResponse
 	implements SuccessIndicator {
 	public constructor(driver: Driver, options: MessageDeserializationOptions) {
 		super(driver, options);
-		this._removeStatus = this.payload[0];
+		this._replaceStatus = this.payload[0];
 	}
 
-	private _removeStatus: ReplaceFailedNodeStartFlags;
-	public get removeStatus(): ReplaceFailedNodeStartFlags {
-		return this._removeStatus;
+	private _replaceStatus: ReplaceFailedNodeStartFlags;
+	public get replaceStatus(): ReplaceFailedNodeStartFlags {
+		return this._replaceStatus;
 	}
 
 	public isOK(): boolean {
-		return this._removeStatus === ReplaceFailedNodeStartFlags.OK;
+		return this._replaceStatus === ReplaceFailedNodeStartFlags.OK;
 	}
 }
