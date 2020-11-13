@@ -919,24 +919,20 @@ export class ZWaveController extends EventEmitter {
 
 		switch (msg.status) {
 			case ReplaceFailedNodeStatus.NodeOK:
-				if (this._replaceFailedPromise != null) {
-					this._replaceFailedPromise.reject(
-						new ZWaveError(
-							`The node ${msg.failedNodeId} could not be replaced because it's not failed`,
-							ZWaveErrorCodes.ReplaceFailedNode_NodeOK,
-						),
-					);
-				}
+				this._replaceFailedPromise?.reject(
+					new ZWaveError(
+						`The node ${msg.failedNodeId} could not be replaced because it's not failed`,
+						ZWaveErrorCodes.ReplaceFailedNode_NodeOK,
+					),
+				);
 				break;
 			case ReplaceFailedNodeStatus.FailedNodeReplaceFailed:
-				if (this._replaceFailedPromise != null) {
-					this._replaceFailedPromise.reject(
-						new ZWaveError(
-							`The replace process could not be completed`,
-							ZWaveErrorCodes.ReplaceFailedNode_Failed,
-						),
-					);
-				}
+				this._replaceFailedPromise?.reject(
+					new ZWaveError(
+						`The replace process could not be completed`,
+						ZWaveErrorCodes.ReplaceFailedNode_Failed,
+					),
+				);
 				break;
 			case ReplaceFailedNodeStatus.FailedNodeReplace:
 				// failed node is now ready to be replaced and controller is ready to add a new
@@ -948,15 +944,10 @@ export class ZWaveController extends EventEmitter {
 					`node ${msg.failedNodeId} successfully replaced`,
 				);
 
-				if (this._replaceFailedPromise != null) {
-					this._replaceFailedPromise.resolve(true);
-				}
+				this._replaceFailedPromise?.resolve(true);
 
 			default:
-				if (this._replaceFailedPromise != null) {
-					this._replaceFailedPromise.resolve(false);
-				}
-				return false;
+				this._replaceFailedPromise?.resolve(false);
 		}
 
 		return true; // Don't invoke any more handlers
