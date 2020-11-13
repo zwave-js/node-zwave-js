@@ -1825,7 +1825,10 @@ ${associatedNodes.join(", ")}`,
 	 * Replace a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
 	 * @param nodeId The id of the node to replace
 	 */
-	public async ReplaceFailedNode(nodeId: number): Promise<void> {
+	public async ReplaceFailedNode(
+		nodeId: number,
+		includeNonSecure: boolean = false,
+	): Promise<boolean> {
 		const result = await this.driver.sendMessage<
 			ReplaceFailedNodeRequestStatusReport | ReplaceFailedNodeResponse
 		>(new ReplaceFailedNodeRequest(this.driver, { failedNodeId: nodeId }));
@@ -1873,7 +1876,7 @@ ${associatedNodes.join(", ")}`,
 			switch (result.removeStatus) {
 				case ReplaceFailedNodeStatus.NodeOK:
 					throw new ZWaveError(
-						`The node could not be removed because it has responded`,
+						`The node could not be replaced because it has responded`,
 						ZWaveErrorCodes.ReplaceFailedNode_NodeOK,
 					);
 				case ReplaceFailedNodeStatus.FailedNodeReplaceFailed:
@@ -1881,12 +1884,13 @@ ${associatedNodes.join(", ")}`,
 						`The removal process could not be completed`,
 						ZWaveErrorCodes.ReplaceFailedNode_Failed,
 					);
+				case ReplaceFailedNodeStatus.FailedNodeReplace:
+					// failed node is now ready to be replaced and controller is ready to add a new
+					// node with the nodeID of the failed node
+					return this.beginInclusion(includeNonSecure);
 				default:
-					// If everything went well, the status is RemoveFailedNodeStatus.NodeRemoved
-
-					// TODO: wtf
-
-					return;
+					// If everything went well, the status is ReplaceFailedNodeStatus.FailedNodeReplaceDone
+					return true;
 			}
 		}
 	}
