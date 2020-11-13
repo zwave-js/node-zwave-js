@@ -5,7 +5,6 @@ import {
 	MessageType,
 } from "../message/Constants";
 import {
-	expectedCallback,
 	expectedResponse,
 	gotDeserializationOptions,
 	Message,
@@ -72,7 +71,7 @@ interface ReplaceFailedNodeRequestOptions extends MessageBaseOptions {
 }
 
 @expectedResponse(FunctionType.ReplaceFailedNode)
-@expectedCallback(FunctionType.ReplaceFailedNode)
+// no expected response, the controller will respond with another AddNodeToNetworkRequest
 export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 	public constructor(
 		driver: Driver,
