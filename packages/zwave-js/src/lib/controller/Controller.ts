@@ -1825,7 +1825,7 @@ ${associatedNodes.join(", ")}`,
 	 * Replace a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
 	 * @param nodeId The id of the node to replace
 	 */
-	public async ReplaceFailedNode(
+	public async replaceFailedNode(
 		nodeId: number,
 		includeNonSecure: boolean = false,
 	): Promise<boolean> {
