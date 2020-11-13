@@ -1888,6 +1888,8 @@ ${associatedNodes.join(", ")}`,
 	/**
 	 * Replace a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
 	 * @param nodeId The id of the node to replace
+	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security. By default, all nodes will be included securely if possible
+	 *
 	 */
 	public async replaceFailedNode(
 		nodeId: number,
