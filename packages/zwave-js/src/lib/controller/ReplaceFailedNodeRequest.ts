@@ -19,16 +19,16 @@ import type { SuccessIndicator } from "../message/SuccessIndicator";
 
 export enum ReplaceFailedNodeStartFlags {
 	OK = 0,
-	/** The removing process was aborted because the controller  is not the primary one */
+	/** The replacing process was aborted because the controller  is not the primary one */
 	NotPrimaryController = 1 << 1,
-	/** The removing process was aborted because no call back function is used */
+	/** The replacing process was aborted because no call back function is used */
 	NoCallbackFunction = 1 << 2,
-	/** The removing process aborted because the node was node found */
+	/** The replacing process aborted because the node was node found */
 	NodeNotFound = 1 << 3,
-	/** The removing process is busy */
-	RemoveProcessBusy = 1 << 4,
-	/** The removing process could not be started*/
-	RemoveFailed = 1 << 5,
+	/** The replacing process is busy */
+	ReplaceProcessBusy = 1 << 4,
+	/** The replacing process could not be started*/
+	ReplaceFailed = 1 << 5,
 }
 
 export enum ReplaceFailedNodeStatus {

@@ -1899,7 +1899,7 @@ ${associatedNodes.join(", ")}`,
 
 		if (result instanceof ReplaceFailedNodeResponse) {
 			// This implicates that the process was unsuccessful.
-			let message = `The node removal process could not be started due to the following reasons:`;
+			let message = `The node replace process could not be started due to the following reasons:`;
 			if (
 				!!(
 					result.replaceStatus &
@@ -1919,15 +1919,15 @@ ${associatedNodes.join(", ")}`,
 			if (
 				!!(
 					result.replaceStatus &
-					ReplaceFailedNodeStartFlags.RemoveProcessBusy
+					ReplaceFailedNodeStartFlags.ReplaceProcessBusy
 				)
 			) {
-				message += `\n· The node removal process is currently busy`;
+				message += `\n· The node replace process is currently busy`;
 			}
 			if (
 				!!(
 					result.replaceStatus &
-					ReplaceFailedNodeStartFlags.RemoveFailed
+					ReplaceFailedNodeStartFlags.ReplaceFailed
 				)
 			) {
 				message += `\n· The controller is busy or the node has responded`;
