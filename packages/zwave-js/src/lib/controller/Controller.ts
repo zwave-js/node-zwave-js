@@ -163,6 +163,11 @@ export class ZWaveController extends EventEmitter {
 			FunctionType.RemoveNodeFromNetwork,
 			this.handleRemoveNodeRequest.bind(this),
 		);
+
+		driver.registerRequestHandler(
+			FunctionType.ReplaceFailedNode,
+			this.handleReplaceNodeRequest.bind(this),
+		);
 	}
 
 	private _libraryVersion: string | undefined;
@@ -560,6 +565,7 @@ export class ZWaveController extends EventEmitter {
 	// The following variables are to be used for inclusion AND exclusion
 	private _beginInclusionPromise: DeferredPromise<boolean> | undefined;
 	private _stopInclusionPromise: DeferredPromise<boolean> | undefined;
+	private _replaceFailedPromise: DeferredPromise<boolean> | undefined;
 
 	/**
 	 * Starts the inclusion process of new nodes.
@@ -895,6 +901,64 @@ export class ZWaveController extends EventEmitter {
 				// not sure what to do with this message
 				return false;
 		}
+		return true; // Don't invoke any more handlers
+	}
+
+	/**
+	 * Is called when an ReplaceFailed request is received from the controller.
+	 * Handles and controls the replace process.
+	 */
+	private async handleReplaceNodeRequest(
+		msg: ReplaceFailedNodeRequest,
+	): Promise<boolean> {
+		log.controller.print(
+			`handling replace node request (status = ${
+				ReplaceFailedNodeStatus[msg.status!]
+			})`,
+		);
+
+		switch (msg.status) {
+			case ReplaceFailedNodeStatus.NodeOK:
+				if (this._replaceFailedPromise != null) {
+					this._replaceFailedPromise.reject(
+						new ZWaveError(
+							`The node ${msg.failedNodeId} could not be replaced because it's not failed`,
+							ZWaveErrorCodes.ReplaceFailedNode_NodeOK,
+						),
+					);
+				}
+				break;
+			case ReplaceFailedNodeStatus.FailedNodeReplaceFailed:
+				if (this._replaceFailedPromise != null) {
+					this._replaceFailedPromise.reject(
+						new ZWaveError(
+							`The replace process could not be completed`,
+							ZWaveErrorCodes.ReplaceFailedNode_Failed,
+						),
+					);
+				}
+				break;
+			case ReplaceFailedNodeStatus.FailedNodeReplace:
+				// failed node is now ready to be replaced and controller is ready to add a new
+				// node with the nodeID of the failed node
+				await this.beginInclusion(msg.includeNonSecure);
+				break;
+			case ReplaceFailedNodeStatus.FailedNodeReplaceDone:
+				log.controller.print(
+					`node ${msg.failedNodeId} successfully replaced`,
+				);
+
+				if (this._replaceFailedPromise != null) {
+					this._replaceFailedPromise.resolve(true);
+				}
+
+			default:
+				if (this._replaceFailedPromise != null) {
+					this._replaceFailedPromise.resolve(false);
+				}
+				return false;
+		}
+
 		return true; // Don't invoke any more handlers
 	}
 
@@ -1829,9 +1893,16 @@ ${associatedNodes.join(", ")}`,
 		nodeId: number,
 		includeNonSecure: boolean = false,
 	): Promise<boolean> {
+		log.controller.print(`starting replace failed node process...`);
+
 		const result = await this.driver.sendMessage<
 			ReplaceFailedNodeRequestStatusReport | ReplaceFailedNodeResponse
-		>(new ReplaceFailedNodeRequest(this.driver, { failedNodeId: nodeId }));
+		>(
+			new ReplaceFailedNodeRequest(this.driver, {
+				failedNodeId: nodeId,
+				includeNonSecure: includeNonSecure,
+			}),
+		);
 
 		if (result instanceof ReplaceFailedNodeResponse) {
 			// This implicates that the process was unsuccessful.
@@ -1873,25 +1944,8 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.ReplaceFailedNode_Failed,
 			);
 		} else {
-			switch (result.replaceStatus) {
-				case ReplaceFailedNodeStatus.NodeOK:
-					throw new ZWaveError(
-						`The node could not be replaced because it has responded`,
-						ZWaveErrorCodes.ReplaceFailedNode_NodeOK,
-					);
-				case ReplaceFailedNodeStatus.FailedNodeReplaceFailed:
-					throw new ZWaveError(
-						`The removal process could not be completed`,
-						ZWaveErrorCodes.ReplaceFailedNode_Failed,
-					);
-				case ReplaceFailedNodeStatus.FailedNodeReplace:
-					// failed node is now ready to be replaced and controller is ready to add a new
-					// node with the nodeID of the failed node
-					return this.beginInclusion(includeNonSecure);
-				default:
-					// If everything went well, the status is ReplaceFailedNodeStatus.FailedNodeReplaceDone
-					return true;
-			}
+			this._replaceFailedPromise = createDeferredPromise();
+			return this._replaceFailedPromise;
 		}
 	}
 

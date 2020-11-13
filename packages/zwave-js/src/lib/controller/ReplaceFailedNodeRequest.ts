@@ -68,6 +68,7 @@ export class ReplaceFailedNodeRequestBase extends Message {
 interface ReplaceFailedNodeRequestOptions extends MessageBaseOptions {
 	// This must not be called nodeId or rejectAllTransactions may reject the request
 	failedNodeId: number;
+	includeNonSecure: boolean;
 }
 
 @expectedResponse(FunctionType.ReplaceFailedNode)
@@ -79,11 +80,19 @@ export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 	) {
 		super(driver, options);
 		this.failedNodeId = options.failedNodeId;
+		this.includeNonSecure = options.includeNonSecure;
 	}
 
 	// This must not be called nodeId or rejectAllTransactions may reject the request
 	/** The node that should be removed */
 	public failedNodeId: number;
+	public includeNonSecure: boolean;
+
+	// These two properties are only set if we parse a response
+	private _status: ReplaceFailedNodeStatus | undefined;
+	public get status(): ReplaceFailedNodeStatus | undefined {
+		return this._status;
+	}
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.failedNodeId, this.callbackId]);
