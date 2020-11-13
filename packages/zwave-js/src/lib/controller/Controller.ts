@@ -937,7 +937,7 @@ export class ZWaveController extends EventEmitter {
 			case ReplaceFailedNodeStatus.FailedNodeReplace:
 				// failed node is now ready to be replaced and controller is ready to add a new
 				// node with the nodeID of the failed node
-				await this.beginInclusion(msg.includeNonSecure);
+				await this.beginInclusion(this._includeNonSecure);
 				break;
 			case ReplaceFailedNodeStatus.FailedNodeReplaceDone:
 				log.controller.print(
@@ -1888,12 +1888,13 @@ ${associatedNodes.join(", ")}`,
 	): Promise<boolean> {
 		log.controller.print(`starting replace failed node process...`);
 
+		this._includeNonSecure = includeNonSecure;
+
 		const result = await this.driver.sendMessage<
 			ReplaceFailedNodeRequestStatusReport | ReplaceFailedNodeResponse
 		>(
 			new ReplaceFailedNodeRequest(this.driver, {
 				failedNodeId: nodeId,
-				includeNonSecure: includeNonSecure,
 			}),
 		);
 
