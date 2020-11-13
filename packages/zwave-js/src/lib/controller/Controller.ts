@@ -87,6 +87,13 @@ import {
 	RemoveNodeType,
 } from "./RemoveNodeFromNetworkRequest";
 import {
+	ReplaceFailedNodeRequest,
+	ReplaceFailedNodeRequestStatusReport,
+	ReplaceFailedNodeResponse,
+	ReplaceFailedNodeStartFlags,
+	ReplaceFailedNodeStatus,
+} from "./ReplaceFailedNodeRequest";
+import {
 	NodeNeighborUpdateStatus,
 	RequestNodeNeighborUpdateReport,
 	RequestNodeNeighborUpdateRequest,
@@ -1808,6 +1815,76 @@ ${associatedNodes.join(", ")}`,
 					this.emit("node removed", this.nodes.get(nodeId)!);
 					// and forget the node
 					this._nodes.delete(nodeId);
+
+					return;
+			}
+		}
+	}
+
+	/**
+	 * Replace a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
+	 * @param nodeId The id of the node to replace
+	 */
+	public async ReplaceFailedNode(nodeId: number): Promise<void> {
+		const result = await this.driver.sendMessage<
+			ReplaceFailedNodeRequestStatusReport | ReplaceFailedNodeResponse
+		>(new ReplaceFailedNodeRequest(this.driver, { failedNodeId: nodeId }));
+
+		if (result instanceof ReplaceFailedNodeResponse) {
+			// This implicates that the process was unsuccessful.
+			let message = `The node removal process could not be started due to the following reasons:`;
+			if (
+				!!(
+					result.removeStatus &
+					ReplaceFailedNodeStartFlags.NotPrimaryController
+				)
+			) {
+				message += "\n· This controller is not the primary controller";
+			}
+			if (
+				!!(
+					result.removeStatus &
+					ReplaceFailedNodeStartFlags.NodeNotFound
+				)
+			) {
+				message += `\n· The node ${nodeId} was not found`;
+			}
+			if (
+				!!(
+					result.removeStatus &
+					ReplaceFailedNodeStartFlags.RemoveProcessBusy
+				)
+			) {
+				message += `\n· The node removal process is currently busy`;
+			}
+			if (
+				!!(
+					result.removeStatus &
+					ReplaceFailedNodeStartFlags.RemoveFailed
+				)
+			) {
+				message += `\n· The controller is busy or the node has responded`;
+			}
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.ReplaceFailedNode_Failed,
+			);
+		} else {
+			switch (result.removeStatus) {
+				case ReplaceFailedNodeStatus.NodeOK:
+					throw new ZWaveError(
+						`The node could not be removed because it has responded`,
+						ZWaveErrorCodes.ReplaceFailedNode_NodeOK,
+					);
+				case ReplaceFailedNodeStatus.FailedNodeReplaceFailed:
+					throw new ZWaveError(
+						`The removal process could not be completed`,
+						ZWaveErrorCodes.ReplaceFailedNode_Failed,
+					);
+				default:
+					// If everything went well, the status is RemoveFailedNodeStatus.NodeRemoved
+
+					// TODO: wtf
 
 					return;
 			}

@@ -112,6 +112,12 @@ export enum ZWaveErrorCodes {
 	FirmwareUpdateCC_FailedToAbort,
 	/** The node did not confirm the completed update or the process stalled for too long */
 	FirmwareUpdateCC_Timeout,
+
+	// Here follow message specific errors
+	/** The replace process could not be started or completed due to one or several reasons */
+	ReplaceFailedNode_Failed,
+	/** The replace process was aborted because the node has responded */
+	ReplaceFailedNode_NodeOK,
 }
 
 /**

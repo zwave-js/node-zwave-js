@@ -145,7 +145,7 @@ export enum FunctionType {
 
 	RemoveFailedNode = 0x61, // Mark a specified node id as failed
 	IsFailedNode = 0x62, // Check to see if a specified node has failed
-	FUNC_ID_ZW_REPLACE_FAILED_NODE = 0x63, // Remove a failed node from the controller's list (?)
+	ReplaceFailedNode = 0x63, // Replace a failed node from the controller's list (?)
 
 	UNKNOWN_FUNC_UNKNOWN_0x66 = 0x66, // ??
 	UNKNOWN_FUNC_UNKNOWN_0x67 = 0x67, // ??
