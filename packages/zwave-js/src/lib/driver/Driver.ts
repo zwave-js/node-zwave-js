@@ -320,6 +320,14 @@ export interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
+
+	/**
+	 * Responses or callbacks to controller commands (excluding SendData) that indicate failure are not thrown as ZWaveErrors.
+	 * Setting this flag to true causes the original errors to be passed through.
+	 * Default: false
+	 */
+	throwOnNOKControllerCommand?: boolean;
+
 	/** Sets the number of milliseconds after which a transaction expires. When the expiration timer elapses, the transaction promise is rejected. */
 	expire?: number;
 	/** Internal information used to identify or mark this transaction */
@@ -464,6 +472,7 @@ export class Driver extends EventEmitter {
 				},
 				notifyRetry: (
 					command,
+					lastError,
 					message,
 					attempts,
 					maxAttempts,
@@ -476,8 +485,33 @@ export class Driver extends EventEmitter {
 							"warn",
 						);
 					} else {
+						// Translate the error into a better one
+						let errorReason: string;
+						switch (lastError) {
+							case "response timeout":
+								errorReason = "No response from controller";
+								break;
+							case "callback timeout":
+								errorReason = "No callback from controller";
+								break;
+							case "response NOK":
+								errorReason =
+									"The controller response indicated failure";
+								break;
+							case "callback NOK":
+								errorReason =
+									"The controller callback indicated failure";
+								break;
+							case "ACK timeout":
+							case "CAN":
+							case "NAK":
+							default:
+								errorReason =
+									"Failed to execute controller command";
+								break;
+						}
 						log.controller.print(
-							`No response from controller after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+							`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
 							"warn",
 						);
 					}
@@ -1959,17 +1993,29 @@ ${handlers.length} left`,
 			}
 			return ret;
 		} catch (e) {
-			// If the node does not acknowledge our request, it is either asleep or dead
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Controller_CallbackNOK &&
-				transaction.message instanceof SendDataRequest &&
-				// Ignore pre-transmit handshakes because the actual transaction will be retried
-				transaction.priority !== MessagePriority.PreTransmitHandshake
-			) {
-				this.handleMissingNodeACK(
-					transaction as Transaction & { message: CommandClass },
-				);
+			if (e instanceof ZWaveError) {
+				if (
+					// If the node does not acknowledge our request, it is either asleep or dead
+					e.code === ZWaveErrorCodes.Controller_CallbackNOK &&
+					transaction.message instanceof SendDataRequest &&
+					// Ignore pre-transmit handshakes because the actual transaction will be retried
+					transaction.priority !==
+						MessagePriority.PreTransmitHandshake
+				) {
+					this.handleMissingNodeACK(
+						transaction as Transaction & { message: CommandClass },
+					);
+				} else if (
+					// If a controller command failed and we should not throw, pass the response/callback through
+					!options.throwOnNOKControllerCommand &&
+					(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
+						e.code === ZWaveErrorCodes.Controller_CallbackNOK) &&
+					e.context instanceof Message &&
+					e.context.functionType !== FunctionType.SendData &&
+					e.context.functionType !== FunctionType.SendDataMulticast
+				) {
+					return e.context as TResponse;
+				}
 			}
 			throw e;
 		}
