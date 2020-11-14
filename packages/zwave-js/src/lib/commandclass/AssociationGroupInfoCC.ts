@@ -14,7 +14,7 @@ import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI } from "./API";
+import { CCAPI, ignoreTimeout } from "./API";
 import type { AssociationCC } from "./AssociationCC";
 import {
 	API,
@@ -458,19 +458,30 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			if (complete) {
-				// First get the group's name
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `Association group #${groupId}: Querying name...`,
-					direction: "outbound",
-				});
-				const name = await api.getGroupName(groupId);
-				const logMessage = `Association group #${groupId} has name "${name}"`;
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
+				await ignoreTimeout(
+					async () => {
+						// First get the group's name
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Association group #${groupId}: Querying name...`,
+							direction: "outbound",
+						});
+						const name = await api.getGroupName(groupId);
+						const logMessage = `Association group #${groupId} has name "${name}"`;
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: logMessage,
+							direction: "inbound",
+						});
+					},
+					() => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Querying name of association group #${groupId} timed out - skipping because it is not critical...`,
+							level: "warn",
+						});
+					},
+				);
 			}
 
 			// Even if this is a partial interview, we need to refresh information
@@ -484,34 +495,59 @@ export class AssociationGroupInfoCC extends CommandClass {
 			}
 
 			if (complete || hasDynamicInfo) {
-				// Then its information
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `Association group #${groupId}: Querying info...`,
-					direction: "outbound",
-				});
-				const info = await api.getGroupInfo(groupId, !!hasDynamicInfo);
-				const logMessage = `Received info for association group #${groupId}:
+				await ignoreTimeout(
+					async () => {
+						// Then its information
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Association group #${groupId}: Querying info...`,
+							direction: "outbound",
+						});
+						const info = await api.getGroupInfo(
+							groupId,
+							!!hasDynamicInfo,
+						);
+						const logMessage = `Received info for association group #${groupId}:
 info is dynamic: ${info.hasDynamicInfo}
 profile:         ${getEnumMemberName(
-					AssociationGroupInfoProfile,
-					info.profile,
-				)}`;
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
+							AssociationGroupInfoProfile,
+							info.profile,
+						)}`;
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: logMessage,
+							direction: "inbound",
+						});
+					},
+					() => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Querying info for association group #${groupId} timed out - skipping because it is not critical...`,
+							level: "warn",
+						});
+					},
+				);
 			}
 
 			if (complete) {
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `Association group #${groupId}: Querying command list...`,
-					direction: "outbound",
-				});
-				await api.getCommands(groupId);
-				// Not sure how to log this
+				await ignoreTimeout(
+					async () => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Association group #${groupId}: Querying command list...`,
+							direction: "outbound",
+						});
+						await api.getCommands(groupId);
+						// Not sure how to log this
+					},
+					() => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Querying command list for association group #${groupId} timed out - skipping because it is not critical...`,
+							level: "warn",
+						});
+					},
+				);
 			}
 		}
 
