@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.4.0 (2020-11-14)
 ### Config file changes
 * Fibaro Keyfob no longer uses special chars in param labels
 * Changed the `valueSize` of param 9 for Shenzhen Neo PD03Z from `2` to `1`
