@@ -8,6 +8,7 @@
 ### Config file changes
 * Fibaro Keyfob no longer uses special chars in param labels
 * Changed the `valueSize` of param 9 for Shenzhen Neo PD03Z from `2` to `1`
+* Added a compatibility flag for devices like `ID Lock` that reuse previous S0 nonces after an unencrypted command
 
 ### Features
 * Added the compat config option `keepS0NonceUntilNext` to disable automatic nonce invalidation for bugged devices (e.g. ID Lock) which reuse nonces in some situations
@@ -21,12 +22,14 @@
 * The `targetValue` property for the `Binary Switch`, `Multilevel Switch` and `Basic` CCs is now created, even if is `undefined`.
 * The type `CommandClass` is now exported from `zwave-js/CommandClass`
 * The interview process for `Configuration CC V3+` now continues even if the response to `NameGet` and/or `InfoGet` commands is missing or incomplete
+* The interview process for `Association Group Info` now continues even if a response is missing or incomplete
 * Multi Channel Lifeline Associations are no longer created automatically if the device does not support the `Multi Channel CC`
 * Fixed an issue where marking nodes with active transaction as asleep would mess up the serial communication with the controller
 * The receiver of an S0 nonce is now stored and after a successful reply, all nonces for said issuer are now invalidated
+* Unsuccessful controller commands now return the response message instead of throwing
 
 ### Changes under the hood
-* The entire configuration database can now be synchronized with the one from OpenZWave. Big shoutout to @robertsLando for the work!
+* The log messages for unsuccessful controller commands no longer claim that the controller did not respond
 
 ## 5.3.6 (2020-11-04)
 ### Bugfixes
