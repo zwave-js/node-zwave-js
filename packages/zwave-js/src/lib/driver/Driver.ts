@@ -320,14 +320,6 @@ export interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
-
-	/**
-	 * Responses or callbacks to controller commands (excluding SendData) that indicate failure are not thrown as ZWaveErrors.
-	 * Setting this flag to true causes the original errors to be passed through.
-	 * Default: false
-	 */
-	throwOnNOKControllerCommand?: boolean;
-
 	/** Sets the number of milliseconds after which a transaction expires. When the expiration timer elapses, the transaction promise is rejected. */
 	expire?: number;
 	/** Internal information used to identify or mark this transaction */
@@ -2006,8 +1998,7 @@ ${handlers.length} left`,
 						transaction as Transaction & { message: CommandClass },
 					);
 				} else if (
-					// If a controller command failed and we should not throw, pass the response/callback through
-					!options.throwOnNOKControllerCommand &&
+					// If a controller command failed (that is not SendData), pass the response/callback through
 					(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
 						e.code === ZWaveErrorCodes.Controller_CallbackNOK) &&
 					e.context instanceof Message &&
