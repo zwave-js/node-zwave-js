@@ -100,7 +100,10 @@ export class CommandClass {
 
 		if (gotDeserializationOptions(options)) {
 			// For deserialized commands, try to invoke the correct subclass constructor
-			const ccCommand = CommandClass.getCCCommand(options.data);
+			const CCConstructor =
+				getCCConstructor(CommandClass.getCommandClass(options.data)) ??
+				CommandClass;
+			const ccCommand = CCConstructor.getCCCommand(options.data);
 			if (ccCommand != undefined) {
 				const CommandConstructor = getCCCommandConstructor(
 					this.ccId,
@@ -255,7 +258,8 @@ export class CommandClass {
 	/**
 	 * Deserializes a CC from a buffer that contains a serialized CC
 	 */
-	private deserialize(data: Buffer) {
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	protected deserialize(data: Buffer) {
 		const ccId = CommandClass.getCommandClass(data);
 		const ccIdLength = this.isExtended() ? 2 : 1;
 		if (data.length > ccIdLength) {
