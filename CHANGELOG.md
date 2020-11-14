@@ -8,7 +8,6 @@
 ### Config file changes
 * Fibaro Keyfob no longer uses special chars in param labels
 * Changed the `valueSize` of param 9 for Shenzhen Neo PD03Z from `2` to `1`
-* Added a compatibility flag for devices like `ID Lock` that reuse previous S0 nonces after an unencrypted command
 
 ### Features
 * Added the compat config option `keepS0NonceUntilNext` to disable automatic nonce invalidation for bugged devices (e.g. ID Lock) which reuse nonces in some situations
