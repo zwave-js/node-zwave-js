@@ -24,7 +24,10 @@ import {
 } from "../controller/SendDataMessages";
 import type { Message } from "../message/Message";
 import type { SendDataErrorData } from "./SendThreadMachine";
-import type { SerialAPICommandEvent } from "./SerialAPICommandMachine";
+import type {
+	SerialAPICommandError,
+	SerialAPICommandEvent,
+} from "./SerialAPICommandMachine";
 import type { Transaction } from "./Transaction";
 
 export interface ServiceImplementations {
@@ -33,6 +36,7 @@ export interface ServiceImplementations {
 	createSendDataAbort: () => SendDataAbort;
 	notifyRetry?: (
 		command: "SendData" | "SerialAPI",
+		lastError: SerialAPICommandError | undefined,
 		message: Message,
 		attempts: number,
 		maxAttempts: number,
@@ -55,24 +59,28 @@ export function sendDataErrorToZWaveError(
 			return new ZWaveError(
 				`Failed to send the message after 3 attempts`,
 				ZWaveErrorCodes.Controller_MessageDropped,
+				undefined,
 				transaction.stack,
 			);
 		case "ACK timeout":
 			return new ZWaveError(
 				`Timeout while waiting for an ACK from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
+				undefined,
 				transaction.stack,
 			);
 		case "response timeout":
 			return new ZWaveError(
 				`Timeout while waiting for a response from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
+				undefined,
 				transaction.stack,
 			);
 		case "callback timeout":
 			return new ZWaveError(
 				`Timeout while waiting for a callback from the controller`,
 				ZWaveErrorCodes.Controller_Timeout,
+				undefined,
 				transaction.stack,
 			);
 		case "response NOK":
@@ -83,12 +91,14 @@ export function sendDataErrorToZWaveError(
 				return new ZWaveError(
 					`Failed to send the command after ${transaction.message.maxSendAttempts} attempts. Transmission queue full`,
 					ZWaveErrorCodes.Controller_MessageDropped,
+					receivedMessage,
 					transaction.stack,
 				);
 			} else {
 				return new ZWaveError(
 					`The controller response indicated failure`,
 					ZWaveErrorCodes.Controller_ResponseNOK,
+					receivedMessage,
 					transaction.stack,
 				);
 			}
@@ -106,6 +116,7 @@ export function sendDataErrorToZWaveError(
 					status === TransmitStatus.NoAck
 						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
+					receivedMessage,
 					transaction.stack,
 				);
 			} else if (
@@ -121,12 +132,14 @@ export function sendDataErrorToZWaveError(
 					status === TransmitStatus.NoAck
 						? ZWaveErrorCodes.Controller_CallbackNOK
 						: ZWaveErrorCodes.Controller_MessageDropped,
+					receivedMessage,
 					transaction.stack,
 				);
 			} else {
 				return new ZWaveError(
 					`The controller callback indicated failure`,
 					ZWaveErrorCodes.Controller_CallbackNOK,
+					receivedMessage,
 					transaction.stack,
 				);
 			}
@@ -134,6 +147,7 @@ export function sendDataErrorToZWaveError(
 			return new ZWaveError(
 				`Timed out while waiting for a response from the node`,
 				ZWaveErrorCodes.Controller_NodeTimeout,
+				undefined,
 				transaction.stack,
 			);
 	}

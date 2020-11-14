@@ -347,6 +347,7 @@ export function getSerialAPICommandMachineOptions(
 			notifyRetry: (ctx) => {
 				notifyRetry?.(
 					"SerialAPI",
+					ctx.lastError,
 					ctx.msg,
 					ctx.attempts,
 					ctx.maxAttempts,
