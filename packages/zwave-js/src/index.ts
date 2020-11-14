@@ -113,10 +113,10 @@ fs.readFile(path.join(libraryRootDir, "package.json"), "utf8").then(
 					}
 
 					// Try to attach transaction context this way
-					if (!ignore && hint.originalException.context) {
+					if (!ignore && hint.originalException.transactionSource) {
 						event.contexts = {
 							transaction: {
-								stack: hint.originalException.context as string,
+								stack: hint.originalException.transactionSource,
 							},
 						};
 					}

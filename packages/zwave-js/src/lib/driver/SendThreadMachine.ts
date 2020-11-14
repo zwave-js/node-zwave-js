@@ -965,6 +965,7 @@ export function createSendThreadMachine(
 				notifyRetry: (ctx) => {
 					implementations.notifyRetry?.(
 						"SendData",
+						undefined,
 						ctx.currentTransaction!.message,
 						ctx.sendDataAttempts,
 						(ctx.currentTransaction!.message as SendDataRequest)
