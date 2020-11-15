@@ -1,4 +1,10 @@
-import { CommandClasses, CRC16_CCITT, validatePayload } from "@zwave-js/core";
+import {
+	CommandClasses,
+	CRC16_CCITT,
+	validatePayload,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import {
 	CCCommand,
@@ -53,7 +59,7 @@ interface TransportServiceCCFirstSegmentOptions extends CCCommandOptions {
 	datagramSize: number;
 	sessionId: number;
 	headerExtension?: Buffer | undefined;
-	encapsulatedPayload: Buffer;
+	partialDatagram: Buffer;
 }
 
 @CCCommand(TransportServiceCommand.FirstSegment)
@@ -97,19 +103,20 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 				payloadOffset += 1 + extLength;
 			}
 
-			this.encapsulatedPayload = this.payload.slice(payloadOffset, -2);
+			this.partialDatagram = this.payload.slice(payloadOffset, -2);
 		} else {
 			this.datagramSize = options.datagramSize;
 			this.sessionId = options.sessionId;
 			this.headerExtension = options.headerExtension;
-			this.encapsulatedPayload = options.encapsulatedPayload;
+			this.partialDatagram = options.partialDatagram;
 		}
 	}
 
 	public datagramSize: number;
 	public sessionId: number;
 	public headerExtension: Buffer | undefined;
-	public encapsulatedPayload: Buffer;
+	public partialDatagram: Buffer;
+	public encapsulated!: CommandClass;
 
 	public serialize(): Buffer {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
@@ -131,7 +138,7 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		}
 		this.payload = Buffer.concat([
 			this.payload,
-			this.encapsulatedPayload,
+			this.partialDatagram,
 			Buffer.alloc(2, 0), // checksum
 		]);
 
@@ -144,6 +151,43 @@ export class TransportServiceCCFirstSegment extends TransportServiceCC {
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
 		return super.serialize();
+	}
+
+	public mergePartialCCs(
+		partials: TransportServiceCCSubsequentSegment[],
+	): void {
+		// Concat the CC buffers
+		const datagram = Buffer.allocUnsafe(this.datagramSize);
+		this.partialDatagram.copy(datagram, 0);
+		for (const partial of partials) {
+			// Ensure that we don't try to write out-of-bounds
+			if (
+				partial.datagramOffset + partial.partialDatagram.length >
+				datagram.length
+			) {
+				throw new ZWaveError(
+					`The partial datagram offset and length in a segment are not compatible to the communicated datagram length`,
+					ZWaveErrorCodes.PacketFormat_InvalidPayload,
+				);
+			}
+			partial.partialDatagram.copy(datagram, partial.datagramOffset);
+		}
+
+		// and deserialize the CC
+		this.encapsulated = CommandClass.from(this.driver, {
+			data: datagram,
+			fromEncapsulation: true,
+			encapCC: this,
+		});
+	}
+
+	protected computeEncapsulationOverhead(): number {
+		// Transport Service CC (first segment) adds 1 byte datagram size, 1 byte Session ID/..., 2 bytes checksum and (0 OR n+1) bytes header extension
+		return (
+			super.computeEncapsulationOverhead() +
+			4 +
+			(this.headerExtension?.length ? 1 + this.headerExtension.length : 0)
+		);
 	}
 }
 
@@ -194,13 +238,13 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 				payloadOffset += 1 + extLength;
 			}
 
-			this.encapsulatedPayload = this.payload.slice(payloadOffset, -2);
+			this.partialDatagram = this.payload.slice(payloadOffset, -2);
 		} else {
 			this.datagramSize = options.datagramSize;
 			this.datagramOffset = options.datagramOffset;
 			this.sessionId = options.sessionId;
 			this.headerExtension = options.headerExtension;
-			this.encapsulatedPayload = options.encapsulatedPayload;
+			this.partialDatagram = options.partialDatagram;
 		}
 	}
 
@@ -208,7 +252,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 	public datagramOffset: number;
 	public sessionId: number;
 	public headerExtension: Buffer | undefined;
-	public encapsulatedPayload: Buffer;
+	public partialDatagram: Buffer;
 
 	public serialize(): Buffer {
 		// Transport Service re-uses the lower 3 bits of the ccCommand as payload
@@ -233,7 +277,7 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		}
 		this.payload = Buffer.concat([
 			this.payload,
-			this.encapsulatedPayload,
+			this.partialDatagram,
 			Buffer.alloc(2, 0), // checksum
 		]);
 
@@ -246,6 +290,15 @@ export class TransportServiceCCSubsequentSegment extends TransportServiceCC {
 		this.payload.writeUInt16BE(crc, this.payload.length - 2);
 
 		return super.serialize();
+	}
+
+	protected computeEncapsulationOverhead(): number {
+		// Transport Service CC (first segment) adds 1 byte datagram size, 1 byte Session ID/..., 1 byte offset, 2 bytes checksum and (0 OR n+1) bytes header extension
+		return (
+			super.computeEncapsulationOverhead() +
+			5 +
+			(this.headerExtension?.length ? 1 + this.headerExtension.length : 0)
+		);
 	}
 }
 
