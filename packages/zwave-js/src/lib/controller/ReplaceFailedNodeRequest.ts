@@ -32,22 +32,17 @@ export enum ReplaceFailedNodeStartFlags {
 
 export enum ReplaceFailedNodeStatus {
 	/* ZW_ReplaceFailedNode callback status definitions */
-	/** The node is working properly (removed from the failed nodes list ). Replace process stopped */
-	NodeOK = 0,
+	NodeOK = 0 /* The node is working properly (removed from the failed nodes list ) */,
 
-	/* ZW_ReplaceFailedNode callback status definitions */
-	/** The failed node is ready to be replaced
-        and controller is ready to add new node
-        with the nodeID of the failed node.
-        Meaning that the new node must now
-        emit a nodeinformation frame to be
-        included. */
-	FailedNodeReplace = 1,
+	FailedNodeRemoved = 1 /* The failed node was removed from the failed nodes list */,
+	FailedNodeNotRemoved = 2 /* The failed node was not removed from the failing nodes list */,
+
+	FailedNodeReplace = 3 /* The failed node are ready to be replaced and controller */,
+	/* is ready to add new node with nodeID of the failed node */
 	/** The failed node has been replaced. */
-	FailedNodeReplaceDone = 2,
+	FailedNodeReplaceDone = 4 /* The failed node has been replaced */,
 
-	/** The replace process has failed */
-	FailedNodeReplaceFailed = 3,
+	FailedNodeReplaceFailed = 5 /* The failed node has not been replaced */,
 }
 
 @messageTypes(MessageType.Request, FunctionType.ReplaceFailedNode)

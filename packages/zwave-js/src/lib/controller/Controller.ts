@@ -908,9 +908,9 @@ export class ZWaveController extends EventEmitter {
 	 * Is called when an ReplaceFailed request is received from the controller.
 	 * Handles and controls the replace process.
 	 */
-	private async handleReplaceNodeRequest(
+	private handleReplaceNodeRequest(
 		msg: ReplaceFailedNodeRequestStatusReport,
-	): Promise<boolean> {
+	): boolean {
 		log.controller.print(
 			`handling replace node request (status = ${
 				ReplaceFailedNodeStatus[msg.replaceStatus]
@@ -926,10 +926,26 @@ export class ZWaveController extends EventEmitter {
 					),
 				);
 				break;
+			case ReplaceFailedNodeStatus.FailedNodeRemoved:
+				this._replaceFailedPromise?.reject(
+					new ZWaveError(
+						`The failed node was removed from the failed nodes list`,
+						ZWaveErrorCodes.ReplaceFailedNode_Failed,
+					),
+				);
+				break;
+			case ReplaceFailedNodeStatus.FailedNodeNotRemoved:
+				this._replaceFailedPromise?.reject(
+					new ZWaveError(
+						`The failed node was not removed from the failing nodes list`,
+						ZWaveErrorCodes.ReplaceFailedNode_Failed,
+					),
+				);
+				break;
 			case ReplaceFailedNodeStatus.FailedNodeReplaceFailed:
 				this._replaceFailedPromise?.reject(
 					new ZWaveError(
-						`The replace process could not be completed`,
+						`The failed node has not been replaced`,
 						ZWaveErrorCodes.ReplaceFailedNode_Failed,
 					),
 				);
@@ -937,12 +953,14 @@ export class ZWaveController extends EventEmitter {
 			case ReplaceFailedNodeStatus.FailedNodeReplace:
 				// failed node is now ready to be replaced and controller is ready to add a new
 				// node with the nodeID of the failed node
-				await this.beginInclusion(this._includeNonSecure);
+				log.controller.print(
+					`inclusion started, node is ready to be replaced`,
+				);
+				this._inclusionActive = true;
+				this._replaceFailedPromise?.resolve(true);
 				break;
 			case ReplaceFailedNodeStatus.FailedNodeReplaceDone:
 				log.controller.print(`node successfully replaced`);
-
-				this._replaceFailedPromise?.resolve(true);
 
 			default:
 				this._replaceFailedPromise?.resolve(false);
