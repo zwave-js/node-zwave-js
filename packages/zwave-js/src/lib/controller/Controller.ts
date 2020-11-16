@@ -909,19 +909,19 @@ export class ZWaveController extends EventEmitter {
 	 * Handles and controls the replace process.
 	 */
 	private async handleReplaceNodeRequest(
-		msg: ReplaceFailedNodeRequest,
+		msg: ReplaceFailedNodeRequestStatusReport,
 	): Promise<boolean> {
 		log.controller.print(
 			`handling replace node request (status = ${
-				ReplaceFailedNodeStatus[msg.status!]
+				ReplaceFailedNodeStatus[msg.replaceStatus]
 			})`,
 		);
 
-		switch (msg.status) {
+		switch (msg.replaceStatus) {
 			case ReplaceFailedNodeStatus.NodeOK:
 				this._replaceFailedPromise?.reject(
 					new ZWaveError(
-						`The node ${msg.failedNodeId} could not be replaced because it's not failed`,
+						`The node could not be replaced because it's not failed`,
 						ZWaveErrorCodes.ReplaceFailedNode_NodeOK,
 					),
 				);
@@ -940,9 +940,7 @@ export class ZWaveController extends EventEmitter {
 				await this.beginInclusion(this._includeNonSecure);
 				break;
 			case ReplaceFailedNodeStatus.FailedNodeReplaceDone:
-				log.controller.print(
-					`node ${msg.failedNodeId} successfully replaced`,
-				);
+				log.controller.print(`node successfully replaced`);
 
 				this._replaceFailedPromise?.resolve(true);
 

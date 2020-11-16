@@ -31,7 +31,7 @@ export enum ReplaceFailedNodeStartFlags {
 }
 
 export enum ReplaceFailedNodeStatus {
-	/* ZW_ReplaceFailedNode and ZW_ReplaceFailedNode callback status definitions */
+	/* ZW_ReplaceFailedNode callback status definitions */
 	/** The node is working properly (removed from the failed nodes list ). Replace process stopped */
 	NodeOK = 0,
 
