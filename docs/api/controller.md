@@ -92,6 +92,16 @@ removeFailedNode(nodeId: number): Promise<void>
 
 Removes a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
 
+### `replaceFailedNode`
+
+```ts
+replaceFailedNode(nodeId: number, includeNonSecure?: boolean): Promise<void>
+```
+
+Replace a failed node from the controller's memory. The promise is fulfilled when the node is ready to be replaced (inclusion is started). If the process fails, this will throw an exception with the details why.
+
+By default, the node will be included securely (with encryption) if a network key is configured and the node supports encryption. You can force a non-secure inclusion by setting the optional parameter `includeNonSecure` to `true`.
+
 ### Managing associations
 
 The following methods can be used to manage associations between nodes. This only works AFTER the interview process!

@@ -565,7 +565,7 @@ export class ZWaveController extends EventEmitter {
 	// The following variables are to be used for inclusion AND exclusion
 	private _beginInclusionPromise: DeferredPromise<boolean> | undefined;
 	private _stopInclusionPromise: DeferredPromise<boolean> | undefined;
-	private _replaceFailedPromise: DeferredPromise<boolean> | undefined;
+	private _replaceFailedPromise: DeferredPromise<void> | undefined;
 
 	/**
 	 * Starts the inclusion process of new nodes.
@@ -957,13 +957,18 @@ export class ZWaveController extends EventEmitter {
 					`inclusion started, node is ready to be replaced`,
 				);
 				this._inclusionActive = true;
-				this._replaceFailedPromise?.resolve(true);
+				this._replaceFailedPromise?.resolve();
 				break;
 			case ReplaceFailedNodeStatus.FailedNodeReplaceDone:
 				log.controller.print(`node successfully replaced`);
 
 			default:
-				this._replaceFailedPromise?.resolve(false);
+				this._replaceFailedPromise?.reject(
+					new ZWaveError(
+						`Unknown error ${msg.replaceStatus}`,
+						ZWaveErrorCodes.ReplaceFailedNode_Failed,
+					),
+				);
 		}
 
 		return true; // Don't invoke any more handlers
@@ -1901,7 +1906,7 @@ ${associatedNodes.join(", ")}`,
 	public async replaceFailedNode(
 		nodeId: number,
 		includeNonSecure: boolean = false,
-	): Promise<boolean> {
+	): Promise<void> {
 		log.controller.print(`starting replace failed node process...`);
 
 		this._includeNonSecure = includeNonSecure;
