@@ -95,7 +95,7 @@ Removes a failed node from the controller's memory. If the process fails, this w
 ### `replaceFailedNode`
 
 ```ts
-replaceFailedNode(nodeId: number, includeNonSecure?: boolean): Promise<void>
+replaceFailedNode(nodeId: number, includeNonSecure?: boolean): Promise<boolean>
 ```
 
 Replace a failed node from the controller's memory. It returns `true` when the inclusion process is started, `false` if another inclusion or exclusion process is already running. If the process fails, this will throw an exception with the details why.
