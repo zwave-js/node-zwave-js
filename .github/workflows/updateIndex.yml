@@ -46,12 +46,18 @@ jobs:
             git add $indexPath
             echo "::set-output name=PUSH::true"
           fi
-      - name: Comment a pull_request
+      - name: Comment pull_request
         if: steps.check_changed.outputs.CHANGED == 'true' && steps.check_index.outputs.PUSH == 'true' && github.event_name == 'pull_request'
-        uses: mb2dev/github-action-comment-pull-request@1.0.0
+        uses: actions/github-script@v3
         with:
-          message: "The index file isn't updated. Comment 'update index' to automatically update it"
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'The index file isn't updated. Comment 'update index' to automatically update it'
+            })
       - name: Commit and Push files
         if: steps.check_changed.outputs.CHANGED == 'true' && steps.check_index.outputs.PUSH == 'true' && github.event_name != 'pull_request' && github.event.comment.body == 'update index'
         run: |
