@@ -1,0 +1,43 @@
+
+name: Update Devices Index
+
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - name: Setup repo
+        run: |
+          npm install
+          npm run prerelease
+
+      - name: Update index
+        id: check_index
+        run: |
+          npm run config -- -i
+          indexPath="packages/config/config/devices/index.json"
+          changedFiles=$(git diff-index --name-only HEAD)
+          if [ "$changedFiles" = "$indexPath" ]; then
+            echo "Index has changed"
+            git add $indexPath
+            echo "::set-output name=PUSH::true"
+          fi
+      - name: Commit files
+        if: contains(steps.check_index.outputs.PUSH, 'true')
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "fix(config): updated devices index.json"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
