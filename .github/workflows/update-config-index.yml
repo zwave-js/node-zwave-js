@@ -23,7 +23,7 @@ jobs:
       - name: Check if any config files changed
         id: check_changed
         run: |
-          if $(git diff --name-only origin/${{ github.base_ref }} origin/${{ github.head_ref }} | grep -q packages/config/config/devices)
+          if $(git diff-index --name-only HEAD | grep -q packages/config/config/devices)
           then
             echo "Devices DB has been updated"
             echo "::set-output name=CHANGED::true"
@@ -61,7 +61,7 @@ jobs:
         run: |
           npm run config -- -i
           indexPath="packages/config/config/devices/index.json"
-          if $(git diff --name-only HEAD | grep -q "$indexPath"); then
+          if $(git diff-index --name-only HEAD | grep -q "$indexPath"); then
             echo "Index file is out of date"
             git add $indexPath
             echo "::set-output name=PUSH::true"
