@@ -17,12 +17,25 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 14.x
+      - name: Check if there are changes in devices config dir
+        id: check_changed
+        run: |
+          changes=$(git diff --name-only | grep packages/config/config/devices)
+          if [ -z "$changes" ]
+          then
+                echo "No device changes detected"
+          else
+                echo "Devices db has been updated"
+                echo "::set-output name=CHANGED::true"
+          fi
       - name: Setup repo
+        if: steps.check_changed.outputs.CHANGED == 'true'
         run: |
           npm install
           npm run prerelease
 
       - name: Update index
+        if: steps.check_changed.outputs.CHANGED == 'true'
         id: check_index
         run: |
           npm run config -- -i
@@ -34,13 +47,13 @@ jobs:
             echo "::set-output name=PUSH::true"
           fi
       - name: Comment a pull_request
-        if: steps.check_index.outputs.PUSH == 'true' && github.event_name == 'pull_request'
+        if: steps.check_changed.outputs.CHANGED == 'true' && steps.check_index.outputs.PUSH == 'true' && github.event_name == 'pull_request'
         uses: mb2dev/github-action-comment-pull-request@1.0.0
         with:
           message: "The index file isn't updated. Comment 'update index' to automatically update it"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Commit and Push files
-        if: steps.check_index.outputs.PUSH == 'true' && github.event_name != 'pull_request' && github.event.comment.body == 'update index'
+        if: steps.check_changed.outputs.CHANGED == 'true' && steps.check_index.outputs.PUSH == 'true' && github.event_name != 'pull_request' && github.event.comment.body == 'update index'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
