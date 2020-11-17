@@ -31,8 +31,8 @@ jobs:
             echo "No device changes detected"
           fi
 
+  # ----
 
-jobs:
   check_and_update_index:
     runs-on: ubuntu-latest
     needs: check_changed
