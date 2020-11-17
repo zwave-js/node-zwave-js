@@ -19,11 +19,14 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+      - name: Fetch all branches
+        run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
 
       - name: Check if any config files changed
         id: check_changed
         run: |
-          if $(git diff-index --name-only HEAD | grep -q packages/config/config/devices)
+          if $(git diff origin/master HEAD --name-only | grep -q packages/config/config/devices)
           then
             echo "Devices DB has been updated"
             echo "::set-output name=CHANGED::true"
