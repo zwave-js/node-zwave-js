@@ -1850,7 +1850,7 @@ ${associatedNodes.join(", ")}`,
 					RemoveFailedNodeStartFlags.NodeNotFound
 				)
 			) {
-				message += `\n· The node ${nodeId} was not found`;
+				message += `\n· Node ${nodeId} is not in the list of failed nodes`;
 			}
 			if (
 				!!(
@@ -1914,15 +1914,13 @@ ${associatedNodes.join(", ")}`,
 
 		this._includeNonSecure = includeNonSecure;
 
-		const result = await this.driver.sendMessage<
-			ReplaceFailedNodeRequestStatusReport | ReplaceFailedNodeResponse
-		>(
+		const result = await this.driver.sendMessage<ReplaceFailedNodeResponse>(
 			new ReplaceFailedNodeRequest(this.driver, {
 				failedNodeId: nodeId,
 			}),
 		);
 
-		if (result instanceof ReplaceFailedNodeResponse) {
+		if (!result.isOK()) {
 			// This implicates that the process was unsuccessful.
 			let message = `The node replace process could not be started due to the following reasons:`;
 			if (
@@ -1939,7 +1937,7 @@ ${associatedNodes.join(", ")}`,
 					ReplaceFailedNodeStartFlags.NodeNotFound
 				)
 			) {
-				message += `\n· The node ${nodeId} was not found`;
+				message += `\n· Node ${nodeId} is not in the list of failed nodes`;
 			}
 			if (
 				!!(
