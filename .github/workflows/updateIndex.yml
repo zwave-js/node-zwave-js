@@ -8,7 +8,7 @@ on:
     types: [created]
 
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,15 +39,10 @@ jobs:
         with:
           message: "The index file isn't updated. Comment 'update index' to automatically update it"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Commit files
+      - name: Commit and Push files
         if: steps.check_index.outputs.PUSH == 'true' && github.event_name != 'pull_request' && github.event.comment.body == 'update index'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "fix(config): updated devices index.json"
-      - name: Push changes
-        if: steps.check_index.outputs.PUSH == 'true' && github.event_name != 'pull_request' && github.event.comment.body == 'update index'
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+          git push
