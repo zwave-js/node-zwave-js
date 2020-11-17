@@ -1,7 +1,6 @@
 {
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
-	"typescript.tsserver.importModuleSpecifierPreference": "project-relative",
 	"jest.showCoverageOnLoad": true,
 	"jest.enableCodeLens": true,
 	"jest.pathToJest": "npm run test:ts --",
@@ -100,5 +99,6 @@
 		80,
 		120
 	],
-	"files.participants.timeout": 10000
+	"files.participants.timeout": 10000,
+	"typescript.preferences.importModuleSpecifier": "project-relative"
 }

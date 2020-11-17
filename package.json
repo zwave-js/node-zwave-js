@@ -80,7 +80,7 @@
     "supports-color": "^7.2.0",
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "https://typescript.visualstudio.com/cf7ac146-d525-443c-b23c-0d58337efebc/_apis/build/builds/87812/artifacts?artifactName=tgz&fileId=55909EDEAB61EA6ACF101E1289AB6877AC9DFF70C10B7C9D71CEB5027B30DFAA02&fileName=/typescript-4.1.0-insiders.20201027.tgz",
+    "typescript": "^4.2.0-dev.20201117",
     "yargs": "^16.0.3"
   },
   "dependencies": {
