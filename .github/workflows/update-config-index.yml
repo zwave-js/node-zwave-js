@@ -18,12 +18,12 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
 
       - name: Check if any config files changed
         id: check_changed
         run: |
-          if $(git diff-index --name-only HEAD | grep -q packages/config/config/devices)
+          if $(git diff --name-only --diff-filter=AM ${{ github.event.before }} ${{ github.sha }} | grep -q packages/config/config/devices)
           then
             echo "Devices DB has been updated"
             echo "::set-output name=CHANGED::true"
