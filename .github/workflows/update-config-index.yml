@@ -1,0 +1,97 @@
+# This workflow checks if any config files were changed without updating the index
+# If so, it asks the author it if should be done automatically
+
+name: Update Devices Index
+
+on:
+  pull_request:
+    types: [opened, edited]
+  issue_comment:
+    types: [created]
+
+jobs:
+  check_changed:
+    runs-on: ubuntu-latest
+    # Use this job to check whether the next jobs need to run
+    outputs:
+      config_changed: ${{ steps.check_changed.outputs.CHANGED }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Check if any config files changed
+        id: check_changed
+        run: |
+          if $(git diff --name-only origin/${{ github.base_ref }} origin/${{ github.head_ref }} | grep -q packages/config/config/devices)
+          then
+            echo "Devices DB has been updated"
+            echo "::set-output name=CHANGED::true"
+          else
+            echo "No device changes detected"
+          fi
+
+
+jobs:
+  check_and_update_index:
+    runs-on: ubuntu-latest
+    needs: check_changed
+    # Skip this job if the config files were not touched
+    if: needs.check_changed.outputs.config_changed
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Install Node.js
+        if: steps.check_changed.outputs.CHANGED == 'true'
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Setup Repo
+        if: steps.check_changed.outputs.CHANGED == 'true'
+        run: |
+          npx lerna boostrap
+          npm run build
+
+      - name: Update index file and check for changes
+        if: steps.check_changed.outputs.CHANGED == 'true'
+        id: check_index
+        run: |
+          npm run config -- -i
+          indexPath="packages/config/config/devices/index.json"
+          if $(git diff --name-only HEAD | grep -q "$indexPath"); then
+            echo "Index file is out of date"
+            git add $indexPath
+            echo "::set-output name=PUSH::true"
+          fi 
+
+      - name: Comment Pull Request
+        if: |
+          steps.check_index.outputs.PUSH == 'true' &&
+          github.event_name == 'pull_request'
+        uses: actions/github-script@v3
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'Thanks for your PR! It seems like you forgot to update the index file. Comment `update index` to automatically update it'
+            })
+
+      - name: Commit and Push files
+        if: |
+          steps.check_changed.outputs.CHANGED == 'true' &&
+          steps.check_index.outputs.PUSH == 'true' &&
+          github.event_name != 'pull_request' &&
+          github.event.comment.body == 'update index' &&
+          github.event.comment.user.login == github.event.issue.user.login
+
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions"
+          git commit -m "fix(config): update device index"
+          git push
