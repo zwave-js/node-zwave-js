@@ -18,7 +18,10 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+      - name: Fetch all branches
+        run: |
+          git fetch --no-tags --prune --depth=0 origin +refs/heads/*:refs/remotes/origin/*
 
       - name: Check if any config files changed
         id: check_changed
