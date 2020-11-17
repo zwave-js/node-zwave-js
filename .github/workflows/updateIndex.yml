@@ -3,7 +3,7 @@ name: Update Devices Index
 
 on:
   pull_request:
-    types: [created]
+    types: [opened, edited]
   issue_comment:
     types: [created]
 
@@ -34,19 +34,19 @@ jobs:
             echo "::set-output name=PUSH::true"
           fi
       - name: Comment a pull_request
-        if: steps.check_index.outputs.PUSH == 'true' && github.event.action == 'pull_request'
+        if: steps.check_index.outputs.PUSH == 'true' && github.event_name == 'pull_request'
         uses: mb2dev/github-action-comment-pull-request@1.0.0
         with:
           message: "The index file isn't updated. Comment 'update index' to automatically update it"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Commit files
-        if: steps.check_index.outputs.PUSH == 'true' && github.event.action!= 'pull_request' && github.event.comment.body === 'update index'
+        if: steps.check_index.outputs.PUSH == 'true' && github.event_name != 'pull_request' && github.event.comment.body == 'update index'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "fix(config): updated devices index.json"
       - name: Push changes
-        if: steps.check_index.outputs.PUSH == 'true' && github.event.action!= 'pull_request' && github.event.comment.body === 'update index'
+        if: steps.check_index.outputs.PUSH == 'true' && github.event_name != 'pull_request' && github.event.comment.body == 'update index'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
