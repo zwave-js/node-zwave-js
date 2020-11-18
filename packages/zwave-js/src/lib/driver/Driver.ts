@@ -1021,6 +1021,12 @@ export class Driver extends EventEmitter {
 			ZWaveErrorCodes.Controller_NodeRemoved,
 		);
 
+		// remove node values from db
+		node.valueDB.clear();
+
+		// cleanup all resources used by the node
+		node.destroy();
+
 		// Asynchronously remove the node from all possible associations, ignore potential errors
 		this.controller.removeNodeFromAllAssocations(node.id).catch((err) => {
 			log.driver.print(
