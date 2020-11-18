@@ -22,6 +22,10 @@
   "funding": {
     "url": "https://github.com/sponsors/AlCalzone/"
   },
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {},
   "devDependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
@@ -81,16 +85,9 @@
     "supports-color": "^7.2.0",
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^4.1.1-rc",
+    "typescript": "^4.2.0-dev.20201117",
     "xml2json": "^0.12.0",
     "yargs": "^16.0.3"
-  },
-  "dependencies": {
-    "@zwave-js/config": "file:packages\\config",
-    "@zwave-js/core": "file:packages\\core",
-    "@zwave-js/serial": "file:packages\\serial",
-    "@zwave-js/shared": "file:packages\\shared",
-    "zwave-js": "file:packages\\zwave-js"
   },
   "scripts": {
     "build": "lerna run build",
@@ -111,7 +108,7 @@
     "toLogEntryOverview": "ts-node packages/zwave-js/maintenance/checkCCToLogEntry.ts",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
     "commit": "git-cz",
-    "prerelease": "lerna bootstrap && lerna run build",
+    "prerelease": "npm install && npm run build",
     "release": "lerna version --no-commit-hooks",
     "preversion": "release-script --lerna-check",
     "version": "release-script --lerna",

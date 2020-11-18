@@ -4,7 +4,6 @@
 	"jest.showCoverageOnLoad": true,
 	"jest.enableCodeLens": true,
 	"jest.pathToJest": "npm run test:ts --",
-	"eslint.enable": true,
 	"editor.formatOnSave": true,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"eslint.validate": [
@@ -99,5 +98,6 @@
 		80,
 		120
 	],
-	"files.participants.timeout": 10000
+	"files.participants.timeout": 10000,
+	"typescript.preferences.importModuleSpecifier": "project-relative"
 }

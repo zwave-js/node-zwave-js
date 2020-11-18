@@ -6,25 +6,6 @@
 				"displayErrorsAsWarnings": true
 			}
 		],
-		// Monorepo setup
-		"baseUrl": "./packages",
-		"paths": {
-			"@zwave-js/config": [
-				"config/src"
-			],
-			"@zwave-js/core": [
-				"core/src"
-			],
-			"@zwave-js/serial": [
-				"serial/src"
-			],
-			"@zwave-js/shared": [
-				"shared/src"
-			],
-			"@zwave-js/testing": [
-				"testing/src"
-			]
-		},
 		"composite": true,
 		"declaration": true,
 		"declarationMap": true,

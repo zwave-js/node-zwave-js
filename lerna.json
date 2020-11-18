@@ -1,20 +1,14 @@
 {
-	"packages": [
-		"packages/*"
-	],
+	"packages": ["packages/*"],
+	"useWorkspaces": true,
 	"version": "5.4.0",
 	"command": {
 		"run": {
 			"stream": true
 		},
 		"version": {
-			"allowBranch": [
-				"master",
-				"release-*"
-			],
-			"ignoreChanges": [
-				"*.md"
-			],
+			"allowBranch": ["master", "release-*"],
+			"ignoreChanges": ["*.md"],
 			"amend": true,
 			"push": false
 		}
