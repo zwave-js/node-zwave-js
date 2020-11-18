@@ -691,15 +691,28 @@ export class ZWaveController extends EventEmitter {
 		});
 	}
 
-	private async secureBootstrapS0(node: ZWaveNode): Promise<void> {
-		// If security has been set up and we are allowed to include the node securely, do it
+	private async secureBootstrapS0(
+		node: ZWaveNode,
+		assumeSecure: boolean = false,
+	): Promise<void> {
+		// If security has been set up and we are allowed to include the node securely, try to do it
 		if (
 			this.driver.securityManager &&
-			!this._includeNonSecure &&
-			node.supportsCC(CommandClasses.Security)
+			(assumeSecure || node.supportsCC(CommandClasses.Security))
 		) {
 			// Only try once, otherwise the node stays unsecure
 			try {
+				// When replacing a node, we receive no NIF, so we cannot know that the Security CC is supported.
+				// Querying the node info however kicks some devices out of secure inclusion mode.
+				// Therefore we must assume that the node supports Security in order to support replacing a node securely
+				if (assumeSecure && !node.supportsCC(CommandClasses.Security)) {
+					node.addCC(CommandClasses.Security, {
+						secure: true,
+						isSupported: true,
+						version: 1,
+					});
+				}
+
 				// SDS13783 - impose a 10s timeout on each message
 				const api = node.commandClasses.Security.withOptions({
 					expire: 10000,
@@ -740,6 +753,7 @@ export class ZWaveController extends EventEmitter {
 				log.controller.logNode(node.id, errorMessage, "warn");
 				// Remember that the node is non-secure
 				node.isSecure = false;
+				node.removeCC(CommandClasses.Security);
 			}
 		} else {
 			// Remember that the node is non-secure
@@ -880,7 +894,9 @@ export class ZWaveController extends EventEmitter {
 					this._nodes.set(newNode.id, newNode);
 					this._nodePendingInclusion = undefined;
 
-					await this.secureBootstrapS0(newNode);
+					if (!this._includeNonSecure) {
+						await this.secureBootstrapS0(newNode);
+					}
 					this._includeController = false;
 
 					// We're done adding this node, notify listeners
@@ -953,15 +969,10 @@ export class ZWaveController extends EventEmitter {
 					this._nodePendingReplace = undefined;
 					this._nodes.set(newNode.id, newNode);
 
-					// And query its node info because for some reason we're not receiving the NIF while replacing a node
-					await newNode.queryNodeInfo();
-
-					// queryNodeInfo changes the interview stage. To do a complete interview afterwards, we need to
-					// reset the interview stage
-					newNode.interviewStage = InterviewStage.None;
-
-					// If necessary, perform the security bootstrap process
-					await this.secureBootstrapS0(newNode);
+					// Try perform the security bootstrap process
+					if (!this._includeNonSecure) {
+						await this.secureBootstrapS0(newNode, true);
+					}
 
 					// We're done adding this node, notify listeners. This also kicks off the node interview
 					this.emit("node added", newNode);
