@@ -87,6 +87,13 @@ import {
 	RemoveNodeType,
 } from "./RemoveNodeFromNetworkRequest";
 import {
+	ReplaceFailedNodeRequest,
+	ReplaceFailedNodeRequestStatusReport,
+	ReplaceFailedNodeResponse,
+	ReplaceFailedNodeStartFlags,
+	ReplaceFailedNodeStatus,
+} from "./ReplaceFailedNodeRequest";
+import {
 	NodeNeighborUpdateStatus,
 	RequestNodeNeighborUpdateReport,
 	RequestNodeNeighborUpdateRequest,
@@ -155,6 +162,10 @@ export class ZWaveController extends EventEmitter {
 		driver.registerRequestHandler(
 			FunctionType.RemoveNodeFromNetwork,
 			this.handleRemoveNodeRequest.bind(this),
+		);
+		driver.registerRequestHandler(
+			FunctionType.ReplaceFailedNode,
+			this.handleReplaceNodeRequest.bind(this),
 		);
 	}
 
@@ -550,9 +561,11 @@ export class ZWaveController extends EventEmitter {
 	private _includeController: boolean = false;
 	private _nodePendingInclusion: ZWaveNode | undefined;
 	private _nodePendingExclusion: ZWaveNode | undefined;
+	private _nodePendingReplace: ZWaveNode | undefined;
 	// The following variables are to be used for inclusion AND exclusion
 	private _beginInclusionPromise: DeferredPromise<boolean> | undefined;
 	private _stopInclusionPromise: DeferredPromise<boolean> | undefined;
+	private _replaceFailedPromise: DeferredPromise<boolean> | undefined;
 
 	/**
 	 * Starts the inclusion process of new nodes.
@@ -676,6 +689,76 @@ export class ZWaveController extends EventEmitter {
 			log.controller.print(`the exclusion process was stopped`);
 			this.emit("exclusion stopped");
 		});
+	}
+
+	private async secureBootstrapS0(
+		node: ZWaveNode,
+		assumeSecure: boolean = false,
+	): Promise<void> {
+		// If security has been set up and we are allowed to include the node securely, try to do it
+		if (
+			this.driver.securityManager &&
+			(assumeSecure || node.supportsCC(CommandClasses.Security))
+		) {
+			// Only try once, otherwise the node stays unsecure
+			try {
+				// When replacing a node, we receive no NIF, so we cannot know that the Security CC is supported.
+				// Querying the node info however kicks some devices out of secure inclusion mode.
+				// Therefore we must assume that the node supports Security in order to support replacing a node securely
+				if (assumeSecure && !node.supportsCC(CommandClasses.Security)) {
+					node.addCC(CommandClasses.Security, {
+						secure: true,
+						isSupported: true,
+						version: 1,
+					});
+				}
+
+				// SDS13783 - impose a 10s timeout on each message
+				const api = node.commandClasses.Security.withOptions({
+					expire: 10000,
+				});
+				// Request security scheme, because it is required by the specs
+				await api.getSecurityScheme(); // ignore the result
+
+				// Request nonce separately, so we can impose a timeout
+				await api.getNonce({
+					standalone: true,
+					storeAsFreeNonce: true,
+				});
+
+				// send the network key
+				await api.setNetworkKey(this.driver.securityManager.networkKey);
+
+				if (this._includeController) {
+					// Tell the controller which security scheme to use
+					await api.inheritSecurityScheme();
+				}
+
+				// Remember that the node is secure
+				node.isSecure = true;
+			} catch (e: unknown) {
+				let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
+				if (!(e instanceof ZWaveError)) {
+					errorMessage += `: ${e as any}`;
+				} else if (
+					e.code === ZWaveErrorCodes.Controller_MessageExpired
+				) {
+					errorMessage += ": a secure inclusion timer has elapsed.";
+				} else if (
+					e.code !== ZWaveErrorCodes.Controller_MessageDropped &&
+					e.code !== ZWaveErrorCodes.Controller_NodeTimeout
+				) {
+					errorMessage += `: ${e.message}`;
+				}
+				log.controller.logNode(node.id, errorMessage, "warn");
+				// Remember that the node is non-secure
+				node.isSecure = false;
+				node.removeCC(CommandClasses.Security);
+			}
+		} else {
+			// Remember that the node is non-secure
+			node.isSecure = false;
+		}
 	}
 
 	/**
@@ -811,72 +894,9 @@ export class ZWaveController extends EventEmitter {
 					this._nodes.set(newNode.id, newNode);
 					this._nodePendingInclusion = undefined;
 
-					// If security has been set up and we are allowed to include the node securely, do it
-					if (
-						this.driver.securityManager &&
-						!this._includeNonSecure &&
-						newNode.supportsCC(CommandClasses.Security)
-					) {
-						// Only try once, otherwise the node stays unsecure
-						try {
-							// SDS13783 - impose a 10s timeout on each message
-							const api = newNode.commandClasses.Security.withOptions(
-								{
-									expire: 10000,
-								},
-							);
-							// Request security scheme, because it is required by the specs
-							await api.getSecurityScheme(); // ignore the result
-
-							// Request nonce separately, so we can impose a timeout
-							await api.getNonce({
-								standalone: true,
-								storeAsFreeNonce: true,
-							});
-
-							// send the network key
-							await api.setNetworkKey(
-								this.driver.securityManager.networkKey,
-							);
-
-							if (this._includeController) {
-								// Tell the controller which security scheme to use
-								await api.inheritSecurityScheme();
-							}
-
-							// Remember that the node is secure
-							newNode.isSecure = true;
-						} catch (e: unknown) {
-							let errorMessage = `Security bootstrapping failed, the node is included insecurely`;
-							if (!(e instanceof ZWaveError)) {
-								errorMessage += `: ${e as any}`;
-							} else if (
-								e.code ===
-								ZWaveErrorCodes.Controller_MessageExpired
-							) {
-								errorMessage +=
-									": a secure inclusion timer has elapsed.";
-							} else if (
-								e.code !==
-									ZWaveErrorCodes.Controller_MessageDropped &&
-								e.code !==
-									ZWaveErrorCodes.Controller_NodeTimeout
-							) {
-								errorMessage += `: ${e.message}`;
-							}
-							log.controller.logNode(
-								newNode.id,
-								errorMessage,
-								"warn",
-							);
-							// Remember that the node is non-secure
-							newNode.isSecure = false;
-						}
-					} else {
-						// Remember that the node is non-secure
-						newNode.isSecure = false;
+					if (!this._includeNonSecure) {
+						await this.secureBootstrapS0(newNode);
 					}
-
 					this._includeController = false;
 
 					// We're done adding this node, notify listeners
@@ -889,6 +909,82 @@ export class ZWaveController extends EventEmitter {
 				return false;
 		}
 		return true; // Don't invoke any more handlers
+	}
+
+	/**
+	 * Is called when an ReplaceFailed request is received from the controller.
+	 * Handles and controls the replace process.
+	 */
+	private async handleReplaceNodeRequest(
+		msg: ReplaceFailedNodeRequestStatusReport,
+	): Promise<boolean> {
+		log.controller.print(
+			`handling replace node request (status = ${
+				ReplaceFailedNodeStatus[msg.replaceStatus]
+			})`,
+		);
+
+		switch (msg.replaceStatus) {
+			case ReplaceFailedNodeStatus.NodeOK:
+				this._replaceFailedPromise?.reject(
+					new ZWaveError(
+						`The node could not be replaced because it has responded`,
+						ZWaveErrorCodes.ReplaceFailedNode_NodeOK,
+					),
+				);
+				break;
+			case ReplaceFailedNodeStatus.FailedNodeReplaceFailed:
+				this._replaceFailedPromise?.reject(
+					new ZWaveError(
+						`The failed node has not been replaced`,
+						ZWaveErrorCodes.ReplaceFailedNode_Failed,
+					),
+				);
+				break;
+			case ReplaceFailedNodeStatus.FailedNodeReplace:
+				// failed node is now ready to be replaced and controller is ready to add a new
+				// node with the nodeID of the failed node
+				log.controller.print(
+					`The failed node is ready to be replaced, inclusion started...`,
+				);
+				this.emit("inclusion started", !this._includeNonSecure);
+				this._inclusionActive = true;
+				this._replaceFailedPromise?.resolve(true);
+
+				// stop here, don't emit inclusion failed
+				return true;
+			case ReplaceFailedNodeStatus.FailedNodeReplaceDone:
+				log.controller.print(`The failed node was replaced`);
+				this.emit("inclusion stopped");
+
+				if (this._nodePendingReplace) {
+					this.emit("node removed", this._nodePendingReplace);
+					this._nodes.delete(this._nodePendingReplace.id);
+
+					// Create a fresh node instance and forget the old one
+					const newNode = new ZWaveNode(
+						this._nodePendingReplace.id,
+						this.driver,
+					);
+					this._nodePendingReplace = undefined;
+					this._nodes.set(newNode.id, newNode);
+
+					// Try perform the security bootstrap process
+					if (!this._includeNonSecure) {
+						await this.secureBootstrapS0(newNode, true);
+					}
+
+					// We're done adding this node, notify listeners. This also kicks off the node interview
+					this.emit("node added", newNode);
+				}
+
+				// stop here, don't emit inclusion failed
+				return true;
+		}
+
+		this.emit("inclusion failed");
+
+		return false; // Don't invoke any more handlers
 	}
 
 	/**
@@ -1767,7 +1863,7 @@ ${associatedNodes.join(", ")}`,
 					RemoveFailedNodeStartFlags.NodeNotFound
 				)
 			) {
-				message += `\n· The node ${nodeId} was not found`;
+				message += `\n· Node ${nodeId} is not in the list of failed nodes`;
 			}
 			if (
 				!!(
@@ -1811,6 +1907,76 @@ ${associatedNodes.join(", ")}`,
 
 					return;
 			}
+		}
+	}
+
+	/**
+	 * Replace a failed node from the controller's memory. If the process fails, this will throw an exception with the details why.
+	 * @param nodeId The id of the node to replace
+	 * @param includeNonSecure Whether the new node should be included non-securely, even if it supports Security. By default, all nodes will be included securely if possible
+	 *
+	 */
+	public async replaceFailedNode(
+		nodeId: number,
+		includeNonSecure: boolean = false,
+	): Promise<boolean> {
+		// don't start it twice
+		if (this._inclusionActive || this._exclusionActive) return false;
+
+		log.controller.print(`starting replace failed node process...`);
+
+		this._includeNonSecure = includeNonSecure;
+
+		const result = await this.driver.sendMessage<ReplaceFailedNodeResponse>(
+			new ReplaceFailedNodeRequest(this.driver, {
+				failedNodeId: nodeId,
+			}),
+		);
+
+		if (!result.isOK()) {
+			// This implicates that the process was unsuccessful.
+			let message = `The node replace process could not be started due to the following reasons:`;
+			if (
+				!!(
+					result.replaceStatus &
+					ReplaceFailedNodeStartFlags.NotPrimaryController
+				)
+			) {
+				message += "\n· This controller is not the primary controller";
+			}
+			if (
+				!!(
+					result.replaceStatus &
+					ReplaceFailedNodeStartFlags.NodeNotFound
+				)
+			) {
+				message += `\n· Node ${nodeId} is not in the list of failed nodes`;
+			}
+			if (
+				!!(
+					result.replaceStatus &
+					ReplaceFailedNodeStartFlags.ReplaceProcessBusy
+				)
+			) {
+				message += `\n· The node replace process is currently busy`;
+			}
+			if (
+				!!(
+					result.replaceStatus &
+					ReplaceFailedNodeStartFlags.ReplaceFailed
+				)
+			) {
+				message += `\n· The controller is busy or the node has responded`;
+			}
+			throw new ZWaveError(
+				message,
+				ZWaveErrorCodes.ReplaceFailedNode_Failed,
+			);
+		} else {
+			// Remember which node we're trying to replace
+			this._nodePendingReplace = this.nodes.get(nodeId);
+			this._replaceFailedPromise = createDeferredPromise();
+			return this._replaceFailedPromise;
 		}
 	}
 
