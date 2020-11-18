@@ -34,6 +34,10 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    # We need npm@7 for the workspaces feature
+    - name: Update npm to >=7
+      run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
+
     - name: Install dependencies
       run: npm ci
 
