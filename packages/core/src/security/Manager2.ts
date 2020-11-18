@@ -3,8 +3,21 @@
 import * as crypto from "crypto";
 import { ZWaveError, ZWaveErrorCodes } from "../error/ZWaveError";
 import { increment } from "./bufferUtils";
-import { computeNoncePRK, deriveMEI, encryptAES128ECB } from "./crypto";
+import { SecurityClasses } from "./constants";
+import {
+	computeNoncePRK,
+	deriveMEI,
+	deriveNetworkKeys,
+	encryptAES128ECB,
+} from "./crypto";
 import { CtrDRBG } from "./ctr_drbg";
+
+interface NetworkKeys {
+	pnk: Buffer;
+	keyCCM: Buffer;
+	keyMPAN: Buffer;
+	personalizationString: Buffer;
+}
 
 export class SecurityManager2 {
 	public constructor() {
@@ -23,38 +36,47 @@ export class SecurityManager2 {
 	private nodeRNG = new Map<number, CtrDRBG>();
 	/** A map of MPAN states for each multicast group */
 	private mpanStates = new Map<number, Buffer>();
+	/** A map of permanent network keys per security class */
+	private networkKeys = new Map<SecurityClasses, NetworkKeys>();
+	/** Which node has been assigned which security class */
+	private nodeClasses = new Map<number, SecurityClasses>();
+	/** Which multicast group has been assigned which security class */
+	private groupClasses = new Map<number, SecurityClasses>();
 
-	private keyCCM: Buffer | undefined;
-	private personalizationString: Buffer | undefined;
-	private keyMPAN: Buffer | undefined;
-
-	public setKeys(
-		keyCCM: Buffer,
-		keyMPAN: Buffer,
-		personalizationString: Buffer,
-	): void {
-		if (keyCCM.length !== 16) {
+	/** Sets the PNK for a given security class and derives the encryption keys from it */
+	public setKey(securityClass: SecurityClasses, key: Buffer): void {
+		if (key.length !== 16) {
 			throw new ZWaveError(
-				`keyCCM must consist of 16 bytes`,
+				`The network key must consist of 16 bytes!`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else if (keyMPAN.length !== 16) {
+		} else if (!(securityClass in SecurityClasses)) {
 			throw new ZWaveError(
-				`keyMPAN must consist of 16 bytes`,
-				ZWaveErrorCodes.Argument_Invalid,
-			);
-		} else if (personalizationString.length !== 32) {
-			throw new ZWaveError(
-				`The personalizationString must consist of 32 bytes`,
+				`Invalid security class!`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
 		}
-
-		this.keyCCM = keyCCM;
-		this.keyMPAN = keyMPAN;
-		this.personalizationString = personalizationString;
+		this.networkKeys.set(securityClass, {
+			pnk: key,
+			...deriveNetworkKeys(key),
+		});
 	}
 
+	public assignSecurityClassSinglecast(
+		nodeId: number,
+		securityClass: SecurityClasses,
+	): void {
+		this.nodeClasses.set(nodeId, securityClass);
+	}
+
+	public assignSecurityClassMulticast(
+		group: number,
+		securityClass: SecurityClasses,
+	): void {
+		this.groupClasses.set(group, securityClass);
+	}
+
+	/** Initializes the singlecast PAN generator for a given node */
 	public initializeSPAN(
 		receiver: number,
 		senderEI: Buffer,
@@ -65,10 +87,17 @@ export class SecurityManager2 {
 				`The entropy input must consist of 16 bytes`,
 				ZWaveErrorCodes.Argument_Invalid,
 			);
-		} else if (this.personalizationString == undefined) {
+		} else if (!this.nodeClasses.has(receiver)) {
 			throw new ZWaveError(
-				`The personalization string must be set`,
-				ZWaveErrorCodes.Argument_Invalid,
+				`Node ${receiver} has not been assigned to a security class yet!`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+		const keys = this.networkKeys.get(this.nodeClasses.get(receiver)!);
+		if (!keys) {
+			throw new ZWaveError(
+				`The network keys for the security class of node ${receiver} have not been set up yet!`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		}
 
@@ -77,7 +106,7 @@ export class SecurityManager2 {
 
 		this.nodeRNG.set(
 			receiver,
-			new CtrDRBG(128, false, MEI, undefined, this.personalizationString),
+			new CtrDRBG(128, false, MEI, undefined, keys.personalizationString),
 		);
 	}
 
@@ -102,16 +131,23 @@ export class SecurityManager2 {
 				`The MPAN state has not been initialized for multicast group ${group}`,
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
-		} else if (this.keyMPAN == undefined) {
+		} else if (!this.groupClasses.has(group)) {
 			throw new ZWaveError(
-				`The MPAN key must be set`,
+				`Multicast group ${group} has not been assigned to a security class yet!`,
+				ZWaveErrorCodes.Security2CC_NotInitialized,
+			);
+		}
+		const keys = this.networkKeys.get(this.groupClasses.get(group)!);
+		if (!keys) {
+			throw new ZWaveError(
+				`The network keys for the security class of multicast group ${group} have not been set up yet!`,
 				ZWaveErrorCodes.Security2CC_NotInitialized,
 			);
 		}
 
 		// Compute the next MPAN
 		const stateN = this.mpanStates.get(group)!;
-		const ret = encryptAES128ECB(stateN, this.keyMPAN);
+		const ret = encryptAES128ECB(stateN, keys.keyMPAN);
 		// Increment the inner state
 		increment(stateN);
 		return ret;
