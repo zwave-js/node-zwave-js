@@ -32,17 +32,14 @@ export enum ReplaceFailedNodeStartFlags {
 
 export enum ReplaceFailedNodeStatus {
 	/* ZW_ReplaceFailedNode callback status definitions */
-	NodeOK = 0 /* The node is working properly (removed from the failed nodes list ) */,
+	NodeOK = 0 /* The node cannot be replaced because it is working properly (removed from the failed nodes list ) */,
 
-	FailedNodeRemoved = 1 /* The failed node was removed from the failed nodes list */,
-	FailedNodeNotRemoved = 2 /* The failed node was not removed from the failing nodes list */,
-
-	FailedNodeReplace = 3 /* The failed node are ready to be replaced and controller */,
-	/* is ready to add new node with nodeID of the failed node */
+	/** The failed node is ready to be replaced and controller is ready to add new node with the nodeID of the failed node. */
+	FailedNodeReplace = 3,
 	/** The failed node has been replaced. */
-	FailedNodeReplaceDone = 4 /* The failed node has been replaced */,
-
-	FailedNodeReplaceFailed = 5 /* The failed node has not been replaced */,
+	FailedNodeReplaceDone = 4,
+	/** The failed node has not been replaced */
+	FailedNodeReplaceFailed = 5,
 }
 
 @messageTypes(MessageType.Request, FunctionType.ReplaceFailedNode)
@@ -78,15 +75,28 @@ export class ReplaceFailedNodeRequest extends ReplaceFailedNodeRequestBase {
 	/** The node that should be removed */
 	public failedNodeId: number;
 
-	// These two properties are only set if we parse a response
-	private _status: ReplaceFailedNodeStatus | undefined;
-	public get status(): ReplaceFailedNodeStatus | undefined {
-		return this._status;
-	}
-
 	public serialize(): Buffer {
 		this.payload = Buffer.from([this.failedNodeId, this.callbackId]);
 		return super.serialize();
+	}
+}
+
+@messageTypes(MessageType.Response, FunctionType.ReplaceFailedNode)
+export class ReplaceFailedNodeResponse
+	extends Message
+	implements SuccessIndicator {
+	public constructor(driver: Driver, options: MessageDeserializationOptions) {
+		super(driver, options);
+		this._replaceStatus = this.payload[0];
+	}
+
+	private _replaceStatus: ReplaceFailedNodeStartFlags;
+	public get replaceStatus(): ReplaceFailedNodeStartFlags {
+		return this._replaceStatus;
+	}
+
+	public isOK(): boolean {
+		return this._replaceStatus === ReplaceFailedNodeStartFlags.OK;
 	}
 }
 
@@ -110,24 +120,5 @@ export class ReplaceFailedNodeRequestStatusReport
 			this._replaceStatus ===
 			ReplaceFailedNodeStatus.FailedNodeReplaceDone
 		);
-	}
-}
-
-@messageTypes(MessageType.Response, FunctionType.ReplaceFailedNode)
-export class ReplaceFailedNodeResponse
-	extends Message
-	implements SuccessIndicator {
-	public constructor(driver: Driver, options: MessageDeserializationOptions) {
-		super(driver, options);
-		this._replaceStatus = this.payload[0];
-	}
-
-	private _replaceStatus: ReplaceFailedNodeStartFlags;
-	public get replaceStatus(): ReplaceFailedNodeStartFlags {
-		return this._replaceStatus;
-	}
-
-	public isOK(): boolean {
-		return this._replaceStatus === ReplaceFailedNodeStartFlags.OK;
 	}
 }

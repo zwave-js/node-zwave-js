@@ -163,7 +163,6 @@ export class ZWaveController extends EventEmitter {
 			FunctionType.RemoveNodeFromNetwork,
 			this.handleRemoveNodeRequest.bind(this),
 		);
-
 		driver.registerRequestHandler(
 			FunctionType.ReplaceFailedNode,
 			this.handleReplaceNodeRequest.bind(this),
@@ -692,7 +691,7 @@ export class ZWaveController extends EventEmitter {
 		});
 	}
 
-	private async secureBootstrap(node: ZWaveNode): Promise<void> {
+	private async secureBootstrapS0(node: ZWaveNode): Promise<void> {
 		// If security has been set up and we are allowed to include the node securely, do it
 		if (
 			this.driver.securityManager &&
@@ -881,7 +880,7 @@ export class ZWaveController extends EventEmitter {
 					this._nodes.set(newNode.id, newNode);
 					this._nodePendingInclusion = undefined;
 
-					await this.secureBootstrap(newNode);
+					await this.secureBootstrapS0(newNode);
 					this._includeController = false;
 
 					// We're done adding this node, notify listeners
@@ -913,24 +912,8 @@ export class ZWaveController extends EventEmitter {
 			case ReplaceFailedNodeStatus.NodeOK:
 				this._replaceFailedPromise?.reject(
 					new ZWaveError(
-						`The node could not be replaced because it's not failed`,
+						`The node could not be replaced because it has responded`,
 						ZWaveErrorCodes.ReplaceFailedNode_NodeOK,
-					),
-				);
-				break;
-			case ReplaceFailedNodeStatus.FailedNodeRemoved:
-				this._replaceFailedPromise?.reject(
-					new ZWaveError(
-						`The failed node was removed from the failed nodes list`,
-						ZWaveErrorCodes.ReplaceFailedNode_Failed,
-					),
-				);
-				break;
-			case ReplaceFailedNodeStatus.FailedNodeNotRemoved:
-				this._replaceFailedPromise?.reject(
-					new ZWaveError(
-						`The failed node was not removed from the failing nodes list`,
-						ZWaveErrorCodes.ReplaceFailedNode_Failed,
 					),
 				);
 				break;
@@ -946,45 +929,45 @@ export class ZWaveController extends EventEmitter {
 				// failed node is now ready to be replaced and controller is ready to add a new
 				// node with the nodeID of the failed node
 				log.controller.print(
-					`inclusion started, node is ready to be replaced`,
+					`The failed node is ready to be replaced, inclusion started...`,
 				);
 				this.emit("inclusion started", !this._includeNonSecure);
 				this._inclusionActive = true;
 				this._replaceFailedPromise?.resolve(true);
 
-				// stop here, don't emit incluson failed
+				// stop here, don't emit inclusion failed
 				return true;
 			case ReplaceFailedNodeStatus.FailedNodeReplaceDone:
-				log.controller.print(`node successfully replaced`);
-
+				log.controller.print(`The failed node was replaced`);
 				this.emit("inclusion stopped");
 
-				if (this._nodePendingReplace !== undefined) {
+				if (this._nodePendingReplace) {
 					this.emit("node removed", this._nodePendingReplace);
 					this._nodes.delete(this._nodePendingReplace.id);
 
+					// Create a fresh node instance and forget the old one
 					const newNode = new ZWaveNode(
 						this._nodePendingReplace.id,
 						this.driver,
 					);
+					this._nodePendingReplace = undefined;
+					this._nodes.set(newNode.id, newNode);
 
-					// actually this is needed to populate node command classes
+					// And query its node info because for some reason we're not receiving the NIF while replacing a node
 					await newNode.queryNodeInfo();
 
-					// reset the interview stage so we do a complete interview
-					// when 'node added' event is triggered
+					// queryNodeInfo changes the interview stage. To do a complete interview afterwards, we need to
+					// reset the interview stage
 					newNode.interviewStage = InterviewStage.None;
 
-					this._nodes.set(newNode.id, newNode);
-					this._nodePendingReplace = undefined;
+					// If necessary, perform the security bootstrap process
+					await this.secureBootstrapS0(newNode);
 
-					await this.secureBootstrap(newNode);
-
-					// We're done adding this node, notify listeners
+					// We're done adding this node, notify listeners. This also kicks off the node interview
 					this.emit("node added", newNode);
 				}
 
-				// stop here, don't emit incluson failed
+				// stop here, don't emit inclusion failed
 				return true;
 		}
 
@@ -1979,8 +1962,9 @@ ${associatedNodes.join(", ")}`,
 				ZWaveErrorCodes.ReplaceFailedNode_Failed,
 			);
 		} else {
-			this._replaceFailedPromise = createDeferredPromise();
+			// Remember which node we're trying to replace
 			this._nodePendingReplace = this.nodes.get(nodeId);
+			this._replaceFailedPromise = createDeferredPromise();
 			return this._replaceFailedPromise;
 		}
 	}

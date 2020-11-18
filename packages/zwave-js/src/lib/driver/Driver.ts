@@ -1014,18 +1014,16 @@ export class Driver extends EventEmitter {
 
 	/** This is called when a node was removed from the network */
 	private onNodeRemoved(node: ZWaveNode): void {
+		// Remove all listeners
 		this.removeNodeEventHandlers(node);
+		// purge node values from the DB
+		node.valueDB.clear();
+
 		this.rejectAllTransactionsForNode(
 			node.id,
 			"The node was removed from the network",
 			ZWaveErrorCodes.Controller_NodeRemoved,
 		);
-
-		// remove node values from db
-		node.valueDB.clear();
-
-		// cleanup all resources used by the node
-		node.destroy();
 
 		// Asynchronously remove the node from all possible associations, ignore potential errors
 		this.controller.removeNodeFromAllAssocations(node.id).catch((err) => {
@@ -1034,6 +1032,9 @@ export class Driver extends EventEmitter {
 				"error",
 			);
 		});
+
+		// And clean up all remaining resources used by the node
+		node.destroy();
 
 		// If this was a failed node it could mean that all nodes are now ready
 		this.checkAllNodesReady();

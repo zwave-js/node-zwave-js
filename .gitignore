@@ -1,4 +1,5 @@
 node_modules/
+/packages/*/package-lock.json
 
 # compiled test-files
 *.test.js
@@ -11,11 +12,10 @@ zwave-js-*.tgz
 # ZWave cache
 **/cache
 
+# Temporary (import) config files
+.tmp
+
 # Compiled source files
 **/build
 **/*.tsbuildinfo
 *.map
-
-.tmp
-
-/packages/*/package-lock.json

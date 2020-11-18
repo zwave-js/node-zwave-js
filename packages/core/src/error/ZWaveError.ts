@@ -58,10 +58,15 @@ export enum ZWaveErrorCodes {
 	Config_Invalid,
 
 	// Here follow message specific errors
+
 	/** The removal process could not be started or completed due to one or several reasons */
 	RemoveFailedNode_Failed,
 	/** The removal process was aborted because the node has responded */
 	RemoveFailedNode_NodeOK,
+	/** The replace process could not be started or completed due to one or several reasons */
+	ReplaceFailedNode_Failed,
+	/** The replace process was aborted because the node has responded */
+	ReplaceFailedNode_NodeOK,
 
 	// Here follow CC specific errors
 
@@ -112,12 +117,6 @@ export enum ZWaveErrorCodes {
 	FirmwareUpdateCC_FailedToAbort,
 	/** The node did not confirm the completed update or the process stalled for too long */
 	FirmwareUpdateCC_Timeout,
-
-	// Here follow message specific errors
-	/** The replace process could not be started or completed due to one or several reasons */
-	ReplaceFailedNode_Failed,
-	/** The replace process was aborted because the node has responded */
-	ReplaceFailedNode_NodeOK,
 }
 
 /**
