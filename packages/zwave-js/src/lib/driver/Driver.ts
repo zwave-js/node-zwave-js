@@ -47,6 +47,7 @@ import {
 	CommandClass,
 	getImplementedVersion,
 } from "../commandclass/CommandClass";
+import { DeviceResetLocallyCCNotification } from "../commandclass/DeviceResetLocallyCC";
 import {
 	isEncapsulatingCommandClass,
 	isMultiEncapsulatingCommandClass,
