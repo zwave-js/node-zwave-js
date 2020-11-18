@@ -51,6 +51,7 @@ export type CommandQueueEvent =
 	| { type: "trigger" } // Used internally to trigger sending from the idle state
 	| { type: "add"; transaction: Transaction } // Adds a transaction to the command queue
 	| { type: "message"; message: Message } // Used for received messages. The message will be returned as unsolicited when it is not expected
+	| { type: "reset" } // Used to abort the ongoing transaction and clear the command queue
 	| { type: "command_error"; error: Error } // An unexpected error occured during command execution
 	| ({ type: "command_success" } & Omit<
 			CommandQueueDoneData & { type: "success" },
@@ -90,6 +91,12 @@ const deleteCurrentTransaction: AssignAction<CommandQueueContext, any> = assign(
 		currentTransaction: undefined,
 	}),
 );
+
+const clearQueue: AssignAction<CommandQueueContext, any> = assign((ctx) => {
+	const queue = ctx.queue;
+	queue.clear();
+	return { ...ctx, queue };
+});
 
 const notifyResult = sendParent<
 	CommandQueueContext,
@@ -153,8 +160,19 @@ export function createCommandQueueMachine(
 				},
 				execute: {
 					entry: setCurrentTransaction,
-					// Now the message event gets auto-forwarded to the serial API machine
-					on: { message: undefined },
+					on: {
+						// Now the message event gets auto-forwarded to the serial API machine
+						message: undefined,
+						// Clear the queue and abort ongoing send data commands when a reset event is received
+						reset: [
+							{
+								cond: "currentTransactionIsSendData",
+								actions: clearQueue,
+								target: "abortSendData",
+							},
+							{ actions: clearQueue, target: "executeDone" },
+						],
+					},
 					invoke: {
 						id: "execute",
 						src: "executeSerialAPICommand",
@@ -233,6 +251,13 @@ export function createCommandQueueMachine(
 				executeSuccessful: (_, evt: any) =>
 					evt.data?.type === "success",
 				queueNotEmpty: (ctx) => ctx.queue.length > 0,
+				currentTransactionIsSendData: (ctx) => {
+					const msg = ctx.currentTransaction?.message;
+					return (
+						msg instanceof SendDataRequest ||
+						msg instanceof SendDataMulticastRequest
+					);
+				},
 				isSendDataWithCallbackTimeout: (ctx, evt: any) => {
 					const msg = ctx.currentTransaction?.message;
 					return (

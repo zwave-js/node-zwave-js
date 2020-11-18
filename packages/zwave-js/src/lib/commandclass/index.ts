@@ -23,6 +23,7 @@ export { ScheduleOverrideType } from "./ClimateControlScheduleCC";
 export { Weekday } from "./ClockCC";
 export { ColorComponent } from "./ColorSwitchCC";
 export type { ColorTable } from "./ColorSwitchCC";
+export type { CommandClass } from "./CommandClass";
 export type { ConfigValue } from "./ConfigurationCC";
 export { DoorLockMode, DoorLockOperationType } from "./DoorLockCC";
 export type { DoorHandleStatus } from "./DoorLockCC";

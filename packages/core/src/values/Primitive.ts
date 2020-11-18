@@ -123,7 +123,7 @@ export function parseBitMask(mask: Buffer, startValue: number = 1): number[] {
 	for (let index = 1; index <= numBits; index++) {
 		const byteNum = (index - 1) >>> 3; // id / 8
 		const bitNum = (index - 1) % 8;
-		if ((mask[byteNum] & (1 << bitNum)) !== 0)
+		if ((mask[byteNum] & (2 ** bitNum)) !== 0)
 			ret.push(index + startValue - 1);
 	}
 	return ret;
@@ -137,7 +137,7 @@ export function encodeBitMask(values: number[], maxValue: number): Buffer {
 		if (values.indexOf(val) === -1) continue;
 		const byteNum = (val - 1) >>> 3; // id / 8
 		const bitNum = (val - 1) % 8;
-		ret[byteNum] |= 1 << bitNum;
+		ret[byteNum] |= 2 ** bitNum;
 	}
 	return ret;
 }

@@ -27,7 +27,7 @@ import {
 	ZWaveSerialPortBase,
 	ZWaveSocket,
 } from "@zwave-js/serial";
-import { DeepPartial, num2hex, pick } from "@zwave-js/shared";
+import { DeepPartial, num2hex, pick, stringify } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
 import {
 	createDeferredPromise,
@@ -40,6 +40,7 @@ import fsExtra from "fs-extra";
 import path from "path";
 import SerialPort from "serialport";
 import { URL } from "url";
+import * as util from "util";
 import { interpret } from "xstate";
 import { FirmwareUpdateStatus } from "../commandclass";
 import {
@@ -462,6 +463,7 @@ export class Driver extends EventEmitter {
 				},
 				notifyRetry: (
 					command,
+					lastError,
 					message,
 					attempts,
 					maxAttempts,
@@ -474,8 +476,33 @@ export class Driver extends EventEmitter {
 							"warn",
 						);
 					} else {
+						// Translate the error into a better one
+						let errorReason: string;
+						switch (lastError) {
+							case "response timeout":
+								errorReason = "No response from controller";
+								break;
+							case "callback timeout":
+								errorReason = "No callback from controller";
+								break;
+							case "response NOK":
+								errorReason =
+									"The controller response indicated failure";
+								break;
+							case "callback NOK":
+								errorReason =
+									"The controller callback indicated failure";
+								break;
+							case "ACK timeout":
+							case "CAN":
+							case "NAK":
+							default:
+								errorReason =
+									"Failed to execute controller command";
+								break;
+						}
 						log.controller.print(
-							`No response from controller after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
+							`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
 							"warn",
 						);
 					}
@@ -491,13 +518,13 @@ export class Driver extends EventEmitter {
 			pick(this.options, ["timeouts", "attempts"]),
 		);
 		this.sendThread = interpret(sendThreadMachine);
-		// this.sendThread.onTransition((state) => {
-		// 	if (state.changed)
-		// 		log.driver.print(
-		// 			`send thread state: ${state.toStrings().slice(-1)[0]}`,
-		// 			"verbose",
-		// 		);
-		// });
+		this.sendThread.onTransition((state) => {
+			if (state.changed)
+				log.driver.print(
+					`send thread state: ${state.toStrings().slice(-1)[0]}`,
+					"verbose",
+				);
+		});
 	}
 
 	/** Enumerates all existing serial ports */
@@ -1957,17 +1984,28 @@ ${handlers.length} left`,
 			}
 			return ret;
 		} catch (e) {
-			// If the node does not acknowledge our request, it is either asleep or dead
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Controller_CallbackNOK &&
-				transaction.message instanceof SendDataRequest &&
-				// Ignore pre-transmit handshakes because the actual transaction will be retried
-				transaction.priority !== MessagePriority.PreTransmitHandshake
-			) {
-				this.handleMissingNodeACK(
-					transaction as Transaction & { message: CommandClass },
-				);
+			if (e instanceof ZWaveError) {
+				if (
+					// If the node does not acknowledge our request, it is either asleep or dead
+					e.code === ZWaveErrorCodes.Controller_CallbackNOK &&
+					transaction.message instanceof SendDataRequest &&
+					// Ignore pre-transmit handshakes because the actual transaction will be retried
+					transaction.priority !==
+						MessagePriority.PreTransmitHandshake
+				) {
+					this.handleMissingNodeACK(
+						transaction as Transaction & { message: CommandClass },
+					);
+				} else if (
+					// If a controller command failed (that is not SendData), pass the response/callback through
+					(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
+						e.code === ZWaveErrorCodes.Controller_CallbackNOK) &&
+					e.context instanceof Message &&
+					e.context.functionType !== FunctionType.SendData &&
+					e.context.functionType !== FunctionType.SendDataMulticast
+				) {
+					return e.context as TResponse;
+				}
 			}
 			throw e;
 		}
@@ -2245,7 +2283,7 @@ ${handlers.length} left`,
 		);
 
 		const serializedObj = this.controller.serialize();
-		const jsonString = JSON.stringify(serializedObj, undefined, 4);
+		const jsonString = stringify(serializedObj);
 		await this.options.fs.writeFile(cacheFile, jsonString, "utf8");
 	}
 
@@ -2359,5 +2397,10 @@ ${handlers.length} left`,
 				: new SendDataRequest(this, { command: commandOrMsg });
 		this.encapsulateCommands(msg);
 		return msg.command.getMaxPayloadLength(msg.getMaxPayloadLength());
+	}
+
+	// This does not all need to be printed to the console
+	public [util.inspect.custom](): string {
+		return "[Driver]";
 	}
 }

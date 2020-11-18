@@ -42,6 +42,11 @@ export function serializeCacheValue(value: unknown): SerializedValue {
 				: valueAsJSON),
 			[SPECIAL_TYPE_KEY]: "duration",
 		};
+	} else if (Buffer.isBuffer(value)) {
+		return {
+			[SPECIAL_TYPE_KEY]: "buffer",
+			data: value.toString("hex"),
+		};
 	} else if (
 		typeof value === "number" ||
 		typeof value === "string" ||
@@ -74,6 +79,8 @@ export function deserializeCacheValue(value: SerializedValue): unknown {
 			);
 		} else if (specialType === "duration") {
 			return new Duration(value.value ?? 1, value.unit);
+		} else if (specialType === "buffer") {
+			return Buffer.from(value.data, "hex");
 		}
 	}
 	return value;

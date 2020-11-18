@@ -34,6 +34,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	commandClass,
 	CommandClass,
 	CommandClassDeserializationOptions,
@@ -447,6 +448,10 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	public readonly targetValue: number | undefined;
 
 	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.Any,
+		label: "Transition duration",
+	})
 	public readonly duration: Duration | undefined;
 
 	public toLogEntry(): MessageOrCCLogEntry {

@@ -36,12 +36,16 @@ interface TestMachineContext {
 	transactions?: Transaction[];
 	index: number;
 	expectedCalls: number;
+	definitelyDone: boolean;
 }
 
 type TestMachineEvents =
 	| {
 			type: "ADD";
 			transaction: Transaction;
+	  }
+	| {
+			type: "RESET";
 	  }
 	| {
 			type: "API_FAILED" | "ABORT_FAILED";
@@ -129,6 +133,7 @@ describe("lib/driver/CommandQueueMachine", () => {
 			context: {
 				index: -1,
 				expectedCalls: 0,
+				definitelyDone: false,
 			},
 			states: {
 				idle: {
@@ -156,6 +161,12 @@ describe("lib/driver/CommandQueueMachine", () => {
 							{ cond: "isCbTimeout", target: "aborting" },
 							{ target: "maybeDone" },
 						],
+						RESET: {
+							actions: assign<TestMachineContext, any>({
+								definitelyDone: true,
+							}),
+							target: "aborting",
+						},
 					},
 					meta: {
 						test: async (
@@ -202,6 +213,7 @@ describe("lib/driver/CommandQueueMachine", () => {
 				},
 				maybeDone: {
 					always: [
+						{ cond: "definitelyDone", target: "done" },
 						{ cond: "queueEmpty", target: "done" },
 						{ target: "sending" },
 					],
@@ -231,6 +243,7 @@ describe("lib/driver/CommandQueueMachine", () => {
 		},
 		{
 			guards: {
+				definitelyDone: (ctx) => ctx.definitelyDone,
 				queueEmpty: (ctx) => {
 					// index is increased in the next step, so we need to add +1 here
 					return ctx.index + 1 >= (ctx.transactions?.length ?? 0);
@@ -258,6 +271,13 @@ describe("lib/driver/CommandQueueMachine", () => {
 				{ commands: ["BasicGet"] },
 				{ commands: ["BasicSet", "BasicGet"] },
 			],
+		},
+		RESET: {
+			exec: ({ interpreter }) => {
+				interpreter.send({
+					type: "reset",
+				});
+			},
 		},
 		API_SUCCESS: {
 			exec: ({ interpreter }, event) => {

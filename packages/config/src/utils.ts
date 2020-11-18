@@ -39,8 +39,9 @@ export function getDeviceEntryPredicate(
 				)));
 }
 
-export function formatId(id: number): string {
-	return "0x" + padStart(id.toString(16), 4, "0");
+export function formatId(id: number | string): string {
+	id = typeof id === "number" ? id.toString(16) : id;
+	return "0x" + padStart(id, 4, "0").toLowerCase();
 }
 
 /** Pads a firmware version string, so it can be compared with semver */

@@ -17,17 +17,6 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
-	"associations": {
-		// Force lifeline to use node associations
-		// All others are detected automatically
-		"1": {
-			"label": "Controller Updates",
-			"description": "Lifeline group",
-			"maxNodes": 1,
-			"isLifeline": true,
-			"noEndpoint": true
-		}
-	},
 	"paramInformation": {
 		"10": {
 			"label": "ALL ON/ALL OFF",

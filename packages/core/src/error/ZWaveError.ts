@@ -121,7 +121,10 @@ export class ZWaveError extends Error {
 	public constructor(
 		public readonly message: string,
 		public readonly code: ZWaveErrorCodes,
+		/** Additional info required to handle this error (e.g. the Z-Wave message indicating the failure) */
 		public readonly context?: unknown,
+		/** If this error corresponds to a failed transaction, this contains the stack where it was created */
+		public readonly transactionSource?: string,
 	) {
 		super(message);
 

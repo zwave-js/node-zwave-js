@@ -489,13 +489,17 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 		const lifelineGroups = getLifelineGroupIds(node);
 		const ownNodeId = this.driver.controller.ownNodeId!;
 		const valueDB = this.getValueDB();
+		// We check if a node supports Multi Channel CC before creating Multi Channel Lifeline Associations (#1109)
+		const supportsMultiChannel = node.supportsCC(
+			CommandClasses["Multi Channel"],
+		);
 
 		if (lifelineGroups.length) {
 			for (const group of lifelineGroups) {
 				const groupSupportsMultiChannel = group <= mcGroupCount;
-				const mustUseNodeAssociation = node.deviceConfig?.associations?.get(
-					group,
-				)?.noEndpoint;
+				const mustUseNodeAssociation =
+					!supportsMultiChannel ||
+					node.deviceConfig?.associations?.get(group)?.noEndpoint;
 
 				const nodeIdsValueId = groupSupportsMultiChannel
 					? getNodeIdsValueId(group)
@@ -520,20 +524,21 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 					!groupSupportsMultiChannel &&
 					!isAssignedAsNodeAssociation
 				) {
+					// Use normal association if this is not a multi channel association group
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Lifeline group #${group} does not support multi channel - assigning controller with Association CC...`,
 						direction: "outbound",
 					});
 
-					// Use normal association if this is not a multi channel association group
 					await assocAPI.addNodeIds(group, ownNodeId);
-					// and refresh the associations - don't trust that it worked
+					// refresh the associations - don't trust that it worked
 					await assocAPI.getGroup(group);
 				} else if (
 					(this.version < 3 || mustUseNodeAssociation) &&
 					!isAssignedAsNodeAssociation
 				) {
+					// Use node id associations for V1 and V2 and if a multi channel lifeline is forbidden
 					log.controller.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Lifeline group #${group} is configured to use node association - assigning controller...`,
@@ -548,12 +553,11 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 						});
 					}
 
-					// Use node id associations for V1 and V2 and if a multi channel lifeline is forbidden
 					await mcAPI.addDestinations({
 						groupId: group,
 						nodeIds: [ownNodeId],
 					});
-					// and refresh the associations - don't trust that it worked
+					// refresh the associations - don't trust that it worked
 					const { nodeIds } = await mcAPI.getGroup(group);
 					didMCAssignmentWork = nodeIds.includes(ownNodeId);
 				} else if (

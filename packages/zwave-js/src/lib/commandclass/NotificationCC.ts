@@ -640,7 +640,8 @@ export class NotificationCCReport extends NotificationCC {
 			// before the interview is complete
 			if (
 				this.alarmType === 0 &&
-				this.alarmLevel === 0 &&
+				// To be compliant with the specs, we SHOULD check if alarmLevel === 0
+				// but like it is so often, manufacturers don't care and send invalid notifications anyways
 				this.payload.length >= 7
 			) {
 				this.notificationStatus = this.payload[3];
@@ -806,12 +807,25 @@ export class NotificationCCReport extends NotificationCC {
 			valueConfig.parameter instanceof
 			NotificationParameterWithCommandClass
 		) {
-			// The parameters contain a CC
-			this.eventParameters = CommandClass.from(this.driver, {
-				data: this.eventParameters,
-				fromEncapsulation: true,
-				encapCC: this,
-			});
+			// The parameters **should** contain a CC, however there might be some exceptions
+			if (
+				this.eventParameters.length === 1 &&
+				notificationConfig.id === 0x06 &&
+				(this.notificationEvent === 0x05 ||
+					this.notificationEvent === 0x06)
+			) {
+				// Access control -> Keypad Lock/Unlock operation
+				// Some devices only send the User ID, not a complete CC payload
+				this.eventParameters = {
+					userId: this.eventParameters[0],
+				};
+			} else {
+				this.eventParameters = CommandClass.from(this.driver, {
+					data: this.eventParameters,
+					fromEncapsulation: true,
+					encapCC: this,
+				});
+			}
 		} else if (
 			valueConfig.parameter instanceof NotificationParameterWithValue
 		) {

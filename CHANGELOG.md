@@ -4,6 +4,44 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 5.4.0 (2020-11-14)
+### Config file changes
+* Fibaro Keyfob no longer uses special chars in param labels
+* Changed the `valueSize` of param 9 for Shenzhen Neo PD03Z from `2` to `1`
+
+### Features
+* Added the compat config option `keepS0NonceUntilNext` to disable automatic nonce invalidation for bugged devices (e.g. ID Lock) which reuse nonces in some situations
+
+### Bugfixes
+* If a node association is duplicated between `Association CC` and `Multi Channel Association CC`, it is now removed from both when using `Controller.removeAssociations`
+* Add missing production dependency `semver` to `@zwave-js/config`
+* The `duration` property for the `Binary Switch`, `Color Switch`, `Multilevel Switch` and `Scene Activation` CCs is now writeable
+* The `Central Scene CC` interview is now skipped if a device does not respond to the supported scenes request
+* Empty user codes are now also handled as strings instead of Buffer objects
+* The `targetValue` property for the `Binary Switch`, `Multilevel Switch` and `Basic` CCs is now created, even if is `undefined`.
+* The type `CommandClass` is now exported from `zwave-js/CommandClass`
+* The interview process for `Configuration CC V3+` now continues even if the response to `NameGet` and/or `InfoGet` commands is missing or incomplete
+* The interview process for `Association Group Info` now continues even if a response is missing or incomplete
+* Multi Channel Lifeline Associations are no longer created automatically if the device does not support the `Multi Channel CC`
+* Fixed an issue where marking nodes with active transaction as asleep would mess up the serial communication with the controller
+* The receiver of an S0 nonce is now stored and after a successful reply, all nonces for said issuer are now invalidated
+* Unsuccessful controller commands now return the response message instead of throwing
+
+### Changes under the hood
+* The log messages for unsuccessful controller commands no longer claim that the controller did not respond
+
+## 5.3.6 (2020-11-04)
+### Bugfixes
+* Compatibility with non-spec-compliant devices has been improved:
+  * `User Code CC`: trim zero-padded user codes, handle non-ascii user codes as Buffers instead of strings
+  * `Notification CC`: support deserializing Notification Reports where the `Alarm Level` is not 0
+  * `Notification CC`: support deserializing Notification Reports with Keypad events that only contain a User ID instead of a `UserCode::Report`
+
+## 5.3.5 (2020-11-03)
+### Bugfixes
+* Errors while updating the `Multilevel Switch` value in response to a `Supervision` report are now caught
+* Added missing metadata to the `duration` property in `Color Switch CC`
+
 ## 5.3.4 (2020-10-27)
 ### Config changes
 * Updated config param description for `Z-Wave.Me ZME_05459 Blinds controller`

@@ -139,6 +139,6 @@ Partial parameters must follow these rules:
 
 In order to get your configuration file included in this library, two things must be done:
 
-1. Check your file for potential problems using `npm run lint:config`. Warnings in your file may be tolerated if there is a good reason for them. Errors must be fixed.
-2. Add your file to the index using `npm run config index`.
-3. Create a PR.
+1. Update the index file using `npm run config -- -i` (don't forget the double dash!).
+1. Check your new or changed files for potential problems using `npm run lint:config`. Warnings in your file may be tolerated if there is a good reason for them. Errors must be fixed.
+1. Create a PR.

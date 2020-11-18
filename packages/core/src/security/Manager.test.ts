@@ -45,9 +45,9 @@ describe("lib/security/Manager", () => {
 		it("should return a random Buffer of the given length", () => {
 			const man = new SecurityManager(options);
 			// I know, this is not really checking if the value is random
-			const nonce1 = man.generateNonce(8);
-			const nonce2 = man.generateNonce(8);
-			const nonce3 = man.generateNonce(8);
+			const nonce1 = man.generateNonce(2, 8);
+			const nonce2 = man.generateNonce(2, 8);
+			const nonce3 = man.generateNonce(2, 8);
 
 			expect(Buffer.isBuffer(nonce1)).toBeTrue();
 			expect(Buffer.isBuffer(nonce2)).toBeTrue();
@@ -80,8 +80,8 @@ describe("lib/security/Manager", () => {
 					.SecurityManager;
 
 				const man = new SM(options);
-				const nonce1 = man.generateNonce(8);
-				const nonce2 = man.generateNonce(8);
+				const nonce1 = man.generateNonce(2, 8);
+				const nonce2 = man.generateNonce(2, 8);
 				expect(nonce1).toEqual(buf1a);
 				expect(nonce2).toEqual(buf2);
 
@@ -94,24 +94,24 @@ describe("lib/security/Manager", () => {
 		it("should store nonces for the current node id", () => {
 			const man = new SecurityManager(options);
 
-			const nonce1 = man.generateNonce(8);
-			const nonce2 = man.generateNonce(8);
-			const nonce3 = man.generateNonce(8);
+			const nonce1 = man.generateNonce(2, 8);
+			const nonce2 = man.generateNonce(2, 8);
+			const nonce3 = man.generateNonce(2, 8);
 
 			expect(
-				man.getNonce({ nodeId: 2, nonceId: man.getNonceId(nonce1) }),
+				man.getNonce({ issuer: 2, nonceId: man.getNonceId(nonce1) }),
 			).toBeUndefined();
 			expect(
-				man.getNonce({ nodeId: 2, nonceId: man.getNonceId(nonce2) }),
+				man.getNonce({ issuer: 2, nonceId: man.getNonceId(nonce2) }),
 			).toBeUndefined();
 			expect(
-				man.getNonce({ nodeId: 2, nonceId: man.getNonceId(nonce3) }),
+				man.getNonce({ issuer: 2, nonceId: man.getNonceId(nonce3) }),
 			).toBeUndefined();
 		});
 
-		it("the nonces should timeout after the given timeout", () => {
+		it("the nonces should expire after the given timeout", () => {
 			const man = new SecurityManager(options);
-			const nonce = man.generateNonce(8);
+			const nonce = man.generateNonce(2, 8);
 			const nonceId = nonce[0];
 			expect(man.getNonce(nonceId)).toEqual(nonce);
 
@@ -119,9 +119,19 @@ describe("lib/security/Manager", () => {
 			expect(man.getNonce(nonceId)).toBeUndefined();
 		});
 
+		it("...except if this was explicitly forbidden", () => {
+			const man = new SecurityManager(options);
+			const nonce = man.generateNonce(2, 8, false);
+			const nonceId = nonce[0];
+			expect(man.getNonce(nonceId)).toEqual(nonce);
+
+			jest.advanceTimersByTime(options.nonceTimeout + 50);
+			expect(man.getNonce(nonceId)).not.toBeUndefined();
+		});
+
 		it(`the nonce should be marked as "reserved"`, () => {
 			const man = new SecurityManager(options);
-			man.generateNonce(8);
+			man.generateNonce(2, 8);
 			expect(man.getFreeNonce(ownNodeId)).toBeUndefined();
 		});
 	});
@@ -130,9 +140,9 @@ describe("lib/security/Manager", () => {
 		it("should return the first byte of the nonce", () => {
 			const man = new SecurityManager(options);
 
-			const nonce1 = man.generateNonce(8);
-			const nonce2 = man.generateNonce(8);
-			const nonce3 = man.generateNonce(8);
+			const nonce1 = man.generateNonce(2, 8);
+			const nonce2 = man.generateNonce(2, 8);
+			const nonce3 = man.generateNonce(2, 8);
 
 			expect(man.getNonceId(nonce1)).toBe(nonce1[0]);
 			expect(man.getNonceId(nonce2)).toBe(nonce2[0]);
@@ -144,9 +154,9 @@ describe("lib/security/Manager", () => {
 		it("should return a previously generated nonce with the same id", () => {
 			const man = new SecurityManager(options);
 
-			const nonce1 = man.generateNonce(8);
-			const nonce2 = man.generateNonce(8);
-			const nonce3 = man.generateNonce(8);
+			const nonce1 = man.generateNonce(2, 8);
+			const nonce2 = man.generateNonce(2, 8);
+			const nonce3 = man.generateNonce(2, 8);
 
 			const nonceId1 = man.getNonceId(nonce1);
 			const nonceId2 = man.getNonceId(nonce2);
@@ -166,7 +176,7 @@ describe("lib/security/Manager", () => {
 
 			const nonce: Buffer = randomBytes(8);
 			nonce[0] = 1;
-			man.setNonce(1, nonce);
+			man.setNonce(1, { nonce, receiver: 2 });
 			expect(man.getNonce(1)).toEqual(nonce);
 		});
 
@@ -174,7 +184,7 @@ describe("lib/security/Manager", () => {
 			const man = new SecurityManager(options);
 			const nonce: Buffer = randomBytes(8);
 			const nonceId = nonce[0];
-			man.setNonce(nonceId, nonce);
+			man.setNonce(nonceId, { nonce, receiver: 2 });
 			expect(man.getNonce(nonceId)).toEqual(nonce);
 
 			jest.advanceTimersByTime(options.nonceTimeout + 50);
@@ -188,10 +198,10 @@ describe("lib/security/Manager", () => {
 			nonce[0] = 1;
 			man.setNonce(
 				{
-					nodeId: 2,
+					issuer: 2,
 					nonceId: 1,
 				},
-				nonce,
+				{ nonce, receiver: options.ownNodeId },
 			);
 			// Wrong node
 			expect(man.getFreeNonce(1)).toBeUndefined();
@@ -203,10 +213,10 @@ describe("lib/security/Manager", () => {
 			const nonce: Buffer = randomBytes(8);
 			man.setNonce(
 				{
-					nodeId: 2,
+					issuer: 2,
 					nonceId: 1,
 				},
-				nonce,
+				{ nonce, receiver: options.ownNodeId },
 			);
 
 			jest.advanceTimersByTime(options.nonceTimeout + 50);
@@ -222,11 +232,11 @@ describe("lib/security/Manager", () => {
 			expect(man.hasNonce(1)).toBeFalse();
 			const nonce1: Buffer = randomBytes(8);
 			nonce1[0] = 1;
-			man.setNonce(1, nonce1);
+			man.setNonce(1, { nonce: nonce1, receiver: 2 });
 			expect(man.hasNonce(1)).toBeTrue();
 
 			// And generated
-			const nonce2 = man.generateNonce(8);
+			const nonce2 = man.generateNonce(2, 8);
 			const nonceId2 = man.getNonceId(nonce2);
 			expect(man.hasNonce(nonceId2)).toBeTrue();
 		});
@@ -236,12 +246,49 @@ describe("lib/security/Manager", () => {
 		it("should remove a nonce from the database", () => {
 			const man = new SecurityManager(options);
 
-			const nonce = man.generateNonce(8);
+			const nonce = man.generateNonce(2, 8);
 			const nonceId = man.getNonceId(nonce);
 
 			man.deleteNonce(nonceId);
 			expect(man.getNonce(nonceId)).toBeUndefined();
 			expect(man.hasNonce(nonceId)).toBeFalse();
+		});
+
+		it("and all other nonces that were created for the same receiver", () => {
+			const man = new SecurityManager(options);
+
+			const nonce1 = man.generateNonce(2, 8);
+			const nonceId1 = man.getNonceId(nonce1);
+			const nonce2 = man.generateNonce(2, 8);
+			const nonceId2 = man.getNonceId(nonce2);
+
+			man.deleteNonce(nonceId1);
+			expect(man.getNonce(nonceId1)).toBeUndefined();
+			expect(man.hasNonce(nonceId1)).toBeFalse();
+			expect(man.getNonce(nonceId2)).toBeUndefined();
+			expect(man.hasNonce(nonceId2)).toBeFalse();
+		});
+	});
+
+	describe("deleteAllNoncesForReceiver", () => {
+		it("should only delete the nonces for the given receiver", () => {
+			const man = new SecurityManager(options);
+
+			const nonce1 = man.generateNonce(2, 8);
+			const nonceId1 = man.getNonceId(nonce1);
+			const nonce2 = man.generateNonce(2, 8);
+			const nonceId2 = man.getNonceId(nonce2);
+			// different receiver
+			const nonce3 = man.generateNonce(3, 8);
+			const nonceId3 = man.getNonceId(nonce3);
+
+			man.deleteNonce(nonceId1);
+			expect(man.getNonce(nonceId1)).toBeUndefined();
+			expect(man.hasNonce(nonceId1)).toBeFalse();
+			expect(man.getNonce(nonceId2)).toBeUndefined();
+			expect(man.hasNonce(nonceId2)).toBeFalse();
+			expect(man.getNonce(nonceId3)).not.toBeUndefined();
+			expect(man.hasNonce(nonceId3)).not.toBeFalse();
 		});
 	});
 
@@ -252,10 +299,10 @@ describe("lib/security/Manager", () => {
 			nonce[0] = 1;
 			man.setNonce(
 				{
-					nodeId: 2,
+					issuer: 2,
 					nonceId: 1,
 				},
-				nonce,
+				{ nonce, receiver: options.ownNodeId },
 			);
 			expect(man.getFreeNonce(2)).toEqual(nonce);
 			expect(man.getFreeNonce(2)).toBeUndefined();
@@ -265,17 +312,17 @@ describe("lib/security/Manager", () => {
 	it("nonces should be stored separately for each node", () => {
 		const man = new SecurityManager(options);
 
-		const nonce1 = man.generateNonce(8);
+		const nonce1 = man.generateNonce(3, 8);
 		const nonceId1 = man.getNonceId(nonce1);
-		// Create a duplicate for another node
+		// Create a nonce with the same nonceId but with another issuer
 		const nonce2: Buffer = randomBytes(8);
 		nonce2[0] = nonceId1;
 
-		const id2 = { nodeId: 7, nonceId: nonceId1 };
+		const id2 = { issuer: 4, nonceId: nonceId1 };
 		expect(man.hasNonce(id2)).toBeFalse();
 		expect(man.getNonce(id2)).toBeUndefined();
 
-		man.setNonce(id2, nonce2);
+		man.setNonce(id2, { nonce: nonce2, receiver: 1 });
 		expect(man.hasNonce(id2)).toBeTrue();
 		expect(man.getNonce(id2)).toEqual(nonce2);
 	});

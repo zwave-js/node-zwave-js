@@ -7,10 +7,14 @@ The controller instance contains information about the controller and a list of 
 ### `beginInclusion`
 
 ```ts
-async beginInclusion(): Promise<boolean>
+async beginInclusion(includeNonSecure?: boolean): Promise<boolean>
 ```
 
 Starts the inclusion process for a new node. The returned promise resolves to `true` if starting the inclusion was successful, `false` if it failed or if it was already active.
+
+By default, the node will be included securely (with encryption) if a network key is configured and the node supports encryption. You can force a non-secure inclusion by setting the optional parameter `includeNonSecure` to `true`.
+
+**Note:** For some devices, a special inclusion sequence needs to be performed in order to include it securely. Please refer to the device manual for further information.
 
 ### `stopInclusion`
 
@@ -227,3 +231,56 @@ Returns the ID of the controller in the current network.
 * readonly sucNodeId: number
 * readonly supportsTimers: boolean
 -->
+
+## Controller events
+
+The `Controller` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The available events are avaiable:
+
+### `"inclusion started"`
+
+The process to include a node into the network was started successfully. The event handler takes a parameter which tells you whether the inclusion should be secure or not:
+
+```ts
+(secure: boolean) => void
+```
+
+**Note:** Whether a node will actually be included securely may depend on the physical activation of the node. Some devices require a special activation sequence to be included securely
+
+### `"exclusion started"`
+
+The process to exclude a node from the network was started successfully.
+
+### `"inclusion failed"` / `"exclusion failed"`
+
+A node could not be included into or excluded from the network for some reason.
+
+### `"inclusion stopped"` / `"exclusion stopped"`
+
+The process to include or exclude a node was stopped successfully. Note that these events are also emitted after a node was included or excluded.
+
+### `"node added"` / `"node removed"`
+
+A node has successfully been added to or removed from the network. The added or removed node is passed to the event handler as the only argument:
+
+```ts
+(node: ZWaveNode) => void
+```
+
+### `"heal network progress"`
+
+This event is used to inform listeners about the progress of an ongoing network heal process. The progress is reported as a map of each node's ID and its healing status.
+
+```ts
+(progress: ReadonlyMap<number, HealNodeStatus>) => void
+```
+
+The healing status is one of the following values:
+
+-   `"pending"` - The network healing process has not been started for this node yet.
+-   `"done"` - The process was completed for this node.
+-   `"failed"` - This node failed to be healed. This means that certain commands of the healing process could not be executed.
+-   `"skipped"` - This node was not healed because it is dead
+
+### `"heal network done"`
+
+The healing process for the network was completed. The event handler is called with the final healing status, see the [`"heal network progress"` event](#quotheal-network-progressquot) for details

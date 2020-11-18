@@ -20,6 +20,7 @@ import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
+import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import {
@@ -162,10 +163,15 @@ export type SendThreadMachineParams = {
 // These actions must be assign actions or they will be executed out of order
 
 const setCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
-	(ctx) => ({
-		...ctx,
-		currentTransaction: ctx.queue.shift()!,
-	}),
+	(ctx) => {
+		const queue = ctx.queue;
+		const next = ctx.queue.shift()!;
+		return {
+			...ctx,
+			queue,
+			currentTransaction: next,
+		};
+	},
 );
 
 const deleteCurrentTransaction: AssignAction<SendThreadContext, any> = assign(
@@ -222,6 +228,10 @@ const sendCurrentTransactionToCommandQueue = send<SendThreadContext, any>(
 	{ to: (ctx) => ctx.commandQueue as any },
 );
 
+const resetCommandQueue = send<SendThreadContext, any>("reset", {
+	to: (ctx) => ctx.commandQueue as any,
+});
+
 const sortQueue: AssignAction<SendThreadContext, any> = assign({
 	queue: (ctx) => {
 		const queue = ctx.queue;
@@ -239,6 +249,7 @@ const every = (...guards: string[]) => ({
 });
 const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	maySendFirstMessage: (ctx) => {
+		log.driver.sendQueue(ctx.queue);
 		const nextTransaction = ctx.queue.peekStart();
 		// We can't send anything if the queue is empty
 		if (!nextTransaction) return false;
@@ -576,6 +587,8 @@ export function createSendThreadMachine(
 			queue.remove(...drop, ...requeue);
 			queue.add(...requeue);
 
+			log.driver.sendQueue(queue);
+
 			return queue;
 		},
 	});
@@ -692,7 +705,7 @@ export function createSendThreadMachine(
 								{
 									name: "commandQueue",
 								},
-							),
+							) as any,
 					}),
 					// Spawn the command queue when starting the send thread
 					always: "idle",
@@ -735,13 +748,15 @@ export function createSendThreadMachine(
 								// );
 							],
 							target: "sending.done",
+							internal: true,
 						},
 						reduce: [
-							// If the current transaction should not be kept, go back to idle
+							// If the current transaction should not be kept, tell the send queue to abort it and go back to idle
 							{
 								cond: "shouldNotKeepCurrentTransaction",
-								actions: reduce,
+								actions: [resetCommandQueue, reduce],
 								target: "sending.done",
+								internal: true,
 							},
 							{ actions: reduce },
 						],
@@ -950,6 +965,7 @@ export function createSendThreadMachine(
 				notifyRetry: (ctx) => {
 					implementations.notifyRetry?.(
 						"SendData",
+						undefined,
 						ctx.currentTransaction!.message,
 						ctx.sendDataAttempts,
 						(ctx.currentTransaction!.message as SendDataRequest)

@@ -1,4 +1,5 @@
 import { highResTimestamp } from "@zwave-js/core";
+import { pick } from "@zwave-js/shared";
 import {
 	Comparable,
 	compareNumberOrString,
@@ -107,5 +108,16 @@ export class Transaction implements Comparable<Transaction> {
 			other.creationTimestamp,
 			this.creationTimestamp,
 		);
+	}
+
+	public toJSON(): any {
+		return pick(this, [
+			"creationTimestamp",
+			"changeNodeStatusOnTimeout",
+			"tag",
+			"message",
+			"priority",
+			"stack",
+		]);
 	}
 }
