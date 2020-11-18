@@ -968,6 +968,13 @@ export class ZWaveController extends EventEmitter {
 						this.driver,
 					);
 
+					// actually this is needed to populate node command classes
+					await newNode.queryNodeInfo();
+
+					// reset the interview stage so we do a complete interview
+					// when 'node added' event is triggered
+					newNode.interviewStage = InterviewStage.None;
+
 					this._nodes.set(newNode.id, newNode);
 					this._nodePendingReplace = undefined;
 

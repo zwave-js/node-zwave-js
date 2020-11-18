@@ -1052,8 +1052,12 @@ version:               ${this.version}`;
 		return true;
 	}
 
-	/** Step #5 of the node interview */
-	protected async queryNodeInfo(): Promise<void> {
+	/**
+	 * @internal
+	 * Step #5 of the node interview
+	 * Request node info
+	 */
+	public async queryNodeInfo(): Promise<void> {
 		if (this.isControllerNode()) {
 			log.controller.logNode(
 				this.id,
