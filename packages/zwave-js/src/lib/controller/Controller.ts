@@ -986,14 +986,6 @@ export class ZWaveController extends EventEmitter {
 
 				// stop here, don't emit incluson failed
 				return true;
-
-			default:
-				this._replaceFailedPromise?.reject(
-					new ZWaveError(
-						`Unknown error ${msg.replaceStatus}`,
-						ZWaveErrorCodes.ReplaceFailedNode_Failed,
-					),
-				);
 		}
 
 		this.emit("inclusion failed");
