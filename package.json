@@ -22,6 +22,10 @@
   "funding": {
     "url": "https://github.com/sponsors/AlCalzone/"
   },
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {},
   "devDependencies": {
     "@actions/core": "^1.2.6",
     "@actions/exec": "^1.0.4",
@@ -84,13 +88,6 @@
     "typescript": "^4.2.0-dev.20201117",
     "xml2json": "^0.12.0",
     "yargs": "^16.0.3"
-  },
-  "dependencies": {
-    "@zwave-js/config": "file:packages\\config",
-    "@zwave-js/core": "file:packages\\core",
-    "@zwave-js/serial": "file:packages\\serial",
-    "@zwave-js/shared": "file:packages\\shared",
-    "zwave-js": "file:packages\\zwave-js"
   },
   "scripts": {
     "build": "lerna run build",
