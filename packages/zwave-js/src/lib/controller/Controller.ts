@@ -948,11 +948,16 @@ export class ZWaveController extends EventEmitter {
 				log.controller.print(
 					`inclusion started, node is ready to be replaced`,
 				);
+				this.emit("inclusion started", !this._includeNonSecure);
 				this._inclusionActive = true;
 				this._replaceFailedPromise?.resolve(true);
-				break;
+
+				// stop here, don't emit incluson failed
+				return true;
 			case ReplaceFailedNodeStatus.FailedNodeReplaceDone:
 				log.controller.print(`node successfully replaced`);
+
+				this.emit("inclusion stopped");
 
 				if (this._nodePendingReplace !== undefined) {
 					this.emit("node removed", this._nodePendingReplace);
@@ -972,6 +977,9 @@ export class ZWaveController extends EventEmitter {
 					this.emit("node added", newNode);
 				}
 
+				// stop here, don't emit incluson failed
+				return true;
+
 			default:
 				this._replaceFailedPromise?.reject(
 					new ZWaveError(
@@ -981,7 +989,9 @@ export class ZWaveController extends EventEmitter {
 				);
 		}
 
-		return true; // Don't invoke any more handlers
+		this.emit("inclusion failed");
+
+		return false; // Don't invoke any more handlers
 	}
 
 	/**
