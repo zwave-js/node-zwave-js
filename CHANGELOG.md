@@ -4,6 +4,16 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Config file changes
+* Added a config file for `Jasco ZW3010`
+
+### Features
+* Implemented the `replaceFailedNode` API
+
+### Changes under the hood
+* Switched to `npm@7` workspaces to get rid of TypeScript's `paths` config and support project-relative auto-imports
+
 ## 5.4.0 (2020-11-14)
 ### Config file changes
 * Fibaro Keyfob no longer uses special chars in param labels
