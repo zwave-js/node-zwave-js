@@ -92,7 +92,11 @@ import {
 import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
-import { InterviewStage, NodeStatus } from "../node/Types";
+import {
+	InterviewStage,
+	NodeInterviewFailedEventArgs,
+	NodeStatus,
+} from "../node/Types";
 import type { FileSystem } from "./FileSystem";
 import {
 	createSendThreadMachine,
@@ -784,6 +788,15 @@ export class Driver extends EventEmitter {
 		}
 	}
 
+	private emitNodeInterviewFailed(
+		node: ZWaveNode,
+		args: NodeInterviewFailedEventArgs,
+	): void {
+		// For compatibility, we emit the arguments as the third parameter until the next major version
+		// TODO: remove this compatibility layer and emit the args as the 2nd parameter directly
+		node.emit("interview failed", node, args.errorMessage, args);
+	}
+
 	private retryNodeInterviewTimeouts = new Map<number, NodeJS.Timeout>();
 	/**
 	 * @internal
@@ -817,7 +830,10 @@ export class Driver extends EventEmitter {
 						`Interview attempt (${node.interviewAttempts}/${maxInterviewAttempts}) failed, node is dead.`,
 						"warn",
 					);
-					node.emit("interview failed", node, "The node is dead");
+					this.emitNodeInterviewFailed(node, {
+						errorMessage: "The node is dead",
+						isFinal: true,
+					});
 				} else if (node.interviewAttempts < maxInterviewAttempts) {
 					// This is most likely because the node is unable to handle our load of requests now. Give it some time
 					const retryTimeout = Math.min(
@@ -829,11 +845,12 @@ export class Driver extends EventEmitter {
 						`Interview attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed, retrying in ${retryTimeout} ms...`,
 						"warn",
 					);
-					node.emit(
-						"interview failed",
-						node,
-						`Attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed`,
-					);
+					this.emitNodeInterviewFailed(node, {
+						errorMessage: `Attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed`,
+						isFinal: false,
+						attempt: node.interviewAttempts,
+						maxAttempts: maxInterviewAttempts,
+					});
 					// Schedule the retry and remember the timeout instance
 					this.retryNodeInterviewTimeouts.set(
 						node.id,
@@ -848,11 +865,12 @@ export class Driver extends EventEmitter {
 						`Failed all interview attempts, giving up.`,
 						"warn",
 					);
-					node.emit(
-						"interview failed",
-						node,
-						"Maximum interview attempts reached",
-					);
+					this.emitNodeInterviewFailed(node, {
+						errorMessage: `Maximum interview attempts reached`,
+						isFinal: true,
+						attempt: maxInterviewAttempts,
+						maxAttempts: maxInterviewAttempts,
+					});
 				}
 			}
 		} catch (e: unknown) {
