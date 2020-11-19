@@ -45,7 +45,8 @@ createCCInstance<T>(cc: CommandClasses): T | undefined
 Creates an instance of the given command class. The instance is linked to the current endpoint and node.
 The method takes the command class ID as a single argument. You may optionally pass the expected return type as a type parameter.
 
-**Note:** You should make sure that the requested command class is implemented by the node. If it neither supported nor controlled, this method will throw.
+> [!WARNING]
+> You should make sure that the requested command class is implemented by the node. If it neither supported nor controlled, this method will throw.
 
 ### `createCCInstanceUnsafe`
 

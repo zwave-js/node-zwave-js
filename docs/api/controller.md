@@ -14,7 +14,8 @@ Starts the inclusion process for a new node. The returned promise resolves to `t
 
 By default, the node will be included securely (with encryption) if a network key is configured and the node supports encryption. You can force a non-secure inclusion by setting the optional parameter `includeNonSecure` to `true`.
 
-**Note:** For some devices, a special inclusion sequence needs to be performed in order to include it securely. Please refer to the device manual for further information.
+> [!NOTE]
+> For some devices, a special inclusion sequence needs to be performed in order to include it securely. Please refer to the device manual for further information.
 
 ### `stopInclusion`
 
@@ -179,7 +180,8 @@ readonly libraryVersion: string
 
 Returns the Z-Wave library version that is supported by the controller hardware.
 
-**Note:** This property is only defined after the controller interview!
+> [!WARNING]
+> This property is only defined after the controller interview!
 
 ### `type`
 
@@ -206,7 +208,8 @@ export enum ZWaveLibraryTypes {
 }
 ```
 
-**Note:** This property is only defined after the controller interview!
+> [!WARNING]
+> This property is only defined after the controller interview!
 
 ### `homeId`
 
@@ -216,7 +219,8 @@ readonly homeId: number
 
 A 32bit number identifying the current network.
 
-**Note:** This property is only defined after the controller interview!
+> [!WARNING]
+> This property is only defined after the controller interview!
 
 ### `ownNodeId`
 
@@ -226,7 +230,8 @@ readonly ownNodeId: number
 
 Returns the ID of the controller in the current network.
 
-**Note:** This property is only defined after the controller interview!
+> [!WARNING]
+> This property is only defined after the controller interview!
 
 <!-- TODO: Document the other properties of the Controller class:
 * readonly isSecondary: boolean
@@ -256,7 +261,8 @@ The process to include a node into the network was started successfully. The eve
 (secure: boolean) => void
 ```
 
-**Note:** Whether a node will actually be included securely may depend on the physical activation of the node. Some devices require a special activation sequence to be included securely
+> [!NOTE]
+> Whether a node will actually be included securely may depend on the physical activation of the node. Some devices require a special activation sequence to be included securely. Please refer to the device manual for further information.
 
 ### `"exclusion started"`
 

@@ -114,7 +114,8 @@
     "preversion": "release-script --lerna-check",
     "version": "release-script --lerna",
     "postversion": "git push && git push --tags",
-    "config": "ts-node maintenance/importConfig.ts"
+    "config": "ts-node maintenance/importConfig.ts",
+    "docs": "docsify serve docs"
   },
   "readme": "README.md",
   "husky": {

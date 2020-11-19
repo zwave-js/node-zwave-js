@@ -26,7 +26,8 @@ If the type of the value is known in advance, you may pass an optional type argu
 
 The method either returns the stored value if it was found, and `undefined` otherwise.
 
-**Note:** This does **not** communicate with the node to refresh the value.
+> [!NOTE]
+> This does **not** communicate with the node to refresh the value.
 
 ### `getValueMetadata`
 
@@ -228,8 +229,9 @@ enum InterviewStage {
 }
 ```
 
-**Note:** DO NOT rely on the numeric values of the enum if you're using it in your application.
-The ordinal values are likely to change in future updates. Instead, refer to the enum values directly.
+> [!WARNING]
+> DO NOT rely on the numeric values of the enum if you're using it in your application.
+> The ordinal values are likely to change in future updates. Instead, refer to the enum properties directly.
 
 ### `deviceClass`
 
@@ -278,8 +280,6 @@ readonly isSecure: boolean
 ```
 
 Whether this node is communicating securely with the controller.
-
-**Note:** Secure communication is not yet supported by this library.
 
 ### `isBeaming`
 
@@ -368,7 +368,8 @@ The interview process for this node was completed. The node is passed as the sin
 (node: ZWaveNode) => void
 ```
 
-**Note:** Because sleeping nodes may have wake up times of minutes up to days, it may take a very long time until this event is emitted. It might be desirable to wake up nodes manually to speed up this process.
+> [!TIP]
+> Because sleeping nodes may have wake up times of minutes up to several hours, it may take a very long time until this event is emitted. It might be desirable to wake up nodes manually to speed up the initial interview process.
 
 ### `"interview failed"`
 
@@ -411,7 +412,8 @@ There are two situations when this event is emitted:
 1. The interview of a node is completed for the first time ever.
 2. The driver begins a partial interview of a node that has previously been interviewed completely.
 
-**Note:** This event does not imply that the node is currently alive or will respond to requests.
+> [!NOTE]
+> This event does not imply that the node is currently awake or will respond to requests.
 
 ### `"value added"` / `"value updated"` / `"value removed"`
 

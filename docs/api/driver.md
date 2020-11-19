@@ -51,7 +51,8 @@ This method
 -   also returns `0` if the node/endpoint interview was not completed yet
 -   otherwise returns the version the node/endpoint claims to support
 
-**Note:** This only provides reliable information **after** the node/endpoint interview was completed.
+> [!WARNING]
+> This only provides reliable information **after** the node/endpoint interview was completed.
 
 ### `getSafeCCVersionForNode`
 
@@ -83,7 +84,8 @@ async destroy(): Promise<void>
 
 This shuts down the driver, closes the serial port and saves the network information to the local cache.
 
-**Note:** Make sure to call this before your application is closed.
+> [!WARNING]
+> Make sure to call this before your application is closed.
 
 ### `sendMessage`
 
@@ -175,7 +177,8 @@ registerRequestHandler<T extends Message>(fnType: FunctionType, handler: Request
 
 Registers a handler for messages that are not handled by the driver as part of a message exchange. The handler function needs to return a boolean indicating if the message has been handled. Registered handlers are called in sequence until a handler returns `true`.
 
-**Note:** For most use cases, it should not be necessary to use this method.
+> [!NOTE]
+> For most use cases, it should not be necessary to use this method.
 
 ### `unregisterRequestHandler`
 
@@ -201,8 +204,10 @@ This property returns absolute path of the directory where information about the
 readonly controller: ZWaveController
 ```
 
-Once the `"driver ready"` event was emitted, this property provides access to the controller instance, which contains information about the controller and a list of all nodes.  
-**Note:** Don't use it before the driver is ready!
+Once the `"driver ready"` event was emitted, this property provides access to the controller instance, which contains information about the controller and a list of all nodes.
+
+> [!WARNING]
+> Don't use it before the driver is ready!
 
 ## Driver events
 
@@ -254,8 +259,9 @@ interface SendMessageOptions {
 
 The message priority must one of the following enum values. Consuming applications typically don't need to overwrite the priority.
 
-**Note:** DO NOT rely on the numeric values of the enum if you're using it in your application.
-The ordinal values are likely to change in future updates. Instead, refer to the enum values directly.
+> [!ATTENTION]
+> DO NOT rely on the numeric values of the enum if you're using it in your application.
+> The ordinal values are likely to change in future updates. Instead, refer to the enum properties directly.
 
 ```ts
 /** The priority of messages, sorted from high (0) to low (>0) */
