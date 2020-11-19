@@ -15,6 +15,18 @@ export interface TranslatedValueID extends ValueID {
 	propertyKeyName?: string;
 }
 
+export type NodeInterviewFailedEventArgs = {
+	errorMessage: string;
+	isFinal: boolean;
+} & (
+	| {
+			attempt: number;
+			maxAttempts: number;
+	  }
+	// eslint-disable-next-line @typescript-eslint/ban-types
+	| {}
+);
+
 export type ZWaveNodeValueAddedArgs = ValueAddedArgs & TranslatedValueID;
 export type ZWaveNodeValueUpdatedArgs = ValueUpdatedArgs & TranslatedValueID;
 export type ZWaveNodeValueRemovedArgs = ValueRemovedArgs & TranslatedValueID;
@@ -44,6 +56,7 @@ export type ZWaveNotificationCallback = (
 export type ZWaveInterviewFailedCallback = (
 	node: ZWaveNode,
 	additionalInfo: string,
+	args?: NodeInterviewFailedEventArgs,
 ) => void;
 export type ZWaveNodeFirmwareUpdateProgressCallback = (
 	node: ZWaveNode,
