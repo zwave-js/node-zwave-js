@@ -437,12 +437,15 @@ export class Security2CCCommandsSupportedReport extends Security2CC {
 	) {
 		super(driver, options);
 		const CCs = parseCCList(this.payload);
+
+		// SDS13783: A sending node MAY terminate the list of supported command classes with the
+		// COMMAND_CLASS_MARK command class identifier.
+		// A receiving node MUST stop parsing the list of supported command classes if it detects the
+		// COMMAND_CLASS_MARK command class identifier in the Security 2 Commands Supported Report
 		this.supportedCCs = CCs.supportedCCs;
-		this.controlledCCs = CCs.controlledCCs;
 	}
 
 	public readonly supportedCCs: CommandClasses[];
-	public readonly controlledCCs: CommandClasses[];
 }
 
 @CCCommand(Security2Command.CommandsSupportedGet)
