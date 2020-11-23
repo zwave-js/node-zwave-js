@@ -55,6 +55,15 @@ export enum BinarySensorType {
 	Any = 0xff,
 }
 
+/**
+ * @publicAPI
+ */
+export type BinarySensorValueMetadata = ValueMetadata & {
+	ccSpecific: {
+		sensorType: BinarySensorType;
+	};
+};
+
 export function getBinarySensorValueId(
 	endpointIndex: number | undefined,
 	sensorType: BinarySensorType,
@@ -278,6 +287,7 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		);
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyBoolean,
+			ccSpecific: { sensorType: this._type },
 		});
 		this.getValueDB().setValue(valueId, this._value);
 		return true;
