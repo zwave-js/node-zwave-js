@@ -1737,7 +1737,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			"parameter #": this._parameter,
-			"next param #": this._parameter,
+			"next param #": this._nextParameter,
 			"value size": this._valueSize,
 			"value format": getEnumMemberName(ValueFormat, this._valueFormat),
 		};
