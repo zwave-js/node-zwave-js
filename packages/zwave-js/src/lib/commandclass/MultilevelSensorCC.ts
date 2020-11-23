@@ -56,6 +56,16 @@ export interface MultilevelSensorValue {
 	scale: Scale;
 }
 
+/**
+ * @publicAPI
+ */
+export type MultilevelSensorValueMetadata = ValueMetadata & {
+	ccSpecific: {
+		sensorType: number;
+		scale: number;
+	};
+};
+
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses["Multilevel Sensor"])
@@ -403,6 +413,10 @@ export class MultilevelSensorCCReport extends MultilevelSensorCC {
 			...ValueMetadata.ReadOnlyNumber,
 			unit: this.scale.unit,
 			label: typeName,
+			ccSpecific: {
+				sensorType: this.type,
+				scale: this.scale.key,
+			},
 		});
 		this.getValueDB().setValue(valueId, this.value);
 		return true;
