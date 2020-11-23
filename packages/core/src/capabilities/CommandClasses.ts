@@ -10,6 +10,7 @@ export enum CommandClasses {
 	"Alarm Silence" = 0x9d,
 	"All Switch" = 0x27,
 	"Anti-theft" = 0x5d,
+	"Anti-theft Unlock" = 0x7e,
 	"Application Capability" = 0x57,
 	"Application Status" = 0x22,
 	"Association" = 0x85,
