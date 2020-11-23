@@ -13,6 +13,9 @@
 * Added a third argument to the `"interview failed"` event handler which includes an object with additional details about the interview attempt (see [docs](https://zwave-js.github.io/node-zwave-js/#/api/node?id=quotinterview-failedquot)).  
   **WARNING:** The current signature is deprecated and will be changed in the next major version!
 
+### Bugfixes
+* The `targetValue` of switch-type CCs is no longer overwritten with `undefined` when a report without target value is received
+
 ### Changes under the hood
 * Switched to `npm@7` workspaces to get rid of TypeScript's `paths` config and support project-relative auto-imports
 
