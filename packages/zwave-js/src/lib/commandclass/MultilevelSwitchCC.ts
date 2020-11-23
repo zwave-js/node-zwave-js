@@ -81,6 +81,15 @@ const switchTypeProperties = Object.keys(SwitchType)
 	.map((key) => switchTypeToActions(key))
 	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
 
+/**
+ * @publicAPI
+ */
+export type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
+	ccSpecific: {
+		switchType: SwitchType;
+	};
+};
+
 function getCurrentValueValueID(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Multilevel Switch"],
@@ -393,12 +402,14 @@ export class MultilevelSwitchCC extends CommandClass {
 			this.getValueDB().setMetadata(upValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${up})`,
+				ccSpecific: { switchType },
 			});
 		}
 		if (!valueDb.hasMetadata(downValueId)) {
 			this.getValueDB().setMetadata(downValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${down})`,
+				ccSpecific: { switchType },
 			});
 		}
 	}
