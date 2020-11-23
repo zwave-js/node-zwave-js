@@ -90,6 +90,15 @@ export interface ThermostatSetpointCapabilities {
 	maxValueScale: number;
 }
 
+/**
+ * @publicAPI
+ */
+export type ThermostatSetpointMetadata = ValueMetadata & {
+	ccSpecific: {
+		setpointType: ThermostatSetpointType;
+	};
+};
+
 function getSupportedSetpointTypesValueID(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Thermostat Setpoint"],
@@ -659,6 +668,9 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 			this.getValueDB().setMetadata(setpointValueId, {
 				...ValueMetadata.Number,
 				unit: this._scale.unit,
+				ccSpecific: {
+					setpointType: this._type,
+				},
 			});
 		}
 		this.getValueDB().setValue(setpointValueId, this._value);
@@ -780,12 +792,7 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 		} = parseFloatWithScale(this.payload.slice(1 + bytesRead)));
 
 		// Predefine the metadata
-		const valueId: ValueID = {
-			commandClass: this.ccId,
-			endpoint: this.endpointIndex,
-			property: "setpoint",
-			propertyKey: this._type,
-		};
+		const valueId = getSetpointValueID(this.endpointIndex, this._type);
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.Number,
 			min: this._minValue,
@@ -793,6 +800,9 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 			unit:
 				getSetpointUnit(this._minValueScale) ||
 				getSetpointUnit(this._maxValueScale),
+			ccSpecific: {
+				setpointType: this._type,
+			},
 		});
 
 		this.persistValues();
