@@ -7,6 +7,8 @@
 ## __WORK IN PROGRESS__
 ### Config file changes
 * Added a config file for `Jasco ZW3010`
+* Added new Notification definitions
+* Added new Indicators
 
 ### Features
 * Implemented the `replaceFailedNode` API

@@ -407,7 +407,14 @@
 				"idle": false,
 				"states": {
 					"0x16": {
-						"label": "Window/door is open"
+						"label": "Window/door is open",
+						"params": {
+							"type": "enum",
+							"values": {
+								"0x00": "Open in regular position",
+								"0x01": "Open in tilt position"
+							}
+						}
 					},
 					"0x17": {
 						"label": "Window/door is closed"
@@ -651,6 +658,15 @@
 						"label": "Motion detection"
 					}
 				}
+			},
+			{
+				"name": "Magnetic interference status",
+				"states": {
+					"0x0b": {
+						"label": "Magnetic field interference detected",
+						"description": "This state is used to indicate that magnetic field disturbance have been detected and the product functionality may not work reliably."
+					}
+				}
 			}
 		],
 		"events": {
@@ -670,6 +686,16 @@
 			"0x0A": {
 				"label": "Impact detected",
 				"description": "This event indicates that the node has detected an excessive amount of pressure or that an impact has occurred on the product itself."
+			},
+			"0x0C": {
+				"label": "RF Jamming detected",
+				"description": "This event can be issued if the node has detected a raise in the background RSSI level.",
+				// 1-byte value representing the measured RSSI over a period of time spanning between 10s and 60s.
+				// TODO: The value MUST be encoded using signed representation
+				"params": {
+					"type": "value",
+					"name": "RSSI"
+				}
 			}
 		}
 	},
@@ -769,6 +795,9 @@
 				"states": {
 					"0x10": {
 						"label": "Back-up battery is low"
+					},
+					"0x12": {
+						"label": "Back-up battery disconnected"
 					}
 				}
 			}
@@ -1074,6 +1103,10 @@
 		"events": {
 			"0x04": {
 				"label": "Posture changed"
+			},
+			"0x0C": {
+				"label": "Fall detected",
+				"description": "This event is used to indicate that a person fall has been detected and medical help may be needed."
 			}
 		}
 	},
