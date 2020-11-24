@@ -7,7 +7,6 @@
 			"stream": true
 		},
 		"version": {
-			"allowBranch": ["master", "release-*"],
 			"ignoreChanges": ["*.md"],
 			"amend": true,
 			"push": false
