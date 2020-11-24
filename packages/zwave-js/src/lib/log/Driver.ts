@@ -1,9 +1,9 @@
 import * as Sentry from "@sentry/node";
 import {
 	createLoggerFormat,
-	createLogTransports,
 	DataDirection,
 	getDirectionPrefix,
+	getTransports,
 	isLoglevelVisible,
 	messageRecordToLines,
 	shouldLogNode,
@@ -32,7 +32,7 @@ function getLogger(): ZWaveLogger {
 	if (!_logger) {
 		if (!winston.loggers.has("driver")) {
 			winston.loggers.add("driver", {
-				transports: createLogTransports(),
+				transports: getTransports(),
 				format: createLoggerFormat(DRIVER_LABEL),
 			});
 		}

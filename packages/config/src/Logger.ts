@@ -1,7 +1,7 @@
 import {
 	createLoggerFormat,
-	createLogTransports,
 	getDirectionPrefix,
+	getTransports,
 	isLoglevelVisible,
 	ZWaveLogger,
 } from "@zwave-js/core";
@@ -15,7 +15,7 @@ function getLogger(): ZWaveLogger {
 	if (!_logger) {
 		if (!winston.loggers.has("config")) {
 			winston.loggers.add("config", {
-				transports: createLogTransports(),
+				transports: getTransports(),
 				format: createLoggerFormat(CONFIG_LABEL),
 			});
 		}

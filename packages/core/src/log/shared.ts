@@ -9,6 +9,15 @@ import { colorizer } from "./Colorizer";
 const { combine, timestamp, label } = winston.format;
 
 const loglevels = configs.npm.levels;
+
+export interface LogConfig {
+	enabled: boolean;
+	logLevel: number;
+	logToFile: boolean;
+	transports: Transport[];
+	filename: string;
+}
+
 function getTransportLoglevel(): string {
 	return process.env.LOGLEVEL! in loglevels ? process.env.LOGLEVEL! : "debug";
 }
@@ -20,9 +29,28 @@ function shouldLogToFile(): boolean {
 	return !!process.env.LOGTOFILE;
 }
 
-const logFilename = require.main
-	? path.join(path.dirname(require.main.filename), `zwave-${process.pid}.log`)
-	: path.join(__dirname, "../../..", `zwave-${process.pid}.log`);
+let logConfig: LogConfig = {
+	enabled: true,
+	logLevel: getTransportLoglevelNumeric(),
+	logToFile: shouldLogToFile(),
+	transports: [],
+	filename: require.main
+		? path.join(
+				path.dirname(require.main.filename),
+				`zwave-${process.pid}.log`,
+		  )
+		: path.join(__dirname, "../../..", `zwave-${process.pid}.log`),
+};
+
+logConfig.transports = createLogTransports();
+
+export function setupLogger(config: LogConfig): void {
+	logConfig = config;
+}
+
+export function getTransports(): Transport[] {
+	return logConfig.transports;
+}
 
 /**
  * Checks the LOG_NODES env variable whether logs should be written for a given node id
@@ -251,7 +279,7 @@ export function createLoggerFormat(
 	channel: string,
 	// colorize: boolean = true,
 ): Format {
-	const colorize = !shouldLogToFile();
+	const colorize = !logConfig.logToFile;
 	const formats: Format[] = [];
 	formats.push(
 		label({ label: channel }),
@@ -297,12 +325,12 @@ export function restoreSilence(
 
 let fileTransport: Transport | undefined;
 
-export function createLogTransports(): Transport[] {
+function createLogTransports(): Transport[] {
 	const ret: Transport[] = [];
-	if (shouldLogToFile()) {
+	if (logConfig.logToFile) {
 		if (!fileTransport) {
 			console.log(`Logging to file:
-${logFilename}`);
+${logConfig.filename}`);
 			fileTransport = createFileTransport();
 		}
 		ret.push(fileTransport);
@@ -312,16 +340,16 @@ ${logFilename}`);
 	return ret;
 }
 
-export function createConsoleTransport(): Transport {
+function createConsoleTransport(): Transport {
 	return new winston.transports.Console({
 		level: getTransportLoglevel(),
 		silent: process.env.NODE_ENV === "test",
 	});
 }
 
-export function createFileTransport(): Transport {
+function createFileTransport(): Transport {
 	return new winston.transports.File({
-		filename: logFilename,
+		filename: logConfig.filename,
 		level: getTransportLoglevel(),
 	});
 }
@@ -334,13 +362,12 @@ const isUnitTest = process.env.NODE_ENV === "test";
 export function isLoglevelVisible(loglevel: string): boolean {
 	// If we are not connected to a TTY, not unit testing and not logging to a file, we won't see anything
 	if (isUnitTest) return true;
-	if (!isTTY && !shouldLogToFile()) return false;
+	if (!isTTY && !logConfig.logToFile) return false;
 
 	if (!loglevelVisibleCache.has(loglevel)) {
 		loglevelVisibleCache.set(
 			loglevel,
-			loglevel in loglevels &&
-				loglevels[loglevel] <= getTransportLoglevelNumeric(),
+			loglevel in loglevels && loglevels[loglevel] <= logConfig.logLevel,
 		);
 	}
 	return loglevelVisibleCache.get(loglevel)!;
