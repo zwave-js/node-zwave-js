@@ -32,7 +32,7 @@ These properties are meant to provide a human-readable representation of the Com
 
 ## ValueMetadata
 
-Value metadata are used to get more informations about a specific valueID.
+Value metadata is used to get additional information about a specific `ValueID`. All metadata shares the following structure (with additional information added) for each value type:
 
 ```ts
 interface ValueMetadataBase {
@@ -45,20 +45,18 @@ interface ValueMetadataBase {
 }
 ```
 
--   `type`: The type of the value. Can be: `any`, `number`, `boolean`, `string`, `number[]`, `string[]`, `boolean[]`
--   `readable`: Whether the value can be read. By default it's `true`
--   `writable`: Wheather a value can be written. By default it's `true`
+-   `type`: The type of the value. Can be: `any`, `number`, `boolean`, `string`, `number[]`, `string[]`, `boolean[]`. Depending on the `type`, each metadata can have additional properties (see below).
+-   `readable`: Whether the value can be read. Default: `true`
+-   `writable`: Wheather a value can be written. Default: `true`
 -   `description`: A description of the value
--   `label`: A human-readable name for the property
--   `ccSpecific`: Command class specific informations to help identify this value
+-   `label`: A human-readable label for the property
+-   `ccSpecific`: CC specific information to help identify this value [(see below)](#CC-specific-fields)
 
-Based on the `type` each metadata can have some more informations
-
-### Types
+### Value types
 
 Here you can find all the type specific metadata fields
 
-#### any
+#### `any`
 
 ```ts
 interface ValueMetadataAny extends ValueMetadataBase {
@@ -68,7 +66,7 @@ interface ValueMetadataAny extends ValueMetadataBase {
 
 -   `default`: The default value
 
-#### number
+#### `number`
 
 ```ts
 interface ValueMetadataNumeric extends ValueMetadataBase {
@@ -82,11 +80,11 @@ interface ValueMetadataNumeric extends ValueMetadataBase {
 }
 ```
 
--   `min`: The minumum value that can be assigned to a CC value
--   `max`: The maximum value that can be assigned to a CC
+-   `min`: The minumum value that can be assigned to this value
+-   `max`: The maximum value that can be assigned to this value
 -   `steps`: When only certain values between min and max are allowed, this determines the step size
 -   `default`: The default value
--   `states`: Speaking names for numeric values
+-   `states`: Human-readable names for numeric values
 -   `unit`: An optional unit for numeric values
 
 #### boolean
@@ -117,9 +115,11 @@ interface ValueMetadataString extends ValueMetadataBase {
 -   `maxLength`: The maximum length this string may have
 -   `default`: The default value
 
-### CC Specific
+### CC-specific fields
 
-Here you can find all `ccSpecific` fields for each CommandClass that provides them
+The structure of the `ccSpecific` fields is shown here for each CC that provides them:
+
+#### Alarm Sensor CC
 
 ```ts
 type AlarmSensorValueMetadata = ValueMetadata & {
@@ -129,6 +129,8 @@ type AlarmSensorValueMetadata = ValueMetadata & {
 };
 ```
 
+#### Binary Sensor CC
+
 ```ts
 type BinarySensorValueMetadata = ValueMetadata & {
 	ccSpecific: {
@@ -136,6 +138,8 @@ type BinarySensorValueMetadata = ValueMetadata & {
 	};
 };
 ```
+
+#### Meter CC
 
 ```ts
 type MeterMetadata = ValueMetadata & {
@@ -147,6 +151,8 @@ type MeterMetadata = ValueMetadata & {
 };
 ```
 
+#### Multilevel Sensor CC
+
 ```ts
 type MultilevelSensorValueMetadata = ValueMetadata & {
 	ccSpecific: {
@@ -156,6 +162,8 @@ type MultilevelSensorValueMetadata = ValueMetadata & {
 };
 ```
 
+#### Multilevel Switch CC
+
 ```ts
 type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 	ccSpecific: {
@@ -163,6 +171,8 @@ type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 	};
 };
 ```
+
+#### Thermostat Setpoint CC
 
 ```ts
 type ThermostatSetpointMetadata = ValueMetadata & {
