@@ -108,10 +108,10 @@
     "toLogEntryOverview": "ts-node packages/zwave-js/maintenance/checkCCToLogEntry.ts",
     "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
     "commit": "git-cz",
-    "prerelease": "npm install && npm run build",
+    "prerelease": "npm run build",
     "release": "lerna version --no-commit-hooks",
     "preversion": "release-script --lerna-check",
-    "version": "release-script --lerna",
+    "version": "rm package-lock.json && npm i && release-script --lerna",
     "postversion": "git push && git push --tags",
     "config": "ts-node maintenance/importConfig.ts",
     "docs": "docsify serve docs"
