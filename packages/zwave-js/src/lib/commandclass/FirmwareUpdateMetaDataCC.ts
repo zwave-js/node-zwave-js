@@ -140,9 +140,10 @@ export class FirmwareUpdateMetaDataCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			FirmwareUpdateMetaDataCCMetaDataReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<FirmwareUpdateMetaDataCCMetaDataReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return pick(response, [
 			"manufacturerId",
 			"firmwareId",
@@ -177,9 +178,9 @@ export class FirmwareUpdateMetaDataCCAPI extends CCAPI {
 		// we do not use the built-in waiting functionality, which would block
 		// all other communication
 		await this.driver.sendCommand(cc, this.commandOptions);
-		const { status } = await this.driver.waitForCommand<
-			FirmwareUpdateMetaDataCCRequestReport
-		>(
+		const {
+			status,
+		} = await this.driver.waitForCommand<FirmwareUpdateMetaDataCCRequestReport>(
 			(cc) =>
 				cc instanceof FirmwareUpdateMetaDataCCRequestReport &&
 				cc.nodeId === this.endpoint.nodeId,

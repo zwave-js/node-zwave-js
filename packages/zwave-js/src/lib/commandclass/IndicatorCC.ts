@@ -249,9 +249,10 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = (await this.driver.sendCommand<
-			IndicatorCCSupportedReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<IndicatorCCSupportedReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			// Include the actual indicator ID if 0x00 was requested
 			...(indicatorId === 0x00

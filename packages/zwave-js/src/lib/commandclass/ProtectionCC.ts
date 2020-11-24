@@ -247,9 +247,10 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			ProtectionCCSupportedReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<ProtectionCCSupportedReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			supportsExclusiveControl: response.supportsExclusiveControl,
 			supportsTimeout: response.supportsTimeout,
@@ -268,9 +269,10 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			ProtectionCCExclusiveControlReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<ProtectionCCExclusiveControlReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.exclusiveControlNodeId;
 	}
 
@@ -298,9 +300,10 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			ProtectionCCTimeoutReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<ProtectionCCTimeoutReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.timeout;
 	}
 

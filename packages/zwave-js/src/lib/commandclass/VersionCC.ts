@@ -120,9 +120,10 @@ export class VersionCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedCC,
 		});
-		const response = (await this.driver.sendCommand<
-			VersionCCCommandClassReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<VersionCCCommandClassReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.ccVersion;
 	}
 
@@ -137,9 +138,10 @@ export class VersionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			VersionCCCapabilitiesReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<VersionCCCapabilitiesReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			supportsZWaveSoftwareGet: response.supportsZWaveSoftwareGet,
 		};
@@ -156,9 +158,10 @@ export class VersionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			VersionCCZWaveSoftwareReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<VersionCCZWaveSoftwareReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			sdkVersion: response.sdkVersion,
 			applicationFrameworkAPIVersion:
