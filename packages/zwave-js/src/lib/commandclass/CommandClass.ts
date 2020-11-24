@@ -566,9 +566,6 @@ export class CommandClass {
 
 	/** Determines if the given value should always be persisted */
 	public shouldValueAlwaysBeCreated(property: keyof this): boolean {
-		// A value is internal if any of the possible definitions say so (true)
-		if (this._registeredCCValues.get(property as string) === true)
-			return true;
 		const ccValueDefinition = getCCValueDefinitions(this).get(
 			property as string,
 		);
@@ -665,14 +662,15 @@ export class CommandClass {
 				}
 			} else {
 				// This value belongs to a simple property
-				db.setValue(
-					{
-						commandClass: cc,
-						endpoint: this.endpointIndex,
-						property: variable,
-					},
-					sourceValue,
-				);
+				const valueId: ValueID = {
+					commandClass: cc,
+					endpoint: this.endpointIndex,
+					property: variable,
+				};
+				// Avoid overwriting existing values with undefined if forceCreation is true
+				if (sourceValue != undefined || !db.hasValue(valueId)) {
+					db.setValue(valueId, sourceValue);
+				}
 			}
 		}
 		return true;

@@ -17,6 +17,7 @@
 
 ### Bugfixes
 * The logs of `ConfigurationCC::PropertiesGet` now include the correct *next parameter #*
+* The `targetValue` of switch-type CCs is no longer overwritten with `undefined` when a report without target value is received
 
 ### Changes under the hood
 * Switched to `npm@7` workspaces to get rid of TypeScript's `paths` config and support project-relative auto-imports
