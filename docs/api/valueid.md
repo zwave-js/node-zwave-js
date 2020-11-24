@@ -84,7 +84,7 @@ interface ValueMetadataNumeric extends ValueMetadataBase {
 -   `max`: The maximum value that can be assigned to this value
 -   `steps`: When only certain values between min and max are allowed, this determines the step size
 -   `default`: The default value
--   `states`: Human-readable names for numeric values
+-   `states`: Human-readable names for numeric values, for example `{0: "off", 1: "on"}`.
 -   `unit`: An optional unit for numeric values
 
 #### boolean
@@ -104,9 +104,7 @@ interface ValueMetadataBoolean extends ValueMetadataBase {
 interface ValueMetadataString extends ValueMetadataBase {
 	type: "string";
 	minLength?: number;
-	/** The maximum length this string may have (optional) */
 	maxLength?: number;
-	/** The default value */
 	default?: string;
 }
 ```
@@ -151,6 +149,8 @@ type MeterMetadata = ValueMetadata & {
 };
 ```
 
+The meter type and scale keys may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/node-zwave-js/blob/master/packages/config/config/meters.json).
+
 #### Multilevel Sensor CC
 
 ```ts
@@ -161,6 +161,8 @@ type MultilevelSensorValueMetadata = ValueMetadata & {
 	};
 };
 ```
+
+The multilevel sensor types may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/node-zwave-js/blob/master/packages/config/config/sensorTypes.json). Named scales which are referenced from the JSON file can be found [here](https://github.com/zwave-js/node-zwave-js/blob/master/packages/config/config/scales.json).
 
 #### Multilevel Switch CC
 
