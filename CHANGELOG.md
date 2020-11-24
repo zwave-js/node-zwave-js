@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.4.1-alpha.0 (2020-11-24)
 ### Config file changes
 * Added a config file for `Jasco ZW3010`
 * Added new Notification definitions
