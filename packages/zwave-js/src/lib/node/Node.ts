@@ -1582,7 +1582,7 @@ version:               ${this.version}`;
 			}
 			this._neighbors = resp.nodeIds;
 			log.controller.logNode(this.id, {
-				message: `  node neighbors received: ${this._neighbors.join(
+				message: `  node neighbors received: ${this._neighbors?.join(
 					", ",
 				)}`,
 				direction: "inbound",
