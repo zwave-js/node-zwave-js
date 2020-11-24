@@ -223,6 +223,8 @@ The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/a
 
 ### `FileSystem`
 
+<!-- #import FileSystem from "zwave-js" -->
+
 ```ts
 interface FileSystem {
 	ensureDir(path: string): Promise<void>;
@@ -244,16 +246,24 @@ interface FileSystem {
 
 Influences the behavior of `driver.sendMessage`.
 
+<!-- #import SendMessageOptions from "zwave-js" -->
+
 ```ts
 interface SendMessageOptions {
 	/** The priority of the message to send. If none is given, the defined default priority of the message class will be used. */
 	priority?: MessagePriority;
 	/** If an exception should be thrown when the message to send is not supported. Setting this to false is is useful if the capabilities haven't been determined yet. Default: true */
 	supportCheck?: boolean;
-	/** Whether the driver should update the node status to asleep or dead when a transaction is not acknowledged (repeatedly). Setting this to false will cause the simply transaction to be rejected on failure. Default: true */
+	/**
+	 * Whether the driver should update the node status to asleep or dead when a transaction is not acknowledged (repeatedly).
+	 * Setting this to false will cause the simply transaction to be rejected on failure.
+	 * Default: true
+	 */
 	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
+	/** Sets the number of milliseconds after which a transaction expires. When the expiration timer elapses, the transaction promise is rejected. */
 	expire?: number;
+	/** Internal information used to identify or mark this transaction */
+	tag?: any;
 }
 ```
 
@@ -263,8 +273,9 @@ The message priority must one of the following enum values. Consuming applicatio
 > DO NOT rely on the numeric values of the enum if you're using it in your application.
 > The ordinal values are likely to change in future updates. Instead, refer to the enum properties directly.
 
+<!-- #import MessagePriority from "zwave-js" -->
+
 ```ts
-/** The priority of messages, sorted from high (0) to low (>0) */
 enum MessagePriority {
 	// Handshake messages have the highest priority because they are part of other transactions
 	// which have already started when the handshakes are needed (e.g. Security Nonce exchange)
@@ -275,23 +286,23 @@ enum MessagePriority {
 	// Our handshake requests must be prioritized over all other messages
 	PreTransmitHandshake = 1,
 	// Controller commands usually finish quickly and should be preferred over node queries
-	Controller = 2,
+	Controller,
 	// Pings (NoOP) are used for device probing at startup and for network diagnostics
-	Ping = 3,
+	Ping,
 	// Multistep controller commands typically require user interaction but still
 	// should happen at a higher priority than any node data exchange
-	MultistepController = 4,
+	MultistepController,
 	// Whenever sleeping devices wake up, their queued messages must be handled quickly
 	// because they want to go to sleep soon. So prioritize them over non-sleeping devices
-	WakeUp = 5,
+	WakeUp,
 	// Normal operation and node data exchange
-	Normal = 6,
+	Normal,
 	// Node querying is expensive and happens whenever a new node is discovered.
 	// In order to keep the system responsive, give them a lower priority
-	NodeQuery = 7,
+	NodeQuery,
 	// Some devices need their state to be polled at regular intervals. Only do that when
 	// nothing else needs to be done
-	Poll = 8,
+	Poll,
 }
 ```
 
@@ -310,6 +321,8 @@ Influences the behavior of `driver.sendSupervisedCommand`. Has all the propertie
 
 The `onUpdate` has the signature `(status: SupervisionStatus, remainingDuration?: Duration) => void` where `SupervisionStatus` is defined as follows:
 
+<!-- #import SupervisionStatus from "zwave-js" -->
+
 ```ts
 enum SupervisionStatus {
 	NoSupport = 0x00,
@@ -322,6 +335,8 @@ enum SupervisionStatus {
 ### `SupervisionResult`
 
 Is used to report the status of a supervised command execution.
+
+<!-- #import SupervisionResult from "zwave-js" -->
 
 ```ts
 interface SupervisionResult {

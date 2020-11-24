@@ -146,10 +146,12 @@ function extractFirmware(data: Buffer, format: FirmwareFileFormat): Firmware
 
 If successful, `extractFirmware` returns an object of the following form, whose properties can be passed to `beginFirmwareUpdate`:
 
+<!-- #import Firmware from "zwave-js" -->
+
 ```ts
 interface Firmware {
-	data: Buffer;
-	firmwareTarget?: number;
+    data: Buffer;
+    firmwareTarget?: number;
 }
 ```
 
@@ -197,6 +199,8 @@ readonly interviewStage: InterviewStage
 
 This property tracks the current status of the node interview. It contains a value representing the **last completed step** of the interview. You shouldn't need to use this in your application. If you do, here are the possible values.
 
+<!-- #import InterviewStage from "zwave-js" -->
+
 ```ts
 enum InterviewStage {
 	/** The interview process hasn't started for this node */
@@ -205,25 +209,36 @@ enum InterviewStage {
 	ProtocolInfo,
 	/** The node has been queried for supported and controlled command classes */
 	NodeInfo,
+
+	// ===== the stuff above should never change =====
+
 	/**
 	 * This marks the beginning of re-interviews on application startup.
 	 * RestartFromCache and later stages will be serialized as "Complete" in the cache
 	 */
 	RestartFromCache,
+
+	// ===== the stuff below changes frequently, so it has to be redone on every start =====
+
 	/**
 	 * Information for all command classes has been queried.
 	 * This includes static information that is requested once as well as dynamic
 	 * information that is requested on every restart.
 	 */
 	CommandClasses,
+
+	// TODO: Heal network on startup
+
 	/**
 	 * Device information for the node has been loaded from a config file.
 	 * If defined, some of the reported information will be overwritten based on the
 	 * config file contents.
 	 */
 	OverwriteConfig,
+
 	/** The node has been queried for its current neighbor list */
 	Neighbors,
+
 	/** The interview process has finished */
 	Complete,
 }

@@ -31,6 +31,7 @@ export enum SupervisionCommand {
 	Report = 0x02,
 }
 
+/** @publicAPI */
 export enum SupervisionStatus {
 	NoSupport = 0x00,
 	Working = 0x01,
@@ -38,6 +39,7 @@ export enum SupervisionStatus {
 	Success = 0xff,
 }
 
+/** @publicAPI */
 export interface SupervisionResult {
 	status: SupervisionStatus;
 	remainingDuration?: Duration;

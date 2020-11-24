@@ -2,12 +2,14 @@
 
 The `ValueID` interface uniquely identifies to which CC, endpoint and property a value belongs to:
 
+<!-- #import ValueID from "zwave-js" -->
+
 ```ts
 interface ValueID {
-	commandClass: CommandClasses;
-	endpoint?: number;
-	property: number | string;
-	propertyKey?: number | string;
+    commandClass: CommandClasses;
+    endpoint?: number;
+    property: string | number;
+    propertyKey?: string | number;
 }
 ```
 
@@ -19,6 +21,8 @@ It has four properties:
 -   `propertyKey` - _(optional)_ Allows sub-addressing properties that contain multiple values (like combined sensors).
 
 Since both `property` and `propertyKey` can be cryptic, value IDs are exposed to consuming applications in a "translated" form, which contains all properties from `ValueID` plus the following ones:
+
+<!-- #import TranslatedValueID from "zwave-js" -->
 
 ```ts
 interface TranslatedValueID extends ValueID {
@@ -33,6 +37,8 @@ These properties are meant to provide a human-readable representation of the Com
 ## ValueMetadata
 
 Value metadata is used to get additional information about a specific `ValueID`. All metadata shares the following structure (with additional information added) for each value type:
+
+<!-- TODO: Import from "core" does not work for some reason -->
 
 ```ts
 interface ValueMetadataBase {
@@ -58,9 +64,12 @@ Here you can find all the type specific metadata fields
 
 #### `any`
 
+<!-- #import ValueMetadataAny from "zwave-js" -->
+
 ```ts
 interface ValueMetadataAny extends ValueMetadataBase {
-	default?: any;
+    /** The default value */
+    default?: any;
 }
 ```
 
@@ -68,15 +77,23 @@ interface ValueMetadataAny extends ValueMetadataBase {
 
 #### `number`
 
+<!-- #import ValueMetadataNumeric from "zwave-js" -->
+
 ```ts
 interface ValueMetadataNumeric extends ValueMetadataBase {
-	type: "number";
-	min?: number;
-	max?: number;
-	steps?: number;
-	default?: number;
-	states?: Record<number, string>;
-	unit?: string;
+    type: "number";
+    /** The minimum value that can be assigned to a CC value (optional) */
+    min?: number;
+    /** The maximum value that can be assigned to a CC value (optional) */
+    max?: number;
+    /** When only certain values between min and max are allowed, this determines the step size */
+    steps?: number;
+    /** The default value */
+    default?: number;
+    /** Speaking names for numeric values */
+    states?: Record<number, string>;
+    /** An optional unit for numeric values */
+    unit?: string;
 }
 ```
 
@@ -89,10 +106,13 @@ interface ValueMetadataNumeric extends ValueMetadataBase {
 
 #### boolean
 
+<!-- #import ValueMetadataBoolean from "zwave-js" -->
+
 ```ts
 interface ValueMetadataBoolean extends ValueMetadataBase {
-	type: "boolean";
-	default?: number;
+    type: "boolean";
+    /** The default value */
+    default?: number;
 }
 ```
 
@@ -100,12 +120,17 @@ interface ValueMetadataBoolean extends ValueMetadataBase {
 
 ### string
 
+<!-- #import ValueMetadataString from "zwave-js" -->
+
 ```ts
 interface ValueMetadataString extends ValueMetadataBase {
-	type: "string";
-	minLength?: number;
-	maxLength?: number;
-	default?: string;
+    type: "string";
+    /** The minimum length this string must have (optional) */
+    minLength?: number;
+    /** The maximum length this string may have (optional) */
+    maxLength?: number;
+    /** The default value */
+    default?: string;
 }
 ```
 
@@ -119,6 +144,8 @@ The structure of the `ccSpecific` fields is shown here for each CC that provides
 
 #### Alarm Sensor CC
 
+<!-- #import AlarmSensorValueMetadata from "zwave-js" -->
+
 ```ts
 type AlarmSensorValueMetadata = ValueMetadata & {
 	ccSpecific: {
@@ -128,6 +155,8 @@ type AlarmSensorValueMetadata = ValueMetadata & {
 ```
 
 #### Binary Sensor CC
+
+<!-- #import BinarySensorValueMetadata from "zwave-js" -->
 
 ```ts
 type BinarySensorValueMetadata = ValueMetadata & {
@@ -139,11 +168,13 @@ type BinarySensorValueMetadata = ValueMetadata & {
 
 #### Indicator CC
 
+<!-- #import IndicatorMetadata from "zwave-js" -->
+
 ```ts
 type IndicatorMetadata = ValueMetadata & {
 	ccSpecific: {
 		indicatorId: number;
-		propertyId?: number; // only present on V2+ indicators
+		propertyId?: number;
 	};
 };
 ```
@@ -151,6 +182,8 @@ type IndicatorMetadata = ValueMetadata & {
 The indicator and property IDs may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/node-zwave-js/blob/master/packages/config/config/indicators.json).
 
 #### Meter CC
+
+<!-- #import MeterMetadata from "zwave-js" -->
 
 ```ts
 type MeterMetadata = ValueMetadata & {
@@ -166,6 +199,8 @@ The meter type and scale keys may change with newer Z-Wave specs. You can find t
 
 #### Multilevel Sensor CC
 
+<!-- #import MultilevelSensorValueMetadata from "zwave-js" -->
+
 ```ts
 type MultilevelSensorValueMetadata = ValueMetadata & {
 	ccSpecific: {
@@ -179,6 +214,8 @@ The multilevel sensor types may change with newer Z-Wave specs. You can find the
 
 #### Multilevel Switch CC
 
+<!-- #import MultilevelSwitchLevelChangeMetadata from "zwave-js" -->
+
 ```ts
 type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 	ccSpecific: {
@@ -188,6 +225,8 @@ type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 ```
 
 #### Notification CC
+
+<!-- #import NotificationMetadata from "zwave-js" -->
 
 ```ts
 type NotificationMetadata = ValueMetadata & {
@@ -201,6 +240,8 @@ The notification types and variable names may change with newer Z-Wave specs. Yo
 The notification variable is not included in this metadata, since there's currently no way to identify them except their name, which is used as the `propertyKey` of the value ID.
 
 #### Thermostat Setpoint CC
+
+<!-- #import ThermostatSetpointMetadata from "zwave-js" -->
 
 ```ts
 type ThermostatSetpointMetadata = ValueMetadata & {
