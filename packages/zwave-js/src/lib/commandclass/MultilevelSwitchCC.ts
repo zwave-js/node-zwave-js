@@ -81,6 +81,15 @@ const switchTypeProperties = Object.keys(SwitchType)
 	.map((key) => switchTypeToActions(key))
 	.reduce<string[]>((acc, cur) => acc.concat(...cur), []);
 
+/**
+ * @publicAPI
+ */
+export type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
+	ccSpecific: {
+		switchType: SwitchType;
+	};
+};
+
 function getCurrentValueValueID(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Multilevel Switch"],
@@ -115,9 +124,10 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			MultilevelSwitchCCReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<MultilevelSwitchCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			currentValue: response.currentValue,
 			targetValue: response.targetValue,
@@ -240,9 +250,10 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			MultilevelSwitchCCSupportedReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<MultilevelSwitchCCSupportedReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.switchType;
 	}
 
@@ -393,12 +404,14 @@ export class MultilevelSwitchCC extends CommandClass {
 			this.getValueDB().setMetadata(upValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${up})`,
+				ccSpecific: { switchType },
 			});
 		}
 		if (!valueDb.hasMetadata(downValueId)) {
 			this.getValueDB().setMetadata(downValueId, {
 				...ValueMetadata.Boolean,
 				label: `Perform a level change (${down})`,
+				ccSpecific: { switchType },
 			});
 		}
 	}

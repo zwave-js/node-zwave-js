@@ -166,9 +166,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			ColorSwitchCCSupportedReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<ColorSwitchCCSupportedReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.supportedColorComponents;
 	}
 

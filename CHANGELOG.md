@@ -14,6 +14,7 @@
 * Implemented the `replaceFailedNode` API
 * Added a third argument to the `"interview failed"` event handler which includes an object with additional details about the interview attempt (see [docs](https://zwave-js.github.io/node-zwave-js/#/api/node?id=quotinterview-failedquot)).  
   **WARNING:** The current signature is deprecated and will be changed in the next major version!
+* Metadata can now be customized by CCs with the `ccSpecific` property. This is used in several CCs to allow applications to identify which value a value ID describes (e.g. sensor type, meter type, etc...)
 
 ### Bugfixes
 * The logs of `ConfigurationCC::PropertiesGet` now include the correct *next parameter #*

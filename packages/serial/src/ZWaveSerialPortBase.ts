@@ -74,9 +74,7 @@ export class ZWaveSerialPortBase extends PassThrough {
 	private parser: SerialAPIParser;
 
 	// Allow strongly-typed async iteration
-	public declare [Symbol.asyncIterator]: () => AsyncIterableIterator<
-		ZWaveSerialChunk
-	>;
+	public declare [Symbol.asyncIterator]: () => AsyncIterableIterator<ZWaveSerialChunk>;
 
 	constructor(private implementation: ZWaveSerialPortImplementation) {
 		super({ readableObjectMode: true });

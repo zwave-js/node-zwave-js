@@ -13,11 +13,13 @@ for (const file of definedCCs) {
 
 // explicitly export specific things from the CCs
 export { AlarmSensorType } from "./AlarmSensorCC";
+export type { AlarmSensorValueMetadata } from "./AlarmSensorCC";
 export type { CCAPI } from "./API";
 export { AssociationGroupInfoProfile } from "./AssociationGroupInfoCC";
 export type { AssociationGroup } from "./AssociationGroupInfoCC";
 export { BatteryChargingStatus, BatteryReplacementStatus } from "./BatteryCC";
 export { BinarySensorType } from "./BinarySensorCC";
+export type { BinarySensorValueMetadata } from "./BinarySensorCC";
 export { CentralSceneKeys } from "./CentralSceneCC";
 export { ScheduleOverrideType } from "./ClimateControlScheduleCC";
 export { Weekday } from "./ClockCC";
@@ -33,19 +35,25 @@ export {
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
 } from "./FirmwareUpdateMetaDataCC";
+export type { IndicatorMetadata } from "./IndicatorCC";
 export { DeviceIdType } from "./ManufacturerSpecificCC";
 export { RateType } from "./MeterCC";
+export type { MeterMetadata } from "./MeterCC";
 export type { Association } from "./MultiChannelAssociationCC";
 export type {
 	MultilevelSensorCCReportOptions,
 	MultilevelSensorValue,
+	MultilevelSensorValueMetadata,
 } from "./MultilevelSensorCC";
 export { LevelChangeDirection, SwitchType } from "./MultilevelSwitchCC";
+export type { MultilevelSwitchLevelChangeMetadata } from "./MultilevelSwitchCC";
+export type { NotificationMetadata } from "./NotificationCC";
 export { LocalProtectionState, RFProtectionState } from "./ProtectionCC";
 export { ToneId } from "./SoundSwitchCC";
 export { ThermostatMode } from "./ThermostatModeCC";
 export { ThermostatOperatingState } from "./ThermostatOperatingStateCC";
 export { SetbackType } from "./ThermostatSetbackCC";
 export { ThermostatSetpointType } from "./ThermostatSetpointCC";
+export type { ThermostatSetpointMetadata } from "./ThermostatSetpointCC";
 export { KeypadMode, UserIDStatus } from "./UserCodeCC";
 export { ZWavePlusNodeType, ZWavePlusRoleType } from "./ZWavePlusCC";
