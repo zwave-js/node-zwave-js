@@ -35,6 +35,7 @@ export {
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
 } from "./FirmwareUpdateMetaDataCC";
+export type { IndicatorMetadata } from "./IndicatorCC";
 export { DeviceIdType } from "./ManufacturerSpecificCC";
 export { RateType } from "./MeterCC";
 export type { MeterMetadata } from "./MeterCC";
@@ -46,6 +47,7 @@ export type {
 } from "./MultilevelSensorCC";
 export { LevelChangeDirection, SwitchType } from "./MultilevelSwitchCC";
 export type { MultilevelSwitchLevelChangeMetadata } from "./MultilevelSwitchCC";
+export type { NotificationMetadata } from "./NotificationCC";
 export { LocalProtectionState, RFProtectionState } from "./ProtectionCC";
 export { ToneId } from "./SoundSwitchCC";
 export { ThermostatMode } from "./ThermostatModeCC";

@@ -50,6 +50,15 @@ export enum NotificationCommand {
 	SupportedReport = 0x08,
 }
 
+/**
+ * @publicAPI
+ */
+export type NotificationMetadata = ValueMetadata & {
+	ccSpecific: {
+		notificationType: number;
+	};
+};
+
 /** Returns the ValueID used to store the supported notification types of a node */
 export function getSupportedNotificationTypesValueId(): ValueID {
 	return {
@@ -221,6 +230,9 @@ function defineMetadataForNotificationEvents(
 		ret.set(JSON.stringify(valueId), {
 			...ValueMetadata.ReadOnlyUInt8,
 			label: `Unknown notification (${num2hex(type)})`,
+			ccSpecific: {
+				notificationType: type,
+			},
 		});
 		return ret;
 	}
@@ -242,6 +254,9 @@ function defineMetadataForNotificationEvents(
 				...ValueMetadata.ReadOnlyUInt8,
 				label: valueConfig.variableName,
 				states: {},
+				ccSpecific: {
+					notificationType: type,
+				},
 			};
 			if (valueConfig.idle) {
 				metadata.states![0] = "idle";

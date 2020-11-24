@@ -137,6 +137,19 @@ type BinarySensorValueMetadata = ValueMetadata & {
 };
 ```
 
+#### Indicator CC
+
+```ts
+type IndicatorMetadata = ValueMetadata & {
+	ccSpecific: {
+		indicatorId: number;
+		propertyId?: number; // only present on V2+ indicators
+	};
+};
+```
+
+The indicator and property IDs may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/node-zwave-js/blob/master/packages/config/config/indicators.json).
+
 #### Meter CC
 
 ```ts
@@ -173,6 +186,19 @@ type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 	};
 };
 ```
+
+#### Notification CC
+
+```ts
+type NotificationMetadata = ValueMetadata & {
+	ccSpecific: {
+		notificationType: number;
+	};
+};
+```
+
+The notification types and variable names may change with newer Z-Wave specs. You can find the current definitions [here](https://github.com/zwave-js/node-zwave-js/blob/master/packages/config/config/notifications.json).
+The notification variable is not included in this metadata, since there's currently no way to identify them except their name, which is used as the `propertyKey` of the value ID.
 
 #### Thermostat Setpoint CC
 
