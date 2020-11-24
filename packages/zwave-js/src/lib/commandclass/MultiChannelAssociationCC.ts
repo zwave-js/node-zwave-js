@@ -207,9 +207,10 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 				endpoint: this.endpoint.index,
 			},
 		);
-		const response = (await this.driver.sendCommand<
-			MultiChannelAssociationCCSupportedGroupingsReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<MultiChannelAssociationCCSupportedGroupingsReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.groupCount;
 	}
 
@@ -228,9 +229,10 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = (await this.driver.sendCommand<
-			MultiChannelAssociationCCReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<MultiChannelAssociationCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			maxNodes: response.maxNodes,
 			nodeIds: response.nodeIds,

@@ -139,9 +139,10 @@ export class AssociationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			AssociationCCSupportedGroupingsReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<AssociationCCSupportedGroupingsReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.groupCount;
 	}
 

@@ -253,9 +253,10 @@ export class ConfigurationCCAPI extends CCAPI {
 			allowUnexpectedResponse,
 		});
 		try {
-			const response = (await this.driver.sendCommand<
-				ConfigurationCCReport
-			>(cc, this.commandOptions))!;
+			const response = (await this.driver.sendCommand<ConfigurationCCReport>(
+				cc,
+				this.commandOptions,
+			))!;
 			// Nodes may respond with a different parameter, e.g. if we
 			// requested a non-existing one
 			if (response.parameter === parameter) {
@@ -364,9 +365,10 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 		});
-		const response = (await this.driver.sendCommand<
-			ConfigurationCCPropertiesReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<ConfigurationCCPropertiesReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			valueSize: response.valueSize,
 			valueFormat: response.valueFormat,
@@ -388,9 +390,10 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 		});
-		const response = (await this.driver.sendCommand<
-			ConfigurationCCNameReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<ConfigurationCCNameReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.name;
 	}
 
@@ -401,9 +404,10 @@ export class ConfigurationCCAPI extends CCAPI {
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 		});
-		const response = (await this.driver.sendCommand<
-			ConfigurationCCInfoReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<ConfigurationCCInfoReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.info;
 	}
 

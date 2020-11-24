@@ -127,9 +127,10 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			MultiChannelCCEndPointReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<MultiChannelCCEndPointReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			isDynamicEndpointCount: response.countIsDynamic,
 			identicalCapabilities: response.identicalCapabilities,
@@ -151,9 +152,10 @@ export class MultiChannelCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
-		const response = (await this.driver.sendCommand<
-			MultiChannelCCCapabilityReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<MultiChannelCCCapabilityReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.capability;
 	}
 
@@ -172,9 +174,10 @@ export class MultiChannelCCAPI extends CCAPI {
 			genericClass,
 			specificClass,
 		});
-		const response = (await this.driver.sendCommand<
-			MultiChannelCCEndPointFindReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<MultiChannelCCEndPointFindReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.foundEndpoints;
 	}
 
@@ -191,9 +194,10 @@ export class MultiChannelCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
-		const response = (await this.driver.sendCommand<
-			MultiChannelCCAggregatedMembersReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<MultiChannelCCAggregatedMembersReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.members;
 	}
 
