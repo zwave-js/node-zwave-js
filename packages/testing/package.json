@@ -28,9 +28,7 @@
   "engines": {
     "node": ">=10.0.0"
   },
-  "dependencies": {
-    "@zwave-js/core": "^5.4.0"
-  },
+  "dependencies": {},
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
     "clean": "npm run build -- --clean",
