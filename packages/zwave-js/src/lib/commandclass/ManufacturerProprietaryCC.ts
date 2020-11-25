@@ -54,10 +54,9 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<FibaroVenetianBlindCCReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			FibaroVenetianBlindCCReport
+		>(cc, this.commandOptions))!;
 		return {
 			position: response.position,
 			tilt: response.tilt,

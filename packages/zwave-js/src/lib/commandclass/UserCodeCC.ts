@@ -426,10 +426,9 @@ export class UserCodeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCUsersNumberReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			UserCodeCCUsersNumberReport
+		>(cc, this.commandOptions))!;
 		return response.supportedUsers;
 	}
 
@@ -455,10 +454,9 @@ export class UserCodeCCAPI extends CCAPI {
 				userId,
 				reportMore: multiple,
 			});
-			const response = (await this.driver.sendCommand<UserCodeCCExtendedUserCodeReport>(
-				cc,
-				this.commandOptions,
-			))!;
+			const response = (await this.driver.sendCommand<
+				UserCodeCCExtendedUserCodeReport
+			>(cc, this.commandOptions))!;
 			if (multiple) {
 				return pick(response, ["userCodes", "nextUserId"]);
 			} else {
@@ -563,10 +561,9 @@ export class UserCodeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCCapabilitiesReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			UserCodeCCCapabilitiesReport
+		>(cc, this.commandOptions))!;
 		return pick(response, [
 			"supportsMasterCode",
 			"supportsMasterCodeDeactivation",
@@ -589,10 +586,9 @@ export class UserCodeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCKeypadModeReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			UserCodeCCKeypadModeReport
+		>(cc, this.commandOptions))!;
 		return response.keypadMode;
 	}
 
@@ -624,10 +620,9 @@ export class UserCodeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCMasterCodeReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			UserCodeCCMasterCodeReport
+		>(cc, this.commandOptions))!;
 		return response.masterCode;
 	}
 
@@ -659,10 +654,9 @@ export class UserCodeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCUserCodeChecksumReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			UserCodeCCUserCodeChecksumReport
+		>(cc, this.commandOptions))!;
 		return response.userCodeChecksum;
 	}
 }

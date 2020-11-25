@@ -179,10 +179,9 @@ export class DoorLockCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<DoorLockCCCapabilitiesReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			DoorLockCCCapabilitiesReport
+		>(cc, this.commandOptions))!;
 		return pick(response, [
 			"autoRelockSupported",
 			"blockToBlockSupported",
@@ -209,10 +208,9 @@ export class DoorLockCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<DoorLockCCOperationReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			DoorLockCCOperationReport
+		>(cc, this.commandOptions))!;
 		return pick(response, [
 			"currentMode",
 			"targetMode",
@@ -273,10 +271,9 @@ export class DoorLockCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<DoorLockCCConfigurationReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			DoorLockCCConfigurationReport
+		>(cc, this.commandOptions))!;
 		return pick(response, [
 			"operationType",
 			"outsideHandlesCanOpenDoorConfiguration",

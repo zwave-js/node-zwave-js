@@ -107,10 +107,9 @@ export class WakeUpCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<WakeUpCCIntervalCapabilitiesReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			WakeUpCCIntervalCapabilitiesReport
+		>(cc, this.commandOptions))!;
 		return {
 			defaultWakeUpInterval: response.defaultWakeUpInterval,
 			minWakeUpInterval: response.minWakeUpInterval,

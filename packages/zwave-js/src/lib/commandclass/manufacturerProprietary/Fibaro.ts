@@ -137,10 +137,9 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 			message: "Requesting venetian blind position and tilt...",
 			direction: "outbound",
 		});
-		const {
-			position,
-			tilt,
-		} = (await this.driver.sendCommand<FibaroVenetianBlindCCReport>(
+		const { position, tilt } = (await this.driver.sendCommand<
+			FibaroVenetianBlindCCReport
+		>(
 			new FibaroVenetianBlindCCGet(this.driver, {
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,

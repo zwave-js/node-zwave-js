@@ -297,10 +297,9 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = (await this.driver.sendCommand<AssociationGroupInfoCCNameReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			AssociationGroupInfoCCNameReport
+		>(cc, this.commandOptions))!;
 		return response.name;
 	}
 
@@ -317,10 +316,9 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 			groupId,
 			refreshCache,
 		});
-		const response = (await this.driver.sendCommand<AssociationGroupInfoCCInfoReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			AssociationGroupInfoCCInfoReport
+		>(cc, this.commandOptions))!;
 		// SDS13782: If List Mode is set to 0, the Group Count field MUST be set to 1.
 		const { groupId: _, ...info } = response.groups[0];
 		return {
@@ -344,10 +342,9 @@ export class AssociationGroupInfoCCAPI extends CCAPI {
 			groupId,
 			allowCache,
 		});
-		const response = (await this.driver.sendCommand<AssociationGroupInfoCCCommandListReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			AssociationGroupInfoCCCommandListReport
+		>(cc, this.commandOptions))!;
 		return response.commands;
 	}
 }

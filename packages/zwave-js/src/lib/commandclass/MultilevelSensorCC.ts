@@ -97,10 +97,9 @@ export class MultilevelSensorCCAPI extends CCAPI {
 			sensorType,
 			scale,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSensorCCReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			MultilevelSensorCCReport
+		>(cc, this.commandOptions))!;
 
 		if (sensorType === undefined) {
 			// Overload #1: return the full response
@@ -125,10 +124,9 @@ export class MultilevelSensorCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSensorCCSupportedSensorReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			MultilevelSensorCCSupportedSensorReport
+		>(cc, this.commandOptions))!;
 		return response.supportedSensorTypes;
 	}
 
@@ -145,10 +143,9 @@ export class MultilevelSensorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSensorCCSupportedScaleReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			MultilevelSensorCCSupportedScaleReport
+		>(cc, this.commandOptions))!;
 		return response.sensorSupportedScales;
 	}
 

@@ -124,10 +124,9 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSwitchCCReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			MultilevelSwitchCCReport
+		>(cc, this.commandOptions))!;
 		return {
 			currentValue: response.currentValue,
 			targetValue: response.targetValue,
@@ -250,10 +249,9 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSwitchCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			MultilevelSwitchCCSupportedReport
+		>(cc, this.commandOptions))!;
 		return response.switchType;
 	}
 

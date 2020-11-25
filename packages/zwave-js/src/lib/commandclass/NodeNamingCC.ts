@@ -88,10 +88,9 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<NodeNamingAndLocationCCNameReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			NodeNamingAndLocationCCNameReport
+		>(cc, this.commandOptions))!;
 		return response.name;
 	}
 
@@ -119,10 +118,9 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<NodeNamingAndLocationCCLocationReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			NodeNamingAndLocationCCLocationReport
+		>(cc, this.commandOptions))!;
 		return response.location;
 	}
 

@@ -194,10 +194,9 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			setpointType,
 		});
-		const response = (await this.driver.sendCommand<ThermostatSetpointCCReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			ThermostatSetpointCCReport
+		>(cc, this.commandOptions))!;
 		return response.type === ThermostatSetpointType["N/A"]
 			? // not supported
 			  undefined
@@ -240,10 +239,9 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			setpointType,
 		});
-		const response = (await this.driver.sendCommand<ThermostatSetpointCCCapabilitiesReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			ThermostatSetpointCCCapabilitiesReport
+		>(cc, this.commandOptions))!;
 		return {
 			minValue: response.minValue,
 			maxValue: response.maxValue,
@@ -269,10 +267,9 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ThermostatSetpointCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			ThermostatSetpointCCSupportedReport
+		>(cc, this.commandOptions))!;
 		return response.supportedSetpointTypes;
 	}
 }

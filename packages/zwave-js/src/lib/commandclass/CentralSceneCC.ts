@@ -100,10 +100,9 @@ export class CentralSceneCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<CentralSceneCCSupportedReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			CentralSceneCCSupportedReport
+		>(cc, this.commandOptions))!;
 		return {
 			sceneCount: response.sceneCount,
 			supportsSlowRefresh: response.supportsSlowRefresh,
@@ -122,10 +121,9 @@ export class CentralSceneCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<CentralSceneCCConfigurationReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			CentralSceneCCConfigurationReport
+		>(cc, this.commandOptions))!;
 		return {
 			slowRefresh: response.slowRefresh,
 		};

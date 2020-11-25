@@ -109,10 +109,9 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ManufacturerSpecificCCReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			ManufacturerSpecificCCReport
+		>(cc, this.commandOptions))!;
 		return {
 			manufacturerId: response.manufacturerId,
 			productType: response.productType,
@@ -133,10 +132,9 @@ export class ManufacturerSpecificCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			deviceIdType,
 		});
-		const response = (await this.driver.sendCommand<ManufacturerSpecificCCDeviceSpecificReport>(
-			cc,
-			this.commandOptions,
-		))!;
+		const response = (await this.driver.sendCommand<
+			ManufacturerSpecificCCDeviceSpecificReport
+		>(cc, this.commandOptions))!;
 		return response.deviceId;
 	}
 }

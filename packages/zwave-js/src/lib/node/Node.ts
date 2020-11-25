@@ -2435,7 +2435,9 @@ version:               ${this.version}`;
 		this._firmwareUpdateStatus.abort = true;
 
 		try {
-			await this.driver.waitForCommand<FirmwareUpdateMetaDataCCStatusReport>(
+			await this.driver.waitForCommand<
+				FirmwareUpdateMetaDataCCStatusReport
+			>(
 				(cc) =>
 					cc.nodeId === this.nodeId &&
 					cc instanceof FirmwareUpdateMetaDataCCStatusReport &&
@@ -2662,7 +2664,9 @@ version:               ${this.version}`;
 
 	private async finishFirmwareUpdate(): Promise<void> {
 		try {
-			const report = await this.driver.waitForCommand<FirmwareUpdateMetaDataCCStatusReport>(
+			const report = await this.driver.waitForCommand<
+				FirmwareUpdateMetaDataCCStatusReport
+			>(
 				(cc) =>
 					cc.nodeId === this.nodeId &&
 					cc instanceof FirmwareUpdateMetaDataCCStatusReport,
