@@ -12641,6 +12641,16 @@
         "filename": "0x019b/z-trm2fx_3.0.json"
     },
     {
+        "manufacturerId": "0x019b",
+        "productType": "0x0003",
+        "productId": "0x0203",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.0"
+        },
+        "filename": "0x019b/z-trm3.json"
+    },
+    {
         "manufacturerId": "0x019d",
         "productType": "0x0002",
         "productId": "0x0001",
