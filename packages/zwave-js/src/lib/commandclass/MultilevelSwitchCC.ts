@@ -17,6 +17,7 @@ import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	ignoreTimeout,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -156,29 +157,18 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 
 		// Multilevel Switch commands may take some time to be executed.
 		// Therefore we try to supervise the command execution
-		const supervisionResult = await this.driver.trySendCommandSupervised(
-			cc,
-			{
+		await ignoreTimeout(async () => {
+			await this.driver.trySendCommandSupervised(cc, {
 				requestStatusUpdates: true,
-				onUpdate: (status) => {
-					if (
-						status === SupervisionStatus.Working ||
-						status === SupervisionStatus.Success
-					) {
-						void this.get().catch();
-					}
+				onUpdate: (_status) => {
+					// Refresh on every update, so we definitely get the current value
+					void this.get().catch();
 				},
-			},
-		);
+			});
+		});
 
 		// Refresh the current value
-		if (
-			!supervisionResult ||
-			supervisionResult.status === SupervisionStatus.Working ||
-			supervisionResult.status === SupervisionStatus.Success
-		) {
-			await this.get();
-		}
+		await this.get();
 	}
 
 	public async startLevelChange(
