@@ -240,6 +240,43 @@ interface FileSystem {
 }
 ```
 
+### `LogConfig`
+
+```ts
+interface LogConfig {
+	enabled: boolean;
+	logLevel: number;
+	logToFile: boolean;
+	transports: Transport[];
+	filename: string;
+}
+```
+
+-   `enable`: If false will silent all transports
+-   `logLevel`: The loglevel (check npm levels), from `0` (error) to `6` (silly)
+-   `logToFile`: Add logs to a file
+-   `transports`: Custom winston logger transports
+-   `filename`: When logToFile is enabled, this is the destination log file
+
+```ts
+// default log configuration
+const logConfig: LogConfig = {
+	enabled: true,
+	logLevel: getTransportLoglevelNumeric(), // fetches the numeric loglevel from string provided by process.env.LOGLEVEL
+	logToFile: !!process.env.LOGTOFILE,
+	transports: [],
+	filename: require.main
+		? path.join(
+				path.dirname(require.main.filename),
+				`zwave-${process.pid}.log`,
+		  )
+		: path.join(__dirname, "../../..", `zwave-${process.pid}.log`),
+};
+```
+
+> [!NOTE] > `getTransportLoglevelNumeric` is provided by `LOGLEVEL` env var (string), by default it's `"debug"` and it's converted to a number from 0-6 (error-silly),
+> `logToFile` is handled by `LOGTOFILE` env var
+
 ### `SendMessageOptions`
 
 Influences the behavior of `driver.sendMessage`.
@@ -369,6 +406,11 @@ interface ZWaveOptions {
 	};
 
 	/**
+	 * Optional log configuration
+	 */
+	logConfig?: LogConfig;
+
+	/**
 	 * Allows you to replace the default file system driver used to store and read the cache
 	 */
 	fs: FileSystem;
@@ -387,3 +429,5 @@ The `report` timeout is used by this library to determine how long to wait for a
 If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is 5.
 
 For more control over writing the cache file, you can use the `fs` and `cacheDir` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
+
+For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
