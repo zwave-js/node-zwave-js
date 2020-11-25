@@ -182,9 +182,10 @@ export class NotificationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			NotificationCCSupportedReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<NotificationCCSupportedReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			supportsV1Alarm: response.supportsV1Alarm,
 			supportedNotificationTypes: response.supportedNotificationTypes,
@@ -203,9 +204,10 @@ export class NotificationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			notificationType,
 		});
-		const response = (await this.driver.sendCommand<
-			NotificationCCEventSupportedReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<NotificationCCEventSupportedReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.supportedEvents;
 	}
 }

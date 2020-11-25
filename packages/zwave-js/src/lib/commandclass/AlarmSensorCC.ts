@@ -144,9 +144,10 @@ export class AlarmSensorCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			AlarmSensorCCSupportedReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<AlarmSensorCCSupportedReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.supportedSensorTypes;
 	}
 }
