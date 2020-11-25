@@ -18,7 +18,7 @@ import {
 	LogConfig,
 	SecurityManager,
 	serializeCacheValue,
-	setupLogger,
+	updateLogConfig,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -458,8 +458,8 @@ export class Driver extends EventEmitter {
 		// And make sure they contain valid values
 		checkOptions(this.options);
 
-		if (this.options.logConfig !== undefined) {
-			setupLogger(this.options.logConfig);
+		if (this.options.logConfig) {
+			updateLogConfig(this.options.logConfig);
 		}
 
 		this.cacheDir = this.options.cacheDir;

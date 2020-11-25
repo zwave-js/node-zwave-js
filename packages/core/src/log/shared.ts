@@ -38,11 +38,10 @@ const logConfig: LogConfig = {
 		  )
 		: path.join(__dirname, "../../..", `zwave-${process.pid}.log`),
 };
-
-// this needs to be called
+// this needs to be called after logConfig.logToFile is set
 logConfig.transports = createLogTransports();
 
-export function setupLogger(config: DeepPartial<LogConfig>): void {
+export function updateLogConfig(config: DeepPartial<LogConfig>): void {
 	Object.assign(logConfig, config);
 
 	// enable/disable transports based on `enabled` property
@@ -51,8 +50,9 @@ export function setupLogger(config: DeepPartial<LogConfig>): void {
 	}
 }
 
-export function getTransports(): Transport[] {
-	return logConfig.transports || [];
+/** Returns the log transports which currently exist */
+export function getConfiguredTransports(): Transport[] {
+	return logConfig.transports;
 }
 
 /**
@@ -346,7 +346,7 @@ ${logConfig.filename}`);
 function createConsoleTransport(): Transport {
 	return new winston.transports.Console({
 		level: getTransportLoglevel(),
-		silent: process.env.NODE_ENV === "test",
+		silent: process.env.NODE_ENV === "test" || !logConfig.enabled,
 	});
 }
 
@@ -354,6 +354,7 @@ function createFileTransport(): Transport {
 	return new winston.transports.File({
 		filename: logConfig.filename,
 		level: getTransportLoglevel(),
+		silent: !logConfig.enabled,
 	});
 }
 

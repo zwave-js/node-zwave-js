@@ -2,9 +2,9 @@ import {
 	CommandClasses,
 	createLoggerFormat,
 	DataDirection,
+	getConfiguredTransports,
 	getDirectionPrefix,
 	getNodeTag,
-	getTransports,
 	isLoglevelVisible,
 	shouldLogNode,
 	tagify,
@@ -27,7 +27,7 @@ function getLogger(): ZWaveLogger {
 	if (!_logger) {
 		if (!winston.loggers.has("controller")) {
 			winston.loggers.add("controller", {
-				transports: getTransports(),
+				transports: getConfiguredTransports(),
 				format: createLoggerFormat(CONTROLLER_LABEL),
 			});
 		}
