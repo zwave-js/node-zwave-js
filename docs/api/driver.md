@@ -252,17 +252,17 @@ interface LogConfig {
 }
 ```
 
--   `enable`: If false will silent all transports
--   `logLevel`: The loglevel (check npm levels), from `0` (error) to `6` (silly)
--   `logToFile`: Add logs to a file
--   `transports`: Custom winston logger transports
--   `filename`: When logToFile is enabled, this is the destination log file
+-   `enable`: If false will silent all transports.
+-   `logLevel`: The loglevel (check npm levels), from `0` (error) to `6` (silly).
+-   `logToFile`: Enable logging to a file.
+-   `transports`: Custom winston logger transports. This will override all the transports, use `getTransports()` to get default transports (console and file if `logToFile` is enabled) if you want to extend them.
+-   `filename`: When logToFile is enabled, this is the path to the log file.
 
 ```ts
 // default log configuration
 const logConfig: LogConfig = {
 	enabled: true,
-	logLevel: getTransportLoglevelNumeric(), // fetches the numeric loglevel from string provided by process.env.LOGLEVEL
+	logLevel: getTransportLoglevelNumeric(),
 	logToFile: !!process.env.LOGTOFILE,
 	transports: [],
 	filename: require.main
@@ -274,7 +274,8 @@ const logConfig: LogConfig = {
 };
 ```
 
-> [!NOTE] > `getTransportLoglevelNumeric` is provided by `LOGLEVEL` env var (string), by default it's `"debug"` and it's converted to a number from 0-6 (error-silly),
+> [!NOTE]
+> `getTransportLoglevelNumeric` is provided by `LOGLEVEL` env var (string), by default it's `"debug"` and it's converted to a number from 0-6 (error-silly),
 > `logToFile` is handled by `LOGTOFILE` env var
 
 ### `SendMessageOptions`
