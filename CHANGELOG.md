@@ -5,6 +5,9 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Config file changes
+* Added a config file for `HeatIt Z-TRM3`
+
 ### Bugfixes
 * `Driver.destroy()` no longer does anything after the first call
 
