@@ -12,9 +12,9 @@ const loglevels = configs.npm.levels;
 
 export interface LogConfig {
 	enabled: boolean;
-	logLevel: number;
-	logToFile: boolean;
+	level: number;
 	transports: Transport[];
+	logToFile: boolean;
 	filename: string;
 }
 
@@ -28,7 +28,7 @@ function getTransportLoglevelNumeric(): number {
 // default log configuration
 const logConfig: LogConfig = {
 	enabled: true,
-	logLevel: getTransportLoglevelNumeric(),
+	level: getTransportLoglevelNumeric(),
 	logToFile: !!process.env.LOGTOFILE,
 	transports: [],
 	filename: require.main
@@ -371,7 +371,7 @@ export function isLoglevelVisible(loglevel: string): boolean {
 	if (!loglevelVisibleCache.has(loglevel)) {
 		loglevelVisibleCache.set(
 			loglevel,
-			loglevel in loglevels && loglevels[loglevel] <= logConfig.logLevel,
+			loglevel in loglevels && loglevels[loglevel] <= logConfig.level,
 		);
 	}
 	return loglevelVisibleCache.get(loglevel)!;

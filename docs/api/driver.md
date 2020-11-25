@@ -242,41 +242,26 @@ interface FileSystem {
 
 ### `LogConfig`
 
+The log configuration is passed to the driver constructor and can be used to influence the logging behavior. This config will overwrite the `LOGTOFILE` and `LOGLEVEL` environment variables if the corresponding properties are set. All properties are optional and will default to the values described below.
+
 ```ts
 interface LogConfig {
 	enabled: boolean;
-	logLevel: number;
-	logToFile: boolean;
+	level: number;
 	transports: Transport[];
+	logToFile: boolean;
 	filename: string;
 }
 ```
 
--   `enable`: If false will silent all transports.
--   `logLevel`: The loglevel (check npm levels), from `0` (error) to `6` (silly).
--   `logToFile`: Enable logging to a file.
--   `transports`: Custom winston logger transports. This will override all the transports, use `getTransports()` to get default transports (console and file if `logToFile` is enabled) if you want to extend them.
--   `filename`: When logToFile is enabled, this is the path to the log file.
-
-```ts
-// default log configuration
-const logConfig: LogConfig = {
-	enabled: true,
-	logLevel: getTransportLoglevelNumeric(),
-	logToFile: !!process.env.LOGTOFILE,
-	transports: [],
-	filename: require.main
-		? path.join(
-				path.dirname(require.main.filename),
-				`zwave-${process.pid}.log`,
-		  )
-		: path.join(__dirname, "../../..", `zwave-${process.pid}.log`),
-};
-```
+-   `enable`: If `false`, logging will be disabled. Default: `true`.
+-   `level`: The numeric loglevel (like the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js)), ranging from `0` (error) to `6` (silly). Default: `5` (debug) or whatever is configured with the `LOGLEVEL` environment variable.
+-   `transports`: Custom [`winston`](https://github.com/winstonjs/winston) log transports. Setting this property will override all configured and default transports. Use `getConfiguredTransports()` if you want to extend the default transports. Default: console transport if `logToFile` is `false`, otherwise a file transport.
+-   `logToFile`: Whether the log should go to a file instead of the console. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
+-   `filename`: When `logToFile` is `true`, this is the path to the log file. The default file is called `zwave-${process.pid}.log` and located in the same directory as the main executable.
 
 > [!NOTE]
-> `getTransportLoglevelNumeric` is provided by `LOGLEVEL` env var (string), by default it's `"debug"` and it's converted to a number from 0-6 (error-silly),
-> `logToFile` is handled by `LOGTOFILE` env var
+> The `level` property is a numeric value (0-6), but the `LOGLEVEL` environment variable uses the string representation (`error`, ..., `silly`)!
 
 ### `SendMessageOptions`
 
