@@ -15,8 +15,10 @@ import {
 	deserializeCacheValue,
 	Duration,
 	highResTimestamp,
+	LogConfig,
 	SecurityManager,
 	serializeCacheValue,
+	setupLogger,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -150,6 +152,11 @@ export interface ZWaveOptions {
 		 */
 		nodeInterview: number;
 	};
+
+	/**
+	 * Optional log configuration
+	 */
+	logConfig?: LogConfig;
 
 	/**
 	 * @internal
@@ -450,6 +457,11 @@ export class Driver extends EventEmitter {
 		) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
+
+		if (this.options.logConfig !== undefined) {
+			setupLogger(this.options.logConfig);
+		}
+
 		this.cacheDir = this.options.cacheDir;
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly

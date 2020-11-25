@@ -1,4 +1,4 @@
-import { flatMap } from "@zwave-js/shared";
+import { DeepPartial, flatMap } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Format, TransformableInfo, TransformFunction } from "logform";
 import * as path from "path";
@@ -25,14 +25,11 @@ function getTransportLoglevelNumeric(): number {
 	return loglevels[getTransportLoglevel()];
 }
 
-function shouldLogToFile(): boolean {
-	return !!process.env.LOGTOFILE;
-}
-
-let logConfig: LogConfig = {
+// default log configuration
+const logConfig: LogConfig = {
 	enabled: true,
 	logLevel: getTransportLoglevelNumeric(),
-	logToFile: shouldLogToFile(),
+	logToFile: !!process.env.LOGTOFILE,
 	transports: [],
 	filename: require.main
 		? path.join(
@@ -42,14 +39,20 @@ let logConfig: LogConfig = {
 		: path.join(__dirname, "../../..", `zwave-${process.pid}.log`),
 };
 
+// this needs to be called
 logConfig.transports = createLogTransports();
 
-export function setupLogger(config: LogConfig): void {
-	logConfig = config;
+export function setupLogger(config: DeepPartial<LogConfig>): void {
+	Object.assign(logConfig, config);
+
+	// enable/disable transports based on `enabled` property
+	for (const transport of logConfig.transports) {
+		transport.silent = !logConfig.enabled;
+	}
 }
 
 export function getTransports(): Transport[] {
-	return logConfig.transports;
+	return logConfig.transports || [];
 }
 
 /**
