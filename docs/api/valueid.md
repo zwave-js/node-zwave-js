@@ -60,6 +60,7 @@ Here you can find all the type specific metadata fields
 
 ```ts
 interface ValueMetadataAny extends ValueMetadataBase {
+	type: "any";
 	default?: any;
 }
 ```
