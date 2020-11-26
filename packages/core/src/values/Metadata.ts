@@ -50,6 +50,7 @@ export interface ValueMetadataBase {
 }
 
 export interface ValueMetadataAny extends ValueMetadataBase {
+	type: "any";
 	/** The default value */
 	default?: any;
 }
