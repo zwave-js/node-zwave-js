@@ -55,8 +55,7 @@ export type ZWaveNotificationCallback = (
 ) => void;
 export type ZWaveInterviewFailedCallback = (
 	node: ZWaveNode,
-	additionalInfo: string,
-	args?: NodeInterviewFailedEventArgs,
+	args: NodeInterviewFailedEventArgs,
 ) => void;
 export type ZWaveNodeFirmwareUpdateProgressCallback = (
 	node: ZWaveNode,

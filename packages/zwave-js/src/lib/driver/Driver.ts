@@ -92,11 +92,7 @@ import {
 import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
-import {
-	InterviewStage,
-	NodeInterviewFailedEventArgs,
-	NodeStatus,
-} from "../node/Types";
+import { InterviewStage, NodeStatus } from "../node/Types";
 import type { FileSystem } from "./FileSystem";
 import {
 	createSendThreadMachine,
@@ -788,15 +784,6 @@ export class Driver extends EventEmitter {
 		}
 	}
 
-	private emitNodeInterviewFailed(
-		node: ZWaveNode,
-		args: NodeInterviewFailedEventArgs,
-	): void {
-		// For compatibility, we emit the arguments as the third parameter until the next major version
-		// TODO: remove this compatibility layer and emit the args as the 2nd parameter directly
-		node.emit("interview failed", node, args.errorMessage, args);
-	}
-
 	private retryNodeInterviewTimeouts = new Map<number, NodeJS.Timeout>();
 	/**
 	 * @internal
@@ -830,7 +817,7 @@ export class Driver extends EventEmitter {
 						`Interview attempt (${node.interviewAttempts}/${maxInterviewAttempts}) failed, node is dead.`,
 						"warn",
 					);
-					this.emitNodeInterviewFailed(node, {
+					node.emit("interview failed", node, {
 						errorMessage: "The node is dead",
 						isFinal: true,
 					});
@@ -845,7 +832,7 @@ export class Driver extends EventEmitter {
 						`Interview attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed, retrying in ${retryTimeout} ms...`,
 						"warn",
 					);
-					this.emitNodeInterviewFailed(node, {
+					node.emit("interview failed", node, {
 						errorMessage: `Attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed`,
 						isFinal: false,
 						attempt: node.interviewAttempts,
@@ -865,7 +852,7 @@ export class Driver extends EventEmitter {
 						`Failed all interview attempts, giving up.`,
 						"warn",
 					);
-					this.emitNodeInterviewFailed(node, {
+					node.emit("interview failed", node, {
 						errorMessage: `Maximum interview attempts reached`,
 						isFinal: true,
 						attempt: maxInterviewAttempts,

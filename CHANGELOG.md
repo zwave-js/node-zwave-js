@@ -6,6 +6,7 @@
 
 ## __WORK IN PROGRESS__
 ### Breaking changes
+* The second (string) parameter of the `"interview failed"` event handler was removed
 
 ### Config file changes
 * Added a config file for `HeatIt Z-TRM3`
