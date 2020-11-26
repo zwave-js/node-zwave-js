@@ -34,7 +34,7 @@ export type ValueType =
 	| "string[]"
 	| "any";
 
-export interface ValueMetadataBase {
+export interface ValueMetadataAny {
 	/** The type of the value */
 	type: ValueType;
 	/** The default value */
@@ -51,7 +51,7 @@ export interface ValueMetadataBase {
 	ccSpecific?: Record<string, any>;
 }
 
-export interface ValueMetadataNumeric extends ValueMetadataBase {
+export interface ValueMetadataNumeric extends ValueMetadataAny {
 	type: "number";
 	/** The minimum value that can be assigned to a CC value (optional) */
 	min?: number;
@@ -67,13 +67,13 @@ export interface ValueMetadataNumeric extends ValueMetadataBase {
 	unit?: string;
 }
 
-export interface ValueMetadataBoolean extends ValueMetadataBase {
+export interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	/** The default value */
 	default?: number;
 }
 
-export interface ValueMetadataString extends ValueMetadataBase {
+export interface ValueMetadataString extends ValueMetadataAny {
 	type: "string";
 	/** The minimum length this string must have (optional) */
 	minLength?: number;
@@ -84,7 +84,7 @@ export interface ValueMetadataString extends ValueMetadataBase {
 }
 
 export type ValueMetadata =
-	| ValueMetadataBase
+	| ValueMetadataAny
 	| ValueMetadataNumeric
 	| ValueMetadataBoolean
 	| ValueMetadataString;
@@ -92,7 +92,7 @@ export type ValueMetadata =
 // TODO: lists of allowed values, etc...
 
 // Mixins for value metadata
-const _default: ValueMetadataBase = {
+const _default: ValueMetadataAny = {
 	type: "any",
 	readable: true,
 	writeable: true,
@@ -107,18 +107,18 @@ const _writeonly = {
 };
 
 /** The default value for metadata: readable and writeable */
-const Any: ValueMetadataBase = {
+const Any: ValueMetadataAny = {
 	..._default,
 };
 
 /** The default value for readonly metadata */
-const ReadOnly: ValueMetadataBase = {
+const ReadOnly: ValueMetadataAny = {
 	..._default,
 	..._readonly,
 };
 
 /** The default value for writeonly metadata */
-const WriteOnly: ValueMetadataBase = {
+const WriteOnly: ValueMetadataAny = {
 	..._default,
 	..._writeonly,
 };

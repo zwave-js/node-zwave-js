@@ -35,7 +35,7 @@ These properties are meant to provide a human-readable representation of the Com
 Value metadata is used to get additional information about a specific `ValueID`. All metadata shares the following structure (with additional information added) for each value type:
 
 ```ts
-interface ValueMetadataBase {
+interface ValueMetadataAny {
 	type: ValueType;
 	default?: any;
 	readable: boolean;
@@ -59,12 +59,12 @@ Here you can find all the type specific metadata fields
 
 #### `any`
 
-Just `ValueMetadataBase`, no additional properties.
+Just `ValueMetadataAny`, no additional properties.
 
 #### `number`
 
 ```ts
-interface ValueMetadataNumeric extends ValueMetadataBase {
+interface ValueMetadataNumeric extends ValueMetadataAny {
 	type: "number";
 	min?: number;
 	max?: number;
@@ -85,7 +85,7 @@ interface ValueMetadataNumeric extends ValueMetadataBase {
 #### `boolean`
 
 ```ts
-interface ValueMetadataBoolean extends ValueMetadataBase {
+interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	default?: number;
 }
@@ -96,7 +96,7 @@ interface ValueMetadataBoolean extends ValueMetadataBase {
 #### `string`
 
 ```ts
-interface ValueMetadataString extends ValueMetadataBase {
+interface ValueMetadataString extends ValueMetadataAny {
 	type: "string";
 	minLength?: number;
 	maxLength?: number;

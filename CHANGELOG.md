@@ -5,6 +5,9 @@
 -->
 
 ## __WORK IN PROGRESS__
+### Breaking changes
+* The type `ValueMetadataBase` has been renamed to `ValueMetadataAny`. The old type `ValueMetadataAny` was merged into `ValueMetadataBase`.
+
 ### Config file changes
 * Added a config file for `HeatIt Z-TRM3`
 * Added a config file for `Eurotronic Air quality sensor`
