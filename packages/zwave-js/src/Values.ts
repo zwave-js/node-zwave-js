@@ -7,7 +7,7 @@ export type {
 	Duration,
 	DurationUnit,
 	ValueID,
-	ValueMetadataAny,
+	ValueMetadataBase,
 	ValueMetadataBoolean,
 	ValueMetadataNumeric,
 	ValueType,

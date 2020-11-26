@@ -37,6 +37,7 @@ Value metadata is used to get additional information about a specific `ValueID`.
 ```ts
 interface ValueMetadataBase {
 	type: ValueType;
+	default?: any;
 	readable: boolean;
 	writeable: boolean;
 	description?: string;
@@ -58,14 +59,7 @@ Here you can find all the type specific metadata fields
 
 #### `any`
 
-```ts
-interface ValueMetadataAny extends ValueMetadataBase {
-	type: "any";
-	default?: any;
-}
-```
-
--   `default`: The default value
+Just `ValueMetadataBase`, no additional properties.
 
 #### `number`
 

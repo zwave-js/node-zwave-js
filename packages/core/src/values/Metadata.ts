@@ -37,6 +37,8 @@ export type ValueType =
 export interface ValueMetadataBase {
 	/** The type of the value */
 	type: ValueType;
+	/** The default value */
+	default?: any;
 	/** Whether the value can be read. By default all values are assumed readable */
 	readable: boolean;
 	/** Whether the value can be written. By default all values are assumed writeable */
@@ -47,12 +49,6 @@ export interface ValueMetadataBase {
 	label?: string;
 	/** CC-specific information to help identify this value */
 	ccSpecific?: Record<string, any>;
-}
-
-export interface ValueMetadataAny extends ValueMetadataBase {
-	type: "any";
-	/** The default value */
-	default?: any;
 }
 
 export interface ValueMetadataNumeric extends ValueMetadataBase {
@@ -88,7 +84,7 @@ export interface ValueMetadataString extends ValueMetadataBase {
 }
 
 export type ValueMetadata =
-	| ValueMetadataAny
+	| ValueMetadataBase
 	| ValueMetadataNumeric
 	| ValueMetadataBoolean
 	| ValueMetadataString;
@@ -111,7 +107,7 @@ const _writeonly = {
 };
 
 /** The default value for metadata: readable and writeable */
-const Any: ValueMetadataAny = {
+const Any: ValueMetadataBase = {
 	..._default,
 };
 
