@@ -8,6 +8,10 @@
 ### Config file changes
 * Added a config file for `HeatIt Z-TRM3`
 * Added a config file for `Eurotronic Air quality sensor`
+* The Application CC value IDs of the root endpoint are now preserved for the `Qubino Flush 2 Relay`
+
+### Features
+* Added the compat config option `preserveRootApplicationCCValueIDs` to disable hiding the root endpoint's application CC value IDs
 
 ### Bugfixes
 * `Driver.destroy()` no longer does anything after the first call

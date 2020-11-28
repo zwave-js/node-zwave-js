@@ -507,6 +507,19 @@ error in compat option keepS0NonceUntilNext`,
 
 			this.keepS0NonceUntilNext = definition.keepS0NonceUntilNext;
 		}
+
+		if (definition.preserveRootApplicationCCValueIDs != undefined) {
+			if (definition.preserveRootApplicationCCValueIDs !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option preserveRootApplicationCCValueIDs`,
+				);
+			}
+
+			this.preserveRootApplicationCCValueIDs =
+				definition.preserveRootApplicationCCValueIDs;
+		}
 	}
 
 	public readonly queryOnWakeup?: [
@@ -521,6 +534,7 @@ error in compat option keepS0NonceUntilNext`,
 	][];
 
 	public keepS0NonceUntilNext?: boolean;
+	public preserveRootApplicationCCValueIDs?: boolean;
 }
 
 export class ParamInformation {
