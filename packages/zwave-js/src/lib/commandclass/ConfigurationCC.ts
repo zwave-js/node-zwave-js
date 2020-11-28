@@ -18,7 +18,7 @@ import {
 	stripUndefined,
 	validatePayload,
 	ValueMetadata,
-	ValueMetadataBase,
+	ValueMetadataAny,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -73,8 +73,8 @@ export enum ValueFormat {
 	BitField = 0x03, // Check Boxes
 }
 
-export interface ConfigurationMetadata extends ValueMetadataBase {
-	// readable and writeable are inherited from ValueMetadataBase
+export interface ConfigurationMetadata extends ValueMetadataAny {
+	// readable and writeable are inherited from ValueMetadataAny
 	min?: ConfigValue;
 	max?: ConfigValue;
 	default?: ConfigValue;
