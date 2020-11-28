@@ -6,6 +6,7 @@
 
 ## __WORK IN PROGRESS__
 ### Breaking changes
+* Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
 
 ### Config file changes
 * Added a config file for `HeatIt Z-TRM3`

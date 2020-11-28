@@ -1,8 +1,8 @@
 import * as Sentry from "@sentry/node";
 import {
 	createLoggerFormat,
-	createLogTransports,
 	DataDirection,
+	getConfiguredTransports,
 	getDirectionPrefix,
 	isLoglevelVisible,
 	ZWaveLogger,
@@ -19,7 +19,7 @@ function getLogger(): ZWaveLogger {
 	if (!_logger) {
 		if (!winston.loggers.has("serial")) {
 			winston.loggers.add("serial", {
-				transports: createLogTransports(),
+				transports: getConfiguredTransports(),
 				format: createLoggerFormat(SERIAL_LABEL),
 			});
 		}

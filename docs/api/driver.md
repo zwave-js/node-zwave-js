@@ -240,6 +240,29 @@ interface FileSystem {
 }
 ```
 
+### `LogConfig`
+
+The log configuration is passed to the driver constructor and can be used to influence the logging behavior. This config will overwrite the `LOGTOFILE` and `LOGLEVEL` environment variables if the corresponding properties are set. All properties are optional and will default to the values described below.
+
+```ts
+interface LogConfig {
+	enabled: boolean;
+	level: number;
+	transports: Transport[];
+	logToFile: boolean;
+	filename: string;
+}
+```
+
+-   `enable`: If `false`, logging will be disabled. Default: `true`.
+-   `level`: The numeric loglevel (like the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js)), ranging from `0` (error) to `6` (silly). Default: `5` (debug) or whatever is configured with the `LOGLEVEL` environment variable.
+-   `transports`: Custom [`winston`](https://github.com/winstonjs/winston) log transports. Setting this property will override all configured and default transports. Use `getConfiguredTransports()` if you want to extend the default transports. Default: console transport if `logToFile` is `false`, otherwise a file transport.
+-   `logToFile`: Whether the log should go to a file instead of the console. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
+-   `filename`: When `logToFile` is `true`, this is the path to the log file. The default file is called `zwave-${process.pid}.log` and located in the same directory as the main executable.
+
+> [!NOTE]
+> The `level` property is a numeric value (0-6), but the `LOGLEVEL` environment variable uses the string representation (`error`, ..., `silly`)!
+
 ### `SendMessageOptions`
 
 Influences the behavior of `driver.sendMessage`.
@@ -369,6 +392,11 @@ interface ZWaveOptions {
 	};
 
 	/**
+	 * Optional log configuration
+	 */
+	logConfig?: LogConfig;
+
+	/**
 	 * Allows you to replace the default file system driver used to store and read the cache
 	 */
 	fs: FileSystem;
@@ -387,3 +415,5 @@ The `report` timeout is used by this library to determine how long to wait for a
 If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is 5.
 
 For more control over writing the cache file, you can use the `fs` and `cacheDir` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
+
+For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
