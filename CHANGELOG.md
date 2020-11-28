@@ -15,6 +15,7 @@
 
 ### Bugfixes
 * `Driver.destroy()` no longer does anything after the first call
+* `Sound Switch Tone Play Report` commands now parse the volume if it exists
 * The log entries for `Notification CC Report`s now contain the correct notification event/state
 
 ## 5.5.0 (2020-11-24)
