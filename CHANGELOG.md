@@ -9,6 +9,9 @@
 * Added a config file for `HeatIt Z-TRM3`
 * Added a config file for `Eurotronic Air quality sensor`
 
+### Features
+* Added the compat config option `preserveRootApplicationCCValueIDs` to disable hiding the root endpoint's application CC value IDs
+
 ### Bugfixes
 * `Driver.destroy()` no longer does anything after the first call
 
