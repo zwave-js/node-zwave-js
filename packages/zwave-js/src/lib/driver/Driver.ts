@@ -1224,8 +1224,10 @@ export class Driver extends EventEmitter {
 	 * Must be called under any circumstances.
 	 */
 	public async destroy(): Promise<void> {
-		log.driver.print("destroying driver instance...");
+		// Ensure this is only called once
+		if (this._wasDestroyed) return;
 		this._wasDestroyed = true;
+		log.driver.print("destroying driver instance...");
 
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
 		this.sendThread.stop();

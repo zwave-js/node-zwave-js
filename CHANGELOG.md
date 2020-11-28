@@ -4,6 +4,16 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Breaking changes
+
+### Config file changes
+* Added a config file for `HeatIt Z-TRM3`
+* Added a config file for `Eurotronic Air quality sensor`
+
+### Bugfixes
+* `Driver.destroy()` no longer does anything after the first call
+
 ## 5.5.0 (2020-11-24)
 ### Config file changes
 * Added a config file for `Jasco ZW3010`
