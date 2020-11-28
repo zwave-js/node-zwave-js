@@ -5,7 +5,7 @@
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHBD",
-	"description": "Flush 2 relays",
+	"description": "Flush 2 Relay",
 	"devices": [
 		{
 			"productType": "0x0002",
@@ -20,7 +20,7 @@
 		"1": {
 			"label": "Default Reporting Group",
 			"maxNodes": 1,
-			"isLifeline": true,
+			"isLifeline": true
 		},
 		"2": {
 			"label": "Q1 basic on/off",
@@ -49,7 +49,7 @@
 		"8": {
 			"label": "Multilevel sensor",
 			"maxNodes": 16,
-			"isLifeline": true,
+			"isLifeline": true
 		}
 	},
 	"paramInformation": {
@@ -312,5 +312,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		// This device was certified before the requirement that the root endpoint must mirror
+		// application functionality of other endpoints
+		"preserveRootApplicationCCValueIDs": true
 	}
 }
