@@ -754,15 +754,17 @@ export class NotificationCCReport extends NotificationCC {
 				"V1 alarm level": this.alarmLevel,
 			};
 		} else {
+			const valueConfig = lookupNotification(
+				this.notificationType!,
+			)?.lookupValue(this.notificationEvent!);
 			message = {
 				"notification type": getNotificationName(
 					this.notificationType!,
 				),
 				"notification status": this.notificationStatus,
-				"notification event":
-					lookupNotification(this.notificationType!)?.events.get(
-						this.notificationEvent!,
-					)?.label ?? `Unknown (${num2hex(this.notificationEvent)})`,
+				[`notification ${valueConfig?.type ?? "event"}`]:
+					valueConfig?.label ??
+					`Unknown (${num2hex(this.notificationEvent)})`,
 			};
 		}
 		if (this.zensorNetSourceNodeId) {
