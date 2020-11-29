@@ -20,7 +20,6 @@ import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import {
@@ -249,7 +248,6 @@ const every = (...guards: string[]) => ({
 });
 const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	maySendFirstMessage: (ctx) => {
-		log.driver.sendQueue(ctx.queue);
 		const nextTransaction = ctx.queue.peekStart();
 		// We can't send anything if the queue is empty
 		if (!nextTransaction) return false;
@@ -586,8 +584,6 @@ export function createSendThreadMachine(
 			// Now we know what to do with the transactions
 			queue.remove(...drop, ...requeue);
 			queue.add(...requeue);
-
-			log.driver.sendQueue(queue);
 
 			return queue;
 		},
