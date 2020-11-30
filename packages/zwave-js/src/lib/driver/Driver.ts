@@ -1332,7 +1332,7 @@ export class Driver extends EventEmitter {
 				// Enrich error data in case something goes wrong
 				Sentry.addBreadcrumb({
 					category: "message",
-					timestamp: Date.now(),
+					timestamp: Date.now() / 1000,
 					type: "debug",
 					data: {
 						direction: "inbound",
