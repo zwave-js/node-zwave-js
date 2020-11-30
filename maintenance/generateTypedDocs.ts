@@ -6,15 +6,19 @@ import { red } from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
 import ts from "typescript";
-import { loadTSConfig } from "../packages/zwave-js/maintenance/tsTools";
+import {
+	formatWithPrettier,
+	loadTSConfig,
+	updateModifiers,
+} from "../packages/zwave-js/maintenance/tsTools";
 import { enumFilesRecursive } from "./tools";
 
-export function findSource(
+export function findSourceNode(
 	program: ts.Program,
 	checker: ts.TypeChecker,
 	exportingFile: string,
 	identifier: string,
-): string | undefined {
+): ts.Declaration | undefined {
 	// Scan all source files
 	const file = program.getSourceFile(exportingFile);
 	if (file) {
@@ -24,18 +28,35 @@ export function findSource(
 			(e) => e.escapedName === identifier,
 		);
 		if (wantedSymbol) {
-			let code = checker
-				.getAliasedSymbol(wantedSymbol)
-				.declarations[0].getText();
-			// Remove some stuff we don't need
-			code = code
-				.replace(/^export type/g, "type")
-				.replace(/^export interface/g, "interface")
-				.replace(/^export class/g, "class")
-				.replace(/^export enum/g, "enum");
-			return code;
+			const node = checker.getAliasedSymbol(wantedSymbol).declarations[0];
+			return node;
 		}
 	}
+}
+
+export function getTransformedSource(node: ts.Declaration): string {
+	const transformer: ts.TransformerFactory<ts.Node> = (context) => {
+		return (root) =>
+			ts.visitNode(root, (node) => {
+				// Remove exports keyword
+				node = updateModifiers(context.factory, node, undefined, [
+					ts.SyntaxKind.ExportKeyword,
+				]);
+				return node;
+			});
+	};
+
+	const result = ts.transform(node, [transformer]);
+	let ret = ts
+		.createPrinter()
+		.printNode(
+			ts.EmitHint.Unspecified,
+			result.transformed[0],
+			node.getSourceFile(),
+		);
+	// Format with Prettier so we get the original formatting back
+	ret = formatWithPrettier("index.ts", ret).trim();
+	return ret;
 }
 
 interface ImportRange {
@@ -69,13 +90,13 @@ export async function processDocFile(
 	// Replace from back to start so we can reuse the indizes
 	for (let i = ranges.length - 1; i >= 0; i--) {
 		const range = ranges[i];
-		const source = findSource(
+		const sourceNode = findSourceNode(
 			program,
 			checker,
 			`packages/${range.module}/src/index.ts`,
 			range.symbol,
 		);
-		if (!source) {
+		if (!sourceNode) {
 			console.error(
 				red(
 					`Cannot find symbol ${range.symbol} in module ${range.module}!`,
@@ -83,6 +104,7 @@ export async function processDocFile(
 			);
 			hasErrors = true;
 		} else {
+			const source = getTransformedSource(sourceNode);
 			fileContent = `${fileContent.slice(0, range.index)}<!-- #import ${
 				range.symbol
 			} from "${range.module}" -->
@@ -93,6 +115,7 @@ ${source}
 		}
 	}
 	fileContent = fileContent.replace(/\r\n/g, "\n");
+	fileContent = formatWithPrettier(docFile, fileContent);
 	if (!hasErrors) {
 		await fs.writeFile(docFile, fileContent, "utf8");
 	}

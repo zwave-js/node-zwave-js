@@ -226,6 +226,7 @@ The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/a
 <!-- #import FileSystem from "zwave-js" -->
 
 ```ts
+/** Defines which methods must be supported by a replacement filesystem */
 interface FileSystem {
 	ensureDir(path: string): Promise<void>;
 	writeFile(
@@ -276,6 +277,7 @@ The message priority must one of the following enum values. Consuming applicatio
 <!-- #import MessagePriority from "zwave-js" -->
 
 ```ts
+/** The priority of messages, sorted from high (0) to low (>0) */
 enum MessagePriority {
 	// Handshake messages have the highest priority because they are part of other transactions
 	// which have already started when the handshakes are needed (e.g. Security Nonce exchange)
@@ -324,6 +326,7 @@ The `onUpdate` has the signature `(status: SupervisionStatus, remainingDuration?
 <!-- #import SupervisionStatus from "zwave-js" -->
 
 ```ts
+/** @publicAPI */
 enum SupervisionStatus {
 	NoSupport = 0x00,
 	Working = 0x01,
@@ -339,6 +342,7 @@ Is used to report the status of a supervised command execution.
 <!-- #import SupervisionResult from "zwave-js" -->
 
 ```ts
+/** @publicAPI */
 interface SupervisionResult {
 	status: SupervisionStatus;
 	remainingDuration?: Duration;
