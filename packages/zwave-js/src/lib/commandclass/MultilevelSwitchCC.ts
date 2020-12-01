@@ -100,7 +100,7 @@ function getCurrentValueValueID(endpoint: number): ValueID {
 }
 
 /** Returns the ValueID used to remember whether a node supports supervision on the start/stop level change commands*/
-export function getSuperviseStartStopLevelChangeValueId(): ValueID {
+function getSuperviseStartStopLevelChangeValueId(): ValueID {
 	return {
 		commandClass: CommandClasses["Multilevel Switch"],
 		property: "superviseStartStopLevelChange",
