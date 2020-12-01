@@ -171,7 +171,7 @@ Example usage:
 // Extract the firmware from the uploaded file
 let actualFirmware: Firmware;
 try {
-	const format = guessFirmwareFormat(
+	const format = guessFirmwareFileFormat(
 		filename,
 		rawData,
 	);
