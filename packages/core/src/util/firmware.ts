@@ -9,6 +9,12 @@ export interface Firmware {
 	firmwareTarget?: number;
 }
 
+/**
+ * Guess the firmware format based on filename and firmware buffer
+ *
+ * @param filename The firmware filename
+ * @param firmware The firmware file data buffer
+ */
 export function guessFirmwareFormat(
 	filename: string,
 	firmware: Buffer,

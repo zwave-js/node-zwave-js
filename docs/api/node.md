@@ -132,7 +132,17 @@ Starts an OTA firmware update process for this node. This method takes two argum
 -   `data` - A buffer containing the firmware image in a format supported by the device
 -   `target` - _(optional)_ The firmware target (i.e. chip) to upgrade. 0 updates the Z-Wave chip, >=1 updates others if they exist
 
-The library includes a helper method (exported from `zwave-js/Utils`) to extract the raw firmware image from some common file types:
+The library includes 2 helper method (exported from `zwave-js/Utils`) to guess the firmware format and extract the raw firmware image from some common file types:
+
+```ts
+function guessFirmwareFormat(
+	filename: string,
+	firmware: Buffer,
+): FirmwareFileFormat
+```
+
+-   `filename` the name of the firmware file
+-   `firmware` the data buffer of the firmware file
 
 ```ts
 function extractFirmware(data: Buffer, format: FirmwareFileFormat): Firmware
@@ -154,6 +164,38 @@ interface Firmware {
 ```
 
 If no firmware data can be extracted, the method will throw.
+
+Example usage:
+
+```ts
+// Extract the firmware from the uploaded file
+const rawData = Buffer.from(firmware);
+let actualFirmware: Firmware;
+try {
+	const format = guessFirmwareFormat(
+		filename,
+		rawData,
+	);
+	actualFirmware = extractFirmware(rawData, format);
+} catch (e) {
+	// handle the error
+}
+
+// try the update
+try {
+	await this.driver.controller.nodes
+		.get(nodeId)!
+		.beginFirmwareUpdate(
+			actualFirmware.data,
+			actualFirmware.firmwareTarget,
+		);
+	console.log(
+		`Node ${nodeId}: Firmware update started`,
+	);
+} catch (e) {
+	// handle error
+}
+```
 
 ### `abortFirmwareUpdate`
 
