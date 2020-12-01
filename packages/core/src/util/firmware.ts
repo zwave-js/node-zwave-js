@@ -26,10 +26,15 @@ export function guessFirmwareFileFormat(
 		return "aeotec";
 	} else if (/\.(hex|ota|otz)$/.test(filename)) {
 		return filename.slice(-3) as FirmwareFileFormat;
+	} else if (filename.endsWith(".hec")) {
+		throw new ZWaveError(
+			"Encrypted .hec firmware files are not supported",
+			ZWaveErrorCodes.Unsupported_Firmware_Format,
+		);
 	} else {
 		throw new ZWaveError(
 			"Could not detect firmware format",
-			ZWaveErrorCodes.Invalid_Firmware_Format,
+			ZWaveErrorCodes.Invalid_Firmware_File,
 		);
 	}
 }
