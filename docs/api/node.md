@@ -143,6 +143,7 @@ extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
 -   `"aeotec"` - A Windows executable (`.exe` or `.ex_`) that contains Aeotec's upload tool
 -   `"otz"` - A compressed firmware file in Intel HEX format
 -   `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
+-   `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
 
 > [!NOTE]  
 > `.hec` firmware update files are encrypted with proprietary encryption and not supported by `zwave-js`
