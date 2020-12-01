@@ -10,6 +10,36 @@ export interface Firmware {
 }
 
 /**
+ * Guess the firmware format based on filename and firmware buffer
+ *
+ * @param filename The firmware filename
+ * @param rawData A buffer containing the original firmware update file
+ */
+export function guessFirmwareFileFormat(
+	filename: string,
+	rawData: Buffer,
+): FirmwareFileFormat {
+	if (
+		(filename.endsWith(".exe") || filename.endsWith(".ex_")) &&
+		rawData.includes(Buffer.from("Aeon Labs", "utf8"))
+	) {
+		return "aeotec";
+	} else if (/\.(hex|ota|otz)$/.test(filename)) {
+		return filename.slice(-3) as FirmwareFileFormat;
+	} else if (filename.endsWith(".hec")) {
+		throw new ZWaveError(
+			"Encrypted .hec firmware files are not supported",
+			ZWaveErrorCodes.Unsupported_Firmware_Format,
+		);
+	} else {
+		throw new ZWaveError(
+			"Could not detect firmware format",
+			ZWaveErrorCodes.Invalid_Firmware_File,
+		);
+	}
+}
+
+/**
  * Extracts the firmware data from a file. The following formats are available:
  * - `"aeotec"` - A Windows executable (.exe or .ex_) that contains Aeotec's upload tool
  * - `"otz"` - A compressed firmware file in Intel HEX format
@@ -18,16 +48,16 @@ export interface Firmware {
  * The returned firmware data and target can be used to start a firmware update process with `node.beginFirmwareUpdate`
  */
 export function extractFirmware(
-	data: Buffer,
+	rawData: Buffer,
 	format: FirmwareFileFormat,
 ): Firmware {
 	switch (format) {
 		case "aeotec":
-			return extractFirmwareAeotec(data);
+			return extractFirmwareAeotec(rawData);
 		case "otz":
 		case "ota":
 		case "hex":
-			return extractFirmwareHEX(data);
+			return extractFirmwareHEX(rawData);
 	}
 }
 
