@@ -31,6 +31,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -95,6 +96,14 @@ function getCurrentValueValueID(endpoint: number): ValueID {
 		commandClass: CommandClasses["Multilevel Switch"],
 		endpoint,
 		property: "currentValue",
+	};
+}
+
+/** Returns the ValueID used to remember whether a node supports supervision on the start/stop level change commands*/
+export function getSuperviseStartStopLevelChangeValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Multilevel Switch"],
+		property: "superviseStartStopLevelChange",
 	};
 }
 
@@ -195,20 +204,33 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			...options,
 		});
 
-		// Try to supervise the command execution
-		const supervisionResult = await this.driver.trySendCommandSupervised(
-			cc,
-		);
+		const superviseValueId = getSuperviseStartStopLevelChangeValueId();
+		const node = this.endpoint.getNodeUnsafe()!;
+		// Assume supervision is supported until we know it is not
+		let mayUseSupervision = node.getValue(superviseValueId) !== false;
 
-		if (
-			supervisionResult &&
-			(supervisionResult.status === SupervisionStatus.Fail ||
-				supervisionResult.status === SupervisionStatus.NoSupport)
-		) {
-			throw new ZWaveError(
-				"startLevelChange failed",
-				ZWaveErrorCodes.SupervisionCC_CommandFailed,
+		if (mayUseSupervision) {
+			// Try to supervise the command execution
+			const supervisionResult = await this.driver.trySendCommandSupervised(
+				cc,
 			);
+
+			if (supervisionResult?.status === SupervisionStatus.Fail) {
+				throw new ZWaveError(
+					"startLevelChange failed",
+					ZWaveErrorCodes.SupervisionCC_CommandFailed,
+				);
+			} else if (
+				supervisionResult?.status === SupervisionStatus.NoSupport
+			) {
+				// Remember that we shouldn't use supervision for that
+				node.valueDB.setValue(superviseValueId, false);
+				mayUseSupervision = false;
+			}
+		}
+		// In order to support a fallback to no supervision, we must not use else-if here
+		if (!mayUseSupervision) {
+			await this.driver.sendCommand(cc);
 		}
 	}
 
@@ -223,20 +245,33 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 		});
 
-		// Try to supervise the command execution
-		const supervisionResult = await this.driver.trySendCommandSupervised(
-			cc,
-		);
+		const superviseValueId = getSuperviseStartStopLevelChangeValueId();
+		const node = this.endpoint.getNodeUnsafe()!;
+		// Assume supervision is supported until we know it is not
+		let mayUseSupervision = node.getValue(superviseValueId) !== false;
 
-		if (
-			supervisionResult &&
-			(supervisionResult.status === SupervisionStatus.Fail ||
-				supervisionResult.status === SupervisionStatus.NoSupport)
-		) {
-			throw new ZWaveError(
-				"stopLevelChange failed",
-				ZWaveErrorCodes.SupervisionCC_CommandFailed,
+		if (mayUseSupervision) {
+			// Try to supervise the command execution
+			const supervisionResult = await this.driver.trySendCommandSupervised(
+				cc,
 			);
+
+			if (supervisionResult?.status === SupervisionStatus.Fail) {
+				throw new ZWaveError(
+					"stopLevelChange failed",
+					ZWaveErrorCodes.SupervisionCC_CommandFailed,
+				);
+			} else if (
+				supervisionResult?.status === SupervisionStatus.NoSupport
+			) {
+				// Remember that we shouldn't use supervision for that
+				node.valueDB.setValue(superviseValueId, false);
+				mayUseSupervision = false;
+			}
+		}
+		// In order to support a fallback to no supervision, we must not use else-if here
+		if (!mayUseSupervision) {
+			await this.driver.sendCommand(cc);
 		}
 	}
 
@@ -317,6 +352,14 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 @implementedVersion(4)
 export class MultilevelSwitchCC extends CommandClass {
 	declare ccCommand: MultilevelSwitchCommand;
+
+	public constructor(driver: Driver, options: CommandClassOptions) {
+		super(driver, options);
+		this.registerValue(
+			getSuperviseStartStopLevelChangeValueId().property,
+			true,
+		);
+	}
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
