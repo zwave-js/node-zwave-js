@@ -9,6 +9,22 @@ export interface Firmware {
 	firmwareTarget?: number;
 }
 
+export function guessFirmwareFormat(
+	filename: string,
+	firmware: Buffer,
+): FirmwareFileFormat {
+	if (
+		(filename.endsWith(".exe") || filename.endsWith(".ex_")) &&
+		firmware.includes(Buffer.from("Aeon Labs", "utf8"))
+	) {
+		return "aeotec";
+	} else if (/\.(hex|ota|otz)$/.test(filename)) {
+		return filename.slice(-3) as FirmwareFileFormat;
+	} else {
+		throw new Error("could not detect firmware format");
+	}
+}
+
 /**
  * Extracts the firmware data from a file. The following formats are available:
  * - `"aeotec"` - A Windows executable (.exe or .ex_) that contains Aeotec's upload tool
