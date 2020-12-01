@@ -13,21 +13,24 @@ export interface Firmware {
  * Guess the firmware format based on filename and firmware buffer
  *
  * @param filename The firmware filename
- * @param firmware The firmware file data buffer
+ * @param rawData The firmware data buffer
  */
-export function guessFirmwareFormat(
+export function guessFirmwareFileFormat(
 	filename: string,
-	firmware: Buffer,
+	rawData: Buffer,
 ): FirmwareFileFormat {
 	if (
 		(filename.endsWith(".exe") || filename.endsWith(".ex_")) &&
-		firmware.includes(Buffer.from("Aeon Labs", "utf8"))
+		rawData.includes(Buffer.from("Aeon Labs", "utf8"))
 	) {
 		return "aeotec";
 	} else if (/\.(hex|ota|otz)$/.test(filename)) {
 		return filename.slice(-3) as FirmwareFileFormat;
 	} else {
-		throw new Error("could not detect firmware format");
+		throw new ZWaveError(
+			"Could not detect firmware format",
+			ZWaveErrorCodes.Invalid_Firmware_Format,
+		);
 	}
 }
 

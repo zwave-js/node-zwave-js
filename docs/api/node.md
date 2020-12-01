@@ -135,14 +135,14 @@ Starts an OTA firmware update process for this node. This method takes two argum
 The library includes 2 helper method (exported from `zwave-js/Utils`) to guess the firmware format and extract the raw firmware image from some common file types:
 
 ```ts
-function guessFirmwareFormat(
+function guessFirmwareFileFormat(
 	filename: string,
-	firmware: Buffer,
+	rawData: Buffer,
 ): FirmwareFileFormat
 ```
 
--   `filename` the name of the firmware file
--   `firmware` the data buffer of the firmware file
+-   `filename`: the name of the firmware file
+-   `rawData`: the file firmware content raw Buffer
 
 ```ts
 function extractFirmware(data: Buffer, format: FirmwareFileFormat): Firmware
@@ -169,7 +169,6 @@ Example usage:
 
 ```ts
 // Extract the firmware from the uploaded file
-const rawData = Buffer.from(firmware);
 let actualFirmware: Firmware;
 try {
 	const format = guessFirmwareFormat(

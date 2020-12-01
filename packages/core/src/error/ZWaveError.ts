@@ -117,6 +117,8 @@ export enum ZWaveErrorCodes {
 	FirmwareUpdateCC_FailedToAbort,
 	/** The node did not confirm the completed update or the process stalled for too long */
 	FirmwareUpdateCC_Timeout,
+
+	Invalid_Firmware_Format,
 }
 
 /**
