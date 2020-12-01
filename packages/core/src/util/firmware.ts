@@ -13,7 +13,7 @@ export interface Firmware {
  * Guess the firmware format based on filename and firmware buffer
  *
  * @param filename The firmware filename
- * @param rawData The firmware data buffer
+ * @param rawData A buffer containing the original firmware update file
  */
 export function guessFirmwareFileFormat(
 	filename: string,
@@ -43,16 +43,16 @@ export function guessFirmwareFileFormat(
  * The returned firmware data and target can be used to start a firmware update process with `node.beginFirmwareUpdate`
  */
 export function extractFirmware(
-	data: Buffer,
+	rawData: Buffer,
 	format: FirmwareFileFormat,
 ): Firmware {
 	switch (format) {
 		case "aeotec":
-			return extractFirmwareAeotec(data);
+			return extractFirmwareAeotec(rawData);
 		case "otz":
 		case "ota":
 		case "hex":
-			return extractFirmwareHEX(data);
+			return extractFirmwareHEX(rawData);
 	}
 }
 

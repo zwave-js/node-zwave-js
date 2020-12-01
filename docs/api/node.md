@@ -130,29 +130,31 @@ beginFirmwareUpdate(data: Buffer, target?: number): Promise<void>
 Starts an OTA firmware update process for this node. This method takes two arguments:
 
 -   `data` - A buffer containing the firmware image in a format supported by the device
--   `target` - _(optional)_ The firmware target (i.e. chip) to upgrade. 0 updates the Z-Wave chip, >=1 updates others if they exist
+-   `target` - _(optional)_ The firmware target (i.e. chip) to upgrade. `0` updates the Z-Wave chip, `>=1` updates others if they exist
 
-The library includes 2 helper method (exported from `zwave-js/Utils`) to guess the firmware format and extract the raw firmware image from some common file types:
-
-```ts
-function guessFirmwareFileFormat(
-	filename: string,
-	rawData: Buffer,
-): FirmwareFileFormat
-```
-
--   `filename`: the name of the firmware file
--   `rawData`: the file firmware content raw Buffer
+The library includes helper methods (exported from `zwave-js/Utils`) to prepare the firmware update.
 
 ```ts
-function extractFirmware(data: Buffer, format: FirmwareFileFormat): Firmware
+extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
 ```
 
-`data` is the raw file data, `format` describes which kind of file that is. The following formats are available:
+`rawData` is a buffer containing the original firmware update file, `format` describes which kind of file that is. The following formats are available:
 
 -   `"aeotec"` - A Windows executable (`.exe` or `.ex_`) that contains Aeotec's upload tool
 -   `"otz"` - A compressed firmware file in Intel HEX format
 -   `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
+
+> [!NOTE]  
+> `.hec` firmware update files are encrypted with proprietary encryption and not supported by `zwave-js`
+
+You can use the helper method `guessFirmwareFileFormat` to guess which firmware format a file has based on the file extension and contents.
+
+```ts
+guessFirmwareFileFormat(filename: string, rawData: Buffer): FirmwareFileFormat
+```
+
+-   `filename`: The name of the firmware file (including the extension)
+-   `rawData`: A buffer containing the original firmware update file
 
 If successful, `extractFirmware` returns an object of the following form, whose properties can be passed to `beginFirmwareUpdate`:
 
@@ -168,16 +170,13 @@ If no firmware data can be extracted, the method will throw.
 Example usage:
 
 ```ts
-// Extract the firmware from the uploaded file
+// Extract the firmware from a given firmware file
 let actualFirmware: Firmware;
 try {
-	const format = guessFirmwareFileFormat(
-		filename,
-		rawData,
-	);
+	const format = guessFirmwareFileFormat(filename, rawData);
 	actualFirmware = extractFirmware(rawData, format);
 } catch (e) {
-	// handle the error
+	// handle the error, then abort the update
 }
 
 // try the update
