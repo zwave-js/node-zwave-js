@@ -12,6 +12,7 @@
 
 ### Features
 * Added the compat config option `preserveRootApplicationCCValueIDs` to disable hiding the root endpoint's application CC value IDs
+* The helper method `guessFirmwareFileFormat` was added to guess the firmware format based on the file contents
 
 ### Bugfixes
 * `Driver.destroy()` no longer does anything after the first call
