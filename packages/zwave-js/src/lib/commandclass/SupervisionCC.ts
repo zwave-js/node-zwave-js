@@ -209,6 +209,8 @@ export class SupervisionCCGet extends SupervisionCC {
 			this.requestStatusUpdates = options.requestStatusUpdates;
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
+			// If the encapsulated command requires security, so does this one
+			if (this.encapsulated.secure) this.secure = true;
 		}
 	}
 
