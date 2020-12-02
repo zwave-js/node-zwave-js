@@ -50,6 +50,15 @@ export enum NotificationCommand {
 	SupportedReport = 0x08,
 }
 
+/**
+ * @publicAPI
+ */
+export type NotificationMetadata = ValueMetadata & {
+	ccSpecific: {
+		notificationType: number;
+	};
+};
+
 /** Returns the ValueID used to store the supported notification types of a node */
 export function getSupportedNotificationTypesValueId(): ValueID {
 	return {
@@ -173,9 +182,10 @@ export class NotificationCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			NotificationCCSupportedReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<NotificationCCSupportedReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			supportsV1Alarm: response.supportsV1Alarm,
 			supportedNotificationTypes: response.supportedNotificationTypes,
@@ -194,9 +204,10 @@ export class NotificationCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			notificationType,
 		});
-		const response = (await this.driver.sendCommand<
-			NotificationCCEventSupportedReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<NotificationCCEventSupportedReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.supportedEvents;
 	}
 }
@@ -219,6 +230,9 @@ function defineMetadataForNotificationEvents(
 		ret.set(JSON.stringify(valueId), {
 			...ValueMetadata.ReadOnlyUInt8,
 			label: `Unknown notification (${num2hex(type)})`,
+			ccSpecific: {
+				notificationType: type,
+			},
 		});
 		return ret;
 	}
@@ -240,6 +254,9 @@ function defineMetadataForNotificationEvents(
 				...ValueMetadata.ReadOnlyUInt8,
 				label: valueConfig.variableName,
 				states: {},
+				ccSpecific: {
+					notificationType: type,
+				},
 			};
 			if (valueConfig.idle) {
 				metadata.states![0] = "idle";
@@ -737,15 +754,17 @@ export class NotificationCCReport extends NotificationCC {
 				"V1 alarm level": this.alarmLevel,
 			};
 		} else {
+			const valueConfig = lookupNotification(
+				this.notificationType!,
+			)?.lookupValue(this.notificationEvent!);
 			message = {
 				"notification type": getNotificationName(
 					this.notificationType!,
 				),
 				"notification status": this.notificationStatus,
-				"notification event":
-					lookupNotification(this.notificationType!)?.events.get(
-						this.notificationEvent!,
-					)?.label ?? `Unknown (${num2hex(this.notificationEvent)})`,
+				[`notification ${valueConfig?.type ?? "event"}`]:
+					valueConfig?.label ??
+					`Unknown (${num2hex(this.notificationEvent)})`,
 			};
 		}
 		if (this.zensorNetSourceNodeId) {

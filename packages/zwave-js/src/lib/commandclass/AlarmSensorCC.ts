@@ -47,6 +47,15 @@ export enum AlarmSensorType {
 	Any = 0xff,
 }
 
+/**
+ * @publicAPI
+ */
+export type AlarmSensorValueMetadata = ValueMetadata & {
+	ccSpecific: {
+		sensorType: AlarmSensorType;
+	};
+};
+
 export function getAlarmSensorStateValueId(
 	endpointIndex: number | undefined,
 	sensorType: AlarmSensorType,
@@ -135,9 +144,10 @@ export class AlarmSensorCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			AlarmSensorCCSupportedReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<AlarmSensorCCSupportedReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return response.supportedSensorTypes;
 	}
 }
@@ -278,6 +288,7 @@ duration: ${currentValue.duration}`;
 				...ValueMetadata.ReadOnlyBoolean,
 				label: `${alarmName} state`,
 				description: "Whether the alarm is active",
+				ccSpecific: { sensorType },
 			});
 		}
 		if (!valueDB.hasMetadata(severityValueId)) {
@@ -287,6 +298,7 @@ duration: ${currentValue.duration}`;
 				max: 100,
 				unit: "%",
 				label: `${alarmName} severity`,
+				ccSpecific: { sensorType },
 			});
 		}
 		if (!valueDB.hasMetadata(durationValueId)) {
@@ -295,6 +307,7 @@ duration: ${currentValue.duration}`;
 				unit: "s",
 				label: `${alarmName} duration`,
 				description: "For how long the alarm should be active",
+				ccSpecific: { sensorType },
 			});
 		}
 	}

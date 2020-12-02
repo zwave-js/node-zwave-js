@@ -117,6 +117,11 @@ export enum ZWaveErrorCodes {
 	FirmwareUpdateCC_FailedToAbort,
 	/** The node did not confirm the completed update or the process stalled for too long */
 	FirmwareUpdateCC_Timeout,
+
+	/** An invalid firmware file was provided that cannot be handled by this library */
+	Invalid_Firmware_File,
+	/** An firmware file with an unsupported format was provided */
+	Unsupported_Firmware_Format,
 }
 
 /**

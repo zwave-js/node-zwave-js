@@ -45,6 +45,8 @@ export interface ValueMetadataBase {
 	description?: string;
 	/** A human-readable name for the property */
 	label?: string;
+	/** CC-specific information to help identify this value */
+	ccSpecific?: Record<string, any>;
 }
 
 export interface ValueMetadataAny extends ValueMetadataBase {

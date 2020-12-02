@@ -523,13 +523,13 @@ export class Driver extends EventEmitter {
 			pick(this.options, ["timeouts", "attempts"]),
 		);
 		this.sendThread = interpret(sendThreadMachine);
-		this.sendThread.onTransition((state) => {
-			if (state.changed)
-				log.driver.print(
-					`send thread state: ${state.toStrings().slice(-1)[0]}`,
-					"verbose",
-				);
-		});
+		// this.sendThread.onTransition((state) => {
+		// 	if (state.changed)
+		// 		log.driver.print(
+		// 			`send thread state: ${state.toStrings().slice(-1)[0]}`,
+		// 			"verbose",
+		// 		);
+		// });
 	}
 
 	/** Enumerates all existing serial ports */
@@ -1212,8 +1212,10 @@ export class Driver extends EventEmitter {
 	 * Must be called under any circumstances.
 	 */
 	public async destroy(): Promise<void> {
-		log.driver.print("destroying driver instance...");
+		// Ensure this is only called once
+		if (this._wasDestroyed) return;
 		this._wasDestroyed = true;
+		log.driver.print("destroying driver instance...");
 
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
 		this.sendThread.stop();
@@ -1330,7 +1332,7 @@ export class Driver extends EventEmitter {
 				// Enrich error data in case something goes wrong
 				Sentry.addBreadcrumb({
 					category: "message",
-					timestamp: Date.now(),
+					timestamp: Date.now() / 1000,
 					type: "debug",
 					data: {
 						direction: "inbound",

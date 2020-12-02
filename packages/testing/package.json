@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/testing",
-  "version": "5.4.0",
+  "version": "5.5.0",
   "description": "zwave-js: testing utilities",
   "private": true,
   "keywords": [],
@@ -27,9 +27,6 @@
   },
   "engines": {
     "node": ">=10.0.0"
-  },
-  "dependencies": {
-    "@zwave-js/core": "^5.4.0"
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",

@@ -555,7 +555,7 @@ export class ZWaveNode extends Endpoint {
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */
 	public getDefinedValueIDs(): TranslatedValueID[] {
-		const ret: ValueID[] = [];
+		let ret: ValueID[] = [];
 		for (const endpoint of this.getAllEndpoints()) {
 			for (const cc of endpoint.implementedCommandClasses.keys()) {
 				const ccInstance = endpoint.createCCInstanceUnsafe(cc);
@@ -565,14 +565,15 @@ export class ZWaveNode extends Endpoint {
 			}
 		}
 
-		// Application command classes of the Root Device capabilities that are also advertised by at
-		// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
-		// via service discovery mechanisms like mDNS or to users in a GUI.
-		return (
-			this.filterRootApplicationCCValueIDs(ret)
-				// Filter first, then translate to reduce the amount of work we need to do
-				.map((id) => this.translateValueID(id))
-		);
+		if (!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs) {
+			// Application command classes of the Root Device capabilities that are also advertised by at
+			// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
+			// via service discovery mechanisms like mDNS or to users in a GUI.
+			ret = this.filterRootApplicationCCValueIDs(ret);
+		}
+
+		// Translate the remaining value IDs before exposing them to applications
+		return ret.map((id) => this.translateValueID(id));
 	}
 
 	private shouldHideValueID(
@@ -2435,9 +2436,7 @@ version:               ${this.version}`;
 		this._firmwareUpdateStatus.abort = true;
 
 		try {
-			await this.driver.waitForCommand<
-				FirmwareUpdateMetaDataCCStatusReport
-			>(
+			await this.driver.waitForCommand<FirmwareUpdateMetaDataCCStatusReport>(
 				(cc) =>
 					cc.nodeId === this.nodeId &&
 					cc instanceof FirmwareUpdateMetaDataCCStatusReport &&
@@ -2664,9 +2663,7 @@ version:               ${this.version}`;
 
 	private async finishFirmwareUpdate(): Promise<void> {
 		try {
-			const report = await this.driver.waitForCommand<
-				FirmwareUpdateMetaDataCCStatusReport
-			>(
+			const report = await this.driver.waitForCommand<FirmwareUpdateMetaDataCCStatusReport>(
 				(cc) =>
 					cc.nodeId === this.nodeId &&
 					cc instanceof FirmwareUpdateMetaDataCCStatusReport,

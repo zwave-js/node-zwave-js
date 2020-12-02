@@ -79,6 +79,17 @@ function splitPropertyKey(
 	};
 }
 
+/**
+ * @publicAPI
+ */
+export type MeterMetadata = ValueMetadata & {
+	ccSpecific: {
+		meterType: number;
+		rateType?: RateType;
+		scale?: number;
+	};
+};
+
 function getMeterTypeName(type: number): string {
 	return lookupMeter(type)?.name ?? `UNKNOWN (${num2hex(type)})`;
 }
@@ -534,6 +545,11 @@ export class MeterCCReport extends MeterCC {
 				this._scale.key,
 			),
 		};
+		const ccSpecific = {
+			meterType: this._type,
+			rateType: this._rateType,
+			scale: this._scale.key,
+		};
 		const valueDB = this.getValueDB();
 
 		const valueValueId = { ...valueIdBase, property: "value" };
@@ -553,6 +569,7 @@ export class MeterCCReport extends MeterCC {
 						: ""
 				})`,
 				unit: this._scale.label,
+				ccSpecific,
 			});
 		}
 		if (this.version >= 2 && !valueDB.hasMetadata(previousValueValueID)) {
@@ -564,6 +581,7 @@ export class MeterCCReport extends MeterCC {
 						: ""
 				})`,
 				unit: this._scale.label,
+				ccSpecific,
 			});
 		}
 		if (this.version >= 2 && !valueDB.hasMetadata(deltaTimeValueId)) {
@@ -573,6 +591,7 @@ export class MeterCCReport extends MeterCC {
 					...ValueMetadata.ReadOnlyNumber,
 					label: `Time since the previous reading`,
 					unit: "s",
+					ccSpecific,
 				},
 			);
 		}
@@ -825,6 +844,9 @@ export class MeterCCSupportedReport extends MeterCC {
 				this.getValueDB().setMetadata(resetSingle, {
 					...ValueMetadata.WriteOnlyBoolean,
 					label: `Reset (${getMeterTypeName(this._type)})`,
+					ccSpecific: {
+						meterType: this._type,
+					},
 				});
 			}
 		}

@@ -6,14 +6,31 @@
 
 ## __WORK IN PROGRESS__
 ### Config file changes
+* Added a config file for `HeatIt Z-TRM3`
+* Added a config file for `Eurotronic Air quality sensor`
+* The Application CC value IDs of the root endpoint are now preserved for the `Qubino Flush 2 Relay`
+
+### Features
+* Added the compat config option `preserveRootApplicationCCValueIDs` to disable hiding the root endpoint's application CC value IDs
+* The helper method `guessFirmwareFileFormat` was added to guess the firmware format based on the file contents
+
+### Bugfixes
+* `Driver.destroy()` no longer does anything after the first call
+* `Sound Switch Tone Play Report` commands now parse the volume if it exists
+* The log entries for `Notification CC Report`s now contain the correct notification event/state
+* The value IDs of `Multi Channel Association CC` are now marked as internal
+
+## 5.5.0 (2020-11-24)
+### Config file changes
 * Added a config file for `Jasco ZW3010`
 * Added new Notification definitions
-* Added new Indicators
+* Added new Indicator definitions
 
 ### Features
 * Implemented the `replaceFailedNode` API
 * Added a third argument to the `"interview failed"` event handler which includes an object with additional details about the interview attempt (see [docs](https://zwave-js.github.io/node-zwave-js/#/api/node?id=quotinterview-failedquot)).  
   **WARNING:** The current signature is deprecated and will be changed in the next major version!
+* Metadata can now be customized by CCs with the `ccSpecific` property. This is used in several CCs to allow applications to identify which value a value ID describes (e.g. sensor type, meter type, etc...)
 
 ### Bugfixes
 * The logs of `ConfigurationCC::PropertiesGet` now include the correct *next parameter #*

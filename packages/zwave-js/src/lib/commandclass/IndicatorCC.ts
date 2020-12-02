@@ -37,6 +37,16 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 
+/**
+ * @publicAPI
+ */
+export type IndicatorMetadata = ValueMetadata & {
+	ccSpecific: {
+		indicatorId: number;
+		propertyId?: number;
+	};
+};
+
 export function getSupportedIndicatorIDsValueID(
 	endpoint: number | undefined,
 ): ValueID {
@@ -92,11 +102,21 @@ function getIndicatorMetadata(
 	const label = lookupIndicator(indicatorId);
 	const prop = lookupProperty(propertyId);
 	if (!label && !prop) {
-		return { ...ValueMetadata.UInt8 };
+		return {
+			...ValueMetadata.UInt8,
+			ccSpecific: {
+				indicatorId,
+				propertyId,
+			},
+		};
 	} else if (!prop) {
 		return {
 			...ValueMetadata.UInt8,
 			label,
+			ccSpecific: {
+				indicatorId,
+				propertyId,
+			},
 		};
 	} else {
 		if (prop.type === "boolean") {
@@ -105,6 +125,10 @@ function getIndicatorMetadata(
 				label: `${label} - ${prop.label}`,
 				description: prop.description,
 				readable: !prop.readonly,
+				ccSpecific: {
+					indicatorId,
+					propertyId,
+				},
 			};
 		} else {
 			// UInt8
@@ -115,6 +139,10 @@ function getIndicatorMetadata(
 				min: prop.min,
 				max: prop.max,
 				readable: !prop.readonly,
+				ccSpecific: {
+					indicatorId,
+					propertyId,
+				},
 			};
 		}
 	}
@@ -249,9 +277,10 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = (await this.driver.sendCommand<
-			IndicatorCCSupportedReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<IndicatorCCSupportedReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			// Include the actual indicator ID if 0x00 was requested
 			...(indicatorId === 0x00
@@ -573,6 +602,9 @@ export class IndicatorCCReport extends IndicatorCC {
 				valueDB.setMetadata(valueId, {
 					...ValueMetadata.UInt8,
 					label: "Indicator value",
+					ccSpecific: {
+						indicatorId: 0,
+					},
 				});
 				valueDB.setValue(valueId, this.value);
 			} else {

@@ -70,9 +70,10 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<
-			ThermostatSetbackCCReport
-		>(cc, this.commandOptions))!;
+		const response = (await this.driver.sendCommand<ThermostatSetbackCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
 		return {
 			setbackType: response.setbackType,
 			setbackState: response.setbackState,
