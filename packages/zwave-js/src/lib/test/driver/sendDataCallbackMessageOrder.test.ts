@@ -97,9 +97,7 @@ describe("regression tests", () => {
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
 		const configGetPromise = node17.commandClasses.Configuration.get(43);
-		const getRoutingInfoPromise = driver.sendMessage<
-			GetRoutingInfoResponse
-		>(
+		const getRoutingInfoPromise = driver.sendMessage<GetRoutingInfoResponse>(
 			new GetRoutingInfoRequest(driver, {
 				nodeId: 15,
 				removeBadLinks: false,
