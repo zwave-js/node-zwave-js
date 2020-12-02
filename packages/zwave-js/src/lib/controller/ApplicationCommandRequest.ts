@@ -115,7 +115,11 @@ export class ApplicationCommandRequest
 
 		const serializedCC = this.command.serialize();
 		this.payload = Buffer.concat([
-			Buffer.from([statusByte, this.command.nodeId, serializedCC.length]),
+			Buffer.from([
+				statusByte,
+				this.driver.controller.ownNodeId!,
+				serializedCC.length,
+			]),
 			serializedCC,
 		]);
 
