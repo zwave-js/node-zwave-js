@@ -19,6 +19,7 @@
 * `Sound Switch Tone Play Report` commands now parse the volume if it exists
 * The log entries for `Notification CC Report`s now contain the correct notification event/state
 * The value IDs of `Multi Channel Association CC` are now marked as internal
+* When encapsulating commands, the `secure` flag is now correctly propagated
 
 ## 5.5.0 (2020-11-24)
 ### Config file changes

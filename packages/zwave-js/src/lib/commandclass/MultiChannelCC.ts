@@ -978,6 +978,8 @@ export class MultiChannelCCCommandEncapsulation extends MultiChannelCC {
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
 			this.destination = options.destination;
+			// If the encapsulated command requires security, so does this one
+			if (this.encapsulated.secure) this.secure = true;
 		}
 	}
 
