@@ -73,6 +73,18 @@ jobs:
     - name: Download changed files from previous job
       uses: actions/download-artifact@v2
 
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    # We need npm@7 for the workspaces feature
+    - name: Update npm to >=7
+      run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
+
+    - name: Install dependencies
+      run: npm ci
+
     - name: Create or update PR
       uses: ./.github/actions/generateTypedDocs
       with:
