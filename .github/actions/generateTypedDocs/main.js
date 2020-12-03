@@ -26,20 +26,30 @@ const reviewers = [
 		return;
 	}
 
-	// create new branch for PR
-	await exec.exec("git", ["checkout", "-b", `${branchName}`]);
+	// Check if a PR already exists
+	const PRs = await octokit.pulls.list({
+		...options,
+		state: "open",
+		head: `zwave-js:${branchName}`,
+	});
+	const firstPR = PRs.data[0];
+	let prNumber = firstPR && firstPR.number;
+	
 	// Check if the action's branch exists on the remote (exit code 0) or not (exit code 2)
-	const exists = !(await exec.exec("git", ["ls-remote", "--exit-code", "--heads", "origin", branchName], {
+	const branchExists = !(await exec.exec("git", ["ls-remote", "--exit-code", "--heads", "origin", branchName], {
 		ignoreReturnCode: true
 	}));
 
-	if (exists) {
+	// create new branch for PR
+	await exec.exec("git", ["checkout", "-b", `${branchName}`]);
+
+	if (branchExists) {
 		// check if our local working copy is different from the remote branch
 		const isChanged = !(await exec.exec("git", ["diff", "--exit-code", `origin/${branchName}`, "--", "docs/"], {
 			ignoreReturnCode: true
 		}));
-		if (isChanged) {
-			console.log(`We have no local changes compared to the remote branch, exiting...`);
+		if (isChanged && !!prNumber) {
+			console.log(`We have no local changes compared to the remote branch and PR exists, exiting...`);
 			return;
 		}
 
@@ -56,20 +66,12 @@ const reviewers = [
 	await exec.exec("git", ["commit", "-m", "docs: update typed documentation"]);
 
 	// And push it (real good)
-	if (exists) {
+	if (branchExists) {
 		await exec.exec("git", ["push", "-f"]);
 	} else {
 		await exec.exec("git", ["push", "--set-upstream", "origin", branchName]);
 	}
 
-	// Find a matching PR
-	const PRs = await octokit.pulls.list({
-		...options,
-		state: "open",
-		head: `zwave-js:${branchName}`,
-	});
-	const firstPR = PRs.data[0];
-	let prNumber = firstPR && firstPR.number;
 	if (!prNumber) {
 		// no PR exists, create one
 		const pr = await octokit.pulls.create({
