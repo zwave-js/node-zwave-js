@@ -151,12 +151,14 @@ export async function processDocFile(
 	program: Project,
 	docFile: string,
 ): Promise<boolean> {
+	console.log(`processing ${docFile}...`);
 	let fileContent = await fs.readFile(docFile, "utf8");
 	const ranges = findImportRanges(fileContent);
 	let hasErrors = false;
 	// Replace from back to start so we can reuse the indizes
 	for (let i = ranges.length - 1; i >= 0; i--) {
 		const range = ranges[i];
+		console.log(`  processing import ${range.symbol} from ${range.module}`);
 		const sourceNode = findSourceNode(
 			program,
 			`packages/${range.module}/src/index.ts`,

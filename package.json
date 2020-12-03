@@ -115,7 +115,7 @@
     "postversion": "git push && git push --tags",
     "config": "ts-node maintenance/importConfig.ts",
     "docs": "docsify serve docs",
-    "generate-docs": "ts-node -P maintenance/tsconfig.json maintenance/generateTypedDocs.ts"
+    "docs:generate": "ts-node -P maintenance/tsconfig.json maintenance/generateTypedDocs.ts"
   },
   "readme": "README.md",
   "husky": {
