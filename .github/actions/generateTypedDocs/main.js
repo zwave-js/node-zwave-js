@@ -29,7 +29,11 @@ const octokit = github.getOctokit(githubToken);
 	await exec.exec("git", ["commit", "-m", "docs: update typed documentation"]);
 
 	// And push it (real good)
-	await exec.exec("git", `push${exists ? " -f" : ""}`.split(" "));
+	if (exists) {
+		await exec.exec("git", ["push", "-f"]);
+	} else {
+		await exec.exec("git", ["push", "--set-upstream", "origin", branchName]);
+	}
 
 	// Find a matching PR
 	const PRs = await octokit.pulls.list({
@@ -52,5 +56,6 @@ const octokit = github.getOctokit(githubToken);
 		});
 	}
 })().catch(e => {
-	throw e;
+	console.error(e);
+	process.exit(1);
 });
