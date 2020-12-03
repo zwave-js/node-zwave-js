@@ -19,12 +19,16 @@ const octokit = github.getOctokit(githubToken);
 		// point the local branch to the remote branch
 		await exec.exec("git", ["branch", "-u", `origin/${branchName}`]);
 	}
+
+	// Would the real Al Calzone please stand up?
+	await exec.exec("git", ["config", "--global", "user.email", "d.griesel@gmx.net"]);
+	await exec.exec("git", ["config", "--global", "user.name", "Al Calzone"]);
 	
 	// Create a commit
 	await exec.exec("git", ["add", "."]);
 	await exec.exec("git", ["commit", "-m", "docs: update typed documentation"]);
 
-	// And push it
+	// And push it (real good)
 	await exec.exec("git", `push${exists ? " -f" : ""}`.split(" "));
 
 	// Find a matching PR
@@ -47,4 +51,6 @@ const octokit = github.getOctokit(githubToken);
 			body: `The auto-generated documentation has changed. Please review the changes and merge them if desired.`
 		});
 	}
-})();
+})().catch(e => {
+	throw e;
+});
