@@ -5,9 +5,18 @@ const core = require("@actions/core");
 const githubToken = core.getInput("githubToken");
 const octokit = github.getOctokit(githubToken);
 
+const options = {
+	owner: "zwave-js",
+	repo: "node-zwave-js",
+};
+const branchName = "docs/update-typed-docs";
+const reviewers = [
+	"AlCalzone",
+	"robertslando",
+];
+
 (async function main() {
 
-	const branchName = "docs/update-typed-docs";
 	// create new branch for PR
 	await exec.exec("git", ["checkout", "-b", `${branchName}`]);
 	// Check if the action's branch exists on the remote (exit code 0) or not (exit code 2)
@@ -37,24 +46,30 @@ const octokit = github.getOctokit(githubToken);
 
 	// Find a matching PR
 	const PRs = await octokit.pulls.list({
-		owner: "zwave-js",
-		repo: "node-zwave-js",
+		...options,
 		state: "open",
 		head: `zwave-js:${branchName}`,
 	});
 	const firstPR = PRs.data[0];
-	const currentId = firstPR && firstPR.id;
-	if (!currentId) {
+	let prNumber = firstPR && firstPR.number;
+	if (!prNumber) {
 		// no PR exists, create one
-		await octokit.pulls.create({
-			owner: "zwave-js",
-			repo: "node-zwave-js",
+		const pr = await octokit.pulls.create({
+			...options,
 			head: branchName,
 			base: "master",
 			title: "docs: update typed documentation 🤖",
-			body: `The auto-generated documentation has changed. Please review the changes and merge them if desired.`
+			body: `The auto-generated documentation has changed. Please review the changes and merge them if desired.`,
+			maintainer_can_modify: true,
 		});
+		prNumber = pr.data.number;
 	}
+	// Request review
+	await octokit.pulls.requestReviewers({
+		...options,
+		pull_number: prNumber,
+		reviewers,
+	});
 })().catch(e => {
 	console.error(e);
 	process.exit(1);
