@@ -391,7 +391,7 @@ interface ZWaveOptions {
 	/** Allows you to specify a different cache directory */
 	cacheDir: string;
 
-	/** Specify the network key to use for encryption. This must be a Buffer with exactly 16 bytes length */
+	/** Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes. */
 	networkKey?: Buffer;
 }
 ```
