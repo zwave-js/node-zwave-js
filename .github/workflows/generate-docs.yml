@@ -8,7 +8,7 @@ on:
   pull_request: {}
 
 jobs:
-  lint:
+  check:
     runs-on: ubuntu-latest
     strategy:
       matrix:
