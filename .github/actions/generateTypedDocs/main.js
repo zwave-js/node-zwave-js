@@ -26,7 +26,7 @@ const reviewers = [
 
 	if (exists) {
 		// check if our local working copy is different from the remote branch
-		const isChanged = !(await exec.exec("git", ["diff", "--exit-code", `origin/${branchName}`], {
+		const isChanged = !(await exec.exec("git", ["diff", "--exit-code", `origin/${branchName}`, "--", "docs/"], {
 			ignoreReturnCode: true
 		}));
 		if (isChanged) {
