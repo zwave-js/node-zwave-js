@@ -40,7 +40,7 @@ const octokit = github.getOctokit(githubToken);
 		owner: "zwave-js",
 		repo: "node-zwave-js",
 		state: "open",
-		head: `zwave-js:${branchName}`,
+		head: branchName,
 	});
 	const firstPR = PRs.data[0];
 	const currentId = firstPR && firstPR.id;
@@ -49,8 +49,8 @@ const octokit = github.getOctokit(githubToken);
 		await octokit.pulls.create({
 			owner: "zwave-js",
 			repo: "node-zwave-js",
-			head: `zwave-js:${branchName}`,
-			base: "zwave-js:master",
+			head: branchName,
+			base: "master",
 			title: "docs: update typed documentation 🤖",
 			body: `The auto-generated documentation has changed. Please review the changes and merge them if desired.`
 		});
