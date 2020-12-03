@@ -34,8 +34,8 @@ const context = github.context;
 		state: "open",
 		head: `zwave-js:${branchName}`,
 	});
-	const currentId = PRs.data?.[0]?.id;
-
+	const firstPR = PRs.data[0];
+	const currentId = firstPR && firstPR.id;
 	if (!currentId) {
 		// no PR exists, create one
 		await octokit.pulls.create({
