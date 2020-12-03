@@ -324,9 +324,12 @@ export interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a transaction expires. When the expiration timer elapses, the transaction promise is rejected. */
+	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
-	/** Internal information used to identify or mark this transaction */
+	/**
+	 * Internal information used to identify or mark this transaction
+	 * @internal
+	 */
 	tag?: any;
 }
 

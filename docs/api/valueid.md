@@ -77,22 +77,16 @@ interface ValueMetadataAny extends ValueMetadataBase {
 
 #### `number`
 
-<!-- #import ValueMetadataNumeric from "zwave-js" -->
+<!-- #import ValueMetadataNumeric from "zwave-js" with no-jsdoc -->
 
 ```ts
 interface ValueMetadataNumeric extends ValueMetadataBase {
 	type: "number";
-	/** The minimum value that can be assigned to a CC value (optional) */
 	min?: number;
-	/** The maximum value that can be assigned to a CC value (optional) */
 	max?: number;
-	/** When only certain values between min and max are allowed, this determines the step size */
 	steps?: number;
-	/** The default value */
 	default?: number;
-	/** Speaking names for numeric values */
 	states?: Record<number, string>;
-	/** An optional unit for numeric values */
 	unit?: string;
 }
 ```
@@ -106,12 +100,11 @@ interface ValueMetadataNumeric extends ValueMetadataBase {
 
 #### boolean
 
-<!-- #import ValueMetadataBoolean from "zwave-js" -->
+<!-- #import ValueMetadataBoolean from "zwave-js" with no-jsdoc -->
 
 ```ts
 interface ValueMetadataBoolean extends ValueMetadataBase {
 	type: "boolean";
-	/** The default value */
 	default?: number;
 }
 ```
@@ -120,21 +113,18 @@ interface ValueMetadataBoolean extends ValueMetadataBase {
 
 ### string
 
-<!-- #import ValueMetadataString from "zwave-js" -->
+<!-- #import ValueMetadataString from "zwave-js" with no-jsdoc -->
 
 ```ts
 interface ValueMetadataString extends ValueMetadataBase {
 	type: "string";
-	/** The minimum length this string must have (optional) */
 	minLength?: number;
-	/** The maximum length this string may have (optional) */
 	maxLength?: number;
-	/** The default value */
 	default?: string;
 }
 ```
 
--   `minLength`: The minimum length this string may have
+-   `minLength`: The minimum length this string must have
 -   `maxLength`: The maximum length this string may have
 -   `default`: The default value
 
@@ -168,13 +158,13 @@ type BinarySensorValueMetadata = ValueMetadata & {
 
 #### Indicator CC
 
-<!-- #import IndicatorMetadata from "zwave-js" -->
+<!-- #import IndicatorMetadata from "zwave-js" with comments -->
 
 ```ts
 type IndicatorMetadata = ValueMetadata & {
 	ccSpecific: {
 		indicatorId: number;
-		propertyId?: number;
+		propertyId?: number; // only present on V2+ indicators
 	};
 };
 ```

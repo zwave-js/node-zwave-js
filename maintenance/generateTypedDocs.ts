@@ -35,21 +35,37 @@ export function stripComments(
 ): ExportedDeclarations {
 	if (Node.isTextInsertableNode(node)) {
 		// Remove some comments if desired
-		const comments: CommentRange[] = [];
+		const ranges: { pos: number; end: number }[] = [];
 		const removePredicate = (c: CommentRange) =>
 			(!options.comments &&
 				c.getKind() === SyntaxKind.SingleLineCommentTrivia) ||
 			(!options.jsdoc &&
 				c.getKind() === SyntaxKind.MultiLineCommentTrivia);
 
+		const getCommentRangesForNode = (
+			node: Node,
+		): { pos: number; end: number }[] => {
+			const comments = node.getLeadingCommentRanges();
+			const ret = comments.map((c, i) => ({
+				pos: c.getPos(),
+				end:
+					i < comments.length - 1
+						? comments[i + 1].getPos()
+						: Math.max(node.getStart(), c.getEnd()),
+				remove: removePredicate(c),
+			}));
+			// Only use comment ranges that should be removed
+			return ret.filter((r) => r.remove);
+		};
+
 		if (Node.isEnumDeclaration(node)) {
 			for (const member of node.getMembers()) {
-				comments.push(...member.getLeadingCommentRanges());
+				ranges.push(...getCommentRangesForNode(member));
 			}
 		} else if (Node.isInterfaceDeclaration(node)) {
 			const walkInterfaceDeclaration = (node: InterfaceDeclaration) => {
 				for (const member of node.getMembers()) {
-					comments.push(...member.getLeadingCommentRanges());
+					ranges.push(...getCommentRangesForNode(member));
 					if (Node.isInterfaceDeclaration(member)) {
 						walkInterfaceDeclaration(member);
 					}
@@ -57,10 +73,6 @@ export function stripComments(
 			};
 			walkInterfaceDeclaration(node);
 		}
-
-		const ranges = comments
-			.filter(removePredicate)
-			.map((c) => ({ pos: c.getPos(), end: c.getEnd() }));
 
 		// Sort in reverse order, so the removals don't influence each other
 		ranges.sort((a, b) => b.pos - a.pos);
