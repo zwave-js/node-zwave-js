@@ -11,8 +11,10 @@ const options = {
 };
 const branchName = "docs/update-typed-docs";
 const reviewers = [
+	"robertsLando",
+];
+const assignees = [
 	"AlCalzone",
-	"robertslando",
 ];
 
 (async function main() {
@@ -84,12 +86,17 @@ const reviewers = [
 		});
 		prNumber = pr.data.number;
 	}
-	// Request review
+	// Request review and add assignee
 	await octokit.pulls.requestReviewers({
 		...options,
 		pull_number: prNumber,
 		reviewers,
 	});
+	await octokit.issues.addAssignees({
+		...options,
+		issue_number: prNumber,
+		assignees,
+	})
 })().catch(e => {
 	console.error(e);
 	process.exit(1);
