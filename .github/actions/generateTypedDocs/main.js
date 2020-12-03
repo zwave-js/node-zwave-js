@@ -20,11 +20,20 @@ const reviewers = [
 	// create new branch for PR
 	await exec.exec("git", ["checkout", "-b", `${branchName}`]);
 	// Check if the action's branch exists on the remote (exit code 0) or not (exit code 2)
-	const exists = !(await exec.exec("git", ["ls-remote", "--exit-code", "--heads", "https://github.com/zwave-js/node-zwave-js.git", branchName], {
+	const exists = !(await exec.exec("git", ["ls-remote", "--exit-code", "--heads", "origin", branchName], {
 		ignoreReturnCode: true
 	}));
 
 	if (exists) {
+		// check if our local working copy is different from the remote branch
+		const isChanged = !(await exec.exec("git", ["diff", "--exit-code", `origin/${branchName}`], {
+			ignoreReturnCode: true
+		}));
+		if (isChanged) {
+			console.log(`Branch exists, we have no local changes, exiting...`);
+			return;
+		}
+
 		// point the local branch to the remote branch
 		await exec.exec("git", ["branch", "-u", `origin/${branchName}`]);
 	}
