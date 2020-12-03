@@ -42,9 +42,12 @@ const octokit = github.getOctokit(githubToken);
 		state: "open",
 		head: branchName,
 	});
+	console.dir(PRs);
 	const firstPR = PRs.data[0];
 	const currentId = firstPR && firstPR.id;
+	console.log(`current PR ID is ${currentId}`);
 	if (!currentId) {
+		console.log(`creating new PR...`);
 		// no PR exists, create one
 		await octokit.pulls.create({
 			owner: "zwave-js",
