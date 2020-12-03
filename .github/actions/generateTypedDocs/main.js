@@ -11,7 +11,7 @@ const octokit = github.getOctokit(githubToken);
 	// create new branch for PR
 	await exec.exec("git", ["checkout", "-b", `${branchName}`]);
 	// Check if the action's branch exists on the remote (exit code 0)
-	const exists = !(await exec.exec("git", ["ls-remote", "--exit-code", "--heads", "git@github.com:zwave-js/node-zwave-js.git", branchName]));
+	const exists = !(await exec.exec("git", ["ls-remote", "--exit-code", "--heads", "https://github.com/zwave-js/node-zwave-js.git", branchName]));
 
 	if (exists) {
 		// point the local branch to the remote branch
