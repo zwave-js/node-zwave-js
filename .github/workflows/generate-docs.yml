@@ -9,7 +9,8 @@ on:
 
 jobs:
   # This job checks if the docs can be generated and produce changes
-  check:
+  # If they do, a PR will be created with the changes
+  check-and-update:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -47,45 +48,12 @@ jobs:
           echo "::set-output name=CHANGES::true"
         fi
 
-    - name: Save changed files for the update PR
-      if: ${{ steps.changes.outputs.CHANGES }}
-      uses: actions/upload-artifact@v2
-      with:
-        name: docs
-        path: docs
-
-  # ============================
-
-  # This job creates a PR which updates the docs
-  update:
     # Trigger this step only when pushing to master and changes were detected
-    if: |
-      needs.check.outputs.CHANGES == 'true' &&
-      github.event_name == 'push' &&
-      github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    needs: [check]
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Download changed files from previous job
-      uses: actions/download-artifact@v2
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-
-    # We need npm@7 for the workspaces feature
-    - name: Update npm to >=7
-      run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
-
-    - name: Install dependencies
-      run: npm ci
-
     - name: Create or update PR
+      if: |
+        steps.changes.outputs.CHANGES == 'true' && 
+        github.event_name == 'push' && 
+        github.ref == 'refs/heads/master'
       uses: ./.github/actions/generateTypedDocs
       with:
         githubToken: ${{ secrets.GITHUB_TOKEN }}
