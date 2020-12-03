@@ -5,55 +5,78 @@
 import { red } from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
-import ts from "typescript";
+import {
+	CommentRange,
+	ExportedDeclarations,
+	Node,
+	Project,
+	SyntaxKind,
+} from "ts-morph";
 import {
 	formatWithPrettier,
-	loadTSConfig,
-	updateModifiers,
+	tsConfigFilePath,
 } from "../packages/zwave-js/maintenance/tsTools";
 import { enumFilesRecursive } from "./tools";
 
 export function findSourceNode(
-	program: ts.Program,
-	checker: ts.TypeChecker,
+	program: Project,
 	exportingFile: string,
 	identifier: string,
-): ts.Declaration | undefined {
+): ExportedDeclarations | undefined {
 	// Scan all source files
 	const file = program.getSourceFile(exportingFile);
-	if (file) {
-		const fileSymbol = checker.getSymbolAtLocation(file)!;
-		const exportSymbols = checker.getExportsOfModule(fileSymbol);
-		const wantedSymbol = exportSymbols.find(
-			(e) => e.escapedName === identifier,
-		);
-		if (wantedSymbol) {
-			const node = checker.getAliasedSymbol(wantedSymbol).declarations[0];
-			return node;
-		}
-	}
+	return file?.getExportedDeclarations().get(identifier)?.[0];
 }
 
-export function getTransformedSource(node: ts.Declaration): string {
-	const transformer: ts.TransformerFactory<ts.Node> = (context) => {
-		return (root) =>
-			ts.visitNode(root, (node) => {
-				// Remove exports keyword
-				node = updateModifiers(context.factory, node, undefined, [
-					ts.SyntaxKind.ExportKeyword,
-				]);
-				return node;
-			});
-	};
+export function stripSingleLineComments(
+	node: ExportedDeclarations,
+	text: string,
+): string {
+	return text;
+}
 
-	const result = ts.transform(node, [transformer]);
-	let ret = ts
-		.createPrinter()
-		.printNode(
-			ts.EmitHint.Unspecified,
-			result.transformed[0],
-			node.getSourceFile(),
-		);
+export function getTransformedSource(
+	node: ExportedDeclarations,
+	options: ImportRange["options"],
+): string {
+	// Remove exports keyword
+	if (Node.isModifierableNode(node)) {
+		node = node.toggleModifier("export", false);
+	}
+
+	if (Node.isTextInsertableNode(node)) {
+		// Remove some comments if desired
+		const commentRanges: { pos: number; end: number }[] = [];
+		const removePredicate = (c: CommentRange) =>
+			(!options.comments &&
+				c.getKind() === SyntaxKind.SingleLineCommentTrivia) ||
+			(!options.jsdoc &&
+				c.getKind() === SyntaxKind.MultiLineCommentTrivia);
+
+		if (Node.isEnumDeclaration(node)) {
+			for (const member of node.getMembers()) {
+				commentRanges.push(
+					...member
+						.getLeadingCommentRanges()
+						.filter(removePredicate)
+						.map((c) => ({ pos: c.getPos(), end: c.getEnd() })),
+				);
+			}
+		}
+		// Sort in reverse order, so the removals don't influence each other
+		commentRanges.sort((a, b) => b.pos - a.pos);
+		for (const { pos, end } of commentRanges) {
+			node.removeText(pos, end);
+		}
+	}
+
+	let ret = node.print();
+	if (!options.comments) {
+		// Strip out leading single-line comments, ts-morph seems to be 2 chars off when we do that
+		const commentRegex = /^\/\/.+\r?\n/g;
+		ret = ret.replace(commentRegex, "");
+	}
+
 	// Format with Prettier so we get the original formatting back
 	ret = formatWithPrettier("index.ts", ret).trim();
 	return ret;
@@ -64,9 +87,14 @@ interface ImportRange {
 	end: number;
 	module: string;
 	symbol: string;
+	import: string;
+	options: {
+		comments?: boolean;
+		jsdoc?: boolean;
+	};
 }
 
-const importRegex = /<!-- #import (?<symbol>.*?) from "(?<module>.*?)" -->(?:[\s\r\n]*```ts[\r\n]*(?<source>(.|\n)*?)```)?/g;
+const importRegex = /(?<import><!-- #import (?<symbol>.*?) from "(?<module>.*?)"(?: with (?<options>[\w\-, ]*?))? -->)(?:[\s\r\n]*```ts[\r\n]*(?<source>(.|\n)*?)```)?/g;
 
 export function findImportRanges(docFile: string): ImportRange[] {
 	const matches = [...docFile.matchAll(importRegex)];
@@ -76,12 +104,16 @@ export function findImportRanges(docFile: string): ImportRange[] {
 		end: match.index! + match[0].length,
 		module: match.groups!.module,
 		symbol: match.groups!.symbol,
+		import: match.groups!.import,
+		options: {
+			comments: !!match.groups!.options?.includes("comments"),
+			jsdoc: !match.groups!.options?.includes("no-jsdoc"),
+		},
 	}));
 }
 
 export async function processDocFile(
-	program: ts.Program,
-	checker: ts.TypeChecker,
+	program: Project,
 	docFile: string,
 ): Promise<boolean> {
 	let fileContent = await fs.readFile(docFile, "utf8");
@@ -92,7 +124,6 @@ export async function processDocFile(
 		const range = ranges[i];
 		const sourceNode = findSourceNode(
 			program,
-			checker,
 			`packages/${range.module}/src/index.ts`,
 			range.symbol,
 		);
@@ -104,10 +135,8 @@ export async function processDocFile(
 			);
 			hasErrors = true;
 		} else {
-			const source = getTransformedSource(sourceNode);
-			fileContent = `${fileContent.slice(0, range.index)}<!-- #import ${
-				range.symbol
-			} from "${range.module}" -->
+			const source = getTransformedSource(sourceNode, range.options);
+			fileContent = `${fileContent.slice(0, range.index)}${range.import}
 
 \`\`\`ts
 ${source}
@@ -123,12 +152,7 @@ ${source}
 }
 
 async function main(): Promise<void> {
-	// Create a Program to represent the project, then pull out the
-	// source file to parse its AST.
-
-	const tsConfig = loadTSConfig();
-	const program = ts.createProgram(tsConfig.fileNames, tsConfig.options);
-	const checker = program.getTypeChecker();
+	const program = new Project({ tsConfigFilePath });
 
 	const files = await enumFilesRecursive(
 		path.join(__dirname, "../docs"),
@@ -136,7 +160,7 @@ async function main(): Promise<void> {
 	);
 	let hasErrors = false;
 	for (const file of files) {
-		hasErrors ||= await processDocFile(program, checker, file);
+		hasErrors ||= await processDocFile(program, file);
 	}
 	if (hasErrors) {
 		process.exit(1);

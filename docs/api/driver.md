@@ -274,7 +274,7 @@ The message priority must one of the following enum values. Consuming applicatio
 > DO NOT rely on the numeric values of the enum if you're using it in your application.
 > The ordinal values are likely to change in future updates. Instead, refer to the enum properties directly.
 
-<!-- #import MessagePriority from "zwave-js" -->
+<!-- #import MessagePriority from "zwave-js" with comments -->
 
 ```ts
 /** The priority of messages, sorted from high (0) to low (>0) */

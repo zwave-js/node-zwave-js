@@ -33,6 +33,9 @@ export function loadTSConfig(): {
 	};
 }
 
+/** Used for ts-morph */
+export const tsConfigFilePath = path.join(projectRoot, "tsconfig.json");
+
 export function compareStrings(a: string, b: string): number {
 	if (a > b) return 1;
 	if (b > a) return -1;
@@ -50,80 +53,4 @@ export function formatWithPrettier(
 		filepath: filename,
 	};
 	return prettier.format(sourceText, prettierOptions);
-}
-
-export function updateModifiers<T extends ts.Node>(
-	factory: ts.NodeFactory,
-	s: T,
-	add: ts.ModifierSyntaxKind[] | undefined,
-	remove: ts.ModifierSyntaxKind[] | undefined,
-): T {
-	let modifiers = [...(s.modifiers ?? [])];
-	if (remove?.length) {
-		modifiers = modifiers.filter((m) => !remove.includes(m.kind));
-	}
-	if (add?.length) {
-		const reallyNew = add.filter(
-			(kind) => !modifiers.some((m) => m.kind === kind),
-		);
-		modifiers.push(...reallyNew.map((kind) => ts.createModifier(kind)));
-	}
-
-	if (ts.isVariableStatement(s)) {
-		return (factory.updateVariableStatement(
-			s,
-			modifiers,
-			s.declarationList,
-		) as unknown) as T;
-	} else if (ts.isTypeAliasDeclaration(s)) {
-		return (factory.updateTypeAliasDeclaration(
-			s,
-			s.decorators,
-			modifiers,
-			s.name,
-			s.typeParameters,
-			s.type,
-		) as unknown) as T;
-	} else if (ts.isInterfaceDeclaration(s)) {
-		return (factory.updateInterfaceDeclaration(
-			s,
-			s.decorators,
-			modifiers,
-			s.name,
-			s.typeParameters,
-			s.heritageClauses,
-			s.members,
-		) as unknown) as T;
-	} else if (ts.isEnumDeclaration(s)) {
-		return (factory.updateEnumDeclaration(
-			s,
-			s.decorators,
-			modifiers,
-			s.name,
-			s.members,
-		) as unknown) as T;
-	} else if (ts.isClassDeclaration(s)) {
-		return (factory.updateClassDeclaration(
-			s,
-			s.decorators,
-			modifiers,
-			s.name,
-			s.typeParameters,
-			s.heritageClauses,
-			s.members,
-		) as unknown) as T;
-	} else if (ts.isFunctionDeclaration(s)) {
-		return (factory.updateFunctionDeclaration(
-			s,
-			s.decorators,
-			modifiers,
-			s.asteriskToken,
-			s.name,
-			s.typeParameters,
-			s.parameters,
-			s.type,
-			s.body,
-		) as unknown) as T;
-	}
-	return s;
 }
