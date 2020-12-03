@@ -17,6 +17,15 @@ const reviewers = [
 
 (async function main() {
 
+	// check if our local working copy has any changes in the docs directory
+	const isChanged = !(await exec.exec("git", ["diff", "--exit-code", "--", "docs/"], {
+		ignoreReturnCode: true
+	}));
+	if (isChanged) {
+		console.log(`We have no local changes, exiting...`);
+		return;
+	}
+
 	// create new branch for PR
 	await exec.exec("git", ["checkout", "-b", `${branchName}`]);
 	// Check if the action's branch exists on the remote (exit code 0) or not (exit code 2)
@@ -30,7 +39,7 @@ const reviewers = [
 			ignoreReturnCode: true
 		}));
 		if (isChanged) {
-			console.log(`Branch exists, we have no local changes, exiting...`);
+			console.log(`We have no local changes compared to the remote branch, exiting...`);
 			return;
 		}
 

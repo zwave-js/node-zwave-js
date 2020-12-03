@@ -40,24 +40,16 @@ jobs:
     - name: Compile TypeScript code
       run: npm run build
 
-    - name: Test documentation generation
+    - name: Generate documentation
       run: npm run docs:generate
 
-    - name: Check for changes
-      id: changes
-      run: |
-        if [ -n "$(git status --porcelain)" ]; then
-          echo "::set-output name=CHANGES::true"
-        fi
-
-    # Trigger this step only when pushing to master and changes were detected
+    # Trigger this step only when pushing to master
     - name: Create or update PR
       if: |
-        steps.changes.outputs.CHANGES == 'true' && 
         github.event_name == 'push' && 
         github.ref == 'refs/heads/master'
       uses: ./.github/actions/generateTypedDocs
       with:
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
+        githubToken: ${{ secrets.DOCS_UPDATE_TOKEN }}
       env:
         CI: true
