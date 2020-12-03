@@ -8,6 +8,7 @@ import * as path from "path";
 import {
 	CommentRange,
 	ExportedDeclarations,
+	InterfaceDeclaration,
 	Node,
 	Project,
 	SyntaxKind,
@@ -28,11 +29,46 @@ export function findSourceNode(
 	return file?.getExportedDeclarations().get(identifier)?.[0];
 }
 
-export function stripSingleLineComments(
+export function stripComments(
 	node: ExportedDeclarations,
-	text: string,
-): string {
-	return text;
+	options: ImportRange["options"],
+): ExportedDeclarations {
+	if (Node.isTextInsertableNode(node)) {
+		// Remove some comments if desired
+		const comments: CommentRange[] = [];
+		const removePredicate = (c: CommentRange) =>
+			(!options.comments &&
+				c.getKind() === SyntaxKind.SingleLineCommentTrivia) ||
+			(!options.jsdoc &&
+				c.getKind() === SyntaxKind.MultiLineCommentTrivia);
+
+		if (Node.isEnumDeclaration(node)) {
+			for (const member of node.getMembers()) {
+				comments.push(...member.getLeadingCommentRanges());
+			}
+		} else if (Node.isInterfaceDeclaration(node)) {
+			const walkInterfaceDeclaration = (node: InterfaceDeclaration) => {
+				for (const member of node.getMembers()) {
+					comments.push(...member.getLeadingCommentRanges());
+					if (Node.isInterfaceDeclaration(member)) {
+						walkInterfaceDeclaration(member);
+					}
+				}
+			};
+			walkInterfaceDeclaration(node);
+		}
+
+		const ranges = comments
+			.filter(removePredicate)
+			.map((c) => ({ pos: c.getPos(), end: c.getEnd() }));
+
+		// Sort in reverse order, so the removals don't influence each other
+		ranges.sort((a, b) => b.pos - a.pos);
+		for (const { pos, end } of ranges) {
+			node.removeText(pos, end);
+		}
+	}
+	return node;
 }
 
 export function getTransformedSource(
@@ -44,39 +80,26 @@ export function getTransformedSource(
 		node = node.toggleModifier("export", false);
 	}
 
-	if (Node.isTextInsertableNode(node)) {
-		// Remove some comments if desired
-		const commentRanges: { pos: number; end: number }[] = [];
-		const removePredicate = (c: CommentRange) =>
-			(!options.comments &&
-				c.getKind() === SyntaxKind.SingleLineCommentTrivia) ||
-			(!options.jsdoc &&
-				c.getKind() === SyntaxKind.MultiLineCommentTrivia);
-
-		if (Node.isEnumDeclaration(node)) {
-			for (const member of node.getMembers()) {
-				commentRanges.push(
-					...member
-						.getLeadingCommentRanges()
-						.filter(removePredicate)
-						.map((c) => ({ pos: c.getPos(), end: c.getEnd() })),
-				);
+	// Remove @internal and @deprecated members
+	if (Node.isInterfaceDeclaration(node)) {
+		for (const member of node.getMembers()) {
+			if (
+				member
+					.getJsDocs()
+					.some((doc) =>
+						/@(deprecated|internal)/.test(doc.getInnerText()),
+					)
+			) {
+				member.remove();
 			}
 		}
-		// Sort in reverse order, so the removals don't influence each other
-		commentRanges.sort((a, b) => b.pos - a.pos);
-		for (const { pos, end } of commentRanges) {
-			node.removeText(pos, end);
-		}
 	}
 
-	let ret = node.print();
-	if (!options.comments) {
-		// Strip out leading single-line comments, ts-morph seems to be 2 chars off when we do that
-		const commentRegex = /^\/\/.+\r?\n/g;
-		ret = ret.replace(commentRegex, "");
-	}
+	// Comments must be removed last (if that is desired)
+	node = stripComments(node, options);
 
+	// Using getText instead of print avoids reformatting the node
+	let ret = node.getText();
 	// Format with Prettier so we get the original formatting back
 	ret = formatWithPrettier("index.ts", ret).trim();
 	return ret;

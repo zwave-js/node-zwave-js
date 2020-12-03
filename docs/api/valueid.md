@@ -5,7 +5,6 @@ The `ValueID` interface uniquely identifies to which CC, endpoint and property a
 <!-- #import ValueID from "zwave-js" -->
 
 ```ts
-/** Uniquely identifies to which CC, endpoint and property a value belongs to */
 interface ValueID {
 	commandClass: CommandClasses;
 	endpoint?: number;
@@ -148,9 +147,6 @@ The structure of the `ccSpecific` fields is shown here for each CC that provides
 <!-- #import AlarmSensorValueMetadata from "zwave-js" -->
 
 ```ts
-/**
- * @publicAPI
- */
 type AlarmSensorValueMetadata = ValueMetadata & {
 	ccSpecific: {
 		sensorType: AlarmSensorType;
@@ -163,9 +159,6 @@ type AlarmSensorValueMetadata = ValueMetadata & {
 <!-- #import BinarySensorValueMetadata from "zwave-js" -->
 
 ```ts
-/**
- * @publicAPI
- */
 type BinarySensorValueMetadata = ValueMetadata & {
 	ccSpecific: {
 		sensorType: BinarySensorType;
@@ -178,9 +171,6 @@ type BinarySensorValueMetadata = ValueMetadata & {
 <!-- #import IndicatorMetadata from "zwave-js" -->
 
 ```ts
-/**
- * @publicAPI
- */
 type IndicatorMetadata = ValueMetadata & {
 	ccSpecific: {
 		indicatorId: number;
@@ -196,9 +186,6 @@ The indicator and property IDs may change with newer Z-Wave specs. You can find 
 <!-- #import MeterMetadata from "zwave-js" -->
 
 ```ts
-/**
- * @publicAPI
- */
 type MeterMetadata = ValueMetadata & {
 	ccSpecific: {
 		meterType: number;
@@ -215,9 +202,6 @@ The meter type and scale keys may change with newer Z-Wave specs. You can find t
 <!-- #import MultilevelSensorValueMetadata from "zwave-js" -->
 
 ```ts
-/**
- * @publicAPI
- */
 type MultilevelSensorValueMetadata = ValueMetadata & {
 	ccSpecific: {
 		sensorType: number;
@@ -233,9 +217,6 @@ The multilevel sensor types may change with newer Z-Wave specs. You can find the
 <!-- #import MultilevelSwitchLevelChangeMetadata from "zwave-js" -->
 
 ```ts
-/**
- * @publicAPI
- */
 type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 	ccSpecific: {
 		switchType: SwitchType;
@@ -248,9 +229,6 @@ type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 <!-- #import NotificationMetadata from "zwave-js" -->
 
 ```ts
-/**
- * @publicAPI
- */
 type NotificationMetadata = ValueMetadata & {
 	ccSpecific: {
 		notificationType: number;
@@ -266,9 +244,6 @@ The notification variable is not included in this metadata, since there's curren
 <!-- #import ThermostatSetpointMetadata from "zwave-js" -->
 
 ```ts
-/**
- * @publicAPI
- */
 type ThermostatSetpointMetadata = ValueMetadata & {
 	ccSpecific: {
 		setpointType: ThermostatSetpointType;

@@ -131,9 +131,6 @@ Contains information about a single association group.
 <!-- #import AssociationGroup from "zwave-js" -->
 
 ```ts
-/**
- * @publicAPI
- */
 interface AssociationGroup {
 	/** How many nodes this association group supports */
 	maxNodes: number;
@@ -157,9 +154,6 @@ This defines the target of a node's association:
 <!-- #import Association from "zwave-js" -->
 
 ```ts
-/**
- * @publicAPI
- */
 interface Association {
 	nodeId: number;
 	endpoint?: number;

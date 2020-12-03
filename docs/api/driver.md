@@ -223,10 +223,11 @@ The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/a
 
 ### `FileSystem`
 
+This interface defines which methods must be supported by a replacement filesystem.
+
 <!-- #import FileSystem from "zwave-js" -->
 
 ```ts
-/** Defines which methods must be supported by a replacement filesystem */
 interface FileSystem {
 	ensureDir(path: string): Promise<void>;
 	writeFile(
@@ -268,16 +269,11 @@ interface SendMessageOptions {
 }
 ```
 
-The message priority must one of the following enum values. Consuming applications typically don't need to overwrite the priority.
-
-> [!ATTENTION]
-> DO NOT rely on the numeric values of the enum if you're using it in your application.
-> The ordinal values are likely to change in future updates. Instead, refer to the enum properties directly.
+The message priority must one of the following enum values, which are sorted from high (0) to low (> 0). Consuming applications typically don't need to overwrite the priority.
 
 <!-- #import MessagePriority from "zwave-js" with comments -->
 
 ```ts
-/** The priority of messages, sorted from high (0) to low (>0) */
 enum MessagePriority {
 	// Handshake messages have the highest priority because they are part of other transactions
 	// which have already started when the handshakes are needed (e.g. Security Nonce exchange)
@@ -308,6 +304,10 @@ enum MessagePriority {
 }
 ```
 
+> [!ATTENTION]
+> DO NOT rely on the numeric values of the enum if you're using it in your application.
+> The ordinal values are likely to change in future updates. Instead, refer to the enum properties directly.
+
 ### `SendCommandOptions`
 
 Influences the behavior of `driver.sendCommand`. Has all the properties of [`SendMessageOptions`](#SendMessageOptions) plus the following:
@@ -326,7 +326,6 @@ The `onUpdate` has the signature `(status: SupervisionStatus, remainingDuration?
 <!-- #import SupervisionStatus from "zwave-js" -->
 
 ```ts
-/** @publicAPI */
 enum SupervisionStatus {
 	NoSupport = 0x00,
 	Working = 0x01,
@@ -342,7 +341,6 @@ Is used to report the status of a supervised command execution.
 <!-- #import SupervisionResult from "zwave-js" -->
 
 ```ts
-/** @publicAPI */
 interface SupervisionResult {
 	status: SupervisionStatus;
 	remainingDuration?: Duration;
@@ -352,6 +350,8 @@ interface SupervisionResult {
 ### `ZWaveOptions`
 
 This interface specifies the optional options object that is passed to the `Driver` constructor. All properties are optional and are internally filled with default values.
+
+<!-- #import ZWaveOptions from "zwave-js" with comments -->
 
 ```ts
 interface ZWaveOptions {
@@ -386,7 +386,6 @@ interface ZWaveOptions {
 		 */
 		nodeInterview: number; // [1...10], default: 5
 	};
-
 	/**
 	 * Allows you to replace the default file system driver used to store and read the cache
 	 */
