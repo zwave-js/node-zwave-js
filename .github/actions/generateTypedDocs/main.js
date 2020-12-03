@@ -1,11 +1,9 @@
-const c = require("ansi-colors");
 const exec = require("@actions/exec");
 const github = require("@actions/github");
 const core = require("@actions/core");
 
 const githubToken = core.getInput("githubToken");
 const octokit = github.getOctokit(githubToken);
-const context = github.context;
 
 (async function main() {
 
