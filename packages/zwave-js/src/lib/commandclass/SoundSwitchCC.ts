@@ -631,6 +631,9 @@ export class SoundSwitchCCTonePlayReport extends SoundSwitchCC {
 		super(driver, options);
 		validatePayload(this.payload.length >= 1);
 		this.toneId = this.payload[0];
+		if (this.toneId !== 0 && this.payload.length >= 2) {
+			this.volume = this.payload[1];
+		}
 
 		this.persistValues();
 	}

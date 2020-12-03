@@ -20,7 +20,6 @@ import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
 import {
@@ -109,7 +108,19 @@ export type SendThreadEvent =
 				| { type: "command_success" }
 				| { type: "command_failure" }
 				| { type: "command_error" }
-			));
+			))
+	| ({ type: "active_command_success" } & Omit<
+			CommandQueueEvent & { type: "command_success" },
+			"type"
+	  >)
+	| ({ type: "active_command_failure" } & Omit<
+			CommandQueueEvent & { type: "command_failure" },
+			"type"
+	  >)
+	| ({ type: "active_command_error" } & Omit<
+			CommandQueueEvent & { type: "command_error" },
+			"type"
+	  >);
 
 export type SendThreadMachine = StateMachine<
 	SendThreadContext,
@@ -220,6 +231,18 @@ const forwardHandshakeResponse = pure<SendThreadContext, any>((ctx, evt) => {
 	});
 });
 
+const forwardActiveCommandSuccess = pure<SendThreadContext, any>((ctx, evt) => {
+	return raise({ ...evt, type: "active_command_success" });
+});
+
+const forwardActiveCommandFailure = pure<SendThreadContext, any>((ctx, evt) => {
+	return raise({ ...evt, type: "active_command_failure" });
+});
+
+const forwardActiveCommandError = pure<SendThreadContext, any>((ctx, evt) => {
+	return raise({ ...evt, type: "active_command_error" });
+});
+
 const sendCurrentTransactionToCommandQueue = send<SendThreadContext, any>(
 	(ctx) => ({
 		type: "add",
@@ -249,7 +272,6 @@ const every = (...guards: string[]) => ({
 });
 const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	maySendFirstMessage: (ctx) => {
-		log.driver.sendQueue(ctx.queue);
 		const nextTransaction = ctx.queue.peekStart();
 		// We can't send anything if the queue is empty
 		if (!nextTransaction) return false;
@@ -277,13 +299,17 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		}
 		return !(msg.command as CommandClass).requiresPreTransmitHandshake();
 	},
-	isNotForActiveCurrentTransaction: (ctx, evt: any) =>
-		!!ctx.currentTransaction && evt.transaction !== ctx.currentTransaction,
-	isNotForActiveHandshakeTransaction: (ctx, evt: any, meta) =>
-		// while in the handshake state, the handshake transaction has a priority
-		(meta.state.matches("sending.handshake") ||
-			!!ctx.handshakeTransaction) &&
-		evt.transaction !== ctx.handshakeTransaction,
+	isForActiveTransaction: (ctx, evt: any, meta) => {
+		return (
+			((meta.state.matches("sending.handshake") ||
+				!!ctx.handshakeTransaction) &&
+				evt.transaction === ctx.handshakeTransaction) ||
+			((meta.state.matches("sending.execute") ||
+				meta.state.matches("sending.waitForUpdate") ||
+				!!ctx.currentTransaction) &&
+				evt.transaction === ctx.currentTransaction)
+		);
+	},
 	expectsNodeUpdate: (ctx) =>
 		ctx.currentTransaction?.message instanceof SendDataRequest &&
 		(ctx.currentTransaction
@@ -587,8 +613,6 @@ export function createSendThreadMachine(
 			queue.remove(...drop, ...requeue);
 			queue.add(...requeue);
 
-			log.driver.sendQueue(queue);
-
 			return queue;
 		},
 	});
@@ -607,51 +631,44 @@ export function createSendThreadMachine(
 				sendDataAttempts: 0,
 			},
 			on: {
-				// Forward low-level events to the command queue
+				// Forward low-level events and unidentified messages to the command queue
 				ACK: { actions: forwardToCommandQueue },
 				CAN: { actions: forwardToCommandQueue },
 				NAK: { actions: forwardToCommandQueue },
-				message: [
-					// For messages, check first if we expect them
-					{
-						cond: "isExpectedHandshakeResponse",
-						actions: forwardHandshakeResponse,
-					},
-					{
-						cond: "isExpectedUpdate",
-						actions: forwardNodeUpdate,
-					},
-					// else forward to the command queue aswell
-					{ actions: forwardToCommandQueue },
-				],
+				// messages may come back as "unsolicited", these might be expected updates
+				// we need to run them through the serial API machine to avoid mismatches
+				message: { actions: forwardToCommandQueue },
 				// resolve/reject any un-interesting transactions if they are done
 				command_success: [
+					// If this notification belongs to an active command, forward it
 					{
-						cond: "isNotForActiveHandshakeTransaction",
-						actions: resolveEventTransaction,
+						cond: "isForActiveTransaction",
+						actions: forwardActiveCommandSuccess,
 					},
+					// otherwise just resolve it
 					{
-						cond: "isNotForActiveCurrentTransaction",
 						actions: resolveEventTransaction,
 					},
 				],
 				command_failure: [
+					// If this notification belongs to an active command, forward it
 					{
-						cond: "isNotForActiveHandshakeTransaction",
-						actions: rejectEventTransaction,
+						cond: "isForActiveTransaction",
+						actions: forwardActiveCommandFailure,
 					},
+					// otherwise just reject it
 					{
-						cond: "isNotForActiveCurrentTransaction",
 						actions: rejectEventTransaction,
 					},
 				],
 				command_error: [
+					// If this notification belongs to an active command, forward it
 					{
-						cond: "isNotForActiveHandshakeTransaction",
-						actions: rejectEventTransactionWithError,
+						cond: "isForActiveTransaction",
+						actions: forwardActiveCommandError,
 					},
+					// otherwise just reject it
 					{
-						cond: "isNotForActiveCurrentTransaction",
 						actions: rejectEventTransactionWithError,
 					},
 				],
@@ -686,8 +703,19 @@ export function createSendThreadMachine(
 						],
 					},
 				],
-				// Return unsolicited messages to the driver
-				unsolicited: { actions: notifyUnsolicited },
+				unsolicited: [
+					// If a message is returned by the serial API, they might be an expected node update
+					{
+						cond: "isExpectedHandshakeResponse",
+						actions: forwardHandshakeResponse,
+					},
+					{
+						cond: "isExpectedUpdate",
+						actions: forwardNodeUpdate,
+					},
+					// Return unsolicited messages to the driver
+					{ actions: notifyUnsolicited },
+				],
 				// Accept external commands to sort the queue
 				sortQueue: {
 					actions: [sortQueue, raise("trigger") as any],
@@ -801,9 +829,9 @@ export function createSendThreadMachine(
 								waitForCommandResult: {
 									on: {
 										// On success, start waiting for the handshake response
-										command_success:
+										active_command_success:
 											"waitForHandshakeResponse",
-										command_failure: [
+										active_command_failure: [
 											// On failure, retry SendData commands if possible
 											{
 												cond: "mayRetry",
@@ -819,7 +847,7 @@ export function createSendThreadMachine(
 												target: "#sending.done",
 											},
 										],
-										command_error: [
+										active_command_error: [
 											// On failure, retry SendData commands if possible
 											{
 												cond: "mayRetry",
@@ -864,7 +892,7 @@ export function createSendThreadMachine(
 								sendCurrentTransactionToCommandQueue,
 							],
 							on: {
-								command_success: [
+								active_command_success: [
 									// On success, start waiting for an update
 									{
 										cond: "expectsNodeUpdate",
@@ -876,7 +904,7 @@ export function createSendThreadMachine(
 										target: "done",
 									},
 								],
-								command_failure: [
+								active_command_failure: [
 									// On failure, retry SendData commands if possible
 									{
 										cond: every(
@@ -891,7 +919,7 @@ export function createSendThreadMachine(
 										target: "done",
 									},
 								],
-								command_error: [
+								active_command_error: [
 									// On failure, retry SendData commands if possible
 									{
 										cond: every(

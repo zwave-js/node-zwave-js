@@ -98,7 +98,7 @@ interface ValueMetadataNumeric extends ValueMetadataBase {
 -   `states`: Human-readable names for numeric values, for example `{0: "off", 1: "on"}`.
 -   `unit`: An optional unit for numeric values
 
-#### boolean
+#### `boolean`
 
 <!-- #import ValueMetadataBoolean from "zwave-js" with no-jsdoc -->
 
@@ -111,7 +111,7 @@ interface ValueMetadataBoolean extends ValueMetadataBase {
 
 -   `default`: The default value
 
-### string
+#### `string`
 
 <!-- #import ValueMetadataString from "zwave-js" with no-jsdoc -->
 

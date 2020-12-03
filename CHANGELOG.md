@@ -4,6 +4,27 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Config file changes
+* Added a config file for `HeatIt Z-TRM3`
+* Added a config file for `Eurotronic Air quality sensor`
+* The Application CC value IDs of the root endpoint are now preserved for the `Qubino Flush 2 Relay`
+
+### Features
+* Added the compat config option `preserveRootApplicationCCValueIDs` to disable hiding the root endpoint's application CC value IDs
+* The helper method `guessFirmwareFileFormat` was added to guess the firmware format based on the file contents
+
+### Bugfixes
+* `Driver.destroy()` no longer does anything after the first call
+* `Sound Switch Tone Play Report` commands now parse the volume if it exists
+* The log entries for `Notification CC Report`s now contain the correct notification event/state
+* The value IDs of `Multi Channel Association CC` are now marked as internal
+* When encapsulating commands, the `secure` flag is now correctly propagated
+* Fixed a bug where commands that belong to a different transaction could be mismatched, resulting in unexpected messages
+* The mapping of root to endpoint 1 now works correctly if the node does not support `Multi Channel Association CC` at all
+* When the `Multilevel Switch CC` level change commands indicate that Supervision is not supported, this is now remembered and the command gets retried without supervision.
+* Removed some debug logging which could blow up the log file size
+
 ## 5.5.0 (2020-11-24)
 ### Config file changes
 * Added a config file for `Jasco ZW3010`
