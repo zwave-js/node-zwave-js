@@ -41,7 +41,8 @@ export async function loadNamedScalesInternal(): Promise<
 				);
 			}
 			const named = new Map<number, Scale>();
-			for (const [key, scaleDefinition] of entries(scales)) {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+			for (const [key, scaleDefinition] of entries(scales as any)) {
 				if (!hexKeyRegexNDigits.test(key)) {
 					throwInvalidConfig(
 						"named scales",

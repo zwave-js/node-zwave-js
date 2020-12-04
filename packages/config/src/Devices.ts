@@ -1,4 +1,4 @@
-import type { ValueID } from "@zwave-js/core";
+import type { CommandClasses, CommandClassInfo, ValueID } from "@zwave-js/core";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	JSONObject,
@@ -16,6 +16,7 @@ import {
 	configDir,
 	formatId,
 	getDeviceEntryPredicate,
+	hexKeyRegex2Digits,
 	hexKeyRegex4Digits,
 	throwInvalidConfig,
 } from "./utils";
@@ -453,7 +454,7 @@ export class CompatConfig {
 			if (
 				!isArray(definition.queryOnWakeup) ||
 				!definition.queryOnWakeup.every(
-					(cmd) =>
+					(cmd: unknown) =>
 						isArray(cmd) &&
 						cmd.length >= 2 &&
 						typeof cmd[0] === "string" &&
@@ -520,6 +521,57 @@ error in compat option preserveRootApplicationCCValueIDs`,
 			this.preserveRootApplicationCCValueIDs =
 				definition.preserveRootApplicationCCValueIDs;
 		}
+
+		if (definition.commandClasses != undefined) {
+			if (!isObject(definition.commandClasses)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option commandClasses`,
+				);
+			}
+
+			if (definition.commandClasses.add != undefined) {
+				if (!isObject(definition.commandClasses.add)) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+error in compat option commandClasses.add`,
+					);
+				} else if (
+					!Object.keys(definition.commandClasses.add).every((k) =>
+						hexKeyRegex2Digits.test(k),
+					)
+				) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+All keys in compat option commandClasses.add must be 2-digit hex numbers!`,
+					);
+				} else if (
+					!Object.values(definition.commandClasses.add).every((v) =>
+						isObject(v),
+					)
+				) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+All values in compat option commandClasses.add must be objects`,
+					);
+				}
+
+				const addCCs = new Map<CommandClasses, CompatAddCC>();
+				for (const [cc, info] of Object.entries(
+					definition.commandClasses.add,
+				)) {
+					addCCs.set(
+						parseInt(cc),
+						new CompatAddCC(filename, info as any),
+					);
+				}
+				this.addCCs = addCCs;
+			}
+		}
 	}
 
 	public readonly queryOnWakeup?: [
@@ -535,6 +587,90 @@ error in compat option preserveRootApplicationCCValueIDs`,
 
 	public keepS0NonceUntilNext?: boolean;
 	public preserveRootApplicationCCValueIDs?: boolean;
+	public addCCs?: ReadonlyMap<CommandClasses, CompatAddCC>;
+}
+
+export class CompatAddCC {
+	public constructor(filename: string, definition: JSONObject) {
+		const endpoints = new Map<number, Partial<CommandClassInfo>>();
+		const parseEndpointInfo = (endpoint: number, info: JSONObject) => {
+			const parsed: Partial<CommandClassInfo> = {};
+			if (info.isSupported != undefined) {
+				if (typeof info.isSupported !== "boolean") {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+Property isSupported in compat option commandClasses.add, endpoint ${endpoint} must be a boolean!`,
+					);
+				} else {
+					parsed.isSupported = info.isSupported;
+				}
+			}
+			if (info.isControlled != undefined) {
+				if (typeof info.isControlled !== "boolean") {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+Property isControlled in compat option commandClasses.add, endpoint ${endpoint} must be a boolean!`,
+					);
+				} else {
+					parsed.isControlled = info.isControlled;
+				}
+			}
+			if (info.secure != undefined) {
+				if (typeof info.secure !== "boolean") {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+Property secure in compat option commandClasses.add, endpoint ${endpoint} must be a boolean!`,
+					);
+				} else {
+					parsed.secure = info.secure;
+				}
+			}
+			if (info.version != undefined) {
+				if (typeof info.version !== "number") {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+Property version in compat option commandClasses.add, endpoint ${endpoint} must be a number!`,
+					);
+				} else {
+					parsed.version = info.version;
+				}
+			}
+		};
+		// Parse root endpoint info if given
+		if (
+			definition.isSupported != undefined ||
+			definition.isControlled != undefined ||
+			definition.version != undefined ||
+			definition.secure != undefined
+		) {
+			// We have info for the root endpoint
+			parseEndpointInfo(0, definition);
+		}
+		// Parse all other endpoints
+		if (isObject(definition.endpoints)) {
+			if (
+				!Object.keys(definition.endpoints).every((k) => /^\d+$/.test(k))
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+invalid endpoint index in compat option commandClasses.add`,
+				);
+			} else {
+				for (const [ep, info] of Object.entries(definition.endpoints)) {
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+					parseEndpointInfo(parseInt(ep), info as any);
+				}
+			}
+		}
+		this.endpoints = endpoints;
+	}
+
+	public readonly endpoints: ReadonlyMap<number, Partial<CommandClassInfo>>;
 }
 
 export class ParamInformation {
@@ -649,7 +785,7 @@ Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
 		if (
 			isArray(definition.options) &&
 			!definition.options.every(
-				(opt) =>
+				(opt: unknown) =>
 					isObject(opt) &&
 					typeof (opt as any).label === "string" &&
 					typeof (opt as any).value === "number",

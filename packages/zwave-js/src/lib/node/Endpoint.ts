@@ -1,6 +1,7 @@
 import {
 	actuatorCCs,
 	CommandClasses,
+	CommandClassInfo,
 	GraphNode,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -9,7 +10,6 @@ import { num2hex } from "@zwave-js/shared";
 import type { CCAPI, CCAPIs } from "../commandclass/API";
 import {
 	CommandClass,
-	CommandClassInfo,
 	Constructable,
 	getAPI,
 	getCCConstructor,

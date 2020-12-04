@@ -59,7 +59,8 @@ export async function loadNotificationsInternal(): Promise<void> {
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			ret.set(idNum, new Notification(idNum, ntfcnDefinition));
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+			ret.set(idNum, new Notification(idNum, ntfcnDefinition as any));
 		}
 		notifications = ret;
 	} catch (e: unknown) {
@@ -133,7 +134,7 @@ export class Notification {
 		this.id = id;
 		this.name = definition.name;
 		this.variables = isArray(definition.variables)
-			? definition.variables.map((v) => new NotificationVariable(v))
+			? definition.variables.map((v: any) => new NotificationVariable(v))
 			: [];
 		const events = new Map<number, NotificationEvent>();
 		if (isObject(definition.events)) {

@@ -36,7 +36,8 @@ export async function loadMetersInternal(): Promise<void> {
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			ret.set(idNum, new Meter(idNum, meterDefinition));
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+			ret.set(idNum, new Meter(idNum, meterDefinition as any));
 		}
 		meters = ret;
 	} catch (e: unknown) {
