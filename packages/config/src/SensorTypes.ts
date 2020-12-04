@@ -40,7 +40,6 @@ export async function loadSensorTypesInternal(): Promise<void> {
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 			ret.set(keyNum, new SensorType(keyNum, sensorDefinition as any));
 		}
 		sensorTypes = ret;

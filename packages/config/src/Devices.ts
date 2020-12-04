@@ -234,8 +234,8 @@ ${prop} is not a string`,
 			!(definition.devices as any[]).every(
 				(dev) =>
 					isObject(dev) &&
-					isHexKeyWith4Digits((dev as any).productType) &&
-					isHexKeyWith4Digits((dev as any).productId),
+					isHexKeyWith4Digits(dev.productType) &&
+					isHexKeyWith4Digits(dev.productId),
 			)
 		) {
 			throwInvalidConfig(
@@ -662,7 +662,6 @@ invalid endpoint index in compat option commandClasses.add`,
 				);
 			} else {
 				for (const [ep, info] of Object.entries(definition.endpoints)) {
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 					parseEndpointInfo(parseInt(ep), info as any);
 				}
 			}
