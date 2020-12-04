@@ -652,15 +652,13 @@ export class NotificationCCReport extends NotificationCC {
 			) {
 				this.zensorNetSourceNodeId = this.payload[2];
 			}
-			// V2+ requires the alarm bytes to be zero
+			// V2+ requires the alarm bytes to be zero. Manufacturers don't care though, so we don't enforce that.
 			// Don't use the version to decide because we might discard notifications
 			// before the interview is complete
-			if (
-				this.alarmType === 0 &&
-				// To be compliant with the specs, we SHOULD check if alarmLevel === 0
-				// but like it is so often, manufacturers don't care and send invalid notifications anyways
-				this.payload.length >= 7
-			) {
+			if (this.payload.length >= 7) {
+				// Ignore the legacy alarm bytes
+				this.alarmType = 0;
+				this.alarmLevel = 0;
 				this.notificationStatus = this.payload[3];
 				this.notificationType = this.payload[4];
 				this.notificationEvent = this.payload[5];
