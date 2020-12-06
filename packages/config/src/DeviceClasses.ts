@@ -211,10 +211,11 @@ export class GenericDeviceClass {
 
 		if (definition.supportedCCs != undefined) {
 			if (
-				!isArray(definition.supportedCCs) &&
-				!definition.supportedCCs.every(
-					(cc: any) => typeof cc === "string",
-				)
+				!isArray(definition.controlledCCs) ||
+				(isArray(definition.supportedCCs) &&
+					!definition.supportedCCs.every(
+						(cc: any) => typeof cc === "string",
+					))
 			) {
 				throwInvalidConfig(
 					"device classes",
@@ -242,10 +243,11 @@ export class GenericDeviceClass {
 
 		if (definition.controlledCCs != undefined) {
 			if (
-				!isArray(definition.controlledCCs) &&
-				!definition.controlledCCs.every(
-					(cc: any) => typeof cc === "string",
-				)
+				!isArray(definition.controlledCCs) ||
+				(isArray(definition.controlledCCs) &&
+					!definition.controlledCCs.every(
+						(cc: any) => typeof cc === "string",
+					))
 			) {
 				throwInvalidConfig(
 					"device classes",
@@ -324,10 +326,11 @@ export class SpecificDeviceClass {
 
 		if (definition.supportedCCs != undefined) {
 			if (
-				!isArray(definition.supportedCCs) &&
-				!definition.supportedCCs.every(
-					(cc: any) => typeof cc === "string",
-				)
+				!isArray(definition.controlledCCs) ||
+				(isArray(definition.supportedCCs) &&
+					!definition.supportedCCs.every(
+						(cc: any) => typeof cc === "string",
+					))
 			) {
 				throwInvalidConfig(
 					"device classes",
@@ -359,10 +362,11 @@ export class SpecificDeviceClass {
 
 		if (definition.controlledCCs != undefined) {
 			if (
-				!isArray(definition.controlledCCs) &&
-				!definition.controlledCCs.every(
-					(cc: any) => typeof cc === "string",
-				)
+				!isArray(definition.controlledCCs) ||
+				(isArray(definition.controlledCCs) &&
+					!definition.controlledCCs.every(
+						(cc: any) => typeof cc === "string",
+					))
 			) {
 				throwInvalidConfig(
 					"device classes",
