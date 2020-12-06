@@ -261,7 +261,10 @@ export class NotificationState {
 						id,
 					)} must be an object`,
 				);
-			} else if (typeof definition.params.type !== "string") {
+			} else if (
+				definition.params.hasOwnProperty("type") &&
+				typeof definition.params.type !== "string"
+			) {
 				throwInvalidConfig(
 					"notifications",
 					`The parameter type of notification state ${num2hex(
