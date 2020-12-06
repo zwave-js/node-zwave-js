@@ -261,7 +261,7 @@ export class NotificationState {
 						id,
 					)} must be an object`,
 				);
-			} else if (typeof (definition.params as any).type !== "string") {
+			} else if (typeof definition.params.type !== "string") {
 				throwInvalidConfig(
 					"notifications",
 					`The parameter type of notification state ${num2hex(
@@ -293,7 +293,7 @@ export class NotificationEvent {
 						id,
 					)} must be an object`,
 				);
-			} else if (typeof (definition.params as any).type !== "string") {
+			} else if (typeof definition.params.type !== "string") {
 				throwInvalidConfig(
 					"notifications",
 					`The parameter type of notification event ${num2hex(
