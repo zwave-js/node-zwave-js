@@ -639,6 +639,7 @@ Property version in compat option commandClasses.add, endpoint ${endpoint} must 
 					parsed.version = info.version;
 				}
 			}
+			endpoints.set(endpoint, parsed);
 		};
 		// Parse root endpoint info if given
 		if (
