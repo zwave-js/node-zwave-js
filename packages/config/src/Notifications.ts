@@ -133,7 +133,7 @@ export class Notification {
 		this.id = id;
 		this.name = definition.name;
 		this.variables = isArray(definition.variables)
-			? definition.variables.map((v) => new NotificationVariable(v))
+			? definition.variables.map((v: any) => new NotificationVariable(v))
 			: [];
 		const events = new Map<number, NotificationEvent>();
 		if (isObject(definition.events)) {

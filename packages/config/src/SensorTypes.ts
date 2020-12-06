@@ -40,10 +40,10 @@ export async function loadSensorTypesInternal(): Promise<void> {
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
-			ret.set(keyNum, new SensorType(keyNum, sensorDefinition));
+			ret.set(keyNum, new SensorType(keyNum, sensorDefinition as JSONObject));
 		}
 		sensorTypes = ret;
-	} catch (e: unknown) {
+	} catch (e) {
 		if (e instanceof ZWaveError) {
 			throw e;
 		} else {
@@ -55,7 +55,7 @@ export async function loadSensorTypesInternal(): Promise<void> {
 export async function loadSensorTypes(): Promise<void> {
 	try {
 		await loadSensorTypesInternal();
-	} catch (e: unknown) {
+	} catch (e) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (
 			e instanceof ZWaveError &&

@@ -41,7 +41,7 @@ export async function loadNamedScalesInternal(): Promise<
 				);
 			}
 			const named = new Map<number, Scale>();
-			for (const [key, scaleDefinition] of entries(scales)) {
+			for (const [key, scaleDefinition] of entries(scales as JSONObject)) {
 				if (!hexKeyRegexNDigits.test(key)) {
 					throwInvalidConfig(
 						"named scales",
@@ -55,7 +55,7 @@ export async function loadNamedScalesInternal(): Promise<
 		}
 		namedScales = ret;
 		return ret;
-	} catch (e: unknown) {
+	} catch (e) {
 		if (e instanceof ZWaveError) {
 			throw e;
 		} else {
@@ -67,7 +67,7 @@ export async function loadNamedScalesInternal(): Promise<
 export async function loadNamedScales(): Promise<void> {
 	try {
 		await loadNamedScalesInternal();
-	} catch (e: unknown) {
+	} catch (e) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (
 			e instanceof ZWaveError &&
