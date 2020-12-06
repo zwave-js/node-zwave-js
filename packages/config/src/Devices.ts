@@ -231,7 +231,7 @@ ${prop} is not a string`,
 		if (
 			!isArray(definition.devices) ||
 			!(definition.devices as any[]).every(
-				(dev) =>
+				(dev: DeviceConfigIndexEntry) =>
 					isObject(dev) &&
 					isHexKeyWith4Digits(dev.productType) &&
 					isHexKeyWith4Digits(dev.productId),
