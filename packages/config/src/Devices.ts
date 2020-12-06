@@ -651,6 +651,8 @@ Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
 			!definition.options.every(
 				(opt: any) =>
 					isObject(opt) &&
+					opt.hasOwnProperty('label') &&
+					opt.hasOwnProperty('value') &&
 					typeof opt.label === "string" &&
 					typeof opt.value === "number",
 			)
