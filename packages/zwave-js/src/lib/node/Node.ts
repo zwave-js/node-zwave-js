@@ -2840,7 +2840,7 @@ version:               ${this.version}`;
 						const numEndpointIndex = parseInt(endpointIndex, 10);
 
 						// Verify the info object
-						const info = (endpoints as any)[
+						const info = endpoints[
 							endpointIndex
 						] as CommandClassInfo;
 						info.isSupported = enforceType(
