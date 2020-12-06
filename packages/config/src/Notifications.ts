@@ -59,10 +59,10 @@ export async function loadNotificationsInternal(): Promise<void> {
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			ret.set(idNum, new Notification(idNum, ntfcnDefinition));
+			ret.set(idNum, new Notification(idNum, ntfcnDefinition as JSONObject));
 		}
 		notifications = ret;
-	} catch (e: unknown) {
+	} catch (e) {
 		if (e instanceof ZWaveError) {
 			throw e;
 		} else {
@@ -74,7 +74,7 @@ export async function loadNotificationsInternal(): Promise<void> {
 export async function loadNotifications(): Promise<void> {
 	try {
 		await loadNotificationsInternal();
-	} catch (e: unknown) {
+	} catch (e) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (
 			e instanceof ZWaveError &&
