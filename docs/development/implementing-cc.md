@@ -1,6 +1,6 @@
 # Implementing a Command Class
 
-Make sure you have the **project snippets** extension for VSCode installed. Implementing a Command Class (CC) requires **a lot** of boilerplate code and you won't have fun without that extension.
+Make sure you have the [project snippets](https://marketplace.visualstudio.com/items?itemName=rebornix.project-snippets) extension for VSCode installed. Implementing a Command Class (CC) requires **a lot** of boilerplate code and you won't have fun without that extension.
 
 1. Have the CC specification open - you'll need it.
 
