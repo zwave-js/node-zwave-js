@@ -57,7 +57,7 @@ export async function loadNamedScalesInternal(): Promise<
 		}
 		namedScales = ret;
 		return ret;
-	} catch (e) {
+	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
 		} else {
@@ -69,7 +69,7 @@ export async function loadNamedScalesInternal(): Promise<
 export async function loadNamedScales(): Promise<void> {
 	try {
 		await loadNamedScalesInternal();
-	} catch (e) {
+	} catch (e: unknown) {
 		// If the config file is missing or invalid, don't try to find it again
 		if (
 			e instanceof ZWaveError &&

@@ -231,7 +231,7 @@ ${prop} is not a string`,
 		if (
 			!isArray(definition.devices) ||
 			!(definition.devices as any[]).every(
-				(dev: DeviceConfigIndexEntry) =>
+				(dev: unknown) =>
 					isObject(dev) &&
 					isHexKeyWith4Digits(dev.productType) &&
 					isHexKeyWith4Digits(dev.productId),
@@ -461,7 +461,7 @@ export class CompatConfig {
 						cmd
 							.slice(2)
 							.every(
-								(arg: any) =>
+								(arg) =>
 									typeof arg === "string" ||
 									typeof arg === "number" ||
 									typeof arg === "boolean",
