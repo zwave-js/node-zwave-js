@@ -43,7 +43,7 @@ import {
 export type IndicatorMetadata = ValueMetadata & {
 	ccSpecific: {
 		indicatorId: number;
-		propertyId?: number;
+		propertyId?: number; // only present on V2+ indicators
 	};
 };
 

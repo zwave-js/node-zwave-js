@@ -18,6 +18,12 @@
 * `Driver.destroy()` no longer does anything after the first call
 * `Sound Switch Tone Play Report` commands now parse the volume if it exists
 * The log entries for `Notification CC Report`s now contain the correct notification event/state
+* The value IDs of `Multi Channel Association CC` are now marked as internal
+* When encapsulating commands, the `secure` flag is now correctly propagated
+* Fixed a bug where commands that belong to a different transaction could be mismatched, resulting in unexpected messages
+* The mapping of root to endpoint 1 now works correctly if the node does not support `Multi Channel Association CC` at all
+* When the `Multilevel Switch CC` level change commands indicate that Supervision is not supported, this is now remembered and the command gets retried without supervision.
+* Removed some debug logging which could blow up the log file size
 
 ## 5.5.0 (2020-11-24)
 ### Config file changes

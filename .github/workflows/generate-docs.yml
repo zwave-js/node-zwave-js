@@ -1,0 +1,55 @@
+name: Generate documentation
+
+# Run this workflow on all pushes to master and pull requests
+on:
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+jobs:
+  # This job checks if the docs can be generated and produce changes
+  # If they do, a PR will be created with the changes
+  check-and-update:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    outputs:
+      CHANGES: ${{ steps.changes.outputs.CHANGES }}
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    # We need npm@7 for the workspaces feature
+    - name: Update npm to >=7
+      run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Compile TypeScript code
+      run: npm run build
+
+    - name: Generate documentation
+      run: npm run docs:generate
+
+    # Trigger this step only when pushing to master
+    - name: Create or update PR
+      if: |
+        github.event_name == 'push' && 
+        github.ref == 'refs/heads/master'
+      uses: ./.github/actions/generateTypedDocs
+      with:
+        githubToken: ${{ secrets.DOCS_UPDATE_TOKEN }}
+      env:
+        CI: true

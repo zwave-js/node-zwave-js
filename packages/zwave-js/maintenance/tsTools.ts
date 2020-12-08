@@ -33,6 +33,9 @@ export function loadTSConfig(): {
 	};
 }
 
+/** Used for ts-morph */
+export const tsConfigFilePath = path.join(projectRoot, "tsconfig.json");
+
 export function compareStrings(a: string, b: string): number {
 	if (a > b) return 1;
 	if (b > a) return -1;

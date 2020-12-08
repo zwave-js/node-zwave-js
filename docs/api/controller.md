@@ -128,6 +128,8 @@ removeNodeFromAllAssocations(nodeId: number): Promise<void>;
 
 Contains information about a single association group.
 
+<!-- #import AssociationGroup from "zwave-js" -->
+
 ```ts
 interface AssociationGroup {
 	/** How many nodes this association group supports */
@@ -149,11 +151,11 @@ interface AssociationGroup {
 
 This defines the target of a node's association:
 
+<!-- #import Association from "zwave-js" -->
+
 ```ts
 interface Association {
-	/** The target node */
 	nodeId: number;
-	/** The target endpoint on the target node */
 	endpoint?: number;
 }
 ```
@@ -191,8 +193,10 @@ readonly type: ZWaveLibraryTypes
 
 Returns the type of the Z-Wave library that is supported by the controller hardware. The following values are possible:
 
+<!-- #import ZWaveLibraryTypes from "zwave-js" -->
+
 ```ts
-export enum ZWaveLibraryTypes {
+enum ZWaveLibraryTypes {
 	"Unknown",
 	"Static Controller",
 	"Controller",

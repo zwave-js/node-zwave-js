@@ -59,7 +59,10 @@ export async function loadNotificationsInternal(): Promise<void> {
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			ret.set(idNum, new Notification(idNum, ntfcnDefinition));
+			ret.set(
+				idNum,
+				new Notification(idNum, ntfcnDefinition as JSONObject),
+			);
 		}
 		notifications = ret;
 	} catch (e: unknown) {
@@ -133,7 +136,7 @@ export class Notification {
 		this.id = id;
 		this.name = definition.name;
 		this.variables = isArray(definition.variables)
-			? definition.variables.map((v) => new NotificationVariable(v))
+			? definition.variables.map((v: any) => new NotificationVariable(v))
 			: [];
 		const events = new Map<number, NotificationEvent>();
 		if (isObject(definition.events)) {
@@ -258,7 +261,7 @@ export class NotificationState {
 						id,
 					)} must be an object`,
 				);
-			} else if (typeof (definition.params as any).type !== "string") {
+			} else if (typeof definition.params.type !== "string") {
 				throwInvalidConfig(
 					"notifications",
 					`The parameter type of notification state ${num2hex(
@@ -290,7 +293,7 @@ export class NotificationEvent {
 						id,
 					)} must be an object`,
 				);
-			} else if (typeof (definition.params as any).type !== "string") {
+			} else if (typeof definition.params.type !== "string") {
 				throwInvalidConfig(
 					"notifications",
 					`The parameter type of notification event ${num2hex(

@@ -31,6 +31,7 @@ export enum SupervisionCommand {
 	Report = 0x02,
 }
 
+/** @publicAPI */
 export enum SupervisionStatus {
 	NoSupport = 0x00,
 	Working = 0x01,
@@ -38,6 +39,7 @@ export enum SupervisionStatus {
 	Success = 0xff,
 }
 
+/** @publicAPI */
 export interface SupervisionResult {
 	status: SupervisionStatus;
 	remainingDuration?: Duration;
@@ -209,6 +211,8 @@ export class SupervisionCCGet extends SupervisionCC {
 			this.requestStatusUpdates = options.requestStatusUpdates;
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
+			// If the encapsulated command requires security, so does this one
+			if (this.encapsulated.secure) this.secure = true;
 		}
 	}
 

@@ -1619,7 +1619,8 @@ version:               ${this.version}`;
 			command.endpointIndex === 0 &&
 			command.constructor.name.endsWith("Report") &&
 			this.getEndpointCount() >= 1 &&
-			this.supportsCC(CommandClasses["Multi Channel Association"]) &&
+			// Don't check for MCA support or devices without it won't be handled
+			// Instead rely on the version. If MCA is not supported, this will be 0
 			this.getCCVersion(CommandClasses["Multi Channel Association"]) < 3
 		) {
 			// Force the CC to store its values again under endpoint 1
@@ -2839,7 +2840,7 @@ version:               ${this.version}`;
 						const numEndpointIndex = parseInt(endpointIndex, 10);
 
 						// Verify the info object
-						const info = (endpoints as any)[
+						const info = endpoints[
 							endpointIndex
 						] as CommandClassInfo;
 						info.isSupported = enforceType(

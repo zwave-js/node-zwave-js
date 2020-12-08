@@ -1,0 +1,10 @@
+name: 'Update typed documentation'
+description: 'Creates or updates a PR with a documentation update'
+author: 'AlCalzone'
+inputs:
+  githubToken:
+    description: 'The github token to use for authentication'
+    required: true
+runs:
+  using: 'node12'
+  main: 'main.js'

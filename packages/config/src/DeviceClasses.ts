@@ -211,7 +211,7 @@ export class GenericDeviceClass {
 
 		if (definition.supportedCCs != undefined) {
 			if (
-				!isArray(definition.supportedCCs) &&
+				!isArray(definition.supportedCCs) ||
 				!definition.supportedCCs.every(
 					(cc: any) => typeof cc === "string",
 				)
@@ -242,7 +242,7 @@ export class GenericDeviceClass {
 
 		if (definition.controlledCCs != undefined) {
 			if (
-				!isArray(definition.controlledCCs) &&
+				!isArray(definition.controlledCCs) ||
 				!definition.controlledCCs.every(
 					(cc: any) => typeof cc === "string",
 				)
@@ -324,7 +324,7 @@ export class SpecificDeviceClass {
 
 		if (definition.supportedCCs != undefined) {
 			if (
-				!isArray(definition.supportedCCs) &&
+				!isArray(definition.supportedCCs) ||
 				!definition.supportedCCs.every(
 					(cc: any) => typeof cc === "string",
 				)
@@ -359,7 +359,7 @@ export class SpecificDeviceClass {
 
 		if (definition.controlledCCs != undefined) {
 			if (
-				!isArray(definition.controlledCCs) &&
+				!isArray(definition.controlledCCs) ||
 				!definition.controlledCCs.every(
 					(cc: any) => typeof cc === "string",
 				)
