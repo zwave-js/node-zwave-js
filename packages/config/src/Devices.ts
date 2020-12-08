@@ -453,7 +453,7 @@ export class CompatConfig {
 			if (
 				!isArray(definition.queryOnWakeup) ||
 				!definition.queryOnWakeup.every(
-					(cmd: any) =>
+					(cmd: unknown) =>
 						isArray(cmd) &&
 						cmd.length >= 2 &&
 						typeof cmd[0] === "string" &&
@@ -649,7 +649,8 @@ Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
 		if (
 			isArray(definition.options) &&
 			!definition.options.every(
-				(opt: any) =>
+				(opt: unknown) =>
+					isObject(opt) &&
 					typeof opt.label === "string" &&
 					typeof opt.value === "number",
 			)
