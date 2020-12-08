@@ -232,7 +232,7 @@ ${prop} is not a string`,
 		if (
 			!isArray(definition.devices) ||
 			!(definition.devices as any[]).every(
-				(dev) =>
+				(dev: unknown) =>
 					isObject(dev) &&
 					isHexKeyWith4Digits(dev.productType) &&
 					isHexKeyWith4Digits(dev.productId),
@@ -787,8 +787,8 @@ Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
 			!definition.options.every(
 				(opt: unknown) =>
 					isObject(opt) &&
-					typeof (opt as any).label === "string" &&
-					typeof (opt as any).value === "number",
+					typeof opt.label === "string" &&
+					typeof opt.value === "number",
 			)
 		) {
 			throwInvalidConfig(

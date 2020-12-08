@@ -15,5 +15,6 @@
 -   Development
     -   [Introduction](development/intro.md)
     -   [Device configuration files](development/config-files.md)
+    -   [Implementing a Command Class](development/implementing-cc.md)
     -   [Troubleshooting](development/troubleshooting.md)
     -   [Installing from GitHub](development/installing-from-github.md)

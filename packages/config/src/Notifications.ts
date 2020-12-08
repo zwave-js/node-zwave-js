@@ -59,7 +59,10 @@ export async function loadNotificationsInternal(): Promise<void> {
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			ret.set(idNum, new Notification(idNum, ntfcnDefinition as any));
+			ret.set(
+				idNum,
+				new Notification(idNum, ntfcnDefinition as JSONObject),
+			);
 		}
 		notifications = ret;
 	} catch (e: unknown) {

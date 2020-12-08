@@ -36,7 +36,7 @@ export async function loadMetersInternal(): Promise<void> {
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			ret.set(idNum, new Meter(idNum, meterDefinition as any));
+			ret.set(idNum, new Meter(idNum, meterDefinition as JSONObject));
 		}
 		meters = ret;
 	} catch (e: unknown) {

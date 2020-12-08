@@ -40,7 +40,10 @@ export async function loadSensorTypesInternal(): Promise<void> {
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
-			ret.set(keyNum, new SensorType(keyNum, sensorDefinition as any));
+			ret.set(
+				keyNum,
+				new SensorType(keyNum, sensorDefinition as JSONObject),
+			);
 		}
 		sensorTypes = ret;
 	} catch (e: unknown) {

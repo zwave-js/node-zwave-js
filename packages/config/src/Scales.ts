@@ -41,7 +41,9 @@ export async function loadNamedScalesInternal(): Promise<
 				);
 			}
 			const named = new Map<number, Scale>();
-			for (const [key, scaleDefinition] of entries(scales as any)) {
+			for (const [key, scaleDefinition] of entries(
+				scales as JSONObject,
+			)) {
 				if (!hexKeyRegexNDigits.test(key)) {
 					throwInvalidConfig(
 						"named scales",
