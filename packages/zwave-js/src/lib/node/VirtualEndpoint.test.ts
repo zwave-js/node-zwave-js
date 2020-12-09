@@ -27,15 +27,15 @@ describe("lib/node/VirtualEndpoint", () => {
 		return node;
 	}
 
-	function setNumEndpoints(node: ZWaveNode, numEndpoints: number) {
-		node.valueDB.setValue(
-			{
-				commandClass: CommandClasses["Multi Channel"],
-				property: "individualCount",
-			},
-			numEndpoints,
-		);
-	}
+	// function setNumEndpoints(node: ZWaveNode, numEndpoints: number) {
+	// 	node.valueDB.setValue(
+	// 		{
+	// 			commandClass: CommandClasses["Multi Channel"],
+	// 			property: "individualCount",
+	// 		},
+	// 		numEndpoints,
+	// 	);
+	// }
 
 	afterEach(async () => {
 		await driver.destroy();
