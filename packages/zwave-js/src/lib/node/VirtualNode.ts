@@ -10,13 +10,16 @@ export class VirtualNode extends VirtualEndpoint {
 		public readonly id: number | undefined,
 		driver: Driver,
 		/** The references to the physical node this virtual node abstracts */
-		public readonly physicalNodes: Iterable<ZWaveNode>,
+		physicalNodes: Iterable<ZWaveNode>,
 	) {
 		// Define this node's intrinsic endpoint as the root device (0)
 		super(undefined, driver, 0);
-		// Set the reference to this
+		// Set the reference to this and the physical nodes
 		super.setNode(this);
+		this.physicalNodes = [...physicalNodes];
 	}
+
+	public readonly physicalNodes: ZWaveNode[];
 
 	/**
 	 * Updates a value for a given property of a given CommandClass.

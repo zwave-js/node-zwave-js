@@ -1,6 +1,7 @@
 import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
-import { num2hex } from "@zwave-js/shared";
-import type { CCAPI, CCAPIs } from "../commandclass/API";
+import { num2hex, staticExtends } from "@zwave-js/shared";
+import { distinct } from "alcalzone-shared/arrays";
+import { CCAPI, CCAPIs, PhysicalCCAPI } from "../commandclass/API";
 import { getAPI, MulticastDestination } from "../commandclass/CommandClass";
 import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "./Endpoint";
@@ -34,7 +35,10 @@ export class VirtualEndpoint {
 	}
 
 	public get nodeId(): number | MulticastDestination {
-		const ret = [...this.node.physicalNodes].map((n) => n.id);
+		// Use the defined node ID if it exists
+		if (this.node.id != undefined) return this.node.id;
+		// Otherwise deduce it from the physical nodes
+		const ret = this.node.physicalNodes.map((n) => n.id);
 		if (ret.length === 1) return ret[0];
 		return ret as MulticastDestination;
 	}
@@ -42,26 +46,21 @@ export class VirtualEndpoint {
 	/** Tests if this endpoint supports the given CommandClass */
 	public supportsCC(cc: CommandClasses): boolean {
 		// A virtual endpoints supports a CC if any of the physical endpoints it targets do
-		for (const node of this.node.physicalNodes) {
-			if (node.getEndpoint(this.index)?.supportsCC(cc)) return true;
-		}
-		return false;
+		return this.node.physicalNodes.some((n) =>
+			n.getEndpoint(this.index)?.supportsCC(cc),
+		);
 	}
 
 	/** Tests if this endpoint supports or controls the given CC only securely */
 	public isCCSecure(cc: CommandClasses): boolean | "both" {
 		// A CC is secure if any of the physical endpoints only support it securely
 		// If some do and some don't, return "both"
-		let someSupportSecurely = false;
-		let someSupportInsecurely = false;
-		for (const n of this.node.physicalNodes) {
-			const isSecure = n.getEndpoint(this.index)?.isCCSecure(cc);
-			if (isSecure) {
-				someSupportSecurely = true;
-			} else if (isSecure === false) {
-				someSupportInsecurely = true;
-			}
-		}
+		const someSupportSecurely = this.node.physicalNodes.some((n) =>
+			n.getEndpoint(this.index)?.isCCSecure(cc),
+		);
+		const someSupportInsecurely = this.node.physicalNodes.some(
+			(n) => n.getEndpoint(this.index)?.isCCSecure(cc) === false,
+		);
 		if (someSupportInsecurely && someSupportSecurely) return "both";
 		return someSupportSecurely;
 	}
@@ -71,7 +70,7 @@ export class VirtualEndpoint {
 	 * Returns 0 if the CC is not supported at all.
 	 */
 	public getCCVersion(cc: CommandClasses): number {
-		const nonZeroVersions = [...this.node.physicalNodes]
+		const nonZeroVersions = this.node.physicalNodes
 			.map((n) => n.getEndpoint(this.index)?.getCCVersion(cc))
 			.filter((v): v is number => v != undefined && v > 0);
 		if (!nonZeroVersions.length) return 0;
@@ -179,13 +178,21 @@ export class VirtualEndpoint {
 	private readonly commandClassesIterator: () => Iterator<CCAPI> = function* (
 		this: VirtualEndpoint,
 	) {
-		const allCCs = [...this._node.physicalNodes]
-			.map((n) => n.getEndpoint(this.index))
-			.filter((e): e is Endpoint => !!e)
-			.map((e) => [...e.implementedCommandClasses.keys()])
-			.reduce((acc, cur) => [...acc, ...cur], []);
+		const allCCs = distinct(
+			this._node.physicalNodes
+				.map((n) => n.getEndpoint(this.index))
+				.filter((e): e is Endpoint => !!e)
+				.map((e) => [...e.implementedCommandClasses.keys()])
+				.reduce((acc, cur) => [...acc, ...cur], []),
+		);
 		for (const cc of allCCs) {
-			if (this.supportsCC(cc)) yield (this.commandClasses as any)[cc];
+			if (this.supportsCC(cc)) {
+				// When a CC is supported, it can still happen that the CC API
+				// cannot be created for virtual endpoints
+				const APIConstructor = getAPI(cc);
+				if (staticExtends(APIConstructor, PhysicalCCAPI)) continue;
+				yield (this.commandClasses as any)[cc];
+			}
 		}
 	}.bind(this);
 
