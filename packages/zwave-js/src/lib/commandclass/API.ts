@@ -124,11 +124,13 @@ export class CCAPI {
 		command: number,
 	): void {
 		if (this.supportsCommand(command) !== true) {
+			const hasNodeId = typeof this.endpoint.nodeId === "number";
+
 			throw new ZWaveError(
-				`Node #${
-					"nodeId" in this.endpoint
-						? this.endpoint.nodeId
-						: "<virtual>"
+				`${
+					hasNodeId
+						? "This virtual node"
+						: `Node #${this.endpoint.nodeId as number}`
 				}${
 					this.endpoint.index > 0
 						? ` (Endpoint ${this.endpoint.index})`
