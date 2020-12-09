@@ -1,6 +1,7 @@
 import {
 	actuatorCCs,
 	CommandClasses,
+	NODE_ID_BROADCAST,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -37,6 +38,7 @@ import { FunctionType } from "../message/Constants";
 import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
+import { VirtualNode } from "../node/VirtualNode";
 import {
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
@@ -271,6 +273,24 @@ export class ZWaveController extends EventEmitter {
 	/** A dictionary of the nodes connected to this controller */
 	public get nodes(): ReadonlyMap<number, ZWaveNode> {
 		return this._nodes;
+	}
+
+	/** Returns a reference to the (virtual) broadcast node, which allows sending commands to all nodes */
+	public getBroadcastNode(): VirtualNode {
+		return new VirtualNode(
+			NODE_ID_BROADCAST,
+			this.driver,
+			this.nodes.values(),
+		);
+	}
+
+	/** Creates a virtual node that can be used to send multicast commands to several nodes */
+	public getMulticastGroup(...nodeIDs: number[]): VirtualNode {
+		return new VirtualNode(
+			undefined,
+			this.driver,
+			nodeIDs.map((id) => this._nodes.get(id)!),
+		);
 	}
 
 	/**

@@ -26,6 +26,7 @@ import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage } from "../node/Types";
+import type { VirtualEndpoint } from "../node/VirtualEndpoint";
 import { CCAPI } from "./API";
 import {
 	EncapsulatingCommandClass,
@@ -950,7 +951,10 @@ export type Constructable<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
 	new (driver: Driver, options: any): T;
 };
-type APIConstructor = new (driver: Driver, endpoint: Endpoint) => CCAPI;
+type APIConstructor = new (
+	driver: Driver,
+	endpoint: Endpoint | VirtualEndpoint,
+) => CCAPI;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type TypedClassDecorator<TTarget extends Object> = <

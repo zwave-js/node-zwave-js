@@ -25,7 +25,7 @@ import {
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -81,7 +81,7 @@ const HALF_NONCE_SIZE = 8;
 // TODO: Ignore commands if received via multicast
 
 @API(CommandClasses.Security)
-export class SecurityCCAPI extends CCAPI {
+export class SecurityCCAPI extends PhysicalCCAPI {
 	public supportsCommand(_cmd: SecurityCommand): Maybe<boolean> {
 		// All commands are mandatory
 		return true;

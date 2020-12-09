@@ -9,6 +9,7 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
+import { VirtualEndpoint } from "../node/VirtualEndpoint";
 import { getCommandClass } from "./CommandClass";
 
 /** Used to identify the method on the CC API class that handles setting values on nodes directly */
@@ -70,7 +71,7 @@ export function throwWrongValueType(
 export class CCAPI {
 	public constructor(
 		protected readonly driver: Driver,
-		protected readonly endpoint: Endpoint,
+		protected readonly endpoint: Endpoint | VirtualEndpoint,
 	) {
 		this.ccId = getCommandClass(this);
 	}
@@ -124,7 +125,11 @@ export class CCAPI {
 	): void {
 		if (this.supportsCommand(command) !== true) {
 			throw new ZWaveError(
-				`Node #${this.endpoint.nodeId}${
+				`Node #${
+					"nodeId" in this.endpoint
+						? this.endpoint.nodeId
+						: "<virtual>"
+				}${
 					this.endpoint.index > 0
 						? ` (Endpoint ${this.endpoint.index})`
 						: ""
@@ -132,6 +137,17 @@ export class CCAPI {
 					commandEnum,
 					command,
 				)}!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+	}
+
+	protected assertPhysicalEndpoint(
+		endpoint: Endpoint | VirtualEndpoint,
+	): asserts endpoint is Endpoint {
+		if (endpoint instanceof VirtualEndpoint) {
+			throw new ZWaveError(
+				`This method is not supported for virtual nodes!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
@@ -159,6 +175,16 @@ export class CCAPI {
 			},
 		});
 	}
+}
+
+/** A CC API that is only available for physical endpoints */
+export class PhysicalCCAPI extends CCAPI {
+	public constructor(driver: Driver, endpoint: Endpoint | VirtualEndpoint) {
+		super(driver, endpoint);
+		this.assertPhysicalEndpoint(endpoint);
+	}
+
+	protected declare readonly endpoint: Endpoint;
 }
 
 /**
