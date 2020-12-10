@@ -47,11 +47,65 @@ A reference to all underlying physical nodes.
 
 # VirtualEndpoint
 
-A virtual endpoint represents a single endpoint of a virtual node, but can target multiple physical endpoints by extension. For this concept, some rules exist:
+A virtual endpoint is to a virtual node what a physical endpoint is to a physical node. Since virtual nodes can target multiple physical nodes, virtual endpoints can target multiple physical endpoints by extension.
+A virtual endpoint exists if at least one of the virtual node's underlying physical nodes has an endpoint with the same index.
 
--   A virtual endpoint exists if at least one of the virtual node's underlying physical nodes has an endpoint with the same index.
--   A virtual endpoint supports a CC if at least one of the physical endpoints it targets does.
--   A CC of a virtual endpoint is secure if **all** of the physical endpoints only support it securely. If some do and some don't, it is impossible to send a command that all nodes understand.
 -   The supported CC version is the minimum non-zero version that any of the physical endpoints support. If none support the CC, it is still 0.
 
-<!-- TODO: methods and properties -->
+## VirtualEndpoint methods
+
+### `supportsCC`
+
+```ts
+supportsCC(cc: CommandClasses): boolean
+```
+
+Tests if this virtual endpoint supports the given CC. This is the case if **at least one** of the underlying physical endpoints does.
+
+### `isCCSecure`
+
+```ts
+isCCSecure(cc: CommandClasses): boolean | "both"
+```
+
+Tests if this virtual endpoint supports or controls the given CC only securely. This method returns one of the following values:
+
+-   `true` if **all** of the physical endpoints support this CC only securely
+-   `false` if **none** of the physical endpoints do
+-   `"both"` otherwise. In this case, it is impossible to send a command that all physical nodes understand.
+
+### `getCCVersion`
+
+```ts
+getCCVersion(cc: CommandClasses): number
+```
+
+Retrieves the minimum version of the given CommandClass the underlying physical endpoints implement. If none of the endpoints support this CC, `0` is returned.
+
+## VirtualEndpoint properties
+
+### `nodeId`
+
+```ts
+readonly nodeId: number | MulticastDestination
+```
+
+If the virtual node this virtual endpoint belongs to has a node ID, that node ID is returned. This is should only be the case for the broadcast node 255.  
+If the virtual node targets a single physical node, that node's ID is returned. In this case, the virtual node is not really doing anything - except limit what you can do.  
+Otherwise, an array of the physical nodes' IDs is returned.
+
+### `index`
+
+```ts
+readonly index: number
+```
+
+The index of this endpoint. 0 for the root device, 1+ otherwise.
+
+### `commandClasses`
+
+```ts
+readonly commandClasses(): CCAPIs
+```
+
+See [`Endpoint.commandClasses`](api/endpoint.md#commandClasses) for a description.

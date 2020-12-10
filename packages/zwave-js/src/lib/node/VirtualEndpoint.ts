@@ -30,6 +30,7 @@ export class VirtualEndpoint {
 	public get node(): VirtualNode {
 		return this._node;
 	}
+	/** @internal */
 	protected setNode(node: VirtualNode): void {
 		this._node = node;
 	}
@@ -206,7 +207,8 @@ export class VirtualEndpoint {
 	}
 
 	/**
-	 * Returns the node this endpoint belongs to (or undefined if the node doesn't exist)
+	 * @internal
+	 * DO NOT CALL THIS!
 	 */
 	public getNodeUnsafe(): never {
 		throw new ZWaveError(
