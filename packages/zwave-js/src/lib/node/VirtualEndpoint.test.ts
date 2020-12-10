@@ -144,7 +144,7 @@ describe("lib/node/VirtualEndpoint", () => {
 		it("multicast", () => {
 			makePhysicalNode(2);
 			makePhysicalNode(3);
-			const broadcast = driver.controller.getMulticastGroup(2, 3);
+			const broadcast = driver.controller.getMulticastGroup([2, 3]);
 			broadcast.commandClasses.Basic.set(99);
 			// » [Node 2, 3] [REQ] [SendData]
 			//   │ transmit options: 0x25

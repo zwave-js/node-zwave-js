@@ -285,7 +285,7 @@ export class ZWaveController extends EventEmitter {
 	}
 
 	/** Creates a virtual node that can be used to send multicast commands to several nodes */
-	public getMulticastGroup(...nodeIDs: number[]): VirtualNode {
+	public getMulticastGroup(nodeIDs: number[]): VirtualNode {
 		return new VirtualNode(
 			undefined,
 			this.driver,
