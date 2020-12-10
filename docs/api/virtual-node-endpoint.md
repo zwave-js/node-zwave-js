@@ -47,10 +47,8 @@ A reference to all underlying physical nodes.
 
 # VirtualEndpoint
 
-A virtual endpoint is to a virtual node what a physical endpoint is to a physical node. Since virtual nodes can target multiple physical nodes, virtual endpoints can target multiple physical endpoints by extension.
+A virtual endpoint is to a virtual node what a physical endpoint is to a physical node. Since virtual nodes can target multiple physical nodes, virtual endpoints can target multiple physical endpoints (with the same index) by extension.
 A virtual endpoint exists if at least one of the virtual node's underlying physical nodes has an endpoint with the same index.
-
--   The supported CC version is the minimum non-zero version that any of the physical endpoints support. If none support the CC, it is still 0.
 
 ## VirtualEndpoint methods
 
