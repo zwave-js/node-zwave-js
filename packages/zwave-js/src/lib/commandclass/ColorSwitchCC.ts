@@ -250,12 +250,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 
-		if (!propertyKey) {
+		if (propertyKey == undefined) {
 			// Might want to treat keyless value as hex "#wwccrrggbb"
 			throwMissingPropertyKey(this.ccId, property);
-		}
-
-		if (typeof propertyKey !== "number") {
+		} else if (typeof propertyKey !== "number") {
 			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
 		}
 
