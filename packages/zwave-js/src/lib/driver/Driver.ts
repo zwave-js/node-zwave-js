@@ -629,7 +629,8 @@ export class Driver extends EventEmitter {
 			spOpenPromise.resolve();
 
 			await this.writeHeader(MessageHeaders.NAK);
-			await wait(1500);
+			// set unref, so stopping the process doesn't need to wait for the 1500ms
+			await wait(1500, true);
 
 			// Load the necessary configuration
 			log.driver.print("loading configuration...");
