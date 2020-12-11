@@ -1008,7 +1008,7 @@ export function createSendThreadMachine(
 				every: (ctx, event, { cond }) => {
 					const keys = (cond as any).guards as string[];
 					return keys.every((guardKey: string) =>
-						guards[guardKey](ctx, event as any, undefined as any),
+						guards[guardKey](ctx, event, undefined as any),
 					);
 				},
 			},

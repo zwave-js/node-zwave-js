@@ -89,7 +89,7 @@ export function checkCCToLogEntry(): void {
 	}
 }
 
-if (!module.parent) {
+if (require.main === module) {
 	checkCCToLogEntry();
 	process.exit(0);
 }

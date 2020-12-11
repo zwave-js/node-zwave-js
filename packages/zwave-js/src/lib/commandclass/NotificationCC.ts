@@ -505,7 +505,7 @@ export class NotificationCC extends CommandClass {
 						},
 					);
 				}
-			} else if (notificationMode === "push") {
+			} /* if (notificationMode === "push") */ else {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];

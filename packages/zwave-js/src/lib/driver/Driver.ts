@@ -285,7 +285,9 @@ function checkOptions(options: ZWaveOptions): void {
 		);
 	}
 	if (
+		// wotan-disable-next-line no-unstable-api-use
 		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) < 1 ||
+		// wotan-disable-next-line no-unstable-api-use
 		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) > 10
 	) {
 		throw new ZWaveError(
@@ -821,6 +823,7 @@ export class Driver extends EventEmitter {
 		}
 
 		const maxInterviewAttempts =
+			// wotan-disable-next-line no-unstable-api-use
 			this.options.nodeInterviewAttempts ??
 			this.options.attempts.nodeInterview;
 

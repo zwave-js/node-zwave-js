@@ -14,6 +14,8 @@ import {
 } from "./shared";
 import { loadTSConfig, projectRoot } from "./tsTools";
 
+/* wotan-disable no-useless-predicate */
+
 function getRequiredInterviewCCsFromMethod(
 	sourceFile: ts.SourceFile,
 	method: ts.MethodDeclaration,
@@ -176,7 +178,7 @@ export function lintCCInterview(): Promise<void> {
 	}
 }
 
-if (!module.parent)
+if (require.main === module)
 	lintCCInterview()
 		.then(() => process.exit(0))
 		.catch(() => process.exit(1));

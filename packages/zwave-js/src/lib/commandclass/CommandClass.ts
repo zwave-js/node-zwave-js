@@ -954,6 +954,7 @@ type APIConstructor = new (driver: Driver, endpoint: Endpoint) => CCAPI;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type TypedClassDecorator<TTarget extends Object> = <
+	// wotan-disable-next-line no-misused-generics
 	T extends TTarget,
 	TConstructor extends new (...args: any[]) => T
 >(

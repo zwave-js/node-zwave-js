@@ -861,7 +861,7 @@ function sanitizeNumber(
 	if (isNullishOrEmptyString(value)) return undefined;
 
 	let ret = Number(value);
-	if (isNaN(ret)) {
+	if (Number.isNaN(ret)) {
 		value = value.replace(/[^0-9-\.\,]/g, "");
 		ret = Number(value);
 	}
