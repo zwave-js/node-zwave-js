@@ -50,7 +50,7 @@ describe("lib/driver/Driver => ", () => {
 
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 			expect(portInstance.openStub).toBeCalledTimes(1);
-			driver.destroy();
+			await driver.destroy();
 		});
 
 		it("should only work once", async () => {
@@ -63,7 +63,7 @@ describe("lib/driver/Driver => ", () => {
 
 			const portInstance = MockSerialPort.getInstance(PORT_ADDRESS)!;
 			expect(portInstance.openStub).toBeCalledTimes(1);
-			driver.destroy();
+			await driver.destroy();
 		});
 
 		it("the start promise should only be fulfilled after the port was opened", async () => {
@@ -77,7 +77,7 @@ describe("lib/driver/Driver => ", () => {
 			expect(fulfilledSpy).not.toBeCalled();
 			// Opening the mock port succeeds by default
 			await expect(startPromise).toResolve();
-			driver.destroy();
+			await driver.destroy();
 		});
 
 		it("the start promise should be rejected if the port opening fails", async () => {
@@ -93,7 +93,7 @@ describe("lib/driver/Driver => ", () => {
 			portInstance.openStub.mockRejectedValue(new Error("NOPE"));
 
 			await expect(startPromise).rejects.toThrow("NOPE");
-			driver.destroy();
+			await driver.destroy();
 		});
 
 		it("after a failed start, starting again should not be possible", async () => {
@@ -114,7 +114,7 @@ describe("lib/driver/Driver => ", () => {
 				errorCode: ZWaveErrorCodes.Driver_Destroyed,
 			});
 
-			driver.destroy();
+			await driver.destroy();
 		});
 
 		it(`should throw if no "error" handler is attached`, async () => {
@@ -137,7 +137,7 @@ describe("lib/driver/Driver => ", () => {
 				errorCode: ZWaveErrorCodes.Driver_NotReady,
 			});
 
-			driver.destroy();
+			await driver.destroy();
 		});
 
 		it("should not be possible if the driver hasn't completed starting", async () => {
@@ -153,7 +153,7 @@ describe("lib/driver/Driver => ", () => {
 				errorCode: ZWaveErrorCodes.Driver_NotReady,
 			});
 
-			driver.destroy();
+			await driver.destroy();
 		});
 
 		it("should not be possible if the driver failed to start", async () => {
@@ -174,7 +174,7 @@ describe("lib/driver/Driver => ", () => {
 				errorCode: ZWaveErrorCodes.Driver_NotReady,
 			});
 
-			driver.destroy();
+			await driver.destroy();
 		});
 
 		// it("invalid data before a message should be ignored", async () => {
@@ -203,7 +203,7 @@ describe("lib/driver/Driver => ", () => {
 		// 	const msg = await promise;
 		// 	expect(msg).toBeInstanceOf(MockResponseMessage);
 
-		// 	driver.destroy();
+		// 	await driver.destroy();
 		// });
 	});
 
@@ -216,7 +216,7 @@ describe("lib/driver/Driver => ", () => {
 	// 	});
 
 	// 	afterEach(() => {
-	// 		driver.destroy();
+	// 		await driver.destroy();
 	// 		driver.removeAllListeners();
 	// 	});
 
@@ -283,8 +283,8 @@ describe("lib/driver/Driver => ", () => {
 			({ driver, serialport } = await createAndStartDriver());
 		});
 
-		afterEach(() => {
-			driver.destroy();
+		afterEach(async () => {
+			await driver.destroy();
 			driver.removeAllListeners();
 		});
 
@@ -330,8 +330,8 @@ describe("lib/driver/Driver => ", () => {
 			({ driver } = await createAndStartDriver());
 		});
 
-		afterEach(() => {
-			driver.destroy();
+		afterEach(async () => {
+			await driver.destroy();
 			driver.removeAllListeners();
 		});
 
@@ -373,8 +373,8 @@ describe("lib/driver/Driver => ", () => {
 			} as any;
 		});
 
-		afterEach(() => {
-			driver.destroy();
+		afterEach(async () => {
+			await driver.destroy();
 			driver.removeAllListeners();
 		});
 
@@ -446,8 +446,8 @@ describe("lib/driver/Driver => ", () => {
 			} as any;
 		});
 
-		afterEach(() => {
-			driver.destroy();
+		afterEach(async () => {
+			await driver.destroy();
 		});
 
 		it("returns true when a non-partial CC is received", async () => {
