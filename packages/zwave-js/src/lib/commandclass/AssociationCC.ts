@@ -12,7 +12,7 @@ import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -110,7 +110,7 @@ export enum AssociationCommand {
 // @noSetValueAPI
 
 @API(CommandClasses.Association)
-export class AssociationCCAPI extends CCAPI {
+export class AssociationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: AssociationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case AssociationCommand.Get:

@@ -141,11 +141,12 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	public supportsCommand(cmd: ThermostatSetpointCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ThermostatSetpointCommand.Get:
-			case ThermostatSetpointCommand.Set:
 			case ThermostatSetpointCommand.SupportedGet:
+				return this.isSinglecast();
+			case ThermostatSetpointCommand.Set:
 				return true; // This is mandatory
 			case ThermostatSetpointCommand.CapabilitiesGet:
-				return this.version >= 3;
+				return this.version >= 3 && this.isSinglecast();
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -177,9 +178,6 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 				getSetpointScaleValueID(this.endpoint.index, propertyKey),
 			);
 		await this.set(propertyKey, value, preferredScale ?? 0);
-
-		// Refresh the current value
-		await this.get(propertyKey);
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -226,6 +224,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			scale,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get(setpointType);
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

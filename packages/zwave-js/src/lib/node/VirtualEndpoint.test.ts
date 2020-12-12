@@ -4,8 +4,8 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { MockSerialPort } from "@zwave-js/serial";
-import { BatteryCCAPI } from "../commandclass/BatteryCC";
 import type { BinarySensorCCAPI } from "../commandclass/BinarySensorCC";
+import { BinarySwitchCCAPI } from "../commandclass/BinarySwitchCC";
 import { ZWaveController } from "../controller/Controller";
 import type { Driver } from "../driver/Driver";
 import { createAndStartDriver } from "../test/utils";
@@ -58,7 +58,7 @@ describe("lib/node/VirtualEndpoint", () => {
 
 			// We must not use Basic CC here, because that is assumed to be always supported
 			const api = broadcast.createAPI(
-				CommandClasses["Binary Sensor"],
+				CommandClasses["Binary Switch"],
 			) as BinarySensorCCAPI;
 
 			// this does not throw
@@ -66,8 +66,27 @@ describe("lib/node/VirtualEndpoint", () => {
 			// this does
 			await assertZWaveError(() => api.get(), {
 				errorCode: ZWaveErrorCodes.CC_NotSupported,
-				messageMatches: "does not support",
 			});
+		});
+
+		it("the broadcast API should know it is a broadcast API", async () => {
+			makePhysicalNode(2);
+			makePhysicalNode(3);
+			const broadcast = driver.controller.getBroadcastNode();
+
+			expect(
+				broadcast.createAPI(CommandClasses.Basic)["isBroadcast"](),
+			).toBeTrue();
+		});
+
+		it("the multicast API should know it is a multicast API", async () => {
+			makePhysicalNode(2);
+			makePhysicalNode(3);
+			const multicast = driver.controller.getMulticastGroup([2, 3]);
+
+			expect(
+				multicast.createAPI(CommandClasses.Basic)["isMulticast"](),
+			).toBeTrue();
 		});
 	});
 
@@ -92,16 +111,16 @@ describe("lib/node/VirtualEndpoint", () => {
 			expect(actual).toEqual([]);
 
 			// Supported and controlled CCs
-			node2.addCC(CommandClasses.Battery, { isSupported: true });
+			node2.addCC(CommandClasses["Binary Switch"], { isSupported: true });
 			node2.addCC(CommandClasses["Wake Up"], { isControlled: true });
-			node3.addCC(CommandClasses.Battery, { isSupported: true });
+			node3.addCC(CommandClasses["Binary Switch"], { isSupported: true });
 			node3.addCC(CommandClasses.Version, { isSupported: true });
 			broadcast = driver.controller.getBroadcastNode();
 
 			actual = [...broadcast.commandClasses];
 			expect(actual).toHaveLength(1);
 			expect(actual.map((api) => api.constructor)).toIncludeAllMembers([
-				BatteryCCAPI,
+				BinarySwitchCCAPI,
 				// VersionCCAPI cannot be used in broadcast
 				// WakeUpCCAPI is not supported (only controlled), so no API!
 			]);

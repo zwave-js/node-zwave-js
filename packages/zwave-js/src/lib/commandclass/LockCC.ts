@@ -10,7 +10,7 @@ import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
-	CCAPI,
+	PhysicalCCAPI,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -38,7 +38,7 @@ export enum LockCommand {
 }
 
 @API(CommandClasses.Lock)
-export class LockCCAPI extends CCAPI {
+export class LockCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: LockCommand): Maybe<boolean> {
 		switch (cmd) {
 			case LockCommand.Get:

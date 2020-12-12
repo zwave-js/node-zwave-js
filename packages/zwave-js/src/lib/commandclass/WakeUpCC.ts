@@ -53,12 +53,13 @@ export enum WakeUpCommand {
 export class WakeUpCCAPI extends CCAPI {
 	public supportsCommand(cmd: WakeUpCommand): Maybe<boolean> {
 		switch (cmd) {
-			case WakeUpCommand.IntervalSet:
 			case WakeUpCommand.IntervalGet:
+				return this.isSinglecast();
+			case WakeUpCommand.IntervalSet:
 			case WakeUpCommand.NoMoreInformation:
 				return true; // This is mandatory
 			case WakeUpCommand.IntervalCapabilitiesGet:
-				return this.version >= 2;
+				return this.version >= 2 && this.isSinglecast();
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -74,8 +75,6 @@ export class WakeUpCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.setInterval(value, this.driver.controller.ownNodeId ?? 1);
-		// Refresh the current value
-		await this.getInterval();
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -132,6 +131,11 @@ export class WakeUpCCAPI extends CCAPI {
 			controllerNodeId,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.getInterval();
+		}
 	}
 
 	public async sendNoMoreInformation(): Promise<void> {

@@ -2,11 +2,13 @@ import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Maybe,
+	NODE_ID_BROADCAST,
 	unknownBoolean,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import { VirtualEndpoint } from "../node/VirtualEndpoint";
@@ -18,6 +20,12 @@ export type SetValueImplementation = (
 	property: Pick<ValueID, "property" | "propertyKey">,
 	value: unknown,
 ) => Promise<void>;
+
+/** Used to identify the method on the CC API class that handles refreshing values from nodes directly */
+export const REFRESH_VALUE: unique symbol = Symbol.for("CCAPI_REFRESH_VALUE");
+export type RefreshValueImplementation<T extends unknown> = (
+	property: Pick<ValueID, "property" | "propertyKey">,
+) => Promise<T>;
 
 // Since the setValue API is called from a point with very generic parameters,
 // we must do narrowing inside the API calls. These three methods are for convenience
@@ -176,6 +184,32 @@ export class CCAPI {
 				}
 			},
 		});
+	}
+
+	protected isSinglecast(): this is this & { endpoint: Endpoint } {
+		return typeof this.endpoint.nodeId === "number";
+	}
+
+	protected isMulticast(): this is this & {
+		endpoint: VirtualEndpoint & {
+			nodeId: number[];
+		};
+	} {
+		return (
+			this.endpoint instanceof VirtualEndpoint &&
+			isArray(this.endpoint.nodeId)
+		);
+	}
+
+	protected isBroadcast(): this is this & {
+		endpoint: VirtualEndpoint & {
+			nodeId: typeof NODE_ID_BROADCAST;
+		};
+	} {
+		return (
+			this.endpoint instanceof VirtualEndpoint &&
+			this.endpoint.nodeId === NODE_ID_BROADCAST
+		);
 	}
 }
 
