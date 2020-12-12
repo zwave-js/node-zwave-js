@@ -16,7 +16,10 @@ export class VirtualNode extends VirtualEndpoint {
 		super(undefined, driver, 0);
 		// Set the reference to this and the physical nodes
 		super.setNode(this);
-		this.physicalNodes = [...physicalNodes];
+		this.physicalNodes = [...physicalNodes].filter(
+			// And avoid including the controller node in the support checks
+			(n) => n.id !== driver.controller.ownNodeId,
+		);
 	}
 
 	public readonly physicalNodes: ZWaveNode[];
@@ -91,7 +94,7 @@ export class VirtualNode extends VirtualEndpoint {
 			log.driver.print(
 				`Virtual node ${
 					this.id ?? "??"
-				}, Endpoint ${index}: Trying to access endpoint instance before Multi Channel interview`,
+				}, Endpoint ${index}: Trying to access endpoint instance before the Multi Channel interview of all nodes was completed!`,
 				"error",
 			);
 			return undefined;
