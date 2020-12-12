@@ -172,9 +172,6 @@ getBroadcastNode(): VirtualNode
 
 Returns a reference to the (virtual) broadcast node. This can be used to send a command to all supporting nodes in the network with a single message. You can target individual endpoints as usual.
 
-> [!NOTE]
-> Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details.
-
 ### `getMulticastGroup`
 
 ```ts
@@ -184,7 +181,8 @@ getMulticastGroup(nodeIDs: number[]): VirtualNode
 Creates a virtual node that can be used to send commands to multiple supporting nodes with a single (multicast) message. You can target individual endpoints as usual.
 
 > [!NOTE]
-> Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details.
+> Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details.  
+> Furthermore, it is not possible to send secure commands using multicast or broadcast.
 
 ## Controller properties
 
