@@ -21,12 +21,6 @@ export type SetValueImplementation = (
 	value: unknown,
 ) => Promise<void>;
 
-/** Used to identify the method on the CC API class that handles refreshing values from nodes directly */
-export const REFRESH_VALUE: unique symbol = Symbol.for("CCAPI_REFRESH_VALUE");
-export type RefreshValueImplementation<T extends unknown> = (
-	property: Pick<ValueID, "property" | "propertyKey">,
-) => Promise<T>;
-
 // Since the setValue API is called from a point with very generic parameters,
 // we must do narrowing inside the API calls. These three methods are for convenience
 export function throwUnsupportedProperty(
