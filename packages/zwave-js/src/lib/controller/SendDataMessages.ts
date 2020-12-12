@@ -348,6 +348,7 @@ export class SendDataMulticastRequest<
 		return {
 			...super.toLogEntry(),
 			message: {
+				"target nodes": this.command.nodeId.join(", "),
 				"transmit options": num2hex(this.transmitOptions),
 				"callback id": this.callbackId,
 			},

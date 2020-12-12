@@ -237,14 +237,8 @@ export class Message {
 			FunctionType[this.functionType],
 		];
 		const nodeId = this.getNodeId();
-		if (nodeId) {
-			tags.unshift(getNodeTag(nodeId));
-		} else if (
-			isCommandClassContainer(this) &&
-			this.command.isMulticast()
-		) {
-			tags.unshift("MULTICAST");
-		}
+		if (nodeId) tags.unshift(getNodeTag(nodeId));
+
 		return {
 			tags,
 			message:
