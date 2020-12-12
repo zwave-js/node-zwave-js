@@ -58,19 +58,7 @@ A virtual endpoint exists if at least one of the virtual node's underlying physi
 supportsCC(cc: CommandClasses): boolean
 ```
 
-Tests if this virtual endpoint supports the given CC. This is the case if **at least one** of the underlying physical endpoints does.
-
-### `isCCSecure`
-
-```ts
-isCCSecure(cc: CommandClasses): boolean | "both"
-```
-
-Tests if this virtual endpoint supports or controls the given CC only securely. This method returns one of the following values:
-
--   `true` if **all** of the physical endpoints support this CC only securely
--   `false` if **none** of the physical endpoints do
--   `"both"` otherwise. In this case, it is impossible to send a command that all physical nodes understand.
+Tests if this virtual endpoint supports the given CC. This is the case if **at least one** of the underlying physical endpoints supports the CC non-securely. Sending secure commands using multicast or broadcast **is not possible** without Security S2.
 
 ### `getCCVersion`
 

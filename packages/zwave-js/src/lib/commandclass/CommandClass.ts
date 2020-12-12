@@ -5,6 +5,7 @@ import {
 	deserializeCacheValue,
 	getCCName,
 	MessageOrCCLogEntry,
+	NODE_ID_BROADCAST,
 	parseCCId,
 	serializeCacheValue,
 	stripUndefined,
@@ -143,7 +144,7 @@ export class CommandClass {
 			this.payload = payload;
 		}
 
-		if (this.isSinglecast()) {
+		if (this.isSinglecast() && this.nodeId !== NODE_ID_BROADCAST) {
 			// For singlecast CCs, set the CC version as high as possible
 			this.version = this.driver.getSafeCCVersionForNode(
 				this.ccId,
@@ -170,7 +171,7 @@ export class CommandClass {
 				!!(endpoint ?? node)?.isCCSecure(this.ccId) &&
 				!!this.driver.securityManager;
 		} else {
-			// For multicast CCs, we just use the highest implemented version to serialize
+			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields
 			this.version = getImplementedVersion(this.ccId);
 			// Security does not support multicast

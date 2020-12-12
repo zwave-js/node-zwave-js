@@ -46,26 +46,13 @@ export class VirtualEndpoint {
 
 	/** Tests if this endpoint supports the given CommandClass */
 	public supportsCC(cc: CommandClasses): boolean {
-		// A virtual endpoints supports a CC if any of the physical endpoints it targets do
-		return this.node.physicalNodes.some((n) =>
-			n.getEndpoint(this.index)?.supportsCC(cc),
-		);
+		// A virtual endpoints supports a CC if any of the physical endpoints it targets supports the CC non-securely
+		// Security S0 does not support broadcast / multicast!
+		return this.node.physicalNodes.some((n) => {
+			const endpoint = n.getEndpoint(this.index);
+			return endpoint?.supportsCC(cc) && !endpoint?.isCCSecure(cc);
+		});
 	}
-
-	/** Tests if this endpoint supports or controls the given CC only securely */
-	public isCCSecure(cc: CommandClasses): boolean | "both" {
-		// A CC is secure if any of the physical endpoints only support it securely
-		// If some do and some don't, return "both"
-		const someSupportSecurely = this.node.physicalNodes.some((n) =>
-			n.getEndpoint(this.index)?.isCCSecure(cc),
-		);
-		const someSupportInsecurely = this.node.physicalNodes.some(
-			(n) => n.getEndpoint(this.index)?.isCCSecure(cc) === false,
-		);
-		if (someSupportInsecurely && someSupportSecurely) return "both";
-		return someSupportSecurely;
-	}
-
 	/**
 	 * Retrieves the minimum non-zero version of the given CommandClass the physical endpoints implement
 	 * Returns 0 if the CC is not supported at all.
