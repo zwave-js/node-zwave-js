@@ -557,7 +557,9 @@ export class ZWaveNode extends Endpoint {
 	public getDefinedValueIDs(): TranslatedValueID[] {
 		let ret: ValueID[] = [];
 		for (const endpoint of this.getAllEndpoints()) {
-			for (const cc of endpoint.implementedCommandClasses.keys()) {
+			for (const [cc, info] of endpoint.implementedCommandClasses) {
+				// Don't return value IDs which are only controlled
+				if (!info.isSupported) continue;
 				const ccInstance = endpoint.createCCInstanceUnsafe(cc);
 				if (ccInstance) {
 					ret.push(...ccInstance.getDefinedValueIDs());
