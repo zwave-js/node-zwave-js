@@ -216,6 +216,28 @@ readonly id: number
 
 Returns the ID this node has been assigned by the controller. This is a number between 1 and 232.
 
+### `name`
+
+```ts
+name: string | undefined;
+```
+
+The user-defined name of this node. Uses the value reported by `Node Naming and Location CC` if it exists.
+
+> [!NOTE]
+> Setting this value only updates the name locally. To permanently change the name of the node, use the [`commandClasses` API](api/endpoint.md#commandClasses).
+
+### `location`
+
+```ts
+location: string | undefined;
+```
+
+The user-defined location of this node. Uses the value reported by `Node Naming and Location CC` if it exists.
+
+> [!NOTE]
+> Setting this value only updates the location locally. To permanently change the location of the node, use the [`commandClasses` API](api/endpoint.md#commandClasses).
+
 ### `status`
 
 ```ts
