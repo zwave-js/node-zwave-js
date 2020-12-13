@@ -15,6 +15,10 @@ import {
 	getCCConstructor,
 	getCommandClassStatic,
 } from "../commandclass/CommandClass";
+import {
+	getInstallerIconValueId,
+	getUserIconValueId,
+} from "../commandclass/ZWavePlusCC";
 import type { Driver } from "../driver/Driver";
 import type { ZWaveNode } from "./Node";
 
@@ -352,5 +356,17 @@ export class Endpoint {
 	 */
 	public getNodeUnsafe(): ZWaveNode | undefined {
 		return this.driver.controller.nodes.get(this.nodeId);
+	}
+
+	/** Z-Wave+ Icon (for management) */
+	public get installerIcon(): number | undefined {
+		return this.getNodeUnsafe()?.getValue(
+			getInstallerIconValueId(this.index),
+		);
+	}
+
+	/** Z-Wave+ Icon (for end users) */
+	public get userIcon(): number | undefined {
+		return this.getNodeUnsafe()?.getValue(getUserIconValueId(this.index));
 	}
 }

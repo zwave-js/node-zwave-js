@@ -87,6 +87,13 @@ import {
 	WakeUpCCWakeUpNotification,
 } from "../commandclass/WakeUpCC";
 import {
+	getNodeTypeValueId,
+	getRoleTypeValueId,
+	getZWavePlusVersionValueId,
+	ZWavePlusNodeType,
+	ZWavePlusRoleType,
+} from "../commandclass/ZWavePlusCC";
+import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
 	ApplicationUpdateRequestNodeInfoRequestFailed,
@@ -499,6 +506,18 @@ export class ZWaveNode extends Endpoint {
 	public get firmwareVersion(): string | undefined {
 		// We're only interested in the first (main) firmware
 		return this.getValue<string[]>(getFirmwareVersionsValueId())?.[0];
+	}
+
+	public get zwavePlusVersion(): number | undefined {
+		return this.getValue(getZWavePlusVersionValueId());
+	}
+
+	public get nodeType(): ZWavePlusNodeType | undefined {
+		return this.getValue(getNodeTypeValueId());
+	}
+
+	public get roleType(): ZWavePlusRoleType | undefined {
+		return this.getValue(getRoleTypeValueId());
 	}
 
 	private _deviceConfig: DeviceConfig | undefined;
