@@ -82,6 +82,22 @@ readonly index: number
 
 The index of this endpoint. 0 for the root device, 1+ otherwise.
 
+### `installerIcon`
+
+```ts
+readonly installerIcon: number | undefined
+```
+
+If the `Z-Wave+` Command Class is supported, this returns the icon to be used for management UIs.
+
+### `userIcon`
+
+```ts
+readonly userIcon: number | undefined
+```
+
+If the `Z-Wave+` Command Class is supported, this returns the icon to be shown to end users.
+
 ### `commandClasses`
 
 ```ts
