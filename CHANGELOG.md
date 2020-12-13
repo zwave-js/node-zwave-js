@@ -24,6 +24,14 @@
 * The mapping of root to endpoint 1 now works correctly if the node does not support `Multi Channel Association CC` at all
 * When the `Multilevel Switch CC` level change commands indicate that Supervision is not supported, this is now remembered and the command gets retried without supervision.
 * Removed some debug logging which could blow up the log file size
+* `Notification CC Reports` are now parsed correctly when the `V1 Alarm` bytes are not zero
+* `Color Switch CC`: Setting the **warm white** `targetValue` no longer falsely claims that the `propertyKey` is missing
+* Added support for `*.gbl` firmware files and Aeotec updater executables which include a checksum and a target chip byte.
+* Removing a node association no longer throws an error when both multi channel and normal associations are supported.
+
+### Changes under the hood
+* Types, interfaces and enum declarations in the docs can now be automatically copied and updated from the TypeScript sources
+* Fixed some leaky tests
 
 ## 5.5.0 (2020-11-24)
 ### Config file changes
