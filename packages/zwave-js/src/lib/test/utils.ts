@@ -1,3 +1,5 @@
+/* wotan-disable no-restricted-property-access */
+
 import { MockSerialPort } from "@zwave-js/serial";
 import { Driver, ZWaveOptions } from "../driver/Driver";
 

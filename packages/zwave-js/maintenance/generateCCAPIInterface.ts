@@ -58,4 +58,4 @@ export async function generateCCAPIInterface(): Promise<void> {
 	await fs.writeFile(apiFile, apiFileContent, "utf8");
 }
 
-if (!module.parent) void generateCCAPIInterface();
+if (require.main === module) void generateCCAPIInterface();

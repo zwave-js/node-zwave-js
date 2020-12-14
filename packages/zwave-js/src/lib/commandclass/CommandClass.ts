@@ -959,6 +959,7 @@ type APIConstructor = new (
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type TypedClassDecorator<TTarget extends Object> = <
+	// wotan-disable-next-line no-misused-generics
 	T extends TTarget,
 	TConstructor extends new (...args: any[]) => T
 >(

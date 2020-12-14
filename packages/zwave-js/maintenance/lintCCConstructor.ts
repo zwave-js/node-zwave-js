@@ -11,6 +11,8 @@ import ts from "typescript";
 import { getCommandClassFromDecorator } from "./shared";
 import { loadTSConfig, projectRoot } from "./tsTools";
 
+/* wotan-disable no-useless-predicate */
+
 // Configure which CCs are excluded from this check
 const whitelistedCCs: CommandClasses[] = [
 	// Configuration CC has a different way of storing its values
@@ -245,7 +247,7 @@ If this is a false-positive, consider suppressing this error with a ${green(
 	}
 }
 
-if (!module.parent)
+if (require.main === module)
 	lintCCConstructors()
 		.then(() => process.exit(0))
 		.catch(() => process.exit(1));
