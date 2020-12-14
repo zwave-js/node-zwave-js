@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.6.0 (2020-12-14)
 ### Config file changes
 * Added a config file for `HeatIt Z-TRM3`
 * Added a config file for `Eurotronic Air quality sensor`

@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/core",
-  "version": "5.5.0",
+  "version": "5.6.0",
   "description": "zwave-js: core components",
   "publishConfig": {
     "access": "public"
@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "@alcalzone/jsonl-db": "^1.2.2",
-    "@zwave-js/shared": "^5.4.0",
+    "@zwave-js/shared": "^5.6.0",
     "alcalzone-shared": "^3.0.1",
     "ansi-colors": "^4.1.1",
     "moment": "^2.29.0",
