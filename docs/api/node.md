@@ -331,6 +331,13 @@ If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node typ
 
 <!-- #import ZWavePlusNodeType from "zwave-js" -->
 
+```ts
+enum ZWavePlusNodeType {
+	Node = 0x00, // ZWave+ Node
+	IPGateway = 0x02, // ZWave+ for IP Gateway
+}
+```
+
 ### `roleType`
 
 ```ts
@@ -340,6 +347,19 @@ readonly roleType: ZWavePlusRoleType | undefined
 If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` role type this device has, which is one of the following values:
 
 <!-- #import ZWavePlusRoleType from "zwave-js" -->
+
+```ts
+enum ZWavePlusRoleType {
+	CentralStaticController = 0x00,
+	SubStaticController = 0x01,
+	PortableController = 0x02,
+	PortableReportingController = 0x03,
+	PortableSlave = 0x04,
+	AlwaysOnSlave = 0x05,
+	SleepingReportingSlave = 0x06,
+	SleepingListeningSlave = 0x07,
+}
+```
 
 ### `isListening`
 
