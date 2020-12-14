@@ -291,6 +291,34 @@ readonly deviceClass: DeviceClass
 
 This property returns the node's [DeviceClass](#DeviceClass-class), which provides further information about the kind of device this node is.
 
+### `zwavePlusVersion`
+
+```ts
+readonly zwavePlusVersion: number | undefined
+```
+
+Returns the version of the `Z-Wave+` Command Class this node supports. If the CC is supported, the value only exists **after** the node is ready.
+
+### `nodeType`
+
+```ts
+readonly nodeType: ZWavePlusNodeType | undefined
+```
+
+If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node type this device has, which is one of the following values:
+
+<!-- #import ZWavePlusNodeType from "zwave-js" -->
+
+### `roleType`
+
+```ts
+readonly roleType: ZWavePlusRoleType | undefined
+```
+
+If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` role type this device has, which is one of the following values:
+
+<!-- #import ZWavePlusRoleType from "zwave-js" -->
+
 ### `isListening`
 
 ```ts
