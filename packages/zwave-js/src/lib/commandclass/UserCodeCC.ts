@@ -20,7 +20,7 @@ import {
 	pick,
 } from "@zwave-js/shared";
 import {
-	CCAPI,
+	PhysicalCCAPI,
 	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
@@ -295,7 +295,7 @@ function persistUserCode(
 }
 
 @API(CommandClasses["User Code"])
-export class UserCodeCCAPI extends CCAPI {
+export class UserCodeCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: UserCodeCommand): Maybe<boolean> {
 		switch (cmd) {
 			case UserCodeCommand.Get:

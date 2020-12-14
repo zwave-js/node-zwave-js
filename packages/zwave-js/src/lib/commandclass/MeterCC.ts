@@ -21,8 +21,8 @@ import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
-	CCAPI,
 	ignoreTimeout,
+	PhysicalCCAPI,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -136,7 +136,7 @@ export function getResetValueId(endpoint: number, type?: number): ValueID {
 }
 
 @API(CommandClasses.Meter)
-export class MeterCCAPI extends CCAPI {
+export class MeterCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: MeterCommand): Maybe<boolean> {
 		switch (cmd) {
 			case MeterCommand.Get:

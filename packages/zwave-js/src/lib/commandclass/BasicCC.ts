@@ -46,8 +46,9 @@ export class BasicCCAPI extends CCAPI {
 	public supportsCommand(cmd: BasicCommand): Maybe<boolean> {
 		switch (cmd) {
 			case BasicCommand.Get:
+				return this.isSinglecast();
 			case BasicCommand.Set:
-				return true; // This is mandatory
+				return true;
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -93,8 +94,10 @@ export class BasicCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 
-		// Refresh the current value
-		await this.get();
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get();
+		}
 	}
 }
 

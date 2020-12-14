@@ -148,6 +148,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		switch (cmd) {
 			case ColorSwitchCommand.SupportedGet:
 			case ColorSwitchCommand.Get:
+				return this.isSinglecast();
 			case ColorSwitchCommand.Set:
 			case ColorSwitchCommand.StartLevelChange:
 			case ColorSwitchCommand.StopLevelChange:
@@ -259,8 +260,10 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 		await this.set({ [propertyKey]: value });
 
-		// Refresh the current value
-		await this.get(propertyKey);
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get(propertyKey);
+		}
 	};
 }
 

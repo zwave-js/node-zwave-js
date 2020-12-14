@@ -4,7 +4,7 @@ import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -87,7 +87,7 @@ export function getUserIconValueId(endpoint: number = 0): ValueID {
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses["Z-Wave Plus Info"])
-export class ZWavePlusCCAPI extends CCAPI {
+export class ZWavePlusCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: ZWavePlusCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ZWavePlusCommand.Get:

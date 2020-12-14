@@ -9,7 +9,7 @@ import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
-	CCAPI,
+	PhysicalCCAPI,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -44,7 +44,7 @@ export enum NodeNamingAndLocationCommand {
 }
 
 @API(CommandClasses["Node Naming and Location"])
-export class NodeNamingAndLocationCCAPI extends CCAPI {
+export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: NodeNamingAndLocationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case NodeNamingAndLocationCommand.NameGet:

@@ -79,10 +79,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 		switch (cmd) {
 			case SoundSwitchCommand.TonesNumberGet:
 			case SoundSwitchCommand.ToneInfoGet:
-			case SoundSwitchCommand.ConfigurationSet:
 			case SoundSwitchCommand.ConfigurationGet:
-			case SoundSwitchCommand.TonePlaySet:
 			case SoundSwitchCommand.TonePlayGet:
+				return this.isSinglecast();
+			case SoundSwitchCommand.ConfigurationSet:
+			case SoundSwitchCommand.TonePlaySet:
 				return true; // This is mandatory
 		}
 		return super.supportsCommand(cmd);
@@ -141,8 +142,10 @@ export class SoundSwitchCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 
-		// Refresh the current value
-		await this.getConfiguration();
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.getConfiguration();
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -184,8 +187,10 @@ export class SoundSwitchCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 
-		// Refresh the current value
-		await this.getPlaying();
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.getPlaying();
+		}
 	}
 
 	public async stopPlaying(): Promise<void> {
@@ -202,8 +207,10 @@ export class SoundSwitchCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 
-		// Refresh the current value
-		await this.getPlaying();
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.getPlaying();
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

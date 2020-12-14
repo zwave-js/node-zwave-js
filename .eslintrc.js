@@ -107,6 +107,7 @@ module.exports = {
 			"error",
 			{
 				allowPrivateClassPropertyAccess: true,
+				allowProtectedClassPropertyAccess: true,
 			},
 		],
 		"quote-props": ["error", "as-needed"],

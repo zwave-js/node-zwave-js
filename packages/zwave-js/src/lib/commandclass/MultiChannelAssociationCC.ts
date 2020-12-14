@@ -12,7 +12,7 @@ import {
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	getGroupCountValueId as getAssociationGroupCountValueId,
 	getHasLifelineValueId,
@@ -177,7 +177,7 @@ export enum MultiChannelAssociationCommand {
 // @noSetValueAPI
 
 @API(CommandClasses["Multi Channel Association"])
-export class MultiChannelAssociationCCAPI extends CCAPI {
+export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(
 		cmd: MultiChannelAssociationCommand,
 	): Maybe<boolean> {
