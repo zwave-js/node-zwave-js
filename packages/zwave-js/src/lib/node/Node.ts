@@ -68,6 +68,10 @@ import {
 } from "../commandclass/ManufacturerSpecificCC";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import {
+	getNodeLocationValueId,
+	getNodeNameValueId,
+} from "../commandclass/NodeNamingCC";
+import {
 	NotificationCC,
 	NotificationCCReport,
 } from "../commandclass/NotificationCC";
@@ -518,6 +522,40 @@ export class ZWaveNode extends Endpoint {
 
 	public get roleType(): ZWavePlusRoleType | undefined {
 		return this.getValue(getRoleTypeValueId());
+	}
+
+	/**
+	 * The user-defined name of this node. Uses the value reported by `Node Naming and Location CC` if it exists.
+	 *
+	 * **Note:** Setting this value only updates the name locally. To permanently change the name of the node, use
+	 * the `commandClasses` API.
+	 */
+	public get name(): string | undefined {
+		return this.getValue(getNodeNameValueId());
+	}
+	public set name(value: string | undefined) {
+		if (value != undefined) {
+			this._valueDB.setValue(getNodeNameValueId(), value);
+		} else {
+			this._valueDB.removeValue(getNodeNameValueId());
+		}
+	}
+
+	/**
+	 * The user-defined location of this node. Uses the value reported by `Node Naming and Location CC` if it exists.
+	 *
+	 * **Note:** Setting this value only updates the location locally. To permanently change the location of the node, use
+	 * the `commandClasses` API.
+	 */
+	public get location(): string | undefined {
+		return this.getValue(getNodeLocationValueId());
+	}
+	public set location(value: string | undefined) {
+		if (value != undefined) {
+			this._valueDB.setValue(getNodeLocationValueId(), value);
+		} else {
+			this._valueDB.removeValue(getNodeLocationValueId());
+		}
 	}
 
 	private _deviceConfig: DeviceConfig | undefined;
