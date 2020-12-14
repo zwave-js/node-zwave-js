@@ -30,18 +30,24 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    # We need npm@7 for the workspaces feature
-    - name: Update npm to >=7
-      run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
+    - name: Install yarn
+      run: npm i -g yarn
+
+    # # We need npm@7 for the workspaces feature
+    # - name: Update npm to >=7
+    #   run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
+
+    # - name: Install dependencies
+    #   run: npm ci
 
     - name: Install dependencies
-      run: npm ci
+      run: rm -rf node_modules && yarn install --frozen-lockfile
 
     - name: Compile TypeScript code
-      run: npm run build
+      run: yarn run build
 
     - name: Generate documentation
-      run: npm run docs:generate
+      run: yarn run docs:generate
 
     # Trigger this step only when pushing to master
     - name: Create or update PR

@@ -35,7 +35,7 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
-    "clean": "npm run build -- --clean",
-    "watch": "npm run build -- --watch --pretty"
+    "clean": "yarn run build -- --clean",
+    "watch": "yarn run build -- --watch --pretty"
   }
 }
