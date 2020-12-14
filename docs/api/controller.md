@@ -181,8 +181,13 @@ getMulticastGroup(nodeIDs: number[]): VirtualNode
 Creates a virtual node that can be used to send commands to multiple supporting nodes with a single (multicast) message. You can target individual endpoints as usual.
 
 > [!NOTE]
-> Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details.  
-> Furthermore, it is not possible to send secure commands using multicast or broadcast.
+> Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details on the available methods and properties.
+
+> [!NOTE]
+> Support for secure communication is very limited:
+>
+> -   Broadcasting or multicasting commands is not possible using `Security S0`.
+> -   Secure multicast requires `Security S2`, which is not yet supported by `zwave-js` and requires devices that support it.
 
 ## Controller properties
 
