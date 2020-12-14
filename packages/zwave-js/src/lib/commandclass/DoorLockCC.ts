@@ -20,7 +20,7 @@ import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
-	CCAPI,
+	PhysicalCCAPI,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -101,7 +101,7 @@ const configurationSetParameters = [
 ] as const;
 
 @API(CommandClasses["Door Lock"])
-export class DoorLockCCAPI extends CCAPI {
+export class DoorLockCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: DoorLockCommand): Maybe<boolean> {
 		switch (cmd) {
 			case DoorLockCommand.OperationSet:

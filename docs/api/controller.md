@@ -164,6 +164,31 @@ If the target endpoint is not given, the association is a "node association". If
 
 A target endpoint of `0` (i.e. the root endpoint), the association targets the node itself and acts like a node association for the target node. However, you should note that some devices don't like having a root endpoint association as the lifeline and must be configured with a node association.
 
+### `getBroadcastNode`
+
+```ts
+getBroadcastNode(): VirtualNode
+```
+
+Returns a reference to the (virtual) broadcast node. This can be used to send a command to all supporting nodes in the network with a single message. You can target individual endpoints as usual.
+
+### `getMulticastGroup`
+
+```ts
+getMulticastGroup(nodeIDs: number[]): VirtualNode
+```
+
+Creates a virtual node that can be used to send commands to multiple supporting nodes with a single (multicast) message. You can target individual endpoints as usual.
+
+> [!NOTE]
+> Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details on the available methods and properties.
+
+> [!NOTE]
+> Support for secure communication is very limited:
+>
+> -   Broadcasting or multicasting commands is not possible using `Security S0`.
+> -   Secure multicast requires `Security S2`, which is not yet supported by `zwave-js` and requires devices that support it.
+
 ## Controller properties
 
 ### `nodes`

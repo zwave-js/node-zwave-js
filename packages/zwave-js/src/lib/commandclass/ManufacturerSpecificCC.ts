@@ -11,7 +11,7 @@ import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -87,7 +87,7 @@ export enum DeviceIdType {
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses["Manufacturer Specific"])
-export class ManufacturerSpecificCCAPI extends CCAPI {
+export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: ManufacturerSpecificCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ManufacturerSpecificCommand.Get:

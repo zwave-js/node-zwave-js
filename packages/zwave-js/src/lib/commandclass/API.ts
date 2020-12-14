@@ -2,13 +2,16 @@ import type { ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	Maybe,
+	NODE_ID_BROADCAST,
 	unknownBoolean,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
+import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
+import { VirtualEndpoint } from "../node/VirtualEndpoint";
 import { getCommandClass } from "./CommandClass";
 
 /** Used to identify the method on the CC API class that handles setting values on nodes directly */
@@ -70,7 +73,7 @@ export function throwWrongValueType(
 export class CCAPI {
 	public constructor(
 		protected readonly driver: Driver,
-		protected readonly endpoint: Endpoint,
+		protected readonly endpoint: Endpoint | VirtualEndpoint,
 	) {
 		this.ccId = getCommandClass(this);
 	}
@@ -123,8 +126,14 @@ export class CCAPI {
 		command: number,
 	): void {
 		if (this.supportsCommand(command) !== true) {
+			const hasNodeId = typeof this.endpoint.nodeId === "number";
+
 			throw new ZWaveError(
-				`Node #${this.endpoint.nodeId}${
+				`${
+					hasNodeId
+						? "This virtual node"
+						: `Node #${this.endpoint.nodeId as number}`
+				}${
 					this.endpoint.index > 0
 						? ` (Endpoint ${this.endpoint.index})`
 						: ""
@@ -132,6 +141,17 @@ export class CCAPI {
 					commandEnum,
 					command,
 				)}!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
+		}
+	}
+
+	protected assertPhysicalEndpoint(
+		endpoint: Endpoint | VirtualEndpoint,
+	): asserts endpoint is Endpoint {
+		if (endpoint instanceof VirtualEndpoint) {
+			throw new ZWaveError(
+				`This method is not supported for virtual nodes!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
@@ -159,6 +179,42 @@ export class CCAPI {
 			},
 		});
 	}
+
+	protected isSinglecast(): this is this & { endpoint: Endpoint } {
+		return typeof this.endpoint.nodeId === "number";
+	}
+
+	protected isMulticast(): this is this & {
+		endpoint: VirtualEndpoint & {
+			nodeId: number[];
+		};
+	} {
+		return (
+			this.endpoint instanceof VirtualEndpoint &&
+			isArray(this.endpoint.nodeId)
+		);
+	}
+
+	protected isBroadcast(): this is this & {
+		endpoint: VirtualEndpoint & {
+			nodeId: typeof NODE_ID_BROADCAST;
+		};
+	} {
+		return (
+			this.endpoint instanceof VirtualEndpoint &&
+			this.endpoint.nodeId === NODE_ID_BROADCAST
+		);
+	}
+}
+
+/** A CC API that is only available for physical endpoints */
+export class PhysicalCCAPI extends CCAPI {
+	public constructor(driver: Driver, endpoint: Endpoint | VirtualEndpoint) {
+		super(driver, endpoint);
+		this.assertPhysicalEndpoint(endpoint);
+	}
+
+	protected declare readonly endpoint: Endpoint;
 }
 
 /**

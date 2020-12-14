@@ -50,8 +50,8 @@ describe("regression tests", () => {
 		});
 	});
 
-	afterEach(() => {
-		driver.destroy();
+	afterEach(async () => {
+		await driver.destroy();
 		driver.removeAllListeners();
 	});
 

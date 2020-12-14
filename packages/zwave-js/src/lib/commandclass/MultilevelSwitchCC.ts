@@ -112,12 +112,13 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	public supportsCommand(cmd: MultilevelSwitchCommand): Maybe<boolean> {
 		switch (cmd) {
 			case MultilevelSwitchCommand.Get:
+				return this.isSinglecast();
 			case MultilevelSwitchCommand.Set:
 			case MultilevelSwitchCommand.StartLevelChange:
 			case MultilevelSwitchCommand.StopLevelChange:
 				return true; // This is mandatory
 			case MultilevelSwitchCommand.SupportedGet:
-				return this.version >= 3;
+				return this.version >= 3 && this.isSinglecast();
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -186,7 +187,10 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			supervisionResult.status === SupervisionStatus.Working ||
 			supervisionResult.status === SupervisionStatus.Success
 		) {
-			await this.get();
+			if (this.isSinglecast()) {
+				// Refresh the current value
+				await this.get();
+			}
 		}
 	}
 

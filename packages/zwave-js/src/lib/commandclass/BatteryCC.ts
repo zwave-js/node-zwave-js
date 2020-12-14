@@ -15,7 +15,7 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI, ignoreTimeout } from "./API";
+import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -56,7 +56,7 @@ export enum BatteryCommand {
 }
 
 @API(CommandClasses.Battery)
-export class BatteryCCAPI extends CCAPI {
+export class BatteryCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: BatteryCommand): Maybe<boolean> {
 		switch (cmd) {
 			case BatteryCommand.Get:

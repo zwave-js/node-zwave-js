@@ -16,7 +16,7 @@ import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI, ignoreTimeout } from "./API";
+import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -59,7 +59,7 @@ function parseVersion(buffer: Buffer): string {
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses.Version)
-export class VersionCCAPI extends CCAPI {
+export class VersionCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: VersionCommand): Maybe<boolean> {
 		switch (cmd) {
 			case VersionCommand.Get:

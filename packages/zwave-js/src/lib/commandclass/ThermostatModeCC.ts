@@ -75,8 +75,9 @@ export class ThermostatModeCCAPI extends CCAPI {
 	public supportsCommand(cmd: ThermostatModeCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ThermostatModeCommand.Get:
-			case ThermostatModeCommand.Set:
 			case ThermostatModeCommand.SupportedGet:
+				return this.isSinglecast();
+			case ThermostatModeCommand.Set:
 				return true; // This is mandatory
 		}
 		return super.supportsCommand(cmd);
@@ -93,9 +94,6 @@ export class ThermostatModeCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.set(value);
-
-		// Refresh the current value
-		await this.get();
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -146,6 +144,11 @@ export class ThermostatModeCCAPI extends CCAPI {
 			manufacturerData: manufacturerData as any,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get();
+		}
 	}
 
 	public async getSupportedModes(): Promise<readonly ThermostatMode[]> {

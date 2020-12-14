@@ -105,6 +105,7 @@ export class TimeParametersCCAPI extends CCAPI {
 	public supportsCommand(cmd: TimeParametersCommand): Maybe<boolean> {
 		switch (cmd) {
 			case TimeParametersCommand.Get:
+				return this.isSinglecast();
 			case TimeParametersCommand.Set:
 				return true; // This is mandatory
 		}
@@ -122,9 +123,6 @@ export class TimeParametersCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "date", typeof value);
 		}
 		await this.set(value);
-
-		// Refresh the current value
-		await this.get();
 	};
 
 	public async get(): Promise<Date> {
@@ -156,6 +154,11 @@ export class TimeParametersCCAPI extends CCAPI {
 			dateAndTime,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get();
+		}
 	}
 }
 

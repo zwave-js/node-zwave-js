@@ -9,7 +9,7 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -55,7 +55,7 @@ export function getNextSessionId(): number {
 }
 
 @API(CommandClasses.Supervision)
-export class SupervisionCCAPI extends CCAPI {
+export class SupervisionCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: SupervisionCommand): Maybe<boolean> {
 		switch (cmd) {
 			case SupervisionCommand.Get:
