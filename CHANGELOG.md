@@ -13,6 +13,9 @@
 ### Features
 * Added the compat config option `preserveRootApplicationCCValueIDs` to disable hiding the root endpoint's application CC value IDs
 * The helper method `guessFirmwareFileFormat` was added to guess the firmware format based on the file contents
+* The value IDs of the `Z-Wave+ CC` are now internal and can instead be accessed through the corresponding properties on the `ZWaveNode` and `Endpoint` instances
+* The value IDs of the `Node Naming and Location CC` are now internal and can instead be accessed through the corresponding properties on the `ZWaveNode` instance
+* Added support for sending multicast and broadcast commands (non-secure only)
 
 ### Bugfixes
 * `Driver.destroy()` no longer does anything after the first call
@@ -28,6 +31,7 @@
 * `Color Switch CC`: Setting the **warm white** `targetValue` no longer falsely claims that the `propertyKey` is missing
 * Added support for `*.gbl` firmware files and Aeotec updater executables which include a checksum and a target chip byte.
 * Removing a node association no longer throws an error when both multi channel and normal associations are supported.
+* `getDefinedValueIDs` no longer returns value IDs that are only controlled by a node
 
 ### Changes under the hood
 * Types, interfaces and enum declarations in the docs can now be automatically copied and updated from the TypeScript sources
