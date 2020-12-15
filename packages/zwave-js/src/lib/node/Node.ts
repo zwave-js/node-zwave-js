@@ -1167,8 +1167,11 @@ version:               ${this.version}`;
 
 	/**
 	 * Loads the device configuration for this node from a config file
+	 * @param withFirmwareVersion Whether the firmware version should be considered while looking up the file
 	 */
-	protected async loadDeviceConfig(): Promise<void> {
+	protected async loadDeviceConfig(
+		withFirmwareVersion: boolean = true,
+	): Promise<void> {
 		// But the configuration definitions might change
 		if (
 			this.manufacturerId != undefined &&
@@ -1181,7 +1184,7 @@ version:               ${this.version}`;
 				this.manufacturerId,
 				this.productType,
 				this.productId,
-				this.firmwareVersion,
+				withFirmwareVersion ? this.firmwareVersion : false,
 			);
 			if (this._deviceConfig) {
 				log.controller.logNode(this.id, "device config loaded");
@@ -1257,7 +1260,17 @@ version:               ${this.version}`;
 			}
 
 			try {
-				if (cc === CommandClasses.Version && endpoint.index === 0) {
+				if (
+					cc === CommandClasses["Manufacturer Specific"] &&
+					endpoint.index === 0
+				) {
+					// After the manufacturer specific interview we have enough info to load
+					// fallback config files without firmware version
+					await this.loadDeviceConfig(false);
+				} else if (
+					cc === CommandClasses.Version &&
+					endpoint.index === 0
+				) {
 					// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
 					await this.loadDeviceConfig();
 				}
