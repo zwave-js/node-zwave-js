@@ -1,6 +1,14 @@
 node_modules/
 /packages/*/package-lock.json
 
+# Yarn config and stuff
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
 # compiled test-files
 *.test.js
 /.nyc_output

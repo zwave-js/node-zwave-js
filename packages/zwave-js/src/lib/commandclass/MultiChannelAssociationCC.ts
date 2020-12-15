@@ -12,7 +12,7 @@ import {
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	getGroupCountValueId as getAssociationGroupCountValueId,
 	getHasLifelineValueId,
@@ -27,6 +27,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -176,7 +177,7 @@ export enum MultiChannelAssociationCommand {
 // @noSetValueAPI
 
 @API(CommandClasses["Multi Channel Association"])
-export class MultiChannelAssociationCCAPI extends CCAPI {
+export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(
 		cmd: MultiChannelAssociationCommand,
 	): Maybe<boolean> {
@@ -306,6 +307,14 @@ export class MultiChannelAssociationCCAPI extends CCAPI {
 @implementedVersion(4)
 export class MultiChannelAssociationCC extends CommandClass {
 	declare ccCommand: MultiChannelAssociationCommand;
+
+	public constructor(driver: Driver, options: CommandClassOptions) {
+		super(driver, options);
+		// Make valueIDs internal
+		this.registerValue(getMaxNodesValueId(0).property, true);
+		this.registerValue(getNodeIdsValueId(0).property, true);
+		this.registerValue(getEndpointsValueId(0).property, true);
+	}
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
 		// MultiChannelAssociationCC must be interviewed after Z-Wave+ if that is supported

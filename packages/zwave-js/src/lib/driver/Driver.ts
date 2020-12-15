@@ -120,33 +120,33 @@ export interface ZWaveOptions {
 	/** Specify timeouts in milliseconds */
 	timeouts: {
 		/** how long to wait for an ACK */
-		ack: number;
+		ack: number; // >=1, default: 1000 ms
 		/** not sure */
-		byte: number;
+		byte: number; // >=1, default: 150 ms
 		/**
 		 * How long to wait for a controller response. Usually this timeout should never elapse,
 		 * so this is merely a safeguard against the driver stalling
 		 */
-		response: number;
+		response: number; // [500...5000], default: 1600 ms
 		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
-		sendDataCallback: number;
+		sendDataCallback: number; // >=10000, default: 65000 ms
 		/** How much time a node gets to process a request and send a response */
-		report: number;
+		report: number; // [1000...40000], default: 1600 ms
 		/** How long generated nonces are valid */
-		nonce: number;
+		nonce: number; // [3000...20000], default: 5000 ms
 		/** How long a node is assumed to be awake after the last communication with it */
-		nodeAwake: number;
+		nodeAwake: number; // [1000...30000], default: 10000 ms
 	};
 
 	attempts: {
 		/** How often the driver should try communication with the controller before giving up */
-		controller: number;
+		controller: number; // [1...3], default: 3
 		/** How often the driver should try sending SendData commands before giving up */
-		sendData: number;
+		sendData: number; // [1...5], default: 3
 		/**
 		 * How many attempts should be made for each node interview before giving up
 		 */
-		nodeInterview: number;
+		nodeInterview: number; // [1...10], default: 5
 	};
 
 	/**
@@ -171,7 +171,7 @@ export interface ZWaveOptions {
 	/** Allows you to specify a different cache directory */
 	cacheDir: string;
 
-	/** Specify the network key to use for encryption */
+	/** Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes. */
 	networkKey?: Buffer;
 }
 
@@ -288,7 +288,9 @@ function checkOptions(options: ZWaveOptions): void {
 		);
 	}
 	if (
+		// wotan-disable-next-line no-unstable-api-use
 		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) < 1 ||
+		// wotan-disable-next-line no-unstable-api-use
 		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) > 10
 	) {
 		throw new ZWaveError(
@@ -327,9 +329,12 @@ export interface SendMessageOptions {
 	 * Default: true
 	 */
 	changeNodeStatusOnMissingACK?: boolean;
-	/** Sets the number of milliseconds after which a transaction expires. When the expiration timer elapses, the transaction promise is rejected. */
+	/** Sets the number of milliseconds after which a message expires. When the expiration timer elapses, the promise is rejected with the error code `Controller_MessageExpired`. */
 	expire?: number;
-	/** Internal information used to identify or mark this transaction */
+	/**
+	 * Internal information used to identify or mark this transaction
+	 * @internal
+	 */
 	tag?: any;
 }
 
@@ -531,13 +536,13 @@ export class Driver extends EventEmitter {
 			pick(this.options, ["timeouts", "attempts"]),
 		);
 		this.sendThread = interpret(sendThreadMachine);
-		this.sendThread.onTransition((state) => {
-			if (state.changed)
-				log.driver.print(
-					`send thread state: ${state.toStrings().slice(-1)[0]}`,
-					"verbose",
-				);
-		});
+		// this.sendThread.onTransition((state) => {
+		// 	if (state.changed)
+		// 		log.driver.print(
+		// 			`send thread state: ${state.toStrings().slice(-1)[0]}`,
+		// 			"verbose",
+		// 		);
+		// });
 	}
 
 	/** Enumerates all existing serial ports */
@@ -634,7 +639,8 @@ export class Driver extends EventEmitter {
 			spOpenPromise.resolve();
 
 			await this.writeHeader(MessageHeaders.NAK);
-			await wait(1500);
+			// set unref, so stopping the process doesn't need to wait for the 1500ms
+			await wait(1500, true);
 
 			// Load the necessary configuration
 			log.driver.print("loading configuration...");
@@ -817,6 +823,7 @@ export class Driver extends EventEmitter {
 		}
 
 		const maxInterviewAttempts =
+			// wotan-disable-next-line no-unstable-api-use
 			this.options.nodeInterviewAttempts ??
 			this.options.attempts.nodeInterview;
 
@@ -1217,7 +1224,7 @@ export class Driver extends EventEmitter {
 		log.driver.print("destroying driver instance...");
 
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
-		this.sendThread.stop();
+		if (this.sendThread.initialized) this.sendThread.stop();
 		if (this.serial != undefined) {
 			if (this.serial.isOpen) await this.serial.close();
 			this.serial = undefined;
@@ -1331,7 +1338,7 @@ export class Driver extends EventEmitter {
 				// Enrich error data in case something goes wrong
 				Sentry.addBreadcrumb({
 					category: "message",
-					timestamp: Date.now(),
+					timestamp: Date.now() / 1000,
 					type: "debug",
 					data: {
 						direction: "inbound",

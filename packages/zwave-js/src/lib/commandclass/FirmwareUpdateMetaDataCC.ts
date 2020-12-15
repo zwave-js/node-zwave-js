@@ -11,7 +11,7 @@ import {
 } from "@zwave-js/core";
 import { AllOrNone, getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -102,7 +102,7 @@ function getSupportsActivationValueId(): ValueID {
 }
 
 @API(CommandClasses["Firmware Update Meta Data"])
-export class FirmwareUpdateMetaDataCCAPI extends CCAPI {
+export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: FirmwareUpdateMetaDataCommand): Maybe<boolean> {
 		switch (cmd) {
 			case FirmwareUpdateMetaDataCommand.MetaDataGet:

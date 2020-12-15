@@ -51,6 +51,7 @@ export class ClockCCAPI extends CCAPI {
 	public supportsCommand(cmd: ClockCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ClockCommand.Get:
+				return this.isSinglecast();
 			case ClockCommand.Set:
 				return true; // This is mandatory
 		}
@@ -92,8 +93,10 @@ export class ClockCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 
-		// Refresh the current value
-		await this.get();
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get();
+		}
 	}
 }
 

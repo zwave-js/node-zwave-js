@@ -123,26 +123,31 @@ export class ProtectionCCAPI extends CCAPI {
 	public supportsCommand(cmd: ProtectionCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ProtectionCommand.Get:
+				return this.isSinglecast();
 			case ProtectionCommand.Set:
 				return true; // This is mandatory
 			case ProtectionCommand.SupportedGet:
-				return this.version >= 2;
+				return this.version >= 2 && this.isSinglecast();
 			case ProtectionCommand.TimeoutGet:
 			case ProtectionCommand.TimeoutSet: {
 				const node = this.endpoint.getNodeUnsafe()!;
 				return (
-					node.getValue<Maybe<boolean>>(
+					this.isSinglecast() &&
+					(node.getValue<Maybe<boolean>>(
 						getSupportsTimeoutValueID(this.endpoint.index),
-					) ?? unknownBoolean
+					) ??
+						unknownBoolean)
 				);
 			}
 			case ProtectionCommand.ExclusiveControlGet:
 			case ProtectionCommand.ExclusiveControlSet: {
 				const node = this.endpoint.getNodeUnsafe()!;
 				return (
-					node.getValue<Maybe<boolean>>(
+					this.isSinglecast() &&
+					(node.getValue<Maybe<boolean>>(
 						getSupportsExclusiveControlValueID(this.endpoint.index),
-					) ?? unknownBoolean
+					) ??
+						unknownBoolean)
 				);
 			}
 		}
@@ -168,8 +173,6 @@ export class ProtectionCCAPI extends CCAPI {
 				getRFStateValueID(this.endpoint.index),
 			);
 			await this.set(value, rf);
-			// Refresh the status
-			await this.get();
 		} else if (property === "rf") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -184,8 +187,6 @@ export class ProtectionCCAPI extends CCAPI {
 				getLocalStateValueID(this.endpoint.index),
 			);
 			await this.set(local ?? LocalProtectionState.Unprotected, value);
-			// Refresh the status
-			await this.get();
 		} else if (property === "exclusiveControlNodeId") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -196,8 +197,6 @@ export class ProtectionCCAPI extends CCAPI {
 				);
 			}
 			await this.setExclusiveControl(value);
-			// Refresh the status
-			await this.getExclusiveControl();
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -234,6 +233,11 @@ export class ProtectionCCAPI extends CCAPI {
 			rf,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get();
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -288,6 +292,11 @@ export class ProtectionCCAPI extends CCAPI {
 			exclusiveControlNodeId: nodeId,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the status
+			await this.getExclusiveControl();
+		}
 	}
 
 	public async getTimeout(): Promise<Timeout> {
@@ -319,6 +328,11 @@ export class ProtectionCCAPI extends CCAPI {
 			timeout,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the status
+			await this.getTimeout();
+		}
 	}
 }
 

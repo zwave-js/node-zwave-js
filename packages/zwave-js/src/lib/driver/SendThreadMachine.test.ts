@@ -523,7 +523,9 @@ describe("lib/driver/SendThreadMachine", () => {
 				const message = testTransactions.BasicReport.message;
 				context.expectedResult = message;
 				interpreter.send({
-					type: "message",
+					// updates are returned by the serial API command machine as "unsolicited"
+					type: "unsolicited",
+					// type: "message",
 					message,
 				} as any);
 			},
@@ -591,7 +593,9 @@ describe("lib/driver/SendThreadMachine", () => {
 				preTransmitHandshakePromise,
 			}) => {
 				interpreter.send({
-					type: "message",
+					// updates are returned by the serial API command machine as "unsolicited"
+					type: "unsolicited",
+					// type: "message",
 					message: testTransactions.NonceResponse.message,
 				});
 				preTransmitHandshakePromise.resolve();
@@ -667,7 +671,7 @@ describe("lib/driver/SendThreadMachine", () => {
 			plan.paths.forEach((path) => {
 				// if (
 				// 	!path.description.endsWith(
-				// 		`ADD_SECURE → HANDSHAKE_ADD_SECURE → HANDSHAKE_FAILURE_SECURE → RETRY_TIMEOUT → HANDSHAKE_ADD_SECURE → HANDSHAKE_FAILURE_SECURE → RETRY_TIMEOUT → HANDSHAKE_ADD_SECURE → HANDSHAKE_SUCCESS_SECURE → HANDSHAKE_UPDATE_SECURE → FAILURE_SECURE`,
+				// 		`via ADD_SENDDATA ({"command":"BasicGet"}) → SUCCESS_SENDDATA → WAIT_TIMEOUT → RETRY_TIMEOUT → SUCCESS_SENDDATA → WAIT_TIMEOUT → RETRY_TIMEOUT → SUCCESS_SENDDATA → UPDATE_SENDDATA`,
 				// 	)
 				// ) {
 				// 	return;
@@ -820,6 +824,13 @@ describe("lib/driver/SendThreadMachine", () => {
 							sentCommand
 						];
 					}
+
+					// context.interpreter.onTransition((ctx) => {
+					// 	console.log(ctx.toStrings());
+					// });
+					// context.interpreter.onEvent((evt) => {
+					// 	console.log(JSON.stringify(evt));
+					// });
 
 					context.interpreter.start();
 

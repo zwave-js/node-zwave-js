@@ -1,6 +1,7 @@
 import {
 	actuatorCCs,
 	CommandClasses,
+	NODE_ID_BROADCAST,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -37,6 +38,7 @@ import { FunctionType } from "../message/Constants";
 import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
 import { InterviewStage, NodeStatus } from "../node/Types";
+import { VirtualNode } from "../node/VirtualNode";
 import {
 	AddNodeStatus,
 	AddNodeToNetworkRequest,
@@ -271,6 +273,24 @@ export class ZWaveController extends EventEmitter {
 	/** A dictionary of the nodes connected to this controller */
 	public get nodes(): ReadonlyMap<number, ZWaveNode> {
 		return this._nodes;
+	}
+
+	/** Returns a reference to the (virtual) broadcast node, which allows sending commands to all nodes */
+	public getBroadcastNode(): VirtualNode {
+		return new VirtualNode(
+			NODE_ID_BROADCAST,
+			this.driver,
+			this.nodes.values(),
+		);
+	}
+
+	/** Creates a virtual node that can be used to send multicast commands to several nodes */
+	public getMulticastGroup(nodeIDs: number[]): VirtualNode {
+		return new VirtualNode(
+			undefined,
+			this.driver,
+			nodeIDs.map((id) => this._nodes.get(id)!),
+		);
 	}
 
 	/**
@@ -1722,6 +1742,15 @@ ${associatedNodes.join(", ")}`,
 		}
 
 		let groupExistsAsMultiChannel = false;
+		// Split associations into conventional and endpoint associations
+		const nodeAssociations = distinct(
+			associations
+				.filter((a) => a.endpoint == undefined)
+				.map((a) => a.nodeId),
+		);
+		const endpointAssociations = associations.filter(
+			(a) => a.endpoint != undefined,
+		) as EndpointAddress[];
 
 		// Removing associations is not either/or - we could have a device with duplicated associations between
 		// Association CC and Multi Channel Association CC
@@ -1735,18 +1764,12 @@ ${associatedNodes.join(", ")}`,
 					`Group ${group} does not exist on node ${nodeId}`,
 					ZWaveErrorCodes.AssociationCC_InvalidGroup,
 				);
+			} else {
+				// Remember that the group exists as a multi channel group, otherwise the "normal" association code
+				// will throw if we try to remove the association from a non-existing "normal" group
+				groupExistsAsMultiChannel = true;
 			}
-			// Remember that the group exists as a multi channel group, otherwise the "normal" association code
-			// will throw if we try to remove the association from a non-existing "normal" group
-			groupExistsAsMultiChannel = true;
-			// Split associations into conventional and endpoint associations
-			const nodeAssociations = associations
-				.filter((a) => a.endpoint == undefined)
-				.map((a) => a.nodeId);
-			const endpointAssociations = associations.filter(
-				(a) => a.endpoint != undefined,
-			) as EndpointAddress[];
-			// And remove them
+
 			await node.commandClasses[
 				"Multi Channel Association"
 			].removeDestinations({
@@ -1758,35 +1781,36 @@ ${associatedNodes.join(", ")}`,
 			await node.commandClasses["Multi Channel Association"].getGroup(
 				group,
 			);
+		} else if (associations.some((a) => a.endpoint != undefined)) {
+			throw new ZWaveError(
+				`Node ${nodeId} does not support multi channel associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
 		}
 
-		if (node.supportsCC(CommandClasses.Association)) {
+		if (
+			nodeAssociations.length > 0 &&
+			node.supportsCC(CommandClasses.Association)
+		) {
 			// Use normal associations as a fallback
 			const cc = node.createCCInstanceUnsafe<AssociationCC>(
 				CommandClasses.Association,
 			)!;
 			if (group > cc.getGroupCountCached()) {
-				// Don't throw if the group existed as multi channel
+				// Don't throw if the group existed as multi channel - this branch is only a fallback
 				if (groupExistsAsMultiChannel) return;
 				throw new ZWaveError(
 					`Group ${group} does not exist on node ${nodeId}`,
 					ZWaveErrorCodes.AssociationCC_InvalidGroup,
 				);
 			}
-			if (associations.some((a) => a.endpoint != undefined)) {
-				throw new ZWaveError(
-					`Node ${nodeId} does not support multi channel associations!`,
-					ZWaveErrorCodes.CC_NotSupported,
-				);
-			}
-			// Remove the associations
+			// Remove the remaining node associations
 			await node.commandClasses.Association.removeNodeIds({
 				groupId: group,
-				nodeIds: associations.map((a) => a.nodeId),
+				nodeIds: nodeAssociations,
 			});
 			// Refresh the association list
 			await node.commandClasses.Association.getGroup(group);
-			return;
 		} else {
 			throw new ZWaveError(
 				`Node ${nodeId} does not support associations!`,

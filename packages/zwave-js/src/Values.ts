@@ -10,6 +10,7 @@ export type {
 	ValueMetadataAny,
 	ValueMetadataBoolean,
 	ValueMetadataNumeric,
+	ValueMetadataString,
 	ValueType,
 } from "@zwave-js/core";
 export type {

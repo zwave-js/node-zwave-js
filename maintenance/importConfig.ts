@@ -38,6 +38,7 @@ import { formatId, padVersion } from "../packages/config/src/utils";
 import { CommandClasses, getIntegerLimits } from "../packages/core/src";
 import { num2hex } from "../packages/shared/src";
 import { stringify } from "../packages/shared/src/strings";
+import { enumFilesRecursive } from "./tools";
 
 const execPromise = promisify(child.exec);
 
@@ -860,7 +861,7 @@ function sanitizeNumber(
 	if (isNullishOrEmptyString(value)) return undefined;
 
 	let ret = Number(value);
-	if (isNaN(ret)) {
+	if (Number.isNaN(ret)) {
 		value = value.replace(/[^0-9-\.\,]/g, "");
 		ret = Number(value);
 	}
@@ -1050,29 +1051,6 @@ function getLatestConfigVersion(
 	});
 
 	return configs[configs.length - 1];
-}
-
-async function enumFilesRecursive(
-	rootDir: string,
-	predicate?: (filename: string) => boolean,
-) {
-	const ret: string[] = [];
-	try {
-		const filesAndDirs = await fs.readdir(rootDir);
-		for (const f of filesAndDirs) {
-			const fullPath = path.join(rootDir, f);
-
-			if (fs.statSync(fullPath).isDirectory()) {
-				ret.push(...(await enumFilesRecursive(fullPath, predicate)));
-			} else if (predicate?.(fullPath)) {
-				ret.push(fullPath);
-			}
-		}
-	} catch (err) {
-		console.error(`Cannot read directory: "${rootDir}": ${err}`);
-	}
-
-	return ret;
 }
 
 /** Generates an index for all device config files */

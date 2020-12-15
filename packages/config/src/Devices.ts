@@ -231,10 +231,10 @@ ${prop} is not a string`,
 		if (
 			!isArray(definition.devices) ||
 			!(definition.devices as any[]).every(
-				(dev) =>
+				(dev: unknown) =>
 					isObject(dev) &&
-					isHexKeyWith4Digits((dev as any).productType) &&
-					isHexKeyWith4Digits((dev as any).productId),
+					isHexKeyWith4Digits(dev.productType) &&
+					isHexKeyWith4Digits(dev.productId),
 			)
 		) {
 			throwInvalidConfig(
@@ -453,7 +453,7 @@ export class CompatConfig {
 			if (
 				!isArray(definition.queryOnWakeup) ||
 				!definition.queryOnWakeup.every(
-					(cmd) =>
+					(cmd: unknown) =>
 						isArray(cmd) &&
 						cmd.length >= 2 &&
 						typeof cmd[0] === "string" &&
@@ -507,6 +507,19 @@ error in compat option keepS0NonceUntilNext`,
 
 			this.keepS0NonceUntilNext = definition.keepS0NonceUntilNext;
 		}
+
+		if (definition.preserveRootApplicationCCValueIDs != undefined) {
+			if (definition.preserveRootApplicationCCValueIDs !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option preserveRootApplicationCCValueIDs`,
+				);
+			}
+
+			this.preserveRootApplicationCCValueIDs =
+				definition.preserveRootApplicationCCValueIDs;
+		}
 	}
 
 	public readonly queryOnWakeup?: [
@@ -521,6 +534,7 @@ error in compat option keepS0NonceUntilNext`,
 	][];
 
 	public keepS0NonceUntilNext?: boolean;
+	public preserveRootApplicationCCValueIDs?: boolean;
 }
 
 export class ParamInformation {
@@ -635,10 +649,10 @@ Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
 		if (
 			isArray(definition.options) &&
 			!definition.options.every(
-				(opt) =>
+				(opt: unknown) =>
 					isObject(opt) &&
-					typeof (opt as any).label === "string" &&
-					typeof (opt as any).value === "number",
+					typeof opt.label === "string" &&
+					typeof opt.value === "number",
 			)
 		) {
 			throwInvalidConfig(

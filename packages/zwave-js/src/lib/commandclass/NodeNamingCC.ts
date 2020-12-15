@@ -1,15 +1,10 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
-import {
-	CommandClasses,
-	ValueMetadata,
-	ZWaveError,
-	ZWaveErrorCodes,
-} from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
+import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
-	CCAPI,
+	PhysicalCCAPI,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -20,7 +15,6 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -43,8 +37,22 @@ export enum NodeNamingAndLocationCommand {
 	LocationReport = 0x06,
 }
 
+export function getNodeNameValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Node Naming and Location"],
+		property: "name",
+	};
+}
+
+export function getNodeLocationValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Node Naming and Location"],
+		property: "location",
+	};
+}
+
 @API(CommandClasses["Node Naming and Location"])
-export class NodeNamingAndLocationCCAPI extends CCAPI {
+export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: NodeNamingAndLocationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case NodeNamingAndLocationCommand.NameGet:
@@ -145,6 +153,11 @@ export class NodeNamingAndLocationCCAPI extends CCAPI {
 @implementedVersion(1)
 export class NodeNamingAndLocationCC extends CommandClass {
 	declare ccCommand: NodeNamingAndLocationCommand;
+
+	public skipEndpointInterview(): boolean {
+		// As the name says, this is for the node, not for endpoints
+		return true;
+	}
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
@@ -259,11 +272,7 @@ export class NodeNamingAndLocationCCNameReport extends NodeNamingAndLocationCC {
 		this.persistValues();
 	}
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Any,
-		label: "Node name",
-	})
+	@ccValue({ internal: true })
 	public readonly name: string;
 
 	public toLogEntry(): MessageOrCCLogEntry {
@@ -350,11 +359,7 @@ export class NodeNamingAndLocationCCLocationReport extends NodeNamingAndLocation
 		this.persistValues();
 	}
 
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.Any,
-		label: "Node location",
-	})
+	@ccValue({ internal: true })
 	public readonly location: string;
 
 	public toLogEntry(): MessageOrCCLogEntry {

@@ -14,7 +14,7 @@ import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI, ignoreTimeout } from "./API";
+import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import type { AssociationCC } from "./AssociationCC";
 import {
 	API,
@@ -275,7 +275,7 @@ function getIssuedCommandsValueID(groupId: number): ValueID {
 }
 
 @API(CommandClasses["Association Group Information"])
-export class AssociationGroupInfoCCAPI extends CCAPI {
+export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: AssociationGroupInfoCommand): Maybe<boolean> {
 		switch (cmd) {
 			case AssociationGroupInfoCommand.NameGet:

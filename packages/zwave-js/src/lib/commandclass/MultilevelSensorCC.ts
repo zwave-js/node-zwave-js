@@ -23,7 +23,7 @@ import {
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI, ignoreTimeout } from "./API";
+import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -69,7 +69,7 @@ export type MultilevelSensorValueMetadata = ValueMetadata & {
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses["Multilevel Sensor"])
-export class MultilevelSensorCCAPI extends CCAPI {
+export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: MultilevelSensorCommand): Maybe<boolean> {
 		switch (cmd) {
 			case MultilevelSensorCommand.Get:

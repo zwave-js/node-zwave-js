@@ -148,6 +148,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 		switch (cmd) {
 			case ColorSwitchCommand.SupportedGet:
 			case ColorSwitchCommand.Get:
+				return this.isSinglecast();
 			case ColorSwitchCommand.Set:
 			case ColorSwitchCommand.StartLevelChange:
 			case ColorSwitchCommand.StopLevelChange:
@@ -250,19 +251,19 @@ export class ColorSwitchCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 
-		if (!propertyKey) {
+		if (propertyKey == undefined) {
 			// Might want to treat keyless value as hex "#wwccrrggbb"
 			throwMissingPropertyKey(this.ccId, property);
-		}
-
-		if (typeof propertyKey !== "number") {
+		} else if (typeof propertyKey !== "number") {
 			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
 		}
 
 		await this.set({ [propertyKey]: value });
 
-		// Refresh the current value
-		await this.get(propertyKey);
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get(propertyKey);
+		}
 	};
 }
 

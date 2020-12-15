@@ -9,7 +9,7 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -31,6 +31,7 @@ export enum SupervisionCommand {
 	Report = 0x02,
 }
 
+/** @publicAPI */
 export enum SupervisionStatus {
 	NoSupport = 0x00,
 	Working = 0x01,
@@ -38,6 +39,7 @@ export enum SupervisionStatus {
 	Success = 0xff,
 }
 
+/** @publicAPI */
 export interface SupervisionResult {
 	status: SupervisionStatus;
 	remainingDuration?: Duration;
@@ -53,7 +55,7 @@ export function getNextSessionId(): number {
 }
 
 @API(CommandClasses.Supervision)
-export class SupervisionCCAPI extends CCAPI {
+export class SupervisionCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: SupervisionCommand): Maybe<boolean> {
 		switch (cmd) {
 			case SupervisionCommand.Get:
@@ -209,6 +211,8 @@ export class SupervisionCCGet extends SupervisionCC {
 			this.requestStatusUpdates = options.requestStatusUpdates;
 			this.encapsulated = options.encapsulated;
 			options.encapsulated.encapsulatingCC = this as any;
+			// If the encapsulated command requires security, so does this one
+			if (this.encapsulated.secure) this.secure = true;
 		}
 	}
 

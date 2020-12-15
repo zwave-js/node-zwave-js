@@ -5,8 +5,12 @@
 		"module": "commonjs",
 		"moduleResolution": "node",
 		// "noImplicitAny": true,
+		"lib": [
+			"ES2020"
+		],
 		"target": "es2015",
-		"rootDir": "../"
+		"rootDir": "../",
+		"newLine": "lf"
 	},
 	"include": [
 		"*.ts",

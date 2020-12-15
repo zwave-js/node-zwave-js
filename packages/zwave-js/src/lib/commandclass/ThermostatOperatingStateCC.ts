@@ -9,7 +9,7 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -54,7 +54,7 @@ export enum ThermostatOperatingState {
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses["Thermostat Operating State"])
-export class ThermostatOperatingStateCCAPI extends CCAPI {
+export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 	public supportsCommand(
 		cmd: ThermostatOperatingStateCommand,
 	): Maybe<boolean> {

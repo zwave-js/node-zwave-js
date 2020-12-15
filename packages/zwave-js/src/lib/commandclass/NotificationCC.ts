@@ -24,7 +24,7 @@ import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI, ignoreTimeout } from "./API";
+import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -85,7 +85,7 @@ export function getNotificationModeValueId(): ValueID {
 }
 
 @API(CommandClasses.Notification)
-export class NotificationCCAPI extends CCAPI {
+export class NotificationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: NotificationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case NotificationCommand.Report:
@@ -505,7 +505,7 @@ export class NotificationCC extends CommandClass {
 						},
 					);
 				}
-			} else if (notificationMode === "push") {
+			} /* if (notificationMode === "push") */ else {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
@@ -652,15 +652,13 @@ export class NotificationCCReport extends NotificationCC {
 			) {
 				this.zensorNetSourceNodeId = this.payload[2];
 			}
-			// V2+ requires the alarm bytes to be zero
+			// V2+ requires the alarm bytes to be zero. Manufacturers don't care though, so we don't enforce that.
 			// Don't use the version to decide because we might discard notifications
 			// before the interview is complete
-			if (
-				this.alarmType === 0 &&
-				// To be compliant with the specs, we SHOULD check if alarmLevel === 0
-				// but like it is so often, manufacturers don't care and send invalid notifications anyways
-				this.payload.length >= 7
-			) {
+			if (this.payload.length >= 7) {
+				// Ignore the legacy alarm bytes
+				this.alarmType = 0;
+				this.alarmLevel = 0;
 				this.notificationStatus = this.payload[3];
 				this.notificationType = this.payload[4];
 				this.notificationEvent = this.payload[5];
@@ -754,15 +752,17 @@ export class NotificationCCReport extends NotificationCC {
 				"V1 alarm level": this.alarmLevel,
 			};
 		} else {
+			const valueConfig = lookupNotification(
+				this.notificationType!,
+			)?.lookupValue(this.notificationEvent!);
 			message = {
 				"notification type": getNotificationName(
 					this.notificationType!,
 				),
 				"notification status": this.notificationStatus,
-				"notification event":
-					lookupNotification(this.notificationType!)?.events.get(
-						this.notificationEvent!,
-					)?.label ?? `Unknown (${num2hex(this.notificationEvent)})`,
+				[`notification ${valueConfig?.type ?? "event"}`]:
+					valueConfig?.label ??
+					`Unknown (${num2hex(this.notificationEvent)})`,
 			};
 		}
 		if (this.zensorNetSourceNodeId) {

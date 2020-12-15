@@ -47,8 +47,9 @@ export class TimeCCAPI extends CCAPI {
 		switch (cmd) {
 			case TimeCommand.TimeGet:
 			case TimeCommand.DateGet:
-				return true; // This is mandatory
+				return this.isSinglecast(); // "mandatory"
 			case TimeCommand.TimeOffsetGet:
+				return this.version >= 2 && this.isSinglecast();
 			case TimeCommand.TimeOffsetSet:
 				return this.version >= 2;
 		}
@@ -105,6 +106,11 @@ export class TimeCCAPI extends CCAPI {
 			dstEnd: timezone.endDate,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.getTimezone();
+		}
 	}
 
 	public async getTimezone(): Promise<DSTInfo> {

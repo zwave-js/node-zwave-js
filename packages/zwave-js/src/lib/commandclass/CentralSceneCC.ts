@@ -81,8 +81,9 @@ export class CentralSceneCCAPI extends CCAPI {
 	public supportsCommand(cmd: CentralSceneCommand): Maybe<boolean> {
 		switch (cmd) {
 			case CentralSceneCommand.SupportedGet:
-				return true; // this is mandatory
+				return this.isSinglecast(); // this is mandatory
 			case CentralSceneCommand.ConfigurationGet:
+				return this.version >= 3 && this.isSinglecast();
 			case CentralSceneCommand.ConfigurationSet:
 				return this.version >= 3;
 		}
@@ -143,6 +144,11 @@ export class CentralSceneCCAPI extends CCAPI {
 			slowRefresh,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.getConfiguration();
+		}
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (

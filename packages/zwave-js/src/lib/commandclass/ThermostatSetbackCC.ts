@@ -53,6 +53,7 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 	public supportsCommand(cmd: ThermostatSetbackCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ThermostatSetbackCommand.Get:
+				return this.isSinglecast();
 			case ThermostatSetbackCommand.Set:
 				return true; // This is mandatory
 		}
@@ -96,6 +97,11 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 			setbackState,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get();
+		}
 	}
 }
 

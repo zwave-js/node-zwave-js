@@ -13,7 +13,7 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI, ignoreTimeout } from "./API";
+import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -86,7 +86,7 @@ export function getSupportedSensorTypesValueId(endpointIndex: number): ValueID {
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses["Binary Sensor"])
-export class BinarySensorCCAPI extends CCAPI {
+export class BinarySensorCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: BinarySensorCommand): Maybe<boolean> {
 		switch (cmd) {
 			case BinarySensorCommand.Get:

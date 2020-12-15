@@ -1,3 +1,5 @@
+/* wotan-disable no-restricted-property-access */
+
 import { MockSerialPort } from "@zwave-js/serial";
 import { Driver, ZWaveOptions } from "../driver/Driver";
 
@@ -38,6 +40,15 @@ export async function createAndStartDriver(
 	// with skipInterview: true
 	driver["_valueDB"] = new Map() as any;
 	driver["_valueDB"]!.close = () => Promise.resolve();
+	driver["_metadataDB"] = new Map() as any;
+	driver["_metadataDB"]!.close = () => Promise.resolve();
+
+	// Mock the controller as it will not be initialized with skipInterview: true
+	driver["_controller"] = {
+		ownNodeId: 1,
+		isFunctionSupported: () => true,
+		nodes: new Map(),
+	} as any;
 
 	return {
 		driver,

@@ -21,8 +21,8 @@ import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
-	CCAPI,
 	ignoreTimeout,
+	PhysicalCCAPI,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -136,7 +136,7 @@ export function getResetValueId(endpoint: number, type?: number): ValueID {
 }
 
 @API(CommandClasses.Meter)
-export class MeterCCAPI extends CCAPI {
+export class MeterCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: MeterCommand): Maybe<boolean> {
 		switch (cmd) {
 			case MeterCommand.Get:
@@ -301,9 +301,9 @@ export class MeterCC extends CommandClass {
 
 		if (this.version >= 2) {
 			let type: number;
-			let supportsReset: boolean;
-			let supportedScales: readonly number[];
-			let supportedRateTypes: readonly RateType[];
+			let supportsReset: boolean | undefined;
+			let supportedScales: readonly number[] | undefined;
+			let supportedRateTypes: readonly RateType[] | undefined;
 
 			const storedType = node.getValue<number>(
 				getTypeValueId(this.endpointIndex),
@@ -367,9 +367,8 @@ supports reset:       ${supportsReset}`;
 			}
 
 			if (
-				type! == undefined ||
-				supportedRateTypes! == undefined ||
-				supportedScales! == undefined
+				supportedRateTypes == undefined ||
+				supportedScales == undefined
 			) {
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,

@@ -128,6 +128,8 @@ removeNodeFromAllAssocations(nodeId: number): Promise<void>;
 
 Contains information about a single association group.
 
+<!-- #import AssociationGroup from "zwave-js" -->
+
 ```ts
 interface AssociationGroup {
 	/** How many nodes this association group supports */
@@ -149,11 +151,11 @@ interface AssociationGroup {
 
 This defines the target of a node's association:
 
+<!-- #import Association from "zwave-js" -->
+
 ```ts
 interface Association {
-	/** The target node */
 	nodeId: number;
-	/** The target endpoint on the target node */
 	endpoint?: number;
 }
 ```
@@ -161,6 +163,31 @@ interface Association {
 If the target endpoint is not given, the association is a "node association". If an endpoint is given, the association is an "endpoint association".
 
 A target endpoint of `0` (i.e. the root endpoint), the association targets the node itself and acts like a node association for the target node. However, you should note that some devices don't like having a root endpoint association as the lifeline and must be configured with a node association.
+
+### `getBroadcastNode`
+
+```ts
+getBroadcastNode(): VirtualNode
+```
+
+Returns a reference to the (virtual) broadcast node. This can be used to send a command to all supporting nodes in the network with a single message. You can target individual endpoints as usual.
+
+### `getMulticastGroup`
+
+```ts
+getMulticastGroup(nodeIDs: number[]): VirtualNode
+```
+
+Creates a virtual node that can be used to send commands to multiple supporting nodes with a single (multicast) message. You can target individual endpoints as usual.
+
+> [!NOTE]
+> Virtual nodes do not support all methods that physical nodes do. Check [`VirtualNode`](api/virtual-node-endpoint.md) for details on the available methods and properties.
+
+> [!NOTE]
+> Support for secure communication is very limited:
+>
+> -   Broadcasting or multicasting commands is not possible using `Security S0`.
+> -   Secure multicast requires `Security S2`, which is not yet supported by `zwave-js` and requires devices that support it.
 
 ## Controller properties
 
@@ -191,8 +218,10 @@ readonly type: ZWaveLibraryTypes
 
 Returns the type of the Z-Wave library that is supported by the controller hardware. The following values are possible:
 
+<!-- #import ZWaveLibraryTypes from "zwave-js" -->
+
 ```ts
-export enum ZWaveLibraryTypes {
+enum ZWaveLibraryTypes {
 	"Unknown",
 	"Static Controller",
 	"Controller",

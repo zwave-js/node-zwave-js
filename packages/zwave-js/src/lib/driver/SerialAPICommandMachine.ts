@@ -1,5 +1,3 @@
-// wotan-disable no-uninferred-type-parameter
-
 import * as Sentry from "@sentry/node";
 import {
 	assign,
@@ -112,7 +110,7 @@ function logOutgoingMessage(ctx: SerialAPICommandContext) {
 		// Enrich error data in case something goes wrong
 		Sentry.addBreadcrumb({
 			category: "message",
-			timestamp: Date.now(),
+			timestamp: Date.now() / 1000,
 			type: "debug",
 			data: {
 				direction: "outbound",

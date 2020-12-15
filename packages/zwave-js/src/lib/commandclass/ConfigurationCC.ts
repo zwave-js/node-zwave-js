@@ -29,8 +29,8 @@ import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
-	CCAPI,
 	ignoreTimeout,
+	PhysicalCCAPI,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -134,7 +134,7 @@ const isParamInfoFromConfigValueId: ValueID = {
 };
 
 @API(CommandClasses.Configuration)
-export class ConfigurationCCAPI extends CCAPI {
+export class ConfigurationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: ConfigurationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ConfigurationCommand.Get:

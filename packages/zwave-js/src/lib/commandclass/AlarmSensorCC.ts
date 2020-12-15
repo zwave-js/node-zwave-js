@@ -14,7 +14,7 @@ import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI, ignoreTimeout } from "./API";
+import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -103,7 +103,7 @@ export function getSupportedSensorTypesValueId(endpointIndex: number): ValueID {
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses["Alarm Sensor"])
-export class AlarmSensorCCAPI extends CCAPI {
+export class AlarmSensorCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: AlarmSensorCommand): Maybe<boolean> {
 		switch (cmd) {
 			case AlarmSensorCommand.Get:

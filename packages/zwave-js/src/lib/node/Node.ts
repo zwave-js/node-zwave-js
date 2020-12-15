@@ -68,6 +68,10 @@ import {
 } from "../commandclass/ManufacturerSpecificCC";
 import { getEndpointCCsValueId } from "../commandclass/MultiChannelCC";
 import {
+	getNodeLocationValueId,
+	getNodeNameValueId,
+} from "../commandclass/NodeNamingCC";
+import {
 	NotificationCC,
 	NotificationCCReport,
 } from "../commandclass/NotificationCC";
@@ -86,6 +90,13 @@ import {
 	WakeUpCC,
 	WakeUpCCWakeUpNotification,
 } from "../commandclass/WakeUpCC";
+import {
+	getNodeTypeValueId,
+	getRoleTypeValueId,
+	getZWavePlusVersionValueId,
+	ZWavePlusNodeType,
+	ZWavePlusRoleType,
+} from "../commandclass/ZWavePlusCC";
 import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
@@ -501,6 +512,52 @@ export class ZWaveNode extends Endpoint {
 		return this.getValue<string[]>(getFirmwareVersionsValueId())?.[0];
 	}
 
+	public get zwavePlusVersion(): number | undefined {
+		return this.getValue(getZWavePlusVersionValueId());
+	}
+
+	public get nodeType(): ZWavePlusNodeType | undefined {
+		return this.getValue(getNodeTypeValueId());
+	}
+
+	public get roleType(): ZWavePlusRoleType | undefined {
+		return this.getValue(getRoleTypeValueId());
+	}
+
+	/**
+	 * The user-defined name of this node. Uses the value reported by `Node Naming and Location CC` if it exists.
+	 *
+	 * **Note:** Setting this value only updates the name locally. To permanently change the name of the node, use
+	 * the `commandClasses` API.
+	 */
+	public get name(): string | undefined {
+		return this.getValue(getNodeNameValueId());
+	}
+	public set name(value: string | undefined) {
+		if (value != undefined) {
+			this._valueDB.setValue(getNodeNameValueId(), value);
+		} else {
+			this._valueDB.removeValue(getNodeNameValueId());
+		}
+	}
+
+	/**
+	 * The user-defined location of this node. Uses the value reported by `Node Naming and Location CC` if it exists.
+	 *
+	 * **Note:** Setting this value only updates the location locally. To permanently change the location of the node, use
+	 * the `commandClasses` API.
+	 */
+	public get location(): string | undefined {
+		return this.getValue(getNodeLocationValueId());
+	}
+	public set location(value: string | undefined) {
+		if (value != undefined) {
+			this._valueDB.setValue(getNodeLocationValueId(), value);
+		} else {
+			this._valueDB.removeValue(getNodeLocationValueId());
+		}
+	}
+
 	private _deviceConfig: DeviceConfig | undefined;
 	/**
 	 * Contains additional information about this node, loaded from a config file
@@ -555,9 +612,11 @@ export class ZWaveNode extends Endpoint {
 
 	/** Returns a list of all value names that are defined on all endpoints of this node */
 	public getDefinedValueIDs(): TranslatedValueID[] {
-		const ret: ValueID[] = [];
+		let ret: ValueID[] = [];
 		for (const endpoint of this.getAllEndpoints()) {
-			for (const cc of endpoint.implementedCommandClasses.keys()) {
+			for (const [cc, info] of endpoint.implementedCommandClasses) {
+				// Don't return value IDs which are only controlled
+				if (!info.isSupported) continue;
 				const ccInstance = endpoint.createCCInstanceUnsafe(cc);
 				if (ccInstance) {
 					ret.push(...ccInstance.getDefinedValueIDs());
@@ -565,14 +624,15 @@ export class ZWaveNode extends Endpoint {
 			}
 		}
 
-		// Application command classes of the Root Device capabilities that are also advertised by at
-		// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
-		// via service discovery mechanisms like mDNS or to users in a GUI.
-		return (
-			this.filterRootApplicationCCValueIDs(ret)
-				// Filter first, then translate to reduce the amount of work we need to do
-				.map((id) => this.translateValueID(id))
-		);
+		if (!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs) {
+			// Application command classes of the Root Device capabilities that are also advertised by at
+			// least one End Point SHOULD be filtered out by controlling nodes before presenting the functionalities
+			// via service discovery mechanisms like mDNS or to users in a GUI.
+			ret = this.filterRootApplicationCCValueIDs(ret);
+		}
+
+		// Translate the remaining value IDs before exposing them to applications
+		return ret.map((id) => this.translateValueID(id));
 	}
 
 	private shouldHideValueID(
@@ -1618,7 +1678,8 @@ version:               ${this.version}`;
 			command.endpointIndex === 0 &&
 			command.constructor.name.endsWith("Report") &&
 			this.getEndpointCount() >= 1 &&
-			this.supportsCC(CommandClasses["Multi Channel Association"]) &&
+			// Don't check for MCA support or devices without it won't be handled
+			// Instead rely on the version. If MCA is not supported, this will be 0
 			this.getCCVersion(CommandClasses["Multi Channel Association"]) < 3
 		) {
 			// Force the CC to store its values again under endpoint 1
@@ -2838,7 +2899,7 @@ version:               ${this.version}`;
 						const numEndpointIndex = parseInt(endpointIndex, 10);
 
 						// Verify the info object
-						const info = (endpoints as any)[
+						const info = endpoints[
 							endpointIndex
 						] as CommandClassInfo;
 						info.isSupported = enforceType(
