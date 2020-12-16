@@ -1,4 +1,4 @@
-// This file is auto-generated using "npm run config index"
+// This file is auto-generated using "yarn run config import -i"
 [
     {
         "manufacturerId": "0x0000",
@@ -12656,7 +12656,7 @@
         "productId": "0x0203",
         "firmwareVersion": {
             "min": "0.0",
-            "max": "255.0"
+            "max": "255.255"
         },
         "filename": "0x019b/z-trm3.json"
     },
