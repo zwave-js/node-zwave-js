@@ -2,23 +2,23 @@
 
 If you need to test changes from GitHub, e.g. a branch that fixes an issue you have, here's what you need to do:
 
-1. **This repo uses `npm` workspaces**, so make sure you have updated `npm` to at least `v7`.  
-   If not: `npm i -g npm@7`
+1. **This repo uses `yarn` workspaces**, so make sure you have `yarn` installed.  
+   If not: `npm i -g yarn`
 1. Clone and open this repo, check out the branch:
     ```bash
     git clone https://github.com/zwave-js/node-zwave-js.git
     cd node-zwave-js
     git checkout branch-you-want-to-test
     ```
-1. Install dependencies, compile the sources and link the `npm` package
+1. Install dependencies, compile the sources and link the packages
     ```bash
-    npm install
-    npm run build
-    cd packages/zwave-js
-    npm link
+    yarn
+    yarn run build
+    lerna exec -- yarn link
     ```
 1. Open directory of your application, run
     ```bash
-    npm link zwave-js
+    yarn link zwave-js
     ```
+    If you use other packages from the `@zwave-js/*` scope, link them the same way.
 1. (Re)start your application
