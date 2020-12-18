@@ -4,6 +4,13 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Config file changes
+* Add Heiman Smoke detector
+
+### Bugfixes
+* Missing responses from the node when requesting the current values during the `Indicator CC` no longer abort the interview
+
 ## 5.6.0 (2020-12-14)
 ### Config file changes
 * Added a config file for `HeatIt Z-TRM3`
