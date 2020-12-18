@@ -10,6 +10,10 @@
         {
             "productType": "0x1301",
             "productId": "0x1000"
+        },
+        {
+            "productType": "0x1301",
+            "productId": "0x1001"
         }
     ],
     "firmwareVersion": {
