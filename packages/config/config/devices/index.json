@@ -13542,8 +13542,8 @@
     },
     {
         "manufacturerId": "0x0258",
-        "productType": "0x0003",
-        "productId": "0x0087",
+        "productType": "0x0100",
+        "productId": "0x1027",
         "firmwareVersion": {
             "min": "0.0",
             "max": "255.255"
@@ -13552,18 +13552,8 @@
     },
     {
         "manufacturerId": "0x0258",
-        "productType": "0x0003",
-        "productId": "0x1087",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0258/nas-wr01ze.json"
-    },
-    {
-        "manufacturerId": "0x0258",
-        "productType": "0x0003",
-        "productId": "0x1483",
+        "productType": "0x0200",
+        "productId": "0x1027",
         "firmwareVersion": {
             "min": "0.0",
             "max": "255.255"
@@ -13632,16 +13622,6 @@
     },
     {
         "manufacturerId": "0x0260",
-        "productType": "0x8002",
-        "productId": "0x1000",
-        "firmwareVersion": {
-            "min": "0.0",
-            "max": "255.255"
-        },
-        "filename": "0x0260/hs1sa-z.json"
-    },
-    {
-        "manufacturerId": "0x0260",
         "productType": "0x8003",
         "productId": "0x1000",
         "firmwareVersion": {
@@ -13689,6 +13669,16 @@
             "max": "255.255"
         },
         "filename": "0x0260/hs1ms-z.json"
+    },
+    {
+        "manufacturerId": "0x0260",
+        "productType": "0x8002",
+        "productId": "0x1000",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0260/hs1sa-z.json"
     },
     {
         "manufacturerId": "0x0260",
