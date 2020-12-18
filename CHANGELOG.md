@@ -4,6 +4,15 @@
 	## __WORK IN PROGRESS__
 -->
 
+## 5.6.1 (2020-12-18)
+### Config file changes
+* Add Heiman Smoke detector
+* New product ID for Fibaro Heat controller
+* Add product config for AEOTEC Range Extender 7
+
+### Bugfixes
+* Missing responses from the node when requesting the current values during the `Indicator CC` no longer abort the interview
+
 ## 5.6.0 (2020-12-14)
 ### Config file changes
 * Added a config file for `HeatIt Z-TRM3`
