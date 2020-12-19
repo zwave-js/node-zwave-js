@@ -1,11 +1,11 @@
-// Z-Wave.Me HS1DS
-// Window / Door Sensor
+// Z-Wave.Me UZB
+// Z-Wave USB Stick
 {
     "_approved": true,
     "manufacturer": "Z-Wave.Me",
     "manufacturerId": "0x0115",
-    "label": "HS1DS",
-    "description": "Window / Door Sensor",
+    "label": "UZB",
+    "description": "Z-Wave USB Stick",
     "devices": [
         {
             "productType": "0x0400",
