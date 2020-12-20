@@ -9,6 +9,7 @@ import {
 	CacheMetadata,
 	CacheValue,
 	CommandClasses,
+	CommandClassInfo,
 	CRC16_CCITT,
 	getCCName,
 	MAX_NODES,
@@ -48,11 +49,7 @@ import {
 	getSceneValueId,
 } from "../commandclass/CentralSceneCC";
 import { ClockCCReport } from "../commandclass/ClockCC";
-import {
-	CommandClass,
-	CommandClassInfo,
-	getCCValueMetadata,
-} from "../commandclass/CommandClass";
+import { CommandClass, getCCValueMetadata } from "../commandclass/CommandClass";
 import {
 	FirmwareUpdateMetaDataCC,
 	FirmwareUpdateMetaDataCCGet,
@@ -1612,8 +1609,17 @@ version:               ${this.version}`;
 		}
 
 		if (this.deviceConfig) {
-			// TODO: Override stuff
+			// Add CCs the device config file tells us to
+			const addCCs = this.deviceConfig.compat?.addCCs;
+			if (addCCs) {
+				for (const [cc, { endpoints }] of addCCs) {
+					for (const [ep, info] of endpoints) {
+						this.getEndpoint(ep)?.addCC(cc, info);
+					}
+				}
+			}
 		}
+
 		await this.setInterviewStage(InterviewStage.OverwriteConfig);
 	}
 

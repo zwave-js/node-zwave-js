@@ -331,5 +331,25 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		"commandClasses": {
+			"add": {
+				"0x31": {
+					// Multilevel Sensor is exposed on endpoints 2-4, but not included in the NIF
+					"endpoints": {
+						"2": {
+							"isSupported": true
+						},
+						"3": {
+							"isSupported": true
+						},
+						"4": {
+							"isSupported": true
+						}
+					}
+				}
+			}
+		}
 	}
 }
