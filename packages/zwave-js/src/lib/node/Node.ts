@@ -958,6 +958,15 @@ export class ZWaveNode extends Endpoint {
 			this.interviewStage === InterviewStage.RestartFromCache ||
 			this.interviewStage === InterviewStage.NodeInfo
 		) {
+			// For controller sticks we need to load the device config to know about supported CCs
+			if (this.isControllerNode()) await this.overwriteConfig();
+		}
+
+		if (
+			this.interviewStage === InterviewStage.RestartFromCache ||
+			this.interviewStage === InterviewStage.NodeInfo ||
+			this.interviewStage === InterviewStage.OverwriteControllerConfig
+		) {
 			// Only advance the interview if it was completed, otherwise abort
 			if (await this.interviewCCs()) {
 				await this.setInterviewStage(InterviewStage.CommandClasses);
@@ -966,12 +975,18 @@ export class ZWaveNode extends Endpoint {
 			}
 		}
 
-		if (this.interviewStage === InterviewStage.CommandClasses) {
+		if (
+			this.interviewStage === InterviewStage.CommandClasses &&
+			!this.isControllerNode()
+		) {
 			// Load a config file for this node if it exists and overwrite the previously reported information
 			await this.overwriteConfig();
 		}
 
-		if (this.interviewStage === InterviewStage.OverwriteConfig) {
+		if (
+			this.interviewStage === InterviewStage.OverwriteConfig ||
+			this.interviewStage === InterviewStage.CommandClasses
+		) {
 			// Request a list of this node's neighbors
 			if (!(await tryInterviewStage(() => this.queryNeighbors()))) {
 				return false;
@@ -1602,25 +1617,33 @@ version:               ${this.version}`;
 
 	/** Overwrites the reported configuration with information from a config file */
 	protected async overwriteConfig(): Promise<void> {
+		const applyDeviceConfig = () => {
+			if (this.deviceConfig) {
+				// Add CCs the device config file tells us to
+				const addCCs = this.deviceConfig.compat?.addCCs;
+				if (addCCs) {
+					for (const [cc, { endpoints }] of addCCs) {
+						for (const [ep, info] of endpoints) {
+							this.getEndpoint(ep)?.addCC(cc, info);
+						}
+					}
+				}
+			}
+		};
+
 		if (this.isControllerNode()) {
 			// The device config was not loaded prior to this step because the Version CC is not interviewed.
 			// Therefore do it here.
 			await this.loadDeviceConfig();
+			applyDeviceConfig();
+			await this.setInterviewStage(
+				InterviewStage.OverwriteControllerConfig,
+			);
+		} else {
+			// For normal nodes, the device config was already loaded
+			applyDeviceConfig();
+			await this.setInterviewStage(InterviewStage.OverwriteConfig);
 		}
-
-		if (this.deviceConfig) {
-			// Add CCs the device config file tells us to
-			const addCCs = this.deviceConfig.compat?.addCCs;
-			if (addCCs) {
-				for (const [cc, { endpoints }] of addCCs) {
-					for (const [ep, info] of endpoints) {
-						this.getEndpoint(ep)?.addCC(cc, info);
-					}
-				}
-			}
-		}
-
-		await this.setInterviewStage(InterviewStage.OverwriteConfig);
 	}
 
 	/** @internal */

@@ -115,6 +115,13 @@ export enum InterviewStage {
 	// ===== the stuff below changes frequently, so it has to be redone on every start =====
 
 	/**
+	 * Device information for the controller node has been loaded from a config file.
+	 * If defined, some of the reported information will be overwritten based on the
+	 * config file contents.
+	 */
+	OverwriteControllerConfig,
+
+	/**
 	 * Information for all command classes has been queried.
 	 * This includes static information that is requested once as well as dynamic
 	 * information that is requested on every restart.
@@ -124,7 +131,7 @@ export enum InterviewStage {
 	// TODO: Heal network on startup
 
 	/**
-	 * Device information for the node has been loaded from a config file.
+	 * Device information for a secondary node has been loaded from a config file.
 	 * If defined, some of the reported information will be overwritten based on the
 	 * config file contents.
 	 */
