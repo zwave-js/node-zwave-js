@@ -255,6 +255,7 @@ export class BatteryCCReport extends BatteryCC {
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		max: 100,
+		unit: "%",
 		label: "Battery level",
 	})
 	public get level(): number {
