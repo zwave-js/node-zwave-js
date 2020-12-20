@@ -15051,6 +15051,13 @@
         "filename": "0x0373/id-150_1.6.json"
     },
     {
+        "manufacturerId": "0x0373",
+        "productType": "0x0003",
+        "productId": "0x0001",
+        "firmwareVersion": false,
+        "filename": "0x0373/id-150_compat.json"
+    },
+    {
         "manufacturerId": "0x0403",
         "productType": "0x0002",
         "productId": "0x0001",

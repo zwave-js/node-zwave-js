@@ -29,7 +29,7 @@ export interface DeviceConfigIndexEntry {
 	manufacturerId: string;
 	productType: string;
 	productId: string;
-	firmwareVersion: FirmwareVersionRange;
+	firmwareVersion: FirmwareVersionRange | false;
 	filename: string;
 }
 
@@ -112,8 +112,7 @@ export function addDeviceToIndex(
 	productType: number,
 	productId: number,
 	filename: string,
-	firmwareVersionMin?: string,
-	firmwareVersionMax?: string,
+	firmwareVersion?: FirmwareVersionRange | false,
 ): void {
 	if (!index) {
 		throw new ZWaveError(
@@ -126,10 +125,13 @@ export function addDeviceToIndex(
 		manufacturerId: formatId(manufacturerId),
 		productId: formatId(productId),
 		productType: formatId(productType),
-		firmwareVersion: {
-			min: firmwareVersionMin || "0.0",
-			max: firmwareVersionMax || "255.255",
-		},
+		firmwareVersion:
+			firmwareVersion === false
+				? false
+				: {
+						min: firmwareVersion?.min || "0.0",
+						max: firmwareVersion?.max || "255.255",
+				  },
 		filename: filename,
 	};
 
@@ -145,13 +147,15 @@ export function getIndex(): DeviceConfigIndexEntry[] | undefined {
  * @param manufacturerId The manufacturer id of the device
  * @param productType The product type of the device
  * @param productId The product id of the device
- * @param firmwareVersion If known, configuration for a specific firmware version can be loaded
+ * @param firmwareVersion If known, configuration for a specific firmware version can be loaded.
+ * If this is `undefined` or not given, the first matching file with a defined firmware range will be returned.
+ * If this is `false`, **only** the first matching file without a firmware version (`firmwareVersion: false`) will be returned.
  */
 export async function lookupDevice(
 	manufacturerId: number,
 	productType: number,
 	productId: number,
-	firmwareVersion?: string,
+	firmwareVersion?: string | false,
 ): Promise<DeviceConfig | undefined> {
 	if (!index) {
 		throw new ZWaveError(
@@ -161,14 +165,27 @@ export async function lookupDevice(
 	}
 
 	// Look up the device in the index
-	const indexEntry = index.find(
-		getDeviceEntryPredicate(
+	let indexEntry: DeviceConfigIndexEntry | undefined;
+	if (firmwareVersion === false) {
+		// A config file with no firmware version is explicitly requested
+		const predicate = getDeviceEntryPredicate(
 			manufacturerId,
 			productType,
 			productId,
-			firmwareVersion,
-		),
-	);
+		);
+		indexEntry = index.find(
+			(e) => e.firmwareVersion === false && predicate(e),
+		);
+	} else {
+		indexEntry = index.find(
+			getDeviceEntryPredicate(
+				manufacturerId,
+				productType,
+				productId,
+				firmwareVersion,
+			),
+		);
+	}
 
 	if (indexEntry) {
 		const filePath = path.join(configDir, "devices", indexEntry.filename);
@@ -247,7 +264,9 @@ devices is malformed (not an object or type/id that is not a 4-digit hex key)`,
 			({ productType, productId }) => ({ productType, productId }),
 		);
 
-		if (
+		if (definition.firmwareVersion === false) {
+			this.firmwareVersion = false;
+		} else if (
 			!isObject(definition.firmwareVersion) ||
 			!isFirmwareVersion(definition.firmwareVersion.min) ||
 			!isFirmwareVersion(definition.firmwareVersion.max)
@@ -257,9 +276,10 @@ devices is malformed (not an object or type/id that is not a 4-digit hex key)`,
 				`config/devices/${filename}:
 firmwareVersion is malformed or invalid`,
 			);
+		} else {
+			const { min, max } = definition.firmwareVersion;
+			this.firmwareVersion = { min, max };
 		}
-		const { min, max } = definition.firmwareVersion;
-		this.firmwareVersion = { min, max };
 
 		if (definition.associations != undefined) {
 			const associations = new Map<number, AssociationConfig>();
@@ -358,7 +378,7 @@ compat is not an object`,
 		productType: string;
 		productId: string;
 	}[];
-	public readonly firmwareVersion: FirmwareVersionRange;
+	public readonly firmwareVersion: FirmwareVersionRange | false;
 	public readonly associations?: ReadonlyMap<number, AssociationConfig>;
 	public readonly paramInformation?: ParamInfoMap;
 	/**
