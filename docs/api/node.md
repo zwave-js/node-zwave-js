@@ -143,6 +143,7 @@ extractFirmware(rawData: Buffer, format: FirmwareFileFormat): Firmware
 -   `"aeotec"` - A Windows executable (`.exe` or `.ex_`) that contains Aeotec's upload tool
 -   `"otz"` - A compressed firmware file in Intel HEX format
 -   `"ota"` or `"hex"` - An uncompressed firmware file in Intel HEX format
+-   `"gecko"` - A binary gecko bootloader firmware file with `.gbl` extension
 
 > [!NOTE]  
 > `.hec` firmware update files are encrypted with proprietary encryption and not supported by `zwave-js`
@@ -214,6 +215,28 @@ readonly id: number
 ```
 
 Returns the ID this node has been assigned by the controller. This is a number between 1 and 232.
+
+### `name`
+
+```ts
+name: string | undefined;
+```
+
+The user-defined name of this node. Uses the value reported by `Node Naming and Location CC` if it exists.
+
+> [!NOTE]
+> Setting this value only updates the name locally. To permanently change the name of the node, use the [`commandClasses` API](api/endpoint.md#commandClasses).
+
+### `location`
+
+```ts
+location: string | undefined;
+```
+
+The user-defined location of this node. Uses the value reported by `Node Naming and Location CC` if it exists.
+
+> [!NOTE]
+> Setting this value only updates the location locally. To permanently change the location of the node, use the [`commandClasses` API](api/endpoint.md#commandClasses).
 
 ### `status`
 
@@ -289,6 +312,54 @@ readonly deviceClass: DeviceClass
 ```
 
 This property returns the node's [DeviceClass](#DeviceClass-class), which provides further information about the kind of device this node is.
+
+### `zwavePlusVersion`
+
+```ts
+readonly zwavePlusVersion: number | undefined
+```
+
+Returns the version of the `Z-Wave+` Command Class this node supports. If the CC is supported, the value only exists **after** the node is ready.
+
+### `nodeType`
+
+```ts
+readonly nodeType: ZWavePlusNodeType | undefined
+```
+
+If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` node type this device has, which is one of the following values:
+
+<!-- #import ZWavePlusNodeType from "zwave-js" -->
+
+```ts
+enum ZWavePlusNodeType {
+	Node = 0x00, // ZWave+ Node
+	IPGateway = 0x02, // ZWave+ for IP Gateway
+}
+```
+
+### `roleType`
+
+```ts
+readonly roleType: ZWavePlusRoleType | undefined
+```
+
+If the `Z-Wave+` Command Class is supported, this returns the `Z-Wave+` role type this device has, which is one of the following values:
+
+<!-- #import ZWavePlusRoleType from "zwave-js" -->
+
+```ts
+enum ZWavePlusRoleType {
+	CentralStaticController = 0x00,
+	SubStaticController = 0x01,
+	PortableController = 0x02,
+	PortableReportingController = 0x03,
+	PortableSlave = 0x04,
+	AlwaysOnSlave = 0x05,
+	SleepingReportingSlave = 0x06,
+	SleepingListeningSlave = 0x07,
+}
+```
 
 ### `isListening`
 

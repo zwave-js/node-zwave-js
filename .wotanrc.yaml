@@ -1,3 +1,6 @@
 extends: wotan:recommended
 rules:
     return-never-call: off
+    prefer-dot-notation: off # this is handled by ESLint and more configurable
+    no-uninferred-type-parameter: off # this introduces more noise than it helps
+

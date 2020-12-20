@@ -59,11 +59,12 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 	public supportsCommand(cmd: ClimateControlScheduleCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ClimateControlScheduleCommand.Set:
+			case ClimateControlScheduleCommand.OverrideSet:
+				return true; // mandatory
 			case ClimateControlScheduleCommand.Get:
 			case ClimateControlScheduleCommand.ChangedGet:
-			case ClimateControlScheduleCommand.OverrideSet:
 			case ClimateControlScheduleCommand.OverrideGet:
-				return true; // This is mandatory
+				return this.isSinglecast();
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -84,6 +85,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			switchPoints,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get(weekday);
+		}
 	}
 
 	public async get(weekday: Weekday): Promise<readonly Switchpoint[]> {
@@ -158,6 +164,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			overrideState: state,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.getOverride();
+		}
 	}
 }
 

@@ -1,4 +1,4 @@
-// This file is auto-generated using "npm run config index"
+// This file is auto-generated using "yarn run config import -i"
 [
     {
         "manufacturerId": "0x0000",
@@ -8223,6 +8223,16 @@
     {
         "manufacturerId": "0x010f",
         "productType": "0x1301",
+        "productId": "0x1001",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x010f/fgt001.json"
+    },
+    {
+        "manufacturerId": "0x010f",
+        "productType": "0x1301",
         "productId": "0x1000",
         "firmwareVersion": {
             "min": "0.0",
@@ -8518,7 +8528,7 @@
             "min": "0.0",
             "max": "255.255"
         },
-        "filename": "0x0115/hs1ds.json"
+        "filename": "0x0115/zme_uzb.json"
     },
     {
         "manufacturerId": "0x0115",
@@ -12656,7 +12666,7 @@
         "productId": "0x0203",
         "firmwareVersion": {
             "min": "0.0",
-            "max": "255.0"
+            "max": "255.255"
         },
         "filename": "0x019b/z-trm3.json"
     },
@@ -13629,6 +13639,16 @@
             "max": "255.255"
         },
         "filename": "0x025d/da_vinci_v9.json"
+    },
+    {
+        "manufacturerId": "0x0260",
+        "productType": "0x8002",
+        "productId": "0x1000",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0260/hs1sa-z.json"
     },
     {
         "manufacturerId": "0x0260",
@@ -14839,6 +14859,16 @@
             "max": "255.255"
         },
         "filename": "0x0371/aeotec_nanomote_quad.json"
+    },
+    {
+        "manufacturerId": "0x0371",
+        "productType": "0x0004",
+        "productId": "0x00bd",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0371/zwa189.json"
     },
     {
         "manufacturerId": "0x0371",

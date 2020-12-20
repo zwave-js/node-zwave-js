@@ -158,4 +158,4 @@ for (const file of definedCCs) {
 	);
 }
 
-if (!module.parent) void generateCCExports();
+if (require.main === module) void generateCCExports();

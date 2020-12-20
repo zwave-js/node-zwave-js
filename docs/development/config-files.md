@@ -139,6 +139,6 @@ Partial parameters must follow these rules:
 
 In order to get your configuration file included in this library, two things must be done:
 
-1. Update the index file using `npm run config -- -i` (don't forget the double dash!).
-1. Check your new or changed files for potential problems using `npm run lint:config`. Warnings in your file may be tolerated if there is a good reason for them. Errors must be fixed.
+1. Update the index file using `yarn run config import -i`.
+1. Check your new or changed files for potential problems using `lerna run lint:config`. Warnings in your file may be tolerated if there is a good reason for them. Errors must be fixed.
 1. Create a PR.

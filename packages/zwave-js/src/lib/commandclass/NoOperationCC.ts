@@ -1,7 +1,7 @@
 import { CommandClasses } from "@zwave-js/core";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CommandClass,
@@ -14,7 +14,7 @@ import { isCommandClassContainer } from "./ICommandClassContainer";
 // @noInterview There's nothing to interview here
 
 @API(CommandClasses["No Operation"])
-export class NoOperationCCAPI extends CCAPI {
+export class NoOperationCCAPI extends PhysicalCCAPI {
 	public async send(): Promise<void> {
 		await this.driver.sendCommand(
 			new NoOperationCC(this.driver, {

@@ -24,7 +24,7 @@ import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI, ignoreTimeout } from "./API";
+import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -85,7 +85,7 @@ export function getNotificationModeValueId(): ValueID {
 }
 
 @API(CommandClasses.Notification)
-export class NotificationCCAPI extends CCAPI {
+export class NotificationCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: NotificationCommand): Maybe<boolean> {
 		switch (cmd) {
 			case NotificationCommand.Report:
@@ -505,7 +505,7 @@ export class NotificationCC extends CommandClass {
 						},
 					);
 				}
-			} else if (notificationMode === "push") {
+			} /* if (notificationMode === "push") */ else {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];

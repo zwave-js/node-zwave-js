@@ -8,7 +8,7 @@ import * as fs from "fs-extra";
 import * as path from "path";
 
 const apiRegex = /^@API\(CommandClasses(?:\.|\[)(.+?)(?:\])?\)/m;
-const classNameRegex = /class ([^\s]+) extends CCAPI/;
+const classNameRegex = /class ([^\s]+) extends (\w+)?CCAPI/;
 const ccDir = path.join(__dirname, "..", "src/lib/commandclass");
 const apiFile = path.join(ccDir, "API.ts");
 const startToken = "\t// AUTO GENERATION BELOW";
@@ -58,4 +58,4 @@ export async function generateCCAPIInterface(): Promise<void> {
 	await fs.writeFile(apiFile, apiFileContent, "utf8");
 }
 
-if (!module.parent) void generateCCAPIInterface();
+if (require.main === module) void generateCCAPIInterface();

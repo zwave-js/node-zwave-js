@@ -37,6 +37,7 @@ export class LanguageCCAPI extends CCAPI {
 	public supportsCommand(cmd: LanguageCommand): Maybe<boolean> {
 		switch (cmd) {
 			case LanguageCommand.Get:
+				return this.isSinglecast();
 			case LanguageCommand.Set:
 				return true; // This is mandatory
 		}
@@ -71,6 +72,11 @@ export class LanguageCCAPI extends CCAPI {
 			country,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get();
+		}
 	}
 }
 

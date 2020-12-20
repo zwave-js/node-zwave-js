@@ -861,7 +861,7 @@ function sanitizeNumber(
 	if (isNullishOrEmptyString(value)) return undefined;
 
 	let ret = Number(value);
-	if (isNaN(ret)) {
+	if (Number.isNaN(ret)) {
 		value = value.replace(/[^0-9-\.\,]/g, "");
 		ret = Number(value);
 	}
@@ -1092,7 +1092,7 @@ async function generateDeviceIndex(): Promise<void> {
 	// Write the index
 	await fs.writeFile(
 		path.join(processedDir, "index.json"),
-		`// This file is auto-generated using "npm run config index"
+		`// This file is auto-generated using "yarn run config import -i"
 ${stringify(index)}`,
 		"utf8",
 	);

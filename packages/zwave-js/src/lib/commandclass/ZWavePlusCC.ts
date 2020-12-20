@@ -1,15 +1,14 @@
 import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
-import { CommandClasses, validatePayload, ValueMetadata } from "@zwave-js/core";
+import { CommandClasses, validatePayload } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
 	ccValue,
-	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -44,18 +43,51 @@ export enum ZWavePlusNodeType {
 	IPGateway = 0x02, // ZWave+ for IP Gateway
 }
 
-export function getZWavePlusVersionValueId(endpoint: number = 0): ValueID {
+// SDS13782 The advertised Z-Wave Plus Version, Role Type and Node Type information values
+// MUST be identical for the Root Device and all Multi Channel End Points
+// --> We only access endpoint 0
+
+export function getZWavePlusVersionValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Z-Wave Plus Info"],
+		property: "zwavePlusVersion",
+	};
+}
+
+export function getNodeTypeValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Z-Wave Plus Info"],
+		property: "nodeType",
+	};
+}
+
+export function getRoleTypeValueId(): ValueID {
+	return {
+		commandClass: CommandClasses["Z-Wave Plus Info"],
+		property: "roleType",
+	};
+}
+
+export function getInstallerIconValueId(endpoint: number = 0): ValueID {
 	return {
 		commandClass: CommandClasses["Z-Wave Plus Info"],
 		endpoint,
-		property: "zwavePlusVersion",
+		property: "installerIcon",
+	};
+}
+
+export function getUserIconValueId(endpoint: number = 0): ValueID {
+	return {
+		commandClass: CommandClasses["Z-Wave Plus Info"],
+		endpoint,
+		property: "userIcon",
 	};
 }
 
 // @noSetValueAPI This CC is read-only
 
 @API(CommandClasses["Z-Wave Plus Info"])
-export class ZWavePlusCCAPI extends CCAPI {
+export class ZWavePlusCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: ZWavePlusCommand): Maybe<boolean> {
 		switch (cmd) {
 			case ZWavePlusCommand.Get:
@@ -152,55 +184,31 @@ export class ZWavePlusCCReport extends ZWavePlusCC {
 	}
 
 	private _zwavePlusVersion: number;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnly,
-		label: "Version of the Z-Wave+ framework",
-	})
+	@ccValue({ internal: true })
 	public get zwavePlusVersion(): number {
 		return this._zwavePlusVersion;
 	}
 
 	private _nodeType: ZWavePlusNodeType;
-	@ccValue()
-	@ccValueMetadata({
-		// TODO: This should be a value list
-		...ValueMetadata.ReadOnly,
-		label: "Z-Wave+ node type",
-	})
+	@ccValue({ internal: true })
 	public get nodeType(): ZWavePlusNodeType {
 		return this._nodeType;
 	}
 
 	private _roleType: ZWavePlusRoleType;
-	@ccValue()
-	@ccValueMetadata({
-		// TODO: This should be a value list
-		...ValueMetadata.ReadOnly,
-		label: "Z-Wave+ role type",
-	})
+	@ccValue({ internal: true })
 	public get roleType(): ZWavePlusRoleType {
 		return this._roleType;
 	}
 
 	private _installerIcon: number;
-	@ccValue()
-	@ccValueMetadata({
-		// TODO: This should be a value list
-		...ValueMetadata.ReadOnly,
-		label: "Z-Wave+ Icon (for management)",
-	})
+	@ccValue({ internal: true })
 	public get installerIcon(): number {
 		return this._installerIcon;
 	}
 
 	private _userIcon: number;
-	@ccValue()
-	@ccValueMetadata({
-		// TODO: This should be a value list
-		...ValueMetadata.ReadOnly,
-		label: "Z-Wave+ Icon (for end users)",
-	})
+	@ccValue({ internal: true })
 	public get userIcon(): number {
 		return this._userIcon;
 	}

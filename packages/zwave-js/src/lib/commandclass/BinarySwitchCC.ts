@@ -47,8 +47,9 @@ export class BinarySwitchCCAPI extends CCAPI {
 	public supportsCommand(cmd: BinarySwitchCommand): Maybe<boolean> {
 		switch (cmd) {
 			case BinarySwitchCommand.Get:
+				return this.isSinglecast();
 			case BinarySwitchCommand.Set:
-				return true; // This is mandatory
+				return true;
 		}
 		return super.supportsCommand(cmd);
 	}
@@ -95,8 +96,10 @@ export class BinarySwitchCCAPI extends CCAPI {
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 
-		// Refresh the current value
-		await this.get();
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get();
+		}
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (

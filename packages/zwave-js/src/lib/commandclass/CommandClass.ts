@@ -5,6 +5,7 @@ import {
 	deserializeCacheValue,
 	getCCName,
 	MessageOrCCLogEntry,
+	NODE_ID_BROADCAST,
 	parseCCId,
 	serializeCacheValue,
 	stripUndefined,
@@ -26,6 +27,7 @@ import type { Driver } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage } from "../node/Types";
+import type { VirtualEndpoint } from "../node/VirtualEndpoint";
 import { CCAPI } from "./API";
 import {
 	EncapsulatingCommandClass,
@@ -131,7 +133,7 @@ export class CommandClass {
 			this.payload = payload;
 		}
 
-		if (this.isSinglecast()) {
+		if (this.isSinglecast() && this.nodeId !== NODE_ID_BROADCAST) {
 			// For singlecast CCs, set the CC version as high as possible
 			this.version = this.driver.getSafeCCVersionForNode(
 				this.ccId,
@@ -158,7 +160,7 @@ export class CommandClass {
 				!!(endpoint ?? node)?.isCCSecure(this.ccId) &&
 				!!this.driver.securityManager;
 		} else {
-			// For multicast CCs, we just use the highest implemented version to serialize
+			// For multicast and broadcast CCs, we just use the highest implemented version to serialize
 			// Older nodes will ignore the additional fields
 			this.version = getImplementedVersion(this.ccId);
 			// Security does not support multicast
@@ -939,10 +941,14 @@ export type Constructable<T extends CommandClass> = typeof CommandClass & {
 	// I don't like the any, but we need it to support half-implemented CCs (e.g. report classes)
 	new (driver: Driver, options: any): T;
 };
-type APIConstructor = new (driver: Driver, endpoint: Endpoint) => CCAPI;
+type APIConstructor = new (
+	driver: Driver,
+	endpoint: Endpoint | VirtualEndpoint,
+) => CCAPI;
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type TypedClassDecorator<TTarget extends Object> = <
+	// wotan-disable-next-line no-misused-generics
 	T extends TTarget,
 	TConstructor extends new (...args: any[]) => T
 >(

@@ -237,9 +237,8 @@ export class Message {
 			FunctionType[this.functionType],
 		];
 		const nodeId = this.getNodeId();
-		if (nodeId) {
-			tags.unshift(getNodeTag(nodeId));
-		}
+		if (nodeId) tags.unshift(getNodeTag(nodeId));
+
 		return {
 			tags,
 			message:

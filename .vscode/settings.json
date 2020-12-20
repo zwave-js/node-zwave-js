@@ -3,7 +3,7 @@
 	"typescript.enablePromptUseWorkspaceTsdk": true,
 	"jest.showCoverageOnLoad": true,
 	"jest.enableCodeLens": true,
-	"jest.pathToJest": "npm run test:ts --",
+	"jest.pathToJest": "yarn run test:ts",
 	"editor.formatOnSave": true,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"eslint.validate": [

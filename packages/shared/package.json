@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/shared",
-  "version": "5.4.0",
+  "version": "5.6.0",
   "description": "zwave-js: shared utilities",
   "publishConfig": {
     "access": "public"
@@ -35,7 +35,7 @@
   },
   "scripts": {
     "build": "tsc -b tsconfig.build.json",
-    "clean": "npm run build -- --clean",
-    "watch": "npm run build -- --watch --pretty"
+    "clean": "yarn run build -- --clean",
+    "watch": "yarn run build -- --watch --pretty"
   }
 }

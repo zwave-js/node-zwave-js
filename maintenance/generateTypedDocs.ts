@@ -2,6 +2,9 @@
  * This method returns the original source code for an interface or type so it can be put into documentation
  */
 
+// wotan-disable no-useless-assertion
+// until fimbullinter/wotan#719 is fixed
+
 import { red } from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
@@ -204,6 +207,6 @@ async function main(): Promise<void> {
 	}
 }
 
-if (!module.parent) {
+if (require.main === module) {
 	void main();
 }

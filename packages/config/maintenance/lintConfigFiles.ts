@@ -12,6 +12,8 @@ import { loadNamedScales, loadNamedScalesInternal } from "../src/Scales";
 import { loadSensorTypesInternal } from "../src/SensorTypes";
 import { configDir, getDeviceEntryPredicate } from "../src/utils";
 
+/* wotan-disable no-useless-predicate */
+
 async function lintNotifications(): Promise<void> {
 	await loadNotificationsInternal();
 	// TODO: Validate that all contents are semantically correct
@@ -474,4 +476,4 @@ export async function lintConfigFiles(): Promise<void> {
 	}
 }
 
-if (!module.parent) void lintConfigFiles();
+if (require.main === module) void lintConfigFiles();

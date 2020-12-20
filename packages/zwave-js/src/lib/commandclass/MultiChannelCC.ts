@@ -99,6 +99,7 @@ export class MultiChannelCCAPI extends CCAPI {
 		switch (cmd) {
 			// Legacy commands:
 			case MultiChannelCommand.GetV1:
+				return this.isSinglecast() && this.version === 1;
 			case MultiChannelCommand.CommandEncapsulationV1:
 				return this.version === 1;
 
@@ -106,12 +107,13 @@ export class MultiChannelCCAPI extends CCAPI {
 			// these do seem to be supported in version 2
 			case MultiChannelCommand.EndPointGet:
 			case MultiChannelCommand.CapabilityGet:
+				return this.version >= 2 && this.isSinglecast();
 			case MultiChannelCommand.CommandEncapsulation:
 				return this.version >= 2;
 			case MultiChannelCommand.EndPointFind:
-				return this.version >= 3;
+				return this.version >= 3 && this.isSinglecast();
 			case MultiChannelCommand.AggregatedMembersGet:
-				return this.version >= 4;
+				return this.version >= 4 && this.isSinglecast();
 		}
 		return super.supportsCommand(cmd);
 	}

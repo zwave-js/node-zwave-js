@@ -1,6 +1,6 @@
-require("reflect-metadata");
+/* wotan-disable async-function-assignability */
 
-/* eslint-disable @typescript-eslint/no-var-requires */
+require("reflect-metadata");
 import { Driver } from "../packages/zwave-js/src";
 
 const driver = new Driver("COM4", {

@@ -1,5 +1,3 @@
-// wotan-disable no-uninferred-type-parameter
-
 import * as Sentry from "@sentry/node";
 import {
 	assign,

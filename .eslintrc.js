@@ -9,7 +9,7 @@
 	find . -type f -name "*.js" | grep ./packages | grep /src/ | xargs -n1 rm
 	```
 
-	Running `TIMING=1 DEBUG=eslint:cli-engine npm run lint:ts` helps detect the problem
+	Running `TIMING=1 DEBUG=eslint:cli-engine yarn run lint:ts` helps detect the problem
 */
 
 module.exports = {
@@ -107,6 +107,7 @@ module.exports = {
 			"error",
 			{
 				allowPrivateClassPropertyAccess: true,
+				allowProtectedClassPropertyAccess: true,
 			},
 		],
 		"quote-props": ["error", "as-needed"],
