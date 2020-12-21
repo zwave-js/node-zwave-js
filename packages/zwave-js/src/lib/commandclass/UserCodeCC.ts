@@ -900,22 +900,33 @@ export class UserCodeCCReport extends UserCodeCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		validatePayload(this.payload.length >= 6);
+		validatePayload(this.payload.length >= 2);
 		this.userId = this.payload[0];
 		this.userIdStatus = this.payload[1];
 
-		let userCodeBuffer = this.payload.slice(2);
-		// Specs say infer user code from payload length, manufacturers send zero-padded strings
-		while (userCodeBuffer[userCodeBuffer.length - 1] === 0) {
-			userCodeBuffer = userCodeBuffer.slice(0, -1);
-		}
-		// Specs say ASCII 0-9, manufacturers don't care :)
-		// Thus we check if the code is printable using ASCII, if not keep it as a Buffer
-		const userCodeString = userCodeBuffer.toString("utf8");
-		if (isPrintableASCII(userCodeString)) {
-			this.userCode = userCodeString;
+		if (
+			this.payload.length === 2 &&
+			this.userIdStatus === UserIDStatus.Available
+		) {
+			// The user code is not set and this report contains no user code
+			this.userCode = "";
 		} else {
-			this.userCode = userCodeBuffer;
+			// The specs require the user code to be at least 4 digits
+			validatePayload(this.payload.length >= 6);
+
+			let userCodeBuffer = this.payload.slice(2);
+			// Specs say infer user code from payload length, manufacturers send zero-padded strings
+			while (userCodeBuffer[userCodeBuffer.length - 1] === 0) {
+				userCodeBuffer = userCodeBuffer.slice(0, -1);
+			}
+			// Specs say ASCII 0-9, manufacturers don't care :)
+			// Thus we check if the code is printable using ASCII, if not keep it as a Buffer
+			const userCodeString = userCodeBuffer.toString("utf8");
+			if (isPrintableASCII(userCodeString)) {
+				this.userCode = userCodeString;
+			} else {
+				this.userCode = userCodeBuffer;
+			}
 		}
 
 		this.persistValues();
