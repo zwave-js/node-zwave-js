@@ -255,6 +255,7 @@ interface LogConfig {
 	transports: Transport[];
 	logToFile: boolean;
 	filename: string;
+	forceConsole: boolean;
 }
 ```
 
@@ -263,6 +264,7 @@ interface LogConfig {
 -   `transports`: Custom [`winston`](https://github.com/winstonjs/winston) log transports. Setting this property will override all configured and default transports. Use `getConfiguredTransports()` if you want to extend the default transports. Default: console transport if `logToFile` is `false`, otherwise a file transport.
 -   `logToFile`: Whether the log should go to a file instead of the console. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
 -   `filename`: When `logToFile` is `true`, this is the path to the log file. The default file is called `zwave-${process.pid}.log` and located in the same directory as the main executable.
+-   `forceConsole`: By default, `zwave-js` does not log to the console if it is not a TTY in order to reduce the CPU load. By setting this option to `true`, the TTY check will be skipped and all logs will be printed to the console, **except if `logToFile` is `true`**. Default: `false`.
 
 > [!NOTE]
 > The `level` property is a numeric value (0-6), but the `LOGLEVEL` environment variable uses the string representation (`error`, ..., `silly`)!
