@@ -99,6 +99,14 @@ function getCurrentValueValueID(endpoint: number): ValueID {
 	};
 }
 
+function getTargetValueValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses["Binary Switch"],
+		endpoint,
+		property: "targetValue",
+	};
+}
+
 /** Returns the ValueID used to remember whether a node supports supervision on the start/stop level change commands*/
 function getSuperviseStartStopLevelChangeValueId(): ValueID {
 	return {
@@ -163,6 +171,16 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
+		if (this.isSinglecast()) {
+			// remember the value in case the device does not respond with a target value
+			this.endpoint
+				.getNodeUnsafe()
+				?.valueDB.setValue(
+					getTargetValueValueId(this.endpoint.index),
+					targetValue,
+					{ noEvent: true },
+				);
+		}
 
 		// Multilevel Switch commands may take some time to be executed.
 		// Therefore we try to supervise the command execution
