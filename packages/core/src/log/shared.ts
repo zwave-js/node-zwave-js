@@ -285,7 +285,7 @@ export const logMessagePrinter: Format = {
 export function createLoggerFormat(channel: string): Format {
 	// Only colorize the output if logging to a TTY, otherwise we'll get
 	// ansi color codes in logfiles
-	const colorize = !logConfig.logToFile && isTTY;
+	const colorize = !logConfig.logToFile && (isTTY || isUnitTest);
 	const formats: Format[] = [];
 	formats.push(
 		label({ label: channel }),
