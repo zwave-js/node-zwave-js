@@ -7,6 +7,7 @@ import {
 	parseBoolean,
 	parseMaybeBoolean,
 	validatePayload,
+	ValueID,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -34,6 +35,14 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+
+function getTargetValueValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses["Binary Switch"],
+		endpoint,
+		property: "targetValue",
+	};
+}
 
 // All the supported commands
 export enum BinarySwitchCommand {
@@ -94,6 +103,16 @@ export class BinarySwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
+		if (this.isSinglecast()) {
+			// remember the value in case the device does not respond with a target value
+			this.endpoint
+				.getNodeUnsafe()
+				?.valueDB.setValue(
+					getTargetValueValueId(this.endpoint.index),
+					targetValue,
+					{ noEvent: true },
+				);
+		}
 		await this.driver.sendCommand(cc, this.commandOptions);
 
 		if (this.isSinglecast()) {
