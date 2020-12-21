@@ -9,6 +9,8 @@ import { colorizer } from "./Colorizer";
 const { combine, timestamp, label } = winston.format;
 
 const loglevels = configs.npm.levels;
+const isTTY = process.stdout.isTTY;
+const isUnitTest = process.env.NODE_ENV === "test";
 
 export interface LogConfig {
 	enabled: boolean;
@@ -16,6 +18,7 @@ export interface LogConfig {
 	transports: Transport[];
 	logToFile: boolean;
 	filename: string;
+	forceConsole: boolean;
 }
 
 function getTransportLoglevel(): string {
@@ -37,6 +40,7 @@ const logConfig: LogConfig = {
 				`zwave-${process.pid}.log`,
 		  )
 		: path.join(__dirname, "../../..", `zwave-${process.pid}.log`),
+	forceConsole: false,
 };
 // this needs to be called after logConfig.logToFile is set
 logConfig.transports = createLogTransports();
@@ -278,11 +282,10 @@ export const logMessagePrinter: Format = {
 };
 
 /** The common logger format for all channels */
-export function createLoggerFormat(
-	channel: string,
-	// colorize: boolean = true,
-): Format {
-	const colorize = !logConfig.logToFile;
+export function createLoggerFormat(channel: string): Format {
+	// Only colorize the output if logging to a TTY, otherwise we'll get
+	// ansi color codes in logfiles
+	const colorize = !logConfig.logToFile && isTTY;
 	const formats: Format[] = [];
 	formats.push(
 		label({ label: channel }),
@@ -359,14 +362,11 @@ function createFileTransport(): Transport {
 }
 
 const loglevelVisibleCache = new Map<string, boolean>();
-const isTTY = process.stdout.isTTY;
-const isUnitTest = process.env.NODE_ENV === "test";
-
 /** Tests whether a log using the given loglevel will be logged */
 export function isLoglevelVisible(loglevel: string): boolean {
 	// If we are not connected to a TTY, not unit testing and not logging to a file, we won't see anything
 	if (isUnitTest) return true;
-	if (!isTTY && !logConfig.logToFile) return false;
+	if (!isTTY && !logConfig.logToFile && !logConfig.forceConsole) return false;
 
 	if (!loglevelVisibleCache.has(loglevel)) {
 		loglevelVisibleCache.set(
