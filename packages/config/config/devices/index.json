@@ -15128,6 +15128,16 @@
         "filename": "0x0431/ecodim07.json"
     },
     {
+        "manufacturerId": "0x0433",
+        "productType": "0x0003",
+        "productId": "0x000d",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0433/q-light_zerodim.json"
+    },
+    {
         "manufacturerId": "0x5254",
         "productType": "0x8201",
         "productId": "0x8021",
