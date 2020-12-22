@@ -1,8 +1,8 @@
 {
     "manufacturer": "Q-light",
     "manufacturerId": "0x0433",
-    "label": "Q-LIGHT_ZERODIM_2POL",
-    "description": "Q-Light Zerodim 2pol",
+    "label": "ZERODIM 2-Pol",
+    "description": "Q-Light Zerodim 2-Pol",
     "devices": [
         {
             "productType": "0x0003",
@@ -20,11 +20,11 @@
             "isLifeline": true
         },
         "2": {
-            "label": "On/Off (rotary nob) / Mirror of endpoint 1, group 2",
+            "label": "On/Off (rotary knob) - Basic command" // Mirror of endpoint 1, group 2,
             "maxNodes": 5
         },
         "3": {
-            "label": "Dimmer (rotary nob) / Mirror of endpoint 1, group 3",
+            "label": "Dimmer (rotary knob) - Multilevel switch command" // Mirror of endpoint 1, group 3,
             "maxNodes": 5
         }
     },

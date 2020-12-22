@@ -1,8 +1,8 @@
 {
     "manufacturer": "Q-light",
     "manufacturerId": "0x0433",
-    "label": "Q-LIGHT_PUCK",
-    "description": "Q-Light puck",
+    "label": "Z-Wave Puck",
+    "description": "Q-Light Puck",
     "devices": [
         {
             "productType": "0x0003",
@@ -20,19 +20,19 @@
             "isLifeline": true
         },
         "2": {
-            "label": "On/Off(S1) / Mirror of endpoint 1, group 2",
+            "label": "On/Off(S1) - Basic command" // Mirror of endpoint 1, group 2,
             "maxNodes": 5
         },
         "3": {
-            "label": "Dimmer(S1) / Mirror of endpoint 1, group 3",
+            "label": "Dimmer(S1) - Multilevel switch command" // Mirror of endpoint 1, group 3,
             "maxNodes": 5
         },
         "4": {
-            "label": "On/Off(S2) / Mirror of endpoint 2, group 2",
+            "label": "On/Off(S2) - Basic command" // Mirror of endpoint 2, group 2,
             "maxNodes": 5
         },
         "5": {
-            "label": "Dimmer(S2) / Mirror of endpoint 2, group 3",
+            "label": "Dimmer(S2) - Multilevel switch command" // Mirror of endpoint 2, group 3,
             "maxNodes": 5
         }
     },
