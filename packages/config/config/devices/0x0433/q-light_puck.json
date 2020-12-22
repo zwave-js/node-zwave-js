@@ -20,19 +20,19 @@
             "isLifeline": true
         },
         "2": {
-            "label": "On/Off(S1) - Basic command" // Mirror of endpoint 1, group 2,
+            "label": "On/Off(S1) - Basic command", // Mirror of endpoint 1, group 2
             "maxNodes": 5
         },
         "3": {
-            "label": "Dimmer(S1) - Multilevel switch command" // Mirror of endpoint 1, group 3,
+            "label": "Dimmer(S1) - Multilevel switch command", // Mirror of endpoint 1, group 3
             "maxNodes": 5
         },
         "4": {
-            "label": "On/Off(S2) - Basic command" // Mirror of endpoint 2, group 2,
+            "label": "On/Off(S2) - Basic command", // Mirror of endpoint 2, group 2
             "maxNodes": 5
         },
         "5": {
-            "label": "Dimmer(S2) - Multilevel switch command" // Mirror of endpoint 2, group 3,
+            "label": "Dimmer(S2) - Multilevel switch command", // Mirror of endpoint 2, group 3
             "maxNodes": 5
         }
     },
