@@ -15130,12 +15130,32 @@
     {
         "manufacturerId": "0x0433",
         "productType": "0x0003",
+        "productId": "0x0005",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0433/q-light_puck.json"
+    },
+    {
+        "manufacturerId": "0x0433",
+        "productType": "0x0003",
         "productId": "0x000d",
         "firmwareVersion": {
             "min": "0.0",
             "max": "255.255"
         },
         "filename": "0x0433/q-light_zerodim.json"
+    },
+    {
+        "manufacturerId": "0x0433",
+        "productType": "0x0003",
+        "productId": "0x000e",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0433/q-light_zerodim_2pol.json"
     },
     {
         "manufacturerId": "0x5254",
