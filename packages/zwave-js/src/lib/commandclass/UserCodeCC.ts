@@ -20,6 +20,7 @@ import {
 	pick,
 } from "@zwave-js/shared";
 import {
+	ignoreTimeout,
 	PhysicalCCAPI,
 	SetValueImplementation,
 	SET_VALUE,
@@ -776,9 +777,20 @@ export class UserCodeCC extends CommandClass {
 				message: "querying all user codes...",
 				direction: "outbound",
 			});
-			for (let userId = 1; userId <= supportedUsers; userId++) {
-				await api.get(userId);
-			}
+			await ignoreTimeout(
+				async () => {
+					for (let userId = 1; userId <= supportedUsers; userId++) {
+						await api.get(userId);
+					}
+				},
+				() => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"User code query timed out - skipping because it is not critical...",
+					});
+				},
+			);
 		}
 
 		// Remember that the interview is complete
