@@ -51,7 +51,8 @@ const program = yargs
 		default: ["oh"],
 	})
 	.option("ids", {
-		description: "devices ids to download",
+		description:
+			"devices ids to download. In ozw the format is '<manufacturer>-<productId>-<productType>'. Ex: '0x0086-0x0075-0x0004'",
 		type: "array",
 		array: true,
 	})
@@ -245,6 +246,21 @@ async function cleanTmpDirectory(): Promise<void> {
 	console.log("temporary directory cleaned");
 }
 
+function matchId(
+	manufacturer: string,
+	prodType: string,
+	prodId: string,
+): boolean {
+	return (
+		program.ids !== undefined &&
+		program.ids.includes(
+			`${formatId(manufacturer)}-${formatId(prodType)}-${formatId(
+				prodId,
+			)}`,
+		)
+	);
+}
+
 /** Reads OZW `manufacturer_specific.xml` */
 async function parseOZWConfig(): Promise<void> {
 	// The manufacturer_specific.xml is OZW's index file and contains all devices, their type, ID and name (label)
@@ -284,11 +300,16 @@ async function parseOZWConfig(): Promise<void> {
 			const products = ensureArray(man.Product);
 			for (const product of products) {
 				if (product.config !== undefined) {
-					await parseOZWProduct(
-						product,
-						manufacturerId,
-						manufacturerName,
-					);
+					if (
+						program.ids === undefined ||
+						matchId(man.id, product.id, product.type)
+					) {
+						await parseOZWProduct(
+							product,
+							manufacturerId,
+							manufacturerName,
+						);
+					}
 				}
 			}
 		}
