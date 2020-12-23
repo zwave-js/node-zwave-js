@@ -242,3 +242,14 @@ export const applicationCCs: readonly CommandClasses[] = [
 	CommandClasses["User Code"],
 	CommandClasses["Window Covering"],
 ];
+
+export interface CommandClassInfo {
+	/** Whether the endpoint or node can react to this CC */
+	isSupported: boolean;
+	/** Whether the endpoint or node can control other nodes with this CC */
+	isControlled: boolean;
+	/** Whether this CC is ONLY supported securely */
+	secure: boolean;
+	/** The maximum version of the CC that is supported or controlled */
+	version: number;
+}

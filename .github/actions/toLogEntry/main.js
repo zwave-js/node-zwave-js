@@ -19,7 +19,7 @@ const context = github.context;
 		},
 	};
 
-	await exec.exec("npm", ["run", "toLogEntryOverview"], options);
+	await exec.exec("yarn", ["run", "toLogEntryOverview"], options);
 
 	const { data: { body: oldBody } } = await octokit.issues.get({
 		...context.repo,

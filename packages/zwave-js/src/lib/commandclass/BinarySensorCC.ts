@@ -288,6 +288,7 @@ export class BinarySensorCCReport extends BinarySensorCC {
 		);
 		this.getValueDB().setMetadata(valueId, {
 			...ValueMetadata.ReadOnlyBoolean,
+			label: getEnumMemberName(BinarySensorType, this._type),
 			ccSpecific: { sensorType: this._type },
 		});
 		this.getValueDB().setValue(valueId, this._value);

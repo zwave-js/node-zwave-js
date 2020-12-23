@@ -19,6 +19,7 @@ import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	ignoreTimeout,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -360,12 +361,24 @@ export class IndicatorCC extends CommandClass {
 		});
 
 		if (this.version === 1) {
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "requesting current indicator value...",
-				direction: "outbound",
-			});
-			await api.get();
+			await ignoreTimeout(
+				async () => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: "requesting current indicator value...",
+						direction: "outbound",
+					});
+					await api.get();
+				},
+				() => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Current value query timed out - skipping because it is not critical...",
+						level: "warn",
+					});
+				},
+			);
 		} else {
 			let supportedIndicatorIds: number[];
 			if (complete) {
@@ -405,14 +418,27 @@ export class IndicatorCC extends CommandClass {
 			}
 
 			for (const indicatorId of supportedIndicatorIds) {
-				log.controller.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `requesting current indicator value (id = ${num2hex(
-						indicatorId,
-					)})...`,
-					direction: "outbound",
-				});
-				await api.get(indicatorId);
+				await ignoreTimeout(
+					async () => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `requesting current indicator value (id = ${num2hex(
+								indicatorId,
+							)})...`,
+							direction: "outbound",
+						});
+						await api.get(indicatorId);
+					},
+					() => {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Querying indicator value (id = ${num2hex(
+								indicatorId,
+							)}) timed out - skipping because it is not critical...`,
+							level: "warn",
+						});
+					},
+				);
 			}
 		}
 

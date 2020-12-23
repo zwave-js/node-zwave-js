@@ -1,4 +1,4 @@
-import type { ValueID } from "@zwave-js/core";
+import type { CommandClasses, CommandClassInfo, ValueID } from "@zwave-js/core";
 import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import {
 	JSONObject,
@@ -16,6 +16,7 @@ import {
 	configDir,
 	formatId,
 	getDeviceEntryPredicate,
+	hexKeyRegex2Digits,
 	hexKeyRegex4Digits,
 	throwInvalidConfig,
 } from "./utils";
@@ -29,7 +30,7 @@ export interface DeviceConfigIndexEntry {
 	manufacturerId: string;
 	productType: string;
 	productId: string;
-	firmwareVersion: FirmwareVersionRange;
+	firmwareVersion: FirmwareVersionRange | false;
 	filename: string;
 }
 
@@ -112,8 +113,7 @@ export function addDeviceToIndex(
 	productType: number,
 	productId: number,
 	filename: string,
-	firmwareVersionMin?: string,
-	firmwareVersionMax?: string,
+	firmwareVersion?: FirmwareVersionRange | false,
 ): void {
 	if (!index) {
 		throw new ZWaveError(
@@ -126,10 +126,13 @@ export function addDeviceToIndex(
 		manufacturerId: formatId(manufacturerId),
 		productId: formatId(productId),
 		productType: formatId(productType),
-		firmwareVersion: {
-			min: firmwareVersionMin || "0.0",
-			max: firmwareVersionMax || "255.255",
-		},
+		firmwareVersion:
+			firmwareVersion === false
+				? false
+				: {
+						min: firmwareVersion?.min || "0.0",
+						max: firmwareVersion?.max || "255.255",
+				  },
 		filename: filename,
 	};
 
@@ -145,13 +148,15 @@ export function getIndex(): DeviceConfigIndexEntry[] | undefined {
  * @param manufacturerId The manufacturer id of the device
  * @param productType The product type of the device
  * @param productId The product id of the device
- * @param firmwareVersion If known, configuration for a specific firmware version can be loaded
+ * @param firmwareVersion If known, configuration for a specific firmware version can be loaded.
+ * If this is `undefined` or not given, the first matching file with a defined firmware range will be returned.
+ * If this is `false`, **only** the first matching file without a firmware version (`firmwareVersion: false`) will be returned.
  */
 export async function lookupDevice(
 	manufacturerId: number,
 	productType: number,
 	productId: number,
-	firmwareVersion?: string,
+	firmwareVersion?: string | false,
 ): Promise<DeviceConfig | undefined> {
 	if (!index) {
 		throw new ZWaveError(
@@ -161,14 +166,27 @@ export async function lookupDevice(
 	}
 
 	// Look up the device in the index
-	const indexEntry = index.find(
-		getDeviceEntryPredicate(
+	let indexEntry: DeviceConfigIndexEntry | undefined;
+	if (firmwareVersion === false) {
+		// A config file with no firmware version is explicitly requested
+		const predicate = getDeviceEntryPredicate(
 			manufacturerId,
 			productType,
 			productId,
-			firmwareVersion,
-		),
-	);
+		);
+		indexEntry = index.find(
+			(e) => e.firmwareVersion === false && predicate(e),
+		);
+	} else {
+		indexEntry = index.find(
+			getDeviceEntryPredicate(
+				manufacturerId,
+				productType,
+				productId,
+				firmwareVersion,
+			),
+		);
+	}
 
 	if (indexEntry) {
 		const filePath = path.join(configDir, "devices", indexEntry.filename);
@@ -247,7 +265,9 @@ devices is malformed (not an object or type/id that is not a 4-digit hex key)`,
 			({ productType, productId }) => ({ productType, productId }),
 		);
 
-		if (
+		if (definition.firmwareVersion === false) {
+			this.firmwareVersion = false;
+		} else if (
 			!isObject(definition.firmwareVersion) ||
 			!isFirmwareVersion(definition.firmwareVersion.min) ||
 			!isFirmwareVersion(definition.firmwareVersion.max)
@@ -257,9 +277,10 @@ devices is malformed (not an object or type/id that is not a 4-digit hex key)`,
 				`config/devices/${filename}:
 firmwareVersion is malformed or invalid`,
 			);
+		} else {
+			const { min, max } = definition.firmwareVersion;
+			this.firmwareVersion = { min, max };
 		}
-		const { min, max } = definition.firmwareVersion;
-		this.firmwareVersion = { min, max };
 
 		if (definition.associations != undefined) {
 			const associations = new Map<number, AssociationConfig>();
@@ -358,7 +379,7 @@ compat is not an object`,
 		productType: string;
 		productId: string;
 	}[];
-	public readonly firmwareVersion: FirmwareVersionRange;
+	public readonly firmwareVersion: FirmwareVersionRange | false;
 	public readonly associations?: ReadonlyMap<number, AssociationConfig>;
 	public readonly paramInformation?: ParamInfoMap;
 	/**
@@ -520,6 +541,57 @@ error in compat option preserveRootApplicationCCValueIDs`,
 			this.preserveRootApplicationCCValueIDs =
 				definition.preserveRootApplicationCCValueIDs;
 		}
+
+		if (definition.commandClasses != undefined) {
+			if (!isObject(definition.commandClasses)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option commandClasses`,
+				);
+			}
+
+			if (definition.commandClasses.add != undefined) {
+				if (!isObject(definition.commandClasses.add)) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+error in compat option commandClasses.add`,
+					);
+				} else if (
+					!Object.keys(definition.commandClasses.add).every((k) =>
+						hexKeyRegex2Digits.test(k),
+					)
+				) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+All keys in compat option commandClasses.add must be 2-digit hex numbers!`,
+					);
+				} else if (
+					!Object.values(definition.commandClasses.add).every((v) =>
+						isObject(v),
+					)
+				) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+All values in compat option commandClasses.add must be objects`,
+					);
+				}
+
+				const addCCs = new Map<CommandClasses, CompatAddCC>();
+				for (const [cc, info] of Object.entries(
+					definition.commandClasses.add,
+				)) {
+					addCCs.set(
+						parseInt(cc),
+						new CompatAddCC(filename, info as any),
+					);
+				}
+				this.addCCs = addCCs;
+			}
+		}
 	}
 
 	public readonly queryOnWakeup?: [
@@ -535,6 +607,90 @@ error in compat option preserveRootApplicationCCValueIDs`,
 
 	public keepS0NonceUntilNext?: boolean;
 	public preserveRootApplicationCCValueIDs?: boolean;
+	public addCCs?: ReadonlyMap<CommandClasses, CompatAddCC>;
+}
+
+export class CompatAddCC {
+	public constructor(filename: string, definition: JSONObject) {
+		const endpoints = new Map<number, Partial<CommandClassInfo>>();
+		const parseEndpointInfo = (endpoint: number, info: JSONObject) => {
+			const parsed: Partial<CommandClassInfo> = {};
+			if (info.isSupported != undefined) {
+				if (typeof info.isSupported !== "boolean") {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+Property isSupported in compat option commandClasses.add, endpoint ${endpoint} must be a boolean!`,
+					);
+				} else {
+					parsed.isSupported = info.isSupported;
+				}
+			}
+			if (info.isControlled != undefined) {
+				if (typeof info.isControlled !== "boolean") {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+Property isControlled in compat option commandClasses.add, endpoint ${endpoint} must be a boolean!`,
+					);
+				} else {
+					parsed.isControlled = info.isControlled;
+				}
+			}
+			if (info.secure != undefined) {
+				if (typeof info.secure !== "boolean") {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+Property secure in compat option commandClasses.add, endpoint ${endpoint} must be a boolean!`,
+					);
+				} else {
+					parsed.secure = info.secure;
+				}
+			}
+			if (info.version != undefined) {
+				if (typeof info.version !== "number") {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+Property version in compat option commandClasses.add, endpoint ${endpoint} must be a number!`,
+					);
+				} else {
+					parsed.version = info.version;
+				}
+			}
+			endpoints.set(endpoint, parsed);
+		};
+		// Parse root endpoint info if given
+		if (
+			definition.isSupported != undefined ||
+			definition.isControlled != undefined ||
+			definition.version != undefined ||
+			definition.secure != undefined
+		) {
+			// We have info for the root endpoint
+			parseEndpointInfo(0, definition);
+		}
+		// Parse all other endpoints
+		if (isObject(definition.endpoints)) {
+			if (
+				!Object.keys(definition.endpoints).every((k) => /^\d+$/.test(k))
+			) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+invalid endpoint index in compat option commandClasses.add`,
+				);
+			} else {
+				for (const [ep, info] of Object.entries(definition.endpoints)) {
+					parseEndpointInfo(parseInt(ep), info as any);
+				}
+			}
+		}
+		this.endpoints = endpoints;
+	}
+
+	public readonly endpoints: ReadonlyMap<number, Partial<CommandClassInfo>>;
 }
 
 export class ParamInformation {

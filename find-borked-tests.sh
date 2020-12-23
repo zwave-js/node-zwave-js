@@ -2,7 +2,7 @@
 
 for file in $(find packages -name "*.test.ts")
 do
-	npm run test:ts -- --testPathPattern="$file" |& grep 'Jest did not exit' &> /dev/null
+	yarn run test:ts -- --testPathPattern="$file" |& grep 'Jest did not exit' &> /dev/null
 	if [ $? == 0 ]; then
 		echo -e "\e[31m[NOK] $file\e[0m"
 	else

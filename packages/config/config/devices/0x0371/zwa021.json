@@ -1,0 +1,184 @@
+// Aeotect Thermostatic Valve similar to Eurotronics Spirit
+// Thermostatic Valve
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "Radiator Thermostat",
+	"description": "Thermostat - HVAC",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0015"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Invert LCD orientation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal orientation",
+					"value": 0
+				},
+				{
+					"label": "LCD content inverted",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "LCD Timeout",
+			"description": "LCD Timeout in seconds",
+			"unit": "s",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 30,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No Timeout LCD always on",
+					"value": 0
+				}
+			]
+		},
+		"3": {
+			"label": "Backlight",
+			"description": "Backlight",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Backlight disabled",
+					"value": 0
+				},
+				{
+					"label": "Backlight enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Battery report",
+			"description": "Battery reporting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Battery reporting disabled",
+					"value": 0
+				},
+				{
+					"label": "Battery reporting enabled",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Measured  Temperature",
+			"description": "Measured Temperature report. Reporting Delta in 1/10 Celsius. '0' to disable reporting.",
+			"unit": "1/10 °C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Temperature reporting disabled",
+					"value": 0
+				}
+			]
+		},
+		"6": {
+			"label": "Valve position",
+			"description": "Valve position report. Reporting delta in percent. '0' to disable reporting.",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Valve position reporting disabled",
+					"value": 0
+				}
+			]
+		},
+		"7": {
+			"label": "Window open detection",
+			"description": "Control 'Window open detection' sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Detection Disabled",
+					"value": 0
+				},
+				{
+					"label": "Sensitivity low",
+					"value": 1
+				},
+				{
+					"label": "Sensitivity medium",
+					"value": 2
+				},
+				{
+					"label": "Sensitivity high",
+					"value": 3
+				}
+			]
+		},
+		"8": {
+			"label": "Temperature Offset",
+			"description": "Measured Temperature offset",
+			"unit": "1/10 °C",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Ext temp sensor is used for regulation",
+					"value": -128
+				}
+			]
+		}
+	}
+}

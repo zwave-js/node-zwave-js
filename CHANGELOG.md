@@ -10,6 +10,34 @@
 * The second (string) parameter of the `"interview failed"` event handler was removed
 * The type `ValueMetadataBase` has been renamed to `ValueMetadataAny`. The old type `ValueMetadataAny` was merged into `ValueMetadataBase`.
 
+## 5.7.0 (2020-12-23)
+### Config file changes
+* Added Aeotec thermostatic Valve ZWA021
+* Added Q-Light Puck and Zerodim 2pol
+* Added Q-Light Zerodim
+* Fixed wrong label and description for Z-Wave.Me UZB
+
+### Bugfixes
+* When a node does not respond because it is asleep, the corresponding transaction is no longer rejected and moved to the wakeup queue instead. This should restore the pre-5.0.0 behavior.
+* Added missing label to Binary Sensor CC
+* Added missing `%` unit to Battery level
+* Timeouts when querying User Codes and the current Lock status are now ignored
+* `User Code CC Reports` without a user code are no longer discarded when the user status is `Available`. This should improve compatibility with some non-compliant nodes
+* The `targetValue` for the `Binary Switch`, `Multilevel Switch` and `Basic` CCs is now persisted in the Value DB when setting values through the API.
+
+### Features
+* Config files can now be used specify additional CCs that a node does not advertise in its NIF.
+* Added support for fallback config files without a firmware version. These can be used to set some parameters for devices which wouldn't complete the `Version CC` interview otherwise
+
+## 5.6.1 (2020-12-18)
+### Config file changes
+* Add Heiman Smoke detector
+* New product ID for Fibaro Heat controller
+* Add product config for AEOTEC Range Extender 7
+
+### Bugfixes
+* Missing responses from the node when requesting the current values during the `Indicator CC` no longer abort the interview
+
 ## 5.6.0 (2020-12-14)
 ### Config file changes
 * Added a config file for `HeatIt Z-TRM3`

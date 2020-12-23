@@ -17,7 +17,7 @@ const context = github.context;
 		},
 	};
 
-	await exec.exec("npm", ["run", "implemented_ccs", "--", "--flavor=github"], options);
+	await exec.exec("yarn", ["run", "implemented_ccs", "--flavor=github"], options);
 
 	ccTable = ccTable
 		.split("\n")

@@ -20,6 +20,7 @@ import type { Driver } from "../driver/Driver";
 import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
+	ignoreTimeout,
 	PhysicalCCAPI,
 	SetValueImplementation,
 	SET_VALUE,
@@ -394,32 +395,43 @@ block to block                 ${!!config.blockToBlock}`;
 			direction: "inbound",
 		});
 
-		log.controller.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: "requesting current lock status...",
-			direction: "outbound",
-		});
-		const status = await api.get();
-		logMessage = `received lock status:
+		await ignoreTimeout(
+			async () => {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "requesting current lock status...",
+					direction: "outbound",
+				});
+				const status = await api.get();
+				logMessage = `received lock status:
 current mode:       ${getEnumMemberName(DoorLockMode, status.currentMode)}`;
-		if (status.targetMode != undefined) {
-			logMessage += `
+				if (status.targetMode != undefined) {
+					logMessage += `
 target mode:        ${getEnumMemberName(DoorLockMode, status.targetMode)}
 remaining duration: ${status.duration?.toString() ?? "undefined"}`;
-		}
-		if (status.lockTimeout != undefined) {
-			logMessage += `
+				}
+				if (status.lockTimeout != undefined) {
+					logMessage += `
 lock timeout:       ${status.lockTimeout} seconds`;
-		}
-		logMessage += `
+				}
+				logMessage += `
 door status:        ${status.doorStatus}
 bolt status:        ${status.boltStatus}
 latch status:       ${status.latchStatus}`;
-		log.controller.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: logMessage,
-			direction: "inbound",
-		});
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			},
+			() => {
+				log.controller.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Lock status query timed out - skipping because it is not critical...",
+				});
+			},
+		);
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
