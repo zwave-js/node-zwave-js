@@ -784,7 +784,6 @@ async function downloadManufacturers(): Promise<void> {
 
 /** Ensures an input file is valid */
 function assertValid(json: any) {
-	ok(typeof json.approved === "string" || typeof json.approved === "number");
 	ok(
 		isObject(json.manufacturer) &&
 			typeof json.manufacturer.reference === "number" &&
@@ -836,7 +835,6 @@ async function parseOHConfigFile(
 	assertValid(json);
 
 	const ret: Record<string, any> = {
-		_approved: json.approved === "1" || json.approved === 1,
 		revision: json.db_version,
 		...(json.errors?.length ? { _errors: json.errors } : undefined),
 		...(json.warnings?.length ? { _warnings: json.warnings } : undefined),
