@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/shared",
-  "version": "5.6.0",
+  "version": "6.0.0-alpha.0",
   "description": "zwave-js: shared utilities",
   "publishConfig": {
     "access": "public"
