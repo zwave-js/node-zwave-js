@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/config",
-  "version": "5.6.1",
+  "version": "5.7.0",
   "description": "zwave-js: configuration files",
   "publishConfig": {
     "access": "public"
@@ -32,7 +32,7 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@zwave-js/core": "^5.6.0",
+    "@zwave-js/core": "^5.7.0",
     "@zwave-js/shared": "^5.6.0",
     "alcalzone-shared": "^3.0.1",
     "ansi-colors": "^4.1.1",

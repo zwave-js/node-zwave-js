@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## __WORK IN PROGRESS__
+## 5.7.0 (2020-12-23)
 ### Config file changes
 * Added Aeotec thermostatic Valve ZWA021
 * Added Q-Light Puck and Zerodim 2pol
