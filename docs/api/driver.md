@@ -409,11 +409,11 @@ interface ZWaveOptions {
 		 */
 		nodeInterview: number; // [1...10], default: 5
 	};
+
 	/**
 	 * Optional log configuration
 	 */
 	logConfig?: LogConfig;
-
 	/**
 	 * Allows you to replace the default file system driver used to store and read the cache
 	 */
