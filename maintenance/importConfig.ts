@@ -536,12 +536,23 @@ async function parseOZWProduct(
 	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
 	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
 
+	const devices = existingDevice?.devices ?? [];
+
+	if (
+		!devices.find(
+			(d: { productType: string; productId: string }) =>
+				d.productType === productType && d.productId === productId,
+		)
+	) {
+		devices.push({ productType, productId });
+	}
+
 	const newConfig: Record<string, any> = {
 		manufacturer,
 		manufacturerId: manufacturerIdHex,
 		label: productLabel,
 		description: existingDevice?.description ?? productName, // don't override the descrition
-		devices: [{ productType, productId }],
+		devices: devices,
 		firmwareVersion: {
 			min: existingDevice?.firmwareVersion.min ?? "0.0",
 			max: existingDevice?.firmwareVersion.max ?? "255.255",
