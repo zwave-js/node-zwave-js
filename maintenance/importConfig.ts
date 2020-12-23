@@ -253,7 +253,7 @@ function matchId(
 ): boolean {
 	return (
 		program.ids !== undefined &&
-		program.ids.includes(
+		program.ids?.includes(
 			`${formatId(manufacturer)}-${formatId(prodType)}-${formatId(
 				prodId,
 			)}`,
@@ -301,7 +301,7 @@ async function parseOZWConfig(): Promise<void> {
 			for (const product of products) {
 				if (product.config !== undefined) {
 					if (
-						program.ids === undefined ||
+						!program.ids ||
 						matchId(man.id, product.id, product.type)
 					) {
 						await parseOZWProduct(
@@ -540,7 +540,7 @@ async function parseOZWProduct(
 	const devices = existingDevice?.devices ?? [];
 
 	if (
-		!devices.find(
+		!devices.some(
 			(d: { productType: string; productId: string }) =>
 				d.productType === productType && d.productId === productId,
 		)
