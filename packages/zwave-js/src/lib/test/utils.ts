@@ -1,6 +1,7 @@
 /* wotan-disable no-restricted-property-access */
 
 import { MockSerialPort } from "@zwave-js/serial";
+import type { DeepPartial } from "@zwave-js/shared";
 import { Driver, ZWaveOptions } from "../driver/Driver";
 
 // load the driver with stubbed out Serialport
@@ -19,7 +20,7 @@ export const PORT_ADDRESS = "/tty/FAKE";
 /** Creates a real driver instance with a mocked serial port to enable end to end tests */
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export async function createAndStartDriver(
-	options: Partial<ZWaveOptions> = {},
+	options: DeepPartial<ZWaveOptions> = {},
 ) {
 	const driver = new Driver(PORT_ADDRESS, {
 		...options,
