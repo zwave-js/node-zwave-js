@@ -28,7 +28,6 @@ describe("regression tests", () => {
 
 	it("marking a node with a pending message as asleep does not mess up the remaining transactions", async () => {
 		jest.setTimeout(5000);
-		jest.retryTimes(3); // Wonder what's going on here
 		// Repro from #1107
 
 		// Node 10's awake timer elapses before its ping is rejected,

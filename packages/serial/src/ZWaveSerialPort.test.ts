@@ -19,7 +19,6 @@ async function createAndOpenMockedZWaveSerialPort(
 		readyData: Buffer.from([]),
 	});
 	const port = new ZWaveSerialPort("/dev/ZWaveTest");
-	// eslint-disable-next-line @typescript-eslint/dot-notation
 	const binding = (port["serial"] as SerialPort).binding as MockBinding;
 	if (open) await port.open();
 	return { port, binding };
