@@ -181,7 +181,10 @@ export class CCAPI {
 	}
 
 	protected isSinglecast(): this is this & { endpoint: Endpoint } {
-		return typeof this.endpoint.nodeId === "number";
+		return (
+			typeof this.endpoint.nodeId === "number" &&
+			this.endpoint.nodeId !== NODE_ID_BROADCAST
+		);
 	}
 
 	protected isMulticast(): this is this & {

@@ -341,41 +341,52 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 		}
 
 		// Validate firmware versions
-		if (config.firmwareVersion.max === "255.0") {
-			addWarning(
-				file,
-				`The maximum firmware version is 255.0. Did you mean 255.255?`,
-			);
-		} else {
-			// Check for invalid version parts
-			const [minMajor, minMinor] = config.firmwareVersion.min
-				.split(".", 2)
-				.map((v) => parseInt(v, 10));
-			if (
-				minMajor < 0 ||
-				minMajor > 255 ||
-				minMinor < 0 ||
-				minMinor > 255
-			) {
+		if (typeof config.firmwareVersion === "boolean") {
+			if (config.firmwareVersion !== false) {
 				addError(
 					file,
-					`The minimum firmware version ${config.firmwareVersion.min} is invalid. Each version part must be between 0 and 255.`,
+					`Invalid firmware version ${
+						config.firmwareVersion as any
+					}. The firmware version must be an object with "min" and "max" properties or false.`,
 				);
 			}
-
-			const [maxMajor, maxMinor] = config.firmwareVersion.max
-				.split(".", 2)
-				.map((v) => parseInt(v, 10));
-			if (
-				maxMajor < 0 ||
-				maxMajor > 255 ||
-				maxMinor < 0 ||
-				maxMinor > 255
-			) {
-				addError(
+		} else {
+			if (config.firmwareVersion.max === "255.0") {
+				addWarning(
 					file,
-					`The maximum firmware version ${config.firmwareVersion.max} is invalid. Each version part must be between 0 and 255.`,
+					`The maximum firmware version is 255.0. Did you mean 255.255?`,
 				);
+			} else {
+				// Check for invalid version parts
+				const [minMajor, minMinor] = config.firmwareVersion.min
+					.split(".", 2)
+					.map((v) => parseInt(v, 10));
+				if (
+					minMajor < 0 ||
+					minMajor > 255 ||
+					minMinor < 0 ||
+					minMinor > 255
+				) {
+					addError(
+						file,
+						`The minimum firmware version ${config.firmwareVersion.min} is invalid. Each version part must be between 0 and 255.`,
+					);
+				}
+
+				const [maxMajor, maxMinor] = config.firmwareVersion.max
+					.split(".", 2)
+					.map((v) => parseInt(v, 10));
+				if (
+					maxMajor < 0 ||
+					maxMajor > 255 ||
+					maxMinor < 0 ||
+					maxMinor > 255
+				) {
+					addError(
+						file,
+						`The maximum firmware version ${config.firmwareVersion.max} is invalid. Each version part must be between 0 and 255.`,
+					);
+				}
 			}
 		}
 	}
@@ -390,19 +401,20 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 				parseInt(entry.productId, 16),
 			),
 		);
-		if (
-			firstIndex !== i &&
-			index[firstIndex].firmwareVersion.min ===
-				entry.firmwareVersion.min &&
-			index[firstIndex].firmwareVersion.max === entry.firmwareVersion.max
-		) {
-			// This is a duplicate!
-			addError(
-				entry.filename,
-				`Duplicate config file detected for device (manufacturer id = ${entry.manufacturerId}, product type = ${entry.productType}, product id = ${entry.productId})
-The first occurence of this device is in file config/devices/${index[firstIndex].filename}`,
-			);
+		if (firstIndex === i) continue;
+		const other = index[firstIndex].firmwareVersion;
+		const me = entry.firmwareVersion;
+		if (typeof other === "boolean" || typeof me === "boolean") {
+			if (other !== me) continue;
+		} else {
+			if (other.min !== me.min || other.max !== me.max) continue;
 		}
+		// This is a duplicate!
+		addError(
+			entry.filename,
+			`Duplicate config file detected for device (manufacturer id = ${entry.manufacturerId}, product type = ${entry.productType}, product id = ${entry.productId})
+The first occurence of this device is in file config/devices/${index[firstIndex].filename}`,
+		);
 	}
 
 	if (warnings.size) {

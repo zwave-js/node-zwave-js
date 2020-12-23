@@ -24,19 +24,26 @@ export function getDeviceEntryPredicate(
 	productId: number,
 	firmwareVersion?: string,
 ): (entry: DeviceConfigIndexEntry) => boolean {
-	return (entry) =>
-		entry.manufacturerId === formatId(manufacturerId) &&
-		entry.productType === formatId(productType) &&
-		entry.productId === formatId(productId) &&
-		(firmwareVersion == undefined ||
-			(semver.lte(
-				padVersion(entry.firmwareVersion.min),
-				padVersion(firmwareVersion),
-			) &&
+	return (entry) => {
+		if (entry.manufacturerId !== formatId(manufacturerId)) return false;
+		if (entry.productType !== formatId(productType)) return false;
+		if (entry.productId !== formatId(productId)) return false;
+		if (firmwareVersion != undefined) {
+			// A firmware version was given, only look at files with a matching firmware version
+			return (
+				typeof entry.firmwareVersion !== "boolean" &&
+				semver.lte(
+					padVersion(entry.firmwareVersion.min),
+					padVersion(firmwareVersion),
+				) &&
 				semver.gte(
 					padVersion(entry.firmwareVersion.max),
 					padVersion(firmwareVersion),
-				)));
+				)
+			);
+		}
+		return true;
+	};
 }
 
 export function formatId(id: number | string): string {

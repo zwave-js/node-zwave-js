@@ -51,7 +51,8 @@ const program = yargs
 		default: ["oh"],
 	})
 	.option("ids", {
-		description: "devices ids to download",
+		description:
+			"devices ids to download. In ozw the format is '<manufacturer>-<productId>-<productType>'. Ex: '0x0086-0x0075-0x0004'",
 		type: "array",
 		array: true,
 	})
@@ -245,6 +246,16 @@ async function cleanTmpDirectory(): Promise<void> {
 	console.log("temporary directory cleaned");
 }
 
+function matchId(
+	manufacturer: string,
+	prodType: string,
+	prodId: string,
+): boolean {
+	return !!program.ids?.includes(
+		`${formatId(manufacturer)}-${formatId(prodType)}-${formatId(prodId)}`,
+	);
+}
+
 /** Reads OZW `manufacturer_specific.xml` */
 async function parseOZWConfig(): Promise<void> {
 	// The manufacturer_specific.xml is OZW's index file and contains all devices, their type, ID and name (label)
@@ -284,11 +295,16 @@ async function parseOZWConfig(): Promise<void> {
 			const products = ensureArray(man.Product);
 			for (const product of products) {
 				if (product.config !== undefined) {
-					await parseOZWProduct(
-						product,
-						manufacturerId,
-						manufacturerName,
-					);
+					if (
+						!program.ids ||
+						matchId(man.id, product.id, product.type)
+					) {
+						await parseOZWProduct(
+							product,
+							manufacturerId,
+							manufacturerName,
+						);
+					}
 				}
 			}
 		}
@@ -499,7 +515,8 @@ async function parseOZWProduct(
 
 	// Load the existing config so we can merge it with the updated information
 	let existingDevice: Record<string, any> | undefined;
-	if (latestConfig) {
+
+	if (await fs.pathExists(fileNameAbsolute)) {
 		existingDevice = JSON5.parse(
 			await fs.readFile(fileNameAbsolute, "utf8"),
 		);
@@ -515,12 +532,23 @@ async function parseOZWProduct(
 	// const name = metadata.find((m: any) => m.name === "Name")?.$t;
 	// const description = metadata.find((m: any) => m.name === "Description")?.$t;
 
+	const devices = existingDevice?.devices ?? [];
+
+	if (
+		!devices.some(
+			(d: { productType: string; productId: string }) =>
+				d.productType === productType && d.productId === productId,
+		)
+	) {
+		devices.push({ productType, productId });
+	}
+
 	const newConfig: Record<string, any> = {
 		manufacturer,
 		manufacturerId: manufacturerIdHex,
 		label: productLabel,
 		description: existingDevice?.description ?? productName, // don't override the descrition
-		devices: [{ productType, productId }],
+		devices: devices,
 		firmwareVersion: {
 			min: existingDevice?.firmwareVersion.min ?? "0.0",
 			max: existingDevice?.firmwareVersion.max ?? "255.255",
@@ -1044,8 +1072,14 @@ function getLatestConfigVersion(
 	configs: DeviceConfigIndexEntry[],
 ): DeviceConfigIndexEntry | undefined {
 	configs.sort((a, b) => {
-		const vA = padVersion(a.firmwareVersion.max);
-		const vB = padVersion(b.firmwareVersion.max);
+		const vA =
+			typeof a.firmwareVersion === "boolean"
+				? "255.255.255"
+				: padVersion(a.firmwareVersion.max);
+		const vB =
+			typeof b.firmwareVersion === "boolean"
+				? "255.255.255"
+				: padVersion(b.firmwareVersion.max);
 
 		return compare(vA, vB);
 	});

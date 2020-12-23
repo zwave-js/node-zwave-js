@@ -519,6 +519,10 @@ export class Driver extends EventEmitter {
 				},
 				timestamp: highResTimestamp,
 				rejectTransaction: (transaction, error) => {
+					// If a node failed to respond in time, it might be sleeping
+					if (this.isMissingNodeACK(transaction, error)) {
+						if (this.handleMissingNodeACK(transaction)) return;
+					}
 					transaction.promise.reject(error);
 				},
 				resolveTransaction: (transaction, result) => {
@@ -1415,20 +1419,37 @@ export class Driver extends EventEmitter {
 		throw e;
 	}
 
+	/** Checks if a transaction failed because a node didn't respond in time */
+	private isMissingNodeACK(
+		transaction: Transaction,
+		e: ZWaveError,
+	): transaction is Transaction & {
+		message: SendDataRequest;
+	} {
+		return (
+			// If the node does not acknowledge our request, it is either asleep or dead
+			e.code === ZWaveErrorCodes.Controller_CallbackNOK &&
+			transaction.message instanceof SendDataRequest &&
+			// Ignore pre-transmit handshakes because the actual transaction will be retried
+			transaction.priority !== MessagePriority.PreTransmitHandshake
+		);
+	}
+
 	/**
-	 * Handles the case that a node failed to respond in time
+	 * Handles the case that a node failed to respond in time.
+	 * Returns `true` if the transaction failure was handled, `false` if it needs to be rejected.
 	 */
 	private handleMissingNodeACK(
 		transaction: Transaction & {
 			message: SendDataRequest;
 		},
-	): void {
+	): boolean {
 		const node = transaction.message.getNodeUnsafe();
-		if (!node) return; // This should never happen, but whatever
+		if (!node) return false; // This should never happen, but whatever
 
 		if (!transaction.changeNodeStatusOnTimeout) {
 			// The sender of this transaction doesn't want it to change the status of the node
-			return;
+			return false;
 		} else if (node.supportsCC(CommandClasses["Wake Up"])) {
 			log.controller.logNode(
 				node.id,
@@ -1438,13 +1459,18 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			);
 			// Mark the node as asleep
 			// The handler for the asleep status will move the messages to the wakeup queue
+			// We need to re-add the current transaction because otherwise it will be dropped
+			this.sendThread.send({ type: "add", transaction });
 			node.markAsAsleep();
+			return true;
 		} else {
 			const errorMsg = `Node ${node.id} did not respond after ${transaction.message.maxSendAttempts} attempts, it is presumed dead`;
 			log.controller.logNode(node.id, errorMsg, "warn");
 
 			node.markAsDead();
 			this.rejectAllTransactionsForNode(node.id, errorMsg);
+			// The above call will reject the transaction, no need to do it again
+			return false;
 		}
 	}
 
@@ -2021,17 +2047,6 @@ ${handlers.length} left`,
 		} catch (e) {
 			if (e instanceof ZWaveError) {
 				if (
-					// If the node does not acknowledge our request, it is either asleep or dead
-					e.code === ZWaveErrorCodes.Controller_CallbackNOK &&
-					transaction.message instanceof SendDataRequest &&
-					// Ignore pre-transmit handshakes because the actual transaction will be retried
-					transaction.priority !==
-						MessagePriority.PreTransmitHandshake
-				) {
-					this.handleMissingNodeACK(
-						transaction as Transaction & { message: CommandClass },
-					);
-				} else if (
 					// If a controller command failed (that is not SendData), pass the response/callback through
 					(e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
 						e.code === ZWaveErrorCodes.Controller_CallbackNOK) &&

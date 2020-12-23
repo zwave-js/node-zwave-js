@@ -7,6 +7,7 @@ import {
 	parseMaybeNumber,
 	parseNumber,
 	validatePayload,
+	ValueID,
 	ValueMetadata,
 } from "@zwave-js/core";
 import type { AllOrNone } from "@zwave-js/shared";
@@ -39,6 +40,14 @@ export enum BasicCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
+}
+
+function getTargetValueValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses.Basic,
+		endpoint,
+		property: "targetValue",
+	};
 }
 
 @API(CommandClasses.Basic)
@@ -92,6 +101,16 @@ export class BasicCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			targetValue,
 		});
+		if (this.isSinglecast()) {
+			// remember the value in case the device does not respond with a target value
+			this.endpoint
+				.getNodeUnsafe()
+				?.valueDB.setValue(
+					getTargetValueValueId(this.endpoint.index),
+					targetValue,
+					{ noEvent: true },
+				);
+		}
 		await this.driver.sendCommand(cc, this.commandOptions);
 
 		if (this.isSinglecast()) {
