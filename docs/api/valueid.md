@@ -41,8 +41,9 @@ Value metadata is used to get additional information about a specific `ValueID`.
 <!-- TODO: Import from "core" does not work for some reason -->
 
 ```ts
-interface ValueMetadataBase {
+interface ValueMetadataAny {
 	type: ValueType;
+	default?: any;
 	readable: boolean;
 	writeable: boolean;
 	description?: string;
@@ -64,23 +65,14 @@ Here you can find all the type specific metadata fields
 
 #### `any`
 
-<!-- #import ValueMetadataAny from "zwave-js" -->
-
-```ts
-interface ValueMetadataAny extends ValueMetadataBase {
-	/** The default value */
-	default?: any;
-}
-```
-
--   `default`: The default value
+Just `ValueMetadataAny`, no additional properties.
 
 #### `number`
 
 <!-- #import ValueMetadataNumeric from "zwave-js" with no-jsdoc -->
 
 ```ts
-interface ValueMetadataNumeric extends ValueMetadataBase {
+interface ValueMetadataNumeric extends ValueMetadataAny {
 	type: "number";
 	min?: number;
 	max?: number;
@@ -103,7 +95,7 @@ interface ValueMetadataNumeric extends ValueMetadataBase {
 <!-- #import ValueMetadataBoolean from "zwave-js" with no-jsdoc -->
 
 ```ts
-interface ValueMetadataBoolean extends ValueMetadataBase {
+interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	default?: number;
 }
@@ -116,7 +108,7 @@ interface ValueMetadataBoolean extends ValueMetadataBase {
 <!-- #import ValueMetadataString from "zwave-js" with no-jsdoc -->
 
 ```ts
-interface ValueMetadataString extends ValueMetadataBase {
+interface ValueMetadataString extends ValueMetadataAny {
 	type: "string";
 	minLength?: number;
 	maxLength?: number;

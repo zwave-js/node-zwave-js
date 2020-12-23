@@ -4,6 +4,12 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Breaking changes
+* Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
+* The second (string) parameter of the `"interview failed"` event handler was removed
+* The type `ValueMetadataBase` has been renamed to `ValueMetadataAny`. The old type `ValueMetadataAny` was merged into `ValueMetadataBase`.
+
 ## 5.7.0 (2020-12-23)
 ### Config file changes
 * Added Aeotec thermostatic Valve ZWA021
