@@ -251,13 +251,8 @@ function matchId(
 	prodType: string,
 	prodId: string,
 ): boolean {
-	return (
-		program.ids !== undefined &&
-		program.ids?.includes(
-			`${formatId(manufacturer)}-${formatId(prodType)}-${formatId(
-				prodId,
-			)}`,
-		)
+	return !!program.ids?.includes(
+		`${formatId(manufacturer)}-${formatId(prodType)}-${formatId(prodId)}`,
 	);
 }
 
