@@ -2,6 +2,7 @@ import { CommandClasses } from "@zwave-js/core";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { wait } from "alcalzone-shared/async";
 import { BasicCCSet } from "../../commandclass/BasicCC";
+import type { SendDataRequest } from "../../controller/SendDataMessages";
 import type { Driver } from "../../driver/Driver";
 import { MessagePriority } from "../../message/Constants";
 import { ZWaveNode } from "../../node/Node";
@@ -45,13 +46,22 @@ describe("regression tests", () => {
 
 		const ACK = Buffer.from([MessageHeaders.ACK]);
 
-		const command = new BasicCCSet(driver, {
+		const command1 = new BasicCCSet(driver, {
 			nodeId: 2,
 			targetValue: 99,
 		});
-		const basicSetPromise = driver.sendCommand(command, {
+		const basicSetPromise1 = driver.sendCommand(command1, {
 			maxSendAttempts: 1,
 		});
+
+		const command2 = new BasicCCSet(driver, {
+			nodeId: 2,
+			targetValue: 50,
+		});
+		const basicSetPromise2 = driver.sendCommand(command2, {
+			maxSendAttempts: 1,
+		});
+
 		// » [Node 002] [REQ] [SendData]
 		//   │ transmit options: 0x25
 		//   │ callback id:      1
@@ -79,11 +89,24 @@ describe("regression tests", () => {
 		serialport.receiveData(Buffer.from("0107001301010002e9", "hex"));
 		expect(serialport.lastWrite).toEqual(ACK);
 		await expect(
-			Promise.race([basicSetPromise, wait(50).then(() => "OK")]),
+			Promise.race([basicSetPromise1, wait(50).then(() => "OK")]),
 		).resolves.toBe("OK");
 
+		// Both transactions should still be in the queue
 		const sendQueue = driver["sendThread"].state.context.queue;
-		expect(sendQueue.length).toBe(1);
-		expect(sendQueue.peekStart()?.priority).toBe(MessagePriority.WakeUp);
+		expect(sendQueue.length).toBe(2);
+		expect(sendQueue.get(0)?.priority).toBe(MessagePriority.WakeUp);
+		expect(sendQueue.get(1)?.priority).toBe(MessagePriority.WakeUp);
+		expect(node2.status).toBe(NodeStatus.Asleep);
+
+		// And the order should be correct
+		expect(
+			((sendQueue.get(0)?.message as SendDataRequest)
+				.command as BasicCCSet).targetValue,
+		).toBe(99);
+		expect(
+			((sendQueue.get(1)?.message as SendDataRequest)
+				.command as BasicCCSet).targetValue,
+		).toBe(50);
 	});
 });
