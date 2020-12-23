@@ -1,7 +1,6 @@
 // Aeotect Thermostatic Valve similar to Eurotronics Spirit
 // Thermostatic Valve
 {
-	"_approved": true,
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "Radiator Thermostat",
@@ -19,8 +18,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "LCD Invert",
-			"description": "LCD orientation control",
+			"label": "Invert LCD orientation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -102,7 +100,7 @@
 		"5": {
 			"label": "Measured  Temperature",
 			"description": "Measured Temperature report. Reporting Delta in 1/10 Celsius. '0' to disable reporting.",
-			"unit": "°C",
+			"unit": "1/10 °C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 50,
