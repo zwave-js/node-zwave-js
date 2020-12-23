@@ -520,7 +520,8 @@ async function parseOZWProduct(
 
 	// Load the existing config so we can merge it with the updated information
 	let existingDevice: Record<string, any> | undefined;
-	if (latestConfig) {
+
+	if (await fs.pathExists(fileNameAbsolute)) {
 		existingDevice = JSON5.parse(
 			await fs.readFile(fileNameAbsolute, "utf8"),
 		);
