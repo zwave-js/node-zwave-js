@@ -3,6 +3,7 @@ import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { wait } from "alcalzone-shared/async";
 import { BasicCCSet } from "../../commandclass/BasicCC";
 import type { Driver } from "../../driver/Driver";
+import { MessagePriority } from "../../message/Constants";
 import { ZWaveNode } from "../../node/Node";
 import { NodeStatus } from "../../node/Types";
 import { createAndStartDriver } from "../utils";
@@ -77,6 +78,12 @@ describe("regression tests", () => {
 		//   transmit status: NoACK
 		serialport.receiveData(Buffer.from("0107001301010002e9", "hex"));
 		expect(serialport.lastWrite).toEqual(ACK);
-		await expect(basicSetPromise).not.toReject();
+		await expect(
+			Promise.race([basicSetPromise, wait(50).then(() => "OK")]),
+		).resolves.toBe("OK");
+
+		const sendQueue = driver["sendThread"].state.context.queue;
+		expect(sendQueue.length).toBe(1);
+		expect(sendQueue.peekStart()?.priority).toBe(MessagePriority.WakeUp);
 	});
 });
