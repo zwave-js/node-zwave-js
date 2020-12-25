@@ -1,0 +1,131 @@
+// Technisat Dimmer
+// Light Dimmer
+{
+	"manufacturer": "TechniSat",
+	"manufacturerId": "0x0299",
+	"label": "Dimmer",
+	"description": "Light Dimmer Switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x1a92"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Parameter 1",
+			"description": "Enable/disable central scene notifications for 2x-5x button presses.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable central scene",
+					"value": 0
+				},
+				{
+					"label": "enable central scene",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Parameter 2",
+			"description": "3 to 8640 - Interval of unsolicited reports in 10s increments, a value of 3 means 30 seconds (30 seconds - 1 day) 0 - Disable unsolicited meter reports of current wattage.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 8640,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Parameter 3",
+			"description": "Interval of active energy meter reports in minutes. - 10 to 30240 - Interval of active energy meter unsolicited reports in minutes (10 minutes - 3 weeks) - 0 - Disable unsolicited meter reports of active energy.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 30240,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Parameter 4",
+			"description": "Operations mode for push buttons controlling the output. - Normal Switch: In this mode the top button will turn the output on, while the bottom button will turn the output off. - Toogle Switch: In this mode any button press will toggle the output - when on it will be turned off, when off it will be turned on.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Switch",
+					"value": 0
+				},
+				{
+					"label": "External Push Button",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Parameter 5",
+			"description": "Configuration of switch type connected to extension input S. - External Normal Switch: Use this value if a toggle switch is connected to extension input S. - External Push Button: Use this value if a push button switch is connected to extension input S.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "External Normal Switch",
+					"value": 0
+				},
+				{
+					"label": "External Push Button",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Parameter 6",
+			"description": "Central Scene mapping of extension input S.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Map extension input S. on the central scene of T1.",
+					"value": 1
+				},
+				{
+					"label": "Map extension input S. on the central scene of T2.",
+					"value": 2
+				},
+				{
+					"label": "Map extension input S. on a custom central scene.",
+					"value": 3
+				}
+			]
+		}
+	}
+}
