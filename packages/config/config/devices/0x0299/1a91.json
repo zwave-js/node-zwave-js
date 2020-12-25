@@ -7,7 +7,7 @@
 	"description": "Series Switches",
 	"devices": [
 		{
-			"productType": "0x0004",
+			"productType": "0x0003",
 			"productId": "0x1a91"
 		}
 	],
