@@ -392,7 +392,7 @@ interface ZWaveOptions {
 		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
 		sendDataCallback: number; // >=10000, default: 65000 ms
 		/** How much time a node gets to process a request and send a response */
-		report: number; // [1000...40000], default: 1600 ms
+		report: number; // [1000...40000], default: 10000 ms
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
 		/** How long a node is assumed to be awake after the last communication with it */
@@ -404,6 +404,8 @@ interface ZWaveOptions {
 		controller: number; // [1...3], default: 3
 		/** How often the driver should try sending SendData commands before giving up */
 		sendData: number; // [1...5], default: 3
+		/** Whether a command should be retried when a node acknowledges the receipt but no response is received */
+		retryAfterTransmitReport: boolean; // default: false
 		/**
 		 * How many attempts should be made for each node interview before giving up
 		 */
