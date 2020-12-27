@@ -54,7 +54,7 @@
 			"label": "Parameter 3",
 			"description": "Interval of active energy meter reports in minutes. - 10 to 30240 - Interval of active energy meter unsolicited reports in minutes (10 minutes - 3 weeks) - 0 - Disable unsolicited meter reports of active energy.",
 			"valueSize": 2,
-			"unit": "10s",
+			"unit": "1m",
 			"minValue": 0,
 			"maxValue": 30240,
 			"defaultValue": 60,
