@@ -19,7 +19,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Parameter 1",
-			"description": "Enable/disable central scene notifications for 2x-5x button presses.",
+			"description": "Enable/disable Central Scene notifications for 2x-5x button presses.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
