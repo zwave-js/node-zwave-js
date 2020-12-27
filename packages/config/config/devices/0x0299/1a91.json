@@ -61,6 +61,27 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Parameter 4",
+			"description": "Switching mode of the push buttons T1 ... T4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "T1 and T3 switch the output on, T2 and T4 switch output off.",
+					"value": 0
+				},
+				{
+					"label": "T1 ... T4 switch the output on and off.",
+					"value": 1
+				}
+			]
 		}
 	}
 }
