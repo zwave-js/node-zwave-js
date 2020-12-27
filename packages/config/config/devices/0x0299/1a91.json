@@ -29,7 +29,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disable central scene",
+					"label": "Disable Central Scene",
 					"value": 0
 				},
 				{
