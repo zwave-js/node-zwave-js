@@ -18,7 +18,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Parameter 1",
+			"label": "Central Scene notifications",
 			"description": "Enable/disable Central Scene notifications for 2x-5x button presses.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -39,7 +39,7 @@
 			]
 		},
 		"2": {
-			"label": "Parameter 2",
+			"label": "Report interval",
 			"description": "3 to 8640 - Interval of unsolicited reports in 10s increments, a value of 3 means 30 seconds (30 seconds - 1 day) 0 - Disable unsolicited meter reports of current wattage.",
 			"valueSize": 2,
 			"unit": "10s",
@@ -51,7 +51,7 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Parameter 3",
+			"label": "Energy meter report interval",
 			"description": "Interval of active energy meter reports in minutes. - 10 to 30240 - Interval of active energy meter unsolicited reports in minutes (10 minutes - 3 weeks) - 0 - Disable unsolicited meter reports of active energy.",
 			"valueSize": 2,
 			"unit": "minutes",
@@ -63,7 +63,7 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Parameter 4",
+			"label": "Button mode",
 			"description": "Switching mode of the push buttons T1 ... T4",
 			"valueSize": 1,
 			"minValue": 0,
