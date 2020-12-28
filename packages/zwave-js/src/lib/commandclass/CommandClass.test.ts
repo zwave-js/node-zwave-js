@@ -126,12 +126,12 @@ describe("lib/commandclass/CommandClass => ", () => {
 	describe("persistValues()", () => {
 		let node2: ZWaveNode;
 
-		beforeAll(() => {
+		beforeEach(() => {
 			node2 = new ZWaveNode(2, fakeDriver as any);
 			(fakeDriver.controller.nodes as any).set(2, node2);
 		});
 
-		afterAll(() => {
+		afterEach(() => {
 			node2.destroy();
 			(fakeDriver.controller.nodes as any).delete(2);
 		});
@@ -174,11 +174,11 @@ describe("lib/commandclass/CommandClass => ", () => {
 			node2.on("value updated", spyA);
 			await node2.handleCommand(cc);
 
+			expect(spyA).not.toBeCalled();
 			expect(spyN).toBeCalled();
 			expect(spyN.mock.calls[0][1].value).toBe(
 				CentralSceneKeys.KeyPressed,
 			);
-			expect(spyA).not.toBeCalled();
 
 			// and not persist the value in the DB
 			expect(
