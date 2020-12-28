@@ -31,6 +31,10 @@ export interface ValueRemovedArgs extends ValueID {
 	prevValue: unknown;
 }
 
+export interface ValueNotificationArgs extends ValueID {
+	value: unknown;
+}
+
 export interface MetadataUpdatedArgs extends ValueID {
 	metadata: ValueMetadata | undefined;
 }
@@ -38,12 +42,14 @@ export interface MetadataUpdatedArgs extends ValueID {
 type ValueAddedCallback = (args: ValueAddedArgs) => void;
 type ValueUpdatedCallback = (args: ValueUpdatedArgs) => void;
 type ValueRemovedCallback = (args: ValueRemovedArgs) => void;
+type ValueNotificationCallback = (args: ValueNotificationArgs) => void;
 type MetadataUpdatedCallback = (args: MetadataUpdatedArgs) => void;
 
 interface ValueDBEventCallbacks {
 	"value added": ValueAddedCallback;
 	"value updated": ValueUpdatedCallback;
 	"value removed": ValueRemovedCallback;
+	"value notification": ValueNotificationCallback;
 	"metadata updated": MetadataUpdatedCallback;
 }
 
@@ -134,6 +140,10 @@ export interface SetValueOptions {
 	noEvent?: boolean;
 	/** When this is true,  */
 	noThrow?: boolean;
+	/**
+	 * When this is `false`, the value will not be stored and a `value notification` event will be emitted instead (implies `noEvent: false`).
+	 */
+	stateful?: boolean;
 }
 
 /**
@@ -181,10 +191,6 @@ export class ValueDB extends EventEmitter {
 		value: unknown,
 		options: SetValueOptions = {},
 	): void {
-		const cbArg: ValueAddedArgs | ValueUpdatedArgs = {
-			...valueId,
-			newValue: value,
-		};
 		let dbKey: string;
 		try {
 			dbKey = this.valueIdToDBKey(valueId);
@@ -200,17 +206,29 @@ export class ValueDB extends EventEmitter {
 			throw e;
 		}
 
-		let event: ValueDBEvents;
-		if (this._db.has(dbKey)) {
-			event = "value updated";
-			(cbArg as ValueUpdatedArgs).prevValue = this._db.get(dbKey);
-		} else {
-			event = "value added";
-		}
+		if (options.stateful !== false) {
+			const cbArg: ValueAddedArgs | ValueUpdatedArgs = {
+				...valueId,
+				newValue: value,
+			};
+			let event: ValueDBEvents;
+			if (this._db.has(dbKey)) {
+				event = "value updated";
+				(cbArg as ValueUpdatedArgs).prevValue = this._db.get(dbKey);
+			} else {
+				event = "value added";
+			}
 
-		this._db.set(dbKey, value);
-		if (options.noEvent !== true) {
-			this.emit(event, cbArg);
+			this._db.set(dbKey, value);
+			if (options.noEvent !== true) {
+				this.emit(event, cbArg);
+			}
+		} else {
+			// For non-stateful values just emit a notification
+			this.emit("value notification", {
+				...valueId,
+				value,
+			});
 		}
 	}
 

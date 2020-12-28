@@ -10,6 +10,7 @@ import {
 	tagify,
 	ValueAddedArgs,
 	ValueID,
+	ValueNotificationArgs,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 	ZWaveLogger,
@@ -116,6 +117,7 @@ const valueEventPrefixes = Object.freeze({
 	added: "+",
 	updated: "~",
 	removed: "-",
+	notification: "!",
 });
 
 function formatValue(value: any): string {
@@ -139,7 +141,11 @@ export function value(
 	args: LogValueArgs<ValueRemovedArgs>,
 ): void;
 export function value(
-	change: "added" | "updated" | "removed",
+	change: "notification",
+	args: LogValueArgs<ValueNotificationArgs>,
+): void;
+export function value(
+	change: "added" | "updated" | "removed" | "notification",
 	args: LogValueArgs<ValueID>,
 ): void {
 	if (!isValueLogVisible()) return;
@@ -177,6 +183,11 @@ export function value(
 			message += ` (was ${formatValue(
 				((args as unknown) as ValueRemovedArgs).prevValue,
 			)})`;
+			break;
+		case "notification":
+			message += `: ${formatValue(
+				((args as unknown) as ValueNotificationArgs).value,
+			)}`;
 			break;
 	}
 	getLogger().log({

@@ -8,6 +8,11 @@ import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
 import { BasicCC, BasicCCSet } from "./BasicCC";
 import {
+	CentralSceneCCNotification,
+	CentralSceneCommand,
+	CentralSceneKeys,
+} from "./CentralSceneCC";
+import {
 	CommandClass,
 	commandClass,
 	expectedCCResponse,
@@ -128,6 +133,7 @@ describe("lib/commandclass/CommandClass => ", () => {
 
 		afterAll(() => {
 			node2.destroy();
+			(fakeDriver.controller.nodes as any).delete(2);
 		});
 
 		it(`should not update "interviewComplete" in the value DB`, () => {
@@ -148,8 +154,36 @@ describe("lib/commandclass/CommandClass => ", () => {
 			expect(properties).not.toContainValue("interviewComplete");
 		});
 
-		afterAll(() => {
-			(fakeDriver.controller.nodes as any).delete(2);
+		it(`should not store values marked as "events" (non-stateful)`, async () => {
+			const cc = new CentralSceneCCNotification(fakeDriver, {
+				nodeId: 2,
+				data: Buffer.from([
+					CommandClasses["Central Scene"],
+					CentralSceneCommand.Notification,
+					1, // seq number
+					CentralSceneKeys.KeyPressed,
+					1, // scene number
+				]),
+			});
+
+			// Central Scene should use the value notification event instead of added/updated
+			const spyN = jest.fn();
+			const spyA = jest.fn();
+			node2.on("value notification", spyN);
+			node2.on("value added", spyA);
+			node2.on("value updated", spyA);
+			await node2.handleCommand(cc);
+
+			expect(spyN).toBeCalled();
+			expect(spyN.mock.calls[0][1].value).toBe(
+				CentralSceneKeys.KeyPressed,
+			);
+			expect(spyA).not.toBeCalled();
+
+			// and not persist the value in the DB
+			expect(
+				node2.valueDB.getValues(CommandClasses["Central Scene"]),
+			).toHaveLength(0);
 		});
 	});
 });
