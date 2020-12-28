@@ -553,6 +553,21 @@ The event arguments have the shape of [`TranslatedValueID`](api/valueid.md) with
 -   `prevValue` - The previous value (before the change). Only present in the `"updated"` and `"removed"` events.
 -   `newValue` - The new value (after the change). Only present in the `"added"` and `"updated"` events.
 
+### `"value notification"`
+
+Some values (like `Central Scene` notifications) are stateless, meaning their value only has significance **the moment** it is received. These stateless values are not persisted in the value DB in order to avoid triggering automations when restoring the network from the cache.
+
+To distinguish them from the statful values, the `"value notification"` event is used. The callback takes the node itself and an argument detailing the change:
+
+```ts
+(node: ZWaveNode, args: ZWaveNodeValueNotificationArgs) => void;
+```
+
+The event argument has the shape of [`TranslatedValueID`](api/valueid.md) with an additional `value` property containing the current value at the time of the event.
+
+> [!NOTE]
+> If these values are displayed in a UI somehow, it is advised to perform some kind of auto-invalidation, e.g. after a fixed short time interval.
+
 ### `"metadata updated"`
 
 The metadata for one of this node's values was added or updated.
