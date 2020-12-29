@@ -313,6 +313,8 @@ readonly deviceClass: DeviceClass
 
 This property returns the node's [DeviceClass](#DeviceClass-class), which provides further information about the kind of device this node is.
 
+<!-- #import DeviceClass from "zwave-js" -->
+
 ### `zwavePlusVersion`
 
 ```ts
