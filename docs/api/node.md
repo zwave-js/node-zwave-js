@@ -315,11 +315,11 @@ This property returns the node's **DeviceClass**, which provides further informa
 
 <!-- #import DeviceClass from "zwave-js" -->
 
-<!-- #import BasicDeviceClass from "zwave-js" -->
+<!-- #import BasicDeviceClass from "@zwave-js/config" -->
 
-<!-- #import GenericDeviceClass from "zwave-js" -->
+<!-- #import GenericDeviceClass from "@zwave-js/config" -->
 
-<!-- #import SpecificDeviceClass from "zwave-js" -->
+<!-- #import SpecificDeviceClass from "@zwave-js/config" -->
 
 ### `zwavePlusVersion`
 
