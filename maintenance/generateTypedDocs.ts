@@ -164,7 +164,7 @@ export async function processDocFile(
 		console.log(`  processing import ${range.symbol} from ${range.module}`);
 		const sourceNode = findSourceNode(
 			program,
-			`packages/${range.module}/src/index.ts`,
+			`packages/${range.module.replace(/^@zwave-js\//, "")}/src/index.ts`,
 			range.symbol,
 		);
 		if (!sourceNode) {
