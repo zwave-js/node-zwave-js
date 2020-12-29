@@ -311,9 +311,15 @@ enum InterviewStage {
 readonly deviceClass: DeviceClass
 ```
 
-This property returns the node's [DeviceClass](#DeviceClass-class), which provides further information about the kind of device this node is.
+This property returns the node's **DeviceClass**, which provides further information about the kind of device this node is.
 
 <!-- #import DeviceClass from "zwave-js" -->
+
+<!-- #import BasicDeviceClass from "@zwave-js/config" -->
+
+<!-- #import GenericDeviceClass from "@zwave-js/config" -->
+
+<!-- #import SpecificDeviceClass from "@zwave-js/config" -->
 
 ### `zwavePlusVersion`
 
