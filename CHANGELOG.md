@@ -5,15 +5,25 @@
 -->
 
 ## __WORK IN PROGRESS__
-### Breaking changes
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)
 * Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
 * The second (string) parameter of the `"interview failed"` event handler was removed
 * The type `ValueMetadataBase` has been renamed to `ValueMetadataAny`. The old type `ValueMetadataAny` was merged into `ValueMetadataBase`.
 * The retry strategy for sending commands to nodes has been revised. By default, a message is no longer re-transmitted when the node has acknowledged its receipt, since it is unlikely that the retransmission will change anything. The old behavior can be restored by setting the `attempts.retryAfterTransmitReport` driver option to `true`.  
 To compensate for the change and give the response enough time to reach the controller, the default for `timeouts.response` has been increased from `1600` to `10000`.
+* The driver now distinguishes between stateful and event values. The latter are now exclusively exposed through the `"value notification"` event.
+* The deprecated `nodeInterviewAttempts` option was removed
+* The options `fs` and `cacheDir` have been renamed to `storage.driver` and `storage.cacheDir`.
+
+### Config file changes
+* Added Technisat Dimmer and series switch
 
 ### Features
 * An option was added to enable logging to the console, even if it is not a TTY
+* An option was added to control the filesystem access throttling
+
+### Bugfixes
+* Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask
 
 ## 5.7.0 (2020-12-23)
 ### Config file changes

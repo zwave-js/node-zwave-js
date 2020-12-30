@@ -493,10 +493,10 @@ The interview process for this node was completed. The node is passed as the sin
 
 ### `"interview failed"`
 
-The interview process for this node or one of the interview attempts has failed. The second argument contains a formatted error message that explains why. The third argument includes more detailed information, including a flag to indicate whether this was the final attempt.
+The interview process for this node or one of the interview attempts has failed. The second argument includes more detailed information, including a formatted error message that explains why and a flag to indicate whether this was the final attempt.
 
 ```ts
-(node: ZWaveNode, errorMessage: string, args?: NodeInterviewFailedEventArgs) => void
+(node: ZWaveNode, args: NodeInterviewFailedEventArgs) => void
 ```
 
 where the third argument looks like this:
@@ -515,9 +515,6 @@ interface NodeInterviewFailedEventArgs {
 	maxAttempts?: number;
 }
 ```
-
-> [!WARNING]
-> The third argument is optional for now, but the legacy version of this event handler with only an error message has been **deprecated**. In the next major version, the second (string) argument **WILL** be removed.
 
 ### `"ready"`
 
