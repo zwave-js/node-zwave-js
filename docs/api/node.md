@@ -493,10 +493,10 @@ The interview process for this node was completed. The node is passed as the sin
 
 ### `"interview failed"`
 
-The interview process for this node or one of the interview attempts has failed. The second argument contains a formatted error message that explains why. The third argument includes more detailed information, including a flag to indicate whether this was the final attempt.
+The interview process for this node or one of the interview attempts has failed. The second argument includes more detailed information, including a formatted error message that explains why and a flag to indicate whether this was the final attempt.
 
 ```ts
-(node: ZWaveNode, errorMessage: string, args?: NodeInterviewFailedEventArgs) => void
+(node: ZWaveNode, args: NodeInterviewFailedEventArgs) => void
 ```
 
 where the third argument looks like this:
@@ -515,9 +515,6 @@ interface NodeInterviewFailedEventArgs {
 	maxAttempts?: number;
 }
 ```
-
-> [!WARNING]
-> The third argument is optional for now, but the legacy version of this event handler with only an error message has been **deprecated**. In the next major version, the second (string) argument **WILL** be removed.
 
 ### `"ready"`
 
@@ -552,6 +549,21 @@ The event arguments have the shape of [`TranslatedValueID`](api/valueid.md) with
 
 -   `prevValue` - The previous value (before the change). Only present in the `"updated"` and `"removed"` events.
 -   `newValue` - The new value (after the change). Only present in the `"added"` and `"updated"` events.
+
+### `"value notification"`
+
+Some values (like `Central Scene` notifications) are stateless, meaning their value only has significance **the moment** it is received. These stateless values are not persisted in the value DB in order to avoid triggering automations when restoring the network from the cache.
+
+To distinguish them from the statful values, the `"value notification"` event is used. The callback takes the node itself and an argument detailing the change:
+
+```ts
+(node: ZWaveNode, args: ZWaveNodeValueNotificationArgs) => void;
+```
+
+The event argument has the shape of [`TranslatedValueID`](api/valueid.md) with an additional `value` property containing the current value at the time of the event.
+
+> [!NOTE]
+> If these values are displayed in a UI somehow, it is advised to perform some kind of auto-invalidation, e.g. after a fixed short time interval.
 
 ### `"metadata updated"`
 

@@ -1,7 +1,7 @@
 {
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"typescript.enablePromptUseWorkspaceTsdk": true,
-	"jest.showCoverageOnLoad": true,
+	"jest.showCoverageOnLoad": false,
 	"jest.enableCodeLens": true,
 	"jest.pathToJest": "yarn run test:ts",
 	"editor.formatOnSave": true,
@@ -99,5 +99,7 @@
 		120
 	],
 	"files.participants.timeout": 10000,
-	"typescript.preferences.importModuleSpecifier": "project-relative"
+	"typescript.preferences.importModuleSpecifier": "project-relative",
+	"jest.autoEnable": false,
+	"jest.runAllTestsFirst": false
 }

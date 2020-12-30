@@ -34,9 +34,11 @@ export type ValueType =
 	| "string[]"
 	| "any";
 
-export interface ValueMetadataBase {
+export interface ValueMetadataAny {
 	/** The type of the value */
 	type: ValueType;
+	/** The default value */
+	default?: any;
 	/** Whether the value can be read. By default all values are assumed readable */
 	readable: boolean;
 	/** Whether the value can be written. By default all values are assumed writeable */
@@ -49,12 +51,7 @@ export interface ValueMetadataBase {
 	ccSpecific?: Record<string, any>;
 }
 
-export interface ValueMetadataAny extends ValueMetadataBase {
-	/** The default value */
-	default?: any;
-}
-
-export interface ValueMetadataNumeric extends ValueMetadataBase {
+export interface ValueMetadataNumeric extends ValueMetadataAny {
 	type: "number";
 	/** The minimum value that can be assigned to a CC value (optional) */
 	min?: number;
@@ -70,13 +67,13 @@ export interface ValueMetadataNumeric extends ValueMetadataBase {
 	unit?: string;
 }
 
-export interface ValueMetadataBoolean extends ValueMetadataBase {
+export interface ValueMetadataBoolean extends ValueMetadataAny {
 	type: "boolean";
 	/** The default value */
 	default?: number;
 }
 
-export interface ValueMetadataString extends ValueMetadataBase {
+export interface ValueMetadataString extends ValueMetadataAny {
 	type: "string";
 	/** The minimum length this string must have (optional) */
 	minLength?: number;
@@ -95,7 +92,7 @@ export type ValueMetadata =
 // TODO: lists of allowed values, etc...
 
 // Mixins for value metadata
-const _default: ValueMetadataBase = {
+const _default: ValueMetadataAny = {
 	type: "any",
 	readable: true,
 	writeable: true,
@@ -115,13 +112,13 @@ const Any: ValueMetadataAny = {
 };
 
 /** The default value for readonly metadata */
-const ReadOnly: ValueMetadataBase = {
+const ReadOnly: ValueMetadataAny = {
 	..._default,
 	..._readonly,
 };
 
 /** The default value for writeonly metadata */
-const WriteOnly: ValueMetadataBase = {
+const WriteOnly: ValueMetadataAny = {
 	..._default,
 	..._writeonly,
 };
