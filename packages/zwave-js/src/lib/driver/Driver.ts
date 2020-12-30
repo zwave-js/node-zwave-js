@@ -161,11 +161,7 @@ export interface ZWaveOptions {
 	 * Set this to true to skip the controller interview. Useful for testing purposes
 	 */
 	skipInterview?: boolean;
-	/**
-	 * How many attempts should be made for each node interview before giving up
-	 * @deprecated Use `attempts.nodeInterview` instead.
-	 */
-	nodeInterviewAttempts?: number;
+
 	/**
 	 * Allows you to replace the default file system driver used to store and read the cache
 	 */
@@ -291,10 +287,8 @@ function checkOptions(options: ZWaveOptions): void {
 		);
 	}
 	if (
-		// wotan-disable-next-line no-unstable-api-use
-		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) < 1 ||
-		// wotan-disable-next-line no-unstable-api-use
-		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) > 10
+		options.attempts.nodeInterview < 1 ||
+		options.attempts.nodeInterview > 10
 	) {
 		throw new ZWaveError(
 			`The Node interview attempts must be between 1 and 10!`,
@@ -829,10 +823,7 @@ export class Driver extends EventEmitter {
 			this.retryNodeInterviewTimeouts.delete(node.id);
 		}
 
-		const maxInterviewAttempts =
-			// wotan-disable-next-line no-unstable-api-use
-			this.options.nodeInterviewAttempts ??
-			this.options.attempts.nodeInterview;
+		const maxInterviewAttempts = this.options.attempts.nodeInterview;
 
 		try {
 			if (!(await node.interview())) {
