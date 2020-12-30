@@ -244,6 +244,31 @@ interface FileSystem {
 }
 ```
 
+### `LogConfig`
+
+The log configuration is passed to the driver constructor and can be used to influence the logging behavior. This config will overwrite the `LOGTOFILE` and `LOGLEVEL` environment variables if the corresponding properties are set. All properties are optional and will default to the values described below.
+
+```ts
+interface LogConfig {
+	enabled: boolean;
+	level: number;
+	transports: Transport[];
+	logToFile: boolean;
+	filename: string;
+	forceConsole: boolean;
+}
+```
+
+-   `enable`: If `false`, logging will be disabled. Default: `true`.
+-   `level`: The numeric loglevel (like the `npm` [loglevels](https://github.com/winstonjs/triple-beam/blob/master/config/npm.js)), ranging from `0` (error) to `6` (silly). Default: `5` (debug) or whatever is configured with the `LOGLEVEL` environment variable.
+-   `transports`: Custom [`winston`](https://github.com/winstonjs/winston) log transports. Setting this property will override all configured and default transports. Use `getConfiguredTransports()` if you want to extend the default transports. Default: console transport if `logToFile` is `false`, otherwise a file transport.
+-   `logToFile`: Whether the log should go to a file instead of the console. Default: `false` or whatever is configured with the `LOGTOFILE` environment variable.
+-   `filename`: When `logToFile` is `true`, this is the path to the log file. The default file is called `zwave-${process.pid}.log` and located in the same directory as the main executable.
+-   `forceConsole`: By default, `zwave-js` does not log to the console if it is not a TTY in order to reduce the CPU load. By setting this option to `true`, the TTY check will be skipped and all logs will be printed to the console, **except if `logToFile` is `true`**. Default: `false`.
+
+> [!NOTE]
+> The `level` property is a numeric value (0-6), but the `LOGLEVEL` environment variable uses the string representation (`error`, ..., `silly`)!
+
 ### `SendMessageOptions`
 
 Influences the behavior of `driver.sendMessage`.
@@ -367,7 +392,7 @@ interface ZWaveOptions {
 		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
 		sendDataCallback: number; // >=10000, default: 65000 ms
 		/** How much time a node gets to process a request and send a response */
-		report: number; // [1000...40000], default: 1600 ms
+		report: number; // [1000...40000], default: 10000 ms
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
 		/** How long a node is assumed to be awake after the last communication with it */
@@ -379,17 +404,33 @@ interface ZWaveOptions {
 		controller: number; // [1...3], default: 3
 		/** How often the driver should try sending SendData commands before giving up */
 		sendData: number; // [1...5], default: 3
+		/** Whether a command should be retried when a node acknowledges the receipt but no response is received */
+		retryAfterTransmitReport: boolean; // default: false
 		/**
 		 * How many attempts should be made for each node interview before giving up
 		 */
 		nodeInterview: number; // [1...10], default: 5
 	};
+
 	/**
-	 * Allows you to replace the default file system driver used to store and read the cache
+	 * Optional log configuration
 	 */
-	fs: FileSystem;
-	/** Allows you to specify a different cache directory */
-	cacheDir: string;
+	logConfig?: LogConfig;
+	storage: {
+		/** Allows you to replace the default file system driver used to store and read the cache */
+		driver: FileSystem;
+		/** Allows you to specify a different cache directory */
+		cacheDir: string;
+		/**
+		 * How frequently the values and metadata should be written to the DB files. This is a compromise between data loss
+		 * in cause of a crash and disk wear:
+		 *
+		 * * `"fast"` immediately writes every change to disk
+		 * * `"slow"` writes at most every 5 minutes or after 500 changes - whichever happens first
+		 * * `"normal"` is a compromise between the two options
+		 */
+		throttle: "fast" | "normal" | "slow";
+	};
 
 	/** Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes. */
 	networkKey?: Buffer;
@@ -402,4 +443,7 @@ The `report` timeout is used by this library to determine how long to wait for a
 
 If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is 5.
 
-For more control over writing the cache file, you can use the `fs` and `cacheDir` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
+For more control over writing the cache files, you can use the `storage` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
+The `throttle` option allows you to fine-tune the filesystem. The default value `"normal"`
+
+For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.

@@ -14331,6 +14331,26 @@
         "filename": "0x0293/lumi_lm-sxzw_c-l.json"
     },
     {
+        "manufacturerId": "0x0299",
+        "productType": "0x0003",
+        "productId": "0x1a91",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0299/1a91.json"
+    },
+    {
+        "manufacturerId": "0x0299",
+        "productType": "0x0004",
+        "productId": "0x1a92",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0299/1a92.json"
+    },
+    {
         "manufacturerId": "0x0301",
         "productType": "0x0048",
         "productId": "0x010f",

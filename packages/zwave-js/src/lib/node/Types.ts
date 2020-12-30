@@ -2,6 +2,7 @@ import type {
 	MetadataUpdatedArgs,
 	ValueAddedArgs,
 	ValueID,
+	ValueNotificationArgs,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 } from "@zwave-js/core";
@@ -30,8 +31,12 @@ export type NodeInterviewFailedEventArgs = {
 export type ZWaveNodeValueAddedArgs = ValueAddedArgs & TranslatedValueID;
 export type ZWaveNodeValueUpdatedArgs = ValueUpdatedArgs & TranslatedValueID;
 export type ZWaveNodeValueRemovedArgs = ValueRemovedArgs & TranslatedValueID;
+export type ZWaveNodeValueNotificationArgs = ValueNotificationArgs &
+	TranslatedValueID;
+
 export type ZWaveNodeMetadataUpdatedArgs = MetadataUpdatedArgs &
 	TranslatedValueID;
+
 export type ZWaveNodeValueAddedCallback = (
 	node: ZWaveNode,
 	args: ZWaveNodeValueAddedArgs,
@@ -44,6 +49,10 @@ export type ZWaveNodeValueRemovedCallback = (
 	node: ZWaveNode,
 	args: ZWaveNodeValueRemovedArgs,
 ) => void;
+export type ZWaveNodeValueNotificationCallback = (
+	node: ZWaveNode,
+	args: ZWaveNodeValueNotificationArgs,
+) => void;
 export type ZWaveNodeMetadataUpdatedCallback = (
 	node: ZWaveNode,
 	args: ZWaveNodeMetadataUpdatedArgs,
@@ -55,8 +64,7 @@ export type ZWaveNotificationCallback = (
 ) => void;
 export type ZWaveInterviewFailedCallback = (
 	node: ZWaveNode,
-	additionalInfo: string,
-	args?: NodeInterviewFailedEventArgs,
+	args: NodeInterviewFailedEventArgs,
 ) => void;
 export type ZWaveNodeFirmwareUpdateProgressCallback = (
 	node: ZWaveNode,
@@ -78,6 +86,7 @@ export interface ZWaveNodeValueEventCallbacks {
 	"value updated": ZWaveNodeValueUpdatedCallback;
 	"value removed": ZWaveNodeValueRemovedCallback;
 	"metadata updated": ZWaveNodeMetadataUpdatedCallback;
+	"value notification": ZWaveNodeValueNotificationCallback;
 }
 
 export interface ZWaveNodeEventCallbacks extends ZWaveNodeValueEventCallbacks {

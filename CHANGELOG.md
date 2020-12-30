@@ -4,6 +4,46 @@
 	## __WORK IN PROGRESS__
 -->
 
+## __WORK IN PROGRESS__
+### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)
+* Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
+* The second (string) parameter of the `"interview failed"` event handler was removed
+* The type `ValueMetadataBase` has been renamed to `ValueMetadataAny`. The old type `ValueMetadataAny` was merged into `ValueMetadataBase`.
+* The retry strategy for sending commands to nodes has been revised. By default, a message is no longer re-transmitted when the node has acknowledged its receipt, since it is unlikely that the retransmission will change anything. The old behavior can be restored by setting the `attempts.retryAfterTransmitReport` driver option to `true`.  
+To compensate for the change and give the response enough time to reach the controller, the default for `timeouts.response` has been increased from `1600` to `10000`.
+* The driver now distinguishes between stateful and event values. The latter are now exclusively exposed through the `"value notification"` event.
+* The deprecated `nodeInterviewAttempts` option was removed
+* The options `fs` and `cacheDir` have been renamed to `storage.driver` and `storage.cacheDir`.
+
+### Config file changes
+* Added Technisat Dimmer and series switch
+
+### Features
+* An option was added to enable logging to the console, even if it is not a TTY
+* An option was added to control the filesystem access throttling
+
+### Bugfixes
+* Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask
+
+## 5.7.0 (2020-12-23)
+### Config file changes
+* Added Aeotec thermostatic Valve ZWA021
+* Added Q-Light Puck and Zerodim 2pol
+* Added Q-Light Zerodim
+* Fixed wrong label and description for Z-Wave.Me UZB
+
+### Bugfixes
+* When a node does not respond because it is asleep, the corresponding transaction is no longer rejected and moved to the wakeup queue instead. This should restore the pre-5.0.0 behavior.
+* Added missing label to Binary Sensor CC
+* Added missing `%` unit to Battery level
+* Timeouts when querying User Codes and the current Lock status are now ignored
+* `User Code CC Reports` without a user code are no longer discarded when the user status is `Available`. This should improve compatibility with some non-compliant nodes
+* The `targetValue` for the `Binary Switch`, `Multilevel Switch` and `Basic` CCs is now persisted in the Value DB when setting values through the API.
+
+### Features
+* Config files can now be used specify additional CCs that a node does not advertise in its NIF.
+* Added support for fallback config files without a firmware version. These can be used to set some parameters for devices which wouldn't complete the `Version CC` interview otherwise
+
 ## 5.6.1 (2020-12-18)
 ### Config file changes
 * Add Heiman Smoke detector

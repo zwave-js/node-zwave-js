@@ -168,7 +168,8 @@ export type TransactionReducer = (
 export type SendThreadMachineParams = {
 	timeouts: SerialAPICommandMachineParams["timeouts"] &
 		Pick<ZWaveOptions["timeouts"], "report">;
-	attempts: SerialAPICommandMachineParams["attempts"];
+	attempts: SerialAPICommandMachineParams["attempts"] &
+		Pick<ZWaveOptions["attempts"], "retryAfterTransmitReport">;
 };
 
 // These actions must be assign actions or they will be executed out of order
@@ -869,11 +870,18 @@ export function createSendThreadMachine(
 									after: {
 										// If an update times out, retry if possible - otherwise reject the entire transaction
 										REPORT_TIMEOUT: [
-											{
-												cond: "mayRetry",
-												target: "#sending.retryWait",
-												actions: rejectHandshakeTransactionWithNodeTimeout,
-											},
+											// only retry on timeout when configured
+											...(params.attempts
+												.retryAfterTransmitReport
+												? [
+														{
+															cond: "mayRetry",
+															target:
+																"#sending.retryWait",
+															actions: rejectHandshakeTransactionWithNodeTimeout,
+														},
+												  ]
+												: []),
 											{
 												actions: [
 													rejectHandshakeTransactionWithNodeTimeout,
@@ -946,10 +954,15 @@ export function createSendThreadMachine(
 							after: {
 								// If an update times out, retry if possible - otherwise reject the transaction
 								REPORT_TIMEOUT: [
-									{
-										cond: "mayRetry",
-										target: "retryWait",
-									},
+									// only retry on timeout when configured
+									...(params.attempts.retryAfterTransmitReport
+										? [
+												{
+													cond: "mayRetry",
+													target: "retryWait",
+												},
+										  ]
+										: []),
 									{
 										actions: rejectCurrentTransactionWithNodeTimeout,
 										target: "done",

@@ -4,14 +4,12 @@
  * and translate the information into a form this library expects
  */
 
-/* eslint-disable @typescript-eslint/no-var-requires */
-
 process.on("unhandledRejection", (r) => {
 	throw r;
 });
 
-import { composeObject, entries } from "alcalzone-shared/objects";
-import { isArray } from "alcalzone-shared/typeguards";
+import { composeObject } from "alcalzone-shared/objects";
+import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { red } from "ansi-colors";
 import { AssertionError, ok } from "assert";
 import axios from "axios";
@@ -19,7 +17,6 @@ import * as child from "child_process";
 import * as fs from "fs-extra";
 import * as JSON5 from "json5";
 import * as path from "path";
-import * as qs from "querystring";
 import { compare } from "semver";
 import { promisify } from "util";
 import xml2json from "xml2json";
@@ -104,57 +101,30 @@ const program = yargs
 	.alias("h", "help").argv;
 
 // Where the files are located
-const importDir = path.join(__dirname, "../packages/config", "config/import");
 const processedDir = path.join(
 	__dirname,
 	"../packages/config",
 	"config/devices",
 );
 
-const paramsRegex = /\[0x([0-9a-f]+)\]/i;
-
-const tmpDir = path.join(__dirname, "../.tmp");
+const ozwTempDir = path.join(__dirname, "../.tmpozw");
 const ozwTarName = "openzwave.tar.gz";
 const ozwTarUrl =
 	"https://github.com/OpenZWave/open-zwave/archive/master.tar.gz";
-const ozwConfigFolder = path.join(tmpDir, "./config");
+const ozwConfigFolder = path.join(ozwTempDir, "./config");
 
-const importedManufacturersPath = path.join(importDir, "manufacturers.json");
-const ownManufacturersPath = path.join(importDir, "../manufacturers.json");
-const ownManufacturers = JSON5.parse(
-	fs.readFileSync(ownManufacturersPath, "utf8"),
-);
-const ownManufacturersReversed = composeObject(
-	entries(ownManufacturers).map(([id, name]) => [name, id]),
-);
+const ohTempDir = path.join(__dirname, "../.tmpoh");
+const importedManufacturersPath = path.join(ohTempDir, "manufacturers.json");
 
 // Regular expressions to parse html pages
-const manufacturerIdRegexes = [
-	/\<manufacturer\>(?:0x)?([0-9a-fA-F]{1,4})\</, // OZW Export
-	/Device identifiers: (?:0x)?([0-9a-fA-F]{1,4}):/, // OH Export
-	/\\"manufacturer_id\\": \\"(?:0x)?([0-9a-fA-F]{1,4})\\"/, // JSON Export
-];
-const databaseIdRegex = /id=\[((?:\d+,?\s?)+)\]/;
-const manufacturerTableStartRegex = /\<table[^\>]+id="manufacturerList"/;
-const manufacturerTableRowsRegex = /\<tr[^\>]+\>(?:\s+\<td\>((?:.|\s)+?)\<\/td\>)(?:\s+\<td\>((?:.|\s)+?)\<\/td\>)/g;
 
 // Where all the information can be found
-const urlManufacturers =
-	"https://www.cd-jackson.com/index.php/zwave/zwave-device-database/zwave-manufacturer-list/manufacturers";
-const urlIDs =
-	"https://www.cd-jackson.com/index.php/zwave/zwave-device-database/database-summary";
-const urlDevice = (id: string) =>
-	`https://www.cd-jackson.com/index.php?option=com_zwave_database&view=devicesummary&format=json&id=${id}`;
-
-function matchAll(regex: RegExp, string: string) {
-	const ret = [];
-	let match;
-	do {
-		match = regex.exec(string);
-		if (match) ret.push(match.slice(1));
-	} while (match);
-	return ret;
-}
+const ohUrlManufacturers =
+	"https://opensmarthouse.org/dmxConnect/api/zwavedatabase/manufacturers/list.php?sort=label&limit=99999";
+const ohUrlIDs =
+	"https://opensmarthouse.org/dmxConnect/api/zwavedatabase/device/list.php?filter=&manufacturer=-1&limit=100000";
+const ohUrlDevice = (id: number) =>
+	`https://opensmarthouse.org/dmxConnect/api/zwavedatabase/device/read.php?device_id=${id}`;
 
 function isNullishOrEmptyString(
 	value: number | string | null | undefined,
@@ -180,23 +150,14 @@ function updateNumberOrDefault(
 }
 
 /** Retrieves the list of database IDs */
-async function fetchIDs(): Promise<string[]> {
-	const sources: string = (await axios({ url: urlIDs })).data;
-	const head = sources.substring(
-		sources.indexOf("<head>") + 6,
-		sources.indexOf("</head>"),
-	);
-	const idsString = head.match(databaseIdRegex)![1];
-	const ids = idsString
-		.split(",")
-		.map((str) => str.trim())
-		.filter((str) => str != "");
-	return ids;
+async function fetchIDs(): Promise<number[]> {
+	const data = (await axios({ url: ohUrlIDs })).data;
+	return data.devices.map((d: any) => d.id);
 }
 
 /** Retrieves the definition for a specific device */
-async function fetchDevice(id: string): Promise<string> {
-	const source = (await axios({ url: urlDevice(id) })).data;
+async function fetchDevice(id: number): Promise<string> {
+	const source = (await axios({ url: ohUrlDevice(id) })).data;
 	return stringify(source);
 }
 
@@ -205,14 +166,14 @@ async function downloadOZWConfig(): Promise<string> {
 	console.log("downloading ozw archive...");
 
 	// create tmp directory if missing
-	await fs.ensureDir(tmpDir);
+	await fs.ensureDir(ozwTempDir);
 
 	// this will return a stream in `data` that we pipe into write stream
 	// to store the file in `tmpDir`
 	const data = (await axios({ url: ozwTarUrl, responseType: "stream" })).data;
 
 	return new Promise((resolve, reject) => {
-		const fileDest = path.join(tmpDir, ozwTarName);
+		const fileDest = path.join(ozwTempDir, ozwTarName);
 		const stream = fs.createWriteStream(fileDest);
 		data.pipe(stream);
 		let hasError = false;
@@ -236,14 +197,15 @@ async function extractConfigFromTar(): Promise<void> {
 	console.log("extracting config folder from ozw archive...");
 	await execPromise(
 		`tar -xzf ${ozwTarName} open-zwave-master/config  --strip-components=1`,
-		{ cwd: tmpDir },
+		{ cwd: ozwTempDir },
 	);
 }
 
 /** Delete all files in `tmpDir` */
 async function cleanTmpDirectory(): Promise<void> {
-	await fs.remove(tmpDir);
-	console.log("temporary directory cleaned");
+	await fs.remove(ozwTempDir);
+	await fs.remove(ohTempDir);
+	console.log("temporary directories cleaned");
 }
 
 function matchId(
@@ -764,7 +726,7 @@ async function parseOZWProduct(
  * Downloads all device information
  * @param IDs If given, only these IDs are downloaded
  */
-async function downloadDevices(IDs?: string[]): Promise<void> {
+async function downloadDevices(IDs?: number[]): Promise<void> {
 	if (!isArray(IDs) || !IDs.length) {
 		process.stdout.write("Fetching database IDs...");
 		IDs = await fetchIDs();
@@ -772,14 +734,14 @@ async function downloadDevices(IDs?: string[]): Promise<void> {
 		process.stdout.write("\r\x1b[K");
 	}
 
-	await fs.ensureDir(importDir);
+	await fs.ensureDir(ohTempDir);
 	for (let i = 0; i < IDs.length; i++) {
 		process.stdout.write(
 			`Fetching device config ${i + 1} of ${IDs.length}...`,
 		);
 		const content = await fetchDevice(IDs[i]);
 		await fs.writeFile(
-			path.join(importDir, `${IDs[i]}.json`),
+			path.join(ohTempDir, `${IDs[i]}.json`),
 			content,
 			"utf8",
 		);
@@ -793,50 +755,24 @@ async function downloadDevices(IDs?: string[]): Promise<void> {
 async function downloadManufacturers(): Promise<void> {
 	process.stdout.write("Fetching manufacturers...");
 
-	const data = {
-		limit: "0",
-		limitstart: "0",
-		task: "",
-		boxchecked: "0",
-		filter_order: "ordering",
-		filter_order_Dir: "asc",
-		f1dfdfdfaf1b78e126ccef47a323a12a: "1",
-	};
-	const options = {
-		method: "POST" as const,
-		headers: { "content-type": "application/x-www-form-urlencoded" },
-		data: qs.stringify(data),
-		url: urlManufacturers,
-	};
-	const sources: string = (await axios(options)).data;
-	const start = manufacturerTableStartRegex.exec(sources)?.index ?? -1;
-	const end = sources.indexOf(`</table>`, start);
-	if (start === -1 || end === -1) {
-		console.error("Could not find manufacturers table");
-		process.exit(1);
-	}
-	const table = sources.substring(start, end);
-	const body = table.substring(
-		table.indexOf("<tbody>") + 7,
-		table.indexOf("</tbody>"),
-	);
+	const data = (await axios({ url: ohUrlManufacturers })).data;
 
 	// Delete the last line
 	process.stdout.write("\r\x1b[K");
 
-	const matches = matchAll(manufacturerTableRowsRegex, body);
 	const manufacturers = composeObject(
-		matches.map(([name, id]) => [
-			name
+		// @ts-expect-error
+		data.manufacturers.data.map(({ id, label }) => [
+			label
 				.replace("</a>", "")
 				.replace(/&quot;/g, `"`)
 				.replace(/&amp;/g, "&")
 				.trim(),
-			formatId(id.trim()),
+			formatId(id),
 		]),
 	);
 
-	await fs.ensureDir(importDir);
+	await fs.ensureDir(ohTempDir);
 	await fs.writeFile(
 		importedManufacturersPath,
 		stringify(manufacturers),
@@ -846,34 +782,18 @@ async function downloadManufacturers(): Promise<void> {
 	console.log("done!");
 }
 
-/** Looks up a manufacturer ID by name */
-function findManufacturerId(
-	input: string,
-	inputAsJson: any,
-): string | undefined {
-	for (const re of manufacturerIdRegexes) {
-		const match = input.match(re);
-		if (match) return formatId(match[1]);
-	}
-	const imported = require(importedManufacturersPath);
-	const manufacturerName = inputAsJson.manufacturer;
-	if (!manufacturerName) return;
-
-	if (manufacturerName in imported) return imported[manufacturerName];
-	if (manufacturerName in ownManufacturersReversed) {
-		return (ownManufacturersReversed as any)[manufacturerName] as string;
-	}
-}
-
 /** Ensures an input file is valid */
 function assertValid(json: any) {
-	ok(typeof json.state === "string" || typeof json.state === "number");
-	ok(typeof json.manufacturer === "string");
+	ok(
+		isObject(json.manufacturer) &&
+			typeof json.manufacturer.reference === "number" &&
+			typeof json.manufacturer.label === "string",
+	);
 	ok(typeof json.description === "string");
 	ok(typeof json.label === "string");
-	ok(typeof json.type_id === "string");
-	ok(typeof json.versionminDisplay === "string");
-	ok(typeof json.versionmaxDisplay === "string");
+	ok(typeof json.device_ref === "string");
+	ok(typeof json.version_min === "string");
+	ok(typeof json.version_max === "string");
 }
 
 /** Removes unnecessary whitespace from imported text */
@@ -915,14 +835,14 @@ async function parseOHConfigFile(
 	assertValid(json);
 
 	const ret: Record<string, any> = {
-		_approved: json.state === "1" || json.state === 1,
+		revision: json.db_version,
 		...(json.errors?.length ? { _errors: json.errors } : undefined),
 		...(json.warnings?.length ? { _warnings: json.warnings } : undefined),
-		manufacturer: json.manufacturer,
-		manufacturerId: findManufacturerId(content, json),
+		manufacturer: json.manufacturer.label,
+		manufacturerId: formatId(json.manufacturer.reference),
 		label: sanitizeText(json.label),
 		description: sanitizeText(json.description),
-		devices: json.type_id
+		devices: json.device_ref
 			.split(",")
 			.filter(Boolean)
 			.map((ref: string) => {
@@ -933,8 +853,8 @@ async function parseOHConfigFile(
 				return { productType, productId };
 			}),
 		firmwareVersion: {
-			min: json.versionminDisplay,
-			max: json.versionmaxDisplay,
+			min: json.version_min.replace(/000/g, "0"),
+			max: json.version_max,
 		},
 	};
 
@@ -943,7 +863,7 @@ async function parseOHConfigFile(
 		const supportsZWavePlus = !!json.endpoints
 			?.find((ep: any) => ep.number === "0")
 			?.commandClasses?.find(
-				(cc: any) => cc.commandclass.class_ref === "94",
+				(cc: any) => cc.commandclass.cmdclass_id === 94,
 			);
 		if (!supportsZWavePlus) {
 			if (json.associations?.length) {
@@ -957,7 +877,7 @@ async function parseOHConfigFile(
 						...(sanitizedDescription
 							? { description: sanitizedDescription }
 							: undefined),
-						maxNodes: parseInt(assoc.max),
+						maxNodes: parseInt(assoc.max_nodes),
 						// isLifeline must be either true or left out
 						isLifeline: assoc.controller === "1" ? true : undefined,
 					};
@@ -974,8 +894,8 @@ async function parseOHConfigFile(
 	if (json.parameters?.length) {
 		ret.paramInformation = {};
 		for (const param of json.parameters) {
-			let key: string = param.param_id;
-			if (param.bitmask !== "0") {
+			let key: string = param.param_id.toString();
+			if (param.bitmask !== "0" && param.bitmask !== 0) {
 				const bitmask = parseInt(param.bitmask);
 				key += `[${num2hex(bitmask)}]`;
 			}
@@ -988,9 +908,9 @@ async function parseOHConfigFile(
 					: undefined),
 				...(sanitizedUnits ? { unit: sanitizedUnits } : undefined),
 				valueSize: parseInt(param.size, 10),
-				minValue: parseInt(param.value_min, 10),
-				maxValue: parseInt(param.value_max, 10),
-				defaultValue: parseInt(param.value_default, 10),
+				minValue: parseInt(param.minimum, 10),
+				maxValue: parseInt(param.maximum, 10),
+				defaultValue: parseInt(param.default, 10),
 				readOnly: param.read_only === "1",
 				writeOnly: param.write_only === "1",
 				allowManualEntry: param.limit_options === "1",
@@ -1010,7 +930,7 @@ async function parseOHConfigFile(
 
 /** Translates all downloaded config files */
 async function importConfigFiles(): Promise<void> {
-	const configFiles = (await fs.readdir(importDir)).filter(
+	const configFiles = (await fs.readdir(ohTempDir)).filter(
 		(file) =>
 			file.endsWith(".json") &&
 			!file.startsWith("_") &&
@@ -1018,7 +938,7 @@ async function importConfigFiles(): Promise<void> {
 	);
 
 	for (const file of configFiles) {
-		const inPath = path.join(importDir, file);
+		const inPath = path.join(ohTempDir, file);
 		let parsed: Record<string, any>;
 		try {
 			parsed = await parseOHConfigFile(inPath);
@@ -1179,7 +1099,11 @@ void (async () => {
 		if (program.source.includes("oh")) {
 			if (program.download) {
 				await downloadManufacturers();
-				await downloadDevices(program.ids?.map(String));
+				await downloadDevices(
+					program.ids
+						?.map((id) => parseInt(id as any))
+						.filter((num) => !Number.isNaN(num)),
+				);
 			}
 
 			if (program.manufacturers) {

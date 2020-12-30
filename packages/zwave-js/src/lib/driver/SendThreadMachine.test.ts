@@ -122,729 +122,784 @@ mockCommandQueueMachine.mockReturnValue(
 	}),
 );
 
-const machineParams: SendThreadMachineParams = {
-	timeouts: {
-		ack: 1000,
-		response: 1600,
-		report: 1600,
-		sendDataCallback: 65000,
-	},
-	attempts: {
-		controller: 3,
-		// @ts-expect-error this property is not defined, we just use it to deduplicate test code
-		sendData: 3,
-	},
-};
-
 describe("lib/driver/SendThreadMachine", () => {
 	beforeEach(() => {
 		mockCommandQueueMachine.mockClear();
 	});
 
-	const testMachine = Machine<
-		TestMachineContext,
-		TestMachineStateSchema,
-		TestMachineEvents
-	>(
-		{
-			id: "SendThreadTest",
-			initial: "idle",
-			context: {
-				sendDataAttempts: 0,
-				retryCount: 0,
+	for (const retryAfterTransmitReport of [true, false]) {
+		const machineParams: SendThreadMachineParams = {
+			timeouts: {
+				ack: 1000,
+				response: 1600,
+				report: 10000,
+				sendDataCallback: 65000,
 			},
-			states: {
-				idle: {
-					on: {
-						ADD_SIMPLE: "execute_simple",
-						ADD_SENDDATA: {
-							target: "execute_senddata",
-							actions: assign({
-								expectsUpdate: (_, evt: any) =>
-									evt.command === "BasicGet",
-							}),
-						},
-						ADD_SECURE: "handshake_secure",
-					},
-					meta: {
-						test: async ({ interpreter }: TestContext) => {
-							expect(interpreter.state.value).toBe("idle");
-							expect(
-								interpreter.state.context.commandQueue,
-							).not.toBeUndefined();
-						},
-					},
+			attempts: {
+				controller: 3,
+				// @ts-expect-error this property is not defined, we just use it to deduplicate test code
+				sendData: 3,
+				retryAfterTransmitReport,
+			},
+		};
+
+		const testMachine = Machine<
+			TestMachineContext,
+			TestMachineStateSchema,
+			TestMachineEvents
+		>(
+			{
+				id: "SendThreadTest",
+				initial: "idle",
+				context: {
+					sendDataAttempts: 0,
+					retryCount: 0,
 				},
-				execute_simple: {
-					on: {
-						SUCCESS_SIMPLE: "done_simple",
-						FAILURE_SIMPLE: "done_simple",
-					},
-					meta: {
-						test: async ({
-							interpreter,
-							sentTransaction,
-						}: TestContext) => {
-							expect(interpreter.state.value).toEqual({
-								sending: "execute",
-							});
-							expect(
-								interpreter.state.context.handshakeTransaction,
-							).toBeUndefined();
-							expect(
-								interpreter.state.context.currentTransaction,
-							).toBe(sentTransaction);
+				states: {
+					idle: {
+						on: {
+							ADD_SIMPLE: "execute_simple",
+							ADD_SENDDATA: {
+								target: "execute_senddata",
+								actions: assign({
+									expectsUpdate: (_, evt: any) =>
+										evt.command === "BasicGet",
+								}),
+							},
+							ADD_SECURE: "handshake_secure",
+						},
+						meta: {
+							test: async ({ interpreter }: TestContext) => {
+								expect(interpreter.state.value).toBe("idle");
+								expect(
+									interpreter.state.context.commandQueue,
+								).not.toBeUndefined();
+							},
 						},
 					},
-				},
-				done_simple: {
-					meta: {
-						test: async ({
-							interpreter,
-							implementations,
-							sentTransaction,
-							expectedResult,
-						}: TestContext) => {
-							expect(interpreter.state.value).toBe("idle");
-							if (expectedResult) {
+					execute_simple: {
+						on: {
+							SUCCESS_SIMPLE: "done_simple",
+							FAILURE_SIMPLE: "done_simple",
+						},
+						meta: {
+							test: async ({
+								interpreter,
+								sentTransaction,
+							}: TestContext) => {
+								expect(interpreter.state.value).toEqual({
+									sending: "execute",
+								});
 								expect(
-									implementations.resolveTransaction,
-								).toBeCalledWith(
-									sentTransaction,
-									expectedResult,
-								);
-							} else {
+									interpreter.state.context
+										.handshakeTransaction,
+								).toBeUndefined();
 								expect(
-									implementations.rejectTransaction,
-								).toBeCalled();
-								expect(
-									implementations.rejectTransaction.mock
-										.calls[0][0],
+									interpreter.state.context
+										.currentTransaction,
 								).toBe(sentTransaction);
-								assertZWaveError(
-									implementations.rejectTransaction.mock
-										.calls[0][1],
-									{
-										errorCode:
-											ZWaveErrorCodes.Controller_MessageDropped,
-									},
-								);
-							}
+							},
 						},
 					},
-				},
-				execute_senddata: {
-					entry: assign({
-						sendDataAttempts: (ctx) => ctx.sendDataAttempts + 1,
-					}),
-					on: {
-						SUCCESS_SENDDATA: [
-							{ cond: "expectsUpdate", target: "wait_senddata" },
-							{ target: "done_senddata" },
-						],
-						FAILURE_SENDDATA: [
-							{ cond: "mayRetry", target: "retry_senddata" },
-							{ target: "done_senddata" },
-						],
-					},
-				},
-				wait_senddata: {
-					on: {
-						UPDATE_SENDDATA: "done_senddata",
-						WAIT_TIMEOUT: [
-							{ cond: "mayRetry", target: "retry_senddata" },
-							{ target: "done_senddata" },
-						],
-						UNSOLICITED_SENDDATA: "unsolicited_senddata",
-					},
-					meta: {
-						test: ({ interpreter }: TestContext) => {
-							expect(interpreter.state.value).toEqual({
-								sending: "waitForUpdate",
-							});
-						},
-					},
-				},
-				retry_senddata: {
-					entry: assign({
-						retryCount: (ctx) => ctx.retryCount + 1,
-					}),
-					on: {
-						RETRY_TIMEOUT: "execute_senddata",
-					},
-					meta: {
-						test: ({ interpreter }: TestContext) => {
-							expect(interpreter.state.value).toEqual({
-								sending: "retryWait",
-							});
-						},
-					},
-				},
-				done_senddata: {
-					meta: {
-						test: (
-							{
+					done_simple: {
+						meta: {
+							test: async ({
 								interpreter,
 								implementations,
 								sentTransaction,
 								expectedResult,
-							}: TestContext,
-							state: State<TestMachineContext>,
-						) => {
-							expect(interpreter.state.value).toBe("idle");
-							expect(
-								implementations.notifyRetry,
-							).toHaveBeenCalledTimes(state.context.retryCount);
-							expect(
-								interpreter.state.context.sendDataAttempts,
-							).toBe(0);
-							expect(
-								interpreter.state.context.currentTransaction,
-							).toBeUndefined();
-
-							if (expectedResult) {
-								expect(
-									implementations.resolveTransaction,
-								).toBeCalledWith(
+							}: TestContext) => {
+								expect(interpreter.state.value).toBe("idle");
+								if (expectedResult) {
+									expect(
+										implementations.resolveTransaction,
+									).toBeCalledWith(
+										sentTransaction,
+										expectedResult,
+									);
+								} else {
+									expect(
+										implementations.rejectTransaction,
+									).toBeCalled();
+									expect(
+										implementations.rejectTransaction.mock
+											.calls[0][0],
+									).toBe(sentTransaction);
+									assertZWaveError(
+										implementations.rejectTransaction.mock
+											.calls[0][1],
+										{
+											errorCode:
+												ZWaveErrorCodes.Controller_MessageDropped,
+										},
+									);
+								}
+							},
+						},
+					},
+					execute_senddata: {
+						entry: assign({
+							sendDataAttempts: (ctx) => ctx.sendDataAttempts + 1,
+						}),
+						on: {
+							SUCCESS_SENDDATA: [
+								{
+									cond: "expectsUpdate",
+									target: "wait_senddata",
+								},
+								{ target: "done_senddata" },
+							],
+							FAILURE_SENDDATA: [
+								{ cond: "mayRetry", target: "retry_senddata" },
+								{ target: "done_senddata" },
+							],
+						},
+					},
+					wait_senddata: {
+						on: {
+							UPDATE_SENDDATA: "done_senddata",
+							WAIT_TIMEOUT: [
+								...(retryAfterTransmitReport
+									? [
+											{
+												cond: "mayRetry",
+												target: "retry_senddata",
+											},
+									  ]
+									: []),
+								{ target: "done_senddata" },
+							],
+							UNSOLICITED_SENDDATA: "unsolicited_senddata",
+						},
+						meta: {
+							test: ({ interpreter }: TestContext) => {
+								expect(interpreter.state.value).toEqual({
+									sending: "waitForUpdate",
+								});
+							},
+						},
+					},
+					retry_senddata: {
+						entry: assign({
+							retryCount: (ctx) => ctx.retryCount + 1,
+						}),
+						on: {
+							RETRY_TIMEOUT: "execute_senddata",
+						},
+						meta: {
+							test: ({ interpreter }: TestContext) => {
+								expect(interpreter.state.value).toEqual({
+									sending: "retryWait",
+								});
+							},
+						},
+					},
+					done_senddata: {
+						meta: {
+							test: (
+								{
+									interpreter,
+									implementations,
 									sentTransaction,
 									expectedResult,
-								);
-							} else {
+								}: TestContext,
+								state: State<TestMachineContext>,
+							) => {
+								expect(interpreter.state.value).toBe("idle");
 								expect(
-									implementations.rejectTransaction,
+									implementations.notifyRetry,
+								).toHaveBeenCalledTimes(
+									state.context.retryCount,
+								);
+								expect(
+									interpreter.state.context.sendDataAttempts,
+								).toBe(0);
+								expect(
+									interpreter.state.context
+										.currentTransaction,
+								).toBeUndefined();
+
+								if (expectedResult) {
+									expect(
+										implementations.resolveTransaction,
+									).toBeCalledWith(
+										sentTransaction,
+										expectedResult,
+									);
+								} else {
+									expect(
+										implementations.rejectTransaction,
+									).toBeCalled();
+									expect(
+										implementations.rejectTransaction.mock
+											.calls[0][0],
+									).toBe(sentTransaction);
+									assertZWaveError(
+										implementations.rejectTransaction.mock
+											.calls[0][1],
+									);
+								}
+							},
+						},
+					},
+					unsolicited_senddata: {
+						meta: {
+							test: ({
+								implementations,
+								expectedResult,
+							}: TestContext) => {
+								expect(
+									implementations.notifyUnsolicited,
+								).toBeCalledWith(expectedResult);
+							},
+						},
+					},
+
+					handshake_secure: {
+						entry: assign({
+							sendDataAttempts: (ctx) => ctx.sendDataAttempts + 1,
+						}),
+						on: {
+							HANDSHAKE_ADD_SECURE: "handshake_execute_secure",
+						},
+						meta: {
+							test: async ({
+								interpreter,
+								testTransactions,
+							}: TestContext) => {
+								// waiting for the handshake transaction to be added
+								expect(
+									interpreter.state.matches(
+										"sending.handshake",
+									),
+								).toBeTrue();
+								expect(
+									(testTransactions.BasicSetSecure
+										.message as SendDataRequest).command
+										.preTransmitHandshake,
 								).toBeCalled();
+							},
+						},
+					},
+					handshake_execute_secure: {
+						on: {
+							HANDSHAKE_SUCCESS_SECURE: "handshake_wait_secure",
+							HANDSHAKE_FAILURE_SECURE: [
+								{ cond: "mayRetry", target: "retry_secure" },
+								{ target: "done_secure" },
+							],
+						},
+						meta: {
+							test: async ({ interpreter }: TestContext) => {
+								// waiting for the handshake transaction to be executed
 								expect(
-									implementations.rejectTransaction.mock
-										.calls[0][0],
-								).toBe(sentTransaction);
-								assertZWaveError(
-									implementations.rejectTransaction.mock
-										.calls[0][1],
-								);
-							}
+									interpreter.state.matches(
+										"sending.handshake",
+									),
+								).toBeTrue();
+							},
 						},
 					},
-				},
-				unsolicited_senddata: {
-					meta: {
-						test: ({
-							implementations,
-							expectedResult,
-						}: TestContext) => {
-							expect(
-								implementations.notifyUnsolicited,
-							).toBeCalledWith(expectedResult);
+					handshake_wait_secure: {
+						on: {
+							HANDSHAKE_UPDATE_SECURE: "execute_secure",
+						},
+						meta: {
+							test: async ({ interpreter }: TestContext) => {
+								// waiting for a response to the handshake transaction
+								expect(
+									interpreter.state.matches(
+										"sending.handshake.waitForHandshakeResponse",
+									),
+								).toBeTrue();
+							},
 						},
 					},
-				},
-
-				handshake_secure: {
-					entry: assign({
-						sendDataAttempts: (ctx) => ctx.sendDataAttempts + 1,
-					}),
-					on: {
-						HANDSHAKE_ADD_SECURE: "handshake_execute_secure",
-					},
-					meta: {
-						test: async ({
-							interpreter,
-							testTransactions,
-						}: TestContext) => {
-							// waiting for the handshake transaction to be added
-							expect(
-								interpreter.state.matches("sending.handshake"),
-							).toBeTrue();
-							expect(
-								(testTransactions.BasicSetSecure
-									.message as SendDataRequest).command
-									.preTransmitHandshake,
-							).toBeCalled();
+					execute_secure: {
+						on: {
+							SUCCESS_SECURE: "done_secure",
+							FAILURE_SECURE: [
+								{ cond: "mayRetry", target: "retry_secure" },
+								{ target: "done_secure" },
+							],
+						},
+						meta: {
+							test: async ({ interpreter }: TestContext) => {
+								// executing the actual transaction
+								expect(interpreter.state.value).toEqual({
+									sending: "execute",
+								});
+							},
 						},
 					},
-				},
-				handshake_execute_secure: {
-					on: {
-						HANDSHAKE_SUCCESS_SECURE: "handshake_wait_secure",
-						HANDSHAKE_FAILURE_SECURE: [
-							{ cond: "mayRetry", target: "retry_secure" },
-							{ target: "done_secure" },
-						],
-					},
-					meta: {
-						test: async ({ interpreter }: TestContext) => {
-							// waiting for the handshake transaction to be executed
-							expect(
-								interpreter.state.matches("sending.handshake"),
-							).toBeTrue();
+					retry_secure: {
+						entry: assign({
+							retryCount: (ctx) => ctx.retryCount + 1,
+						}),
+						on: {
+							RETRY_TIMEOUT: "handshake_secure",
+						},
+						meta: {
+							test: ({ interpreter }: TestContext) => {
+								expect(interpreter.state.value).toEqual({
+									sending: "retryWait",
+								});
+							},
 						},
 					},
-				},
-				handshake_wait_secure: {
-					on: {
-						HANDSHAKE_UPDATE_SECURE: "execute_secure",
-					},
-					meta: {
-						test: async ({ interpreter }: TestContext) => {
-							// waiting for a response to the handshake transaction
-							expect(
-								interpreter.state.matches(
-									"sending.handshake.waitForHandshakeResponse",
-								),
-							).toBeTrue();
-						},
-					},
-				},
-				execute_secure: {
-					on: {
-						SUCCESS_SECURE: "done_secure",
-						FAILURE_SECURE: [
-							{ cond: "mayRetry", target: "retry_secure" },
-							{ target: "done_secure" },
-						],
-					},
-					meta: {
-						test: async ({ interpreter }: TestContext) => {
-							// executing the actual transaction
-							expect(interpreter.state.value).toEqual({
-								sending: "execute",
-							});
-						},
-					},
-				},
-				retry_secure: {
-					entry: assign({
-						retryCount: (ctx) => ctx.retryCount + 1,
-					}),
-					on: {
-						RETRY_TIMEOUT: "handshake_secure",
-					},
-					meta: {
-						test: ({ interpreter }: TestContext) => {
-							expect(interpreter.state.value).toEqual({
-								sending: "retryWait",
-							});
-						},
-					},
-				},
-				done_secure: {
-					meta: {
-						test: async ({ interpreter }: TestContext) => {
-							expect(interpreter.state.value).toBe("idle");
+					done_secure: {
+						meta: {
+							test: async ({ interpreter }: TestContext) => {
+								expect(interpreter.state.value).toBe("idle");
+							},
 						},
 					},
 				},
 			},
-		},
-		{
-			guards: {
-				expectsUpdate: (ctx) => !!ctx.expectsUpdate,
-				mayRetry: (ctx) =>
-					ctx.sendDataAttempts <
-					(machineParams.attempts as any).sendData,
+			{
+				guards: {
+					expectsUpdate: (ctx) => !!ctx.expectsUpdate,
+					mayRetry: (ctx) =>
+						ctx.sendDataAttempts <
+						(machineParams.attempts as any).sendData,
+				},
 			},
-		},
-	);
-
-	const testModel = createModel<TestContext, TestMachineContext>(
-		testMachine,
-	).withEvents({
-		ADD_SIMPLE: {
-			exec: (context) => {
-				const { interpreter, testTransactions } = context;
-				context.sentTransaction =
-					testTransactions.GetControllerIdRequest;
-				interpreter.send({
-					type: "add",
-					transaction: context.sentTransaction,
-				});
-			},
-		},
-		SUCCESS_SIMPLE: {
-			exec: (context) => {
-				const { interpreter, testTransactions } = context;
-				const result = testTransactions.GetControllerIdResponse.message;
-				context.expectedResult = result;
-				interpreter.send({
-					type: "command_success",
-					transaction: testTransactions.GetControllerIdRequest,
-					result,
-				} as any);
-			},
-		},
-		FAILURE_SIMPLE: {
-			exec: ({ interpreter, testTransactions }) => {
-				interpreter.send({
-					type: "command_failure",
-					transaction: testTransactions.GetControllerIdRequest,
-					reason: "CAN",
-				} as any);
-			},
-		},
-		ADD_SENDDATA: {
-			exec: ({ interpreter, testTransactions }, event) => {
-				interpreter.send({
-					type: "add",
-					// @ts-expect-error
-					transaction: testTransactions[event.command],
-				});
-			},
-			cases: [{ command: "BasicSet" }, { command: "BasicGet" }],
-		},
-		SUCCESS_SENDDATA: {
-			exec: (context) => {
-				const { interpreter, sentTransaction, fakeDriver } = context;
-				const result = new SendDataRequestTransmitReport(fakeDriver, {
-					callbackId: sentTransaction!.message.callbackId,
-					transmitStatus: TransmitStatus.OK,
-				});
-				context.expectedResult = result;
-				interpreter.send({
-					type: "command_success",
-					transaction: sentTransaction,
-					result,
-				} as any);
-			},
-		},
-		FAILURE_SENDDATA: {
-			exec: (context) => {
-				const { interpreter, sentTransaction } = context;
-				context.expectedResult = undefined;
-				interpreter.send({
-					type: "command_failure",
-					transaction: sentTransaction,
-					reason: "response NOK",
-				} as any);
-			},
-		},
-		UPDATE_SENDDATA: {
-			// Send the expected update
-			exec: (context) => {
-				const { interpreter, testTransactions } = context;
-				const message = testTransactions.BasicReport.message;
-				context.expectedResult = message;
-				interpreter.send({
-					// updates are returned by the serial API command machine as "unsolicited"
-					type: "unsolicited",
-					// type: "message",
-					message,
-				} as any);
-			},
-		},
-		UNSOLICITED_SENDDATA: {
-			exec: (context) => {
-				const { interpreter, testTransactions } = context;
-				const message = testTransactions.BasicSet.message;
-				context.expectedResult = message;
-				interpreter.send({
-					type: "unsolicited",
-					message,
-				} as any);
-			},
-		},
-
-		ADD_SECURE: {
-			exec: ({ interpreter, testTransactions }) => {
-				interpreter.send({
-					type: "add",
-					transaction: testTransactions.BasicSetSecure,
-				});
-			},
-		},
-		HANDSHAKE_ADD_SECURE: {
-			exec: (context) => {
-				const { interpreter, testTransactions } = context;
-				context.sentTransaction = testTransactions.NonceRequest;
-				interpreter.send({
-					type: "add",
-					transaction: context.sentTransaction,
-				});
-			},
-		},
-		HANDSHAKE_SUCCESS_SECURE: {
-			exec: (context) => {
-				const { interpreter, sentTransaction, fakeDriver } = context;
-				const result = new SendDataRequestTransmitReport(fakeDriver, {
-					callbackId: sentTransaction!.message.callbackId,
-					transmitStatus: TransmitStatus.OK,
-				});
-				context.expectedResult = result;
-				interpreter.send({
-					type: "command_success",
-					transaction: sentTransaction,
-					result,
-				} as any);
-			},
-		},
-		HANDSHAKE_FAILURE_SECURE: {
-			exec: (context) => {
-				const { interpreter, sentTransaction } = context;
-				context.expectedResult = undefined;
-				interpreter.send({
-					type: "command_failure",
-					transaction: sentTransaction,
-					reason: "CAN",
-				} as any);
-			},
-		},
-		HANDSHAKE_UPDATE_SECURE: {
-			exec: ({
-				interpreter,
-				testTransactions,
-				preTransmitHandshakePromise,
-			}) => {
-				interpreter.send({
-					// updates are returned by the serial API command machine as "unsolicited"
-					type: "unsolicited",
-					// type: "message",
-					message: testTransactions.NonceResponse.message,
-				});
-				preTransmitHandshakePromise.resolve();
-				// little hack because the event queue seems to work differently on Node.js 10
-				return new Promise((resolve) => setImmediate(resolve));
-			},
-		},
-
-		SUCCESS_SECURE: {
-			exec: (context) => {
-				const {
-					interpreter,
-					sentTransaction,
-					fakeDriver,
-					testTransactions,
-				} = context;
-				const result = new SendDataRequestTransmitReport(fakeDriver, {
-					callbackId: sentTransaction!.message.callbackId,
-					transmitStatus: TransmitStatus.OK,
-				});
-				context.expectedResult = result;
-				interpreter.send({
-					type: "command_success",
-					transaction: testTransactions.BasicSetSecure,
-					result,
-				} as any);
-			},
-		},
-		FAILURE_SECURE: {
-			exec: (context) => {
-				const { interpreter, testTransactions } = context;
-				context.expectedResult = undefined;
-				interpreter.send({
-					type: "command_failure",
-					transaction: testTransactions.BasicSetSecure,
-					reason: "response NOK",
-				} as any);
-			},
-		},
-
-		RETRY_TIMEOUT: {
-			exec: () => {
-				jest.advanceTimersByTime(500);
-			},
-		},
-		WAIT_TIMEOUT: {
-			exec: (context) => {
-				// After a timeout, we no longer expect a response
-				context.expectedResult = undefined;
-				jest.advanceTimersByTime(1600);
-			},
-		},
-	});
-
-	const testPlans = testModel.getSimplePathPlans();
-
-	testPlans.forEach((plan) => {
-		// if (plan.state.value === "idle") return;
-		if (
-			typeof plan.state.value !== "string" ||
-			(plan.state.value !== "idle" &&
-				!plan.state.value.startsWith("done_") &&
-				!plan.state.value.startsWith("unsolicited_"))
-		) {
-			return;
-		}
-
-		const planDescription = plan.description.replace(
-			` (${JSON.stringify(plan.state.context)})`,
-			"",
 		);
-		describe(planDescription, () => {
-			plan.paths.forEach((path) => {
-				// if (
-				// 	!path.description.endsWith(
-				// 		`via ADD_SENDDATA ({"command":"BasicGet"}) → SUCCESS_SENDDATA → WAIT_TIMEOUT → RETRY_TIMEOUT → SUCCESS_SENDDATA → WAIT_TIMEOUT → RETRY_TIMEOUT → SUCCESS_SENDDATA → UPDATE_SENDDATA`,
-				// 	)
-				// ) {
-				// 	return;
-				// }
 
-				it(path.description, () => {
-					const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
-					fakeDriver.options.attempts.sendData = (machineParams.attempts as any).sendData;
-					const sm = new SecurityManager({
-						ownNodeId: 1,
-						nonceTimeout: 500,
-						networkKey: Buffer.alloc(16, 1),
+		const testModel = createModel<TestContext, TestMachineContext>(
+			testMachine,
+		).withEvents({
+			ADD_SIMPLE: {
+				exec: (context) => {
+					const { interpreter, testTransactions } = context;
+					context.sentTransaction =
+						testTransactions.GetControllerIdRequest;
+					interpreter.send({
+						type: "add",
+						transaction: context.sentTransaction,
 					});
-					(fakeDriver as any).securityManager = sm;
-
-					const ctrlrIdRequest = new GetControllerIdRequest(
-						fakeDriver,
-					);
-					const ctrlrIdResponse = new GetControllerIdResponse(
-						fakeDriver,
-						{
-							data: Buffer.from("01080120dc3452b301de", "hex"),
-						},
-					);
-
-					const sendDataBasicGet = new SendDataRequest(fakeDriver, {
-						command: new BasicCCGet(fakeDriver, {
-							nodeId: 2,
-						}),
+				},
+			},
+			SUCCESS_SIMPLE: {
+				exec: (context) => {
+					const { interpreter, testTransactions } = context;
+					const result =
+						testTransactions.GetControllerIdResponse.message;
+					context.expectedResult = result;
+					interpreter.send({
+						type: "command_success",
+						transaction: testTransactions.GetControllerIdRequest,
+						result,
+					} as any);
+				},
+			},
+			FAILURE_SIMPLE: {
+				exec: ({ interpreter, testTransactions }) => {
+					interpreter.send({
+						type: "command_failure",
+						transaction: testTransactions.GetControllerIdRequest,
+						reason: "CAN",
+					} as any);
+				},
+			},
+			ADD_SENDDATA: {
+				exec: ({ interpreter, testTransactions }, event) => {
+					interpreter.send({
+						type: "add",
+						// @ts-expect-error
+						transaction: testTransactions[event.command],
 					});
-
-					const sendDataBasicReport = new ApplicationCommandRequest(
+				},
+				cases: [{ command: "BasicSet" }, { command: "BasicGet" }],
+			},
+			SUCCESS_SENDDATA: {
+				exec: (context) => {
+					const {
+						interpreter,
+						sentTransaction,
+						fakeDriver,
+					} = context;
+					const result = new SendDataRequestTransmitReport(
 						fakeDriver,
 						{
-							command: new BasicCCReport(fakeDriver, {
-								nodeId: 2,
-								currentValue: 50,
-							}),
+							callbackId: sentTransaction!.message.callbackId,
+							transmitStatus: TransmitStatus.OK,
 						},
 					);
+					context.expectedResult = result;
+					interpreter.send({
+						type: "command_success",
+						transaction: sentTransaction,
+						result,
+					} as any);
+				},
+			},
+			FAILURE_SENDDATA: {
+				exec: (context) => {
+					const { interpreter, sentTransaction } = context;
+					context.expectedResult = undefined;
+					interpreter.send({
+						type: "command_failure",
+						transaction: sentTransaction,
+						reason: "response NOK",
+					} as any);
+				},
+			},
+			UPDATE_SENDDATA: {
+				// Send the expected update
+				exec: (context) => {
+					const { interpreter, testTransactions } = context;
+					const message = testTransactions.BasicReport.message;
+					context.expectedResult = message;
+					interpreter.send({
+						// updates are returned by the serial API command machine as "unsolicited"
+						type: "unsolicited",
+						// type: "message",
+						message,
+					} as any);
+				},
+			},
+			UNSOLICITED_SENDDATA: {
+				exec: (context) => {
+					const { interpreter, testTransactions } = context;
+					const message = testTransactions.BasicSet.message;
+					context.expectedResult = message;
+					interpreter.send({
+						type: "unsolicited",
+						message,
+					} as any);
+				},
+			},
 
-					const sendDataBasicSet = new SendDataRequest(fakeDriver, {
-						command: new BasicCCSet(fakeDriver, {
-							nodeId: 2,
-							targetValue: 22,
-						}),
+			ADD_SECURE: {
+				exec: ({ interpreter, testTransactions }) => {
+					interpreter.send({
+						type: "add",
+						transaction: testTransactions.BasicSetSecure,
 					});
-
-					const sendDataBasicSetSecure = new SendDataRequest(
+				},
+			},
+			HANDSHAKE_ADD_SECURE: {
+				exec: (context) => {
+					const { interpreter, testTransactions } = context;
+					context.sentTransaction = testTransactions.NonceRequest;
+					interpreter.send({
+						type: "add",
+						transaction: context.sentTransaction,
+					});
+				},
+			},
+			HANDSHAKE_SUCCESS_SECURE: {
+				exec: (context) => {
+					const {
+						interpreter,
+						sentTransaction,
+						fakeDriver,
+					} = context;
+					const result = new SendDataRequestTransmitReport(
 						fakeDriver,
 						{
-							command: new SecurityCCCommandEncapsulation(
-								fakeDriver,
-								{
-									nodeId: 2,
-									encapsulated: new BasicCCSet(fakeDriver, {
-										nodeId: 2,
-										targetValue: 1,
-									}),
-								},
-							),
+							callbackId: sentTransaction!.message.callbackId,
+							transmitStatus: TransmitStatus.OK,
 						},
 					);
+					context.expectedResult = result;
+					interpreter.send({
+						type: "command_success",
+						transaction: sentTransaction,
+						result,
+					} as any);
+				},
+			},
+			HANDSHAKE_FAILURE_SECURE: {
+				exec: (context) => {
+					const { interpreter, sentTransaction } = context;
+					context.expectedResult = undefined;
+					interpreter.send({
+						type: "command_failure",
+						transaction: sentTransaction,
+						reason: "CAN",
+					} as any);
+				},
+			},
+			HANDSHAKE_UPDATE_SECURE: {
+				exec: ({
+					interpreter,
+					testTransactions,
+					preTransmitHandshakePromise,
+				}) => {
+					interpreter.send({
+						// updates are returned by the serial API command machine as "unsolicited"
+						type: "unsolicited",
+						// type: "message",
+						message: testTransactions.NonceResponse.message,
+					});
+					preTransmitHandshakePromise.resolve();
+					// little hack because the event queue seems to work differently on Node.js 10
+					return new Promise((resolve) => setImmediate(resolve));
+				},
+			},
 
-					const sendDataNonceRequest = new SendDataRequest(
-						fakeDriver,
-						{
-							command: new SecurityCCNonceGet(fakeDriver, {
-								nodeId: 2,
-							}),
-						},
-					);
-
-					const sendDataNonceResponse = new ApplicationCommandRequest(
-						fakeDriver,
-						{
-							command: new SecurityCCNonceReport(fakeDriver, {
-								nodeId: 2,
-								nonce: Buffer.allocUnsafe(8),
-							}),
-						},
-					);
-					function createTransaction(
-						msg: Message,
-						priority: MessagePriority = MessagePriority.Normal,
-					) {
-						const ret = new Transaction(
-							fakeDriver,
-							msg,
-							createDeferredPromise(),
-							priority,
-						);
-						(ret as any).toJSON = () => ({
-							message: msg.constructor.name,
-						});
-						return ret;
-					}
-
-					const testTransactions = {
-						GetControllerIdRequest: createTransaction(
-							ctrlrIdRequest,
-						),
-						GetControllerIdResponse: createTransaction(
-							ctrlrIdResponse,
-						),
-						BasicSet: createTransaction(sendDataBasicSet),
-						BasicGet: createTransaction(sendDataBasicGet),
-						BasicReport: createTransaction(sendDataBasicReport),
-						BasicSetSecure: createTransaction(
-							sendDataBasicSetSecure,
-						),
-						NonceRequest: createTransaction(
-							sendDataNonceRequest,
-							MessagePriority.PreTransmitHandshake,
-						),
-						NonceResponse: createTransaction(sendDataNonceResponse),
-					};
-
-					const implementations: MockImplementations = {
-						notifyRetry: jest.fn(),
-						notifyUnsolicited: jest.fn(),
-						resolveTransaction: jest.fn(),
-						rejectTransaction: jest.fn(),
-					};
-					const machine = createSendThreadMachine(
-						implementations as any,
-						machineParams,
-					);
-
-					const context: TestContext = {
-						interpreter: interpret(machine),
-						implementations,
+			SUCCESS_SECURE: {
+				exec: (context) => {
+					const {
+						interpreter,
+						sentTransaction,
 						fakeDriver,
 						testTransactions,
-						preTransmitHandshakePromise: undefined as any,
-					};
+					} = context;
+					const result = new SendDataRequestTransmitReport(
+						fakeDriver,
+						{
+							callbackId: sentTransaction!.message.callbackId,
+							transmitStatus: TransmitStatus.OK,
+						},
+					);
+					context.expectedResult = result;
+					interpreter.send({
+						type: "command_success",
+						transaction: testTransactions.BasicSetSecure,
+						result,
+					} as any);
+				},
+			},
+			FAILURE_SECURE: {
+				exec: (context) => {
+					const { interpreter, testTransactions } = context;
+					context.expectedResult = undefined;
+					interpreter.send({
+						type: "command_failure",
+						transaction: testTransactions.BasicSetSecure,
+						reason: "response NOK",
+					} as any);
+				},
+			},
 
-					sendDataBasicSetSecure.command.preTransmitHandshake = jest
-						.fn()
-						.mockImplementation(() => {
-							context.preTransmitHandshakePromise = createDeferredPromise();
-							return context.preTransmitHandshakePromise;
+			RETRY_TIMEOUT: {
+				exec: () => {
+					jest.advanceTimersByTime(500);
+				},
+			},
+			WAIT_TIMEOUT: {
+				exec: (context) => {
+					// After a timeout, we no longer expect a response
+					context.expectedResult = undefined;
+					jest.advanceTimersByTime(machineParams.timeouts.report);
+				},
+			},
+		});
+
+		const testPlans = testModel.getSimplePathPlans();
+
+		testPlans.forEach((plan) => {
+			// if (plan.state.value === "idle") return;
+			if (
+				typeof plan.state.value !== "string" ||
+				(plan.state.value !== "idle" &&
+					!plan.state.value.startsWith("done_") &&
+					!plan.state.value.startsWith("unsolicited_"))
+			) {
+				return;
+			}
+
+			const planDescription = plan.description.replace(
+				` (${JSON.stringify(plan.state.context)})`,
+				"",
+			);
+			describe(`(retryAfterTransmitReport = ${retryAfterTransmitReport}) ${planDescription}`, () => {
+				plan.paths.forEach((path) => {
+					// if (
+					// 	!path.description.endsWith(
+					// 		`via ADD_SENDDATA ({"command":"BasicGet"}) → SUCCESS_SENDDATA → WAIT_TIMEOUT → RETRY_TIMEOUT → SUCCESS_SENDDATA → WAIT_TIMEOUT → RETRY_TIMEOUT → SUCCESS_SENDDATA → UPDATE_SENDDATA`,
+					// 	)
+					// ) {
+					// 	return;
+					// }
+
+					it(path.description, () => {
+						const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+						fakeDriver.options.attempts.sendData = (machineParams.attempts as any).sendData;
+						fakeDriver.options.attempts.retryAfterTransmitReport = retryAfterTransmitReport;
+						const sm = new SecurityManager({
+							ownNodeId: 1,
+							nonceTimeout: 500,
+							networkKey: Buffer.alloc(16, 1),
 						});
+						(fakeDriver as any).securityManager = sm;
 
-					const sentCommand = (path.segments.find(
-						(s) => s.event.type === "ADD_SENDDATA",
-					)?.event as any)?.command;
-					if (sentCommand) {
-						context.sentTransaction = (testTransactions as any)[
-							sentCommand
-						];
-					}
+						const ctrlrIdRequest = new GetControllerIdRequest(
+							fakeDriver,
+						);
+						const ctrlrIdResponse = new GetControllerIdResponse(
+							fakeDriver,
+							{
+								data: Buffer.from(
+									"01080120dc3452b301de",
+									"hex",
+								),
+							},
+						);
 
-					// context.interpreter.onTransition((ctx) => {
-					// 	console.log(ctx.toStrings());
-					// });
-					// context.interpreter.onEvent((evt) => {
-					// 	console.log(JSON.stringify(evt));
-					// });
+						const sendDataBasicGet = new SendDataRequest(
+							fakeDriver,
+							{
+								command: new BasicCCGet(fakeDriver, {
+									nodeId: 2,
+								}),
+							},
+						);
 
-					context.interpreter.start();
+						const sendDataBasicReport = new ApplicationCommandRequest(
+							fakeDriver,
+							{
+								command: new BasicCCReport(fakeDriver, {
+									nodeId: 2,
+									currentValue: 50,
+								}),
+							},
+						);
 
-					return path.test(context);
+						const sendDataBasicSet = new SendDataRequest(
+							fakeDriver,
+							{
+								command: new BasicCCSet(fakeDriver, {
+									nodeId: 2,
+									targetValue: 22,
+								}),
+							},
+						);
+
+						const sendDataBasicSetSecure = new SendDataRequest(
+							fakeDriver,
+							{
+								command: new SecurityCCCommandEncapsulation(
+									fakeDriver,
+									{
+										nodeId: 2,
+										encapsulated: new BasicCCSet(
+											fakeDriver,
+											{
+												nodeId: 2,
+												targetValue: 1,
+											},
+										),
+									},
+								),
+							},
+						);
+
+						const sendDataNonceRequest = new SendDataRequest(
+							fakeDriver,
+							{
+								command: new SecurityCCNonceGet(fakeDriver, {
+									nodeId: 2,
+								}),
+							},
+						);
+
+						const sendDataNonceResponse = new ApplicationCommandRequest(
+							fakeDriver,
+							{
+								command: new SecurityCCNonceReport(fakeDriver, {
+									nodeId: 2,
+									nonce: Buffer.allocUnsafe(8),
+								}),
+							},
+						);
+						function createTransaction(
+							msg: Message,
+							priority: MessagePriority = MessagePriority.Normal,
+						) {
+							const ret = new Transaction(
+								fakeDriver,
+								msg,
+								createDeferredPromise(),
+								priority,
+							);
+							(ret as any).toJSON = () => ({
+								message: msg.constructor.name,
+							});
+							return ret;
+						}
+
+						const testTransactions = {
+							GetControllerIdRequest: createTransaction(
+								ctrlrIdRequest,
+							),
+							GetControllerIdResponse: createTransaction(
+								ctrlrIdResponse,
+							),
+							BasicSet: createTransaction(sendDataBasicSet),
+							BasicGet: createTransaction(sendDataBasicGet),
+							BasicReport: createTransaction(sendDataBasicReport),
+							BasicSetSecure: createTransaction(
+								sendDataBasicSetSecure,
+							),
+							NonceRequest: createTransaction(
+								sendDataNonceRequest,
+								MessagePriority.PreTransmitHandshake,
+							),
+							NonceResponse: createTransaction(
+								sendDataNonceResponse,
+							),
+						};
+
+						const implementations: MockImplementations = {
+							notifyRetry: jest.fn(),
+							notifyUnsolicited: jest.fn(),
+							resolveTransaction: jest.fn(),
+							rejectTransaction: jest.fn(),
+						};
+						const machine = createSendThreadMachine(
+							implementations as any,
+							machineParams,
+						);
+
+						const context: TestContext = {
+							interpreter: interpret(machine),
+							implementations,
+							fakeDriver,
+							testTransactions,
+							preTransmitHandshakePromise: undefined as any,
+						};
+
+						sendDataBasicSetSecure.command.preTransmitHandshake = jest
+							.fn()
+							.mockImplementation(() => {
+								context.preTransmitHandshakePromise = createDeferredPromise();
+								return context.preTransmitHandshakePromise;
+							});
+
+						const sentCommand = (path.segments.find(
+							(s) => s.event.type === "ADD_SENDDATA",
+						)?.event as any)?.command;
+						if (sentCommand) {
+							context.sentTransaction = (testTransactions as any)[
+								sentCommand
+							];
+						}
+
+						// context.interpreter.onTransition((ctx) => {
+						// 	console.log(ctx.toStrings());
+						// });
+						// context.interpreter.onEvent((evt) => {
+						// 	console.log(JSON.stringify(evt));
+						// });
+
+						context.interpreter.start();
+
+						return path.test(context);
+					});
 				});
 			});
 		});
-	});
 
-	it("coverage", () => {
-		testModel.testCoverage({
-			filter: (stateNode) => {
-				return !!stateNode.meta;
-			},
+		it("coverage", () => {
+			testModel.testCoverage({
+				filter: (stateNode) => {
+					return !!stateNode.meta;
+				},
+			});
 		});
-	});
+	}
 });

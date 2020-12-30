@@ -15,8 +15,10 @@ import {
 	deserializeCacheValue,
 	Duration,
 	highResTimestamp,
+	LogConfig,
 	SecurityManager,
 	serializeCacheValue,
+	updateLogConfig,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -92,11 +94,7 @@ import {
 import { getDefaultPriority, Message } from "../message/Message";
 import { isNodeQuery } from "../node/INodeQuery";
 import type { ZWaveNode } from "../node/Node";
-import {
-	InterviewStage,
-	NodeInterviewFailedEventArgs,
-	NodeStatus,
-} from "../node/Types";
+import { InterviewStage, NodeStatus } from "../node/Types";
 import type { FileSystem } from "./FileSystem";
 import {
 	createSendThreadMachine,
@@ -104,6 +102,7 @@ import {
 	TransactionReducer,
 	TransactionReducerResult,
 } from "./SendThreadMachine";
+import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
 
 // eslint-disable-next-line
@@ -133,7 +132,7 @@ export interface ZWaveOptions {
 		/** How long to wait for a callback from the host for a SendData[Multicast]Request */
 		sendDataCallback: number; // >=10000, default: 65000 ms
 		/** How much time a node gets to process a request and send a response */
-		report: number; // [1000...40000], default: 1600 ms
+		report: number; // [1000...40000], default: 10000 ms
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
 		/** How long a node is assumed to be awake after the last communication with it */
@@ -145,6 +144,8 @@ export interface ZWaveOptions {
 		controller: number; // [1...3], default: 3
 		/** How often the driver should try sending SendData commands before giving up */
 		sendData: number; // [1...5], default: 3
+		/** Whether a command should be retried when a node acknowledges the receipt but no response is received */
+		retryAfterTransmitReport: boolean; // default: false
 		/**
 		 * How many attempts should be made for each node interview before giving up
 		 */
@@ -152,21 +153,31 @@ export interface ZWaveOptions {
 	};
 
 	/**
+	 * Optional log configuration
+	 */
+	logConfig?: LogConfig;
+
+	/**
 	 * @internal
 	 * Set this to true to skip the controller interview. Useful for testing purposes
 	 */
 	skipInterview?: boolean;
-	/**
-	 * How many attempts should be made for each node interview before giving up
-	 * @deprecated Use `attempts.nodeInterview` instead.
-	 */
-	nodeInterviewAttempts?: number;
-	/**
-	 * Allows you to replace the default file system driver used to store and read the cache
-	 */
-	fs: FileSystem;
-	/** Allows you to specify a different cache directory */
-	cacheDir: string;
+
+	storage: {
+		/** Allows you to replace the default file system driver used to store and read the cache */
+		driver: FileSystem;
+		/** Allows you to specify a different cache directory */
+		cacheDir: string;
+		/**
+		 * How frequently the values and metadata should be written to the DB files. This is a compromise between data loss
+		 * in cause of a crash and disk wear:
+		 *
+		 * * `"fast"` immediately writes every change to disk
+		 * * `"slow"` writes at most every 5 minutes or after 500 changes - whichever happens first
+		 * * `"normal"` is a compromise between the two options
+		 */
+		throttle: "fast" | "normal" | "slow";
+	};
 
 	/** Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes. */
 	networkKey?: Buffer;
@@ -177,7 +188,7 @@ const defaultOptions: ZWaveOptions = {
 		ack: 1000,
 		byte: 150,
 		response: 1600,
-		report: 1600,
+		report: 10000,
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
 		nodeAwake: 10000,
@@ -185,11 +196,15 @@ const defaultOptions: ZWaveOptions = {
 	attempts: {
 		controller: 3,
 		sendData: 3,
+		retryAfterTransmitReport: false,
 		nodeInterview: 5,
 	},
 	skipInterview: false,
-	fs: fsExtra,
-	cacheDir: path.resolve(__dirname, "../../..", "cache"),
+	storage: {
+		driver: fsExtra,
+		cacheDir: path.resolve(__dirname, "../../..", "cache"),
+		throttle: "normal",
+	},
 };
 
 /**
@@ -285,10 +300,8 @@ function checkOptions(options: ZWaveOptions): void {
 		);
 	}
 	if (
-		// wotan-disable-next-line no-unstable-api-use
-		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) < 1 ||
-		// wotan-disable-next-line no-unstable-api-use
-		(options.nodeInterviewAttempts ?? options.attempts.nodeInterview) > 10
+		options.attempts.nodeInterview < 1 ||
+		options.attempts.nodeInterview > 10
 	) {
 		throw new ZWaveError(
 			`The Node interview attempts must be between 1 and 10!`,
@@ -455,7 +468,12 @@ export class Driver extends EventEmitter {
 		) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
-		this.cacheDir = this.options.cacheDir;
+
+		if (this.options.logConfig) {
+			updateLogConfig(this.options.logConfig);
+		}
+
+		this.cacheDir = this.options.storage.cacheDir;
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
@@ -708,17 +726,7 @@ export class Driver extends EventEmitter {
 			// Always start the value and metadata databases
 			const options: JsonlDBOptions<any> = {
 				ignoreReadErrors: true,
-				autoCompress: {
-					onOpen: true,
-					intervalMs: 60000,
-					intervalMinChanges: 5,
-					sizeFactor: 2,
-					sizeFactorMinimumSize: 20,
-				},
-				throttleFS: {
-					intervalMs: 1000,
-					maxBufferedCommands: 50,
-				},
+				...throttlePresets[this.options.storage.throttle],
 			};
 
 			const valueDBFile = path.join(
@@ -798,15 +806,6 @@ export class Driver extends EventEmitter {
 		}
 	}
 
-	private emitNodeInterviewFailed(
-		node: ZWaveNode,
-		args: NodeInterviewFailedEventArgs,
-	): void {
-		// For compatibility, we emit the arguments as the third parameter until the next major version
-		// TODO: remove this compatibility layer and emit the args as the 2nd parameter directly
-		node.emit("interview failed", node, args.errorMessage, args);
-	}
-
 	private retryNodeInterviewTimeouts = new Map<number, NodeJS.Timeout>();
 	/**
 	 * @internal
@@ -827,10 +826,7 @@ export class Driver extends EventEmitter {
 			this.retryNodeInterviewTimeouts.delete(node.id);
 		}
 
-		const maxInterviewAttempts =
-			// wotan-disable-next-line no-unstable-api-use
-			this.options.nodeInterviewAttempts ??
-			this.options.attempts.nodeInterview;
+		const maxInterviewAttempts = this.options.attempts.nodeInterview;
 
 		try {
 			if (!(await node.interview())) {
@@ -841,7 +837,7 @@ export class Driver extends EventEmitter {
 						`Interview attempt (${node.interviewAttempts}/${maxInterviewAttempts}) failed, node is dead.`,
 						"warn",
 					);
-					this.emitNodeInterviewFailed(node, {
+					node.emit("interview failed", node, {
 						errorMessage: "The node is dead",
 						isFinal: true,
 					});
@@ -856,7 +852,7 @@ export class Driver extends EventEmitter {
 						`Interview attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed, retrying in ${retryTimeout} ms...`,
 						"warn",
 					);
-					this.emitNodeInterviewFailed(node, {
+					node.emit("interview failed", node, {
 						errorMessage: `Attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed`,
 						isFinal: false,
 						attempt: node.interviewAttempts,
@@ -876,7 +872,7 @@ export class Driver extends EventEmitter {
 						`Failed all interview attempts, giving up.`,
 						"warn",
 					);
-					this.emitNodeInterviewFailed(node, {
+					node.emit("interview failed", node, {
 						errorMessage: `Maximum interview attempts reached`,
 						isFinal: true,
 						attempt: maxInterviewAttempts,
@@ -2326,7 +2322,7 @@ ${handlers.length} left`,
 	private async saveNetworkToCacheInternal(): Promise<void> {
 		if (!this._controller || !this.controller.homeId) return;
 
-		await this.options.fs.ensureDir(this.cacheDir);
+		await this.options.storage.driver.ensureDir(this.cacheDir);
 		const cacheFile = path.join(
 			this.cacheDir,
 			this.controller.homeId.toString(16) + ".json",
@@ -2334,7 +2330,11 @@ ${handlers.length} left`,
 
 		const serializedObj = this.controller.serialize();
 		const jsonString = stringify(serializedObj);
-		await this.options.fs.writeFile(cacheFile, jsonString, "utf8");
+		await this.options.storage.driver.writeFile(
+			cacheFile,
+			jsonString,
+			"utf8",
+		);
 	}
 
 	/**
@@ -2376,7 +2376,7 @@ ${handlers.length} left`,
 			this.cacheDir,
 			`${this.controller.homeId.toString(16)}.json`,
 		);
-		if (!(await this.options.fs.pathExists(cacheFile))) return;
+		if (!(await this.options.storage.driver.pathExists(cacheFile))) return;
 
 		try {
 			log.driver.print(
@@ -2384,7 +2384,7 @@ ${handlers.length} left`,
 					this.controller.homeId,
 				)} found, attempting to restore the network from cache...`,
 			);
-			const cacheString = await this.options.fs.readFile(
+			const cacheString = await this.options.storage.driver.readFile(
 				cacheFile,
 				"utf8",
 			);
