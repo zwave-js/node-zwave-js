@@ -266,7 +266,7 @@ export class BatteryCCReport extends BatteryCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyBoolean,
-		label: "Level is low",
+		label: "Low battery level",
 	})
 	public get isLow(): boolean {
 		return this._isLow;
