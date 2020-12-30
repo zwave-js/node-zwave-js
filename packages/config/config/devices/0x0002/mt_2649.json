@@ -1,7 +1,6 @@
 // Danfoss MT 2649
 // Room Thermostat
 {
-	"_approved": true,
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",
 	"label": "MT 2649",
@@ -15,6 +14,13 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
 	},
 	"paramInformation": {
 		"1": {
