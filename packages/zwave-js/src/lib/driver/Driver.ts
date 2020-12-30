@@ -102,6 +102,7 @@ import {
 	TransactionReducer,
 	TransactionReducerResult,
 } from "./SendThreadMachine";
+import { throttlePresets } from "./ThrottlePresets";
 import { Transaction } from "./Transaction";
 
 // eslint-disable-next-line
@@ -162,12 +163,21 @@ export interface ZWaveOptions {
 	 */
 	skipInterview?: boolean;
 
-	/**
-	 * Allows you to replace the default file system driver used to store and read the cache
-	 */
-	fs: FileSystem;
-	/** Allows you to specify a different cache directory */
-	cacheDir: string;
+	storage: {
+		/** Allows you to replace the default file system driver used to store and read the cache */
+		driver: FileSystem;
+		/** Allows you to specify a different cache directory */
+		cacheDir: string;
+		/**
+		 * How frequently the values and metadata should be written to the DB files. This is a compromise between data loss
+		 * in cause of a crash and disk wear:
+		 *
+		 * * `"fast"` immediately writes every change to disk
+		 * * `"slow"` writes at most every 5 minutes or after 500 changes - whichever happens first
+		 * * `"normal"` is a compromise between the two options
+		 */
+		throttle: "fast" | "normal" | "slow";
+	};
 
 	/** Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes. */
 	networkKey?: Buffer;
@@ -190,8 +200,11 @@ const defaultOptions: ZWaveOptions = {
 		nodeInterview: 5,
 	},
 	skipInterview: false,
-	fs: fsExtra,
-	cacheDir: path.resolve(__dirname, "../../..", "cache"),
+	storage: {
+		driver: fsExtra,
+		cacheDir: path.resolve(__dirname, "../../..", "cache"),
+		throttle: "normal",
+	},
 };
 
 /**
@@ -460,7 +473,7 @@ export class Driver extends EventEmitter {
 			updateLogConfig(this.options.logConfig);
 		}
 
-		this.cacheDir = this.options.cacheDir;
+		this.cacheDir = this.options.storage.cacheDir;
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
@@ -713,17 +726,7 @@ export class Driver extends EventEmitter {
 			// Always start the value and metadata databases
 			const options: JsonlDBOptions<any> = {
 				ignoreReadErrors: true,
-				autoCompress: {
-					onOpen: true,
-					intervalMs: 60000,
-					intervalMinChanges: 5,
-					sizeFactor: 2,
-					sizeFactorMinimumSize: 20,
-				},
-				throttleFS: {
-					intervalMs: 1000,
-					maxBufferedCommands: 50,
-				},
+				...throttlePresets[this.options.storage.throttle],
 			};
 
 			const valueDBFile = path.join(
@@ -2319,7 +2322,7 @@ ${handlers.length} left`,
 	private async saveNetworkToCacheInternal(): Promise<void> {
 		if (!this._controller || !this.controller.homeId) return;
 
-		await this.options.fs.ensureDir(this.cacheDir);
+		await this.options.storage.driver.ensureDir(this.cacheDir);
 		const cacheFile = path.join(
 			this.cacheDir,
 			this.controller.homeId.toString(16) + ".json",
@@ -2327,7 +2330,11 @@ ${handlers.length} left`,
 
 		const serializedObj = this.controller.serialize();
 		const jsonString = stringify(serializedObj);
-		await this.options.fs.writeFile(cacheFile, jsonString, "utf8");
+		await this.options.storage.driver.writeFile(
+			cacheFile,
+			jsonString,
+			"utf8",
+		);
 	}
 
 	/**
@@ -2369,7 +2376,7 @@ ${handlers.length} left`,
 			this.cacheDir,
 			`${this.controller.homeId.toString(16)}.json`,
 		);
-		if (!(await this.options.fs.pathExists(cacheFile))) return;
+		if (!(await this.options.storage.driver.pathExists(cacheFile))) return;
 
 		try {
 			log.driver.print(
@@ -2377,7 +2384,7 @@ ${handlers.length} left`,
 					this.controller.homeId,
 				)} found, attempting to restore the network from cache...`,
 			);
-			const cacheString = await this.options.fs.readFile(
+			const cacheString = await this.options.storage.driver.readFile(
 				cacheFile,
 				"utf8",
 			);

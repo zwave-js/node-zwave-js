@@ -416,12 +416,21 @@ interface ZWaveOptions {
 	 * Optional log configuration
 	 */
 	logConfig?: LogConfig;
-	/**
-	 * Allows you to replace the default file system driver used to store and read the cache
-	 */
-	fs: FileSystem;
-	/** Allows you to specify a different cache directory */
-	cacheDir: string;
+	storage: {
+		/** Allows you to replace the default file system driver used to store and read the cache */
+		driver: FileSystem;
+		/** Allows you to specify a different cache directory */
+		cacheDir: string;
+		/**
+		 * How frequently the values and metadata should be written to the DB files. This is a compromise between data loss
+		 * in cause of a crash and disk wear:
+		 *
+		 * * `"fast"` immediately writes every change to disk
+		 * * `"slow"` writes at most every 5 minutes or after 500 changes - whichever happens first
+		 * * `"normal"` is a compromise between the two options
+		 */
+		throttle: "fast" | "normal" | "slow";
+	};
 
 	/** Specify the network key to use for encryption. This must be a Buffer of exactly 16 bytes. */
 	networkKey?: Buffer;
@@ -434,6 +443,7 @@ The `report` timeout is used by this library to determine how long to wait for a
 
 If your network has connectivity issues, you can increase the number of interview attempts the driver makes before giving up. The default is 5.
 
-For more control over writing the cache file, you can use the `fs` and `cacheDir` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
+For more control over writing the cache files, you can use the `storage` options. By default, the cache is located inside `node_modules/zwave-js/cache` and written using Node.js built-in `fs` methods (promisified using `fs-extra`). The replacement file system must adhere to the [`FileSystem`](#FileSystem) interface.
+The `throttle` option allows you to fine-tune the filesystem. The default value `"normal"`
 
 For custom logging options you can use `logConfig`, check [`LogConfig`](#LogConfig) interface for more informations.
