@@ -21,9 +21,11 @@ To compensate for the change and give the response enough time to reach the cont
 ### Features
 * An option was added to enable logging to the console, even if it is not a TTY
 * An option was added to control the filesystem access throttling
+* Improved the `label` for `Level low` property in `BatteryCC`
 
 ### Bugfixes
-* Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask
+* Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask.  
+**Note:** If your devices are affected by this bug, re-interview them to remove corrupted values.
 
 ## 5.7.0 (2020-12-23)
 ### Config file changes
