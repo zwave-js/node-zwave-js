@@ -13583,6 +13583,16 @@
     {
         "manufacturerId": "0x0258",
         "productType": "0x0200",
+        "productId": "0x1027",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0258/nas-wr01ze.json"
+    },
+    {
+        "manufacturerId": "0x0258",
+        "productType": "0x0200",
         "productId": "0x102c",
         "firmwareVersion": {
             "min": "0.0",
