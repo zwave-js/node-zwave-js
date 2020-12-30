@@ -101,8 +101,8 @@ describe("lib/commandclass/BinarySensorCC => ", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([
 				BinarySensorCommand.SupportedReport, // CC Command
-				0b01010101,
-				1,
+				0b10101010,
+				0b10,
 			]),
 		);
 		const cc = new BinarySensorCCSupportedReport(fakeDriver, {

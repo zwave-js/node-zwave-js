@@ -381,7 +381,11 @@ export class BinarySensorCCSupportedReport extends BinarySensorCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 1);
-		this._supportedSensorTypes = parseBitMask(this.payload);
+		// The enumeration starts at 1, but the first (reserved) bit is included
+		// in the report
+		this._supportedSensorTypes = parseBitMask(this.payload, 0).filter(
+			(t) => t !== 0,
+		);
 		this.persistValues();
 	}
 
