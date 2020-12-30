@@ -134,10 +134,16 @@ export class SecurityManager {
 		}
 	}
 
-	/** Deletes ALL nonces that were issued for a given node */
-	public deleteAllNoncesForReceiver(receiver: number): void {
+	/** Deletes ALL nonces that were issued for a given node, except the given nonce id */
+	public deleteAllNoncesForReceiver(
+		receiver: number,
+		exceptId?: number,
+	): void {
 		for (const [key, entry] of this._nonceStore) {
-			if (entry.receiver === receiver) {
+			if (
+				entry.receiver === receiver &&
+				this.getNonceId(entry.nonce) !== exceptId
+			) {
 				this.deleteNonceInternal(key);
 			}
 		}

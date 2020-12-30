@@ -181,13 +181,15 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		}
 
 		// If a compat option requires the nonces to stick around, disable the expire feature
-		const expire = !this.endpoint.getNodeUnsafe()?.deviceConfig?.compat
-			?.keepS0NonceUntilNext;
+		const keepUntilNext = !!this.endpoint.getNodeUnsafe()?.deviceConfig
+			?.compat?.keepS0NonceUntilNext;
+		const expire = !keepUntilNext;
 		const nonce = this.driver.securityManager.generateNonce(
 			this.endpoint.nodeId,
 			HALF_NONCE_SIZE,
 			expire,
 		);
+		const nonceId = this.driver.securityManager.getNonceId(nonce);
 
 		const cc = new SecurityCCNonceReport(this.driver, {
 			nodeId: this.endpoint.nodeId,
@@ -204,6 +206,14 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				...this.commandOptions,
 				priority: MessagePriority.Handshake,
 			});
+			if (keepUntilNext) {
+				// The nonce was received. If we are talking to a device with the keepS0NonceUntilNext compat option,
+				// we now may expire all other nonces
+				this.driver.securityManager.deleteAllNoncesForReceiver(
+					cc.nodeId,
+					nonceId,
+				);
+			}
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
@@ -213,9 +223,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 					e.code === ZWaveErrorCodes.Controller_MessageDropped)
 			) {
 				// The nonce could not be sent, invalidate it
-				this.driver.securityManager.deleteNonce(
-					this.driver.securityManager.getNonceId(nonce),
-				);
+				this.driver.securityManager.deleteNonce(nonceId);
 				return false;
 			} else {
 				// Pass other errors through
