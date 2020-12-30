@@ -100,5 +100,6 @@
 	],
 	"files.participants.timeout": 10000,
 	"typescript.preferences.importModuleSpecifier": "project-relative",
-	"jest.autoEnable": false
+	"jest.autoEnable": false,
+	"jest.runAllTestsFirst": false
 }

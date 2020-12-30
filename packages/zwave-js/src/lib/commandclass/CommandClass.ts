@@ -568,6 +568,19 @@ export class CommandClass {
 		return false;
 	}
 
+	/** Determines if the given value should be persisted or represents an event */
+	public isStatefulValue(property: keyof this): boolean {
+		const ccValueDefinition = getCCValueDefinitions(this).get(
+			property as string,
+		);
+		if (ccValueDefinition?.stateful === false) return false;
+		const ccKeyValuePairDefinition = getCCKeyValuePairDefinitions(this).get(
+			property as string,
+		);
+		if (ccKeyValuePairDefinition?.stateful === false) return false;
+		return true;
+	}
+
 	/** Persists all values on the given node into the value. Returns true if the process succeeded, false otherwise */
 	public persistValues(valueNames?: (keyof this)[]): boolean {
 		// In order to avoid cluttering applications with heaps of unsupported properties,
@@ -660,7 +673,11 @@ export class CommandClass {
 				};
 				// Avoid overwriting existing values with undefined if forceCreation is true
 				if (sourceValue != undefined || !db.hasValue(valueId)) {
-					db.setValue(valueId, sourceValue);
+					// Tell the value DB if this is a stateful value
+					const stateful = this.isStatefulValue(
+						variable as keyof this,
+					);
+					db.setValue(valueId, sourceValue, { stateful });
 				}
 			}
 		}
@@ -1220,6 +1237,10 @@ export interface CCValueOptions {
 	 * Whether this value should always be created/persisted, even if it is undefined. Default: false
 	 */
 	forceCreation?: boolean;
+	/**
+	 * Whether this value represents a state (`true`) or a notification/event (`false`). Default: `true`
+	 */
+	stateful?: boolean;
 }
 
 /**

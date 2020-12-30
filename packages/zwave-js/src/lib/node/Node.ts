@@ -181,6 +181,7 @@ export class ZWaveNode extends Endpoint {
 			"value added",
 			"value updated",
 			"value removed",
+			"value notification",
 			"metadata updated",
 		] as const) {
 			this._valueDB.on(event, this.translateValueEvent.bind(this, event));
@@ -1862,7 +1863,7 @@ version:               ${this.version}`;
 			key: CentralSceneKeys,
 		): void => {
 			const valueId = getSceneValueId(sceneNumber);
-			this.valueDB.setValue(valueId, key);
+			this.valueDB.setValue(valueId, key, { stateful: false });
 		};
 
 		const forceKeyUp = (): void => {
