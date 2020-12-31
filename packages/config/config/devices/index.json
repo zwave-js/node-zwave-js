@@ -14942,6 +14942,16 @@
     },
     {
         "manufacturerId": "0x0371",
+        "productType": "0x0002",
+        "productId": "0x00bb",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0371/zw187.json"
+    },
+    {
+        "manufacturerId": "0x0371",
         "productType": "0x0003",
         "productId": "0x0001",
         "firmwareVersion": {
