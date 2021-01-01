@@ -28,12 +28,15 @@ function getTransportLoglevelNumeric(): number {
 	return loglevels[getTransportLoglevel()];
 }
 
+let fileTransport: Transport | undefined;
+let consoleTransport: Transport | undefined;
+
 // default log configuration
 const logConfig: LogConfig = {
 	enabled: true,
 	level: getTransportLoglevelNumeric(),
 	logToFile: !!process.env.LOGTOFILE,
-	transports: [],
+	transports: undefined as any,
 	filename: require.main
 		? path.join(
 				path.dirname(require.main.filename),
@@ -42,15 +45,29 @@ const logConfig: LogConfig = {
 		: path.join(__dirname, "../../..", `zwave-${process.pid}.log`),
 	forceConsole: false,
 };
-// this needs to be called after logConfig.logToFile is set
+// Fallback for when updateLogConfig is not called
 logConfig.transports = createLogTransports();
+let didCallUpdateLogConfig = false;
 
+/** This must be called before logging for the first time */
 export function updateLogConfig(config: DeepPartial<LogConfig>): void {
 	Object.assign(logConfig, config);
 
+	// Initialize transports on the first call
+	if (!didCallUpdateLogConfig && !config.transports) {
+		logConfig.transports = createLogTransports();
+	}
+	didCallUpdateLogConfig = true;
+
 	// enable/disable transports based on `enabled` property
 	for (const transport of logConfig.transports) {
-		transport.silent = !logConfig.enabled;
+		if (transport === consoleTransport) {
+			transport.silent = isConsoleTransportSilent();
+		} else if (transport === fileTransport) {
+			transport.silent = isFileTransportSilent();
+		} else {
+			transport.silent = !logConfig.enabled;
+		}
 	}
 }
 
@@ -329,11 +346,9 @@ export function restoreSilence(
 	}
 }
 
-let fileTransport: Transport | undefined;
-
 function createLogTransports(): Transport[] {
 	const ret: Transport[] = [];
-	if (logConfig.logToFile) {
+	if (logConfig.logToFile && logConfig.enabled) {
 		if (!fileTransport) {
 			console.log(`Logging to file:
 ${logConfig.filename}`);
@@ -341,15 +356,26 @@ ${logConfig.filename}`);
 		}
 		ret.push(fileTransport);
 	} else {
-		ret.push(createConsoleTransport());
+		if (!consoleTransport) {
+			consoleTransport = createConsoleTransport();
+		}
+		ret.push(consoleTransport);
 	}
 	return ret;
+}
+
+function isConsoleTransportSilent(): boolean {
+	return process.env.NODE_ENV === "test" || !logConfig.enabled;
+}
+
+function isFileTransportSilent(): boolean {
+	return !logConfig.enabled;
 }
 
 function createConsoleTransport(): Transport {
 	return new winston.transports.Console({
 		level: getTransportLoglevel(),
-		silent: process.env.NODE_ENV === "test" || !logConfig.enabled,
+		silent: isConsoleTransportSilent(),
 	});
 }
 
@@ -357,7 +383,7 @@ function createFileTransport(): Transport {
 	return new winston.transports.File({
 		filename: logConfig.filename,
 		level: getTransportLoglevel(),
-		silent: !logConfig.enabled,
+		silent: isFileTransportSilent(),
 	});
 }
 
