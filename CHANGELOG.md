@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 6.0.0-alpha.1 (2020-12-30)
+## __WORK IN PROGRESS__
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)
 * Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
 * The second (string) parameter of the `"interview failed"` event handler was removed
@@ -17,6 +17,10 @@ To compensate for the change and give the response enough time to reach the cont
 
 ### Config file changes
 * Added Technisat Dimmer and series switch
+* Add Lifeline association to Danfoss MT 2649
+* Add product id/type to NAS-WR01ZE
+* New versions of `@zwave-js/config` are now automatically released every night if **only** config files were changed since the last release.  
+You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull the latest config files. For now, a driver restart is required afterwards.
 
 ### Features
 * An option was added to enable logging to the console, even if it is not a TTY
@@ -26,6 +30,7 @@ To compensate for the change and give the response enough time to reach the cont
 ### Bugfixes
 * Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask.  
 **Note:** If your devices are affected by this bug, re-interview them to remove corrupted values.
+* Expire nonces for `keepS0NonceUntilNext` devices until **after** the next nonce was received by the device
 
 ## 5.7.0 (2020-12-23)
 ### Config file changes
