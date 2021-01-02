@@ -5,6 +5,7 @@ import {
 	deserializeCacheValue,
 	getCCName,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	NODE_ID_BROADCAST,
 	parseCCId,
 	serializeCacheValue,
@@ -18,6 +19,7 @@ import {
 } from "@zwave-js/core";
 import {
 	buffer2hex,
+	getEnumMemberName,
 	JSONObject,
 	num2hex,
 	staticExtends,
@@ -332,12 +334,23 @@ export class CommandClass {
 
 	/** Generates a representation of this CC for the log */
 	public toLogEntry(): MessageOrCCLogEntry {
+		let tag = this.constructor.name;
+		const message: MessageRecord = {};
+		if (this.constructor === CommandClass) {
+			tag = `${getEnumMemberName(
+				CommandClasses,
+				this.ccId,
+			)} CC (not implemented)`;
+			if (this.ccCommand != undefined) {
+				message.command = num2hex(this.ccCommand);
+			}
+		}
+		if (this.payload.length > 0) {
+			message.payload = buffer2hex(this.payload);
+		}
 		return {
-			tags: [this.constructor.name],
-			message:
-				this.payload.length > 0
-					? { payload: buffer2hex(this.payload) }
-					: undefined,
+			tags: [tag],
+			message,
 		};
 	}
 
