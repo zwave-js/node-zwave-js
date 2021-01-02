@@ -5,6 +5,7 @@ import {
 	deserializeCacheValue,
 	getCCName,
 	MessageOrCCLogEntry,
+	MessageRecord,
 	NODE_ID_BROADCAST,
 	parseCCId,
 	serializeCacheValue,
@@ -18,6 +19,7 @@ import {
 } from "@zwave-js/core";
 import {
 	buffer2hex,
+	getEnumMemberName,
 	JSONObject,
 	num2hex,
 	staticExtends,
@@ -60,6 +62,7 @@ export interface CCCommandOptions {
 }
 
 interface CommandClassCreationOptions extends CCCommandOptions {
+	ccId?: number; // Used to overwrite the declared CC ID
 	ccCommand?: number; // undefined = NoOp
 	payload?: Buffer;
 }
@@ -77,8 +80,9 @@ export class CommandClass {
 	// empty constructor to parse messages
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		this.driver = driver;
-		// Extract the cc from declared metadata if not provided
-		this.ccId = getCommandClass(this);
+		// Extract the cc from declared metadata if not provided by the CC constructor
+		this.ccId =
+			("ccId" in options && options.ccId) || getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
 		this.endpointIndex =
 			("endpoint" in options ? options.endpoint : undefined) ?? 0;
@@ -330,12 +334,23 @@ export class CommandClass {
 
 	/** Generates a representation of this CC for the log */
 	public toLogEntry(): MessageOrCCLogEntry {
+		let tag = this.constructor.name;
+		const message: MessageRecord = {};
+		if (this.constructor === CommandClass) {
+			tag = `${getEnumMemberName(
+				CommandClasses,
+				this.ccId,
+			)} CC (not implemented)`;
+			if (this.ccCommand != undefined) {
+				message.command = num2hex(this.ccCommand);
+			}
+		}
+		if (this.payload.length > 0) {
+			message.payload = buffer2hex(this.payload);
+		}
 		return {
-			tags: [this.constructor.name],
-			message:
-				this.payload.length > 0
-					? { payload: buffer2hex(this.payload) }
-					: undefined,
+			tags: [tag],
+			message,
 		};
 	}
 

@@ -13,6 +13,10 @@
     -   [Endpoint](api/endpoint.md)
     -   [ValueID](api/valueid.md)
 
+-   Advanced usage
+
+    -   [Send custom messages](usage/custom.md)
+
 -   Development
     -   [Introduction](development/intro.md)
     -   [Device configuration files](development/config-files.md)
