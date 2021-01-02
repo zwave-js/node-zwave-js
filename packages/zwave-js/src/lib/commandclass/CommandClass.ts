@@ -60,6 +60,7 @@ export interface CCCommandOptions {
 }
 
 interface CommandClassCreationOptions extends CCCommandOptions {
+	ccId?: number; // Used to overwrite the declared CC ID
 	ccCommand?: number; // undefined = NoOp
 	payload?: Buffer;
 }
@@ -77,8 +78,9 @@ export class CommandClass {
 	// empty constructor to parse messages
 	public constructor(driver: Driver, options: CommandClassOptions) {
 		this.driver = driver;
-		// Extract the cc from declared metadata if not provided
-		this.ccId = getCommandClass(this);
+		// Extract the cc from declared metadata if not provided by the CC constructor
+		this.ccId =
+			("ccId" in options && options.ccId) || getCommandClass(this);
 		// Default to the root endpoint - Inherited classes may override this behavior
 		this.endpointIndex =
 			("endpoint" in options ? options.endpoint : undefined) ?? 0;

@@ -3,6 +3,7 @@ import {
 	CommandClasses,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
 import { createEmptyMockDriver } from "../test/mocks";
@@ -37,6 +38,37 @@ class DummyCCSubClass2 extends DummyCC {
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
 describe("lib/commandclass/CommandClass => ", () => {
+	describe("creating and serializing()", () => {
+		let node2: ZWaveNode;
+
+		beforeEach(() => {
+			node2 = new ZWaveNode(2, fakeDriver as any);
+			(fakeDriver.controller.nodes as any).set(2, node2);
+		});
+
+		afterEach(() => {
+			node2.destroy();
+			(fakeDriver.controller.nodes as any).delete(2);
+		});
+
+		it(`should work for unspecified commands`, () => {
+			// Repro for #1219
+			const cc = new CommandClass(fakeDriver, {
+				nodeId: 2,
+				ccId: 0x5d,
+				ccCommand: 0x02,
+				payload: Buffer.from([1, 2, 3]),
+			});
+			const msg = new SendDataRequest(fakeDriver, {
+				command: cc,
+				callbackId: 0xfe,
+			});
+			expect(msg.serialize()).toEqual(
+				Buffer.from("010c001302055d0201020325fe63", "hex"),
+			);
+		});
+	});
+
 	describe("from()", () => {
 		it("throws CC_NotImplemented when receiving a non-implemented CC", () => {
 			// This is a Node Provisioning CC. Change it when that CC is implemented
