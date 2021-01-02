@@ -95,8 +95,7 @@ function findExports() {
 							sourceFile.fileName,
 							node.name.text,
 							ts.isTypeAliasDeclaration(node) ||
-								ts.isInterfaceDeclaration(node) ||
-								ts.isClassDeclaration(node),
+								ts.isInterfaceDeclaration(node),
 						);
 					}
 				}

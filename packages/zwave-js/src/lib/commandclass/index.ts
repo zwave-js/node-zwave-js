@@ -14,7 +14,7 @@ for (const file of definedCCs) {
 // explicitly export specific things from the CCs
 export { AlarmSensorType } from "./AlarmSensorCC";
 export type { AlarmSensorValueMetadata } from "./AlarmSensorCC";
-export type { CCAPI } from "./API";
+export { CCAPI } from "./API";
 export { AssociationGroupInfoProfile } from "./AssociationGroupInfoCC";
 export type { AssociationGroup } from "./AssociationGroupInfoCC";
 export { BatteryChargingStatus, BatteryReplacementStatus } from "./BatteryCC";
@@ -25,7 +25,7 @@ export { ScheduleOverrideType } from "./ClimateControlScheduleCC";
 export { Weekday } from "./ClockCC";
 export { ColorComponent } from "./ColorSwitchCC";
 export type { ColorTable } from "./ColorSwitchCC";
-export type { CommandClass } from "./CommandClass";
+export { CommandClass } from "./CommandClass";
 export type { ConfigValue } from "./ConfigurationCC";
 export { DoorLockMode, DoorLockOperationType } from "./DoorLockCC";
 export type { DoorHandleStatus } from "./DoorLockCC";
