@@ -179,6 +179,8 @@ export enum FunctionType {
 	FUNC_ID_ZW_GET_VIRTUAL_NODES = 0xa5, // Return all virtual nodes
 	FUNC_ID_ZW_IS_VIRTUAL_NODE = 0xa6, // Virtual node test
 
+	BridgeApplicationCommand = 0xa8, // A message from another node using the Bridge API
+
 	UNKNOWN_FUNC_UNKNOWN_0xB4 = 0xb4, // ??
 
 	UNKNOWN_FUNC_WATCH_DOG_ENABLE = 0xb6,
