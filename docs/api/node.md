@@ -315,11 +315,47 @@ This property returns the node's **DeviceClass**, which provides further informa
 
 <!-- #import DeviceClass from "zwave-js" -->
 
+```ts
+interface DeviceClass<> {
+	readonly basic: BasicDeviceClass;
+	readonly generic: GenericDeviceClass;
+	readonly specific: SpecificDeviceClass;
+	readonly mandatorySupportedCCs: readonly CommandClasses[];
+	readonly mandatoryControlledCCs: readonly CommandClasses[];
+}
+```
+
 <!-- #import BasicDeviceClass from "@zwave-js/config" -->
+
+```ts
+interface BasicDeviceClass {
+	key: number;
+	label: string;
+}
+```
 
 <!-- #import GenericDeviceClass from "@zwave-js/config" -->
 
+```ts
+interface GenericDeviceClass<> {
+	readonly key: number;
+	readonly label: string;
+	readonly supportedCCs: readonly CommandClasses[];
+	readonly controlledCCs: readonly CommandClasses[];
+	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
+}
+```
+
 <!-- #import SpecificDeviceClass from "@zwave-js/config" -->
+
+```ts
+interface SpecificDeviceClass<> {
+	readonly key: number;
+	readonly label: string;
+	readonly supportedCCs: readonly CommandClasses[];
+	readonly controlledCCs: readonly CommandClasses[];
+}
+```
 
 ### `zwavePlusVersion`
 

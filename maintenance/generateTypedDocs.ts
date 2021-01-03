@@ -12,6 +12,7 @@ import {
 	CommentRange,
 	ExportedDeclarations,
 	InterfaceDeclaration,
+	InterfaceDeclarationStructure,
 	Node,
 	Project,
 	SyntaxKind,
@@ -86,6 +87,27 @@ export function stripComments(
 	return node;
 }
 
+// As long as ts-morph has no means to print a structure, we'll have to use this
+// to print the declarations of a class
+function printInterfaceDeclarationStructure(
+	struct: InterfaceDeclarationStructure,
+): string {
+	return `
+interface ${struct.name}${
+		struct.typeParameters?.length
+			? `<${struct.typeParameters.map((t) => t.toString()).join(", ")}>`
+			: ""
+	} {
+	${struct.properties
+		?.map((p) => {
+			return `${p.isReadonly ? "readonly " : ""}${p.name}${
+				p.hasQuestionToken ? "?:" : ":"
+			} ${p.type as string};`;
+		})
+		.join("\n")}
+}`;
+}
+
 export function getTransformedSource(
 	node: ExportedDeclarations,
 	options: ImportRange["options"],
@@ -110,11 +132,17 @@ export function getTransformedSource(
 		}
 	}
 
-	// Comments must be removed last (if that is desired)
-	node = stripComments(node, options);
+	let ret: string;
+	if (Node.isClassDeclaration(node)) {
+		// Class declarations contain the entire source, we are only interested in the properties
+		ret = printInterfaceDeclarationStructure(node.extractInterface());
+	} else {
+		// Comments must be removed last (if that is desired)
+		node = stripComments(node, options);
+		// Using getText instead of print avoids reformatting the node
+		ret = node.getText();
+	}
 
-	// Using getText instead of print avoids reformatting the node
-	let ret = node.getText();
 	// Format with Prettier so we get the original formatting back
 	ret = formatWithPrettier("index.ts", ret).trim();
 	return ret;
