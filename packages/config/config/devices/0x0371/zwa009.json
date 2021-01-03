@@ -17,6 +17,34 @@
     "max": "255.255"
   },
   "supportsZWavePlus": true,
+  "associations": {
+    "1": {
+      "label": "Lifeline",
+      "maxNodes": 5,
+      "isLifeline": true
+    },
+    "2": {
+      "label": "High Temperature Notification",
+      "maxNodes": 5
+    },
+    "35": {
+      "label": "Low Temperature Notification",
+      "maxNodes": 5
+    },
+    "45": {
+      "label": "High Humidity Notification",
+      "maxNodes": 5
+    },
+    "55": {
+      "label": "Low Humidity Notification",
+      "maxNodes": 5
+    },
+    "65": {
+      "label": "Air Temperature",
+      "description": "A multilevel sensor report is sent to the nodes in this group",
+      "maxNodes": 5
+    }
+  },
   "paramInformation": {
     "1": {
       "label": "Minimum Temperature change to report",
@@ -175,8 +203,8 @@
       "description": "This value allows to switch between Celcius and Fahrenheit unit of temperature report. Default: Celcius (EU version) or Fahrenheit (US version).",
       "unsigned": true,
       "valueSize": 1,
-      "minValue": 0,
-      "maxValue": 10,
+      "minValue": 1,
+      "maxValue": 2,
       "defaultValue": 1,
       "readOnly": false,
       "writeOnly": false,
