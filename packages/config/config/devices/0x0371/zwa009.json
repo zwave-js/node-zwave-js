@@ -43,7 +43,6 @@
       "label": "Air Temperature",
       "description": "A multilevel sensor report is sent to the nodes in this group",
       "maxNodes": 5,
-      "isLifeline": true
     }
   },
   "paramInformation": {
