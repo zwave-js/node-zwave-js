@@ -58,7 +58,7 @@ describe("regression tests", () => {
 			nodeId: 2,
 			targetValue: 50,
 		});
-		const basicSetPromise2 = driver.sendCommand(command2, {
+		driver.sendCommand(command2, {
 			maxSendAttempts: 1,
 		});
 

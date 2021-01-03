@@ -35,7 +35,7 @@ The method either returns the stored value if it was found, and `undefined` othe
 getValueMetadata(valueId: ValueID): ValueMetadata
 ```
 
-Every value in Z-Wave has associated metadata that defines the range of allowed values etc. You can retrieve this metadata using `getValueMetadata`. Like `getValue` this takes a single argument of the type [`ValueMetadata`](./valueid.md#ValueMetadata).
+Every value in Z-Wave has associated metadata that defines the range of allowed values etc. You can retrieve this metadata using `getValueMetadata`. Like `getValue` this takes a single argument of the type [`ValueMetadata`](/api/valueid.md#ValueMetadata).
 
 This method is guaranteed to return at least some very basic metadata, even if the value was not found.
 
@@ -311,7 +311,51 @@ enum InterviewStage {
 readonly deviceClass: DeviceClass
 ```
 
-This property returns the node's [DeviceClass](#DeviceClass-class), which provides further information about the kind of device this node is.
+This property returns the node's **DeviceClass**, which provides further information about the kind of device this node is.
+
+<!-- #import DeviceClass from "zwave-js" -->
+
+```ts
+interface DeviceClass {
+	readonly basic: BasicDeviceClass;
+	readonly generic: GenericDeviceClass;
+	readonly specific: SpecificDeviceClass;
+	readonly mandatorySupportedCCs: readonly CommandClasses[];
+	readonly mandatoryControlledCCs: readonly CommandClasses[];
+}
+```
+
+<!-- #import BasicDeviceClass from "@zwave-js/config" -->
+
+```ts
+interface BasicDeviceClass {
+	key: number;
+	label: string;
+}
+```
+
+<!-- #import GenericDeviceClass from "@zwave-js/config" -->
+
+```ts
+interface GenericDeviceClass {
+	readonly key: number;
+	readonly label: string;
+	readonly supportedCCs: readonly CommandClasses[];
+	readonly controlledCCs: readonly CommandClasses[];
+	readonly specific: ReadonlyMap<number, SpecificDeviceClass>;
+}
+```
+
+<!-- #import SpecificDeviceClass from "@zwave-js/config" -->
+
+```ts
+interface SpecificDeviceClass {
+	readonly key: number;
+	readonly label: string;
+	readonly supportedCCs: readonly CommandClasses[];
+	readonly controlledCCs: readonly CommandClasses[];
+}
+```
 
 ### `zwavePlusVersion`
 
@@ -441,7 +485,7 @@ These three properties together identify the actual device this node is.
 readonly deviceConfig: DeviceConfig | undefined
 ```
 
-Contains additional information about this node, loaded from a [config file](../development/config-files.md).
+Contains additional information about this node, loaded from a [config file](/development/config-files.md#device-configuration-files).
 
 ### `neighbors`
 
