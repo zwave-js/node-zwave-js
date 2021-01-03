@@ -27,19 +27,19 @@
       "label": "High Temperature Notification",
       "maxNodes": 5
     },
-    "35": {
+    "3": {
       "label": "Low Temperature Notification",
       "maxNodes": 5
     },
-    "45": {
+    "4": {
       "label": "High Humidity Notification",
       "maxNodes": 5
     },
-    "55": {
+    "5": {
       "label": "Low Humidity Notification",
       "maxNodes": 5
     },
-    "65": {
+    "6": {
       "label": "Air Temperature",
       "description": "A multilevel sensor report is sent to the nodes in this group",
       "maxNodes": 5
