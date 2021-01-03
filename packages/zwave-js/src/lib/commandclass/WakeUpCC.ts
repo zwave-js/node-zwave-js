@@ -13,6 +13,7 @@ import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/Types";
 import {
 	CCAPI,
+	ignoreTimeout,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -210,23 +211,34 @@ export class WakeUpCC extends CommandClass {
 			if (complete) {
 				// This information does not change
 				if (this.version >= 2) {
-					log.controller.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"retrieving wakeup capabilities from the device...",
-						direction: "outbound",
-					});
-					const wakeupCaps = await api.getIntervalCapabilities();
-					const logMessage = `received wakeup capabilities:
+					await ignoreTimeout(
+						async () => {
+							log.controller.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message:
+									"retrieving wakeup capabilities from the device...",
+								direction: "outbound",
+							});
+							const wakeupCaps = await api.getIntervalCapabilities();
+							const logMessage = `received wakeup capabilities:
 default wakeup interval: ${wakeupCaps.defaultWakeUpInterval} seconds
 minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
 wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
-					log.controller.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
+							log.controller.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message: logMessage,
+								direction: "inbound",
+							});
+						},
+						() => {
+							log.controller.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message:
+									"Wakeup capability query timed out - skipping because it is not critical...",
+							});
+						},
+					);
 				}
 			}
 
