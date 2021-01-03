@@ -14982,6 +14982,16 @@
     },
     {
         "manufacturerId": "0x0371",
+        "productType": "0x0002",
+        "productId": "0x0009",
+        "firmwareVersion": {
+            "min": "0.0",
+            "max": "255.255"
+        },
+        "filename": "0x0371/zwa009.json"
+    },
+    {
+        "manufacturerId": "0x0371",
         "productType": "0x0103",
         "productId": "0x0002",
         "firmwareVersion": {
