@@ -17,6 +17,19 @@
         "max": "255.255"
     },
     "supportsZWavePlus": true,
+    "associations": {
+        "1": {
+            "label": "Lifeline",
+            "description": "Lifeline group. (1) Device Reset Locally Notification: Issued when Factory Reset is performed. (2) Battery Report: lssued periodically to report the current battery level; lssued when battery becomes low. (3) Sensor Binary Report: Issued when Magnet is away or near. (4) Notification Report (Type=0x06; Event=0x16): Issued when sensor state is changed to be Open Status. (5) Notification Report (Type=0x06; Event=0x17): Issued when sensor state is changed to be Close Status. (6) Notification Report (Type=0x08; Event-0x01): Issued when battery voltage change exceeds 20%. (7) Notification Report (Type-0x09; Event=0x04; Param=0x55): Issued when reset due to Watch-Dog Timeout.",
+            "maxNodes": 5,
+            "isLifeline": true
+        },
+        "2": {
+            "label": "On/Off control (Access)",
+            "description": "Issue Basic Set when magnet is away or near. (The Basic Set Value is determined by Confiquration Parameter 3)",
+            "maxNodes": 5
+        }
+    },
     "paramInformation": {
         "1": {
             "label": "Binary Sensor Report",
