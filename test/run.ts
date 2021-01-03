@@ -11,6 +11,14 @@ const driver = new Driver("COM4", {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
+		// const cc = new CommandClass(driver, {
+		// 	nodeId: 24,
+		// 	ccId: 0x5d,
+		// 	ccCommand: 0x02,
+		// 	payload: Buffer.from([1, 2, 3]),
+		// });
+		// await driver.sendCommand(cc);
+		// console.log("OK");
 		// const node = driver.controller.nodes.get(21)!;
 		// node.keepAwake = true;
 		// node.once("interview completed", async () => {
