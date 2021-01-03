@@ -316,7 +316,7 @@ This property returns the node's **DeviceClass**, which provides further informa
 <!-- #import DeviceClass from "zwave-js" -->
 
 ```ts
-interface DeviceClass<> {
+interface DeviceClass {
 	readonly basic: BasicDeviceClass;
 	readonly generic: GenericDeviceClass;
 	readonly specific: SpecificDeviceClass;
@@ -337,7 +337,7 @@ interface BasicDeviceClass {
 <!-- #import GenericDeviceClass from "@zwave-js/config" -->
 
 ```ts
-interface GenericDeviceClass<> {
+interface GenericDeviceClass {
 	readonly key: number;
 	readonly label: string;
 	readonly supportedCCs: readonly CommandClasses[];
@@ -349,7 +349,7 @@ interface GenericDeviceClass<> {
 <!-- #import SpecificDeviceClass from "@zwave-js/config" -->
 
 ```ts
-interface SpecificDeviceClass<> {
+interface SpecificDeviceClass {
 	readonly key: number;
 	readonly label: string;
 	readonly supportedCCs: readonly CommandClasses[];
