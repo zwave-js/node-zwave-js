@@ -1342,8 +1342,11 @@ version:               ${this.version}`;
 			this._isSecure = false;
 		}
 
-		// Don't offer or interview the Basic CC if any actuator CC is supported
-		this.hideBasicCCInFavorOfActuatorCCs();
+		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
+		// to map the Basic CC to other CCs
+		if (!this._deviceConfig?.compat?.disableBasicMapping) {
+			this.hideBasicCCInFavorOfActuatorCCs();
+		}
 
 		// We determine the correct interview order by topologically sorting a dependency graph
 		const rootInterviewGraph = this.buildCCInterviewGraph();
@@ -2056,28 +2059,31 @@ version:               ${this.version}`;
 
 		// Depending on the generic device class, we may need to map the basic command to other CCs
 		let mappedTargetCC: CommandClass | undefined;
-		switch (this.deviceClass?.generic.key) {
-			case 0x20: // Binary Sensor
-				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
-					CommandClasses["Binary Sensor"],
-				);
-				break;
-			// TODO: Which sensor type to use here?
-			// case GenericDeviceClasses["Multilevel Sensor"]:
-			// 	mappedTargetCC = this.createCCInstanceUnsafe(
-			// 		CommandClasses["Multilevel Sensor"],
-			// 	);
-			// 	break;
-			case 0x10: // Binary Switch
-				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
-					CommandClasses["Binary Switch"],
-				);
-				break;
-			case 0x11: // Multilevel Switch
-				mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
-					CommandClasses["Multilevel Switch"],
-				);
-				break;
+		// Do not map the basic CC if the device config forbids it
+		if (!this._deviceConfig?.compat?.disableBasicMapping) {
+			switch (this.deviceClass?.generic.key) {
+				case 0x20: // Binary Sensor
+					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+						CommandClasses["Binary Sensor"],
+					);
+					break;
+				// TODO: Which sensor type to use here?
+				// case GenericDeviceClasses["Multilevel Sensor"]:
+				// 	mappedTargetCC = this.createCCInstanceUnsafe(
+				// 		CommandClasses["Multilevel Sensor"],
+				// 	);
+				// 	break;
+				case 0x10: // Binary Switch
+					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+						CommandClasses["Binary Switch"],
+					);
+					break;
+				case 0x11: // Multilevel Switch
+					mappedTargetCC = sourceEndpoint.createCCInstanceUnsafe(
+						CommandClasses["Multilevel Switch"],
+					);
+					break;
+			}
 		}
 
 		if (command instanceof BasicCCReport) {

@@ -529,6 +529,17 @@ error in compat option keepS0NonceUntilNext`,
 			this.keepS0NonceUntilNext = definition.keepS0NonceUntilNext;
 		}
 
+		if (definition.disableBasicMapping != undefined) {
+			if (definition.disableBasicMapping !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option disableBasicMapping`,
+				);
+			}
+
+			this.disableBasicMapping = definition.disableBasicMapping;
+		}
 		if (definition.preserveRootApplicationCCValueIDs != undefined) {
 			if (definition.preserveRootApplicationCCValueIDs !== true) {
 				throwInvalidConfig(
@@ -594,7 +605,11 @@ All values in compat option commandClasses.add must be objects`,
 		}
 	}
 
-	public readonly queryOnWakeup?: [
+	public readonly addCCs?: ReadonlyMap<CommandClasses, CompatAddCC>;
+	public readonly disableBasicMapping?: boolean;
+	public readonly keepS0NonceUntilNext?: boolean;
+	public readonly preserveRootApplicationCCValueIDs?: boolean;
+	public readonly queryOnWakeup?: readonly [
 		string,
 		string,
 		...(
@@ -604,10 +619,6 @@ All values in compat option commandClasses.add must be objects`,
 			| Pick<ValueID, "property" | "propertyKey">
 		)[]
 	][];
-
-	public keepS0NonceUntilNext?: boolean;
-	public preserveRootApplicationCCValueIDs?: boolean;
-	public addCCs?: ReadonlyMap<CommandClasses, CompatAddCC>;
 }
 
 export class CompatAddCC {
