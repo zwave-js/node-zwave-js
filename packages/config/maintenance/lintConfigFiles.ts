@@ -266,6 +266,21 @@ Consider converting this parameter to unsigned using ${white(
 				}
 			}
 
+			// Check if there are partial parameters and non-partials with the same number
+			const duplicatedPartials = distinct(
+				partialParams.map(([key]) => key.parameter),
+			).filter((parameter) =>
+				config.paramInformation!.has({ parameter }),
+			);
+			if (duplicatedPartials.length) {
+				addError(
+					file,
+					`The following non-partial parameters need to be removed because partial parameters with the same key exist: ${duplicatedPartials
+						.map((p) => `#${p}`)
+						.join(", ")}!`,
+				);
+			}
+
 			// Check if there are partial parameters with incompatible min/max/default values
 			for (const [key, param] of partialParams) {
 				const bitMask = key.valueBitMask!;

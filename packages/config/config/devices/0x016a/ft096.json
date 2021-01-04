@@ -136,28 +136,6 @@
 				}
 			]
 		},
-		"83": {
-			"label": "Color in night light mode",
-			"valueSize": 3,
-			"minValue": 0,
-			"maxValue": 16777215,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"84": {
-			"label": "Color in energy mode",
-			"valueSize": 3,
-			"minValue": 0,
-			"maxValue": 16777215,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"90": {
 			"label": "Enable items 91 and 92",
 			"description": "Enables/disables parameter 91 and 92",

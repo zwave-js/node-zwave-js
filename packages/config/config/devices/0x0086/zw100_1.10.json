@@ -130,18 +130,6 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"9": {
-			"label": "Report the current power mode",
-			"description": "Report the current power mode and the product state of battery power mode",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"39": {
 			"label": "Low Battery Report",
 			"description": "Report Low Battery if below this value",
@@ -252,28 +240,6 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"49": {
-			"label": "Upper limit value of temp sensor",
-			"description": "Upper limit value of temperature sensor",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
-		},
-		"50": {
-			"label": "Lower limit value of temperature sensor",
-			"description": "Lower limit value of temperature sensor",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
 			"allowManualEntry": true
 		},
 		"51": {

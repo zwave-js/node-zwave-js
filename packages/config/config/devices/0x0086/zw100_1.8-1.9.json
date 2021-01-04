@@ -472,17 +472,6 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"201": {
-			"label": "Temperature Calibration",
-			"description": "Temperature calibration in 0.1 deg steps",
-			"valueSize": 2,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"202": {
 			"label": "Humidity Sensor Calibration",
 			"description": "Humidity Sensor Calibration",
