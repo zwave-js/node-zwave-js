@@ -351,7 +351,7 @@
 		"10[0xffff]": {
 			"label": "Temperature Reporting Filter (lower bound)",
 			"description": "Temperature Reporting Filter (lower bound)",
-			"valueSize": 2,
+			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 124,
 			"defaultValue": 124,
@@ -362,7 +362,7 @@
 		"10[0x0fff0000]": {
 			"label": "Temperature Reporting Filter  (upper bound)",
 			"description": "Temperature Reporting Filter  (upper bound)",
-			"valueSize": 2,
+			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 124,
 			"defaultValue": 124,

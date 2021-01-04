@@ -316,6 +316,29 @@ Did you mean to use ${param.defaultValue >>> shiftAmount}?`,
 				}
 			}
 
+			// Check if there are partial parameters referencing the same parameter with different value sizes
+			const checkedValueSize: number[] = [];
+			for (const [key, param] of partialParams) {
+				if (checkedValueSize.includes(key.parameter)) continue;
+				checkedValueSize.push(key.parameter);
+
+				const others = partialParams.filter(
+					([kk]) =>
+						key.parameter === kk.parameter &&
+						key.valueBitMask !== kk.valueBitMask,
+				);
+				if (
+					others.some(
+						([, other]) => other.valueSize !== param.valueSize,
+					)
+				) {
+					addError(
+						file,
+						`Parameter #${key.parameter}: All partial parameters must have the same valueSize!`,
+					);
+				}
+			}
+
 			// Check if there are partial parameters with incompatible options
 			const partialParamsWithOptions = partialParams.filter(
 				([, p]) => p.options.length > 0,
@@ -336,6 +359,22 @@ Did you mean to use ${param.defaultValue >>> shiftAmount}?`,
 Did you mean to use ${opt.value >>> shiftAmount}?`,
 						);
 					}
+				}
+			}
+
+			// Check if there are partial parameters with a valueSize that is too small for the bitmask
+			for (const [key, param] of partialParams) {
+				if (key.valueBitMask! >= 256 ** param.valueSize) {
+					addError(
+						file,
+						`Parameter #${key.parameter}[${num2hex(
+							key.valueBitMask,
+						)}]: valueSize ${
+							param.valueSize
+						} is incompatible with the bit mask ${num2hex(
+							key.valueBitMask,
+						)}!`,
+					);
 				}
 			}
 		}

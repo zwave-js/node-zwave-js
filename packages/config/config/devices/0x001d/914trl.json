@@ -1,108 +1,108 @@
 // Leviton 914TRL
 // Touchpad Electronic Deadbolt
 {
-    "_approved": false,
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "914TRL",
-    "description": "Touchpad Electronic Deadbolt",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "40": {
-            "label": "Factory Default",
-            "description": "Reset to factory default settings.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 1
-                }
-            ]
-        },
-        "31[0x100000]": {
-            "label": "Auto Buzzer",
-            "description": "Beeping sound enabled.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                }
-            ]
-        },
-        "31[0x01000000]": {
-            "label": "Auto Lock",
-            "description": "Automatically re-locks door 30 seconds after unlocking.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                }
-            ]
-        },
-        "31[0x10000000]": {
-            "label": "Lock LED Status",
-            "description": "Door lock status LED blinks every 6 seconds.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"_approved": false,
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "914TRL",
+	"description": "Touchpad Electronic Deadbolt",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"40": {
+			"label": "Factory Default",
+			"description": "Reset to factory default settings.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 1
+				}
+			]
+		},
+		"31[0x100000]": {
+			"label": "Auto Buzzer",
+			"description": "Beeping sound enabled.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				}
+			]
+		},
+		"31[0x01000000]": {
+			"label": "Auto Lock",
+			"description": "Automatically re-locks door 30 seconds after unlocking.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				}
+			]
+		},
+		"31[0x10000000]": {
+			"label": "Lock LED Status",
+			"description": "Door lock status LED blinks every 6 seconds.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				}
+			]
+		}
+	}
 }
