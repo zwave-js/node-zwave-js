@@ -184,6 +184,14 @@
 					"value": 4
 				},
 				{
+					"label": "Generate Random PIN 1x use",
+					"value": 5
+				},
+				{
+					"label": "Generate Random PIN 24h use",
+					"value": 6
+				},
+				{
 					"label": "Always Valid",
 					"value": 7
 				},
@@ -211,6 +219,56 @@
 			"readOnly": true,
 			"writeOnly": false,
 			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Updater Mode",
+			"description": "Enables use of the Updater app",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "Disabled (no sound)",
+					"value": 0
+				},
+				{
+					"label": "Enabled (no sound)",
+					"value": 1
+				},
+			    {
+					"label": "Disabled",
+					"value": 2
+				},
+				{
+					"label": "Enabled",
+					"value": 3
+				}
+			]
+		},		
+		"9": {
+			"label": "Master PIN Unlock Mode",
+			"description": "Configures if the Master PIN can unlock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
 		}
 	},
 	"compat": {
