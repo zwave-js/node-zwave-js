@@ -17,20 +17,32 @@ To compensate for the change and give the response enough time to reach the cont
 
 ### Config file changes
 * Added Technisat Dimmer and series switch
-* Add Lifeline association to Danfoss MT 2649
-* Add product id/type to NAS-WR01ZE
+* Added Lifeline association to Danfoss MT 2649
+* Added product id/type to NAS-WR01ZE
+* Added Inovelli LZW31 Black Series Dimmer
+* Added Aeotec ZW187 Recessed Door Sensor 7
+* Added checks for partial parameters
+* Added Aeotec ZWA009 aerQ Temperature and Humidity Sensor
 * New versions of `@zwave-js/config` are now automatically released every night if **only** config files were changed since the last release.  
 You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull the latest config files. For now, a driver restart is required afterwards.
 
 ### Features
+* Added a compatibility option to disable the `Basic CC` mapping
 * An option was added to enable logging to the console, even if it is not a TTY
 * An option was added to control the filesystem access throttling
 * Improved the `label` for `Level low` property in `BatteryCC`
+* Unimplemented CCs may now be sent
 
 ### Bugfixes
 * Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask.  
 **Note:** If your devices are affected by this bug, re-interview them to remove corrupted values.
 * Expire nonces for `keepS0NonceUntilNext` devices until **after** the next nonce was received by the device
+* The interview is no longer aborted when a device does not respond to the Wakeup Capability query
+* Fixed a crash that could happen when compressing the value DB with an existing backup file.
+
+### Changes under the hood
+* Test releases for PRs can now be created with a command
+* PRs titles are now enforced to comply with conventional commits
 
 ## 5.7.0 (2020-12-23)
 ### Config file changes
