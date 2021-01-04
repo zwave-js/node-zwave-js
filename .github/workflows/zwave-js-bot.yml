@@ -2,7 +2,7 @@ name: Trigger Bot
 
 on:
   issue_comment:
-    types: [created, edited, deleted]
+    types: [created, edited] # deleted
 
 jobs:
   # Publish a PR build when an authorized person comments "@zwave-js-bot pack this"
