@@ -1,4 +1,3 @@
-const c = require("ansi-colors");
 const exec = require("@actions/exec");
 const github = require("@actions/github");
 const core = require("@actions/core");
@@ -6,7 +5,6 @@ const core = require("@actions/core");
 const githubToken = core.getInput("githubToken");
 const task = core.getInput("task");
 const octokit = github.getOctokit(githubToken);
-const context = github.context;
 const semver = require("semver");
 
 const options = {
