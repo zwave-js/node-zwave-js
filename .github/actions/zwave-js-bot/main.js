@@ -46,7 +46,7 @@ async function publishPr() {
 	try {
 		await exec.exec(
 			"npx",
-			`lerna publish from-git --dist-tag next --yes`.split(" "),
+			`lerna publish from-package --dist-tag next --yes`.split(" "),
 		);
 		success = true;
 	} catch (e) {
