@@ -4,11 +4,11 @@
     "_approved": true,
     "manufacturer": "Inovelli",
     "manufacturerId": "0x031e",
-    "label": "LZW31-SN",
-    "description": "Red Series Dimmer",
+    "label": "LZW31",
+    "description": "Black Series Dimmer",
     "devices": [
         {
-            "productType": "0x0001",
+            "productType": "0x0003",
             "productId": "0x0001"
         }
     ],
