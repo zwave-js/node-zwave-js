@@ -69,7 +69,7 @@
         "5": {
             "label": "Minimum Dim Level",
             "description": "Minimum Dim Level",
-            "unit": "percent",
+            "unit": "%",
             "valueSize": 1,
             "minValue": 1,
             "maxValue": 45,
@@ -81,7 +81,7 @@
         "6": {
             "label": "Maximum Dim Level",
             "description": "Maximum Dim Level",
-            "unit": "percent",
+            "unit": "%",
             "valueSize": 1,
             "minValue": 55,
             "maxValue": 99,
@@ -126,7 +126,7 @@
         "9": {
             "label": "Default Level (Local)",
             "description": "Default Level (Local)",
-            "unit": "percent",
+            "unit": "%",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
@@ -138,7 +138,7 @@
         "10": {
             "label": "Default Level (Z-Wave)",
             "description": "Default Level (Z-Wave)",
-            "unit": "percent",
+            "unit": "%",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 99,
@@ -218,7 +218,7 @@
         "18": {
             "label": "Active Power Reports",
             "description": "Active Power Reports",
-            "unit": "percent",
+            "unit": "%",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 100,
@@ -242,7 +242,7 @@
         "20": {
             "label": "Energy Reports",
             "description": "Energy Reports",
-            "unit": "percent",
+            "unit": "%",
             "valueSize": 1,
             "minValue": 0,
             "maxValue": 100,
