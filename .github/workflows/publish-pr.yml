@@ -6,7 +6,7 @@ on:
 
 jobs:
   publish:
-    if: contains(github.event.comment.html_url, '/pull/') && contains(github.event.comment.body, 'commenttest')
+    # if: contains(github.event.comment.html_url, '/pull/') # && contains(github.event.comment.body, 'commenttest')
     runs-on: [ubuntu-latest]
     steps:
       - name: Dump GitHub context
