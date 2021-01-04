@@ -41,7 +41,7 @@ jobs:
       run: yarn install --prefer-offline --frozen-lockfile
 
     - name: Compile TypeScript code
-      run: npx lerna run build
+      run: yarn run build
 
     # The script will check if there are changes before updating the issue
     - name: Update CC table

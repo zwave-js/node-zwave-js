@@ -48,7 +48,7 @@ jobs:
       run: yarn install --prefer-offline --frozen-lockfile
 
     - name: Compile TypeScript code
-      run: npx lerna run build
+      run: yarn run build
     
     - name: Lint TypeScript code
       run: yarn run lint
@@ -98,7 +98,7 @@ jobs:
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
-      run: npx lerna run build
+      run: yarn run build
 
     - name: Run component tests
       run: yarn run test:ci
@@ -143,7 +143,7 @@ jobs:
 
     # Do a full build so the package files are regenerated
     - name: Compile TypeScript code
-      run: npx lerna run build:full
+      run: yarn run build:full
 
     - name: Import main entry point
       run: node -e 'require("./packages/zwave-js")'
@@ -191,7 +191,7 @@ jobs:
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
-      run: npx lerna run build
+      run: yarn run build
 
     - name: Generate coverage
       run: yarn run coverage:ci
@@ -259,7 +259,7 @@ jobs:
       run: yarn install --prefer-offline --frozen-lockfile
 
     - name: Create a clean build
-      run: npx lerna run build:full
+      run: yarn run build:full
 
     - name: Publish package to npm
       run: |
