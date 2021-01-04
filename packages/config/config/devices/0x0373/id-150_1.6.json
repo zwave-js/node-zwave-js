@@ -229,7 +229,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disabled (no sound)",
@@ -239,7 +239,7 @@
 					"label": "Enabled (no sound)",
 					"value": 1
 				},
-			    {
+				{
 					"label": "Disabled",
 					"value": 2
 				},
@@ -248,7 +248,7 @@
 					"value": 3
 				}
 			]
-		},		
+		},
 		"9": {
 			"label": "Master PIN Unlock Mode",
 			"description": "Configures if the Master PIN can unlock",
@@ -258,7 +258,7 @@
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disabled",
