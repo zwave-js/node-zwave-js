@@ -25,6 +25,10 @@ If you're new, you might want to choose an issue with ![](https://img.shields.io
 
 If there is no corresponding issue it might be worth to open one before you start working to make sure that we will accept the PR.
 
+**Note:** We use _conventional commits_ for our commit messages and PR titles.
+If you're unsure what that means, check out the [description and examples](https://www.conventionalcommits.org/en/v1.0.0/).
+Since PRs are squash-merged, it is enough to edit the PR title accordingly.
+
 ## Do you want to help out with a PR but don't know how stuff works?
 
 Some things are already described in the [Development documentation](https://zwave-js.github.io/node-zwave-js/#/development/intro). If not, feel free to ask or raise an issue about missing documentation. Time is limited, so it is not always worth documenting every development aspect in depth.
