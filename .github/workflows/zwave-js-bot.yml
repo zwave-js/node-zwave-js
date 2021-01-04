@@ -8,9 +8,9 @@ jobs:
   # Publish a PR build when an authorized person comments "@zwave-js-bot pack this"
   publish-pr:
     if: |
-      contains(github.event.issue.html_url, "/pull/") &&
-      contains(github.event.comment.body, "@zwave-js-bot pack this") &&
-      (github.event.comment.user.login == "AlCalzone")
+      contains(github.event.issue.html_url, '/pull/') &&
+      contains(github.event.comment.body, '@zwave-js-bot pack this') &&
+      (github.event.comment.user.login == 'AlCalzone')
 
     runs-on: [ubuntu-latest]
     steps:
