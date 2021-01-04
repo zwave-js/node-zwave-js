@@ -35,8 +35,8 @@ jobs:
                    You can monitor the progress [here](${context.payload.repository.url}/actions/runs/${context.runId}).`
           })
 
-    - name: Install yarn
-      run: npm i -g yarn
+    # - name: Install yarn
+    #   run: npm i -g yarn
 
     - name: Install dependencies
       run: yarn install --frozen-lockfile
