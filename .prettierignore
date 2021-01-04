@@ -3,6 +3,5 @@ package.json
 package-lock.json
 build/
 .github/workflows/
-.github/actions
-!.github/actions/**/*.js
+.github/actions/*.yml
 cache/

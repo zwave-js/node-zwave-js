@@ -1,0 +1,49 @@
+name: Trigger Bot
+
+on:
+  issue_comment:
+    types: [created, edited, deleted]
+
+jobs:
+  # Publish a PR build when an authorized person comments "@zwave-js-bot pack this"
+  publish-pr:
+    if: |
+      contains(github.event.issue.html_url, "/pull/") &&
+      contains(github.event.comment.body, "@zwave-js-bot pack this") &&
+      (github.event.comment.user.login == "AlCalzone")
+
+    runs-on: [ubuntu-latest]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: `👋 Hey @${context.payload.comment.user.login}!
+                   I've started to deploy this PR as a development build.
+                   You can monitor the progress [here](${context.payload.repository.url}/actions/runs/${context.runId}).`
+          })
+
+    - name: Install yarn
+      run: npm i -g yarn
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Let the bot do its thing
+      uses: ./.github/actions/zwave-js-bot
+      with:
+        githubToken: ${{ secrets.BOT_TOKEN }}
+        task: publish-pr
+        pr: ${{ github.event.issue.number }}

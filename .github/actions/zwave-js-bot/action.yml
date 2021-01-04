@@ -1,0 +1,13 @@
+name: "Z-Wave JS Bot"
+description: "Contains the actions the Bot can execute"
+author: "AlCalzone"
+inputs:
+    githubToken:
+        description: "The github token to use for authentication"
+        required: true
+    task:
+        description: "What the bot is supposed to do"
+        required: true
+runs:
+    using: "node12"
+    main: "main.js"
