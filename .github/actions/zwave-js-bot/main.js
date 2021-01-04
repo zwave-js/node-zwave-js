@@ -1,3 +1,5 @@
+// @ts-check
+
 const exec = require("@actions/exec");
 const github = require("@actions/github");
 const core = require("@actions/core");
@@ -18,6 +20,10 @@ if (task === "publish-pr") {
 
 async function publishPr() {
 	const pr = core.getInput("pr");
+	const { data: pull } = await octokit.pulls.get({
+		...options,
+		pull_number: pr,
+	});
 
 	// Build it
 	await exec.exec("yarn", ["run", "build"]);
