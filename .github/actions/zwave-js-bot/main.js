@@ -37,7 +37,7 @@ async function publishPr() {
 	// Bump versions
 	await exec.exec(
 		"npx",
-		`lerna version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --no-git-tag-version --yes`.split(
+		`lerna version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --yes`.split(
 			" ",
 		),
 	);
@@ -46,7 +46,7 @@ async function publishPr() {
 	try {
 		await exec.exec(
 			"npx",
-			`lerna publish from-package --dist-tag next --yes`.split(" "),
+			`lerna publish from-git --dist-tag next --yes`.split(" "),
 		);
 		success = true;
 	} catch (e) {
