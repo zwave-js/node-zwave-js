@@ -3,7 +3,7 @@
 		"packages/*"
 	],
 	"useWorkspaces": true,
-	"version": "6.0.0-alpha.2",
+	"version": "6.0.0-alpha.3",
 	"command": {
 		"run": {
 			"stream": true
