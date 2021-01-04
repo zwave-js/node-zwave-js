@@ -18,8 +18,17 @@ jobs:
       with:
         fetch-depth: 0 # Fetch the history, or this action won't work
 
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
     - name: Detect changes (git)
       run: |
+        # ===============================
+        # Detect changes using git
+        # ===============================
+
         LAST_TAG=$(git describe --abbrev=0)
         echo "Checking for changes since last tag $LAST_TAG"
 
@@ -37,19 +46,17 @@ jobs:
           echo "✔ Changes are limited to config files"
         fi
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+        # ===============================
+        # Install dependencies
+        # ===============================
 
-    - name: Install yarn
-      run: npm i -g yarn
+        npm i -g yarn
+        yarn install --frozen-lockfile
 
-    - name: Install dependencies
-      run: yarn install --frozen-lockfile
+        # ===============================
+        # Double-check changes with lerna
+        # ===============================
 
-    - name: Double-check changes with lerna
-      run: |
         # Verify that only @zwave-js/config and zwave-js are changed
         LERNA_CHANGED=$(npx lerna changed)
         if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$LERNA_CHANGED" ]]; then
@@ -59,14 +66,20 @@ jobs:
           exit 0
         fi
 
-    - name: Create a clean build
-      run: npx lerna run build --scope=@zwave-js/config
+        # ===============================
+        # Perform last checks
+        # ===============================
 
-    - name: Lint config files
-      run: npx lerna run lint:config
+        # Create a clean build
+        npx lerna run build --scope=@zwave-js/config
 
-    - name: Bump the version and publish
-      run: |
+        # Lint config files
+        npx lerna run lint:config
+
+        # ===============================
+        # Bump the version and publish
+        # ===============================
+
         cd packages/config
         npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
         npm whoami
