@@ -314,42 +314,6 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"154": {
-			"label": "ON frame value for single click",
-			"description": "ON frame value for single click",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 4294967295,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"155": {
-			"label": "OFF frame value for single click",
-			"description": "OFF frame value for single click",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 4294967295,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"156": {
-			"label": "ON frame value for double click",
-			"description": "ON frame value for double click",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 4294967295,
-			"defaultValue": 4294967295,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"157": {
 			"label": "Start programmed sequence",
 			"description": "Start programmed sequence",

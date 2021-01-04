@@ -71,17 +71,6 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"10": {
-			"label": "Alarm time for buzzer",
-			"description": "Set the alarm time for the buzzer when triggered",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"39": {
 			"label": "Low Battery Threshold",
 			"description": "Set the low battery value. (Range: 10% to 50%)",
@@ -114,28 +103,6 @@
 					"value": 1
 				}
 			]
-		},
-		"49": {
-			"label": "Set the upper limit value (overheat)",
-			"description": "Set the upper limit value (overheat)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2147483647,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"50": {
-			"label": "Set the lower limit value (underheat)",
-			"description": "Set the lower limit value (underheat)",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 2147483647,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
 		},
 		"64": {
 			"label": "Default Temperature Unit",
@@ -303,17 +270,6 @@
 			"maxValue": 0,
 			"defaultValue": 0,
 			"readOnly": true,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"201": {
-			"label": "Temperature calibration",
-			"description": "Temperature calibration",
-			"valueSize": 2,
-			"minValue": -128,
-			"maxValue": 127,
-			"defaultValue": 1,
-			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},

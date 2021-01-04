@@ -18,18 +18,6 @@
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
-		"37": {
-			"label": "Sirensound and Volume",
-			"description": "Sets the sound type and volume",
-			"valueSize": 2,
-			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 13,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"80": {
 			"label": "Send Notifications",
 			"description": "send notifications to associated devices",
