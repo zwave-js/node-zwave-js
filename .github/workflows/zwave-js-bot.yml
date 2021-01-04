@@ -14,31 +14,47 @@ jobs:
 
     runs-on: [ubuntu-latest]
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
 
     - uses: actions/github-script@v3
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
-          github.issues.createComment({
-            issue_number: context.issue.number,
+          const options = {
             owner: context.repo.owner,
             repo: context.repo.repo,
+          };
+          const { data: pull } = await github.pulls.get({
+            ...options,
+            pull_number: context.payload.issue.number,
+          });
+
+          if (!pull.mergeable || !pull.merge_commit_sha) {
+            await github.issues.createComment({
+              ...options,
+              issue_number: context.payload.issue.number,
+              body: `😥 Seems like this PR cannot be merged. Please fix the merge conflicts and try again.`,
+            });
+            process.exit(1);
+          }
+
+          await github.issues.createComment({
+            ...options,
+            issue_number: context.issue.number,
             body: `👋 Hey @${context.payload.comment.user.login}!
                    I've started to deploy this PR as a development build.
-                   You can monitor the progress [here](${context.payload.repository.url}/actions/runs/${context.runId}).`
+                   You can monitor the progress [here](${context.payload.repository.html_url}/actions/runs/${context.runId}).`
           })
 
-    # - name: Install yarn
-    #   run: npm i -g yarn
+    - name: Checkout merged code
+      uses: actions/checkout@v2
+      with:
+        token: ${{secrets.BOT_TOKEN}}
+        ref: 'refs/pull/${{ github.event.issue.number }}/merge'
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
 
     - name: Install dependencies
       run: yarn install --frozen-lockfile

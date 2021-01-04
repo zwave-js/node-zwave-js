@@ -19,28 +19,12 @@ if (task === "publish-pr") {
 async function publishPr() {
 	const pr = core.getInput("pr");
 
-	const { data: pull } = await octokit.pulls.get({
-		...options,
-		pull_number: pr,
-	});
-	console.dir(pull, { depth: Infinity });
-	if (!pull.mergeable || !pull.merge_commit_sha) {
-		octokit.issues.createComment({
-			...options,
-			issue_number: pr,
-			body: `😥 Seems like this PR cannot be merged. Please fix the merge conflicts and try again.`,
-		});
-		return;
-	}
-
-	// Checkout merge commit
-	await exec.exec("git", ["checkout", `${pull.merge_commit_sha}`]);
 	// Build it
 	await exec.exec("yarn", ["run", "build"]);
 
 	// Figure out the next version
 	const newVersion = `${semver.inc(
-		require("./package.json").version,
+		require(`${process.env.GITHUB_WORKSPACE}/lerna.json`).version,
 		"prerelease",
 	)}-pr-${pr}-${pull.merge_commit_sha.slice(0, 7)}`;
 
