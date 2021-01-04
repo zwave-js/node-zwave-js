@@ -5,6 +5,7 @@ const github = require("@actions/github");
 const core = require("@actions/core");
 
 const githubToken = core.getInput("githubToken");
+const npmToken = core.getInput("npmToken");
 const task = core.getInput("task");
 const octokit = github.getOctokit(githubToken);
 const semver = require("semver");
@@ -25,36 +26,36 @@ async function publishPr() {
 		pull_number: pr,
 	});
 
-	// Build it
-	await exec.exec("yarn", ["run", "build"]);
-
-	// Figure out the next version
-	const newVersion = `${semver.inc(
-		require(`${process.env.GITHUB_WORKSPACE}/lerna.json`).version,
-		"prerelease",
-	)}-pr-${pr}-${pull.merge_commit_sha.slice(0, 7)}`;
-
-	// Configure git
-	await exec.exec("git", ["config", "user.email", "bot@zwave.js"]);
-	await exec.exec("git", ["config", "user.name", "Z-Wave JS Bot"]);
-
-	// Bump versions
-	await exec.exec(
-		"npx",
-		`lerna version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --yes`.split(
-			" ",
-		),
-	);
-
 	let success = false;
+	let newVersion;
 	try {
+		// Build it
+		await exec.exec("yarn", ["run", "build"]);
+
+		// Configure git
+		await exec.exec("git", ["config", "user.email", "bot@zwave.js"]);
+		await exec.exec("git", ["config", "user.name", "Z-Wave JS Bot"]);
+
 		// Configure npm
 		await exec.exec("npm", [
 			"config",
 			"set",
-			"//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}",
+			`//registry.npmjs.org/:_authToken=${npmToken}`,
 		]);
-		await exec.exec("npm", ["whoami"]);
+
+		// Figure out the next version
+		newVersion = `${semver.inc(
+			require(`${process.env.GITHUB_WORKSPACE}/lerna.json`).version,
+			"prerelease",
+		)}-pr-${pr}-${pull.merge_commit_sha.slice(0, 7)}`;
+
+		// Bump versions
+		await exec.exec(
+			"npx",
+			`lerna version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --yes`.split(
+				" ",
+			),
+		);
 
 		// and release
 		await exec.exec("npx", [
