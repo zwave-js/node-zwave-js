@@ -34,6 +34,10 @@ async function publishPr() {
 		"prerelease",
 	)}-pr-${pr}-${pull.merge_commit_sha.slice(0, 7)}`;
 
+	// Configure git
+	await exec.exec("git", ["config", "user.email", "bot@zwave.js"]);
+	await exec.exec("git", ["config", "user.name", "Z-Wave JS Bot"]);
+
 	// Bump versions
 	await exec.exec(
 		"npx",
@@ -41,9 +45,10 @@ async function publishPr() {
 			" ",
 		),
 	);
-	// and release
+
 	let success = false;
 	try {
+		// Configure npm
 		await exec.exec("npm", [
 			"config",
 			"set",
@@ -51,9 +56,7 @@ async function publishPr() {
 		]);
 		await exec.exec("npm", ["whoami"]);
 
-		await exec.exec("git", ["config", "user.email", "bot@zwave.js"]);
-		await exec.exec("git", ["config", "user.name", "Z-Wave JS Bot"]);
-
+		// and release
 		await exec.exec("npx", [
 			"lerna",
 			"publish",
