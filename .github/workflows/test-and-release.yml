@@ -31,18 +31,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install yarn
-      run: npm i -g yarn
-
-    # # We need npm@7 for the workspaces feature
-    # - name: Update npm to >=7
-    #   run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
-
-    # - name: Install dependencies
-    #   run: npm ci
-
     - name: Install dependencies
-      run: rm -rf node_modules && yarn install --frozen-lockfile
+      run: yarn install --prefer-offline --frozen-lockfile
 
     - name: Compile TypeScript code
       run: npx lerna run build
@@ -74,18 +64,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install yarn
-      run: npm i -g yarn
-
-    # # We need npm@7 for the workspaces feature
-    # - name: Update npm to >=7
-    #   run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
-
-    # - name: Install dependencies
-    #   run: npm ci
-
     - name: Install dependencies
-      run: rm -rf node_modules && yarn install --frozen-lockfile
+      run: yarn install --prefer-offline --frozen-lockfile
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
@@ -126,18 +106,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install yarn
-      run: npm i -g yarn
-
-    # # We need npm@7 for the workspaces feature
-    # - name: Update npm to >=7
-    #   run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
-
-    # - name: Install dependencies
-    #   run: npm ci
-
     - name: Install dependencies
-      run: rm -rf node_modules && yarn install --frozen-lockfile
+      run: yarn install --prefer-offline --frozen-lockfile
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
@@ -179,13 +149,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install yarn
-      run: npm i -g yarn
-
-    # # We need npm@7 for the workspaces feature
-    # - name: Update npm to >=7
-    #   run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
-
     - name: Extract the version and commit body from the tag
       id: extract_release
       # The body may be multiline, therefore we need to escape some characters
@@ -199,11 +162,8 @@ jobs:
         BODY="${BODY//$'\r'/'%0D'}"
         echo "::set-output name=BODY::$BODY"
 
-    # - name: Install dependencies
-    #   run: npm ci
-
     - name: Install dependencies
-      run: rm -rf node_modules && yarn install --frozen-lockfile
+      run: yarn install --prefer-offline --frozen-lockfile
 
     - name: Create a clean build
       run: npx lerna run build
