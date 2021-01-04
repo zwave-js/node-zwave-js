@@ -44,10 +44,24 @@ async function publishPr() {
 	// and release
 	let success = false;
 	try {
-		await exec.exec(
-			"npx",
-			`lerna publish from-git --dist-tag next --yes`.split(" "),
-		);
+		await exec.exec("npm", [
+			"config",
+			"set",
+			"//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}",
+		]);
+		await exec.exec("npm", ["whoami"]);
+
+		await exec.exec("git", ["config", "user.email", "bot@zwave.js"]);
+		await exec.exec("git", ["config", "user.name", "Z-Wave JS Bot"]);
+
+		await exec.exec("npx", [
+			"lerna",
+			"publish",
+			"from-package",
+			"--yes",
+			"--dist-tag",
+			"next",
+		]);
 		success = true;
 	} catch (e) {
 		console.error(e.message);

@@ -66,5 +66,6 @@ jobs:
       uses: ./.github/actions/zwave-js-bot
       with:
         githubToken: ${{ secrets.BOT_TOKEN }}
+        npmToken: ${{ secrets.NPM_TOKEN }}
         task: publish-pr
         pr: ${{ github.event.issue.number }}

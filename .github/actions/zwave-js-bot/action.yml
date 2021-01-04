@@ -5,6 +5,9 @@ inputs:
   githubToken:
     description: "The github token to use for authentication"
     required: true
+  npmToken:
+    description: "The token used to publish to npm"
+    required: true
   task:
     description: "What the bot is supposed to do"
     required: true
