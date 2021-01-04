@@ -37,7 +37,7 @@ async function publishPr() {
 	// Bump versions
 	await exec.exec(
 		"npx",
-		`lerna version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --yes`.split(
+		`lerna version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --no-git-tag-version --yes`.split(
 			" ",
 		),
 	);

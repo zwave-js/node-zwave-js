@@ -51,6 +51,9 @@ jobs:
         token: ${{secrets.BOT_TOKEN}}
         ref: 'refs/pull/${{ github.event.issue.number }}/merge'
 
+    - name: Switch to a branch
+      run: git switch -c temp
+
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
