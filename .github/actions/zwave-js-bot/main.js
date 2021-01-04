@@ -35,7 +35,7 @@ async function publishPr() {
 	)}-pr-${pr}-${pull.merge_commit_sha.slice(0, 7)}`;
 
 	// Bump versions
-	await exec(
+	await exec.exec(
 		"npx",
 		`lerna version ${newVersion} --exact --allow-branch * --ignore-scripts --no-commit-hooks --yes`.split(
 			" ",
@@ -44,7 +44,7 @@ async function publishPr() {
 	// and release
 	let success = false;
 	try {
-		await exec(
+		await exec.exec(
 			"npx",
 			`lerna publish from-git --dist-tag next --yes`.split(" "),
 		);
