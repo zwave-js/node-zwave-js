@@ -15,7 +15,7 @@ const options = {
 };
 
 if (task === "publish-pr") {
-	publishPr();
+	publishPr().catch(() => process.exit(1));
 }
 
 async function publishPr() {
