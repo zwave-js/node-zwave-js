@@ -90,7 +90,8 @@
     "yargs": "^16.0.3"
   },
   "scripts": {
-    "build": "lerna run build",
+    "build": "lerna run build --scope=zwave-js",
+    "build:full": "lerna run build --scope=@zwave-js/* && lerna run build:full",
     "watch": "lerna run watch --parallel",
     "test:reset": "jest --clear-cache",
     "test:ts": "jest",
