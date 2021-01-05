@@ -637,7 +637,7 @@ export class Driver extends EventEmitter {
 		// asynchronously open the serial port
 		setImmediate(async () => {
 			try {
-				await this.serial.open();
+				await this.serial!.open();
 			} catch (e) {
 				const message = `Failed to open the serial port: ${e.message}`;
 				log.driver.print(message, "error");

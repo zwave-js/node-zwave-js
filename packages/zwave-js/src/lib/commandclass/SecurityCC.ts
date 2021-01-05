@@ -150,7 +150,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		const nonce = response.nonce;
 
 		if (storeAsFreeNonce) {
-			const secMan = this.driver.securityManager;
+			const secMan = this.driver.securityManager!;
 			secMan.setNonce(
 				{
 					issuer: this.endpoint.nodeId,
@@ -500,7 +500,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			// Validate the encrypted data
 			const authData = getAuthenticationData(
 				iv,
-				nonce,
+				nonce!,
 				this.ccCommand,
 				this.nodeId,
 				this.driver.controller.ownNodeId,
@@ -514,7 +514,7 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			const frameControlAndDecryptedCC = decryptAES128OFB(
 				encryptedPayload,
 				this.encryptionKey,
-				Buffer.concat([iv, nonce]),
+				Buffer.concat([iv, nonce!]),
 			);
 			const frameControl = frameControlAndDecryptedCC[0];
 			this.sequenceCounter = frameControl & 0b1111;

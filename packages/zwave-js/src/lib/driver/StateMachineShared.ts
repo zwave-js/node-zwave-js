@@ -236,21 +236,21 @@ export function interpretEx<
 		get(target, key) {
 			if (key === "restart") {
 				return () => {
-					const listeners = [...(target.listeners as Set<any>)];
+					const listeners = [...(target["listeners"] as Set<any>)];
 					const contextListeners = [
-						...(target.contextListeners as Set<any>),
+						...(target["contextListeners"] as Set<any>),
 					];
 					const stopListeners = [
-						...(target.stopListeners as Set<any>),
+						...(target["stopListeners"] as Set<any>),
 					];
 					const doneListeners = [
-						...(target.doneListeners as Set<any>),
+						...(target["doneListeners"] as Set<any>),
 					];
 					const eventListeners = [
-						...(target.eventListeners as Set<any>),
+						...(target["eventListeners"] as Set<any>),
 					];
 					const sendListeners = [
-						...(target.sendListeners as Set<any>),
+						...(target["sendListeners"] as Set<any>),
 					];
 					target.stop();
 					for (const listener of listeners)
@@ -268,7 +268,7 @@ export function interpretEx<
 					return target.start();
 				};
 			} else {
-				return target[key];
+				return (target as any)[key];
 			}
 		},
 	});

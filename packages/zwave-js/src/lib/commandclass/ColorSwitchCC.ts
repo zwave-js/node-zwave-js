@@ -560,7 +560,7 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			);
 		} else {
 			// Populate properties from options object
-			this.colorTable = pick(options, colorTableKeys);
+			this.colorTable = pick(options, colorTableKeys as any[]);
 			this.duration = options.duration;
 		}
 	}

@@ -870,9 +870,9 @@ describe("lib/driver/SendThreadMachine", () => {
 								return context.preTransmitHandshakePromise;
 							});
 
-						const sentCommand = path.segments.find(
+						const sentCommand = (path.segments.find(
 							(s) => s.event.type === "ADD_SENDDATA",
-						)?.event?.command;
+						)?.event as any)?.command;
 						if (sentCommand) {
 							context.sentTransaction = (testTransactions as any)[
 								sentCommand

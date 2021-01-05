@@ -1066,7 +1066,9 @@ export function getCommandClassStatic<T extends Constructable<CommandClass>>(
 	classConstructor: T,
 ): CommandClasses {
 	// retrieve the current metadata
-	const ret = Reflect.getMetadata(METADATA_commandClass, classConstructor);
+	const ret = Reflect.getMetadata(METADATA_commandClass, classConstructor) as
+		| CommandClasses
+		| undefined;
 	if (ret == undefined) {
 		throw new ZWaveError(
 			`No command class defined for ${classConstructor.name}!`,

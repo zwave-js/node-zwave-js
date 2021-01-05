@@ -249,11 +249,11 @@ const sendCurrentTransactionToCommandQueue = send<SendThreadContext, any>(
 		type: "add",
 		transaction: ctx.currentTransaction,
 	}),
-	{ to: (ctx) => ctx.commandQueue },
+	{ to: (ctx) => ctx.commandQueue as any },
 );
 
 const resetCommandQueue = send<SendThreadContext, any>("reset", {
-	to: (ctx) => ctx.commandQueue,
+	to: (ctx) => ctx.commandQueue as any,
 });
 
 const sortQueue: AssignAction<SendThreadContext, any> = assign({
@@ -318,7 +318,7 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 	isExpectedUpdate: (ctx, evt, meta) => {
 		if (!meta.state.matches("sending.waitForUpdate")) return false;
 		const sentMsg = ctx.currentTransaction!.message as SendDataRequest;
-		const receivedMsg = evt.message;
+		const receivedMsg = (evt as any).message;
 		return (
 			receivedMsg instanceof ApplicationCommandRequest &&
 			sentMsg.command.isExpectedCCResponse(receivedMsg.command)
@@ -346,7 +346,7 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		// Ensure that the current transaction is SendData
 		if (!currentTransactionIsSendData(ctx)) return false;
 
-		const transaction = evt.transaction as Transaction;
+		const transaction = (evt as any).transaction as Transaction;
 		if (transaction.priority !== MessagePriority.PreTransmitHandshake)
 			return false;
 		if (!(transaction.message instanceof SendDataRequest)) return false;
@@ -361,7 +361,7 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		if (!meta.state.matches("sending.handshake.waitForHandshakeResponse"))
 			return false;
 		const sentMsg = ctx.handshakeTransaction.message as SendDataRequest;
-		const receivedMsg = evt.message;
+		const receivedMsg = (evt as any).message;
 		if (!isCommandClassContainer(receivedMsg)) return false;
 		return (
 			receivedMsg instanceof ApplicationCommandRequest &&
@@ -373,7 +373,7 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		// First ensure that the current transaction is SendData
 		if (!currentTransactionIsSendData(ctx)) return false;
 		// Then ensure that the event transaction is also SendData
-		const transaction = evt.transaction as Transaction;
+		const transaction = (evt as any).transaction as Transaction;
 		if (transaction.priority !== MessagePriority.Handshake) return false;
 		if (!(transaction.message instanceof SendDataRequest)) return false;
 		// require the handshake to be for the same node
@@ -383,12 +383,16 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		);
 	},
 	shouldNotKeepCurrentTransaction: (ctx, evt) => {
-		const reducer = evt.reducer;
+		const reducer = (evt as any).reducer;
 		return reducer(ctx.currentTransaction, "current").type !== "keep";
 	},
 	currentTransactionIsPingForNode: (ctx, evt) => {
 		const msg = ctx.currentTransaction?.message;
-		return !!msg && messageIsPing(msg) && msg.getNodeId() === evt.nodeId;
+		return (
+			!!msg &&
+			messageIsPing(msg) &&
+			msg.getNodeId() === (evt as any).nodeId
+		);
 	},
 };
 
@@ -1015,7 +1019,7 @@ export function createSendThreadMachine(
 			guards: {
 				...guards,
 				every: (ctx, event, { cond }) => {
-					const keys = cond.guards as string[];
+					const keys = (cond as any).guards as string[];
 					return keys.every((guardKey: string) =>
 						guards[guardKey](ctx, event, undefined as any),
 					);

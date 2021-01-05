@@ -13,7 +13,7 @@ If you need to test changes from GitHub, e.g. a branch that fixes an issue you h
 1. Install dependencies, compile the sources and link the packages
     ```bash
     yarn
-    yarn run build:full
+    yarn run build
     lerna exec -- yarn link
     ```
 1. Open directory of your application, run
