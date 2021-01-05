@@ -48,7 +48,7 @@ jobs:
           packages/*/build
           packages/*/*.tsbuildinfo
           packages/*/*.js
-        # When dependencies change, we like have to recompile. TS manages the sources itself
+        # When dependencies change, we likely have to recompile. TS manages the sources itself
         key: ts-${{ hashFiles('**/yarn.lock') }}
 
     - name: Compile TypeScript code
