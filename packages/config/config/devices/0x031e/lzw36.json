@@ -373,119 +373,30 @@
         },
         "26": {
             "label": "Light LED Strip Timeout",
-            "description": "When the LED strip is disabled (Light LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted.\n      Range: 0-10\n      Default: 3",
-            "valueSize": 1,
+            "description": "When the LED strip is disabled (Light LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted.\n      Range: 0-10\n      Default: 3    Disabled: 0",
+            "unit": "s",
+			"valueSize": 1,
             "minValue": 0,
             "maxValue": 10,
             "defaultValue": 3,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Stay Off",
-                    "value": 0
-                },
-                {
-                    "label": "1 Second",
-                    "value": 1
-                },
-                {
-                    "label": "2 Seconds",
-                    "value": 2
-                },
-                {
-                    "label": "3 Seconds",
-                    "value": 3
-                },
-                {
-                    "label": "4 Seconds",
-                    "value": 4
-                },
-                {
-                    "label": "5 Seconds",
-                    "value": 5
-                },
-                {
-                    "label": "6 Seconds",
-                    "value": 6
-                },
-                {
-                    "label": "7 Seconds",
-                    "value": 7
-                },
-                {
-                    "label": "8 Seconds",
-                    "value": 8
-                },
-                {
-                    "label": "9 Seconds",
-                    "value": 9
-                },
-                {
-                    "label": "10 Seconds",
-                    "value": 10
-                }
-            ]
+            "allowManualEntry": true,
         },
         "27": {
             "label": "Fan LED Strip Timeout",
-            "description": "When the LED strip is disabled (Fan LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted.\n      Range: 0-10\n      Default: 3",
-            "valueSize": 1,
+            "description": "When the LED strip is disabled (Fan LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted.\n      Range: 0-10\n      Default: 3      Disabled: 0",
+            "unit": "s",
+			"valueSize": 1,
             "minValue": 0,
             "maxValue": 10,
             "defaultValue": 3,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Stay Off",
-                    "value": 0
-                },
-                {
-                    "label": "1 Second",
-                    "value": 1
-                },
-                {
-                    "label": "2 Seconds",
-                    "value": 2
-                },
-                {
-                    "label": "3 Seconds",
-                    "value": 3
-                },
-                {
-                    "label": "4 Seconds",
-                    "value": 4
-                },
-                {
-                    "label": "5 Seconds",
-                    "value": 5
-                },
-                {
-                    "label": "6 Seconds",
-                    "value": 6
-                },
-                {
-                    "label": "7 Seconds",
-                    "value": 7
-                },
-                {
-                    "label": "8 Seconds",
-                    "value": 8
-                },
-                {
-                    "label": "9 Seconds",
-                    "value": 9
-                },
-                {
-                    "label": "10 Seconds",
-                    "value": 10
-                }
-            ]
+            "allowManualEntry": true,
+
         },
         "28": {
             "label": "Active Power Reports",
