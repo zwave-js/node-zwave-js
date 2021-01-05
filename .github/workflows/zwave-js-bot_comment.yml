@@ -69,3 +69,47 @@ jobs:
         npmToken: ${{ secrets.NPM_TOKEN }}
         task: publish-pr
         pr: ${{ github.event.issue.number }}
+
+  # Fix lint errors when an authorized person posts "@zwave-js-bot pack this"
+  fix-lint:
+    if: |
+      contains(github.event.issue.html_url, '/pull/') &&
+      contains(github.event.comment.body, '@zwave-js-bot fix lint') &&
+      (github.event.comment.user.login != 'zwave-js-bot')
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Check user's permissions to do this
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          await bot.fixLintCheck({github, context});
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Do the lint fix
+      run: |
+        yarn run lint:ts --fix
+        yarn run lint:wotan --fix
+
+        # Check if something changed
+        if [[ $(git diff --quiet) != 0]]; then
+          git add -A
+          git commit -m "style: fix lint"
+          git push
+        fi
