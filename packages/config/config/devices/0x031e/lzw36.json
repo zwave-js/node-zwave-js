@@ -511,7 +511,7 @@
             "valueSize": 4,
             "minValue": 0,
             "maxValue": 9,
-            "defaultValue": 56160,
+            "defaultValue": 3,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
