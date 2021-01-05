@@ -5,9 +5,9 @@
  */
 
 import { applicationCCs, CommandClasses, getCCName } from "@zwave-js/core";
-import { red, yellow } from "ansi-colors";
 import * as path from "path";
 import ts from "typescript";
+import { reportProblem } from "../../../maintenance/tools";
 import {
 	expressionToCommandClass,
 	getCommandClassFromDecorator,
@@ -90,26 +90,23 @@ export function lintCCInterview(): Promise<void> {
 							sourceFile,
 							node.getStart(sourceFile, false),
 						);
-						console.warn(
-							yellow(
-								`[WARN] ${relativePath}:${
-									location.line + 1
-								}: Could not determine defined CC for ${
-									node.name.text
-								}!`,
-							),
-						);
+						reportProblem({
+							severity: "warn",
+							filename: relativePath,
+							line: location.line + 1,
+							message: `Could not determine defined CC for ${node.name.text}!`,
+						});
 					}
 					return;
 				}
 				// Ensure the filename ends with CC.ts - otherwise CommandClass.from won't find it
 				if (!relativePath.endsWith("CC.ts")) {
 					hasError = true;
-					console.error(
-						red(
-							`[ERROR] ${relativePath}: Files containing CC implementations MUST end with "CC.ts"\n`,
-						),
-					);
+					reportProblem({
+						severity: "error",
+						filename: relativePath,
+						message: `Files containing CC implementations MUST end with "CC.ts"!`,
+					});
 				}
 
 				// Only look at implementations of determineRequiredCCInterviews
@@ -154,13 +151,12 @@ export function lintCCInterview(): Promise<void> {
 							}
 						} catch (e) {
 							hasError = true;
-							console.error(
-								red(
-									`[ERROR] ${relativePath}:${
-										location.line + 1
-									}:`,
-								) + `\n${e.message}\n`,
-							);
+							reportProblem({
+								severity: "error",
+								filename: relativePath,
+								line: location.line + 1,
+								message: e.message,
+							});
 						}
 					}
 				}

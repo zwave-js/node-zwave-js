@@ -1,3 +1,4 @@
+import { red, yellow } from "ansi-colors";
 import * as fs from "fs-extra";
 import * as path from "path";
 
@@ -22,4 +23,34 @@ export async function enumFilesRecursive(
 	}
 
 	return ret;
+}
+
+interface ReportProblemOptions {
+	severity: "warn" | "error";
+	filename: string;
+	line?: number;
+	message: string;
+}
+
+export function reportProblem({
+	severity,
+	filename,
+	line,
+	message,
+}: ReportProblemOptions): void {
+	if (process.env.CI) {
+		console[severity](
+			`::${severity}${severity === "warn" ? "ing" : ""} file=${filename}${
+				line != undefined ? `,line=${line}` : ""
+			}::${message}\n`,
+		);
+	} else {
+		console[severity](
+			(severity === "warn" ? yellow : red)(
+				`[${severity.toUpperCase()}] ${filename}${
+					line != undefined ? `:${line}` : ""
+				}:` + `\n${message}\n`,
+			),
+		);
+	}
 }
