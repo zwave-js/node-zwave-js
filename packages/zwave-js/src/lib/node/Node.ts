@@ -176,7 +176,7 @@ export class ZWaveNode extends Endpoint {
 		// Define this node's intrinsic endpoint as the root device (0)
 		super(id, driver, 0);
 
-		this._valueDB = new ValueDB(id, driver.valueDB!, driver.metadataDB!);
+		this._valueDB = new ValueDB(id, driver.valueDB, driver.metadataDB);
 		for (const event of [
 			"value added",
 			"value updated",
@@ -219,7 +219,7 @@ export class ZWaveNode extends Endpoint {
 		this.statusMachine.onTransition((state) => {
 			if (state.changed) {
 				this.onStatusChange(
-					nodeStatusMachineStateToNodeStatus(state.value as any),
+					nodeStatusMachineStateToNodeStatus(state.value),
 				);
 			}
 		});
@@ -2929,9 +2929,7 @@ version:               ${this.version}`;
 						const numEndpointIndex = parseInt(endpointIndex, 10);
 
 						// Verify the info object
-						const info = endpoints[
-							endpointIndex
-						] as CommandClassInfo;
+						const info = endpoints[endpointIndex];
 						info.isSupported = enforceType(
 							info.isSupported,
 							"boolean",

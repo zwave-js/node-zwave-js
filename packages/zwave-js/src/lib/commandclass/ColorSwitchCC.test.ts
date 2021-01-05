@@ -128,8 +128,8 @@ describe("lib/commandclass/ColorSwitchCC => ", () => {
 		expect(cc.colorComponent).toBe(ColorComponent.Red);
 		expect(cc.currentValue).toBe(128);
 		expect(cc.targetValue).toBe(255);
-		expect(cc.duration!.value).toBe(1);
-		expect(cc.duration!.unit).toBe("seconds");
+		expect(cc.duration.value).toBe(1);
+		expect(cc.duration.unit).toBe("seconds");
 	});
 
 	it("the Set command should serialize correctly (version 1)", () => {

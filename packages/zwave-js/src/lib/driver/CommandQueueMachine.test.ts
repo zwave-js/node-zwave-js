@@ -401,9 +401,9 @@ describe("lib/driver/CommandQueueMachine", () => {
 					};
 					context.interpreter.onEvent((evt) => {
 						if (evt.type === "command_success") {
-							context.actualResults.push((evt as any).result);
+							context.actualResults.push(evt.result);
 						} else if (evt.type === "command_failure") {
-							context.actualReasons.push((evt as any).reason);
+							context.actualReasons.push(evt.reason);
 						}
 					});
 					// context.interpreter.onTransition((state, evt) => {

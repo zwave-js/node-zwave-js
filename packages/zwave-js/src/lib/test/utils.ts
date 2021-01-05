@@ -35,7 +35,7 @@ export async function createAndStartDriver(
 	portInstance.openStub.mockClear();
 	portInstance.closeStub.mockClear();
 	portInstance.writeStub.mockClear();
-	portInstance["_lastWrite"] = undefined;
+	portInstance._lastWrite = undefined;
 
 	// Mock the value DB, because the original one will not be initialized
 	// with skipInterview: true

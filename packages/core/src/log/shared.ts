@@ -323,7 +323,7 @@ export function tagify(tags: string[]): string {
 /** Unsilences the console transport of a logger and returns the original value */
 export function unsilence(logger: winston.Logger): boolean {
 	const consoleTransport = logger.transports.find(
-		(t) => (t as any).name === "console",
+		(t) => t.name === "console",
 	);
 	if (consoleTransport) {
 		const ret = !!consoleTransport.silent;
@@ -339,7 +339,7 @@ export function restoreSilence(
 	original: boolean,
 ): void {
 	const consoleTransport = logger.transports.find(
-		(t) => (t as any).name === "console",
+		(t) => t.name === "console",
 	);
 	if (consoleTransport) {
 		consoleTransport.silent = original;

@@ -95,8 +95,8 @@ describe("lib/commandclass/BinarySwitchCC => ", () => {
 
 		expect(cc.currentValue).toBe(true);
 		expect(cc.targetValue).toBe(false);
-		expect(cc.duration!.unit).toBe("seconds");
-		expect(cc.duration!.value).toBe(1);
+		expect(cc.duration.unit).toBe("seconds");
+		expect(cc.duration.value).toBe(1);
 	});
 
 	it("deserializing an unsupported command should return an unspecified version of BinarySwitchCC", () => {

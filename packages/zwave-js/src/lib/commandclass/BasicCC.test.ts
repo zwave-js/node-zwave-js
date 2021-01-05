@@ -80,8 +80,8 @@ describe("lib/commandclass/BasicCC => ", () => {
 
 		expect(basicCC.currentValue).toBe(55);
 		expect(basicCC.targetValue).toBe(66);
-		expect(basicCC.duration!.unit).toBe("seconds");
-		expect(basicCC.duration!.value).toBe(1);
+		expect(basicCC.duration.unit).toBe("seconds");
+		expect(basicCC.duration.value).toBe(1);
 	});
 
 	it("deserializing an unsupported command should return an unspecified version of BasicCC", () => {

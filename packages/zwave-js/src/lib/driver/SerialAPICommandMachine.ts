@@ -245,13 +245,13 @@ export function getSerialAPICommandMachineConfig(
 							cond: "responseIsNOK",
 							actions: assign({
 								lastError: (_) => "response NOK",
-								result: (_, evt) => (evt as any).message,
+								result: (_, evt) => evt.message,
 							}),
 						},
 						{
 							target: "waitForCallback",
 							actions: assign({
-								result: (_, evt) => (evt as any).message,
+								result: (_, evt) => evt.message,
 							}),
 						},
 					],
@@ -274,14 +274,14 @@ export function getSerialAPICommandMachineConfig(
 							cond: "callbackIsNOK",
 							actions: assign({
 								lastError: (_) => "callback NOK",
-								result: (_, evt) => (evt as any).message,
+								result: (_, evt) => evt.message,
 							}),
 						},
 						{
 							target: "success",
 							cond: "callbackIsFinal",
 							actions: assign({
-								result: (_, evt) => (evt as any).message,
+								result: (_, evt) => evt.message,
 							}),
 						},
 						{ target: "waitForCallback" },
@@ -360,9 +360,9 @@ export function getSerialAPICommandMachineOptions(
 			expectsNoCallback: (ctx) => !ctx.msg.expectsCallback(),
 			isExpectedMessage: (ctx, evt, meta) =>
 				meta.state.matches("waitForResponse")
-					? ctx.msg.isExpectedResponse((evt as any).message)
+					? ctx.msg.isExpectedResponse(evt.message)
 					: meta.state.matches("waitForCallback")
-					? ctx.msg.isExpectedCallback((evt as any).message)
+					? ctx.msg.isExpectedCallback(evt.message)
 					: false,
 			responseIsNOK: (ctx, evt) =>
 				evt.type === "response" &&

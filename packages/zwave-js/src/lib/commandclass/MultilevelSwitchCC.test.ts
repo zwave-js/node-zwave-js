@@ -97,8 +97,8 @@ describe("lib/commandclass/MultilevelSwitchCC => ", () => {
 
 		expect(cc.currentValue).toBe(55);
 		expect(cc.targetValue).toBe(66);
-		expect(cc.duration!.unit).toBe("seconds");
-		expect(cc.duration!.value).toBe(1);
+		expect(cc.duration.unit).toBe("seconds");
+		expect(cc.duration.value).toBe(1);
 	});
 
 	it("the StartLevelChange command (V1) should serialize correctly (up, ignore start level)", () => {
