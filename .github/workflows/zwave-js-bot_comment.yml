@@ -1,4 +1,4 @@
-name: Trigger Bot
+name: 'Z-Wave Bot: React to comments'
 
 on:
   issue_comment:

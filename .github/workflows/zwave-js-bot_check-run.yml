@@ -1,0 +1,47 @@
+name: 'Z-Wave Bot: React to checks'
+
+on:
+  check_run:
+    types: [completed]
+
+jobs:
+  # Offer help to the contributor to fix lint errors
+  fix-lint-comment:
+    if: |
+      contains(github.event.check_run.name, 'lint-zwave') &&
+      github.event.check_run.conclusion == 'failure' &&
+      github.event.check_run.pull_requests.length > 0
+
+    runs-on: [ubuntu-latest]
+    steps:
+
+    - uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          // Download job logs
+          const log = await github.request(`https://api.github.com/repos/${context.repo.owner}/${context.repo.repo}/actions/jobs/${context.payload.check_run.id}/logs`);
+          
+          // Check if the --fix option can do something
+          if (!log.includes("--fix") return;
+          const options = {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          };
+          const pr = context.payload.check_run.pull_requests[0].number;
+
+          // In order not to post this help too often, check if the bot has commented in the last 12 hours
+          const { data: comments } = await octokit.issues.listComments({
+            ...options,
+            issue_number: pr,
+            since: new Date(Date.now() - 12*60*60*1000).toISOString(),
+          });
+          if (comments.some(c => c.user.login === "zwave-js-bot")) return;
+
+          await github.issues.createComment({
+            ...options,
+            issue_number: context.issue.number,
+            body: `🚧 It seems like this PR has lint errors 🚧
+                   I can try to fix them for you. If you want me to, just comment
+                   \`@zwave-js-bot fix lint\``
+          })
