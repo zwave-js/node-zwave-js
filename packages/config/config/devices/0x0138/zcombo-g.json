@@ -24,7 +24,8 @@
         "1": {
             "label": "SuperVision report timeout",
             "description": "ZCOMBO will send the message over SuperVision Command Class and it will wait for the SuperVision report from the Controller for the SuperVision report timeout time.",
-            "valueSize": 2,
+            "unit": "s",
+			"valueSize": 2,
             "minValue": 500,
             "maxValue": 5000,
             "defaultValue": 1500,
@@ -48,7 +49,8 @@
         "3": {
             "label": "SuperVision wait time",
             "description": "Before retrying the message, ZCOMBO will wait for the SuperVision wait time. Actual wait time is calculated using the formula: Wait Time = SuperVision wait time base-value + random-value + (attempt-count x 5 seconds). The random value will be between 100 and 1100 milliseconds.",
-            "valueSize": 2,
+            "unit": "s"
+			"valueSize": 2,
             "minValue": 1,
             "maxValue": 60,
             "defaultValue": 5,
