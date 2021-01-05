@@ -481,7 +481,7 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 					.filter((line) => !line.endsWith(filename + ":"));
 				reportProblem({
 					severity: "warn",
-					filename: filename,
+					filename: `packages/config/config/devices/${filename}`,
 					message: lines.join("\n"),
 				});
 			}
@@ -498,7 +498,7 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 					.filter((line) => !line.endsWith(filename + ":"));
 				reportProblem({
 					severity: "error",
-					filename: filename,
+					filename: `packages/config/config/devices/${filename}`,
 					message: lines.join("\n"),
 				});
 			}
