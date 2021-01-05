@@ -12,7 +12,9 @@ import * as path from "path";
 // locations in error messages
 import "source-map-support/register";
 
-const { version: libVersion } = require("./package.json"); 
+/** The version of zwave-js, exported for your convenience */
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const libVersion: string = require("./package.json").version;
 const libraryRootDir = path.join(__dirname, "..");
 
 /** Checks if a filename is part of this library. Paths outside will be excluded from Sentry error reporting */
