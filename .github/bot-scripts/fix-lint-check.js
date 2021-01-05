@@ -1,3 +1,6 @@
+/// <reference path="types.d.ts" />
+// @ts-check
+
 const { authorizedUsers } = require("./authorizedUsers");
 
 /**
@@ -17,10 +20,10 @@ async function main(param) {
 	// Only the pull request author and authorized users may execute this command
 	if (
 		![...authorizedUsers, pull.user.login].includes(
-			context.payload.comment.user,
+			context.payload.comment.user.login,
 		)
 	) {
-		process.exit(1);
+		return false;
 	}
 
 	// Let the user know we're working on it
@@ -29,5 +32,7 @@ async function main(param) {
 		comment_id: context.payload.comment.id,
 		content: "rocket",
 	});
+
+	return true;
 }
 module.exports = main;

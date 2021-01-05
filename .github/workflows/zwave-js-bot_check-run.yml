@@ -8,7 +8,7 @@ jobs:
   # Offer help to the contributor to fix lint errors
   fix-lint-comment:
     if: |
-      contains(github.event.check_run.name, 'lint-zwave') &&
+      contains(github.event.check_run.name, 'lint') &&
       github.event.check_run.conclusion == 'failure' &&
       github.event.check_run.pull_requests.length > 0
 

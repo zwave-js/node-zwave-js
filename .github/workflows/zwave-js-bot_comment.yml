@@ -87,29 +87,75 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Check user's permissions to do this
+      id: check
       uses: actions/github-script@v3
       with:
         github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          await bot.fixLintCheck({github, context});
+          return await bot.fixLintCheck({github, context});
 
+    - run: echo "${{ steps.check.outputs.result }}"
+
+    # These steps only run if the check was successful
     - name: Use Node.js ${{ matrix.node-version }}
+      if: steps.check.outputs.result == 'true'
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      if: steps.check.outputs.result == 'true'
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
     - name: Install dependencies
-      run: yarn install --frozen-lockfile
+      if: steps.check.outputs.result == 'true'
+      run: yarn install --prefer-offline --frozen-lockfile
 
     - name: Do the lint fix
+      if: steps.check.outputs.result == 'true'
+      id: fix
       run: |
-        yarn run lint:ts --fix
-        yarn run lint:wotan --fix
+        # Run all lint commands and remember if one fails
+        LINT_RESULT=0
+        if ! yarn run lint:ts --fix ; then LINT_RESULT=1 ; fi
+        if ! yarn run lint:wotan --fix ; then LINT_RESULT=1 ; fi
 
         # Check if something changed
-        if [[ $(git diff --quiet) != 0]]; then
+        if ! git diff --quiet ; then
+          git config user.email "bot@zwave.js"
+          git config user.name "Z-Wave JS Bot"
           git add -A
           git commit -m "style: fix lint"
           git push
+        else
+          echo "::set-output name=result::unchanged"
+          exit 0
         fi
+
+        if [[ $LINT_RESULT == 0 ]] ; then
+          echo "::set-output name=result::ok"
+        else
+          echo "::set-output name=result::error"
+        fi
+
+    - name: Give feedback
+      uses: actions/github-script@v3
+      env:
+        FEEDBACK: ${{ steps.fix.outputs.result }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return await bot.fixLintFeedback({github, context});

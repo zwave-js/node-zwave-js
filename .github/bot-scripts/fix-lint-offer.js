@@ -1,3 +1,6 @@
+/// <reference path="types.d.ts" />
+// @ts-check
+
 /**
  * @param {{github: Github, context: Context}} param
  */
@@ -26,7 +29,7 @@ async function main(param) {
 
 	await github.issues.createComment({
 		...options,
-		issue_number: context.issue.number,
+		issue_number: pr,
 		body: `🚧 It seems like this PR has lint errors 🚧
 I should be able to fix them for you. If you want me to, just comment
 \`@zwave-js-bot fix lint\``,
