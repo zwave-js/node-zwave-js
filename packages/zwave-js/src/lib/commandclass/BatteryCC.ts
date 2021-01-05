@@ -161,6 +161,7 @@ needs to be replaced or charged: ${
 							batteryStatus.rechargeOrReplace!
 						]
 					}
+is low temperature               ${batteryStatus.lowTemperatureStatus}
 is disconnected:                 ${batteryStatus.disconnected}`;
 				}
 				log.controller.logNode(node.id, {
@@ -385,6 +386,9 @@ export class BatteryCCReport extends BatteryCC {
 				BatteryReplacementStatus,
 				this.rechargeOrReplace,
 			);
+		}
+		if (this.lowTemperatureStatus != undefined) {
+			message.lowTemperatureStatus = this.lowTemperatureStatus;
 		}
 		if (this.disconnected != undefined) {
 			message.disconnected = this.disconnected;
