@@ -5,9 +5,10 @@
  */
 
 import { applicationCCs, CommandClasses } from "@zwave-js/core";
-import { blue, green, red, yellow } from "ansi-colors";
+import { blue, green } from "ansi-colors";
 import * as path from "path";
 import ts from "typescript";
+import { reportProblem } from "../../../maintenance/tools";
 import { getCommandClassFromDecorator } from "./shared";
 import { loadTSConfig, projectRoot } from "./tsTools";
 
@@ -134,13 +135,12 @@ export function lintCCConstructors(): Promise<void> {
 					severity: "error" | "warn" = "error",
 				) => {
 					if (severity === "error") hasError = true;
-					console[severity](
-						(severity === "error" ? red : yellow)(
-							`[${severity.toUpperCase()}] ${relativePath}:${
-								classLocation.line + 1
-							}:`,
-						) + `\n${reason}\n`,
-					);
+					reportProblem({
+						severity,
+						filename: relativePath,
+						line: classLocation.line + 1,
+						message: reason,
+					});
 				};
 
 				// Only look at the constructor

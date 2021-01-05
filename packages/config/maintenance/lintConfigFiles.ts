@@ -1,9 +1,10 @@
 import { getIntegerLimits, getMinimumShiftForBitMask } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
-import { green, red, white, yellow } from "ansi-colors";
+import { green, red, white } from "ansi-colors";
 import { readFile } from "fs-extra";
 import * as path from "path";
+import { reportProblem } from "../../../maintenance/tools";
 import { DeviceConfig, loadDeviceIndexInternal } from "../src/Devices";
 import { loadIndicatorsInternal } from "../src/Indicators";
 import { loadManufacturersInternal } from "../src/Manufacturers";
@@ -473,12 +474,16 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 
 	if (warnings.size) {
 		for (const [filename, fileWarnings] of warnings.entries()) {
-			console.warn(`config/devices/${filename}:`);
+			// console.warn(`config/devices/${filename}:`);
 			for (const warning of fileWarnings) {
 				const lines = warning
 					.split("\n")
 					.filter((line) => !line.endsWith(filename + ":"));
-				console.warn(yellow("[WARN] " + lines.join("\n")));
+				reportProblem({
+					severity: "warn",
+					filename: `packages/config/config/devices/${filename}`,
+					message: lines.join("\n"),
+				});
 			}
 			console.warn();
 		}
@@ -486,12 +491,16 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 
 	if (errors.size) {
 		for (const [filename, fileErrors] of errors.entries()) {
-			console.error(`config/devices/${filename}:`);
+			// console.error(`config/devices/${filename}:`);
 			for (const error of fileErrors) {
 				const lines = error
 					.split("\n")
 					.filter((line) => !line.endsWith(filename + ":"));
-				console.error("[ERR] " + red(lines.join("\n")));
+				reportProblem({
+					severity: "error",
+					filename: `packages/config/config/devices/${filename}`,
+					message: lines.join("\n"),
+				});
 			}
 			console.error();
 		}
