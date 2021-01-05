@@ -349,13 +349,12 @@ export class BatteryCCReport extends BatteryCC {
 
 	private _lowTemperatureStatus: boolean | undefined;
 	@ccValue({ minVersion: 3 })
-
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyBoolean,
-		label: "Battery temperature is low"
+		label: "Battery temperature is low",
 	})
 	public get lowTemperatureStatus(): boolean | undefined {
-		return this._lowTemperatureStatus
+		return this._lowTemperatureStatus;
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
