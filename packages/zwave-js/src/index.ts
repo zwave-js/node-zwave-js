@@ -12,6 +12,7 @@ import * as path from "path";
 // locations in error messages
 import "source-map-support/register";
 
+const { version: libVersion } = require("../package.json"); 
 const libraryRootDir = path.join(__dirname, "..");
 
 /** Checks if a filename is part of this library. Paths outside will be excluded from Sentry error reporting */
@@ -157,4 +158,4 @@ export * from "./Error";
 export * from "./Node";
 export * from "./Utils";
 export * from "./Values";
-export { version } from "../package.json";
+export libVersion;
