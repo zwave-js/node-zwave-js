@@ -20,27 +20,27 @@
             "isLifeline": true
         },
         "2": {
-            "label": "Basic_Set_Light",
+            "label": "Basic Set Light",
             "maxNodes": 5
         },
         "3": {
-            "label": "Switch_MultiLevel_Set_Light",
+            "label": "Switch MultiLevel Set Light",
             "maxNodes": 5
         },
         "4": {
-            "label": "Switch_MultiLevel_Start/Stop_Light",
+            "label": "Switch MultiLevel Start/Stop Light",
             "maxNodes": 5
         },
         "5": {
-            "label": "Basic_Set_Fan",
+            "label": "Basic Set Fan",
             "maxNodes": 5
         },
         "6": {
-            "label": "Switch_MultiLevel_Set_Fan",
+            "label": "Switch MultiLevel Set Fan",
             "maxNodes": 5
         },
         "7": {
-            "label": "Switch_MultiLevel_Start/Stop_Fan",
+            "label": "Switch MultiLevel Start/Stop Fan",
             "maxNodes": 5
         }
     },
