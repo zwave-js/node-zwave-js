@@ -144,7 +144,8 @@
         "10": {
             "label": "Auto Off Light Timer",
             "description": "Automatically turns the light switch off after this many seconds. When the switch is turned on a timer is started that is the duration of this setting. When the timer expires, the switch is turned off.\n      Range:0-32767\n      Default: 0",
-            "valueSize": 2,
+            "unit": "s",
+			"valueSize": 2,
             "minValue": 0,
             "maxValue": 32767,
             "defaultValue": 0,
@@ -156,7 +157,8 @@
         "11": {
             "label": "Auto Off Fan Timer",
             "description": "Automatically turns the fan switch off after this many seconds. When the switch is turned on a timer is started that is the duration of this setting. When the timer expires, the switch is turned off.\n      Range:0-32767\n      Default: 0",
-            "valueSize": 2,
+            "units": "s",
+			"valueSize": 2,
             "minValue": 0,
             "maxValue": 32767,
             "defaultValue": 0,
@@ -500,7 +502,8 @@
         "29": {
             "label": "Periodic Power & Energy Reports",
             "description": "Time period between consecutive power & energy reports being sent (in seconds). The timer is reset after each report is sent.\n      Range:0-32767\n      Default: 3600",
-            "valueSize": 2,
+            "units": "s",
+			"valueSize": 2,
             "minValue": 0,
             "maxValue": 32767,
             "defaultValue": 3600,
