@@ -157,3 +157,4 @@ export * from "./Error";
 export * from "./Node";
 export * from "./Utils";
 export * from "./Values";
+export { version } from "../package.json";
