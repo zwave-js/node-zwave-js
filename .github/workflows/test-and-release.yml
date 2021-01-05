@@ -31,27 +31,44 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install yarn
-      run: npm i -g yarn
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
 
-    # # We need npm@7 for the workspaces feature
-    # - name: Update npm to >=7
-    #   run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
-
-    # - name: Install dependencies
-    #   run: npm ci
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      run: rm -rf node_modules && yarn install --frozen-lockfile
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    - name: Use TypeScript build cache
+      uses: actions/cache@v2
+      id: build-cache
+      with:
+        path: |
+          packages/*/build
+          packages/*/*.tsbuildinfo
+          packages/*/*.js
+        # When dependencies change, we likely have to recompile. TS manages the sources itself
+        key: ts-${{ hashFiles('**/yarn.lock') }}
 
     - name: Compile TypeScript code
-      run: npx lerna run build
+      run: yarn run build
     
     - name: Lint TypeScript code
       run: yarn run lint
 
     - name: Lint config files
       run: npx lerna run lint:config
+
+    - name: Lint Z-Wave specifics
+      run: npx lerna run lint:zwave
 
   # ===================
 
@@ -74,32 +91,84 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install yarn
-      run: npm i -g yarn
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
 
-    # # We need npm@7 for the workspaces feature
-    # - name: Update npm to >=7
-    #   run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
-
-    # - name: Install dependencies
-    #   run: npm ci
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      run: rm -rf node_modules && yarn install --frozen-lockfile
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    - name: Use TypeScript build cache
+      uses: actions/cache@v2
+      id: build-cache
+      with:
+        path: |
+          packages/*/build
+          packages/*/*.tsbuildinfo
+          packages/*/*.js
+        # When dependencies change, we likely have to recompile. TS manages the sources itself
+        key: ts-${{ hashFiles('**/yarn.lock') }}
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
-      run: npx lerna run build
+      run: yarn run build
 
     - name: Run component tests
       run: yarn run test:ci
       env:
         CI: true
 
-    # Test that the main entry point is not broken
+  # ===================
+
+  # Test that the generated packages are ok
+  test-package:
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    # Do a full build so the package files are regenerated
+    - name: Compile TypeScript code
+      run: yarn run build:full
+
     - name: Import main entry point
       run: node -e 'require("./packages/zwave-js")'
-
 
   # ===================
 
@@ -126,22 +195,36 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install yarn
-      run: npm i -g yarn
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
 
-    # # We need npm@7 for the workspaces feature
-    # - name: Update npm to >=7
-    #   run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
-
-    # - name: Install dependencies
-    #   run: npm ci
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      run: rm -rf node_modules && yarn install --frozen-lockfile
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    - name: Use TypeScript build cache
+      uses: actions/cache@v2
+      id: build-cache
+      with:
+        path: |
+          packages/*/build
+          packages/*/*.tsbuildinfo
+          packages/*/*.js
+        # When dependencies change, we likely have to recompile. TS manages the sources itself
+        key: ts-${{ hashFiles('**/yarn.lock') }}
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
-      run: npx lerna run build
+      run: yarn run build
 
     - name: Generate coverage
       run: yarn run coverage:ci
@@ -163,7 +246,7 @@ jobs:
       github.event_name == 'push' &&
       startsWith(github.ref, 'refs/tags/v')
 
-    needs: [lint, unit-tests]
+    needs: [lint, unit-tests, test-package]
 
     runs-on: ubuntu-latest
     strategy:
@@ -179,13 +262,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install yarn
-      run: npm i -g yarn
-
-    # # We need npm@7 for the workspaces feature
-    # - name: Update npm to >=7
-    #   run: "[ $(npm -v | cut -d. -f1) -lt 7 ] && npm i -g npm@7"
-
     - name: Extract the version and commit body from the tag
       id: extract_release
       # The body may be multiline, therefore we need to escape some characters
@@ -199,14 +275,24 @@ jobs:
         BODY="${BODY//$'\r'/'%0D'}"
         echo "::set-output name=BODY::$BODY"
 
-    # - name: Install dependencies
-    #   run: npm ci
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      run: rm -rf node_modules && yarn install --frozen-lockfile
+      run: yarn install --prefer-offline --frozen-lockfile
 
     - name: Create a clean build
-      run: npx lerna run build
+      run: yarn run build:full
 
     - name: Publish package to npm
       run: |
