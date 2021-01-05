@@ -88,6 +88,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 			overheating: response.overheating,
 			lowFluid: response.lowFluid,
 			rechargeOrReplace: response.rechargeOrReplace,
+			lowTemperatureStatus: response.lowTemperatureStatus,
 			disconnected: response.disconnected,
 		};
 	}
@@ -244,6 +245,7 @@ export class BatteryCCReport extends BatteryCC {
 				: !!(this.payload[1] & 0b1)
 				? BatteryReplacementStatus.Soon
 				: BatteryReplacementStatus.No;
+			this._lowTemperatureStatus = !!(this.payload[2] & 0b10);
 			this._disconnected = !!(this.payload[2] & 0b1);
 		}
 
@@ -342,6 +344,17 @@ export class BatteryCCReport extends BatteryCC {
 	})
 	public get disconnected(): boolean | undefined {
 		return this._disconnected;
+	}
+
+	private _lowTemperatureStatus: boolean | undefined;
+	@ccValue({ minVersion: 3 })
+
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Battery temperature is low"
+	})
+	public get lowTemperatureStatus(): boolean | undefined {
+		return this._lowTemperatureStatus
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
