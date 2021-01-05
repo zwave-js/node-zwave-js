@@ -411,15 +411,49 @@
         },	
         "24[0xff]": {
             "label": "Light LED Strip Effect Color",
-            "description": "Light LED Strip Effect Color.\n    Color - 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value\n      Range: 0-100600319\n      Default: 56160",
+            "description": "Light LED Strip Effect Color.\n    Color - 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value\n      Range: 0-255\n      Default: 0",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 100600319,
-            "defaultValue": 56160,
+            "maxValue": 255,
+            "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true		
+            "allowManualEntry": true,
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				}
+			]			
         },		
         "25[0x7f000000]": {
             "label": "Fan LED Strip Effect",
@@ -485,15 +519,49 @@
         },	
         "25[0xff]": {
             "label": "Fan LED Strip Effect Color",
-            "description": "Fan LED Color\n 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value\n      Range: 0-100600319\n      Default: 3",
+            "description": "Fan LED Color\n 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value\n      Range: 0-255\n      Default: 0",
             "valueSize": 4,
             "minValue": 0,
-            "maxValue": 100600319,
-            "defaultValue": 3,
+            "maxValue": 255,
+            "defaultValue": 0,
             "unsigned": true,
             "readOnly": false,
             "writeOnly": false,
-            "allowManualEntry": true			
+            "allowManualEntry": true,
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				}
+			]			
         },			
 		"26": {
             "label": "Light LED Strip Timeout",
