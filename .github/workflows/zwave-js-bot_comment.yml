@@ -1,0 +1,161 @@
+name: 'Z-Wave Bot: React to comments'
+
+on:
+  issue_comment:
+    types: [created, edited] # deleted
+
+jobs:
+  # Publish a PR build when an authorized person comments "@zwave-js-bot pack this"
+  publish-pr:
+    if: |
+      contains(github.event.issue.html_url, '/pull/') &&
+      contains(github.event.comment.body, '@zwave-js-bot pack this') &&
+      (github.event.comment.user.login == 'AlCalzone')
+
+    runs-on: [ubuntu-latest]
+    steps:
+
+    - uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const options = {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+          };
+          const { data: pull } = await github.pulls.get({
+            ...options,
+            pull_number: context.payload.issue.number,
+          });
+
+          if (!pull.mergeable || !pull.merge_commit_sha) {
+            await github.issues.createComment({
+              ...options,
+              issue_number: context.payload.issue.number,
+              body: `😥 Seems like this PR cannot be merged. Please fix the merge conflicts and try again.`,
+            });
+            process.exit(1);
+          }
+
+          await github.issues.createComment({
+            ...options,
+            issue_number: context.issue.number,
+            body: `👋 Hey @${context.payload.comment.user.login}!
+                   I've started to deploy this PR as a development build.
+                   You can monitor the progress [here](${context.payload.repository.html_url}/actions/runs/${context.runId}).`
+          })
+
+    - name: Checkout merged code
+      uses: actions/checkout@v2
+      with:
+        token: ${{secrets.BOT_TOKEN}}
+        ref: 'refs/pull/${{ github.event.issue.number }}/merge'
+
+    - name: Switch to a branch
+      run: git switch -c temp
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Let the bot do its thing
+      uses: ./.github/actions/zwave-js-bot
+      with:
+        githubToken: ${{ secrets.BOT_TOKEN }}
+        npmToken: ${{ secrets.NPM_TOKEN }}
+        task: publish-pr
+        pr: ${{ github.event.issue.number }}
+
+  # Fix lint errors when an authorized person posts "@zwave-js-bot pack this"
+  fix-lint:
+    if: |
+      contains(github.event.issue.html_url, '/pull/') &&
+      contains(github.event.comment.body, '@zwave-js-bot fix lint') &&
+      (github.event.comment.user.login != 'zwave-js-bot')
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Check user's permissions to do this
+      id: check
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return await bot.fixLintCheck({github, context});
+
+    - run: echo "${{ steps.check.outputs.result }}"
+
+    # These steps only run if the check was successful
+    - name: Use Node.js ${{ matrix.node-version }}
+      if: steps.check.outputs.result == 'true'
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      if: steps.check.outputs.result == 'true'
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      if: steps.check.outputs.result == 'true'
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    - name: Do the lint fix
+      if: steps.check.outputs.result == 'true'
+      id: fix
+      run: |
+        # Run all lint commands and remember if one fails
+        LINT_RESULT=0
+        if ! yarn run lint:ts --fix ; then LINT_RESULT=1 ; fi
+        if ! yarn run lint:wotan --fix ; then LINT_RESULT=1 ; fi
+
+        # Check if something changed
+        if ! git diff --quiet ; then
+          git config user.email "bot@zwave.js"
+          git config user.name "Z-Wave JS Bot"
+          git add -A
+          git commit -m "style: fix lint"
+          git push
+        else
+          echo "::set-output name=result::unchanged"
+          exit 0
+        fi
+
+        if [[ $LINT_RESULT == 0 ]] ; then
+          echo "::set-output name=result::ok"
+        else
+          echo "::set-output name=result::error"
+        fi
+
+    - name: Give feedback
+      uses: actions/github-script@v3
+      env:
+        FEEDBACK: ${{ steps.fix.outputs.result }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return await bot.fixLintFeedback({github, context});
