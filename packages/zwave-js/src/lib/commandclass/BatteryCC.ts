@@ -113,7 +113,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 }
 
 @commandClass(CommandClasses.Battery)
-@implementedVersion(2)
+@implementedVersion(3)
 export class BatteryCC extends CommandClass {
 	declare ccCommand: BatteryCommand;
 
