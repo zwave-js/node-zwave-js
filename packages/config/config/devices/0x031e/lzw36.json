@@ -347,10 +347,10 @@
             "writeOnly": false,
             "allowManualEntry": true
         },
-        "24[0x01]": {
+        "24[000000FF]": {
             "label": "Light LED Strip Effect",
             "description": "Light LED Strip Effect\n          Byte 4: Effect - 0 = Off, 1 = Solid, 2 = Slow Blink, 3 = Fast Blink, 4 = Chase, 5 = Pulse\n      Default: 0",
-            "valueSize": 4,
+            "valueSize": 1,
             "minValue": 0,
             "maxValue": 5,
             "defaultValue": 0,
@@ -385,10 +385,10 @@
                 }
             ]			
         },
-        "24[0x02]": {
+        "24[0000FF00]": {
             "label": "Light LED Strip Effect Duration",
             "description": "Light LED Strip Effect Duration.\n       1 to 60 = seconds, 61 to 120  minutes, 121 -  254 = hours, 255 = Indefinitely\n          Default: 0",
-            "valueSize": 3,
+            "valueSize": 1,
             "minValue": 0,
             "maxValue": 255,
             "defaultValue": 0,
@@ -397,10 +397,10 @@
             "writeOnly": false,
             "allowManualEntry": true			
         },	
-        "24[0x03]": {
+        "24[00FF0000]": {
             "label": "Light LED Strip Effect Intensity",
             "description": "Light LED Strip Effect Intensity.\n        0 to 9.  0 = dim, 9 = bright\n          Default: 3",
-            "valueSize": 2,
+            "valueSize": 1,
             "minValue": 0,
             "maxValue": 9,
             "defaultValue": 3,
@@ -409,7 +409,7 @@
             "writeOnly": false,
             "allowManualEntry": true		
         },	
-        "24[0x04]": {
+        "24[FF000000]": {
             "label": "Light LED Strip Effect Color",
             "description": "Light LED Strip Effect Color.\n    Color - 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value\n      Range: 0-100600319\n      Default: 56160",
             "valueSize": 1,
@@ -421,10 +421,10 @@
             "writeOnly": false,
             "allowManualEntry": true		
         },		
-        "25[0x01]": {
+        "25[000000FF]": {
             "label": "Fan LED Strip Effect",
             "description": "Fan LED Strip Effect.\n     0 = Off, 1 = Solid, 2 = Slow Blink, 3 = Fast Blink, 4 = Chase, 5 = Pulse\n   Default: 0",
-            "valueSize": 4,
+            "valueSize": 1,
             "minValue": 0,
             "maxValue": 5,
             "defaultValue": 0,
@@ -459,7 +459,7 @@
                 }
             ]				
         },
-        "25[0x02]": {
+        "25[0000FF00]": {
             "label": "Fan LED Strip Effect Duration",
             "description": "Fan LED Strip Duration.\n    1 to 60 = seconds, 61 to 120  minutes, 121 -  254 = hours, 255 = Indefinitely\n          Default: 0",
 			"valueSize": 3,
@@ -471,10 +471,10 @@
             "writeOnly": false,
             "allowManualEntry": true
         },
-        "25[0x03]": {
+        "25[00FF0000]": {
             "label": "Fan LED Strip Effect Intensity",
             "description": "Fan LED Strip Intensity\n    0 to 9.  0 = dim, 9 = bright\n     Default: 3",
-            "valueSize": 2,
+            "valueSize": 1,
             "minValue": 0,
             "maxValue": 9,
             "defaultValue": 56160,
@@ -483,7 +483,7 @@
             "writeOnly": false,
             "allowManualEntry": true			
         },	
-        "25[0x04]": {
+        "25[FF000000]": {
             "label": "Fan LED Strip Effect Color",
             "description": "Fan LED Color\n 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value\n      Range: 0-100600319\n      Default: 3",
             "valueSize": 1,
