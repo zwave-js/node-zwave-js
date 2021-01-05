@@ -88,6 +88,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 			overheating: response.overheating,
 			lowFluid: response.lowFluid,
 			rechargeOrReplace: response.rechargeOrReplace,
+			lowTemperatureStatus: response.lowTemperatureStatus,
 			disconnected: response.disconnected,
 		};
 	}
@@ -112,7 +113,7 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 }
 
 @commandClass(CommandClasses.Battery)
-@implementedVersion(2)
+@implementedVersion(3)
 export class BatteryCC extends CommandClass {
 	declare ccCommand: BatteryCommand;
 
@@ -160,6 +161,7 @@ needs to be replaced or charged: ${
 							batteryStatus.rechargeOrReplace!
 						]
 					}
+is low temperature               ${batteryStatus.lowTemperatureStatus}
 is disconnected:                 ${batteryStatus.disconnected}`;
 				}
 				log.controller.logNode(node.id, {
@@ -244,6 +246,7 @@ export class BatteryCCReport extends BatteryCC {
 				: !!(this.payload[1] & 0b1)
 				? BatteryReplacementStatus.Soon
 				: BatteryReplacementStatus.No;
+			this._lowTemperatureStatus = !!(this.payload[2] & 0b10);
 			this._disconnected = !!(this.payload[2] & 0b1);
 		}
 
@@ -344,6 +347,16 @@ export class BatteryCCReport extends BatteryCC {
 		return this._disconnected;
 	}
 
+	private _lowTemperatureStatus: boolean | undefined;
+	@ccValue({ minVersion: 3 })
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyBoolean,
+		label: "Battery temperature is low",
+	})
+	public get lowTemperatureStatus(): boolean | undefined {
+		return this._lowTemperatureStatus;
+	}
+
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			level: this._level,
@@ -372,6 +385,9 @@ export class BatteryCCReport extends BatteryCC {
 				BatteryReplacementStatus,
 				this.rechargeOrReplace,
 			);
+		}
+		if (this.lowTemperatureStatus != undefined) {
+			message.lowTemperatureStatus = this.lowTemperatureStatus;
 		}
 		if (this.disconnected != undefined) {
 			message.disconnected = this.disconnected;
