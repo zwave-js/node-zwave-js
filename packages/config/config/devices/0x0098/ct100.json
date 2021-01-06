@@ -1,51 +1,50 @@
 // Radio Thermostat Company of America (RTC) CT100
 // Z-Wave Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Radio Thermostat Company of America (RTC)",
-    "manufacturerId": "0x0098",
-    "label": "CT100",
-    "description": "Z-Wave Thermostat",
-    "devices": [
-        {
-            "productType": "0x6401",
-            "productId": "0x0015"
-        },
-        {
-            "productType": "0x6401",
-            "productId": "0x0103"
-        },
-        {
-            "productType": "0x6401",
-            "productId": "0x0105"
-        },
-        {
-            "productType": "0x6401",
-            "productId": "0x0106"
-        },
-        {
-            "productType": "0x6401",
-            "productId": "0x0107"
-        },
-        {
-            "productType": "0x6401",
-            "productId": "0x01fd"
-        },
-        {
-            "productType": "0x6501",
-            "productId": "0x000b"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Send report about Thermostat Mode, Thermostat Operating State, Fan Mode, Fan State, Setpoint, Sensor Multilevel",
-            "maxNodes": 2,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Radio Thermostat Company of America (RTC)",
+	"manufacturerId": "0x0098",
+	"label": "CT100",
+	"description": "Z-Wave Thermostat",
+	"devices": [
+		{
+			"productType": "0x6401",
+			"productId": "0x0015"
+		},
+		{
+			"productType": "0x6401",
+			"productId": "0x0103"
+		},
+		{
+			"productType": "0x6401",
+			"productId": "0x0105"
+		},
+		{
+			"productType": "0x6401",
+			"productId": "0x0106"
+		},
+		{
+			"productType": "0x6401",
+			"productId": "0x0107"
+		},
+		{
+			"productType": "0x6401",
+			"productId": "0x01fd"
+		},
+		{
+			"productType": "0x6501",
+			"productId": "0x000b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Send report about Thermostat Mode, Thermostat Operating State, Fan Mode, Fan State, Setpoint, Sensor Multilevel",
+			"maxNodes": 2,
+			"isLifeline": true
+		}
+	}
 }

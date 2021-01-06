@@ -1,19 +1,18 @@
 // Intermatic HA18
 // 15-amp Wall Switch
 {
-    "_approved": true,
-    "manufacturer": "Intermatic",
-    "manufacturerId": "0x0005",
-    "label": "HA18",
-    "description": "15-amp Wall Switch",
-    "devices": [
-        {
-            "productType": "0x4841",
-            "productId": "0x0018"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Intermatic",
+	"manufacturerId": "0x0005",
+	"label": "HA18",
+	"description": "15-amp Wall Switch",
+	"devices": [
+		{
+			"productType": "0x4841",
+			"productId": "0x0018"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

@@ -1,20 +1,19 @@
 // Forest Group Nederland B.V Shuttle S/L
 // Drapery hardware
 {
-    "_approved": true,
-    "manufacturer": "Forest Group Nederland B.V",
-    "manufacturerId": "0x0207",
-    "label": "Shuttle S/L",
-    "description": "Drapery hardware",
-    "devices": [
-        {
-            "productType": "0x0027",
-            "productId": "0x0100"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Forest Group Nederland B.V",
+	"manufacturerId": "0x0207",
+	"label": "Shuttle S/L",
+	"description": "Drapery hardware",
+	"devices": [
+		{
+			"productType": "0x0027",
+			"productId": "0x0100"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

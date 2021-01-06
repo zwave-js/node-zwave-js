@@ -1,90 +1,89 @@
 // zwaveproducts.com WD-100
 // In-Wall Dimmer
 {
-    "_approved": true,
-    "manufacturer": "zwaveproducts.com",
-    "manufacturerId": "0x0315",
-    "label": "WD-100",
-    "description": "In-Wall Dimmer",
-    "devices": [
-        {
-            "productType": "0x4447",
-            "productId": "0x3034"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "4": {
-            "label": "Orientation",
-            "description": "Controls the on/off orientation of the rocker switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Inverted",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Remote dim level increment",
-            "description": "Number of dim levels to change for each dim step when remotely commanded",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Remote dim step duration",
-            "description": "Interval between dimming steps when remotely commanded",
-            "unit": "10ms",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Dim Level Increment",
-            "description": "Indicates the number of levels (1-99) to change dimming each step",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Step Duration",
-            "description": "The number of tens of milliseconds (1-255) to delay on each dimming step.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "zwaveproducts.com",
+	"manufacturerId": "0x0315",
+	"label": "WD-100",
+	"description": "In-Wall Dimmer",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x3034"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"4": {
+			"label": "Orientation",
+			"description": "Controls the on/off orientation of the rocker switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Inverted",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Remote dim level increment",
+			"description": "Number of dim levels to change for each dim step when remotely commanded",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Remote dim step duration",
+			"description": "Interval between dimming steps when remotely commanded",
+			"unit": "10ms",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Dim Level Increment",
+			"description": "Indicates the number of levels (1-99) to change dimming each step",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Step Duration",
+			"description": "The number of tens of milliseconds (1-255) to delay on each dimming step.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

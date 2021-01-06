@@ -1,74 +1,73 @@
 // EcoBright EcoDim07
 // Smart Dimmer Switch 200W LED
 {
-    "_approved": true,
-    "manufacturer": "EcoBright",
-    "manufacturerId": "0x0431",
-    "label": "EcoDim07",
-    "description": "Smart Dimmer Switch 200W LED",
-    "devices": [
-        {
-            "productType": "0x0202",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "State after power restored",
-            "description": "Switch state after power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                },
-                {
-                    "label": "Return to state after power outage",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Notify load status change",
-            "description": "Send notification to associated device when status is changed.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "The function is disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Send switch multilevel report",
-                    "value": 1
-                },
-                {
-                    "label": "When load status has not changed",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "EcoBright",
+	"manufacturerId": "0x0431",
+	"label": "EcoDim07",
+	"description": "Smart Dimmer Switch 200W LED",
+	"devices": [
+		{
+			"productType": "0x0202",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "State after power restored",
+			"description": "Switch state after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				},
+				{
+					"label": "Return to state after power outage",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Notify load status change",
+			"description": "Send notification to associated device when status is changed.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Send switch multilevel report",
+					"value": 1
+				},
+				{
+					"label": "When load status has not changed",
+					"value": 2
+				}
+			]
+		}
+	}
 }

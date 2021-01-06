@@ -1,23 +1,22 @@
 // Eurotronics CometZ
 // Thermostatic Valve
 {
-    "_approved": true,
-    "manufacturer": "Eurotronics",
-    "manufacturerId": "0x0148",
-    "label": "CometZ",
-    "description": "Thermostatic Valve",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0001"
-        },
-        {
-            "productType": "0x4672",
-            "productId": "0xbd41"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Eurotronics",
+	"manufacturerId": "0x0148",
+	"label": "CometZ",
+	"description": "Thermostatic Valve",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x4672",
+			"productId": "0xbd41"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

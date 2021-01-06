@@ -1,7 +1,6 @@
 // Jasco Products GE 12725
 // In-Wall Dimmer
 {
-	"_approved": true,
 	"manufacturer": "Jasco Products",
 	"manufacturerId": "0x0063",
 	"label": "GE 12725",

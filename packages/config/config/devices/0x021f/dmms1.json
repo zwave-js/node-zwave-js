@@ -1,7 +1,6 @@
 // Elexa Consumer Products Inc. DMMS1
 // Dome Z-Wave Plus Motion Detector with Light Sensor and Flexible Magnetic Mount
 {
-	"_approved": true,
 	"manufacturer": "Elexa Consumer Products Inc.",
 	"manufacturerId": "0x021f",
 	"label": "DMMS1",

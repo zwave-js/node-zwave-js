@@ -1,7 +1,6 @@
 // AEON Labs ZW095
 // Home Energy Meter - Gen 5
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW095",

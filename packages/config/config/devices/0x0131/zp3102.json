@@ -1,66 +1,65 @@
 // Zipato ZP3102
 // Multi Sensor Dual: motion and temperature sensor
 {
-    "_approved": true,
-    "manufacturer": "Zipato",
-    "manufacturerId": "0x0131",
-    "label": "ZP3102",
-    "description": "Multi Sensor Dual: motion and temperature sensor",
-    "devices": [
-        {
-            "productType": "0x2002",
-            "productId": "0x0205"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "On time in minutes",
-            "description": "Delay before sending OFF",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Celsius / Fahrenheit",
-            "description": "0 = Celsius, 1 = Fahrenheit",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Celsius",
-                    "value": 0
-                },
-                {
-                    "label": "Fahrenheit",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Infrared sensor sensitivity adjustment",
-            "description": "1 is most sensitive, 7 is least",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "ZP3102",
+	"description": "Multi Sensor Dual: motion and temperature sensor",
+	"devices": [
+		{
+			"productType": "0x2002",
+			"productId": "0x0205"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "On time in minutes",
+			"description": "Delay before sending OFF",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Celsius / Fahrenheit",
+			"description": "0 = Celsius, 1 = Fahrenheit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Infrared sensor sensitivity adjustment",
+			"description": "1 is most sensitive, 7 is least",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

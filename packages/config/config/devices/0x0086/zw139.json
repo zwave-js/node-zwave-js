@@ -1,329 +1,328 @@
 // AEON Labs ZW139
 // Nano Switch Gen5 (without meter)
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "ZW139",
-    "description": "Nano Switch Gen5 (without meter)",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x008b"
-        },
-        {
-            "productType": "0x0103",
-            "productId": "0x008b"
-        },
-        {
-            "productType": "0x0203",
-            "productId": "0x008b"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "4": {
-            "label": "Overheat protection",
-            "description": "Overheat protection",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "(Default) Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "20": {
-            "label": "Output status after re-power",
-            "description": "Configure the output status after re-power on it",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Last status",
-                    "value": 0
-                },
-                {
-                    "label": "Always on",
-                    "value": 1
-                },
-                {
-                    "label": "Always off",
-                    "value": 2
-                }
-            ]
-        },
-        "80": {
-            "label": "Group 1 notifications",
-            "description": "Group 1 notifications when the state of Nano Switch's load is changed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Send Nothing",
-                    "value": 0
-                },
-                {
-                    "label": "Send Hail CC",
-                    "value": 1
-                },
-                {
-                    "label": "Send Basic Report CC",
-                    "value": 2
-                },
-                {
-                    "label": "Send Hail CC",
-                    "value": 3
-                }
-            ]
-        },
-        "81": {
-            "label": "Group 3 notifications",
-            "description": "Notification to sent for Group 3 when using the external switch 1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Send Nothing",
-                    "value": 0
-                },
-                {
-                    "label": "Send Basic Set CC",
-                    "value": 1
-                }
-            ]
-        },
-        "82": {
-            "label": "Group 4 notifications",
-            "description": "Notification to sent for Group 4 when using the external switch 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Send Nothing",
-                    "value": 0
-                },
-                {
-                    "label": "Send Basic Set CC",
-                    "value": 1
-                }
-            ]
-        },
-        "83": {
-            "label": "Configure the state of LED",
-            "description": "Configure the state of LED when it is in 3 modes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Energy mode.",
-                    "value": 0
-                },
-                {
-                    "label": "Momentary indicate mode",
-                    "value": 1
-                },
-                {
-                    "label": "Night light mode. The LED will remain ON state",
-                    "value": 2
-                }
-            ]
-        },
-        "84": {
-            "label": "Night light mode LED state",
-            "description": "Set the ON/OFF time of the LED when it is in Night light mode",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 16777276,
-            "defaultValue": 301991936,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "86": {
-            "label": "Set appointment 1",
-            "description": "Set the ON time of output load.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 8327680,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "87": {
-            "label": "Set appointment 2",
-            "description": "Set the OFF time of output load",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 16777216,
-            "defaultValue": 8327680,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "120": {
-            "label": "External switch mode for S1",
-            "description": "Configure the external switch mode for S1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Enter automatic identification mode",
-                    "value": 0
-                },
-                {
-                    "label": "2-state switch mode",
-                    "value": 1
-                },
-                {
-                    "label": "3 way switch mode",
-                    "value": 2
-                },
-                {
-                    "label": "Momentary push button mode",
-                    "value": 3
-                }
-            ]
-        },
-        "121": {
-            "label": "External switch mode for S2",
-            "description": "Configure the external switch mode for S2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Enter automatic identification mode",
-                    "value": 0
-                },
-                {
-                    "label": "2-state switch mode",
-                    "value": 1
-                },
-                {
-                    "label": "3 way switch mode",
-                    "value": 2
-                },
-                {
-                    "label": "Momentary push button mode",
-                    "value": 3
-                }
-            ]
-        },
-        "122": {
-            "label": "Control destination of external switch",
-            "description": "Set the control destination for external switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "control the output loads of itself",
-                    "value": 1
-                },
-                {
-                    "label": "control the other nodes",
-                    "value": 2
-                },
-                {
-                    "label": "control the output loads of itself and other nodes",
-                    "value": 3
-                }
-            ]
-        },
-        "252": {
-            "label": "Lock/unlock configuration parameters",
-            "description": "Lock/unlock configuration parameters",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Unlock",
-                    "value": 0
-                },
-                {
-                    "label": "Lock",
-                    "value": 1
-                }
-            ]
-        },
-        "255": {
-            "label": "Reset the Nano Switch",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "(Default) Reset all configuration parameters",
-                    "value": 0
-                },
-                {
-                    "label": "Reset and remove from network",
-                    "value": 1431655765
-                }
-            ]
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW139",
+	"description": "Nano Switch Gen5 (without meter)",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x008b"
+		},
+		{
+			"productType": "0x0103",
+			"productId": "0x008b"
+		},
+		{
+			"productType": "0x0203",
+			"productId": "0x008b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"4": {
+			"label": "Overheat protection",
+			"description": "Overheat protection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "(Default) Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "Output status after re-power",
+			"description": "Configure the output status after re-power on it",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Last status",
+					"value": 0
+				},
+				{
+					"label": "Always on",
+					"value": 1
+				},
+				{
+					"label": "Always off",
+					"value": 2
+				}
+			]
+		},
+		"80": {
+			"label": "Group 1 notifications",
+			"description": "Group 1 notifications when the state of Nano Switch's load is changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send Nothing",
+					"value": 0
+				},
+				{
+					"label": "Send Hail CC",
+					"value": 1
+				},
+				{
+					"label": "Send Basic Report CC",
+					"value": 2
+				},
+				{
+					"label": "Send Hail CC",
+					"value": 3
+				}
+			]
+		},
+		"81": {
+			"label": "Group 3 notifications",
+			"description": "Notification to sent for Group 3 when using the external switch 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send Nothing",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Set CC",
+					"value": 1
+				}
+			]
+		},
+		"82": {
+			"label": "Group 4 notifications",
+			"description": "Notification to sent for Group 4 when using the external switch 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send Nothing",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Set CC",
+					"value": 1
+				}
+			]
+		},
+		"83": {
+			"label": "Configure the state of LED",
+			"description": "Configure the state of LED when it is in 3 modes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Energy mode.",
+					"value": 0
+				},
+				{
+					"label": "Momentary indicate mode",
+					"value": 1
+				},
+				{
+					"label": "Night light mode. The LED will remain ON state",
+					"value": 2
+				}
+			]
+		},
+		"84": {
+			"label": "Night light mode LED state",
+			"description": "Set the ON/OFF time of the LED when it is in Night light mode",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 16777276,
+			"defaultValue": 301991936,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"86": {
+			"label": "Set appointment 1",
+			"description": "Set the ON time of output load.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 8327680,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"87": {
+			"label": "Set appointment 2",
+			"description": "Set the OFF time of output load",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 16777216,
+			"defaultValue": 8327680,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"120": {
+			"label": "External switch mode for S1",
+			"description": "Configure the external switch mode for S1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enter automatic identification mode",
+					"value": 0
+				},
+				{
+					"label": "2-state switch mode",
+					"value": 1
+				},
+				{
+					"label": "3 way switch mode",
+					"value": 2
+				},
+				{
+					"label": "Momentary push button mode",
+					"value": 3
+				}
+			]
+		},
+		"121": {
+			"label": "External switch mode for S2",
+			"description": "Configure the external switch mode for S2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enter automatic identification mode",
+					"value": 0
+				},
+				{
+					"label": "2-state switch mode",
+					"value": 1
+				},
+				{
+					"label": "3 way switch mode",
+					"value": 2
+				},
+				{
+					"label": "Momentary push button mode",
+					"value": 3
+				}
+			]
+		},
+		"122": {
+			"label": "Control destination of external switch",
+			"description": "Set the control destination for external switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "control the output loads of itself",
+					"value": 1
+				},
+				{
+					"label": "control the other nodes",
+					"value": 2
+				},
+				{
+					"label": "control the output loads of itself and other nodes",
+					"value": 3
+				}
+			]
+		},
+		"252": {
+			"label": "Lock/unlock configuration parameters",
+			"description": "Lock/unlock configuration parameters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock",
+					"value": 0
+				},
+				{
+					"label": "Lock",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset the Nano Switch",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "(Default) Reset all configuration parameters",
+					"value": 0
+				},
+				{
+					"label": "Reset and remove from network",
+					"value": 1431655765
+				}
+			]
+		}
+	}
 }

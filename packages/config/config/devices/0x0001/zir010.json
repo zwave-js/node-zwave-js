@@ -1,7 +1,6 @@
 // ACT - Advanced Control Technologies ZIR010
 // PIR Motion Sensor
 {
-	"_approved": true,
 	"manufacturer": "ACT - Advanced Control Technologies",
 	"manufacturerId": "0x0001",
 	"label": "ZIR010",

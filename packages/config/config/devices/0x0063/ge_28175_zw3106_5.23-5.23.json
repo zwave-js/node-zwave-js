@@ -1,142 +1,141 @@
 // Jasco Products GE 28175 (ZW3106)
 // Plug-In Dual Smart Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "GE 28175 (ZW3106)",
-    "description": "Plug-In Dual Smart Dimmer",
-    "devices": [
-        {
-            "productType": "0x5044",
-            "productId": "0x3132"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "5.23",
-        "max": "5.23"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED Light",
-            "description": "Adjust Button LED Light",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED ON / Device OFF",
-                    "value": 0
-                },
-                {
-                    "label": "LED ON / Device ON (Default)",
-                    "value": 1
-                },
-                {
-                    "label": "Disable LED",
-                    "value": 2
-                }
-            ]
-        },
-        "7": {
-            "label": "command steps",
-            "description": "number of steps or levels per dim command",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "command timing",
-            "description": "timing of the command steps",
-            "unit": "ms * 10",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "manual steps",
-            "description": "number of steps or levels per dimmer button press",
-            "unit": "steps",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "manual timing",
-            "description": "timing of the manual steps",
-            "unit": "ms * 10",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "All on/off steps",
-            "description": "number of steps or levels per all on/off command",
-            "unit": "steps",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "All on/off timing",
-            "description": "timing of the all on/off command",
-            "unit": "ms * 10",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "29": {
-            "label": "load sensing",
-            "description": "turn ON when new bulb is sensed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "disable (default)",
-                    "value": 0
-                },
-                {
-                    "label": "enable",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "GE 28175 (ZW3106)",
+	"description": "Plug-In Dual Smart Dimmer",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3132"
+		}
+	],
+	"firmwareVersion": {
+		"min": "5.23",
+		"max": "5.23"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "Adjust Button LED Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON / Device OFF",
+					"value": 0
+				},
+				{
+					"label": "LED ON / Device ON (Default)",
+					"value": 1
+				},
+				{
+					"label": "Disable LED",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "command steps",
+			"description": "number of steps or levels per dim command",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "command timing",
+			"description": "timing of the command steps",
+			"unit": "ms * 10",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "manual steps",
+			"description": "number of steps or levels per dimmer button press",
+			"unit": "steps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "manual timing",
+			"description": "timing of the manual steps",
+			"unit": "ms * 10",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "All on/off steps",
+			"description": "number of steps or levels per all on/off command",
+			"unit": "steps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "All on/off timing",
+			"description": "timing of the all on/off command",
+			"unit": "ms * 10",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"29": {
+			"label": "load sensing",
+			"description": "turn ON when new bulb is sensed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable (default)",
+					"value": 0
+				},
+				{
+					"label": "enable",
+					"value": 1
+				}
+			]
+		}
+	}
 }

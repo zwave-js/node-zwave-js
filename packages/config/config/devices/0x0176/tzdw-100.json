@@ -1,198 +1,197 @@
 // Telldus Technologies AB TZDW-100
 // Door/window sensor
 {
-    "_approved": true,
-    "manufacturer": "Telldus Technologies AB",
-    "manufacturerId": "0x0176",
-    "label": "TZDW-100",
-    "description": "Door/window sensor",
-    "devices": [
-        {
-            "productType": "0x0005",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Group 2 Command Type",
-            "description": "Select what type of command to be sent to nodes in association group 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Basic",
-                    "value": 0
-                },
-                {
-                    "label": "Switch Binary",
-                    "value": 1
-                },
-                {
-                    "label": "Switch All",
-                    "value": 2
-                },
-                {
-                    "label": "Switch Multilevel",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Group 2 Value",
-            "description": "Select what value that should be sent to association group 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 63,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Last value",
-                    "value": 255
-                }
-            ]
-        },
-        "3": {
-            "label": "Group 2 Signal Type",
-            "description": "Type of commands to association group 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Inverted",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Group 3 Command Type",
-            "description": "Select what type of command to be sent to nodes in association group 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Basic",
-                    "value": 0
-                },
-                {
-                    "label": "Switch Binary",
-                    "value": 1
-                },
-                {
-                    "label": "Switch All",
-                    "value": 2
-                },
-                {
-                    "label": "Switch Multilevel",
-                    "value": 3
-                }
-            ]
-        },
-        "5": {
-            "label": "Group 3 Value",
-            "description": "Select what value that should be sent to association group 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 63,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Last value",
-                    "value": 255
-                }
-            ]
-        },
-        "6": {
-            "label": "Group 3 Signal Type",
-            "description": "Type of commands to association group 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Inverted",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "LED-Indicator",
-            "description": "LED-Indicator",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Lifeline command Type",
-            "description": "Select the type of command to be sent in the Lifeline",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Notification",
-                    "value": 0
-                },
-                {
-                    "label": "Sensor binary",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Telldus Technologies AB",
+	"manufacturerId": "0x0176",
+	"label": "TZDW-100",
+	"description": "Door/window sensor",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Group 2 Command Type",
+			"description": "Select what type of command to be sent to nodes in association group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Basic",
+					"value": 0
+				},
+				{
+					"label": "Switch Binary",
+					"value": 1
+				},
+				{
+					"label": "Switch All",
+					"value": 2
+				},
+				{
+					"label": "Switch Multilevel",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Group 2 Value",
+			"description": "Select what value that should be sent to association group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 63,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Last value",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Group 2 Signal Type",
+			"description": "Type of commands to association group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Inverted",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Group 3 Command Type",
+			"description": "Select what type of command to be sent to nodes in association group 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Basic",
+					"value": 0
+				},
+				{
+					"label": "Switch Binary",
+					"value": 1
+				},
+				{
+					"label": "Switch All",
+					"value": 2
+				},
+				{
+					"label": "Switch Multilevel",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Group 3 Value",
+			"description": "Select what value that should be sent to association group 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 63,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Last value",
+					"value": 255
+				}
+			]
+		},
+		"6": {
+			"label": "Group 3 Signal Type",
+			"description": "Type of commands to association group 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Inverted",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "LED-Indicator",
+			"description": "LED-Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Lifeline command Type",
+			"description": "Select the type of command to be sent in the Lifeline",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Notification",
+					"value": 0
+				},
+				{
+					"label": "Sensor binary",
+					"value": 1
+				}
+			]
+		}
+	}
 }

@@ -1,29 +1,19 @@
 // Siterwell Technology HK Co., Ltd. SM_PZ710U
 // Power Plug
 {
-    "_approved": false,
-    "_errors": [
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "Siterwell Technology HK Co., Ltd.",
-    "manufacturerId": "0x0266",
-    "label": "SM_PZ710U",
-    "description": "Power Plug",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Siterwell Technology HK Co., Ltd.",
+	"manufacturerId": "0x0266",
+	"label": "SM_PZ710U",
+	"description": "Power Plug",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

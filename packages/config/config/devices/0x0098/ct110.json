@@ -1,7 +1,6 @@
 // Radio Thermostat Company of America (RTC) CT110
 // Thermostat
 {
-	"_approved": true,
 	"manufacturer": "Radio Thermostat Company of America (RTC)",
 	"manufacturerId": "0x0098",
 	"label": "CT110",

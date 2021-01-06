@@ -1,7 +1,6 @@
 // Zipato AB02Z_PSE02
 // Indoor Siren
 {
-	"_approved": true,
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "AB02Z_PSE02",

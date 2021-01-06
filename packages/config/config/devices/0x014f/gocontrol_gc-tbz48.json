@@ -1,7 +1,6 @@
 // Nortek Security & Control LLC GoControl GC-TBZ48
 // Z-Wave Plus Thermostat
 {
-	"_approved": true,
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
 	"label": "GoControl GC-TBZ48",

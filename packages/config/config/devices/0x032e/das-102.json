@@ -1,7 +1,6 @@
 // DEFARO DAS-102
 // Double relay Switch 2x1.7kW
 {
-	"_approved": true,
 	"manufacturer": "DEFARO",
 	"manufacturerId": "0x032e",
 	"label": "DAS-102",

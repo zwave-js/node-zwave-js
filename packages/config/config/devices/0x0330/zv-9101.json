@@ -1,89 +1,88 @@
 // Sunricher ZV-9101
 // In-Wall Dimmer Module
 {
-    "_approved": true,
-    "manufacturer": "Sunricher",
-    "manufacturerId": "0x0330",
-    "label": "ZV-9101",
-    "description": "In-Wall Dimmer Module",
-    "devices": [
-        {
-            "productType": "0x0200",
-            "productId": "0xd005"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "2": {
-            "label": "Saving load state",
-            "description": "Saving load state before power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Enable/disable to send report",
-            "description": "basic report to the Lifeline when the load state changed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Default fade time",
-            "description": "Default fade time (unit is second)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "brightness value",
-            "description": "Setting minimum brightness value",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 50,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "MOSFET",
-            "description": "Choose MOSFET",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "removal from network",
-            "description": "Enable/disable external switch to be added to and removed from a network",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0330",
+	"label": "ZV-9101",
+	"description": "In-Wall Dimmer Module",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0xd005"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "Saving load state",
+			"description": "Saving load state before power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Enable/disable to send report",
+			"description": "basic report to the Lifeline when the load state changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Default fade time",
+			"description": "Default fade time (unit is second)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "brightness value",
+			"description": "Setting minimum brightness value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "MOSFET",
+			"description": "Choose MOSFET",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "removal from network",
+			"description": "Enable/disable external switch to be added to and removed from a network",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

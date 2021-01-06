@@ -1,168 +1,167 @@
 // Everspring ST814
 // Temperature and Humidity Sensor
 {
-    "_approved": true,
-    "manufacturer": "Everspring",
-    "manufacturerId": "0x0060",
-    "label": "ST814",
-    "description": "Temperature and Humidity Sensor",
-    "devices": [
-        {
-            "productType": "0x0006",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Reports",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Control",
-            "maxNodes": 3
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Basic Set Level",
-            "description": "Set basic set value to be on or off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "2": {
-            "label": "Temperature Trigger ON value",
-            "description": "Temperature level when a ON command is sent out. Set to 99 to disable.",
-            "valueSize": 1,
-            "minValue": -20,
-            "maxValue": 50,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 99
-                }
-            ]
-        },
-        "3": {
-            "label": "Temperature Trigger OFF value",
-            "description": "Temperature level when a OFF command is sent out. Set to 99 to disable.",
-            "valueSize": 1,
-            "minValue": -20,
-            "maxValue": 50,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 99
-                }
-            ]
-        },
-        "4": {
-            "label": "Humidity Trigger ON value",
-            "description": "Humidity level when a ON command is sent out. Set to 99 to disable.",
-            "valueSize": 1,
-            "minValue": 20,
-            "maxValue": 90,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 99
-                }
-            ]
-        },
-        "5": {
-            "label": "Humidity Trigger OFF value",
-            "description": "Humidity level when a OFF command is sent out. Set to 99 to disable.",
-            "valueSize": 1,
-            "minValue": 20,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 99
-                }
-            ]
-        },
-        "6": {
-            "label": "Auto report time",
-            "description": "Sets the time interval when a sensor report is sent",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1439,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "7": {
-            "label": "Auto report temperature",
-            "description": "Sets the temperature change causing a sensor report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 70,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "8": {
-            "label": "Auto report humidity",
-            "description": "Sets the humidity change causing a sensor report.",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 70,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        }
-    }
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "ST814",
+	"description": "Temperature and Humidity Sensor",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Reports",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Control",
+			"maxNodes": 3
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Basic Set Level",
+			"description": "Set basic set value to be on or off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"2": {
+			"label": "Temperature Trigger ON value",
+			"description": "Temperature level when a ON command is sent out. Set to 99 to disable.",
+			"valueSize": 1,
+			"minValue": -20,
+			"maxValue": 50,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 99
+				}
+			]
+		},
+		"3": {
+			"label": "Temperature Trigger OFF value",
+			"description": "Temperature level when a OFF command is sent out. Set to 99 to disable.",
+			"valueSize": 1,
+			"minValue": -20,
+			"maxValue": 50,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 99
+				}
+			]
+		},
+		"4": {
+			"label": "Humidity Trigger ON value",
+			"description": "Humidity level when a ON command is sent out. Set to 99 to disable.",
+			"valueSize": 1,
+			"minValue": 20,
+			"maxValue": 90,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 99
+				}
+			]
+		},
+		"5": {
+			"label": "Humidity Trigger OFF value",
+			"description": "Humidity level when a OFF command is sent out. Set to 99 to disable.",
+			"valueSize": 1,
+			"minValue": 20,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 99
+				}
+			]
+		},
+		"6": {
+			"label": "Auto report time",
+			"description": "Sets the time interval when a sensor report is sent",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1439,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"7": {
+			"label": "Auto report temperature",
+			"description": "Sets the temperature change causing a sensor report.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 70,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"8": {
+			"label": "Auto report humidity",
+			"description": "Sets the humidity change causing a sensor report.",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 70,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		}
+	}
 }

@@ -1,19 +1,18 @@
 // Wintop iModuleDouble
 // Dual In-wall Switch
 {
-    "_approved": true,
-    "manufacturer": "Wintop",
-    "manufacturerId": "0x0097",
-    "label": "iModuleDouble",
-    "description": "Dual In-wall Switch",
-    "devices": [
-        {
-            "productType": "0x1122",
-            "productId": "0x5501"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "1.4",
-        "max": "255.255"
-    }
+	"manufacturer": "Wintop",
+	"manufacturerId": "0x0097",
+	"label": "iModuleDouble",
+	"description": "Dual In-wall Switch",
+	"devices": [
+		{
+			"productType": "0x1122",
+			"productId": "0x5501"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.4",
+		"max": "255.255"
+	}
 }

@@ -1,7 +1,6 @@
 // D-Link DCH-Z510
 // Siren
 {
-	"_approved": true,
 	"manufacturer": "D-Link",
 	"manufacturerId": "0x0108",
 	"label": "DCH-Z510",

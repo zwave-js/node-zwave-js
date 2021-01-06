@@ -1,7 +1,6 @@
 // Z-Wave.Me WALLC-S
 // Wall Controller
 {
-	"_approved": true,
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
 	"label": "WALLC-S",

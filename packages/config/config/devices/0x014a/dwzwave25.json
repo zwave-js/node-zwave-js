@@ -1,66 +1,65 @@
 // Ecolink DWZWAVE25
 // Z-Wave Door/Window Sensor
 {
-    "_approved": true,
-    "manufacturer": "Ecolink",
-    "manufacturerId": "0x014a",
-    "label": "DWZWAVE25",
-    "description": "Z-Wave Door/Window Sensor",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Send Basic Set",
-            "description": "Send Basic Set to Association Group 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Don't Send Basic Set",
-                    "value": 0
-                },
-                {
-                    "label": "Send Basic Set",
-                    "value": 255
-                }
-            ]
-        },
-        "2": {
-            "label": "Send Sensor Binary Report",
-            "description": "Send Sensor Binary Report to Association Group 1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Send Sensor Binary Report",
-                    "value": 0
-                },
-                {
-                    "label": "Don't Send Binary Sensor Report",
-                    "value": 255
-                }
-            ]
-        }
-    }
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "DWZWAVE25",
+	"description": "Z-Wave Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Send Basic Set",
+			"description": "Send Basic Set to Association Group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don't Send Basic Set",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Set",
+					"value": 255
+				}
+			]
+		},
+		"2": {
+			"label": "Send Sensor Binary Report",
+			"description": "Send Sensor Binary Report to Association Group 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send Sensor Binary Report",
+					"value": 0
+				},
+				{
+					"label": "Don't Send Binary Sensor Report",
+					"value": 255
+				}
+			]
+		}
+	}
 }

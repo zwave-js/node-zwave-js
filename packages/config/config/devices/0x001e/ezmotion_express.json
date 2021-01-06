@@ -1,114 +1,113 @@
 // Express Controls EZMotion Express
 // Wireless 3-in-1 Sensor
 {
-    "_approved": true,
-    "manufacturer": "Express Controls",
-    "manufacturerId": "0x001e",
-    "label": "EZMotion Express",
-    "description": "Wireless 3-in-1 Sensor",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0001"
-        },
-        {
-            "productType": "0x0002",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Association Group",
-            "maxNodes": 4,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Sensitivity",
-            "description": "Sensitivity sets the amount of motion required for EZMotion to detect motion.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 200,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "On Time",
-            "description": "Sets the number of minutes the lights stay on when motion has not been detected.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 20,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "LED On/Off",
-            "description": "LED ON/OFF turns the LED on or off.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 255
-                }
-            ]
-        },
-        "4": {
-            "label": "Light Threshold",
-            "description": "Light Threshold is the % of light above which the lights will not be turned on.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 100,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Stay Awake",
-            "description": "Setting Stay Awake value",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "On Value",
-            "description": "The value sent by the Z-Wave BASIC_SET command when motion is detected.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Express Controls",
+	"manufacturerId": "0x001e",
+	"label": "EZMotion Express",
+	"description": "Wireless 3-in-1 Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Association Group",
+			"maxNodes": 4,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Sensitivity",
+			"description": "Sensitivity sets the amount of motion required for EZMotion to detect motion.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 200,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "On Time",
+			"description": "Sets the number of minutes the lights stay on when motion has not been detected.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "LED On/Off",
+			"description": "LED ON/OFF turns the LED on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"4": {
+			"label": "Light Threshold",
+			"description": "Light Threshold is the % of light above which the lights will not be turned on.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 100,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Stay Awake",
+			"description": "Setting Stay Awake value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "On Value",
+			"description": "The value sent by the Z-Wave BASIC_SET command when motion is detected.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

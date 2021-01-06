@@ -1,26 +1,25 @@
 // Scientia Technologies, Inc. ZDP200
 // HomePro ZDP200 Wall Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Scientia Technologies, Inc.",
-    "manufacturerId": "0x001f",
-    "label": "ZDP200",
-    "description": "HomePro ZDP200 Wall Dimmer",
-    "devices": [
-        {
-            "productType": "0x4450",
-            "productId": "0x3030"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Dimmer Switch",
-            "maxNodes": 16,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Scientia Technologies, Inc.",
+	"manufacturerId": "0x001f",
+	"label": "ZDP200",
+	"description": "HomePro ZDP200 Wall Dimmer",
+	"devices": [
+		{
+			"productType": "0x4450",
+			"productId": "0x3030"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Dimmer Switch",
+			"maxNodes": 16,
+			"isLifeline": true
+		}
+	}
 }

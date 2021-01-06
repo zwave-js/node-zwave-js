@@ -1,97 +1,96 @@
 // Eaton RFTR9505
 // Duplex receptacle
 {
-    "_approved": true,
-    "manufacturer": "Eaton",
-    "manufacturerId": "0x001a",
-    "label": "RFTR9505",
-    "description": "Duplex receptacle",
-    "devices": [
-        {
-            "productType": "0x5244",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "2": {
-            "label": "Panic ON time",
-            "description": "Panic ON time",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": -128,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Panic OFF time",
-            "description": "Panic OFF time",
-            "valueSize": 1,
-            "minValue": -128,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Power Up State",
-            "description": "Power up state of the device after power loss",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 1
-                },
-                {
-                    "label": "ON",
-                    "value": 2
-                },
-                {
-                    "label": "Last state",
-                    "value": 3
-                }
-            ]
-        },
-        "6": {
-            "label": "Panic mode enable",
-            "description": "Enables this device to participate in panic mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RFTR9505",
+	"description": "Duplex receptacle",
+	"devices": [
+		{
+			"productType": "0x5244",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Panic ON time",
+			"description": "Panic ON time",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Panic OFF time",
+			"description": "Panic OFF time",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Power Up State",
+			"description": "Power up state of the device after power loss",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				},
+				{
+					"label": "Last state",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Panic mode enable",
+			"description": "Enables this device to participate in panic mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				}
+			]
+		}
+	}
 }

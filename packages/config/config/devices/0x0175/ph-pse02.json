@@ -1,7 +1,6 @@
 // Devolo ph-pse02
 // Multisound indoor siren
 {
-	"_approved": true,
 	"manufacturer": "Devolo",
 	"manufacturerId": "0x0175",
 	"label": "ph-pse02",

@@ -1,55 +1,54 @@
 // ThermoFloor TF016
 // ZWave Thermostat
 {
-    "_approved": true,
-    "manufacturer": "ThermoFloor",
-    "manufacturerId": "0x019b",
-    "label": "TF016",
-    "description": "ZWave Thermostat",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        },
-        {
-            "productType": "0x0003",
-            "productId": "0x0201"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "1.7"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Operation mode",
-            "description": "Defines Operation Mode of thermostat",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 11,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Heat",
-                    "value": 1
-                },
-                {
-                    "label": "Cool",
-                    "value": 2
-                },
-                {
-                    "label": "Energy Save Heat",
-                    "value": 11
-                }
-            ]
-        }
-    }
+	"manufacturer": "ThermoFloor",
+	"manufacturerId": "0x019b",
+	"label": "TF016",
+	"description": "ZWave Thermostat",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x0201"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "1.7"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Operation mode",
+			"description": "Defines Operation Mode of thermostat",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 11,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "Heat",
+					"value": 1
+				},
+				{
+					"label": "Cool",
+					"value": 2
+				},
+				{
+					"label": "Energy Save Heat",
+					"value": 11
+				}
+			]
+		}
+	}
 }

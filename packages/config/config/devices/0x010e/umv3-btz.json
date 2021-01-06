@@ -1,174 +1,173 @@
 // Poly-control UMV3-BTZ
 // Danalock Universal Module V3
 {
-    "_approved": true,
-    "manufacturer": "Poly-control",
-    "manufacturerId": "0x010e",
-    "label": "UMV3-BTZ",
-    "description": "Danalock Universal Module V3",
-    "devices": [
-        {
-            "productType": "0x0009",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Relay 1 Pulse length (ms)",
-            "description": "Time the relay is on in milliseconds.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 5000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Relay 1 Delay length (ms)",
-            "description": "Time before the relay is activated.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Relay 2 Pulse length (ms)",
-            "description": "Time the relay is on in milliseconds.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 5000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Relay 2 Delay length (ms)",
-            "description": "Time before the relay is activated.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Relay 3 Pulse length (ms)",
-            "description": "Time the relay is on in milliseconds.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 5000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Relay 3 Delay length (ms)",
-            "description": "Time before the relay is activated.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Disable battery alarm",
-            "description": "Disable battery alarm0 = Battery Alarm enable,1 = Battery Alarm disable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Battery Alarm enable",
-                    "value": 0
-                },
-                {
-                    "label": "Battery Alarm disable",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Battery Sample Interval Seconds",
-            "description": "Battery Sample Interval Seconds",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 3600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Battery Milli Volt Level Threshold Maximum",
-            "description": "Maximum battery alarm level in mV.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 12100,
-            "defaultValue": 12100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Battery Milli Volt Level Threshold Minimum",
-            "description": "Minimum battery alarm level in mV.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 11600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Ble temporary allow – timer - seconds",
-            "description": "Allow Bluetooth to be on for a time in seconds",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "BLE Always allowed",
-            "description": "0 = Not always allowed. 1= Always allowed.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Not always allowed",
-                    "value": 0
-                },
-                {
-                    "label": "Always allowed",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Poly-control",
+	"manufacturerId": "0x010e",
+	"label": "UMV3-BTZ",
+	"description": "Danalock Universal Module V3",
+	"devices": [
+		{
+			"productType": "0x0009",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Relay 1 Pulse length (ms)",
+			"description": "Time the relay is on in milliseconds.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 5000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Relay 1 Delay length (ms)",
+			"description": "Time before the relay is activated.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Relay 2 Pulse length (ms)",
+			"description": "Time the relay is on in milliseconds.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 5000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Relay 2 Delay length (ms)",
+			"description": "Time before the relay is activated.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Relay 3 Pulse length (ms)",
+			"description": "Time the relay is on in milliseconds.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 5000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Relay 3 Delay length (ms)",
+			"description": "Time before the relay is activated.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Disable battery alarm",
+			"description": "Disable battery alarm0 = Battery Alarm enable,1 = Battery Alarm disable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Battery Alarm enable",
+					"value": 0
+				},
+				{
+					"label": "Battery Alarm disable",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Battery Sample Interval Seconds",
+			"description": "Battery Sample Interval Seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Battery Milli Volt Level Threshold Maximum",
+			"description": "Maximum battery alarm level in mV.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 12100,
+			"defaultValue": 12100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Battery Milli Volt Level Threshold Minimum",
+			"description": "Minimum battery alarm level in mV.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 11600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Ble temporary allow – timer - seconds",
+			"description": "Allow Bluetooth to be on for a time in seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "BLE Always allowed",
+			"description": "0 = Not always allowed. 1= Always allowed.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Not always allowed",
+					"value": 0
+				},
+				{
+					"label": "Always allowed",
+					"value": 1
+				}
+			]
+		}
+	}
 }

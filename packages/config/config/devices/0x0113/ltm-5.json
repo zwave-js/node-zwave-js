@@ -1,13 +1,6 @@
 // Evolve LTM-5
 // Wall Mount Accessory Switch
 {
-	"_approved": true,
-	"_warnings": [
-		"Inclusion information is not set",
-		"Exclusion information is not set",
-		"Parameter 3 description is too long (max=80) - shorten and use the overview field.",
-		"Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-	],
 	"manufacturer": "Evolve",
 	"manufacturerId": "0x0113",
 	"label": "LTM-5",

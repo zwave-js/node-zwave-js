@@ -1,7 +1,6 @@
 // Zooz ZSE09
 // Motion and Light Mini Sensor
 {
-	"_approved": true,
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZSE09",

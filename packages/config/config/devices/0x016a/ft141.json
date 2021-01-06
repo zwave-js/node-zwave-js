@@ -1,23 +1,19 @@
 // Fantem FT141
 // In-Wall Shutter
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Fantem",
-    "manufacturerId": "0x016a",
-    "label": "FT141",
-    "description": "In-Wall Shutter",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x008d"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Fantem",
+	"manufacturerId": "0x016a",
+	"label": "FT141",
+	"description": "In-Wall Shutter",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x008d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

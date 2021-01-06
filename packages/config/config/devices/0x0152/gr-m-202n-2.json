@@ -1,28 +1,19 @@
 // UFairy G.R. Tech GR-M-202N-2
 // Inwall dual switch
 {
-    "_approved": false,
-    "_errors": [
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "UFairy G.R. Tech",
-    "manufacturerId": "0x0152",
-    "label": "GR-M-202N-2",
-    "description": "Inwall dual switch",
-    "devices": [
-        {
-            "productType": "0x0500",
-            "productId": "0x0004"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "UFairy G.R. Tech",
+	"manufacturerId": "0x0152",
+	"label": "GR-M-202N-2",
+	"description": "Inwall dual switch",
+	"devices": [
+		{
+			"productType": "0x0500",
+			"productId": "0x0004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

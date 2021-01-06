@@ -1,7 +1,6 @@
 // Leviton DZPD3
 // Lamp Module
 {
-	"_approved": true,
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "DZPD3",

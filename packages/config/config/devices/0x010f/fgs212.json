@@ -1,345 +1,344 @@
 // Fibargroup FGS212
 // Relay Switch 1x2.5kW
 {
-    "_approved": true,
-    "manufacturer": "Fibargroup",
-    "manufacturerId": "0x010f",
-    "label": "FGS212",
-    "description": "Relay Switch 1x2.5kW",
-    "devices": [
-        {
-            "productType": "0x0401",
-            "productId": "0x100a"
-        },
-        {
-            "productType": "0x0402",
-            "productId": "0x1002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Switch 1",
-            "maxNodes": 16
-        },
-        "2": {
-            "label": "Switch 2",
-            "maxNodes": 16
-        },
-        "3": {
-            "label": "Controller Updates",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Enable/Disable ALL ON/OFF",
-            "description": "Activate/Deactive ALL ON/OFF",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "ALL ON disabled / ALL OFF disabled",
-                    "value": 0
-                },
-                {
-                    "label": "ALL ON disabled / ALL OFF active",
-                    "value": 1
-                },
-                {
-                    "label": "ALL ON active / ALL OFF disabled",
-                    "value": 2
-                },
-                {
-                    "label": "ALL ON active / ALL OFF active",
-                    "value": 255
-                }
-            ]
-        },
-        "3": {
-            "label": "Override OFF-delay",
-            "description": "Forced auto off period",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Turn off with push button disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Turn off with push button enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Relay 1: OFF-delay time (100ms steps)",
-            "description": "Automatic turning off relay 1 after set time ...",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Separation of association sending (key 1)",
-            "description": "Sending commands to control devices assigned ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Map status to all devices in group 1",
-                    "value": 0
-                },
-                {
-                    "label": "Map OFF status to all devices in group 1  ...",
-                    "value": 1
-                },
-                {
-                    "label": "Map OFF status to all devices in group 1 ...",
-                    "value": 2
-                }
-            ]
-        },
-        "13": {
-            "label": "Inputs behaviour",
-            "description": "Assigns bistable key status to the device status.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Toggle",
-                    "value": 0
-                },
-                {
-                    "label": "Follow switch contact (closed=ON, open=OFF)",
-                    "value": 1
-                }
-            ]
-        },
-        "14": {
-            "label": "Inputs Button/Switch configuration",
-            "description": "Binary inputs type configuration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Mono-stable input (button)",
-                    "value": 0
-                },
-                {
-                    "label": "Bi-stable input (switch)",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "Dimmer/Roller shutter control",
-            "description": "Enable/Disable operation of dimmer or roller shutter devices ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Dimmer/Roller shutter control",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Dimmer/Roller shutter control",
-                    "value": 1
-                }
-            ]
-        },
-        "16": {
-            "label": "Saving state before power failure",
-            "description": "Saving state before power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "State NOT saved at pwr failure, outputs set ...",
-                    "value": 0
-                },
-                {
-                    "label": "State saved at pwr failure, outputs are set to ...",
-                    "value": 1
-                }
-            ]
-        },
-        "30": {
-            "label": "Relay 1: Response to General Alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "DEACTIVATION - no response to alarm frames",
-                    "value": 0
-                },
-                {
-                    "label": "Alarm relay ON",
-                    "value": 1
-                },
-                {
-                    "label": "Alarm relay OFF",
-                    "value": 2
-                },
-                {
-                    "label": "ALARM FLASHING - relay will turn ON and OFF ...",
-                    "value": 3
-                }
-            ]
-        },
-        "31": {
-            "label": "Relay 1: Response to Water Flood Alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 2,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "DEACTIVATION - no response to alarm frames",
-                    "value": 0
-                },
-                {
-                    "label": "Alarm relay ON",
-                    "value": 1
-                },
-                {
-                    "label": "Alarm relay OFF",
-                    "value": 2
-                },
-                {
-                    "label": "ALARM FLASHING - relay will turn ON and OFF ...",
-                    "value": 3
-                }
-            ]
-        },
-        "32": {
-            "label": "Relay 1: Response to Smoke, CO, CO2 Alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "DEACTIVATION - no response to alarm frames",
-                    "value": 0
-                },
-                {
-                    "label": "Alarm relay ON",
-                    "value": 1
-                },
-                {
-                    "label": "Alarm relay OFF",
-                    "value": 2
-                },
-                {
-                    "label": "ALARM FLASHING - relay will turn ON and OFF ...",
-                    "value": 3
-                }
-            ]
-        },
-        "33": {
-            "label": "Relay 1: Response to Temperature Alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "DEACTIVATION - no response to alarm frames",
-                    "value": 0
-                },
-                {
-                    "label": "Alarm relay ON",
-                    "value": 1
-                },
-                {
-                    "label": "Alarm relay OFF",
-                    "value": 2
-                },
-                {
-                    "label": "ALARM FLASHING - relay will turn ON and OFF ...",
-                    "value": 3
-                }
-            ]
-        },
-        "39": {
-            "label": "ALARM FLASHING alarm time",
-            "description": "Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 600,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGS212",
+	"description": "Relay Switch 1x2.5kW",
+	"devices": [
+		{
+			"productType": "0x0401",
+			"productId": "0x100a"
+		},
+		{
+			"productType": "0x0402",
+			"productId": "0x1002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Switch 1",
+			"maxNodes": 16
+		},
+		"2": {
+			"label": "Switch 2",
+			"maxNodes": 16
+		},
+		"3": {
+			"label": "Controller Updates",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Enable/Disable ALL ON/OFF",
+			"description": "Activate/Deactive ALL ON/OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON disabled / ALL OFF disabled",
+					"value": 0
+				},
+				{
+					"label": "ALL ON disabled / ALL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON active / ALL OFF disabled",
+					"value": 2
+				},
+				{
+					"label": "ALL ON active / ALL OFF active",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Override OFF-delay",
+			"description": "Forced auto off period",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn off with push button disabled",
+					"value": 0
+				},
+				{
+					"label": "Turn off with push button enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Relay 1: OFF-delay time (100ms steps)",
+			"description": "Automatic turning off relay 1 after set time ...",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Separation of association sending (key 1)",
+			"description": "Sending commands to control devices assigned ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Map status to all devices in group 1",
+					"value": 0
+				},
+				{
+					"label": "Map OFF status to all devices in group 1  ...",
+					"value": 1
+				},
+				{
+					"label": "Map OFF status to all devices in group 1 ...",
+					"value": 2
+				}
+			]
+		},
+		"13": {
+			"label": "Inputs behaviour",
+			"description": "Assigns bistable key status to the device status.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle",
+					"value": 0
+				},
+				{
+					"label": "Follow switch contact (closed=ON, open=OFF)",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Inputs Button/Switch configuration",
+			"description": "Binary inputs type configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Mono-stable input (button)",
+					"value": 0
+				},
+				{
+					"label": "Bi-stable input (switch)",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Dimmer/Roller shutter control",
+			"description": "Enable/Disable operation of dimmer or roller shutter devices ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Dimmer/Roller shutter control",
+					"value": 0
+				},
+				{
+					"label": "Enable Dimmer/Roller shutter control",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Saving state before power failure",
+			"description": "Saving state before power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "State NOT saved at pwr failure, outputs set ...",
+					"value": 0
+				},
+				{
+					"label": "State saved at pwr failure, outputs are set to ...",
+					"value": 1
+				}
+			]
+		},
+		"30": {
+			"label": "Relay 1: Response to General Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "DEACTIVATION - no response to alarm frames",
+					"value": 0
+				},
+				{
+					"label": "Alarm relay ON",
+					"value": 1
+				},
+				{
+					"label": "Alarm relay OFF",
+					"value": 2
+				},
+				{
+					"label": "ALARM FLASHING - relay will turn ON and OFF ...",
+					"value": 3
+				}
+			]
+		},
+		"31": {
+			"label": "Relay 1: Response to Water Flood Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "DEACTIVATION - no response to alarm frames",
+					"value": 0
+				},
+				{
+					"label": "Alarm relay ON",
+					"value": 1
+				},
+				{
+					"label": "Alarm relay OFF",
+					"value": 2
+				},
+				{
+					"label": "ALARM FLASHING - relay will turn ON and OFF ...",
+					"value": 3
+				}
+			]
+		},
+		"32": {
+			"label": "Relay 1: Response to Smoke, CO, CO2 Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "DEACTIVATION - no response to alarm frames",
+					"value": 0
+				},
+				{
+					"label": "Alarm relay ON",
+					"value": 1
+				},
+				{
+					"label": "Alarm relay OFF",
+					"value": 2
+				},
+				{
+					"label": "ALARM FLASHING - relay will turn ON and OFF ...",
+					"value": 3
+				}
+			]
+		},
+		"33": {
+			"label": "Relay 1: Response to Temperature Alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "DEACTIVATION - no response to alarm frames",
+					"value": 0
+				},
+				{
+					"label": "Alarm relay ON",
+					"value": 1
+				},
+				{
+					"label": "Alarm relay OFF",
+					"value": 2
+				},
+				{
+					"label": "ALARM FLASHING - relay will turn ON and OFF ...",
+					"value": 3
+				}
+			]
+		},
+		"39": {
+			"label": "ALARM FLASHING alarm time",
+			"description": "Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

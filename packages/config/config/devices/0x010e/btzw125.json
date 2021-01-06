@@ -1,328 +1,327 @@
 // Poly-control BTZW125
 // Danalock v2 circle
 {
-    "_approved": true,
-    "manufacturer": "Poly-control",
-    "manufacturerId": "0x010e",
-    "label": "BTZW125",
-    "description": "Danalock v2 circle",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0002"
-        },
-        {
-            "productType": "0x0008",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Direction",
-            "description": "Direction",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Clockwise",
-                    "value": 0
-                },
-                {
-                    "label": "The motor goes counterclockwise when latched",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Speed (Torque)",
-            "description": "Speed (Torque)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 5,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Slowest",
-                    "value": 1
-                },
-                {
-                    "label": "Slow",
-                    "value": 2
-                },
-                {
-                    "label": "Normal",
-                    "value": 3
-                },
-                {
-                    "label": "Fast",
-                    "value": 4
-                },
-                {
-                    "label": "Fastest",
-                    "value": 5
-                }
-            ]
-        },
-        "3": {
-            "label": "Mode",
-            "description": "Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Powersaving",
-                    "value": 0
-                },
-                {
-                    "label": "Full drive",
-                    "value": 1
-                },
-                {
-                    "label": "Relay mode",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Turn degrees",
-            "description": "Turn degrees",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 100,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Auto Latch time",
-            "description": "Auto Latch time",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 60,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Sound",
-            "description": "Sound",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable sound",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Sound",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Battery Type",
-            "description": "Battery Type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "3,6V",
-                    "value": 0
-                },
-                {
-                    "label": "3,0V",
-                    "value": 1
-                },
-                {
-                    "label": "Mains power",
-                    "value": 2
-                }
-            ]
-        },
-        "8": {
-            "label": "Battery alarm",
-            "description": "Battery alarm value",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "TurnAndGo",
-            "description": "TurnAndGo",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "BrakeAndGoBack",
-            "description": "Turn 75 degrees back after x seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Brake for 1 second",
-                    "value": 1
-                },
-                {
-                    "label": "Brake for 2 seconds",
-                    "value": 2
-                },
-                {
-                    "label": "Brake for 3 seconds",
-                    "value": 3
-                },
-                {
-                    "label": "Brake for 4 seconds",
-                    "value": 4
-                },
-                {
-                    "label": "Brake for 5 seconds",
-                    "value": 5
-                },
-                {
-                    "label": "Brake for 6 seconds",
-                    "value": 6
-                },
-                {
-                    "label": "Brake for 7 seconds",
-                    "value": 7
-                },
-                {
-                    "label": "Brake for 8 seconds",
-                    "value": 8
-                },
-                {
-                    "label": "Brake for 9 seconds",
-                    "value": 9
-                },
-                {
-                    "label": "Brake for 10 seconds",
-                    "value": 10
-                },
-                {
-                    "label": "Brake for 11 seconds",
-                    "value": 11
-                },
-                {
-                    "label": "Brake for 12 seconds",
-                    "value": 12
-                },
-                {
-                    "label": "Brake for 13 seconds",
-                    "value": 13
-                },
-                {
-                    "label": "Brake for 14 seconds",
-                    "value": 14
-                },
-                {
-                    "label": "Brake for 15 seconds",
-                    "value": 15
-                }
-            ]
-        },
-        "11": {
-            "label": "Async",
-            "description": "Used if the lock is using an optional rotation sensor",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Async off",
-                    "value": 0
-                },
-                {
-                    "label": "Async on",
-                    "value": 1
-                }
-            ]
-        },
-        "12": {
-            "label": "ReportType",
-            "description": "Door lock operation report type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Default",
-                    "value": 0
-                },
-                {
-                    "label": "Advanced",
-                    "value": 1
-                },
-                {
-                    "label": "No reporting",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Poly-control",
+	"manufacturerId": "0x010e",
+	"label": "BTZW125",
+	"description": "Danalock v2 circle",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002"
+		},
+		{
+			"productType": "0x0008",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Direction",
+			"description": "Direction",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Clockwise",
+					"value": 0
+				},
+				{
+					"label": "The motor goes counterclockwise when latched",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Speed (Torque)",
+			"description": "Speed (Torque)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Slowest",
+					"value": 1
+				},
+				{
+					"label": "Slow",
+					"value": 2
+				},
+				{
+					"label": "Normal",
+					"value": 3
+				},
+				{
+					"label": "Fast",
+					"value": 4
+				},
+				{
+					"label": "Fastest",
+					"value": 5
+				}
+			]
+		},
+		"3": {
+			"label": "Mode",
+			"description": "Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Powersaving",
+					"value": 0
+				},
+				{
+					"label": "Full drive",
+					"value": 1
+				},
+				{
+					"label": "Relay mode",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Turn degrees",
+			"description": "Turn degrees",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Auto Latch time",
+			"description": "Auto Latch time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Sound",
+			"description": "Sound",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable sound",
+					"value": 0
+				},
+				{
+					"label": "Enable Sound",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Battery Type",
+			"description": "Battery Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "3,6V",
+					"value": 0
+				},
+				{
+					"label": "3,0V",
+					"value": 1
+				},
+				{
+					"label": "Mains power",
+					"value": 2
+				}
+			]
+		},
+		"8": {
+			"label": "Battery alarm",
+			"description": "Battery alarm value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "TurnAndGo",
+			"description": "TurnAndGo",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "BrakeAndGoBack",
+			"description": "Turn 75 degrees back after x seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Brake for 1 second",
+					"value": 1
+				},
+				{
+					"label": "Brake for 2 seconds",
+					"value": 2
+				},
+				{
+					"label": "Brake for 3 seconds",
+					"value": 3
+				},
+				{
+					"label": "Brake for 4 seconds",
+					"value": 4
+				},
+				{
+					"label": "Brake for 5 seconds",
+					"value": 5
+				},
+				{
+					"label": "Brake for 6 seconds",
+					"value": 6
+				},
+				{
+					"label": "Brake for 7 seconds",
+					"value": 7
+				},
+				{
+					"label": "Brake for 8 seconds",
+					"value": 8
+				},
+				{
+					"label": "Brake for 9 seconds",
+					"value": 9
+				},
+				{
+					"label": "Brake for 10 seconds",
+					"value": 10
+				},
+				{
+					"label": "Brake for 11 seconds",
+					"value": 11
+				},
+				{
+					"label": "Brake for 12 seconds",
+					"value": 12
+				},
+				{
+					"label": "Brake for 13 seconds",
+					"value": 13
+				},
+				{
+					"label": "Brake for 14 seconds",
+					"value": 14
+				},
+				{
+					"label": "Brake for 15 seconds",
+					"value": 15
+				}
+			]
+		},
+		"11": {
+			"label": "Async",
+			"description": "Used if the lock is using an optional rotation sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Async off",
+					"value": 0
+				},
+				{
+					"label": "Async on",
+					"value": 1
+				}
+			]
+		},
+		"12": {
+			"label": "ReportType",
+			"description": "Door lock operation report type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Advanced",
+					"value": 1
+				},
+				{
+					"label": "No reporting",
+					"value": 2
+				}
+			]
+		}
+	}
 }

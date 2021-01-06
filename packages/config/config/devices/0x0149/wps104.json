@@ -1,7 +1,6 @@
 // wiDom WPS104
 // Energy Driven Switch
 {
-	"_approved": true,
 	"manufacturer": "wiDom",
 	"manufacturerId": "0x0149",
 	"label": "WPS104",

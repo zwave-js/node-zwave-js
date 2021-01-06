@@ -1,31 +1,30 @@
 // Leviton VRF01
 // Scene Capable Quiet Fan Speed Control
 {
-    "_approved": true,
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRF01",
-    "description": "Scene Capable Quiet Fan Speed Control",
-    "devices": [
-        {
-            "productType": "0x1001",
-            "productId": "0x0209"
-        },
-        {
-            "productType": "0x1001",
-            "productId": "0x0334"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRF01",
+	"description": "Scene Capable Quiet Fan Speed Control",
+	"devices": [
+		{
+			"productType": "0x1001",
+			"productId": "0x0209"
+		},
+		{
+			"productType": "0x1001",
+			"productId": "0x0334"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

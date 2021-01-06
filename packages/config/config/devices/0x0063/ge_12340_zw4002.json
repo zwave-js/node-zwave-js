@@ -1,136 +1,135 @@
 // Jasco Products GE 12340 (ZW4002)
 // In-Wall Smart Fan Control
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "GE 12340 (ZW4002)",
-    "description": "In-Wall Smart Fan Control",
-    "devices": [
-        {
-            "productType": "0x4944",
-            "productId": "0x3034"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "3": {
-            "label": "LED Light",
-            "description": "Sets when the LED on the switch is lit.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED on when light off",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when light on",
-                    "value": 1
-                },
-                {
-                    "label": "LED always off",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Invert Switch",
-            "description": "Invert Switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No",
-                    "value": 0
-                },
-                {
-                    "label": "Yes",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Z-Wave Command Dim Step",
-            "description": "Z-Wave Command Dim Step",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Z-Wave Command Dim Rate",
-            "description": "Z-Wave Command Dim Rate",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Local Control Dim Step",
-            "description": "Local Control Dim Step",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Local Control Dim Rate",
-            "description": "Local Control Dim Rate",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "ALL ON/ALL OFF Dim Step",
-            "description": "ALL ON/ALL OFF Dim Step",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "ALL ON/ALL OFF Dim Rate",
-            "description": "ALL ON/ALL OFF Dim Rate",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "GE 12340 (ZW4002)",
+	"description": "In-Wall Smart Fan Control",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3034"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "Sets when the LED on the switch is lit.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when light off",
+					"value": 0
+				},
+				{
+					"label": "LED on when light on",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "Invert Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Z-Wave Command Dim Step",
+			"description": "Z-Wave Command Dim Step",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Z-Wave Command Dim Rate",
+			"description": "Z-Wave Command Dim Rate",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Local Control Dim Step",
+			"description": "Local Control Dim Step",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Local Control Dim Rate",
+			"description": "Local Control Dim Rate",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "ALL ON/ALL OFF Dim Step",
+			"description": "ALL ON/ALL OFF Dim Step",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "ALL ON/ALL OFF Dim Rate",
+			"description": "ALL ON/ALL OFF Dim Rate",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

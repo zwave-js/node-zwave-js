@@ -1,28 +1,18 @@
 // NorthQ NQ-9300-EU
 // Q-Plug (NQ-9300-EU)
 {
-    "_approved": false,
-    "_errors": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set",
-        "No endpoints are configured",
-        "Device category is not set.",
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "manufacturer": "NorthQ",
-    "manufacturerId": "0x0096",
-    "label": "NQ-9300-EU",
-    "description": "Q-Plug (NQ-9300-EU)",
-    "devices": [
-        {
-            "productType": "0x000a",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "NorthQ",
+	"manufacturerId": "0x0096",
+	"label": "NQ-9300-EU",
+	"description": "Q-Plug (NQ-9300-EU)",
+	"devices": [
+		{
+			"productType": "0x000a",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

@@ -1,57 +1,56 @@
 // McoHome Technology Co., Ltd. TPS411
 // Touch Panel Switch 1 Button
 {
-    "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "TPS411",
-    "description": "Touch Panel Switch 1 Button",
-    "devices": [
-        {
-            "productType": "0x4111",
-            "productId": "0x1302"
-        },
-        {
-            "productType": "0x4111",
-            "productId": "0x5102"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "5.5"
-    },
-    "associations": {
-        "1": {
-            "label": "Switch Button Group 1",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "All Status Reports",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Saving state before power failure",
-            "description": "Switch state saved or not when power down",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "TPS411",
+	"description": "Touch Panel Switch 1 Button",
+	"devices": [
+		{
+			"productType": "0x4111",
+			"productId": "0x1302"
+		},
+		{
+			"productType": "0x4111",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "5.5"
+	},
+	"associations": {
+		"1": {
+			"label": "Switch Button Group 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "All Status Reports",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Saving state before power failure",
+			"description": "Switch state saved or not when power down",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

@@ -1,163 +1,162 @@
 // BeNext plugInDimmer
 // Plug-in Dimmer
 {
-    "_approved": true,
-    "manufacturer": "BeNext",
-    "manufacturerId": "0x008a",
-    "label": "plugInDimmer",
-    "description": "Plug-in Dimmer",
-    "devices": [
-        {
-            "productType": "0x0018",
-            "productId": "0x0100"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Receives BASIC SET commands",
-            "maxNodes": 8
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Receives METER and MULTILEVEL_SWITCH commands",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Reset to factory settings",
-            "description": "Set all configuration values to default values (factory settings).",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Enable dimming",
-            "description": "Enable dimming",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Maximum powerload",
-            "description": "Maximum powerload",
-            "valueSize": 2,
-            "minValue": 25,
-            "maxValue": 150,
-            "defaultValue": 125,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Dimming speed",
-            "description": "Dimming speed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Fading up speed",
-            "description": "Fading up speed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Auto meter report: percentage",
-            "description": "Auto meter report: percentage",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Auto meter report: watt",
-            "description": "Auto meter report: watt",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Auto meter report: time",
-            "description": "Auto meter report: time",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "Last known status",
-            "description": "Last known status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Fading down speed",
-            "description": "Fading down speed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "BeNext",
+	"manufacturerId": "0x008a",
+	"label": "plugInDimmer",
+	"description": "Plug-in Dimmer",
+	"devices": [
+		{
+			"productType": "0x0018",
+			"productId": "0x0100"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Receives BASIC SET commands",
+			"maxNodes": 8
+		},
+		"2": {
+			"label": "Group 2",
+			"description": "Receives METER and MULTILEVEL_SWITCH commands",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Reset to factory settings",
+			"description": "Set all configuration values to default values (factory settings).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Enable dimming",
+			"description": "Enable dimming",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Maximum powerload",
+			"description": "Maximum powerload",
+			"valueSize": 2,
+			"minValue": 25,
+			"maxValue": 150,
+			"defaultValue": 125,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Dimming speed",
+			"description": "Dimming speed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Fading up speed",
+			"description": "Fading up speed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Auto meter report: percentage",
+			"description": "Auto meter report: percentage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Auto meter report: watt",
+			"description": "Auto meter report: watt",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Auto meter report: time",
+			"description": "Auto meter report: time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Last known status",
+			"description": "Last known status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Fading down speed",
+			"description": "Fading down speed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

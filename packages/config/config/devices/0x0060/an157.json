@@ -1,23 +1,22 @@
 // Everspring AN157
 // Switch Plugin
 {
-    "_approved": true,
-    "manufacturer": "Everspring",
-    "manufacturerId": "0x0060",
-    "label": "AN157",
-    "description": "Switch Plugin",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0001"
-        },
-        {
-            "productType": "0x0104",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "AN157",
+	"description": "Switch Plugin",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0104",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

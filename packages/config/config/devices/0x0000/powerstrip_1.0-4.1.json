@@ -1,15 +1,6 @@
 // Sigma Designs (Former Zensys) PowerStrip
 // 9 endpoints
 {
-	"_approved": false,
-	"_errors": [
-		"Parameter 0 only has overview defined. A description should be provided as a single line of text with additional information put in the overview field.",
-		"Parameter 0 has inconsistent size and maximum value.",
-		"Parameter 2 has label duplicated with another parameter.",
-		"Parameter 3 has label duplicated with another parameter.",
-		"Device has configuration parameters defined, but does not support the CONFIGURATION command class.",
-		"Device has association groups defined, but does not support the ASSOCIATION command class."
-	],
 	"manufacturer": "Sigma Designs (Former Zensys)",
 	"manufacturerId": "0x0000",
 	"label": "PowerStrip",

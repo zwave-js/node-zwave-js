@@ -1,7 +1,6 @@
 // permundo GmbH PSC132ZW
 // Metering Relay Switch, 16A
 {
-	"_approved": true,
 	"manufacturer": "permundo GmbH",
 	"manufacturerId": "0x0245",
 	"label": "PSC132ZW",

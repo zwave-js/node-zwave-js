@@ -1,462 +1,461 @@
 // Fibargroup FGWPB-111
 // FIBARO Wall Plug
 {
-    "_approved": true,
-    "manufacturer": "Fibargroup",
-    "manufacturerId": "0x010f",
-    "label": "FGWPB-111",
-    "description": "FIBARO Wall Plug",
-    "devices": [
-        {
-            "productType": "0x1701",
-            "productId": "0x2000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "2": {
-            "label": "PowerFailure",
-            "description": "How the Wall Plug will react in the event of power supply failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Restore",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Overload safety switch",
-            "description": "turn off the controlled device in case of exceeding the defined power.",
-            "unit": "0.1 Watts",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 18000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "PowerReporting",
-            "description": "Minimum change in active power consumption to trigger",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "EnergyReportingThreshold",
-            "description": "Energy reporting threshold",
-            "unit": "0.01 kWh",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 500,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "PeriodicPowerRpt",
-            "description": "Periodic power reporting",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32400,
-            "defaultValue": 3600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "PeriodicEnergyRpt",
-            "description": "Periodic energy reporting",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32400,
-            "defaultValue": 3600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "SelfConsumption",
-            "description": "Measuring energy consumed by the Wall Plug itself",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "function inactive",
-                    "value": 0
-                },
-                {
-                    "label": "function active",
-                    "value": 1
-                }
-            ]
-        },
-        "21": {
-            "label": "UPValue",
-            "description": "UP value -On/Off (Power) association group (3)",
-            "unit": "0.1W",
-            "valueSize": 2,
-            "minValue": 100,
-            "maxValue": 18000,
-            "defaultValue": 500,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "DOWNvalue",
-            "description": "lower power threshold",
-            "unit": "0.1w",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 17900,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "23": {
-            "label": "ControlMode",
-            "description": "the way that 3rd association group devices are controlled",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Going Up",
-                    "value": 1
-                },
-                {
-                    "label": "Going Down",
-                    "value": 2
-                },
-                {
-                    "label": "Both Ways",
-                    "value": 3
-                }
-            ]
-        },
-        "24": {
-            "label": "SwitchOn",
-            "description": "Command sent when physical button is pressed",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "25": {
-            "label": "SwitchOff",
-            "description": "Command sent when button turned off.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "26": {
-            "label": "ThresholdUpCmd",
-            "description": "Command sent if power exceeds param 21",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "27": {
-            "label": "ThresholdDownCmd",
-            "description": "Command sent when power drops below threshold",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "30": {
-            "label": "ActiveAlarm",
-            "description": "Z-Wave network alarms to which the Wall Plug will respond",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 63,
-            "defaultValue": 63,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "general alarm",
-                    "value": 1
-                },
-                {
-                    "label": "smoke alarm",
-                    "value": 2
-                },
-                {
-                    "label": "CO Alarm",
-                    "value": 4
-                },
-                {
-                    "label": "CO2 Alarm",
-                    "value": 8
-                },
-                {
-                    "label": "High Temp Alarm",
-                    "value": 16
-                },
-                {
-                    "label": "flood alarm",
-                    "value": 32
-                },
-                {
-                    "label": "all",
-                    "value": 63
-                }
-            ]
-        },
-        "31": {
-            "label": "AlarmResponse",
-            "description": "how the Wall Plug will respond to alarms",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 50,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "no reaction",
-                    "value": 0
-                },
-                {
-                    "label": "turn connected device on",
-                    "value": 1
-                },
-                {
-                    "label": "turn connected device off",
-                    "value": 2
-                }
-            ]
-        },
-        "32": {
-            "label": "AlarmDuration",
-            "description": "duration of alarm state",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32400,
-            "defaultValue": 600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "40": {
-            "label": "PwrLoadViolet",
-            "description": "maximum active power value causes the LED frame to flash violet",
-            "unit": "0.1w",
-            "valueSize": 2,
-            "minValue": 1000,
-            "maxValue": 18000,
-            "defaultValue": 18000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "41": {
-            "label": "LEDwhenOn",
-            "description": "LED frame color when controlled device is on",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "illumination turned off completely",
-                    "value": 0
-                },
-                {
-                    "label": "color changes smoothly depending on active power",
-                    "value": 1
-                },
-                {
-                    "label": "color changes in steps depending on active power",
-                    "value": 2
-                },
-                {
-                    "label": "white",
-                    "value": 3
-                },
-                {
-                    "label": "red",
-                    "value": 4
-                },
-                {
-                    "label": "green",
-                    "value": 5
-                },
-                {
-                    "label": "blue",
-                    "value": 6
-                },
-                {
-                    "label": "yellow",
-                    "value": 7
-                },
-                {
-                    "label": "cyan",
-                    "value": 8
-                },
-                {
-                    "label": "magenta",
-                    "value": 9
-                }
-            ]
-        },
-        "42": {
-            "label": "LEDwhenOff",
-            "description": "LED frame color when controlled device is off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "illumination turned off completely",
-                    "value": 0
-                },
-                {
-                    "label": "LED frame is illuminated with last color",
-                    "value": 1
-                },
-                {
-                    "label": "white",
-                    "value": 3
-                },
-                {
-                    "label": "red",
-                    "value": 4
-                },
-                {
-                    "label": "green",
-                    "value": 5
-                },
-                {
-                    "label": "blue",
-                    "value": 6
-                },
-                {
-                    "label": "yellow",
-                    "value": 7
-                },
-                {
-                    "label": "cyan",
-                    "value": 8
-                },
-                {
-                    "label": "magenta",
-                    "value": 9
-                }
-            ]
-        },
-        "43": {
-            "label": "LEDwhenAlarm",
-            "description": "LED frame color at the Z-Wave network alarm detection",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "illumination turned off completely",
-                    "value": 0
-                },
-                {
-                    "label": "no change in color",
-                    "value": 1
-                },
-                {
-                    "label": "LED frame flashes red/blue/white",
-                    "value": 2
-                },
-                {
-                    "label": "white",
-                    "value": 3
-                },
-                {
-                    "label": "red",
-                    "value": 4
-                },
-                {
-                    "label": "green",
-                    "value": 5
-                },
-                {
-                    "label": "blue",
-                    "value": 6
-                },
-                {
-                    "label": "yellow",
-                    "value": 7
-                },
-                {
-                    "label": "cyan",
-                    "value": 8
-                },
-                {
-                    "label": "magenta",
-                    "value": 9
-                }
-            ]
-        }
-    }
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGWPB-111",
+	"description": "FIBARO Wall Plug",
+	"devices": [
+		{
+			"productType": "0x1701",
+			"productId": "0x2000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "PowerFailure",
+			"description": "How the Wall Plug will react in the event of power supply failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Restore",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Overload safety switch",
+			"description": "turn off the controlled device in case of exceeding the defined power.",
+			"unit": "0.1 Watts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 18000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "PowerReporting",
+			"description": "Minimum change in active power consumption to trigger",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "EnergyReportingThreshold",
+			"description": "Energy reporting threshold",
+			"unit": "0.01 kWh",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "PeriodicPowerRpt",
+			"description": "Periodic power reporting",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "PeriodicEnergyRpt",
+			"description": "Periodic energy reporting",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "SelfConsumption",
+			"description": "Measuring energy consumed by the Wall Plug itself",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "function inactive",
+					"value": 0
+				},
+				{
+					"label": "function active",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "UPValue",
+			"description": "UP value -On/Off (Power) association group (3)",
+			"unit": "0.1W",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 18000,
+			"defaultValue": 500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "DOWNvalue",
+			"description": "lower power threshold",
+			"unit": "0.1w",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 17900,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "ControlMode",
+			"description": "the way that 3rd association group devices are controlled",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Going Up",
+					"value": 1
+				},
+				{
+					"label": "Going Down",
+					"value": 2
+				},
+				{
+					"label": "Both Ways",
+					"value": 3
+				}
+			]
+		},
+		"24": {
+			"label": "SwitchOn",
+			"description": "Command sent when physical button is pressed",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"25": {
+			"label": "SwitchOff",
+			"description": "Command sent when button turned off.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"26": {
+			"label": "ThresholdUpCmd",
+			"description": "Command sent if power exceeds param 21",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"27": {
+			"label": "ThresholdDownCmd",
+			"description": "Command sent when power drops below threshold",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"label": "ActiveAlarm",
+			"description": "Z-Wave network alarms to which the Wall Plug will respond",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 63,
+			"defaultValue": 63,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "general alarm",
+					"value": 1
+				},
+				{
+					"label": "smoke alarm",
+					"value": 2
+				},
+				{
+					"label": "CO Alarm",
+					"value": 4
+				},
+				{
+					"label": "CO2 Alarm",
+					"value": 8
+				},
+				{
+					"label": "High Temp Alarm",
+					"value": 16
+				},
+				{
+					"label": "flood alarm",
+					"value": 32
+				},
+				{
+					"label": "all",
+					"value": 63
+				}
+			]
+		},
+		"31": {
+			"label": "AlarmResponse",
+			"description": "how the Wall Plug will respond to alarms",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "no reaction",
+					"value": 0
+				},
+				{
+					"label": "turn connected device on",
+					"value": 1
+				},
+				{
+					"label": "turn connected device off",
+					"value": 2
+				}
+			]
+		},
+		"32": {
+			"label": "AlarmDuration",
+			"description": "duration of alarm state",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "PwrLoadViolet",
+			"description": "maximum active power value causes the LED frame to flash violet",
+			"unit": "0.1w",
+			"valueSize": 2,
+			"minValue": 1000,
+			"maxValue": 18000,
+			"defaultValue": 18000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41": {
+			"label": "LEDwhenOn",
+			"description": "LED frame color when controlled device is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "illumination turned off completely",
+					"value": 0
+				},
+				{
+					"label": "color changes smoothly depending on active power",
+					"value": 1
+				},
+				{
+					"label": "color changes in steps depending on active power",
+					"value": 2
+				},
+				{
+					"label": "white",
+					"value": 3
+				},
+				{
+					"label": "red",
+					"value": 4
+				},
+				{
+					"label": "green",
+					"value": 5
+				},
+				{
+					"label": "blue",
+					"value": 6
+				},
+				{
+					"label": "yellow",
+					"value": 7
+				},
+				{
+					"label": "cyan",
+					"value": 8
+				},
+				{
+					"label": "magenta",
+					"value": 9
+				}
+			]
+		},
+		"42": {
+			"label": "LEDwhenOff",
+			"description": "LED frame color when controlled device is off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "illumination turned off completely",
+					"value": 0
+				},
+				{
+					"label": "LED frame is illuminated with last color",
+					"value": 1
+				},
+				{
+					"label": "white",
+					"value": 3
+				},
+				{
+					"label": "red",
+					"value": 4
+				},
+				{
+					"label": "green",
+					"value": 5
+				},
+				{
+					"label": "blue",
+					"value": 6
+				},
+				{
+					"label": "yellow",
+					"value": 7
+				},
+				{
+					"label": "cyan",
+					"value": 8
+				},
+				{
+					"label": "magenta",
+					"value": 9
+				}
+			]
+		},
+		"43": {
+			"label": "LEDwhenAlarm",
+			"description": "LED frame color at the Z-Wave network alarm detection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "illumination turned off completely",
+					"value": 0
+				},
+				{
+					"label": "no change in color",
+					"value": 1
+				},
+				{
+					"label": "LED frame flashes red/blue/white",
+					"value": 2
+				},
+				{
+					"label": "white",
+					"value": 3
+				},
+				{
+					"label": "red",
+					"value": 4
+				},
+				{
+					"label": "green",
+					"value": 5
+				},
+				{
+					"label": "blue",
+					"value": 6
+				},
+				{
+					"label": "yellow",
+					"value": 7
+				},
+				{
+					"label": "cyan",
+					"value": 8
+				},
+				{
+					"label": "magenta",
+					"value": 9
+				}
+			]
+		}
+	}
 }

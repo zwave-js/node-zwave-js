@@ -1,66 +1,65 @@
 // FortrezZ LLC WWA-01 / WWA-02
 // Wireless Water and Temperature Alarm
 {
-    "_approved": true,
-    "manufacturer": "FortrezZ LLC",
-    "manufacturerId": "0x0084",
-    "label": "WWA-01 / WWA-02",
-    "description": "Wireless Water and Temperature Alarm",
-    "devices": [
-        {
-            "productType": "0x0053",
-            "productId": "0x0216"
-        },
-        {
-            "productType": "0x0061",
-            "productId": "0x010c"
-        },
-        {
-            "productType": "0x0063",
-            "productId": "0x010c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Water and Temperature Alarms",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Water Alarms",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Temperature Alarms",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Low Temperature Trigger Point",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 4,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "High Temperature Trigger Point",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 70,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "FortrezZ LLC",
+	"manufacturerId": "0x0084",
+	"label": "WWA-01 / WWA-02",
+	"description": "Wireless Water and Temperature Alarm",
+	"devices": [
+		{
+			"productType": "0x0053",
+			"productId": "0x0216"
+		},
+		{
+			"productType": "0x0061",
+			"productId": "0x010c"
+		},
+		{
+			"productType": "0x0063",
+			"productId": "0x010c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Water and Temperature Alarms",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Water Alarms",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Temperature Alarms",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Low Temperature Trigger Point",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "High Temperature Trigger Point",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 70,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

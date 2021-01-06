@@ -1,20 +1,19 @@
 // NIE Technology Co., Ltd. ZW37
 // Show Home, 2 channel smart plug, ZWave Plus
 {
-    "_approved": true,
-    "manufacturer": "NIE Technology Co., Ltd.",
-    "manufacturerId": "0x0312",
-    "label": "ZW37",
-    "description": "Show Home, 2 channel smart plug, ZWave Plus",
-    "devices": [
-        {
-            "productType": "0x0221",
-            "productId": "0x251c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "ZW37",
+	"description": "Show Home, 2 channel smart plug, ZWave Plus",
+	"devices": [
+		{
+			"productType": "0x0221",
+			"productId": "0x251c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

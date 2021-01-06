@@ -1,7 +1,6 @@
 // Jin Tao Bao Curtain Motor
 // Curtain motor
 {
-	"_approved": true,
 	"manufacturer": "Jin Tao Bao",
 	"manufacturerId": "0x015a",
 	"label": "Curtain Motor",

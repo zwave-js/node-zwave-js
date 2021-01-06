@@ -1,136 +1,135 @@
 // Vemmio DS100
 // Double Switch in a dual relay in-wall module.
 {
-    "_approved": true,
-    "manufacturer": "Vemmio",
-    "manufacturerId": "0x030f",
-    "label": "DS100",
-    "description": "Double Switch in a dual relay in-wall module.",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "0": {
-            "label": "Watt Meter Report Period",
-            "description": "720*5s=3600s=1hour",
-            "unit": "5s",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 720,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "KWH Meter Report Period",
-            "description": "6*10 min = 1 hour",
-            "unit": "10min",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Selected Relay",
-            "description": "1: Relay 1, 2: Relay 2, 3: Relay 1 & Relay 2",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Edge or Pulse mode or Edge-Toggle mode",
-            "description": "1: Edge mode, 2: Pulse mode, 3: Edge-Toggle mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Threshold of current for load caution",
-            "description": "750*0.01A=7.5A",
-            "unit": "0.01A",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 750,
-            "defaultValue": 750,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Threshold of KWH for load caution",
-            "unit": "1KWh",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 10000,
-            "defaultValue": 10000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Restore switch state mode",
-            "description": "0: Switch off, 1: Last switch, 2: Switch on",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Auto off timer",
-            "description": "0: Disable auto off function, 1: 0x0-0x7FFF 1s-32767s",
-            "unit": "1s",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "RF off command mode",
-            "description": "0: Switch off, 1: Ignore, 2: Switch toggle, 3: Switch on",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Existence of endpoint 3",
-            "description": "1: endpoint 3 exists, 2: No endpoint 3",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Vemmio",
+	"manufacturerId": "0x030f",
+	"label": "DS100",
+	"description": "Double Switch in a dual relay in-wall module.",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"0": {
+			"label": "Watt Meter Report Period",
+			"description": "720*5s=3600s=1hour",
+			"unit": "5s",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 720,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "KWH Meter Report Period",
+			"description": "6*10 min = 1 hour",
+			"unit": "10min",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Selected Relay",
+			"description": "1: Relay 1, 2: Relay 2, 3: Relay 1 & Relay 2",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Edge or Pulse mode or Edge-Toggle mode",
+			"description": "1: Edge mode, 2: Pulse mode, 3: Edge-Toggle mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Threshold of current for load caution",
+			"description": "750*0.01A=7.5A",
+			"unit": "0.01A",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 750,
+			"defaultValue": 750,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Threshold of KWH for load caution",
+			"unit": "1KWh",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10000,
+			"defaultValue": 10000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Restore switch state mode",
+			"description": "0: Switch off, 1: Last switch, 2: Switch on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Auto off timer",
+			"description": "0: Disable auto off function, 1: 0x0-0x7FFF 1s-32767s",
+			"unit": "1s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "RF off command mode",
+			"description": "0: Switch off, 1: Ignore, 2: Switch toggle, 3: Switch on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Existence of endpoint 3",
+			"description": "1: endpoint 3 exists, 2: No endpoint 3",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

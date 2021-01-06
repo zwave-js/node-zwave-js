@@ -1,29 +1,25 @@
 // Qees P313A
 // Plug-in Socket Dimmer
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Qees",
-    "manufacturerId": "0x0095",
-    "label": "P313A",
-    "description": "Plug-in Socket Dimmer",
-    "devices": [
-        {
-            "productType": "0x3103",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 232,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Qees",
+	"manufacturerId": "0x0095",
+	"label": "P313A",
+	"description": "Plug-in Socket Dimmer",
+	"devices": [
+		{
+			"productType": "0x3103",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 232,
+			"isLifeline": true
+		}
+	}
 }

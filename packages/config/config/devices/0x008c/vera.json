@@ -1,29 +1,18 @@
 // Vera Control Vera
 // Vera Home Gateway
 {
-    "_approved": false,
-    "_errors": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set",
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "`thingid` should not contain manufacturer name."
-    ],
-    "manufacturer": "Vera Control",
-    "manufacturerId": "0x008c",
-    "label": "Vera",
-    "description": "Vera Home Gateway",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Vera Control",
+	"manufacturerId": "0x008c",
+	"label": "Vera",
+	"description": "Vera Home Gateway",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

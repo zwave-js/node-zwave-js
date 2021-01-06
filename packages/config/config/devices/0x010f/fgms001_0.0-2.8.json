@@ -1,7 +1,6 @@
 // Fibargroup FGMS001
 // Motion Sensor
 {
-	"_approved": true,
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGMS001",

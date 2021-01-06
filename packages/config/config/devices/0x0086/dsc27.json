@@ -1,80 +1,79 @@
 // AEON Labs DSC27
 // Micro Illuminator G2
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSC27",
-    "description": "Micro Illuminator G2",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x001b"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Target for automatic reports",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "80": {
-            "label": "Notification on Status Change",
-            "description": "Send notification to Group 1 when the load has changed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Deactivate",
-                    "value": 0
-                },
-                {
-                    "label": "Hail CC Sent",
-                    "value": 1
-                },
-                {
-                    "label": "Basic CC Report Sent",
-                    "value": 2
-                }
-            ]
-        },
-        "120": {
-            "label": "Turn External Button Mode",
-            "description": "Parameter to set External button type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Momentary Button Mode",
-                    "value": 0
-                },
-                {
-                    "label": "2 State Switch Mode",
-                    "value": 1
-                },
-                {
-                    "label": "3 Way Switch Mode",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSC27",
+	"description": "Micro Illuminator G2",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x001b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Target for automatic reports",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"80": {
+			"label": "Notification on Status Change",
+			"description": "Send notification to Group 1 when the load has changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Deactivate",
+					"value": 0
+				},
+				{
+					"label": "Hail CC Sent",
+					"value": 1
+				},
+				{
+					"label": "Basic CC Report Sent",
+					"value": 2
+				}
+			]
+		},
+		"120": {
+			"label": "Turn External Button Mode",
+			"description": "Parameter to set External button type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary Button Mode",
+					"value": 0
+				},
+				{
+					"label": "2 State Switch Mode",
+					"value": 1
+				},
+				{
+					"label": "3 Way Switch Mode",
+					"value": 2
+				}
+			]
+		}
+	}
 }

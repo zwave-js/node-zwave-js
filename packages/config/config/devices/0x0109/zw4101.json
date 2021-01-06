@@ -1,63 +1,59 @@
 // Vision Security ZW4101
 // Drapery controller (up/stop/down)
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZW4101",
-    "description": "Drapery controller (up/stop/down)",
-    "devices": [
-        {
-            "productType": "0x200d",
-            "productId": "0x0d03"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Up output time",
-            "description": "Up output time",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Stop output time",
-            "description": "Stop output time",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Down output time",
-            "description": "Down output time",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZW4101",
+	"description": "Drapery controller (up/stop/down)",
+	"devices": [
+		{
+			"productType": "0x200d",
+			"productId": "0x0d03"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Up output time",
+			"description": "Up output time",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Stop output time",
+			"description": "Stop output time",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Down output time",
+			"description": "Down output time",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

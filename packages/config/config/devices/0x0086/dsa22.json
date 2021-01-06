@@ -1,131 +1,130 @@
 // AEON Labs DSA22
 // 4 button keyfob
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSA22",
-    "description": "4 button keyfob",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0016"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Scene 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Scene 2",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Scene 3",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "4": {
-            "label": "Scene 4",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "241": {
-            "label": "Mode of Button 1 (upper left)",
-            "description": "Defines the switching mode of Button 1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                }
-            ]
-        },
-        "242": {
-            "label": "Mode of Button 2 (upper right)",
-            "description": "Defines the switching mode of Button 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                }
-            ]
-        },
-        "243": {
-            "label": "Mode of Button 3 (lower left)",
-            "description": "Defines the switching mode of Button 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                }
-            ]
-        },
-        "244": {
-            "label": "Mode of Button 4 (lower right)",
-            "description": "Defines the switching mode of Button 4",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSA22",
+	"description": "4 button keyfob",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0016"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Scene 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Scene 2",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Scene 3",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"4": {
+			"label": "Scene 4",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"241": {
+			"label": "Mode of Button 1 (upper left)",
+			"description": "Defines the switching mode of Button 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				}
+			]
+		},
+		"242": {
+			"label": "Mode of Button 2 (upper right)",
+			"description": "Defines the switching mode of Button 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				}
+			]
+		},
+		"243": {
+			"label": "Mode of Button 3 (lower left)",
+			"description": "Defines the switching mode of Button 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				}
+			]
+		},
+		"244": {
+			"label": "Mode of Button 4 (lower right)",
+			"description": "Defines the switching mode of Button 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				}
+			]
+		}
+	}
 }

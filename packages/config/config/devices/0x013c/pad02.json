@@ -1,105 +1,104 @@
 // Philio Technology Corp PAD02
 // Dimmer Socket
 {
-    "_approved": true,
-    "manufacturer": "Philio Technology Corp",
-    "manufacturerId": "0x013c",
-    "label": "PAD02",
-    "description": "Dimmer Socket",
-    "devices": [
-        {
-            "productType": "0x0005",
-            "productId": "0x0031"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Mode of  Switch Off  function",
-            "description": "Switch button mode (enabled/disabled).",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "LED indication mode",
-            "description": "LED mode: 1 is show switch state. 2 is night mode (opposite).",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Show current switch state",
-                    "value": 1
-                },
-                {
-                    "label": "Night mode (opposite)",
-                    "value": 2
-                }
-            ]
-        },
-        "3": {
-            "label": "Auto off timer",
-            "description": "Automatic OFF after given time.",
-            "unit": "1s",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "RF off command mode",
-            "description": "How to interpret OFF command.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch off",
-                    "value": 0
-                },
-                {
-                    "label": "Ignore",
-                    "value": 1
-                },
-                {
-                    "label": "Toggle Switch",
-                    "value": 2
-                },
-                {
-                    "label": "Switch On",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PAD02",
+	"description": "Dimmer Socket",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Mode of  Switch Off  function",
+			"description": "Switch button mode (enabled/disabled).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "LED indication mode",
+			"description": "LED mode: 1 is show switch state. 2 is night mode (opposite).",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Show current switch state",
+					"value": 1
+				},
+				{
+					"label": "Night mode (opposite)",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Auto off timer",
+			"description": "Automatic OFF after given time.",
+			"unit": "1s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "RF off command mode",
+			"description": "How to interpret OFF command.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch off",
+					"value": 0
+				},
+				{
+					"label": "Ignore",
+					"value": 1
+				},
+				{
+					"label": "Toggle Switch",
+					"value": 2
+				},
+				{
+					"label": "Switch On",
+					"value": 3
+				}
+			]
+		}
+	}
 }

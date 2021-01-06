@@ -1,10 +1,6 @@
 // Fantem FT096
 // Plug-in Switch
 {
-	"_approved": true,
-	"_warnings": [
-		"Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-	],
 	"manufacturer": "Fantem",
 	"manufacturerId": "0x016a",
 	"label": "FT096",

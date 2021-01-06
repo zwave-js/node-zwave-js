@@ -1,162 +1,161 @@
 // AEON Labs ZW112
 // Door/Window Sensor 6
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "ZW112",
-    "description": "Door/Window Sensor 6",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0070"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x0070"
-        },
-        {
-            "productType": "0x0202",
-            "productId": "0x0070"
-        },
-        {
-            "productType": "0x1d02",
-            "productId": "0x0070"
-        },
-        {
-            "productType": "0x6015",
-            "productId": "0x020d"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Value that will be sent on open/close events",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "On for opened, Off for closed",
-                    "value": 0
-                },
-                {
-                    "label": "Off for opened, On for closed",
-                    "value": 1
-                }
-            ]
-        },
-        "39": {
-            "label": "Low battery threshold (10% to 50%)",
-            "description": "The value the sensor will use to determine a low battery level",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 50,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "101": {
-            "label": "Low battery voltage check",
-            "description": "Enable or disables the low battery voltage check",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "111": {
-            "label": "Low battery voltage check time",
-            "description": "Sets the value of the interval for the low battery check time (in seconds)",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 240,
-            "maxValue": 134217727,
-            "defaultValue": 86640,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "121": {
-            "label": "Reporting mode on open/close event",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Send nothing",
-                    "value": 0
-                },
-                {
-                    "label": "Send Basic Set CC",
-                    "value": 1
-                },
-                {
-                    "label": "Send Sensor Binary Report CC",
-                    "value": 2
-                },
-                {
-                    "label": "Send Basic Set CC and Sensor Binary Report CC",
-                    "value": 3
-                }
-            ]
-        },
-        "252": {
-            "label": "Lock/Unlock all configuration parameters",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Unlock",
-                    "value": 0
-                },
-                {
-                    "label": "Lock",
-                    "value": 1
-                }
-            ]
-        },
-        "255": {
-            "label": "Reset to factory default & /or exclude",
-            "description": "Reset sensor to factory default and remove from network",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW112",
+	"description": "Door/Window Sensor 6",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0070"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x0070"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x0070"
+		},
+		{
+			"productType": "0x1d02",
+			"productId": "0x0070"
+		},
+		{
+			"productType": "0x6015",
+			"productId": "0x020d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Value that will be sent on open/close events",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On for opened, Off for closed",
+					"value": 0
+				},
+				{
+					"label": "Off for opened, On for closed",
+					"value": 1
+				}
+			]
+		},
+		"39": {
+			"label": "Low battery threshold (10% to 50%)",
+			"description": "The value the sensor will use to determine a low battery level",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101": {
+			"label": "Low battery voltage check",
+			"description": "Enable or disables the low battery voltage check",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"111": {
+			"label": "Low battery voltage check time",
+			"description": "Sets the value of the interval for the low battery check time (in seconds)",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 240,
+			"maxValue": 134217727,
+			"defaultValue": 86640,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"121": {
+			"label": "Reporting mode on open/close event",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send nothing",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Set CC",
+					"value": 1
+				},
+				{
+					"label": "Send Sensor Binary Report CC",
+					"value": 2
+				},
+				{
+					"label": "Send Basic Set CC and Sensor Binary Report CC",
+					"value": 3
+				}
+			]
+		},
+		"252": {
+			"label": "Lock/Unlock all configuration parameters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock",
+					"value": 0
+				},
+				{
+					"label": "Lock",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset to factory default & /or exclude",
+			"description": "Reset sensor to factory default and remove from network",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		}
+	}
 }

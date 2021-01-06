@@ -1,7 +1,6 @@
 // EbV heatapp! floor
 // heatapp! floor is a controller for thermal actuators in underfloor heating installations and is part of the heatapp! system, providing individual circ
 {
-	"_approved": true,
 	"manufacturer": "EbV",
 	"manufacturerId": "0x017c",
 	"label": "heatapp! floor",

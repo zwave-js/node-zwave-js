@@ -1,47 +1,46 @@
 // zwaveproducts.com ZL-PA-100
 // ZL-PA-100
 {
-    "_approved": true,
-    "manufacturer": "zwaveproducts.com",
-    "manufacturerId": "0x0315",
-    "label": "ZL-PA-100",
-    "description": "ZL-PA-100",
-    "devices": [
-        {
-            "productType": "0x4447",
-            "productId": "0x3031"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "Nightlight",
-            "description": "Nightlight Operation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED opposite to Load",
-                    "value": 0
-                },
-                {
-                    "label": "LED same as Load",
-                    "value": 1
-                },
-                {
-                    "label": "LED always OFF",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "zwaveproducts.com",
+	"manufacturerId": "0x0315",
+	"label": "ZL-PA-100",
+	"description": "ZL-PA-100",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x3031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "Nightlight",
+			"description": "Nightlight Operation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED opposite to Load",
+					"value": 0
+				},
+				{
+					"label": "LED same as Load",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				}
+			]
+		}
+	}
 }

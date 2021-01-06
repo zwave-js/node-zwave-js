@@ -1,19 +1,18 @@
 // Benetek BSL01
 {
-    "_approved": true,
-    "manufacturer": "Benetek",
-    "manufacturerId": "0x032d",
-    "label": "BSL01",
-    "description": "",
-    "devices": [
-        {
-            "productType": "0x3002",
-            "productId": "0x0006"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Benetek",
+	"manufacturerId": "0x032d",
+	"label": "BSL01",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x3002",
+			"productId": "0x0006"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

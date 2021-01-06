@@ -1,369 +1,368 @@
 // AEON Labs DSA03202
 // Minimote 4 button remote control
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSA03202",
-    "description": "Minimote 4 button remote control",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0003"
-        },
-        {
-            "productType": "0x0006",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Scene 1",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "Scene 2",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Scene 3",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Scene 4",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "241": {
-            "label": "Mode of Button 1 (upper left)",
-            "description": "Defines the switching mode of Button 1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Add Mode",
-                    "value": 2
-                },
-                {
-                    "label": "Remove Mode",
-                    "value": 3
-                },
-                {
-                    "label": "Association Mode",
-                    "value": 4
-                },
-                {
-                    "label": "Learn Mode",
-                    "value": 5
-                }
-            ]
-        },
-        "242": {
-            "label": "Mode of Button 2 (upper right)",
-            "description": "Defines the switching mode of Button 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Add Mode",
-                    "value": 2
-                },
-                {
-                    "label": "Remove Mode",
-                    "value": 3
-                },
-                {
-                    "label": "Association Mode",
-                    "value": 4
-                },
-                {
-                    "label": "Learn Mode",
-                    "value": 5
-                }
-            ]
-        },
-        "243": {
-            "label": "Mode of Button 3 (lower left)",
-            "description": "Defines the switching mode of Button 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Add Mode",
-                    "value": 2
-                },
-                {
-                    "label": "Remove Mode",
-                    "value": 3
-                },
-                {
-                    "label": "Association Mode",
-                    "value": 4
-                },
-                {
-                    "label": "Learn Mode",
-                    "value": 5
-                }
-            ]
-        },
-        "244": {
-            "label": "Mode of Button 4 (lower right)",
-            "description": "Defines the switching mode of Button 4",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Add Mode",
-                    "value": 2
-                },
-                {
-                    "label": "Remove Mode",
-                    "value": 3
-                },
-                {
-                    "label": "Association Mode",
-                    "value": 4
-                },
-                {
-                    "label": "Learn Mode",
-                    "value": 5
-                }
-            ]
-        },
-        "245": {
-            "label": "Mode of Button 5 (Include)",
-            "description": "Defines the switching mode of Button 5",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Add Mode",
-                    "value": 2
-                },
-                {
-                    "label": "Remove Mode",
-                    "value": 3
-                },
-                {
-                    "label": "Association Mode",
-                    "value": 4
-                },
-                {
-                    "label": "Learn Mode",
-                    "value": 5
-                }
-            ]
-        },
-        "246": {
-            "label": "Mode of Button 6 (Exclude)",
-            "description": "Defines the switching mode of Button 6",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Add Mode",
-                    "value": 2
-                },
-                {
-                    "label": "Remove Mode",
-                    "value": 3
-                },
-                {
-                    "label": "Association Mode",
-                    "value": 4
-                },
-                {
-                    "label": "Learn Mode",
-                    "value": 5
-                }
-            ]
-        },
-        "247": {
-            "label": "Mode of Button 7 (Association)",
-            "description": "Defines the switching mode of Button 7",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Add Mode",
-                    "value": 2
-                },
-                {
-                    "label": "Remove Mode",
-                    "value": 3
-                },
-                {
-                    "label": "Association Mode",
-                    "value": 4
-                },
-                {
-                    "label": "Learn Mode",
-                    "value": 5
-                }
-            ]
-        },
-        "248": {
-            "label": "Mode of Button 8 (Learn)",
-            "description": "Defines the switching mode of Button 8",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Add Mode",
-                    "value": 2
-                },
-                {
-                    "label": "Remove Mode",
-                    "value": 3
-                },
-                {
-                    "label": "Association Mode",
-                    "value": 4
-                },
-                {
-                    "label": "Learn Mode",
-                    "value": 5
-                }
-            ]
-        },
-        "250": {
-            "label": "Secondary Controller Mode",
-            "description": "Selects Group Mode or Scene Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Group Mode",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSA03202",
+	"description": "Minimote 4 button remote control",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003"
+		},
+		{
+			"productType": "0x0006",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Scene 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Scene 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Scene 3",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Scene 4",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"241": {
+			"label": "Mode of Button 1 (upper left)",
+			"description": "Defines the switching mode of Button 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				},
+				{
+					"label": "Add Mode",
+					"value": 2
+				},
+				{
+					"label": "Remove Mode",
+					"value": 3
+				},
+				{
+					"label": "Association Mode",
+					"value": 4
+				},
+				{
+					"label": "Learn Mode",
+					"value": 5
+				}
+			]
+		},
+		"242": {
+			"label": "Mode of Button 2 (upper right)",
+			"description": "Defines the switching mode of Button 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				},
+				{
+					"label": "Add Mode",
+					"value": 2
+				},
+				{
+					"label": "Remove Mode",
+					"value": 3
+				},
+				{
+					"label": "Association Mode",
+					"value": 4
+				},
+				{
+					"label": "Learn Mode",
+					"value": 5
+				}
+			]
+		},
+		"243": {
+			"label": "Mode of Button 3 (lower left)",
+			"description": "Defines the switching mode of Button 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				},
+				{
+					"label": "Add Mode",
+					"value": 2
+				},
+				{
+					"label": "Remove Mode",
+					"value": 3
+				},
+				{
+					"label": "Association Mode",
+					"value": 4
+				},
+				{
+					"label": "Learn Mode",
+					"value": 5
+				}
+			]
+		},
+		"244": {
+			"label": "Mode of Button 4 (lower right)",
+			"description": "Defines the switching mode of Button 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				},
+				{
+					"label": "Add Mode",
+					"value": 2
+				},
+				{
+					"label": "Remove Mode",
+					"value": 3
+				},
+				{
+					"label": "Association Mode",
+					"value": 4
+				},
+				{
+					"label": "Learn Mode",
+					"value": 5
+				}
+			]
+		},
+		"245": {
+			"label": "Mode of Button 5 (Include)",
+			"description": "Defines the switching mode of Button 5",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				},
+				{
+					"label": "Add Mode",
+					"value": 2
+				},
+				{
+					"label": "Remove Mode",
+					"value": 3
+				},
+				{
+					"label": "Association Mode",
+					"value": 4
+				},
+				{
+					"label": "Learn Mode",
+					"value": 5
+				}
+			]
+		},
+		"246": {
+			"label": "Mode of Button 6 (Exclude)",
+			"description": "Defines the switching mode of Button 6",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				},
+				{
+					"label": "Add Mode",
+					"value": 2
+				},
+				{
+					"label": "Remove Mode",
+					"value": 3
+				},
+				{
+					"label": "Association Mode",
+					"value": 4
+				},
+				{
+					"label": "Learn Mode",
+					"value": 5
+				}
+			]
+		},
+		"247": {
+			"label": "Mode of Button 7 (Association)",
+			"description": "Defines the switching mode of Button 7",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				},
+				{
+					"label": "Add Mode",
+					"value": 2
+				},
+				{
+					"label": "Remove Mode",
+					"value": 3
+				},
+				{
+					"label": "Association Mode",
+					"value": 4
+				},
+				{
+					"label": "Learn Mode",
+					"value": 5
+				}
+			]
+		},
+		"248": {
+			"label": "Mode of Button 8 (Learn)",
+			"description": "Defines the switching mode of Button 8",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				},
+				{
+					"label": "Add Mode",
+					"value": 2
+				},
+				{
+					"label": "Remove Mode",
+					"value": 3
+				},
+				{
+					"label": "Association Mode",
+					"value": 4
+				},
+				{
+					"label": "Learn Mode",
+					"value": 5
+				}
+			]
+		},
+		"250": {
+			"label": "Secondary Controller Mode",
+			"description": "Selects Group Mode or Scene Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Group Mode",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				}
+			]
+		}
+	}
 }

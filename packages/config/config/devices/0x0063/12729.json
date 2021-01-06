@@ -1,7 +1,6 @@
 // Jasco Products 12729
 // In-Wall Smart Dimmer
 {
-	"_approved": true,
 	"manufacturer": "Jasco Products",
 	"manufacturerId": "0x0063",
 	"label": "12729",

@@ -1,45 +1,44 @@
 // Leviton VRCS4-M0
 // 4-Scene controller with load control
 {
-    "_approved": true,
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRCS4-M0",
-    "description": "4-Scene controller with load control",
-    "devices": [
-        {
-            "productType": "0x1302",
-            "productId": "0x0243"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Button 1",
-            "description": "First (top) button on controller",
-            "maxNodes": 32,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Button 2",
-            "description": "Second button on controller",
-            "maxNodes": 32,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Button 3",
-            "description": "Third button on controller",
-            "maxNodes": 32,
-            "isLifeline": true
-        },
-        "4": {
-            "label": "Button 4",
-            "description": "Fourth button on controller",
-            "maxNodes": 32,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRCS4-M0",
+	"description": "4-Scene controller with load control",
+	"devices": [
+		{
+			"productType": "0x1302",
+			"productId": "0x0243"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Button 1",
+			"description": "First (top) button on controller",
+			"maxNodes": 32,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button 2",
+			"description": "Second button on controller",
+			"maxNodes": 32,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Button 3",
+			"description": "Third button on controller",
+			"maxNodes": 32,
+			"isLifeline": true
+		},
+		"4": {
+			"label": "Button 4",
+			"description": "Fourth button on controller",
+			"maxNodes": 32,
+			"isLifeline": true
+		}
+	}
 }

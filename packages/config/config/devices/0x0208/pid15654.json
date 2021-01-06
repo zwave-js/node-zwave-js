@@ -1,7 +1,6 @@
 // HANK Electronics Ltd. PID15654
 // Smart Plug with two USB ports
 {
-	"_approved": true,
 	"manufacturer": "HANK Electronics Ltd.",
 	"manufacturerId": "0x0208",
 	"label": "PID15654",

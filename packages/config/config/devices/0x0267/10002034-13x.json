@@ -1,7 +1,6 @@
 // SimonTech S.L.U 10002034-13X
 // Switch IO: On/Off Power Switch
 {
-	"_approved": true,
 	"manufacturer": "SimonTech S.L.U",
 	"manufacturerId": "0x0267",
 	"label": "10002034-13X",
@@ -127,7 +126,7 @@
 			"minValue": 0,
 			"maxValue": 39015,
 			"defaultValue": 0,
-            "unsigned": true,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": false,

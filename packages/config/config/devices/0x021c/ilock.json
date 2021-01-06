@@ -1,20 +1,19 @@
 // Shenzhen iSurpass Technology Co. , Ltd. iLock
 // Smart lock
 {
-    "_approved": true,
-    "manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
-    "manufacturerId": "0x021c",
-    "label": "iLock",
-    "description": "Smart lock",
-    "devices": [
-        {
-            "productType": "0x634b",
-            "productId": "0x504c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
+	"manufacturerId": "0x021c",
+	"label": "iLock",
+	"description": "Smart lock",
+	"devices": [
+		{
+			"productType": "0x634b",
+			"productId": "0x504c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

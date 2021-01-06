@@ -1,20 +1,19 @@
 // Shenzhen Heiman Technology Co., Ltd. HS1DS-Z
 // Smart Door Sensor
 {
-    "_approved": true,
-    "manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
-    "manufacturerId": "0x0260",
-    "label": "HS1DS-Z",
-    "description": "Smart Door Sensor",
-    "devices": [
-        {
-            "productType": "0x0168",
-            "productId": "0x0168"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
+	"manufacturerId": "0x0260",
+	"label": "HS1DS-Z",
+	"description": "Smart Door Sensor",
+	"devices": [
+		{
+			"productType": "0x0168",
+			"productId": "0x0168"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

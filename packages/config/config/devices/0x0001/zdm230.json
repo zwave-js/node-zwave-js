@@ -1,107 +1,106 @@
 // ACT - Advanced Control Technologies ZDM230
 // HomePro Wall Dimmer ZDM230
 {
-    "_approved": true,
-    "manufacturer": "ACT - Advanced Control Technologies",
-    "manufacturerId": "0x0001",
-    "label": "ZDM230",
-    "description": "HomePro Wall Dimmer ZDM230",
-    "devices": [
-        {
-            "productType": "0x444d",
-            "productId": "0x3330"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Left paddle",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Right Paddle",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Group 3",
-            "description": "Right double click paddle",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Group 4",
-            "description": "Group used to inform devices about status updates",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Ignore Start-Level (Transmitting)",
-            "description": "Dimmers controlled by this switch will start dimming from their current level.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No",
-                    "value": 0
-                },
-                {
-                    "label": "Yes",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Suspend group 4",
-            "description": "Temporarily disable transmitting commands to Group 4",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No",
-                    "value": 0
-                },
-                {
-                    "label": "Yes",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Night Light",
-            "description": "Night-light mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No",
-                    "value": 0
-                },
-                {
-                    "label": "Yes",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturerId": "0x0001",
+	"label": "ZDM230",
+	"description": "HomePro Wall Dimmer ZDM230",
+	"devices": [
+		{
+			"productType": "0x444d",
+			"productId": "0x3330"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Left paddle",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Group 2",
+			"description": "Right Paddle",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Group 3",
+			"description": "Right double click paddle",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Group 4",
+			"description": "Group used to inform devices about status updates",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Ignore Start-Level (Transmitting)",
+			"description": "Dimmers controlled by this switch will start dimming from their current level.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Suspend group 4",
+			"description": "Temporarily disable transmitting commands to Group 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Night Light",
+			"description": "Night-light mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		}
+	}
 }

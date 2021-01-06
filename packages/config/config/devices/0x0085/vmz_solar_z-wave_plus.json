@@ -1,12 +1,6 @@
 // Fakro VMZ Solar z-wave plus
 // Awning Blind z-wave plus version
 {
-	"_approved": true,
-	"_warnings": [
-		"Overview information is not set",
-		"Inclusion information is not set",
-		"Exclusion information is not set"
-	],
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
 	"label": "VMZ Solar z-wave plus",

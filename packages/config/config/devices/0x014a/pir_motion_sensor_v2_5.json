@@ -1,66 +1,65 @@
 // Ecolink PIR Motion Sensor v2.5
 // Z-Wave Motion Sensor
 {
-    "_approved": true,
-    "manufacturer": "Ecolink",
-    "manufacturerId": "0x014a",
-    "label": "PIR Motion Sensor v2.5",
-    "description": "Z-Wave Motion Sensor",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Send Basic Sets",
-            "description": "Send or do not send Basic Set commands to AG2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Do not send",
-                    "value": 0
-                },
-                {
-                    "label": "Send Basic Sets",
-                    "value": 255
-                }
-            ]
-        },
-        "2": {
-            "label": "Send Binary Reports",
-            "description": "Send Sensor Binary Reports for backward compatibility",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Send Sensor Binary Reports",
-                    "value": 0
-                },
-                {
-                    "label": "Send only Notification Reports",
-                    "value": 255
-                }
-            ]
-        }
-    }
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "PIR Motion Sensor v2.5",
+	"description": "Z-Wave Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Send Basic Sets",
+			"description": "Send or do not send Basic Set commands to AG2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do not send",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Sets",
+					"value": 255
+				}
+			]
+		},
+		"2": {
+			"label": "Send Binary Reports",
+			"description": "Send Sensor Binary Reports for backward compatibility",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send Sensor Binary Reports",
+					"value": 0
+				},
+				{
+					"label": "Send only Notification Reports",
+					"value": 255
+				}
+			]
+		}
+	}
 }

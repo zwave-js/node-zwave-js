@@ -1,43 +1,42 @@
 // Nexia Home Intelligence DB100Z
 // Doorbell
 {
-    "_approved": true,
-    "manufacturer": "Nexia Home Intelligence",
-    "manufacturerId": "0x0178",
-    "label": "DB100Z",
-    "description": "Doorbell",
-    "devices": [
-        {
-            "productType": "0x4442",
-            "productId": "0x3130"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Send Battery Report with Notification Report",
-            "description": "Send Battery Report with Notification Report",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Do not send battery report",
-                    "value": 0
-                },
-                {
-                    "label": "Send Battery Report",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Nexia Home Intelligence",
+	"manufacturerId": "0x0178",
+	"label": "DB100Z",
+	"description": "Doorbell",
+	"devices": [
+		{
+			"productType": "0x4442",
+			"productId": "0x3130"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Send Battery Report with Notification Report",
+			"description": "Send Battery Report with Notification Report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do not send battery report",
+					"value": 0
+				},
+				{
+					"label": "Send Battery Report",
+					"value": 1
+				}
+			]
+		}
+	}
 }

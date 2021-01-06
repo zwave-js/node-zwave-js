@@ -1,48 +1,47 @@
 // Dragon Tech Industrial, Ltd. PA-100
 // Plug-in On/Off Switch
 {
-    "_approved": true,
-    "manufacturer": "Dragon Tech Industrial, Ltd.",
-    "manufacturerId": "0x0184",
-    "label": "PA-100",
-    "description": "Plug-in On/Off Switch",
-    "devices": [
-        {
-            "productType": "0x4447",
-            "productId": "0x3031"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED Indicator",
-            "description": "Controls LED behavior when switch state is on/off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "off/on",
-                    "value": 0
-                },
-                {
-                    "label": "on/off",
-                    "value": 1
-                },
-                {
-                    "label": "off",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Dragon Tech Industrial, Ltd.",
+	"manufacturerId": "0x0184",
+	"label": "PA-100",
+	"description": "Plug-in On/Off Switch",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x3031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED Indicator",
+			"description": "Controls LED behavior when switch state is on/off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "off/on",
+					"value": 0
+				},
+				{
+					"label": "on/off",
+					"value": 1
+				},
+				{
+					"label": "off",
+					"value": 2
+				}
+			]
+		}
+	}
 }

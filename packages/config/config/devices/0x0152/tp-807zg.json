@@ -1,20 +1,19 @@
 // UFairy G.R. Tech TP-807ZG
 // Smoke + Carbon Monoxide + Natural Liquefied Gas Leak Detector
 {
-    "_approved": true,
-    "manufacturer": "UFairy G.R. Tech",
-    "manufacturerId": "0x0152",
-    "label": "TP-807ZG",
-    "description": "Smoke + Carbon Monoxide + Natural Liquefied Gas Leak Detector",
-    "devices": [
-        {
-            "productType": "0x0500",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "UFairy G.R. Tech",
+	"manufacturerId": "0x0152",
+	"label": "TP-807ZG",
+	"description": "Smoke + Carbon Monoxide + Natural Liquefied Gas Leak Detector",
+	"devices": [
+		{
+			"productType": "0x0500",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

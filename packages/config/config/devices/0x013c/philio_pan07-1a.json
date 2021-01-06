@@ -1,198 +1,197 @@
 // Philio Technology Corp Philio PAN07-1A
 // TWO SPDT Switch module with meter
 {
-    "_approved": true,
-    "manufacturer": "Philio Technology Corp",
-    "manufacturerId": "0x013c",
-    "label": "Philio PAN07-1A",
-    "description": "TWO SPDT Switch module with meter",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0005"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "maxNodes": 1
-        },
-        "3": {
-            "label": "Group 3",
-            "maxNodes": 1
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Watt Meter Report Period",
-            "description": "Watt Meter Report Period",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 720,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "KWH Meter Report",
-            "description": "KWH Meter Report",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Selected Relay",
-            "description": "Selected Relay",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Relay1",
-                    "value": 1
-                },
-                {
-                    "label": "Relay2",
-                    "value": 2
-                },
-                {
-                    "label": "Relay1 & Relay2",
-                    "value": 3
-                }
-            ]
-        },
-        "4": {
-            "label": "Mode",
-            "description": "Mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Edge mode",
-                    "value": 1
-                },
-                {
-                    "label": "Pulse mode",
-                    "value": 2
-                },
-                {
-                    "label": "Edge-Toggle mode",
-                    "value": 3
-                }
-            ]
-        },
-        "5": {
-            "label": "Threshold of current for Load Caution",
-            "description": "Threshold of current for Load Caution",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 600,
-            "defaultValue": 600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Threshold of KWH for Load Caution",
-            "description": "Threshold of KWH for Load Caution",
-            "unit": "KWh",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 10000,
-            "defaultValue": 10000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Relay control mode",
-            "description": "Relay control mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Control relay refer to meter wattage",
-                    "value": 1
-                },
-                {
-                    "label": "Control relay directly",
-                    "value": 2
-                }
-            ]
-        },
-        "8": {
-            "label": "Restore Relay state mode",
-            "description": "Restore Relay state mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "All relay stay NC terminal",
-                    "value": 0
-                },
-                {
-                    "label": "Last relay switch state",
-                    "value": 1
-                },
-                {
-                    "label": "All relay stay NO terminal",
-                    "value": 2
-                }
-            ]
-        },
-        "9": {
-            "label": "Existence of Endpoint3",
-            "description": "Existence of Endpoint3",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Endpoint3 exist",
-                    "value": 1
-                },
-                {
-                    "label": "No Endpoint3",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "Philio PAN07-1A",
+	"description": "TWO SPDT Switch module with meter",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0005"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 1
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 1
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Watt Meter Report Period",
+			"description": "Watt Meter Report Period",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 720,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "KWH Meter Report",
+			"description": "KWH Meter Report",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Selected Relay",
+			"description": "Selected Relay",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Relay1",
+					"value": 1
+				},
+				{
+					"label": "Relay2",
+					"value": 2
+				},
+				{
+					"label": "Relay1 & Relay2",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Mode",
+			"description": "Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Edge mode",
+					"value": 1
+				},
+				{
+					"label": "Pulse mode",
+					"value": 2
+				},
+				{
+					"label": "Edge-Toggle mode",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Threshold of current for Load Caution",
+			"description": "Threshold of current for Load Caution",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 600,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Threshold of KWH for Load Caution",
+			"description": "Threshold of KWH for Load Caution",
+			"unit": "KWh",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10000,
+			"defaultValue": 10000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Relay control mode",
+			"description": "Relay control mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Control relay refer to meter wattage",
+					"value": 1
+				},
+				{
+					"label": "Control relay directly",
+					"value": 2
+				}
+			]
+		},
+		"8": {
+			"label": "Restore Relay state mode",
+			"description": "Restore Relay state mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All relay stay NC terminal",
+					"value": 0
+				},
+				{
+					"label": "Last relay switch state",
+					"value": 1
+				},
+				{
+					"label": "All relay stay NO terminal",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Existence of Endpoint3",
+			"description": "Existence of Endpoint3",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Endpoint3 exist",
+					"value": 1
+				},
+				{
+					"label": "No Endpoint3",
+					"value": 2
+				}
+			]
+		}
+	}
 }

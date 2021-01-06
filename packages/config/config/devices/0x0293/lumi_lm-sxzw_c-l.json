@@ -1,20 +1,19 @@
 // Home controls Lumi LM-SxZW (C-L)
 // Z-Wave Switch with 4 on/off light switches
 {
-    "_approved": true,
-    "manufacturer": "Home controls",
-    "manufacturerId": "0x0293",
-    "label": "Lumi LM-SxZW (C-L)",
-    "description": "Z-Wave Switch with 4 on/off light switches",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x4414"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Home controls",
+	"manufacturerId": "0x0293",
+	"label": "Lumi LM-SxZW (C-L)",
+	"description": "Z-Wave Switch with 4 on/off light switches",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x4414"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

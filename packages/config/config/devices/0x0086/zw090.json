@@ -1,10 +1,6 @@
 // AEON Labs ZW090
 // Z‐Stick Gen5 USB Controller
 {
-	"_approved": true,
-	"_warnings": [
-		"No channels have been assigned even though there are user configurable command classes."
-	],
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW090",

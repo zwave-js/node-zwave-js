@@ -1,30 +1,29 @@
 // Residential Control Systems, Inc. (RCS) TZ45
 // Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Residential Control Systems, Inc. (RCS)",
-    "manufacturerId": "0x0010",
-    "label": "TZ45",
-    "description": "Thermostat",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0009"
-        },
-        {
-            "productType": "0x0001",
-            "productId": "0x000b"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Residential Control Systems, Inc. (RCS)",
+	"manufacturerId": "0x0010",
+	"label": "TZ45",
+	"description": "Thermostat",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0009"
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x000b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }

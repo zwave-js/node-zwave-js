@@ -1,48 +1,47 @@
 // Vision Security ZD2102-5
 // Door Window Sensor
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZD2102-5",
-    "description": "Door Window Sensor",
-    "devices": [
-        {
-            "productType": "0x2001",
-            "productId": "0x0105"
-        },
-        {
-            "productType": "0x2001",
-            "productId": "0x0106"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "External switch",
-            "description": "Determines if the external switch can be used.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 255
-                }
-            ]
-        }
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZD2102-5",
+	"description": "Door Window Sensor",
+	"devices": [
+		{
+			"productType": "0x2001",
+			"productId": "0x0105"
+		},
+		{
+			"productType": "0x2001",
+			"productId": "0x0106"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "External switch",
+			"description": "Determines if the external switch can be used.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		}
+	}
 }

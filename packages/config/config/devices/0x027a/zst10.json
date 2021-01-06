@@ -1,22 +1,18 @@
 // Zooz ZST10
 // S2 USB Stick Controller
 {
-    "_approved": true,
-    "_warnings": [
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZST10",
-    "description": "S2 USB Stick Controller",
-    "devices": [
-        {
-            "productType": "0x0401",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZST10",
+	"description": "S2 USB Stick Controller",
+	"devices": [
+		{
+			"productType": "0x0401",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

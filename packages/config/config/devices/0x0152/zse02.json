@@ -1,20 +1,19 @@
 // UFairy G.R. Tech ZSE02
 // Zooz Z‑Wave Plus Motion Sensor
 {
-    "_approved": true,
-    "manufacturer": "UFairy G.R. Tech",
-    "manufacturerId": "0x0152",
-    "label": "ZSE02",
-    "description": "Zooz Z‑Wave Plus Motion Sensor",
-    "devices": [
-        {
-            "productType": "0x0500",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "UFairy G.R. Tech",
+	"manufacturerId": "0x0152",
+	"label": "ZSE02",
+	"description": "Zooz Z‑Wave Plus Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0500",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

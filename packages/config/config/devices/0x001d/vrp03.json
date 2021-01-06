@@ -1,26 +1,25 @@
 // Leviton VRP03
 // 300W Scene Capable Plug-In Lamp Dimming Module
 {
-    "_approved": true,
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRP03",
-    "description": "300W Scene Capable Plug-In Lamp Dimming Module",
-    "devices": [
-        {
-            "productType": "0x0202",
-            "productId": "0x030b"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRP03",
+	"description": "300W Scene Capable Plug-In Lamp Dimming Module",
+	"devices": [
+		{
+			"productType": "0x0202",
+			"productId": "0x030b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

@@ -1,287 +1,283 @@
 // Aeotec Ltd. ZW175
 // Smart Switch 7
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Aeotec Ltd.",
-    "manufacturerId": "0x0371",
-    "label": "ZW175",
-    "description": "Smart Switch 7",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x00af"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "4": {
-            "label": "Overload threshold",
-            "description": "Set Watt (W) Threshold for Overpower.",
-            "unit": "W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 2415,
-            "defaultValue": 2415,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Switch reaction to alarm",
-            "description": "What do to when an alarm is recieved",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No Action",
-                    "value": 0
-                },
-                {
-                    "label": "Turn switch off",
-                    "value": 1
-                },
-                {
-                    "label": "Turn switch on",
-                    "value": 2
-                },
-                {
-                    "label": "Turn the switch on and off",
-                    "value": 3
-                }
-            ]
-        },
-        "9": {
-            "label": "Alarm reaction when received",
-            "description": "Configure what alarms Smart Switch 7 will react to from other Z-Wave devices.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 16384,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Trigger open, disabled closed",
-                    "value": 0
-                },
-                {
-                    "label": "Trigger closed, disabled open",
-                    "value": 1
-                },
-                {
-                    "label": "Smoke alarm",
-                    "value": 256
-                },
-                {
-                    "label": "CO Alarm",
-                    "value": 512
-                },
-                {
-                    "label": "CO2 Alarm",
-                    "value": 1024
-                },
-                {
-                    "label": "Heat Alarm",
-                    "value": 2048
-                },
-                {
-                    "label": "Water Alarm",
-                    "value": 4096
-                },
-                {
-                    "label": "Access Control",
-                    "value": 8192
-                },
-                {
-                    "label": "Home Security",
-                    "value": 16384
-                }
-            ]
-        },
-        "10": {
-            "label": "Release/Disable alarm",
-            "description": "Sets how you are able to disable Smart Switch 7s alarm state",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "Flash frequency",
-            "description": "Configures the LED flash frequency and amount of time",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19": {
-            "label": "Start/Stop LED flash",
-            "description": "Sets the timeframe of flashing in seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Power restored state",
-            "description": "Switches state after an power outage",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "80": {
-            "label": "Status Update",
-            "description": "Determine which reports are sent to your gateway",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No report sent",
-                    "value": 0
-                },
-                {
-                    "label": "Report Basic Report",
-                    "value": 1
-                },
-                {
-                    "label": "Report Binary Switch",
-                    "value": 2
-                }
-            ]
-        },
-        "81": {
-            "label": "LED indicator mode",
-            "description": "Allows you to configure how the LED indicator works",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Night Light Mode",
-                    "value": 1
-                },
-                {
-                    "label": "On/Off Mode",
-                    "value": 2
-                }
-            ]
-        },
-        "82": {
-            "label": "Night Light Mode",
-            "description": "Enable or disable Night Light Mode during specific times",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "91": {
-            "label": "Watt threshold",
-            "description": "When to send a watt report",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 2300,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "92": {
-            "label": "kWh threshold",
-            "description": "When to send a kWh report",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 10000,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "93": {
-            "label": "Current threshold",
-            "description": "When to send a current report",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "101": {
-            "label": "Timed report enable/disable",
-            "description": "Configure timed report",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 15,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "111": {
-            "label": "Timed report interval",
-            "description": "Reports the sensors set on Parameter 101",
-            "valueSize": 4,
-            "minValue": 30,
-            "maxValue": 2592000,
-            "defaultValue": 600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Factory reset",
-            "description": "Factory reset the smart switch 7",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZW175",
+	"description": "Smart Switch 7",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x00af"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"4": {
+			"label": "Overload threshold",
+			"description": "Set Watt (W) Threshold for Overpower.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2415,
+			"defaultValue": 2415,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Switch reaction to alarm",
+			"description": "What do to when an alarm is recieved",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Turn switch off",
+					"value": 1
+				},
+				{
+					"label": "Turn switch on",
+					"value": 2
+				},
+				{
+					"label": "Turn the switch on and off",
+					"value": 3
+				}
+			]
+		},
+		"9": {
+			"label": "Alarm reaction when received",
+			"description": "Configure what alarms Smart Switch 7 will react to from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 16384,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Trigger open, disabled closed",
+					"value": 0
+				},
+				{
+					"label": "Trigger closed, disabled open",
+					"value": 1
+				},
+				{
+					"label": "Smoke alarm",
+					"value": 256
+				},
+				{
+					"label": "CO Alarm",
+					"value": 512
+				},
+				{
+					"label": "CO2 Alarm",
+					"value": 1024
+				},
+				{
+					"label": "Heat Alarm",
+					"value": 2048
+				},
+				{
+					"label": "Water Alarm",
+					"value": 4096
+				},
+				{
+					"label": "Access Control",
+					"value": 8192
+				},
+				{
+					"label": "Home Security",
+					"value": 16384
+				}
+			]
+		},
+		"10": {
+			"label": "Release/Disable alarm",
+			"description": "Sets how you are able to disable Smart Switch 7s alarm state",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Flash frequency",
+			"description": "Configures the LED flash frequency and amount of time",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Start/Stop LED flash",
+			"description": "Sets the timeframe of flashing in seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Power restored state",
+			"description": "Switches state after an power outage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"80": {
+			"label": "Status Update",
+			"description": "Determine which reports are sent to your gateway",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No report sent",
+					"value": 0
+				},
+				{
+					"label": "Report Basic Report",
+					"value": 1
+				},
+				{
+					"label": "Report Binary Switch",
+					"value": 2
+				}
+			]
+		},
+		"81": {
+			"label": "LED indicator mode",
+			"description": "Allows you to configure how the LED indicator works",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Disabled",
+					"value": 0
+				},
+				{
+					"label": "Night Light Mode",
+					"value": 1
+				},
+				{
+					"label": "On/Off Mode",
+					"value": 2
+				}
+			]
+		},
+		"82": {
+			"label": "Night Light Mode",
+			"description": "Enable or disable Night Light Mode during specific times",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"91": {
+			"label": "Watt threshold",
+			"description": "When to send a watt report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2300,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"92": {
+			"label": "kWh threshold",
+			"description": "When to send a kWh report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 10000,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"93": {
+			"label": "Current threshold",
+			"description": "When to send a current report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101": {
+			"label": "Timed report enable/disable",
+			"description": "Configure timed report",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"111": {
+			"label": "Timed report interval",
+			"description": "Reports the sensors set on Parameter 101",
+			"valueSize": 4,
+			"minValue": 30,
+			"maxValue": 2592000,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Factory reset",
+			"description": "Factory reset the smart switch 7",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

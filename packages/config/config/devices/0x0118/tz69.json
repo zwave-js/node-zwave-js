@@ -1,7 +1,6 @@
 // TKB Home TZ69
 // Smart meter switch
 {
-	"_approved": true,
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
 	"label": "TZ69",

@@ -1,33 +1,32 @@
 // Willis Electric Co., Ltd. NZW97
 // Inovelli Outdoor Smart Plug (2 Channel)
 {
-    "_approved": true,
-    "manufacturer": "Willis Electric Co., Ltd.",
-    "manufacturerId": "0x015d",
-    "label": "NZW97",
-    "description": "Inovelli Outdoor Smart Plug (2 Channel)",
-    "devices": [
-        {
-            "productType": "0x6100",
-            "productId": "0x6100"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "LED Indicator",
-            "description": "LED Indicator ON/OFF/Disabled",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "NZW97",
+	"description": "Inovelli Outdoor Smart Plug (2 Channel)",
+	"devices": [
+		{
+			"productType": "0x6100",
+			"productId": "0x6100"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "LED Indicator",
+			"description": "LED Indicator ON/OFF/Disabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		}
+	}
 }

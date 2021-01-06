@@ -1,7 +1,6 @@
 // AEON Labs DSC06
 // Smart Energy Switch
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSC06",

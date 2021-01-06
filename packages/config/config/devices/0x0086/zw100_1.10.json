@@ -1,7 +1,6 @@
 // AEON Labs ZW100
 // Multisensor 6
 {
-	"_approved": false,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW100",

@@ -1,88 +1,84 @@
 // Zooz ZEN22
 // Z-Wave Plus Dimmer Light Switch
 {
-    "_approved": true,
-    "_errors": [
-        "Channel \"switch_dimmer\" in endpoint 0 command class SWITCH_MULTILEVEL is duplicated!"
-    ],
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN22",
-    "description": "Z-Wave Plus Dimmer Light Switch",
-    "devices": [
-        {
-            "productType": "0xb112",
-            "productId": "0x1f1c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "20.15",
-        "max": "20.15"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Paddle Control",
-            "description": "Choose Paddle Functionality",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Upper paddle turns on, lower paddle turns off",
-                    "value": 0
-                },
-                {
-                    "label": "Upper paddle turns off, lower paddle turns on",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "LED Indicator Control",
-            "description": "Choose LED Functionality",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED on when switch off, LED off when switch off",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when switch on, LED off when switch off",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Enable / Disable LED Indicator",
-            "description": "Enable or disable the LED indicator",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED indicator is enabled",
-                    "value": 0
-                },
-                {
-                    "label": "LED indicator is disabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN22",
+	"description": "Z-Wave Plus Dimmer Light Switch",
+	"devices": [
+		{
+			"productType": "0xb112",
+			"productId": "0x1f1c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "20.15",
+		"max": "20.15"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Paddle Control",
+			"description": "Choose Paddle Functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Upper paddle turns on, lower paddle turns off",
+					"value": 0
+				},
+				{
+					"label": "Upper paddle turns off, lower paddle turns on",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "LED Indicator Control",
+			"description": "Choose LED Functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when switch off, LED off when switch off",
+					"value": 0
+				},
+				{
+					"label": "LED on when switch on, LED off when switch off",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Enable / Disable LED Indicator",
+			"description": "Enable or disable the LED indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED indicator is enabled",
+					"value": 0
+				},
+				{
+					"label": "LED indicator is disabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

@@ -1,129 +1,128 @@
 // McoHome Technology Co., Ltd. MH8-FC
 // Fan Coil Thermostat (Zwave Plus)
 {
-    "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH8-FC",
-    "description": "Fan Coil Thermostat (Zwave Plus)",
-    "devices": [
-        {
-            "productType": "0x0801",
-            "productId": "0x3102"
-        },
-        {
-            "productType": "0x0801",
-            "productId": "0x5102"
-        },
-        {
-            "productType": "0x0802",
-            "productId": "0x3102"
-        },
-        {
-            "productType": "0x0802",
-            "productId": "0x5102"
-        },
-        {
-            "productType": "0x0803",
-            "productId": "0x5102"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "For sending temperature, working mode, etc. notifications",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Temperature Unit Setting",
-            "description": "Temperature Unit Setting. 0 = C, 1 = F",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Celcius",
-                    "value": 0
-                },
-                {
-                    "label": "Fahrenheit",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Upload Temperature Automatically",
-            "description": "Upload Temperature Automatically",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Upload the difference value only",
-                    "value": 1
-                },
-                {
-                    "label": "Timing upload mode only",
-                    "value": 2
-                },
-                {
-                    "label": "Upload the difference + timing upload mode",
-                    "value": 3
-                }
-            ]
-        },
-        "3": {
-            "label": "Upload temperature difference",
-            "description": "Upload temperature difference",
-            "valueSize": 2,
-            "minValue": 3,
-            "maxValue": 1000,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Upload time interval",
-            "description": "Upload time interval in seconds",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 65535,
-            "defaultValue": 30,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Factory Setting",
-            "description": "Factory Setting",
-            "valueSize": 1,
-            "minValue": 85,
-            "maxValue": 85,
-            "defaultValue": 85,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH8-FC",
+	"description": "Fan Coil Thermostat (Zwave Plus)",
+	"devices": [
+		{
+			"productType": "0x0801",
+			"productId": "0x3102"
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x5102"
+		},
+		{
+			"productType": "0x0802",
+			"productId": "0x3102"
+		},
+		{
+			"productType": "0x0802",
+			"productId": "0x5102"
+		},
+		{
+			"productType": "0x0803",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"description": "For sending temperature, working mode, etc. notifications",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Temperature Unit Setting",
+			"description": "Temperature Unit Setting. 0 = C, 1 = F",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celcius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Upload Temperature Automatically",
+			"description": "Upload Temperature Automatically",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "Upload the difference value only",
+					"value": 1
+				},
+				{
+					"label": "Timing upload mode only",
+					"value": 2
+				},
+				{
+					"label": "Upload the difference + timing upload mode",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Upload temperature difference",
+			"description": "Upload temperature difference",
+			"valueSize": 2,
+			"minValue": 3,
+			"maxValue": 1000,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Upload time interval",
+			"description": "Upload time interval in seconds",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 65535,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Factory Setting",
+			"description": "Factory Setting",
+			"valueSize": 1,
+			"minValue": 85,
+			"maxValue": 85,
+			"defaultValue": 85,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		}
+	}
 }

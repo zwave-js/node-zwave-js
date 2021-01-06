@@ -1,187 +1,186 @@
 // Z-Wave.Me ZME_06437
 // Wall Plug Switch
 {
-    "_approved": true,
-    "manufacturer": "Z-Wave.Me",
-    "manufacturerId": "0x0115",
-    "label": "ZME_06437",
-    "description": "Wall Plug Switch",
-    "devices": [
-        {
-            "productType": "0x1000",
-            "productId": "0x0200"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Set LED indication mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Show switch state",
-                    "value": 1
-                },
-                {
-                    "label": "Operated by Indicator Command Class",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Automatic switch off",
-            "description": "If not zero, automatically switch off after a user defined time",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Function of RF off command",
-            "description": "Function of RF off command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Ignore",
-                    "value": 1
-                },
-                {
-                    "label": "Switch ON",
-                    "value": 2
-                },
-                {
-                    "label": "Switch on if load is off else switch off",
-                    "value": 3
-                }
-            ]
-        },
-        "5": {
-            "label": "Restore switch state after power cycle",
-            "description": "Restore switch state after power cycle",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No, turn off",
-                    "value": 0
-                },
-                {
-                    "label": "Yes (Default)",
-                    "value": 1
-                }
-            ]
-        },
-        "20": {
-            "label": "Energy consumption",
-            "description": "Energy consumption",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1800,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "Off Color",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Yellow",
-                    "value": 4
-                }
-            ]
-        },
-        "22": {
-            "label": "On Color",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Yellow",
-                    "value": 4
-                }
-            ]
-        }
-    }
+	"manufacturer": "Z-Wave.Me",
+	"manufacturerId": "0x0115",
+	"label": "ZME_06437",
+	"description": "Wall Plug Switch",
+	"devices": [
+		{
+			"productType": "0x1000",
+			"productId": "0x0200"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Set LED indication mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Show switch state",
+					"value": 1
+				},
+				{
+					"label": "Operated by Indicator Command Class",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Automatic switch off",
+			"description": "If not zero, automatically switch off after a user defined time",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Function of RF off command",
+			"description": "Function of RF off command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch OFF",
+					"value": 0
+				},
+				{
+					"label": "Ignore",
+					"value": 1
+				},
+				{
+					"label": "Switch ON",
+					"value": 2
+				},
+				{
+					"label": "Switch on if load is off else switch off",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Restore switch state after power cycle",
+			"description": "Restore switch state after power cycle",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No, turn off",
+					"value": 0
+				},
+				{
+					"label": "Yes (Default)",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "Energy consumption",
+			"description": "Energy consumption",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1800,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Off Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				}
+			]
+		},
+		"22": {
+			"label": "On Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				}
+			]
+		}
+	}
 }

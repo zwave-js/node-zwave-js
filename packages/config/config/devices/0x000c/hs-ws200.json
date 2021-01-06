@@ -1,193 +1,192 @@
 // HomeSeer Technologies HS-WS200+
 // Scene Capable Wall Switch
 {
-    "_approved": true,
-    "manufacturer": "HomeSeer Technologies",
-    "manufacturerId": "0x000c",
-    "label": "HS-WS200+",
-    "description": "Scene Capable Wall Switch",
-    "devices": [
-        {
-            "productType": "0x4447",
-            "productId": "0x3035"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "Bottom LED Operation",
-            "description": "Sets LED operation (in normal mode)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED ON if load is OFF",
-                    "value": 0
-                },
-                {
-                    "label": "LED OFF if load is OFF",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Orientation",
-            "description": "Sets paddle’s load orientation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Top of Paddle turns load ON",
-                    "value": 0
-                },
-                {
-                    "label": "Bottom of Paddle turns load ON",
-                    "value": 1
-                }
-            ]
-        },
-        "13": {
-            "label": "Status Mode",
-            "description": "Sets switch mode of operation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal mode (load status)",
-                    "value": 0
-                },
-                {
-                    "label": "Status mode (custom status)",
-                    "value": 1
-                }
-            ]
-        },
-        "14": {
-            "label": "Load Status LED Color",
-            "description": "Sets the Normal mode LED color",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "White",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Magenta",
-                    "value": 4
-                },
-                {
-                    "label": "Yellow",
-                    "value": 5
-                },
-                {
-                    "label": "Cyan",
-                    "value": 6
-                }
-            ]
-        },
-        "21": {
-            "label": "Status LED Color",
-            "description": "Sets the Status mode LED color",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Magenta",
-                    "value": 4
-                },
-                {
-                    "label": "Yellow",
-                    "value": 5
-                },
-                {
-                    "label": "Cyan",
-                    "value": 6
-                },
-                {
-                    "label": "White",
-                    "value": 7
-                }
-            ]
-        },
-        "31": {
-            "label": "Blink Frequency",
-            "description": "Sets the switch LED Blink frequency",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No blink",
-                    "value": 0
-                },
-                {
-                    "label": "100ms ON then 100ms OFF",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-WS200+",
+	"description": "Scene Capable Wall Switch",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x3035"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "Bottom LED Operation",
+			"description": "Sets LED operation (in normal mode)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON if load is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED OFF if load is OFF",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Orientation",
+			"description": "Sets paddle’s load orientation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Top of Paddle turns load ON",
+					"value": 0
+				},
+				{
+					"label": "Bottom of Paddle turns load ON",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "Status Mode",
+			"description": "Sets switch mode of operation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal mode (load status)",
+					"value": 0
+				},
+				{
+					"label": "Status mode (custom status)",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Load Status LED Color",
+			"description": "Sets the Normal mode LED color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "White",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				}
+			]
+		},
+		"21": {
+			"label": "Status LED Color",
+			"description": "Sets the Status mode LED color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
+		},
+		"31": {
+			"label": "Blink Frequency",
+			"description": "Sets the switch LED Blink frequency",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No blink",
+					"value": 0
+				},
+				{
+					"label": "100ms ON then 100ms OFF",
+					"value": 1
+				}
+			]
+		}
+	}
 }

@@ -1,22 +1,18 @@
 // Leviton VRC0P-1LW
 // Serial Interface Module RS232
 {
-    "_approved": false,
-    "_errors": [
-        "No endpoints are configured"
-    ],
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRC0P-1LW",
-    "description": "Serial Interface Module RS232",
-    "devices": [
-        {
-            "productType": "0x001d",
-            "productId": "0x030b"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRC0P-1LW",
+	"description": "Serial Interface Module RS232",
+	"devices": [
+		{
+			"productType": "0x001d",
+			"productId": "0x030b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

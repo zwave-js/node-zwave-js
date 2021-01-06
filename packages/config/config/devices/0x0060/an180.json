@@ -1,62 +1,61 @@
 // Everspring AN180
 // Switch without metering
 {
-    "_approved": true,
-    "manufacturer": "Everspring",
-    "manufacturerId": "0x0060",
-    "label": "AN180",
-    "description": "Switch without metering",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0007"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Basic Set Command value",
-            "description": "Defines value for Basic Set command",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "On",
-                    "value": 255
-                }
-            ]
-        },
-        "2": {
-            "label": "Delaying time Group 1",
-            "description": "The delaying time to report to Group 1",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 25,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Remember the last status",
-            "description": "Remember the last status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "AN180",
+	"description": "Switch without metering",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0007"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Basic Set Command value",
+			"description": "Defines value for Basic Set command",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"2": {
+			"label": "Delaying time Group 1",
+			"description": "The delaying time to report to Group 1",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 25,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Remember the last status",
+			"description": "Remember the last status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

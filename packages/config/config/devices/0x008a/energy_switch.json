@@ -1,132 +1,131 @@
 // BeNext Energy Switch +
 // Energy Switch +
 {
-    "_approved": true,
-    "manufacturer": "BeNext",
-    "manufacturerId": "0x008a",
-    "label": "Energy Switch +",
-    "description": "Energy Switch +",
-    "devices": [
-        {
-            "productType": "0x0020",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Report",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Set to Default",
-            "description": "If value is set to 0XFF (255), device set to default",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Amount of decimals",
-            "description": "If value is set to 1 the info shall be presented with 1 decimal",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Power Limit",
-            "description": "The device will shut down when it reaches an amount higher then defined (W)",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 4500,
-            "defaultValue": 4500,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Start up with last known socket status",
-            "description": "Start up with last known socket status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Auto report %",
-            "description": "The value will change when the % is changed.",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 100,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Auto report Watt",
-            "description": "The value will change when the Watt is changed.",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Auto report time",
-            "description": "The time between 2 of the meter rerport",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 255,
-            "defaultValue": 20,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Relais delay time",
-            "description": "The time that needs to pass before the next state change",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 50,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Led indicator",
-            "description": "The state of the Led compared to the relais state",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "BeNext",
+	"manufacturerId": "0x008a",
+	"label": "Energy Switch +",
+	"description": "Energy Switch +",
+	"devices": [
+		{
+			"productType": "0x0020",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Report",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Set to Default",
+			"description": "If value is set to 0XFF (255), device set to default",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Amount of decimals",
+			"description": "If value is set to 1 the info shall be presented with 1 decimal",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Power Limit",
+			"description": "The device will shut down when it reaches an amount higher then defined (W)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4500,
+			"defaultValue": 4500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Start up with last known socket status",
+			"description": "Start up with last known socket status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Auto report %",
+			"description": "The value will change when the % is changed.",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Auto report Watt",
+			"description": "The value will change when the Watt is changed.",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Auto report time",
+			"description": "The time between 2 of the meter rerport",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Relais delay time",
+			"description": "The time that needs to pass before the next state change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Led indicator",
+			"description": "The state of the Led compared to the relais state",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,393 +1,392 @@
 // McoHome Technology Co., Ltd. MH-S521
 // Shutter Panel
 {
-    "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH-S521",
-    "description": "Shutter Panel",
-    "devices": [
-        {
-            "productType": "0xc321",
-            "productId": "0x5102"
-        },
-        {
-            "productType": "0xc521",
-            "productId": "0x5101"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "2": {
-            "label": "Power Failure State",
-            "description": "switch will be off when powered again",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "not saved",
-                    "value": 0
-                },
-                {
-                    "label": "saved",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "ALL ON/ALL OFF",
-            "description": "ALL ON/ALL OFF",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "forbid ALL ON, forbid ALL OFF",
-                    "value": 0
-                },
-                {
-                    "label": "forbid ALL ON, allow ALL OFF",
-                    "value": 1
-                },
-                {
-                    "label": "allow ALL ON, forbid ALL OFF",
-                    "value": 2
-                },
-                {
-                    "label": "allow ALL ON, allow ALL OFF",
-                    "value": 255
-                }
-            ]
-        },
-        "4": {
-            "label": "LED Backlit brightness level",
-            "description": "LED Backlit brightness level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 10,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Key Mode",
-            "description": "Key Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "single click to switch on/off status",
-                    "value": 0
-                },
-                {
-                    "label": "Key default as off state",
-                    "value": 1
-                },
-                {
-                    "label": "Key default as on state",
-                    "value": 2
-                },
-                {
-                    "label": "hold >3s then key is on, and off once released",
-                    "value": 3
-                },
-                {
-                    "label": "single click + hold >3s then key is on",
-                    "value": 4
-                }
-            ]
-        },
-        "6": {
-            "label": "Key On duration",
-            "description": "Key On duration",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Basic CC integration setting",
-            "description": "Basic CC integration setting",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "Scene respond",
-            "description": "Scene respond",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17": {
-            "label": "Key1 Scene Activate Mode Setting",
-            "description": "Key1 Scene Activate Mode Setting",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Scene activate function disabled",
-                    "value": 0
-                },
-                {
-                    "label": "One click key1 always activate scene ID1",
-                    "value": 1
-                },
-                {
-                    "label": "only activate scene ID1 when key1's relay open",
-                    "value": 2
-                },
-                {
-                    "label": "only activate scene ID1 when key1's relay closed",
-                    "value": 3
-                }
-            ]
-        },
-        "18": {
-            "label": "Key1 Activate Scene ID",
-            "description": "Key1 Activate Scene ID",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19": {
-            "label": "Key1 Activate Scene Duration",
-            "description": "Key1 Activate Scene Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Key2 Scene Activate Mode Setting",
-            "description": "Key2 Scene Activate Mode Setting",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Scene activate function disabled",
-                    "value": 0
-                },
-                {
-                    "label": "always activate scene ID1",
-                    "value": 1
-                },
-                {
-                    "label": ",only activate scene ID1 when key2's relay open",
-                    "value": 2
-                },
-                {
-                    "label": "nly activate scene ID1 when key2's relay closed",
-                    "value": 3
-                }
-            ]
-        },
-        "21": {
-            "label": "Key2 Activate Scene ID",
-            "description": "Key2 Activate Scene ID",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "Key2 Activate Scene Duration",
-            "description": "Key2 Activate Scene Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "23": {
-            "label": "Key3 Scene Activate Mode Setting",
-            "description": "Key3 Scene Activate Mode Setting",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Scene activate function disabled",
-                    "value": 0
-                },
-                {
-                    "label": "always activate scene ID1",
-                    "value": 1
-                },
-                {
-                    "label": "only activate scene ID1 when key3's relay open",
-                    "value": 2
-                },
-                {
-                    "label": "only activate scene ID1 when key3's relay closed",
-                    "value": 3
-                }
-            ]
-        },
-        "24": {
-            "label": "Key3 Activate Scene ID",
-            "description": "Key3 Activate Scene ID",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "25": {
-            "label": "Key3 Activate Scene Duration",
-            "description": "Key3 Activate Scene Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "32": {
-            "label": "Scene respond ID 1-50",
-            "description": "Scene respond ID 1-50",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "33": {
-            "label": "Scene respond ID 51-100",
-            "description": "Scene respond ID 51-100",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "34": {
-            "label": "Scene respond ID 101-150",
-            "description": "Scene respond ID 101-150",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "35": {
-            "label": "Scene respond ID 151-200",
-            "description": "Scene respond ID 151-200",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "36": {
-            "label": "Scene respond ID 201-250",
-            "description": "Scene respond ID 201-250",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Factory Reset",
-            "description": "Factory Reset",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "restore factory setting",
-                    "value": 85
-                }
-            ]
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-S521",
+	"description": "Shutter Panel",
+	"devices": [
+		{
+			"productType": "0xc321",
+			"productId": "0x5102"
+		},
+		{
+			"productType": "0xc521",
+			"productId": "0x5101"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "Power Failure State",
+			"description": "switch will be off when powered again",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "not saved",
+					"value": 0
+				},
+				{
+					"label": "saved",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "ALL ON/ALL OFF",
+			"description": "ALL ON/ALL OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "forbid ALL ON, forbid ALL OFF",
+					"value": 0
+				},
+				{
+					"label": "forbid ALL ON, allow ALL OFF",
+					"value": 1
+				},
+				{
+					"label": "allow ALL ON, forbid ALL OFF",
+					"value": 2
+				},
+				{
+					"label": "allow ALL ON, allow ALL OFF",
+					"value": 255
+				}
+			]
+		},
+		"4": {
+			"label": "LED Backlit brightness level",
+			"description": "LED Backlit brightness level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Key Mode",
+			"description": "Key Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "single click to switch on/off status",
+					"value": 0
+				},
+				{
+					"label": "Key default as off state",
+					"value": 1
+				},
+				{
+					"label": "Key default as on state",
+					"value": 2
+				},
+				{
+					"label": "hold >3s then key is on, and off once released",
+					"value": 3
+				},
+				{
+					"label": "single click + hold >3s then key is on",
+					"value": 4
+				}
+			]
+		},
+		"6": {
+			"label": "Key On duration",
+			"description": "Key On duration",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Basic CC integration setting",
+			"description": "Basic CC integration setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Scene respond",
+			"description": "Scene respond",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "Key1 Scene Activate Mode Setting",
+			"description": "Key1 Scene Activate Mode Setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene activate function disabled",
+					"value": 0
+				},
+				{
+					"label": "One click key1 always activate scene ID1",
+					"value": 1
+				},
+				{
+					"label": "only activate scene ID1 when key1's relay open",
+					"value": 2
+				},
+				{
+					"label": "only activate scene ID1 when key1's relay closed",
+					"value": 3
+				}
+			]
+		},
+		"18": {
+			"label": "Key1 Activate Scene ID",
+			"description": "Key1 Activate Scene ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Key1 Activate Scene Duration",
+			"description": "Key1 Activate Scene Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Key2 Scene Activate Mode Setting",
+			"description": "Key2 Scene Activate Mode Setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene activate function disabled",
+					"value": 0
+				},
+				{
+					"label": "always activate scene ID1",
+					"value": 1
+				},
+				{
+					"label": ",only activate scene ID1 when key2's relay open",
+					"value": 2
+				},
+				{
+					"label": "nly activate scene ID1 when key2's relay closed",
+					"value": 3
+				}
+			]
+		},
+		"21": {
+			"label": "Key2 Activate Scene ID",
+			"description": "Key2 Activate Scene ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Key2 Activate Scene Duration",
+			"description": "Key2 Activate Scene Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "Key3 Scene Activate Mode Setting",
+			"description": "Key3 Scene Activate Mode Setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene activate function disabled",
+					"value": 0
+				},
+				{
+					"label": "always activate scene ID1",
+					"value": 1
+				},
+				{
+					"label": "only activate scene ID1 when key3's relay open",
+					"value": 2
+				},
+				{
+					"label": "only activate scene ID1 when key3's relay closed",
+					"value": 3
+				}
+			]
+		},
+		"24": {
+			"label": "Key3 Activate Scene ID",
+			"description": "Key3 Activate Scene ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"25": {
+			"label": "Key3 Activate Scene Duration",
+			"description": "Key3 Activate Scene Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Scene respond ID 1-50",
+			"description": "Scene respond ID 1-50",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "Scene respond ID 51-100",
+			"description": "Scene respond ID 51-100",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "Scene respond ID 101-150",
+			"description": "Scene respond ID 101-150",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35": {
+			"label": "Scene respond ID 151-200",
+			"description": "Scene respond ID 151-200",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"36": {
+			"label": "Scene respond ID 201-250",
+			"description": "Scene respond ID 201-250",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Factory Reset",
+			"description": "Factory Reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "restore factory setting",
+					"value": 85
+				}
+			]
+		}
+	}
 }

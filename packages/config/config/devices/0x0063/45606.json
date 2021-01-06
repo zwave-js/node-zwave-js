@@ -1,7 +1,6 @@
 // Jasco Products 45606
 // 2-Way Dimmer Switch
 {
-	"_approved": true,
 	"manufacturer": "Jasco Products",
 	"manufacturerId": "0x0063",
 	"label": "45606",

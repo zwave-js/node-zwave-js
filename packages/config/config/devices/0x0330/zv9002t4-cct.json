@@ -1,20 +1,19 @@
 // Sunricher ZV9002T4-CCT
 // 4 group CCT touch panel secondary controller
 {
-    "_approved": true,
-    "manufacturer": "Sunricher",
-    "manufacturerId": "0x0330",
-    "label": "ZV9002T4-CCT",
-    "description": "4 group CCT touch panel secondary controller",
-    "devices": [
-        {
-            "productType": "0x0300",
-            "productId": "0xa103"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0330",
+	"label": "ZV9002T4-CCT",
+	"description": "4 group CCT touch panel secondary controller",
+	"devices": [
+		{
+			"productType": "0x0300",
+			"productId": "0xa103"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

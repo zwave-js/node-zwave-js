@@ -1,19 +1,18 @@
 // Home controls HTP-4S1-FB
 // Four Touch Panel and Power Socket
 {
-    "_approved": true,
-    "manufacturer": "Home controls",
-    "manufacturerId": "0x0293",
-    "label": "HTP-4S1-FB",
-    "description": "Four Touch Panel and Power Socket",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0014"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "2.2",
-        "max": "255.255"
-    }
+	"manufacturer": "Home controls",
+	"manufacturerId": "0x0293",
+	"label": "HTP-4S1-FB",
+	"description": "Four Touch Panel and Power Socket",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0014"
+		}
+	],
+	"firmwareVersion": {
+		"min": "2.2",
+		"max": "255.255"
+	}
 }

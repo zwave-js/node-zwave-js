@@ -1,18 +1,6 @@
 // Eaton RF9537
 // 1000W Dimmer Light Switch
 {
-	"_approved": false,
-	"_errors": [
-		"Device has configuration parameters defined, but does not support the CONFIGURATION command class.",
-		"Device has association groups defined, but does not support the ASSOCIATION command class.",
-		"At least one manufacturers product image must be uploaded"
-	],
-	"_warnings": [
-		"Overview information is not set",
-		"Inclusion information is not set",
-		"Exclusion information is not set",
-		"No endpoints are configured"
-	],
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RF9537",

@@ -1,57 +1,53 @@
 // Remotec ZXT-310
 // AV IR Extender
 {
-    "_approved": true,
-    "_warnings": [
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
-    "manufacturer": "Remotec",
-    "manufacturerId": "0x5254",
-    "label": "ZXT-310",
-    "description": "AV IR Extender",
-    "devices": [
-        {
-            "productType": "0x0102",
-            "productId": "0x8371"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "1": {
-            "label": "UIRD",
-            "description": "parameter 1 - 20 (0x01 - 0x14)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "The Simple AV command",
-            "description": "The Simple AV command number or key going to be downloaded to the ZXT‐310",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "Download status register",
-            "description": "Download status register",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZXT-310",
+	"description": "AV IR Extender",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x8371"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "UIRD",
+			"description": "parameter 1 - 20 (0x01 - 0x14)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "The Simple AV command",
+			"description": "The Simple AV command number or key going to be downloaded to the ZXT‐310",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Download status register",
+			"description": "Download status register",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

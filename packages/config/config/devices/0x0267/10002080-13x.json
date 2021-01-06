@@ -1,239 +1,238 @@
 // SimonTech S.L.U 10002080-13x
 // Simon IO: Roller Blind
 {
-    "_approved": true,
-    "manufacturer": "SimonTech S.L.U",
-    "manufacturerId": "0x0267",
-    "label": "10002080-13x",
-    "description": "Simon IO: Roller Blind",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0000"
-        },
-        {
-            "productType": "0x0004",
-            "productId": "0x0022"
-        },
-        {
-            "productType": "0x0004",
-            "productId": "0x0063"
-        },
-        {
-            "productType": "0x0004",
-            "productId": "0x0091"
-        },
-        {
-            "productType": "0x0004",
-            "productId": "0x0092"
-        },
-        {
-            "productType": "0x0004",
-            "productId": "0x0093"
-        },
-        {
-            "productType": "0x0004",
-            "productId": "0x0094"
-        },
-        {
-            "productType": "0x0004",
-            "productId": "0x0177"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Association LED",
-            "description": "Activates the Central LED.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Turns the LED OFF (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Turns the LED ON",
-                    "value": 255
-                }
-            ]
-        },
-        "4": {
-            "label": "Up Time",
-            "description": "Up Time",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 120,
-            "defaultValue": 60,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Sets the UP time in seconds",
-                    "value": 1
-                },
-                {
-                    "label": "Default",
-                    "value": 60
-                }
-            ]
-        },
-        "5": {
-            "label": "Down Time",
-            "description": "Down Time",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 120,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Sets the DOWN time in seconds",
-                    "value": 1
-                },
-                {
-                    "label": "Default",
-                    "value": 60
-                }
-            ]
-        },
-        "9": {
-            "label": "Calibration",
-            "description": "Calibration",
-            "valueSize": 1,
-            "minValue": 255,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Behavior of LED in Repose",
-            "description": "Configuration of Main LED as identification at 20%.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED OFF",
-                    "value": 0
-                },
-                {
-                    "label": "LED ON at 20% of maximum level",
-                    "value": 255
-                }
-            ]
-        },
-        "13": {
-            "label": "Lock Input",
-            "description": "Unlock/lock the direct control of load.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Unlock the direct control of load.",
-                    "value": 0
-                },
-                {
-                    "label": "Lock the direct control of load.",
-                    "value": 255
-                }
-            ]
-        },
-        "21": {
-            "label": "Load State",
-            "description": "Load State (Read Only)",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Bit 0: Load is OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Bit 1: Sunblind position 0%",
-                    "value": 0
-                },
-                {
-                    "label": "Bit 0: Load is going UP/DOWN",
-                    "value": 1
-                },
-                {
-                    "label": "Bit 1: Sunblind position 99%",
-                    "value": 99
-                }
-            ]
-        },
-        "23": {
-            "label": "Calibration Required",
-            "description": "Calibration Required (Read Only)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Calibration is not required.",
-                    "value": 0
-                },
-                {
-                    "label": "It is necessary to calibrate the device.",
-                    "value": 255
-                }
-            ]
-        },
-        "27": {
-            "label": "Lock long press",
-            "description": "7 Lock long press",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Long press works as default.",
-                    "value": 0
-                },
-                {
-                    "label": "Long press works as overview.",
-                    "value": 255
-                }
-            ]
-        }
-    }
+	"manufacturer": "SimonTech S.L.U",
+	"manufacturerId": "0x0267",
+	"label": "10002080-13x",
+	"description": "Simon IO: Roller Blind",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0000"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0022"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0063"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0091"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0092"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0093"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0094"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0177"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Association LED",
+			"description": "Activates the Central LED.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turns the LED OFF (default)",
+					"value": 0
+				},
+				{
+					"label": "Turns the LED ON",
+					"value": 255
+				}
+			]
+		},
+		"4": {
+			"label": "Up Time",
+			"description": "Up Time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 60,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Sets the UP time in seconds",
+					"value": 1
+				},
+				{
+					"label": "Default",
+					"value": 60
+				}
+			]
+		},
+		"5": {
+			"label": "Down Time",
+			"description": "Down Time",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 120,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Sets the DOWN time in seconds",
+					"value": 1
+				},
+				{
+					"label": "Default",
+					"value": 60
+				}
+			]
+		},
+		"9": {
+			"label": "Calibration",
+			"description": "Calibration",
+			"valueSize": 1,
+			"minValue": 255,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Behavior of LED in Repose",
+			"description": "Configuration of Main LED as identification at 20%.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED OFF",
+					"value": 0
+				},
+				{
+					"label": "LED ON at 20% of maximum level",
+					"value": 255
+				}
+			]
+		},
+		"13": {
+			"label": "Lock Input",
+			"description": "Unlock/lock the direct control of load.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock the direct control of load.",
+					"value": 0
+				},
+				{
+					"label": "Lock the direct control of load.",
+					"value": 255
+				}
+			]
+		},
+		"21": {
+			"label": "Load State",
+			"description": "Load State (Read Only)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Bit 0: Load is OFF",
+					"value": 0
+				},
+				{
+					"label": "Bit 1: Sunblind position 0%",
+					"value": 0
+				},
+				{
+					"label": "Bit 0: Load is going UP/DOWN",
+					"value": 1
+				},
+				{
+					"label": "Bit 1: Sunblind position 99%",
+					"value": 99
+				}
+			]
+		},
+		"23": {
+			"label": "Calibration Required",
+			"description": "Calibration Required (Read Only)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Calibration is not required.",
+					"value": 0
+				},
+				{
+					"label": "It is necessary to calibrate the device.",
+					"value": 255
+				}
+			]
+		},
+		"27": {
+			"label": "Lock long press",
+			"description": "7 Lock long press",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Long press works as default.",
+					"value": 0
+				},
+				{
+					"label": "Long press works as overview.",
+					"value": 255
+				}
+			]
+		}
+	}
 }

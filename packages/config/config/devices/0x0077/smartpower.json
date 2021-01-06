@@ -1,66 +1,65 @@
 // INNOVUS SmartPower
 // RAone SmartPower
 {
-    "_approved": true,
-    "manufacturer": "INNOVUS",
-    "manufacturerId": "0x0077",
-    "label": "SmartPower",
-    "description": "RAone SmartPower",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0002"
-        },
-        {
-            "productType": "0x0010",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Switch",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Report node",
-            "description": "Report changes in level to this node id",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "BO IR support",
-            "description": "Enable/Disable BO IR Support",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "disabled",
-                    "value": 0
-                },
-                {
-                    "label": "enabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "INNOVUS",
+	"manufacturerId": "0x0077",
+	"label": "SmartPower",
+	"description": "RAone SmartPower",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002"
+		},
+		{
+			"productType": "0x0010",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Switch",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Report node",
+			"description": "Report changes in level to this node id",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "BO IR support",
+			"description": "Enable/Disable BO IR Support",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disabled",
+					"value": 0
+				},
+				{
+					"label": "enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

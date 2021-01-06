@@ -1,184 +1,183 @@
 // ASSA ABLOY US2.0 CP2-5-3
 // Yale Real Living™ Z-Wave Module
 {
-    "_approved": true,
-    "manufacturer": "ASSA ABLOY",
-    "manufacturerId": "0x0129",
-    "label": "US2.0 CP2-5-3",
-    "description": "Yale Real Living™ Z-Wave Module",
-    "devices": [
-        {
-            "productType": "0x800c",
-            "productId": "0x0f00"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "1.78",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Silent Mode on/off",
-            "description": "Changes speaker settigs",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "High",
-                    "value": 1
-                },
-                {
-                    "label": "Low",
-                    "value": 2
-                },
-                {
-                    "label": "Silent",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Auto Relock On/Off",
-            "valueSize": 1,
-            "minValue": -128,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Auto Relock On",
-                    "value": -128
-                },
-                {
-                    "label": "Auto Relock Off",
-                    "value": 0
-                }
-            ]
-        },
-        "3": {
-            "label": "Auto Relock Time",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 127,
-            "defaultValue": 127,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Wrong Code Entry Limit",
-            "unit": "Attempts",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 10,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Shut Down Time (after wrong code entries)",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 127,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Operating Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal Mode (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Vacation Mode (Keypad Locked Out)",
-                    "value": 1
-                },
-                {
-                    "label": "Privacy Mode (Keypad Locked, RF Unlock Functional)",
-                    "value": 2
-                }
-            ]
-        },
-        "11": {
-            "label": "One Touch Locking",
-            "valueSize": 1,
-            "minValue": -128,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "One Touch Locking On",
-                    "value": -128
-                },
-                {
-                    "label": "One Touch Locking Off",
-                    "value": 0
-                }
-            ]
-        },
-        "13": {
-            "label": "Lock Status LED",
-            "valueSize": 1,
-            "minValue": -128,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED On",
-                    "value": -128
-                },
-                {
-                    "label": "LED Off",
-                    "value": 0
-                }
-            ]
-        },
-        "15": {
-            "label": "Reset to Factory Defaults",
-            "valueSize": 1,
-            "minValue": -128,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Reset to Factory On",
-                    "value": -128
-                },
-                {
-                    "label": "Reset to Factory Off",
-                    "value": 0
-                }
-            ]
-        }
-    }
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "US2.0 CP2-5-3",
+	"description": "Yale Real Living™ Z-Wave Module",
+	"devices": [
+		{
+			"productType": "0x800c",
+			"productId": "0x0f00"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.78",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Silent Mode on/off",
+			"description": "Changes speaker settigs",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Low",
+					"value": 2
+				},
+				{
+					"label": "Silent",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Auto Relock On/Off",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Auto Relock On",
+					"value": -128
+				},
+				{
+					"label": "Auto Relock Off",
+					"value": 0
+				}
+			]
+		},
+		"3": {
+			"label": "Auto Relock Time",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 127,
+			"defaultValue": 127,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Wrong Code Entry Limit",
+			"unit": "Attempts",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Shut Down Time (after wrong code entries)",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 127,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Operating Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Mode (Default)",
+					"value": 0
+				},
+				{
+					"label": "Vacation Mode (Keypad Locked Out)",
+					"value": 1
+				},
+				{
+					"label": "Privacy Mode (Keypad Locked, RF Unlock Functional)",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "One Touch Locking",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "One Touch Locking On",
+					"value": -128
+				},
+				{
+					"label": "One Touch Locking Off",
+					"value": 0
+				}
+			]
+		},
+		"13": {
+			"label": "Lock Status LED",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED On",
+					"value": -128
+				},
+				{
+					"label": "LED Off",
+					"value": 0
+				}
+			]
+		},
+		"15": {
+			"label": "Reset to Factory Defaults",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset to Factory On",
+					"value": -128
+				},
+				{
+					"label": "Reset to Factory Off",
+					"value": 0
+				}
+			]
+		}
+	}
 }

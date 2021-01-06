@@ -1,7 +1,6 @@
 // Fantem FT121
 // LED RGBWW Strip
 {
-	"_approved": true,
 	"manufacturer": "Fantem",
 	"manufacturerId": "0x016a",
 	"label": "FT121",

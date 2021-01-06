@@ -1,7 +1,6 @@
 // Popp & Co 004001
 // Smoke Detector and Siren
 {
-	"_approved": true,
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
 	"label": "004001",

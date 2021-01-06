@@ -1,7 +1,6 @@
 // Zooz ZSE30
 // Water Sensor
 {
-	"_approved": true,
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZSE30",

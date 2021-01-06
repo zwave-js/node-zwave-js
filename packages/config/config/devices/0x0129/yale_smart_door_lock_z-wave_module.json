@@ -1,26 +1,25 @@
 // ASSA ABLOY Yale Smart Door Lock Z-Wave Module
 // The Yale Smart Door Lock Z-Wave module allows you to control your Yale Connected Smart Door Lock from anywhere in the world when linked to a leading Z
 {
-    "_approved": true,
-    "manufacturer": "ASSA ABLOY",
-    "manufacturerId": "0x0129",
-    "label": "Yale Smart Door Lock Z-Wave Module",
-    "description": "The Yale Smart Door Lock Z-Wave module allows you to control your Yale Connected Smart Door Lock from anywhere in the world when linked to a leading Z",
-    "devices": [
-        {
-            "productType": "0x0007",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Alarm Reports",
-            "maxNodes": 4,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "Yale Smart Door Lock Z-Wave Module",
+	"description": "The Yale Smart Door Lock Z-Wave module allows you to control your Yale Connected Smart Door Lock from anywhere in the world when linked to a leading Z",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Alarm Reports",
+			"maxNodes": 4,
+			"isLifeline": true
+		}
+	}
 }

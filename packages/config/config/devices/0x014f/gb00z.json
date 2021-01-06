@@ -1,27 +1,26 @@
 // Nortek Security & Control LLC GB00Z
 // Glass Break Detector
 {
-    "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "GB00Z",
-    "description": "Glass Break Detector",
-    "devices": [
-        {
-            "productType": "0x4742",
-            "productId": "0x3030"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Alarms are reported to this group",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "GB00Z",
+	"description": "Glass Break Detector",
+	"devices": [
+		{
+			"productType": "0x4742",
+			"productId": "0x3030"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Alarms are reported to this group",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }

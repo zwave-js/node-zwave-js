@@ -1,16 +1,6 @@
 // Logic Group Heatit Z-Scene Controller
 // Push button 6-gang
 {
-	"_approved": false,
-	"_warnings": [
-		"Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!",
-		"Endpoint 1 contains both switch and dimmer channels. It probably should only include dimmer!",
-		"Endpoint 2 contains both switch and dimmer channels. It probably should only include dimmer!",
-		"Endpoint 3 contains both switch and dimmer channels. It probably should only include dimmer!",
-		"Endpoint 4 contains both switch and dimmer channels. It probably should only include dimmer!",
-		"Endpoint 5 contains both switch and dimmer channels. It probably should only include dimmer!",
-		"Endpoint 6 contains both switch and dimmer channels. It probably should only include dimmer!"
-	],
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "Heatit Z-Scene Controller ZHC5002",

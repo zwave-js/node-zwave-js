@@ -1,30 +1,29 @@
 // Leviton VRI06
 // Incandescent Scene Capable Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRI06",
-    "description": "Incandescent Scene Capable Dimmer",
-    "devices": [
-        {
-            "productType": "0x0401",
-            "productId": "0x0209"
-        },
-        {
-            "productType": "0x0401",
-            "productId": "0x0334"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 232,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRI06",
+	"description": "Incandescent Scene Capable Dimmer",
+	"devices": [
+		{
+			"productType": "0x0401",
+			"productId": "0x0209"
+		},
+		{
+			"productType": "0x0401",
+			"productId": "0x0334"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 232,
+			"isLifeline": true
+		}
+	}
 }

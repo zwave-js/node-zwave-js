@@ -1,19 +1,6 @@
 // NorthQ NQ-9121
 // NorthQ Gas Meter
 {
-	"_approved": false,
-	"_errors": [
-		"Overview information is not set",
-		"Inclusion information is not set",
-		"Exclusion information is not set",
-		"No endpoints are configured",
-		"Parameter 4 description is too long (max=80) - shorten and use the overview field.",
-		"Parameter 5 description is too long (max=80) - shorten and use the overview field.",
-		"Parameter 11 description is too long (max=80) - shorten and use the overview field.",
-		"Device category is not set.",
-		"Device has configuration parameters defined, but does not support the CONFIGURATION command class."
-	],
-	"_warnings": ["Device description should not contain manufacturer name."],
 	"manufacturer": "NorthQ",
 	"manufacturerId": "0x0096",
 	"label": "NQ-9121",

@@ -1,228 +1,227 @@
 // Qubino ZMNHOD
 // Flush Shutter DC
 {
-    "_approved": true,
-    "manufacturer": "Qubino",
-    "manufacturerId": "0x0159",
-    "label": "ZMNHOD",
-    "description": "Flush Shutter DC",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0053"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "10": {
-            "label": "Activate/deactivate functions ALL ON / ALL OFF",
-            "description": "Activate/deactivate functions ALL ON / ALL OFF",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "ALL ON is not active, ALL OFF is not active",
-                    "value": 0
-                },
-                {
-                    "label": "ALL ON is not active ALL OFF active",
-                    "value": 1
-                },
-                {
-                    "label": "ALL ON is not active ALL OFF is not active",
-                    "value": 2
-                },
-                {
-                    "label": "ALL ON active, ALL OFF active",
-                    "value": 255
-                }
-            ]
-        },
-        "40": {
-            "label": "Power report (Watts) on power change for Q1 or Q2",
-            "description": "Power report (Watts) on power change for Q1 or Q2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "42": {
-            "label": "Power report (Watts) by time interval for Q1 or Q2",
-            "description": "Power report (Watts) by time interval for Q1 or Q2",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "71": {
-            "label": "Operating modes",
-            "description": "Operating modes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Shutter mode.",
-                    "value": 0
-                },
-                {
-                    "label": "Venetian mode (up/down and slate rotation)",
-                    "value": 1
-                }
-            ]
-        },
-        "72": {
-            "label": "Slats tilting full turn time",
-            "description": "Slats tilting full turn time",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 150,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "73": {
-            "label": "Slats position",
-            "description": "Slats position",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Return to previous position only with Z-wave",
-                    "value": 0
-                },
-                {
-                    "label": "Return to previous position with Z-wave or button",
-                    "value": 1
-                }
-            ]
-        },
-        "74": {
-            "label": "Motor moving up/down time",
-            "description": "Motor moving up/down time",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "76": {
-            "label": "Motor operation detection",
-            "description": "Motor operation detection",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "78": {
-            "label": "Forced Shutter DC calibration",
-            "description": "Forced Shutter DC calibration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Default",
-                    "value": 0
-                },
-                {
-                    "label": "Start calibration process.",
-                    "value": 1
-                }
-            ]
-        },
-        "85": {
-            "label": "Power consumption max delay time",
-            "description": "Power consumption max delay time",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 50,
-            "defaultValue": 8,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "86": {
-            "label": "Power consumption at limit switch delay time",
-            "description": "Power consumption at limit switch delay time",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 50,
-            "defaultValue": 8,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "90": {
-            "label": "Time delay for next motor movement",
-            "description": "Time delay for next motor movement",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 30,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "110": {
-            "label": "Temperature sensor offset settings",
-            "description": "Temperature sensor offset settings",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32536,
-            "defaultValue": 32536,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "120": {
-            "label": "Digital temperature sensor reporting",
-            "description": "Digital temperature sensor reporting",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHOD",
+	"description": "Flush Shutter DC",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0053"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"10": {
+			"label": "Activate/deactivate functions ALL ON / ALL OFF",
+			"description": "Activate/deactivate functions ALL ON / ALL OFF",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON is not active, ALL OFF is not active",
+					"value": 0
+				},
+				{
+					"label": "ALL ON is not active ALL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON is not active ALL OFF is not active",
+					"value": 2
+				},
+				{
+					"label": "ALL ON active, ALL OFF active",
+					"value": 255
+				}
+			]
+		},
+		"40": {
+			"label": "Power report (Watts) on power change for Q1 or Q2",
+			"description": "Power report (Watts) on power change for Q1 or Q2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Power report (Watts) by time interval for Q1 or Q2",
+			"description": "Power report (Watts) by time interval for Q1 or Q2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"71": {
+			"label": "Operating modes",
+			"description": "Operating modes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Shutter mode.",
+					"value": 0
+				},
+				{
+					"label": "Venetian mode (up/down and slate rotation)",
+					"value": 1
+				}
+			]
+		},
+		"72": {
+			"label": "Slats tilting full turn time",
+			"description": "Slats tilting full turn time",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 150,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"73": {
+			"label": "Slats position",
+			"description": "Slats position",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Return to previous position only with Z-wave",
+					"value": 0
+				},
+				{
+					"label": "Return to previous position with Z-wave or button",
+					"value": 1
+				}
+			]
+		},
+		"74": {
+			"label": "Motor moving up/down time",
+			"description": "Motor moving up/down time",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"76": {
+			"label": "Motor operation detection",
+			"description": "Motor operation detection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"78": {
+			"label": "Forced Shutter DC calibration",
+			"description": "Forced Shutter DC calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Start calibration process.",
+					"value": 1
+				}
+			]
+		},
+		"85": {
+			"label": "Power consumption max delay time",
+			"description": "Power consumption max delay time",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 50,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"86": {
+			"label": "Power consumption at limit switch delay time",
+			"description": "Power consumption at limit switch delay time",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 50,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"90": {
+			"label": "Time delay for next motor movement",
+			"description": "Time delay for next motor movement",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"110": {
+			"label": "Temperature sensor offset settings",
+			"description": "Temperature sensor offset settings",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32536,
+			"defaultValue": 32536,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"120": {
+			"label": "Digital temperature sensor reporting",
+			"description": "Digital temperature sensor reporting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

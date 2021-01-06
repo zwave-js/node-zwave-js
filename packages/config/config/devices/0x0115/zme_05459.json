@@ -1,7 +1,6 @@
 // Z-Wave.Me ZME_05459
 // Blinds controller
 {
-	"_approved": true,
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
 	"label": "ZME_05459",

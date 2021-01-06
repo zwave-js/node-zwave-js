@@ -1,47 +1,46 @@
 // Honeywell 39342 / Jasco ZW4106
 // Plug-In Smart Switch (Dual Linked Outlets, Grounded)
 {
-    "_approved": true,
-    "manufacturer": "Honeywell",
-    "manufacturerId": "0x0039",
-    "label": "39342 / Jasco ZW4106",
-    "description": "Plug-In Smart Switch (Dual Linked Outlets, Grounded)",
-    "devices": [
-        {
-            "productType": "0x5052",
-            "productId": "0x3033"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED Light Control",
-            "description": "Controls LED light state",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED Light on when switch turned OFF (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "LED Light on when switch turned On",
-                    "value": 1
-                },
-                {
-                    "label": "LED Light Always Off",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39342 / Jasco ZW4106",
+	"description": "Plug-In Smart Switch (Dual Linked Outlets, Grounded)",
+	"devices": [
+		{
+			"productType": "0x5052",
+			"productId": "0x3033"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED Light Control",
+			"description": "Controls LED light state",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Light on when switch turned OFF (Default)",
+					"value": 0
+				},
+				{
+					"label": "LED Light on when switch turned On",
+					"value": 1
+				},
+				{
+					"label": "LED Light Always Off",
+					"value": 2
+				}
+			]
+		}
+	}
 }

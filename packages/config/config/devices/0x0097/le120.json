@@ -1,19 +1,18 @@
 // Wintop LE120
 // Appliance Module
 {
-    "_approved": true,
-    "manufacturer": "Wintop",
-    "manufacturerId": "0x0097",
-    "label": "LE120",
-    "description": "Appliance Module",
-    "devices": [
-        {
-            "productType": "0x6941",
-            "productId": "0x5501"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Wintop",
+	"manufacturerId": "0x0097",
+	"label": "LE120",
+	"description": "Appliance Module",
+	"devices": [
+		{
+			"productType": "0x6941",
+			"productId": "0x5501"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

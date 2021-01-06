@@ -1,19 +1,18 @@
 // Intermatic CA3500
 // 15 Amp Split-Duplex Receptacle
 {
-    "_approved": true,
-    "manufacturer": "Intermatic",
-    "manufacturerId": "0x0005",
-    "label": "CA3500",
-    "description": "15 Amp Split-Duplex Receptacle",
-    "devices": [
-        {
-            "productType": "0x4341",
-            "productId": "0x3500"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Intermatic",
+	"manufacturerId": "0x0005",
+	"label": "CA3500",
+	"description": "15 Amp Split-Duplex Receptacle",
+	"devices": [
+		{
+			"productType": "0x4341",
+			"productId": "0x3500"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

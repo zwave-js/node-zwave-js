@@ -1,102 +1,101 @@
 // wiDom WiDom Universal Relay Switch
 // WiDom Universal Relay Switch
 {
-    "_approved": true,
-    "manufacturer": "wiDom",
-    "manufacturerId": "0x0149",
-    "label": "WiDom Universal Relay Switch",
-    "description": "WiDom Universal Relay Switch",
-    "devices": [
-        {
-            "productType": "0x0012",
-            "productId": "0x0104"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "1.0",
-        "max": "1.7"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 16,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "maxNodes": 16
-        },
-        "3": {
-            "label": "Group 3",
-            "maxNodes": 16
-        },
-        "4": {
-            "label": "Group 4",
-            "maxNodes": 16
-        },
-        "5": {
-            "label": "Group 5",
-            "maxNodes": 16
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Device status 1 click",
-            "description": "Device status when the external switch receives 1 click",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 4,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "TOGGLE",
-                    "value": 1
-                },
-                {
-                    "label": "ON",
-                    "value": 2
-                },
-                {
-                    "label": "OFF",
-                    "value": 3
-                },
-                {
-                    "label": "IGNORE",
-                    "value": 4
-                }
-            ]
-        },
-        "2": {
-            "label": "Device status 2 click",
-            "description": "Device status when the external switch receives 2 clicks",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 4,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "TOGGLE",
-                    "value": 1
-                },
-                {
-                    "label": "ON",
-                    "value": 2
-                },
-                {
-                    "label": "OFF",
-                    "value": 3
-                },
-                {
-                    "label": "IGNORE",
-                    "value": 4
-                }
-            ]
-        }
-    }
+	"manufacturer": "wiDom",
+	"manufacturerId": "0x0149",
+	"label": "WiDom Universal Relay Switch",
+	"description": "WiDom Universal Relay Switch",
+	"devices": [
+		{
+			"productType": "0x0012",
+			"productId": "0x0104"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.0",
+		"max": "1.7"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 16,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 16
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 16
+		},
+		"4": {
+			"label": "Group 4",
+			"maxNodes": 16
+		},
+		"5": {
+			"label": "Group 5",
+			"maxNodes": 16
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Device status 1 click",
+			"description": "Device status when the external switch receives 1 click",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "TOGGLE",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				},
+				{
+					"label": "OFF",
+					"value": 3
+				},
+				{
+					"label": "IGNORE",
+					"value": 4
+				}
+			]
+		},
+		"2": {
+			"label": "Device status 2 click",
+			"description": "Device status when the external switch receives 2 clicks",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "TOGGLE",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				},
+				{
+					"label": "OFF",
+					"value": 3
+				},
+				{
+					"label": "IGNORE",
+					"value": 4
+				}
+			]
+		}
+	}
 }

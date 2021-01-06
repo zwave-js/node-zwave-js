@@ -1,7 +1,6 @@
 // Sunricher ZV9003T3-RGBW
 // RGBW 3 Scene Wall Controller
 {
-	"_approved": true,
 	"manufacturer": "Sunricher",
 	"manufacturerId": "0x0330",
 	"label": "ZV9003T3-RGBW",

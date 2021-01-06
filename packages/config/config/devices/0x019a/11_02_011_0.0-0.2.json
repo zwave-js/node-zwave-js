@@ -1,220 +1,219 @@
 // Sensative AB 11 02 011
 // Strips Comfort/Drips Multisensor
 {
-    "_approved": true,
-    "manufacturer": "Sensative AB",
-    "manufacturerId": "0x019a",
-    "label": "11 02 011",
-    "description": "Strips Comfort/Drips Multisensor",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x000a"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "0.2"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "Temperature reporting mode",
-            "description": "0:Off 1:Normal 2:High Accuracy",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Normal",
-                    "value": 1
-                },
-                {
-                    "label": "High Accuracy",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Temperature reporting unit",
-            "description": "0:Celcius 1:Fahrenheit",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Celcius",
-                    "value": 0
-                },
-                {
-                    "label": "Fahrenheit",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "High Temperature alarm",
-            "description": "0:Off 1:On",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "High Temperature alarm level",
-            "description": "-20 to + 60 degree C",
-            "valueSize": 1,
-            "minValue": -20,
-            "maxValue": 60,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Temperature alarm level",
-                    "value": -20
-                }
-            ]
-        },
-        "7": {
-            "label": "Low Temperature alarm",
-            "description": "0:Off 1:On",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Low Temperature alarm level",
-            "description": "-20 to + 60 degree C",
-            "valueSize": 1,
-            "minValue": -20,
-            "maxValue": 60,
-            "defaultValue": -20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Temperature alarm level",
-                    "value": -20
-                }
-            ]
-        },
-        "9": {
-            "label": "Ambient light reporting",
-            "description": "0:Off 1:On",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "Leakage alarm",
-            "description": "0:Off 1:On",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                }
-            ]
-        },
-        "11": {
-            "label": "Leakage alarm level",
-            "description": "1 to 100 (1= almost dry, 100 = soaking wet)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 100,
-            "defaultValue": 25,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "(1= almost dry, 100= soaking wet)",
-                    "value": 1
-                }
-            ]
-        },
-        "12": {
-            "label": "Moisture reporting period",
-            "description": "0-120: Number of hours between moisture reports",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 120,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Number of hours between moisture reports",
-                    "value": 0
-                }
-            ]
-        }
-    }
+	"manufacturer": "Sensative AB",
+	"manufacturerId": "0x019a",
+	"label": "11 02 011",
+	"description": "Strips Comfort/Drips Multisensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x000a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "0.2"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "Temperature reporting mode",
+			"description": "0:Off 1:Normal 2:High Accuracy",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Normal",
+					"value": 1
+				},
+				{
+					"label": "High Accuracy",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Temperature reporting unit",
+			"description": "0:Celcius 1:Fahrenheit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celcius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "High Temperature alarm",
+			"description": "0:Off 1:On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "High Temperature alarm level",
+			"description": "-20 to + 60 degree C",
+			"valueSize": 1,
+			"minValue": -20,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Temperature alarm level",
+					"value": -20
+				}
+			]
+		},
+		"7": {
+			"label": "Low Temperature alarm",
+			"description": "0:Off 1:On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Low Temperature alarm level",
+			"description": "-20 to + 60 degree C",
+			"valueSize": 1,
+			"minValue": -20,
+			"maxValue": 60,
+			"defaultValue": -20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Temperature alarm level",
+					"value": -20
+				}
+			]
+		},
+		"9": {
+			"label": "Ambient light reporting",
+			"description": "0:Off 1:On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Leakage alarm",
+			"description": "0:Off 1:On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Leakage alarm level",
+			"description": "1 to 100 (1= almost dry, 100 = soaking wet)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 25,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "(1= almost dry, 100= soaking wet)",
+					"value": 1
+				}
+			]
+		},
+		"12": {
+			"label": "Moisture reporting period",
+			"description": "0-120: Number of hours between moisture reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Number of hours between moisture reports",
+					"value": 0
+				}
+			]
+		}
+	}
 }

@@ -1,7 +1,6 @@
 // Qubino ZMNHZD
 // Multifunctional Weather Station
 {
-	"_approved": true,
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHZD",

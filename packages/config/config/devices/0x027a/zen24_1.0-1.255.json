@@ -1,54 +1,53 @@
 // Zooz ZEN24
 // Z-Wave Plus Toggle Dimmer Light Switch Ver 2.0
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN24",
-    "description": "Z-Wave Plus Toggle Dimmer Light Switch Ver 2.0",
-    "devices": [
-        {
-            "productType": "0xb112",
-            "productId": "0x261c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "1.0",
-        "max": "1.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Toggle Control",
-            "description": "Controls behavior of the toggle switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Ramp Rate Control",
-            "description": "Choose from 2 ramp rate options (fade-in / fade-out effect)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Slow Ramp Rate",
-                    "value": 0
-                },
-                {
-                    "label": "Fast Ramp Rate",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN24",
+	"description": "Z-Wave Plus Toggle Dimmer Light Switch Ver 2.0",
+	"devices": [
+		{
+			"productType": "0xb112",
+			"productId": "0x261c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.0",
+		"max": "1.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Toggle Control",
+			"description": "Controls behavior of the toggle switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Ramp Rate Control",
+			"description": "Choose from 2 ramp rate options (fade-in / fade-out effect)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Slow Ramp Rate",
+					"value": 0
+				},
+				{
+					"label": "Fast Ramp Rate",
+					"value": 1
+				}
+			]
+		}
+	}
 }

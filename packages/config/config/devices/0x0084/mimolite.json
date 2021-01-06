@@ -1,249 +1,248 @@
 // FortrezZ LLC MIMOlite
 // Digital or Analog Voltage input and/or Dry Contact Relay
 {
-    "_approved": true,
-    "manufacturer": "FortrezZ LLC",
-    "manufacturerId": "0x0084",
-    "label": "MIMOlite",
-    "description": "Digital or Analog Voltage input and/or Dry Contact Relay",
-    "devices": [
-        {
-            "productType": "0x0451",
-            "productId": "0x010e"
-        },
-        {
-            "productType": "0x0451",
-            "productId": "0x0110"
-        },
-        {
-            "productType": "0x0453",
-            "productId": "0x010e"
-        },
-        {
-            "productType": "0x0453",
-            "productId": "0x010f"
-        },
-        {
-            "productType": "0x0453",
-            "productId": "0x0110"
-        },
-        {
-            "productType": "0x0453",
-            "productId": "0x0111"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Binary input Set Group",
-            "maxNodes": 2
-        },
-        "2": {
-            "label": "MultiLevel Sensor report",
-            "maxNodes": 2,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Power Alarm",
-            "maxNodes": 2,
-            "isLifeline": true
-        },
-        "4": {
-            "label": "Binary Sensor report",
-            "maxNodes": 2
-        },
-        "5": {
-            "label": "Pulse Meter Sensor report",
-            "maxNodes": 2
-        }
-    },
-    "paramInformation": {
-        "2": {
-            "label": "Clear_Pulse_Meter_Counts",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Clear Pulse Meter Counts",
-                    "value": 0
-                }
-            ]
-        },
-        "3": {
-            "label": "Trigger_Mapping",
-            "description": "Input-to-relay Mapping",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "SIG1 triggered/untriggered sets or clears Relay1",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Lower_Threshold_High",
-            "description": "Lower Threshold, High",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 187,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Default (0xBB)",
-                    "value": 187
-                }
-            ]
-        },
-        "5": {
-            "label": "Lower_Threshold_Low",
-            "description": "Lower Threshold, Low",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 171,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Default (0xAB)",
-                    "value": 171
-                }
-            ]
-        },
-        "6": {
-            "label": "Upper_Threshold_High",
-            "description": "Upper Threshold, High",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Default (0xFF)",
-                    "value": 255
-                }
-            ]
-        },
-        "7": {
-            "label": "Upper_Threshold_Low",
-            "description": "Upper Threshold, Low",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 254,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Default (0xFE)",
-                    "value": 254
-                }
-            ]
-        },
-        "8": {
-            "label": "Trigger_Level_And_Input_Threshold",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "ANALOG, trigger OUTSIDE of thresholds.",
-                    "value": 0
-                },
-                {
-                    "label": "ANALOG, trigger BETWEEN thresholds.",
-                    "value": 1
-                },
-                {
-                    "label": "DIGITAL, trigger OUTSIDE of thresholds.",
-                    "value": 2
-                },
-                {
-                    "label": "DIGITAL, trigger BETWEEN thresholds.",
-                    "value": 3
-                }
-            ]
-        },
-        "9": {
-            "label": "Multilevel_AutoReport_Interval",
-            "description": "Multilevel AutoReport Interval",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Automatic Reports",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Reports every 30 seconds (Default)",
-                    "value": 3
-                }
-            ]
-        },
-        "11": {
-            "label": "Momentary_Relay1_Duration",
-            "description": "Momentary Relay1 output enable/disable (100msec).",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "500 milliseconds",
-                    "value": 5
-                }
-            ]
-        }
-    }
+	"manufacturer": "FortrezZ LLC",
+	"manufacturerId": "0x0084",
+	"label": "MIMOlite",
+	"description": "Digital or Analog Voltage input and/or Dry Contact Relay",
+	"devices": [
+		{
+			"productType": "0x0451",
+			"productId": "0x010e"
+		},
+		{
+			"productType": "0x0451",
+			"productId": "0x0110"
+		},
+		{
+			"productType": "0x0453",
+			"productId": "0x010e"
+		},
+		{
+			"productType": "0x0453",
+			"productId": "0x010f"
+		},
+		{
+			"productType": "0x0453",
+			"productId": "0x0110"
+		},
+		{
+			"productType": "0x0453",
+			"productId": "0x0111"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Binary input Set Group",
+			"maxNodes": 2
+		},
+		"2": {
+			"label": "MultiLevel Sensor report",
+			"maxNodes": 2,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Power Alarm",
+			"maxNodes": 2,
+			"isLifeline": true
+		},
+		"4": {
+			"label": "Binary Sensor report",
+			"maxNodes": 2
+		},
+		"5": {
+			"label": "Pulse Meter Sensor report",
+			"maxNodes": 2
+		}
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Clear_Pulse_Meter_Counts",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Clear Pulse Meter Counts",
+					"value": 0
+				}
+			]
+		},
+		"3": {
+			"label": "Trigger_Mapping",
+			"description": "Input-to-relay Mapping",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "SIG1 triggered/untriggered sets or clears Relay1",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Lower_Threshold_High",
+			"description": "Lower Threshold, High",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 187,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Default (0xBB)",
+					"value": 187
+				}
+			]
+		},
+		"5": {
+			"label": "Lower_Threshold_Low",
+			"description": "Lower Threshold, Low",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 171,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Default (0xAB)",
+					"value": 171
+				}
+			]
+		},
+		"6": {
+			"label": "Upper_Threshold_High",
+			"description": "Upper Threshold, High",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Default (0xFF)",
+					"value": 255
+				}
+			]
+		},
+		"7": {
+			"label": "Upper_Threshold_Low",
+			"description": "Upper Threshold, Low",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 254,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Default (0xFE)",
+					"value": 254
+				}
+			]
+		},
+		"8": {
+			"label": "Trigger_Level_And_Input_Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ANALOG, trigger OUTSIDE of thresholds.",
+					"value": 0
+				},
+				{
+					"label": "ANALOG, trigger BETWEEN thresholds.",
+					"value": 1
+				},
+				{
+					"label": "DIGITAL, trigger OUTSIDE of thresholds.",
+					"value": 2
+				},
+				{
+					"label": "DIGITAL, trigger BETWEEN thresholds.",
+					"value": 3
+				}
+			]
+		},
+		"9": {
+			"label": "Multilevel_AutoReport_Interval",
+			"description": "Multilevel AutoReport Interval",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Automatic Reports",
+					"value": 0
+				},
+				{
+					"label": "Enable Reports every 30 seconds (Default)",
+					"value": 3
+				}
+			]
+		},
+		"11": {
+			"label": "Momentary_Relay1_Duration",
+			"description": "Momentary Relay1 output enable/disable (100msec).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "500 milliseconds",
+					"value": 5
+				}
+			]
+		}
+	}
 }

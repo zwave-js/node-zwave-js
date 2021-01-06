@@ -1,7 +1,6 @@
 // Z-Wave.Me ZME_RC2
 // Z-Wave Remote Control+
 {
-	"_approved": true,
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
 	"label": "ZME_RC2",

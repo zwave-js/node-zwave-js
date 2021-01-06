@@ -1,117 +1,116 @@
 // Wenzhou MTLC Electric Appliances Co., Ltd. ZW15SM
 // Binary Switch + Meter
 {
-    "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
-    "manufacturerId": "0x011a",
-    "label": "ZW15SM",
-    "description": "Binary Switch + Meter",
-    "devices": [
-        {
-            "productType": "0x0111",
-            "productId": "0x0102"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "LED Toggle",
-            "description": "Synchronization of load power and LED indicator",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Power on, LED off",
-                    "value": 0
-                },
-                {
-                    "label": "Power on, LED on",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Button Toggle",
-            "description": "Configure button toggle",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "METER_REPORT Instant Energy  Interval",
-            "description": "METER_REPORT Instant Energy  Interval",
-            "unit": "minutes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Instant Energy Autosend Interval",
-            "description": "Instant Energy Autosend Interval (SENSOR_MULTILEVEL_REPORT)",
-            "unit": "minutes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Accumulated Energy Autosend Interval report",
-            "description": "Accumulated Energy Autosend Interval report (METER_REPORT)",
-            "unit": "minutes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Power change notification",
-            "description": "Enable automatic notifications whenever there is a wattage change",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Power change notification threshold",
-            "description": "Minimum change in wattage report",
-            "unit": "deciwatts",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
+	"label": "ZW15SM",
+	"description": "Binary Switch + Meter",
+	"devices": [
+		{
+			"productType": "0x0111",
+			"productId": "0x0102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "LED Toggle",
+			"description": "Synchronization of load power and LED indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power on, LED off",
+					"value": 0
+				},
+				{
+					"label": "Power on, LED on",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Button Toggle",
+			"description": "Configure button toggle",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "METER_REPORT Instant Energy  Interval",
+			"description": "METER_REPORT Instant Energy  Interval",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Instant Energy Autosend Interval",
+			"description": "Instant Energy Autosend Interval (SENSOR_MULTILEVEL_REPORT)",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Accumulated Energy Autosend Interval report",
+			"description": "Accumulated Energy Autosend Interval report (METER_REPORT)",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Power change notification",
+			"description": "Enable automatic notifications whenever there is a wattage change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Power change notification threshold",
+			"description": "Minimum change in wattage report",
+			"unit": "deciwatts",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

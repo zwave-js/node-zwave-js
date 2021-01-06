@@ -1,7 +1,6 @@
 // INNOVUS SmartDimmer
 // RAone SmartDimmer
 {
-	"_approved": true,
 	"manufacturer": "INNOVUS",
 	"manufacturerId": "0x0077",
 	"label": "SmartDimmer",

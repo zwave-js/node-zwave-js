@@ -1,149 +1,148 @@
 // Qubino ZMNHQD
 // Qubino LUXY Smart Light
 {
-    "_approved": true,
-    "manufacturer": "Qubino",
-    "manufacturerId": "0x0159",
-    "label": "ZMNHQD",
-    "description": "Qubino LUXY Smart Light",
-    "devices": [
-        {
-            "productType": "0x0008",
-            "productId": "0x0051"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Digital input type",
-            "description": "Defines the type of input device connected to digital input.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Push-button",
-                    "value": 0
-                },
-                {
-                    "label": "On/Off toggle switch",
-                    "value": 1
-                },
-                {
-                    "label": "Motion sensor",
-                    "value": 2
-                },
-                {
-                    "label": "Motion sensor with memory",
-                    "value": 3
-                }
-            ]
-        },
-        "3": {
-            "label": "Turn off alarming",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Only by Z-Wave",
-                    "value": 0
-                },
-                {
-                    "label": "By capacitive input or Z-Wave command",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Motion sensor memory timer",
-            "description": "Time after which the output triggered by motion sensor is turned off.",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32535,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Auto-on timer",
-            "description": "Defines the time after which the device is turned to last known state.",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Auto-off timer",
-            "description": "Defines the time after which the device is turned to last known state.",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "30": {
-            "label": "Restore state on power failure",
-            "description": "Restore state on power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "disabled",
-                    "value": 0
-                },
-                {
-                    "label": "enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "50": {
-            "label": "Enable/disable beeper",
-            "description": "Enable/disable beeper",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHQD",
+	"description": "Qubino LUXY Smart Light",
+	"devices": [
+		{
+			"productType": "0x0008",
+			"productId": "0x0051"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Digital input type",
+			"description": "Defines the type of input device connected to digital input.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Push-button",
+					"value": 0
+				},
+				{
+					"label": "On/Off toggle switch",
+					"value": 1
+				},
+				{
+					"label": "Motion sensor",
+					"value": 2
+				},
+				{
+					"label": "Motion sensor with memory",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Turn off alarming",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Only by Z-Wave",
+					"value": 0
+				},
+				{
+					"label": "By capacitive input or Z-Wave command",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Motion sensor memory timer",
+			"description": "Time after which the output triggered by motion sensor is turned off.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Auto-on timer",
+			"description": "Defines the time after which the device is turned to last known state.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Auto-off timer",
+			"description": "Defines the time after which the device is turned to last known state.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"label": "Restore state on power failure",
+			"description": "Restore state on power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disabled",
+					"value": 0
+				},
+				{
+					"label": "enabled",
+					"value": 1
+				}
+			]
+		},
+		"50": {
+			"label": "Enable/disable beeper",
+			"description": "Enable/disable beeper",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

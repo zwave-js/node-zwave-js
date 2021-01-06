@@ -1,7 +1,6 @@
 // Inovelli LZW30-SN
 // Red Series On/Off switch
 {
-	"_approved": false,
 	"manufacturer": "Inovelli",
 	"manufacturerId": "0x031e",
 	"label": "LZW30-SN",

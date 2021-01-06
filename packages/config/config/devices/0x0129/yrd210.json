@@ -1,168 +1,167 @@
 // ASSA ABLOY YRD210
 // Push Button Deadbolt
 {
-    "_approved": true,
-    "manufacturer": "ASSA ABLOY",
-    "manufacturerId": "0x0129",
-    "label": "YRD210",
-    "description": "Push Button Deadbolt",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0000"
-        },
-        {
-            "productType": "0x0004",
-            "productId": "0x0209"
-        },
-        {
-            "productType": "0x0004",
-            "productId": "0xaa00"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Alarm Reports",
-            "maxNodes": 4,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Audio Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Silent",
-                    "value": 1
-                },
-                {
-                    "label": "Low",
-                    "value": 2
-                },
-                {
-                    "label": "High",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Auto relock",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 255
-                }
-            ]
-        },
-        "3": {
-            "label": "Relock time",
-            "description": "Seconds; automatically re-lock after specified time",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 255,
-            "defaultValue": 30,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Wrong Code Entry Limit",
-            "description": "The number of invalid code entries before TAMPER Alarm.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Language",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "English",
-                    "value": 1
-                },
-                {
-                    "label": "Spanish",
-                    "value": 2
-                },
-                {
-                    "label": "French",
-                    "value": 3
-                }
-            ]
-        },
-        "7": {
-            "label": "Shutdown Time",
-            "description": "Time unit will be inoperable after too many wrong codes",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 30,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Operating Mode",
-            "description": "Operating Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Vacation",
-                    "value": 1
-                },
-                {
-                    "label": "Privacy",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "YRD210",
+	"description": "Push Button Deadbolt",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0000"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0209"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0xaa00"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Alarm Reports",
+			"maxNodes": 4,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Audio Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Silent",
+					"value": 1
+				},
+				{
+					"label": "Low",
+					"value": 2
+				},
+				{
+					"label": "High",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Auto relock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Relock time",
+			"description": "Seconds; automatically re-lock after specified time",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Wrong Code Entry Limit",
+			"description": "The number of invalid code entries before TAMPER Alarm.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Language",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "English",
+					"value": 1
+				},
+				{
+					"label": "Spanish",
+					"value": 2
+				},
+				{
+					"label": "French",
+					"value": 3
+				}
+			]
+		},
+		"7": {
+			"label": "Shutdown Time",
+			"description": "Time unit will be inoperable after too many wrong codes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Operating Mode",
+			"description": "Operating Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Vacation",
+					"value": 1
+				},
+				{
+					"label": "Privacy",
+					"value": 2
+				}
+			]
+		}
+	}
 }

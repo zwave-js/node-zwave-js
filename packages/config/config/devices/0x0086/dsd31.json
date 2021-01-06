@@ -1,7 +1,6 @@
 // AEON Labs DSD31
 // Outlet Plugable Siren
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSD31",

@@ -1,24 +1,19 @@
 // VDA Vitrum I EU switch
 // Vitrum touch switch Relay
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!",
-        "Endpoint 1 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "VDA",
-    "manufacturerId": "0x010a",
-    "label": "Vitrum I EU switch",
-    "description": "Vitrum touch switch Relay",
-    "devices": [
-        {
-            "productType": "0x7001",
-            "productId": "0x0f02"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "VDA",
+	"manufacturerId": "0x010a",
+	"label": "Vitrum I EU switch",
+	"description": "Vitrum touch switch Relay",
+	"devices": [
+		{
+			"productType": "0x7001",
+			"productId": "0x0f02"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

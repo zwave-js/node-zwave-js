@@ -1,7 +1,6 @@
 // Eaton RF9640
 // Z-Wave Plus universal smart dimmer
 {
-	"_approved": true,
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RF9640",

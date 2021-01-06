@@ -1,1071 +1,1070 @@
 // Fibargroup FGD212
 // Dimmer 2
 {
-    "_approved": true,
-    "manufacturer": "Fibargroup",
-    "manufacturerId": "0x010f",
-    "label": "FGD212",
-    "description": "Dimmer 2",
-    "devices": [
-        {
-            "productType": "0x0102",
-            "productId": "0x1000"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x2000"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x3000"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x4000"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x6000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.5",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Minimum brightness level",
-            "description": "set automatically during the calibration",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 98,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Maximum brightness level",
-            "description": "parameter is set automatically during the calibration process",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Incandescence level of dimmable CFL*",
-            "description": "Virtual value (percentage between 1% and 99%)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Incandescence time of dimmable CFL*",
-            "description": "time required for switching. 0s - 25,5s",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Dimming Step at Automatic Control",
-            "description": "percentage of a dimming step at automatic control. 1-99",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Dimming Step Timing at Automatic Control",
-            "description": "Defines the time of a dimming step at automatic control",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Dimming Step at Manual Control",
-            "description": "The parameter defines the percentage of a dimming step at manual control. 1-99",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Dimming Step Timing at Manual Control",
-            "description": "Defines the time of a dimming step at manual control.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Saving state before power failure",
-            "description": "Saving state before power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "All outputs are set to OFF upon power restore",
-                    "value": 0
-                },
-                {
-                    "label": "Outputs set to previous state upon power restore",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "Timer functionality (auto - off)",
-            "description": "Defines the setting of the timer",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "ALL ON/ALL OFF function",
-            "description": "The parameter specifies the available functions.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "ALL ON not active, ALL OFF not active",
-                    "value": 0
-                },
-                {
-                    "label": "ALL ON not active, ALL OFF active",
-                    "value": 1
-                },
-                {
-                    "label": "ALL ON active, ALL OFF not active",
-                    "value": 2
-                },
-                {
-                    "label": "ALL ON active, ALL OFF active",
-                    "value": 255
-                }
-            ]
-        },
-        "13": {
-            "label": "Force auto-calibration",
-            "description": "Force calibration process",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "readout",
-                    "value": 0
-                },
-                {
-                    "label": "Force auto-calibration without Fibaro Bypass",
-                    "value": 1
-                },
-                {
-                    "label": "Force auto-calibration with Fibaro Bypass",
-                    "value": 2
-                }
-            ]
-        },
-        "14": {
-            "label": "Auto-calibration status (read-only parameter)",
-            "description": "Operating mode of the Dimmer",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No calibration or manual settings",
-                    "value": 0
-                },
-                {
-                    "label": "Dimmer operates on auto-calibration settings",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "Burnt out bulb detection",
-            "description": "Percentage value of power variation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "Time delay of a burnt out bulb",
-            "description": "Time of delay for power variation detection",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19": {
-            "label": "Forced switch on brightness level",
-            "description": "Dimmer 2 will always set this brightness level.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Inputs Button/Switch configuration",
-            "description": "Binary inputs type configuration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Mono-stable input (button)",
-                    "value": 0
-                },
-                {
-                    "label": "Bi-stable input (switch)",
-                    "value": 1
-                },
-                {
-                    "label": "Roller blind switch (UP / DOWN)",
-                    "value": 2
-                }
-            ]
-        },
-        "21": {
-            "label": "Value sent to associated devices on single click",
-            "description": "The value sent to associated devices on single click.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Set associated devices to last state",
-                    "value": 0
-                },
-                {
-                    "label": "Dimmer 2 state synchronizes brightness level",
-                    "value": 1
-                }
-            ]
-        },
-        "22": {
-            "label": "Change [On-Off] bi-stable keys",
-            "description": "Allow changing [On-Off] bi-stable keys",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Device changes status on key status change",
-                    "value": 0
-                },
-                {
-                    "label": "Status depends on key status",
-                    "value": 1
-                }
-            ]
-        },
-        "23": {
-            "label": "Double click option",
-            "description": "Double-click set lighting at 100%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable double click",
-                    "value": 0
-                },
-                {
-                    "label": "Enable double click",
-                    "value": 1
-                }
-            ]
-        },
-        "24": {
-            "label": "Command frames sent in 2nd and 3rd assoc group",
-            "description": "Actions not resulting in sending frames to assoc",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "all actions send to association groups",
-                    "value": 0
-                },
-                {
-                    "label": "do not send when switching ON (single click)",
-                    "value": 1
-                },
-                {
-                    "label": "do not send when switching OFF (single click)",
-                    "value": 2
-                },
-                {
-                    "label": "Do not send when changing dimming level",
-                    "value": 4
-                },
-                {
-                    "label": "do not send on double click",
-                    "value": 8
-                },
-                {
-                    "label": "send 0xFF value on double click",
-                    "value": 16
-                }
-            ]
-        },
-        "25": {
-            "label": "Command frames sent in 4th and 5th assoc grp",
-            "description": "Actions not resulting in sending frames to assoc grp",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "all actions send to association groups",
-                    "value": 0
-                },
-                {
-                    "label": "do not send when switching ON (single click)",
-                    "value": 1
-                },
-                {
-                    "label": "do not send when switching OFF (single click)",
-                    "value": 2
-                },
-                {
-                    "label": "Do not send when changing dimming level",
-                    "value": 4
-                },
-                {
-                    "label": "do not send on double click",
-                    "value": 8
-                },
-                {
-                    "label": "send 0xFF value on double click",
-                    "value": 16
-                }
-            ]
-        },
-        "26": {
-            "label": "The function of 3-way switch",
-            "description": "Key no. 2 controls the Dimmer additionally",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "3-way switch function for S2 disabled",
-                    "value": 0
-                },
-                {
-                    "label": "3-way switch function for S2 enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "27": {
-            "label": "Associations in Z-Wave network security mode",
-            "description": "Defines commands are sent as secure or non-secure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 15,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "all groups (II-V) sent as non-secure",
-                    "value": 0
-                },
-                {
-                    "label": "2nd group sent as secure",
-                    "value": 1
-                },
-                {
-                    "label": "3rd group sent as secure",
-                    "value": 2
-                },
-                {
-                    "label": "4th group sent as secure",
-                    "value": 4
-                },
-                {
-                    "label": "5th group sent as secure",
-                    "value": 8
-                },
-                {
-                    "label": "all groups (II-V) sent as secure",
-                    "value": 15
-                }
-            ]
-        },
-        "28": {
-            "label": "Scene activation functionality",
-            "description": "SCENE ID depends on the switch type configuration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Scene functionality deactivated",
-                    "value": 0
-                },
-                {
-                    "label": "Scene functionality activated",
-                    "value": 1
-                }
-            ]
-        },
-        "29": {
-            "label": "Switch functionality of S1 and S2",
-            "description": "Switch S1 and S2 buttons",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "standard mode",
-                    "value": 0
-                },
-                {
-                    "label": "S1 operates as S2, S2 operates as S1",
-                    "value": 1
-                }
-            ]
-        },
-        "30": {
-            "label": "Load control mode",
-            "description": "The parameter defines the used control mode.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 2,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "forced leading edge control",
-                    "value": 0
-                },
-                {
-                    "label": "forced trailing edge control",
-                    "value": 1
-                },
-                {
-                    "label": "Control mode selected automatically",
-                    "value": 2
-                }
-            ]
-        },
-        "31": {
-            "label": "Load recognized during auto-calibration",
-            "description": "Load control mode recognized during auto-calibration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "leading edge control",
-                    "value": 0
-                },
-                {
-                    "label": "trailing edge control",
-                    "value": 1
-                }
-            ]
-        },
-        "32": {
-            "label": "On/Off mode",
-            "description": "Mode for connecting non-dimmable light sources",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 2,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "on/off mode disabled (dimming is possible)",
-                    "value": 0
-                },
-                {
-                    "label": "on/off mode enabled (dimming is not possible)",
-                    "value": 1
-                },
-                {
-                    "label": "mode selected automatically",
-                    "value": 2
-                }
-            ]
-        },
-        "33": {
-            "label": "Dimmability of the load (read only)",
-            "description": "Dimmability of the load (read only)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Load recognized as dimmable",
-                    "value": 0
-                },
-                {
-                    "label": "Load recognized as non-dimmable",
-                    "value": 1
-                }
-            ]
-        },
-        "34": {
-            "label": "Soft-Start functionality",
-            "description": "Time required to warm up the filament of halogen bulb.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "no soft-start",
-                    "value": 0
-                },
-                {
-                    "label": "short soft-start (0,1s)",
-                    "value": 1
-                },
-                {
-                    "label": "long soft-start (0,5s)",
-                    "value": 2
-                }
-            ]
-        },
-        "35": {
-            "label": "Auto-calibration after power on",
-            "description": "Determines trigger of auto-calibration procedure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No auto-calibration of the load after power on",
-                    "value": 0
-                },
-                {
-                    "label": "Auto-calibration performed after first power on",
-                    "value": 1
-                },
-                {
-                    "label": "Auto-calibration performed after each power on",
-                    "value": 2
-                },
-                {
-                    "label": "Auto-calibration after pwr up or load error",
-                    "value": 3
-                },
-                {
-                    "label": "Auto-calibration after pwr on or load error",
-                    "value": 4
-                }
-            ]
-        },
-        "37": {
-            "label": "Behaviour of the Dimmer after overload or surge",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Device permanently disabled",
-                    "value": 0
-                },
-                {
-                    "label": "three attempts to turn on the load",
-                    "value": 1
-                }
-            ]
-        },
-        "38": {
-            "label": "Brightness level correction for flickering loads",
-            "description": "Duration of brightn level correction for flickering",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "39": {
-            "label": "Power limit - OVERLOAD",
-            "description": "Defined value turns off load",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 250,
-            "defaultValue": 250,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "40": {
-            "label": "General Purpose Alarm",
-            "description": "The parameter specifies the response to an alarm.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No reaction",
-                    "value": 0
-                },
-                {
-                    "label": "Turn on the load",
-                    "value": 1
-                },
-                {
-                    "label": "Turn off the load",
-                    "value": 2
-                },
-                {
-                    "label": "Load blinking",
-                    "value": 3
-                }
-            ]
-        },
-        "41": {
-            "label": "Water Flooding Alarm",
-            "description": "The parameter specifies the response to an alarm.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 2,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No reaction",
-                    "value": 0
-                },
-                {
-                    "label": "Turn on the load",
-                    "value": 1
-                },
-                {
-                    "label": "Turn off the load",
-                    "value": 2
-                },
-                {
-                    "label": "Load blinking",
-                    "value": 3
-                }
-            ]
-        },
-        "42": {
-            "label": "Smoke, CO or CO2 Alarm",
-            "description": "The parameter specifies the response to an alarm.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No reaction",
-                    "value": 0
-                },
-                {
-                    "label": "Turn on the load",
-                    "value": 1
-                },
-                {
-                    "label": "Turn off the load",
-                    "value": 2
-                },
-                {
-                    "label": "Load blinking",
-                    "value": 3
-                }
-            ]
-        },
-        "43": {
-            "label": "Temperature Alarm",
-            "description": "The parameter specifies the response to an alarm.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No reaction",
-                    "value": 0
-                },
-                {
-                    "label": "Turn on the load",
-                    "value": 1
-                },
-                {
-                    "label": "Turn off the load",
-                    "value": 2
-                },
-                {
-                    "label": "Load blinking",
-                    "value": 3
-                }
-            ]
-        },
-        "44": {
-            "label": "Time of alarm state",
-            "description": "Time alarm state cancelled",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "45": {
-            "label": "OVERLOAD alarm report",
-            "description": "(load power consumption too high)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No reaction",
-                    "value": 0
-                },
-                {
-                    "label": "Send an alarm frame",
-                    "value": 1
-                }
-            ]
-        },
-        "46": {
-            "label": "LOAD ERROR alarm report",
-            "description": "(no load, load failure, burnt out bulb)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No reaction",
-                    "value": 0
-                },
-                {
-                    "label": "Send an alarm frame",
-                    "value": 1
-                }
-            ]
-        },
-        "47": {
-            "label": "OVERCURRENT alarm report",
-            "description": "(short circuit, burnt out bulb causing overcurrent)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No reaction",
-                    "value": 0
-                },
-                {
-                    "label": "Send an alarm frame",
-                    "value": 1
-                }
-            ]
-        },
-        "48": {
-            "label": "SURGE alarm report",
-            "description": "(Dimmer output overvoltage)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No reaction",
-                    "value": 0
-                },
-                {
-                    "label": "Send an alarm frame",
-                    "value": 1
-                }
-            ]
-        },
-        "49": {
-            "label": "OVERHEAT and VOLTAGE DROP alarm report",
-            "description": "Critical temperature/VOLTAGE DROP alarm report",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No reaction",
-                    "value": 0
-                },
-                {
-                    "label": "Send an alarm frame",
-                    "value": 1
-                }
-            ]
-        },
-        "50": {
-            "label": "Active power reports",
-            "description": "Pwr level change resulting in power report sent",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "52": {
-            "label": "Periodic active power and energy reports",
-            "description": "Time period between consecutive reports",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 3600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "53": {
-            "label": "Energy reports",
-            "description": "Energy level change resulting in energy report sent",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "54": {
-            "label": "Self-measurement",
-            "description": "Reports include power/energy used by device",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Self-measurement inactive",
-                    "value": 0
-                },
-                {
-                    "label": "Self-measurement active",
-                    "value": 1
-                }
-            ]
-        },
-        "58": {
-            "label": "Method of calculating the active power",
-            "description": "Calculation of active power",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "measurement based on the standard algorithm",
-                    "value": 0
-                },
-                {
-                    "label": "approximation based on the calibration data",
-                    "value": 1
-                },
-                {
-                    "label": "approximation based on the control angle",
-                    "value": 2
-                }
-            ]
-        },
-        "59": {
-            "label": "Approximated power at the maximum brightness level",
-            "description": "Approximated power at the maximum brightness level",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 500,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGD212",
+	"description": "Dimmer 2",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x1000"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x2000"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x3000"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x4000"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x6000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.5",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Minimum brightness level",
+			"description": "set automatically during the calibration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 98,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Maximum brightness level",
+			"description": "parameter is set automatically during the calibration process",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Incandescence level of dimmable CFL*",
+			"description": "Virtual value (percentage between 1% and 99%)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Incandescence time of dimmable CFL*",
+			"description": "time required for switching. 0s - 25,5s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Dimming Step at Automatic Control",
+			"description": "percentage of a dimming step at automatic control. 1-99",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Dimming Step Timing at Automatic Control",
+			"description": "Defines the time of a dimming step at automatic control",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Dimming Step at Manual Control",
+			"description": "The parameter defines the percentage of a dimming step at manual control. 1-99",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Dimming Step Timing at Manual Control",
+			"description": "Defines the time of a dimming step at manual control.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Saving state before power failure",
+			"description": "Saving state before power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All outputs are set to OFF upon power restore",
+					"value": 0
+				},
+				{
+					"label": "Outputs set to previous state upon power restore",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Timer functionality (auto - off)",
+			"description": "Defines the setting of the timer",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "ALL ON/ALL OFF function",
+			"description": "The parameter specifies the available functions.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON not active, ALL OFF not active",
+					"value": 0
+				},
+				{
+					"label": "ALL ON not active, ALL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON active, ALL OFF not active",
+					"value": 2
+				},
+				{
+					"label": "ALL ON active, ALL OFF active",
+					"value": 255
+				}
+			]
+		},
+		"13": {
+			"label": "Force auto-calibration",
+			"description": "Force calibration process",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "readout",
+					"value": 0
+				},
+				{
+					"label": "Force auto-calibration without Fibaro Bypass",
+					"value": 1
+				},
+				{
+					"label": "Force auto-calibration with Fibaro Bypass",
+					"value": 2
+				}
+			]
+		},
+		"14": {
+			"label": "Auto-calibration status (read-only parameter)",
+			"description": "Operating mode of the Dimmer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No calibration or manual settings",
+					"value": 0
+				},
+				{
+					"label": "Dimmer operates on auto-calibration settings",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Burnt out bulb detection",
+			"description": "Percentage value of power variation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Time delay of a burnt out bulb",
+			"description": "Time of delay for power variation detection",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Forced switch on brightness level",
+			"description": "Dimmer 2 will always set this brightness level.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Inputs Button/Switch configuration",
+			"description": "Binary inputs type configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Mono-stable input (button)",
+					"value": 0
+				},
+				{
+					"label": "Bi-stable input (switch)",
+					"value": 1
+				},
+				{
+					"label": "Roller blind switch (UP / DOWN)",
+					"value": 2
+				}
+			]
+		},
+		"21": {
+			"label": "Value sent to associated devices on single click",
+			"description": "The value sent to associated devices on single click.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Set associated devices to last state",
+					"value": 0
+				},
+				{
+					"label": "Dimmer 2 state synchronizes brightness level",
+					"value": 1
+				}
+			]
+		},
+		"22": {
+			"label": "Change [On-Off] bi-stable keys",
+			"description": "Allow changing [On-Off] bi-stable keys",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Device changes status on key status change",
+					"value": 0
+				},
+				{
+					"label": "Status depends on key status",
+					"value": 1
+				}
+			]
+		},
+		"23": {
+			"label": "Double click option",
+			"description": "Double-click set lighting at 100%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable double click",
+					"value": 0
+				},
+				{
+					"label": "Enable double click",
+					"value": 1
+				}
+			]
+		},
+		"24": {
+			"label": "Command frames sent in 2nd and 3rd assoc group",
+			"description": "Actions not resulting in sending frames to assoc",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "all actions send to association groups",
+					"value": 0
+				},
+				{
+					"label": "do not send when switching ON (single click)",
+					"value": 1
+				},
+				{
+					"label": "do not send when switching OFF (single click)",
+					"value": 2
+				},
+				{
+					"label": "Do not send when changing dimming level",
+					"value": 4
+				},
+				{
+					"label": "do not send on double click",
+					"value": 8
+				},
+				{
+					"label": "send 0xFF value on double click",
+					"value": 16
+				}
+			]
+		},
+		"25": {
+			"label": "Command frames sent in 4th and 5th assoc grp",
+			"description": "Actions not resulting in sending frames to assoc grp",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "all actions send to association groups",
+					"value": 0
+				},
+				{
+					"label": "do not send when switching ON (single click)",
+					"value": 1
+				},
+				{
+					"label": "do not send when switching OFF (single click)",
+					"value": 2
+				},
+				{
+					"label": "Do not send when changing dimming level",
+					"value": 4
+				},
+				{
+					"label": "do not send on double click",
+					"value": 8
+				},
+				{
+					"label": "send 0xFF value on double click",
+					"value": 16
+				}
+			]
+		},
+		"26": {
+			"label": "The function of 3-way switch",
+			"description": "Key no. 2 controls the Dimmer additionally",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "3-way switch function for S2 disabled",
+					"value": 0
+				},
+				{
+					"label": "3-way switch function for S2 enabled",
+					"value": 1
+				}
+			]
+		},
+		"27": {
+			"label": "Associations in Z-Wave network security mode",
+			"description": "Defines commands are sent as secure or non-secure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 15,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "all groups (II-V) sent as non-secure",
+					"value": 0
+				},
+				{
+					"label": "2nd group sent as secure",
+					"value": 1
+				},
+				{
+					"label": "3rd group sent as secure",
+					"value": 2
+				},
+				{
+					"label": "4th group sent as secure",
+					"value": 4
+				},
+				{
+					"label": "5th group sent as secure",
+					"value": 8
+				},
+				{
+					"label": "all groups (II-V) sent as secure",
+					"value": 15
+				}
+			]
+		},
+		"28": {
+			"label": "Scene activation functionality",
+			"description": "SCENE ID depends on the switch type configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene functionality deactivated",
+					"value": 0
+				},
+				{
+					"label": "Scene functionality activated",
+					"value": 1
+				}
+			]
+		},
+		"29": {
+			"label": "Switch functionality of S1 and S2",
+			"description": "Switch S1 and S2 buttons",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "standard mode",
+					"value": 0
+				},
+				{
+					"label": "S1 operates as S2, S2 operates as S1",
+					"value": 1
+				}
+			]
+		},
+		"30": {
+			"label": "Load control mode",
+			"description": "The parameter defines the used control mode.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "forced leading edge control",
+					"value": 0
+				},
+				{
+					"label": "forced trailing edge control",
+					"value": 1
+				},
+				{
+					"label": "Control mode selected automatically",
+					"value": 2
+				}
+			]
+		},
+		"31": {
+			"label": "Load recognized during auto-calibration",
+			"description": "Load control mode recognized during auto-calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "leading edge control",
+					"value": 0
+				},
+				{
+					"label": "trailing edge control",
+					"value": 1
+				}
+			]
+		},
+		"32": {
+			"label": "On/Off mode",
+			"description": "Mode for connecting non-dimmable light sources",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "on/off mode disabled (dimming is possible)",
+					"value": 0
+				},
+				{
+					"label": "on/off mode enabled (dimming is not possible)",
+					"value": 1
+				},
+				{
+					"label": "mode selected automatically",
+					"value": 2
+				}
+			]
+		},
+		"33": {
+			"label": "Dimmability of the load (read only)",
+			"description": "Dimmability of the load (read only)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Load recognized as dimmable",
+					"value": 0
+				},
+				{
+					"label": "Load recognized as non-dimmable",
+					"value": 1
+				}
+			]
+		},
+		"34": {
+			"label": "Soft-Start functionality",
+			"description": "Time required to warm up the filament of halogen bulb.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "no soft-start",
+					"value": 0
+				},
+				{
+					"label": "short soft-start (0,1s)",
+					"value": 1
+				},
+				{
+					"label": "long soft-start (0,5s)",
+					"value": 2
+				}
+			]
+		},
+		"35": {
+			"label": "Auto-calibration after power on",
+			"description": "Determines trigger of auto-calibration procedure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No auto-calibration of the load after power on",
+					"value": 0
+				},
+				{
+					"label": "Auto-calibration performed after first power on",
+					"value": 1
+				},
+				{
+					"label": "Auto-calibration performed after each power on",
+					"value": 2
+				},
+				{
+					"label": "Auto-calibration after pwr up or load error",
+					"value": 3
+				},
+				{
+					"label": "Auto-calibration after pwr on or load error",
+					"value": 4
+				}
+			]
+		},
+		"37": {
+			"label": "Behaviour of the Dimmer after overload or surge",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Device permanently disabled",
+					"value": 0
+				},
+				{
+					"label": "three attempts to turn on the load",
+					"value": 1
+				}
+			]
+		},
+		"38": {
+			"label": "Brightness level correction for flickering loads",
+			"description": "Duration of brightn level correction for flickering",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39": {
+			"label": "Power limit - OVERLOAD",
+			"description": "Defined value turns off load",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 250,
+			"defaultValue": 250,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "General Purpose Alarm",
+			"description": "The parameter specifies the response to an alarm.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Turn on the load",
+					"value": 1
+				},
+				{
+					"label": "Turn off the load",
+					"value": 2
+				},
+				{
+					"label": "Load blinking",
+					"value": 3
+				}
+			]
+		},
+		"41": {
+			"label": "Water Flooding Alarm",
+			"description": "The parameter specifies the response to an alarm.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Turn on the load",
+					"value": 1
+				},
+				{
+					"label": "Turn off the load",
+					"value": 2
+				},
+				{
+					"label": "Load blinking",
+					"value": 3
+				}
+			]
+		},
+		"42": {
+			"label": "Smoke, CO or CO2 Alarm",
+			"description": "The parameter specifies the response to an alarm.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Turn on the load",
+					"value": 1
+				},
+				{
+					"label": "Turn off the load",
+					"value": 2
+				},
+				{
+					"label": "Load blinking",
+					"value": 3
+				}
+			]
+		},
+		"43": {
+			"label": "Temperature Alarm",
+			"description": "The parameter specifies the response to an alarm.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Turn on the load",
+					"value": 1
+				},
+				{
+					"label": "Turn off the load",
+					"value": 2
+				},
+				{
+					"label": "Load blinking",
+					"value": 3
+				}
+			]
+		},
+		"44": {
+			"label": "Time of alarm state",
+			"description": "Time alarm state cancelled",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"45": {
+			"label": "OVERLOAD alarm report",
+			"description": "(load power consumption too high)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Send an alarm frame",
+					"value": 1
+				}
+			]
+		},
+		"46": {
+			"label": "LOAD ERROR alarm report",
+			"description": "(no load, load failure, burnt out bulb)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Send an alarm frame",
+					"value": 1
+				}
+			]
+		},
+		"47": {
+			"label": "OVERCURRENT alarm report",
+			"description": "(short circuit, burnt out bulb causing overcurrent)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Send an alarm frame",
+					"value": 1
+				}
+			]
+		},
+		"48": {
+			"label": "SURGE alarm report",
+			"description": "(Dimmer output overvoltage)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Send an alarm frame",
+					"value": 1
+				}
+			]
+		},
+		"49": {
+			"label": "OVERHEAT and VOLTAGE DROP alarm report",
+			"description": "Critical temperature/VOLTAGE DROP alarm report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Send an alarm frame",
+					"value": 1
+				}
+			]
+		},
+		"50": {
+			"label": "Active power reports",
+			"description": "Pwr level change resulting in power report sent",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "Periodic active power and energy reports",
+			"description": "Time period between consecutive reports",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"53": {
+			"label": "Energy reports",
+			"description": "Energy level change resulting in energy report sent",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"54": {
+			"label": "Self-measurement",
+			"description": "Reports include power/energy used by device",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Self-measurement inactive",
+					"value": 0
+				},
+				{
+					"label": "Self-measurement active",
+					"value": 1
+				}
+			]
+		},
+		"58": {
+			"label": "Method of calculating the active power",
+			"description": "Calculation of active power",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "measurement based on the standard algorithm",
+					"value": 0
+				},
+				{
+					"label": "approximation based on the calibration data",
+					"value": 1
+				},
+				{
+					"label": "approximation based on the control angle",
+					"value": 2
+				}
+			]
+		},
+		"59": {
+			"label": "Approximated power at the maximum brightness level",
+			"description": "Approximated power at the maximum brightness level",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

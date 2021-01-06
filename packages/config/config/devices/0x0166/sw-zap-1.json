@@ -1,44 +1,43 @@
 // CBCC Domotique SAS SW-ZAP-1
 // Swiid Plug
 {
-    "_approved": true,
-    "manufacturer": "CBCC Domotique SAS",
-    "manufacturerId": "0x0166",
-    "label": "SW-ZAP-1",
-    "description": "Swiid Plug",
-    "devices": [
-        {
-            "productType": "0x2007",
-            "productId": "0x0706"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Switch All",
-            "description": "Switch All",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 255
-                }
-            ]
-        }
-    }
+	"manufacturer": "CBCC Domotique SAS",
+	"manufacturerId": "0x0166",
+	"label": "SW-ZAP-1",
+	"description": "Swiid Plug",
+	"devices": [
+		{
+			"productType": "0x2007",
+			"productId": "0x0706"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Switch All",
+			"description": "Switch All",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 255
+				}
+			]
+		}
+	}
 }

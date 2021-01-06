@@ -1,502 +1,501 @@
 // ID-RF MSP-3-1-X1
 // Z-Wave Plus Micro Smart Plug ON/OFF
 {
-    "_approved": true,
-    "manufacturer": "ID-RF",
-    "manufacturerId": "0x0165",
-    "label": "MSP-3-1-X1",
-    "description": "Z-Wave Plus Micro Smart Plug ON/OFF",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Default State",
-            "description": "Status after a power outage or after being plugged",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                },
-                {
-                    "label": "Status before power outage",
-                    "value": 2
-                }
-            ]
-        },
-        "3": {
-            "label": "Follow State",
-            "description": "Allows to enable or disable Group 2 & Group 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Group 2 & Group 3 disable",
-                    "value": 0
-                },
-                {
-                    "label": "Group 2 enable",
-                    "value": 1
-                },
-                {
-                    "label": "Group 3 enable",
-                    "value": 2
-                },
-                {
-                    "label": "Group 2 & Group 3 enable",
-                    "value": 3
-                }
-            ]
-        },
-        "4": {
-            "label": "Always On",
-            "description": "Forces the Micro Smart Plug status to be ON",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Always ON disable",
-                    "value": 0
-                },
-                {
-                    "label": "Always ON enable",
-                    "value": 1
-                }
-            ]
-        },
-        "21": {
-            "label": "Power Auto-Sending Report",
-            "description": "Power report for changes of x % W",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Power Auto-Polling Report Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Power Auto-Polling Report Enable if 10%",
-                    "value": 10
-                },
-                {
-                    "label": "Power Auto-Polling Report Enable if 20 %",
-                    "value": 20
-                },
-                {
-                    "label": "Power Auto-Polling Report Enable if 30 %",
-                    "value": 30
-                },
-                {
-                    "label": "Power Auto-Polling Report Enable if 40 %",
-                    "value": 40
-                },
-                {
-                    "label": "Power Auto-Polling Report Enable if 50 %",
-                    "value": 50
-                },
-                {
-                    "label": "Power Auto-Polling Report Enable if 60 %",
-                    "value": 60
-                },
-                {
-                    "label": "Power Auto-Polling Report Enable if 70 %",
-                    "value": 70
-                },
-                {
-                    "label": "Power Auto-Polling Report Enable if 80 %",
-                    "value": 80
-                },
-                {
-                    "label": "Power Auto-Polling Report Enable if 90 %",
-                    "value": 90
-                },
-                {
-                    "label": "Power Auto-Polling Report Enable if 100%",
-                    "value": 100
-                }
-            ]
-        },
-        "22": {
-            "label": "Overload Report",
-            "description": "Switch off Micro Smart Plug in case the power is above  x W",
-            "unit": "W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 2000,
-            "defaultValue": 2000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Overload Report Disable (Not Recommended)",
-                    "value": 0
-                },
-                {
-                    "label": "Overload Report enable with a upper limit of 50 W",
-                    "value": 50
-                },
-                {
-                    "label": "Overload Report enable with a upper limit of 100 W",
-                    "value": 100
-                },
-                {
-                    "label": "Overload Report enable with a upper limit of 150 W",
-                    "value": 150
-                },
-                {
-                    "label": "Overload Report enable with a upper limit of 200 W",
-                    "value": 200
-                },
-                {
-                    "label": "Overload Report enable with a upper limit of 250 W",
-                    "value": 250
-                },
-                {
-                    "label": "Overload Report enable with a upper limit of 500 W",
-                    "value": 500
-                },
-                {
-                    "label": "Upper limit of 1000 W",
-                    "value": 1000
-                },
-                {
-                    "label": "Upper limit of 1500 W",
-                    "value": 1500
-                },
-                {
-                    "label": "Upper limit of 2000 W",
-                    "value": 2000
-                }
-            ]
-        },
-        "23": {
-            "label": "Energy Auto-Sending Report",
-            "description": "Auto energy report if value changes of x Wh",
-            "unit": "Wh",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 1000,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Energy Auto-Polling Report Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable if 1000 Wh variation",
-                    "value": 1000
-                },
-                {
-                    "label": "Enable if 2000 Wh variation",
-                    "value": 2000
-                },
-                {
-                    "label": "Enable if 3000 Wh variation",
-                    "value": 3000
-                },
-                {
-                    "label": "Enable if 4000 Wh variation",
-                    "value": 4000
-                },
-                {
-                    "label": "Enable if 5000 Wh variation",
-                    "value": 5000
-                },
-                {
-                    "label": "Enable if 10.000 Wh variation",
-                    "value": 10000
-                },
-                {
-                    "label": "Enable if 20.000 Wh variation",
-                    "value": 20000
-                },
-                {
-                    "label": "Enable if 30.000 Wh variation",
-                    "value": 30000
-                },
-                {
-                    "label": "Enable if 40.000 Wh variation",
-                    "value": 40000
-                },
-                {
-                    "label": "Enable if 50.000 Wh variation",
-                    "value": 50000
-                },
-                {
-                    "label": "Enable if 60.000 Wh variation",
-                    "value": 60000
-                },
-                {
-                    "label": "Enable if 65.535 Wh variation",
-                    "value": 65535
-                }
-            ]
-        },
-        "24": {
-            "label": "Metering Heartbeat",
-            "description": "Reporting intervall for power and energy to lifeline.",
-            "unit": "s",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 3600,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Metering Pulse disable",
-                    "value": 0
-                },
-                {
-                    "label": "Metering Pulse enable and send report every hour",
-                    "value": 3600
-                },
-                {
-                    "label": "Enable and send report every 6 hours",
-                    "value": 21600
-                },
-                {
-                    "label": "Enable and send report every 12 hours",
-                    "value": 43200
-                }
-            ]
-        },
-        "25": {
-            "label": "Power High Threshold",
-            "description": "Defines the High Threshold value in W.",
-            "unit": "W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 20,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Power High Threshold disable",
-                    "value": 0
-                },
-                {
-                    "label": "Power High Threshold enable 10 W",
-                    "value": 10
-                },
-                {
-                    "label": "Power High Threshold enable 20 W",
-                    "value": 20
-                },
-                {
-                    "label": "Power High Threshold enable 30 W",
-                    "value": 30
-                },
-                {
-                    "label": "Power High Threshold enable 40 W",
-                    "value": 40
-                },
-                {
-                    "label": "Power High Threshold enable 50 W",
-                    "value": 50
-                },
-                {
-                    "label": "Power High Threshold enable 100 W",
-                    "value": 100
-                },
-                {
-                    "label": "Power High Threshold enable 200 W",
-                    "value": 200
-                },
-                {
-                    "label": "Power High Threshold enable 300 W",
-                    "value": 300
-                },
-                {
-                    "label": "Power High Threshold enable 400 W",
-                    "value": 400
-                },
-                {
-                    "label": "Power High Threshold enable 500 W",
-                    "value": 500
-                },
-                {
-                    "label": "Power High Threshold enable 1000 W",
-                    "value": 1000
-                },
-                {
-                    "label": "Power High Threshold enable 1500 W",
-                    "value": 1500
-                },
-                {
-                    "label": "Power High Threshold enable 2000 W",
-                    "value": 2000
-                }
-            ]
-        },
-        "26": {
-            "label": "Power Low Threshold",
-            "description": "Defines the Low Threshold value in W.",
-            "unit": "W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 5,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Power Low Threshold disable",
-                    "value": 0
-                },
-                {
-                    "label": "Power Low Threshold enable 5 W",
-                    "value": 5
-                },
-                {
-                    "label": "Power Low Threshold enable 10 W",
-                    "value": 10
-                },
-                {
-                    "label": "Power Low Threshold enable 20 W",
-                    "value": 20
-                },
-                {
-                    "label": "Power Low Threshold enable 30 W",
-                    "value": 30
-                },
-                {
-                    "label": "Power Low Threshold enable 40 W",
-                    "value": 40
-                },
-                {
-                    "label": "Power Low Threshold enable 50 W",
-                    "value": 50
-                },
-                {
-                    "label": "Power Low Threshold enable 100 W",
-                    "value": 100
-                },
-                {
-                    "label": "Power Low Threshold enable 200 W",
-                    "value": 200
-                },
-                {
-                    "label": "Power Low Threshold enable 300 W",
-                    "value": 300
-                },
-                {
-                    "label": "Power Low Threshold enable 400 W",
-                    "value": 400
-                },
-                {
-                    "label": "Power Low Threshold enable 500 W",
-                    "value": 500
-                },
-                {
-                    "label": "Power Low Threshold enable 1000 W",
-                    "value": 1000
-                },
-                {
-                    "label": "Power Low Threshold enable 1500 W",
-                    "value": 1500
-                },
-                {
-                    "label": "Power Low Threshold enable 2000 W",
-                    "value": 2000
-                }
-            ]
-        },
-        "27": {
-            "label": "Power Threshold Action",
-            "description": "Defines actions if the power Low/High Threshold are reached.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 20,
-            "defaultValue": 7,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Power Threshold Action is disable.",
-                    "value": 0
-                },
-                {
-                    "label": "Power High Group 4 OFF",
-                    "value": 1
-                },
-                {
-                    "label": "Power High Group 4 ON",
-                    "value": 3
-                },
-                {
-                    "label": "Power Low Group 5 OFF",
-                    "value": 4
-                },
-                {
-                    "label": "Power High Group 4 OFF & Power Low Group 5 OFF",
-                    "value": 5
-                },
-                {
-                    "label": "Power High Group 4 ON & Power Low Group 5 OFF",
-                    "value": 7
-                },
-                {
-                    "label": "Power High Group 5 ON",
-                    "value": 12
-                },
-                {
-                    "label": "Power High Group 4 OFF & Power Low Gourp 5 ON",
-                    "value": 13
-                },
-                {
-                    "label": "Power High Group 4 ON & Power Low Group 5 ON",
-                    "value": 15
-                }
-            ]
-        }
-    }
+	"manufacturer": "ID-RF",
+	"manufacturerId": "0x0165",
+	"label": "MSP-3-1-X1",
+	"description": "Z-Wave Plus Micro Smart Plug ON/OFF",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Default State",
+			"description": "Status after a power outage or after being plugged",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				},
+				{
+					"label": "Status before power outage",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Follow State",
+			"description": "Allows to enable or disable Group 2 & Group 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Group 2 & Group 3 disable",
+					"value": 0
+				},
+				{
+					"label": "Group 2 enable",
+					"value": 1
+				},
+				{
+					"label": "Group 3 enable",
+					"value": 2
+				},
+				{
+					"label": "Group 2 & Group 3 enable",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Always On",
+			"description": "Forces the Micro Smart Plug status to be ON",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always ON disable",
+					"value": 0
+				},
+				{
+					"label": "Always ON enable",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "Power Auto-Sending Report",
+			"description": "Power report for changes of x % W",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Power Auto-Polling Report Disable",
+					"value": 0
+				},
+				{
+					"label": "Power Auto-Polling Report Enable if 10%",
+					"value": 10
+				},
+				{
+					"label": "Power Auto-Polling Report Enable if 20 %",
+					"value": 20
+				},
+				{
+					"label": "Power Auto-Polling Report Enable if 30 %",
+					"value": 30
+				},
+				{
+					"label": "Power Auto-Polling Report Enable if 40 %",
+					"value": 40
+				},
+				{
+					"label": "Power Auto-Polling Report Enable if 50 %",
+					"value": 50
+				},
+				{
+					"label": "Power Auto-Polling Report Enable if 60 %",
+					"value": 60
+				},
+				{
+					"label": "Power Auto-Polling Report Enable if 70 %",
+					"value": 70
+				},
+				{
+					"label": "Power Auto-Polling Report Enable if 80 %",
+					"value": 80
+				},
+				{
+					"label": "Power Auto-Polling Report Enable if 90 %",
+					"value": 90
+				},
+				{
+					"label": "Power Auto-Polling Report Enable if 100%",
+					"value": 100
+				}
+			]
+		},
+		"22": {
+			"label": "Overload Report",
+			"description": "Switch off Micro Smart Plug in case the power is above  x W",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2000,
+			"defaultValue": 2000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Overload Report Disable (Not Recommended)",
+					"value": 0
+				},
+				{
+					"label": "Overload Report enable with a upper limit of 50 W",
+					"value": 50
+				},
+				{
+					"label": "Overload Report enable with a upper limit of 100 W",
+					"value": 100
+				},
+				{
+					"label": "Overload Report enable with a upper limit of 150 W",
+					"value": 150
+				},
+				{
+					"label": "Overload Report enable with a upper limit of 200 W",
+					"value": 200
+				},
+				{
+					"label": "Overload Report enable with a upper limit of 250 W",
+					"value": 250
+				},
+				{
+					"label": "Overload Report enable with a upper limit of 500 W",
+					"value": 500
+				},
+				{
+					"label": "Upper limit of 1000 W",
+					"value": 1000
+				},
+				{
+					"label": "Upper limit of 1500 W",
+					"value": 1500
+				},
+				{
+					"label": "Upper limit of 2000 W",
+					"value": 2000
+				}
+			]
+		},
+		"23": {
+			"label": "Energy Auto-Sending Report",
+			"description": "Auto energy report if value changes of x Wh",
+			"unit": "Wh",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 1000,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Energy Auto-Polling Report Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable if 1000 Wh variation",
+					"value": 1000
+				},
+				{
+					"label": "Enable if 2000 Wh variation",
+					"value": 2000
+				},
+				{
+					"label": "Enable if 3000 Wh variation",
+					"value": 3000
+				},
+				{
+					"label": "Enable if 4000 Wh variation",
+					"value": 4000
+				},
+				{
+					"label": "Enable if 5000 Wh variation",
+					"value": 5000
+				},
+				{
+					"label": "Enable if 10.000 Wh variation",
+					"value": 10000
+				},
+				{
+					"label": "Enable if 20.000 Wh variation",
+					"value": 20000
+				},
+				{
+					"label": "Enable if 30.000 Wh variation",
+					"value": 30000
+				},
+				{
+					"label": "Enable if 40.000 Wh variation",
+					"value": 40000
+				},
+				{
+					"label": "Enable if 50.000 Wh variation",
+					"value": 50000
+				},
+				{
+					"label": "Enable if 60.000 Wh variation",
+					"value": 60000
+				},
+				{
+					"label": "Enable if 65.535 Wh variation",
+					"value": 65535
+				}
+			]
+		},
+		"24": {
+			"label": "Metering Heartbeat",
+			"description": "Reporting intervall for power and energy to lifeline.",
+			"unit": "s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 3600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Metering Pulse disable",
+					"value": 0
+				},
+				{
+					"label": "Metering Pulse enable and send report every hour",
+					"value": 3600
+				},
+				{
+					"label": "Enable and send report every 6 hours",
+					"value": 21600
+				},
+				{
+					"label": "Enable and send report every 12 hours",
+					"value": 43200
+				}
+			]
+		},
+		"25": {
+			"label": "Power High Threshold",
+			"description": "Defines the High Threshold value in W.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 20,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Power High Threshold disable",
+					"value": 0
+				},
+				{
+					"label": "Power High Threshold enable 10 W",
+					"value": 10
+				},
+				{
+					"label": "Power High Threshold enable 20 W",
+					"value": 20
+				},
+				{
+					"label": "Power High Threshold enable 30 W",
+					"value": 30
+				},
+				{
+					"label": "Power High Threshold enable 40 W",
+					"value": 40
+				},
+				{
+					"label": "Power High Threshold enable 50 W",
+					"value": 50
+				},
+				{
+					"label": "Power High Threshold enable 100 W",
+					"value": 100
+				},
+				{
+					"label": "Power High Threshold enable 200 W",
+					"value": 200
+				},
+				{
+					"label": "Power High Threshold enable 300 W",
+					"value": 300
+				},
+				{
+					"label": "Power High Threshold enable 400 W",
+					"value": 400
+				},
+				{
+					"label": "Power High Threshold enable 500 W",
+					"value": 500
+				},
+				{
+					"label": "Power High Threshold enable 1000 W",
+					"value": 1000
+				},
+				{
+					"label": "Power High Threshold enable 1500 W",
+					"value": 1500
+				},
+				{
+					"label": "Power High Threshold enable 2000 W",
+					"value": 2000
+				}
+			]
+		},
+		"26": {
+			"label": "Power Low Threshold",
+			"description": "Defines the Low Threshold value in W.",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Power Low Threshold disable",
+					"value": 0
+				},
+				{
+					"label": "Power Low Threshold enable 5 W",
+					"value": 5
+				},
+				{
+					"label": "Power Low Threshold enable 10 W",
+					"value": 10
+				},
+				{
+					"label": "Power Low Threshold enable 20 W",
+					"value": 20
+				},
+				{
+					"label": "Power Low Threshold enable 30 W",
+					"value": 30
+				},
+				{
+					"label": "Power Low Threshold enable 40 W",
+					"value": 40
+				},
+				{
+					"label": "Power Low Threshold enable 50 W",
+					"value": 50
+				},
+				{
+					"label": "Power Low Threshold enable 100 W",
+					"value": 100
+				},
+				{
+					"label": "Power Low Threshold enable 200 W",
+					"value": 200
+				},
+				{
+					"label": "Power Low Threshold enable 300 W",
+					"value": 300
+				},
+				{
+					"label": "Power Low Threshold enable 400 W",
+					"value": 400
+				},
+				{
+					"label": "Power Low Threshold enable 500 W",
+					"value": 500
+				},
+				{
+					"label": "Power Low Threshold enable 1000 W",
+					"value": 1000
+				},
+				{
+					"label": "Power Low Threshold enable 1500 W",
+					"value": 1500
+				},
+				{
+					"label": "Power Low Threshold enable 2000 W",
+					"value": 2000
+				}
+			]
+		},
+		"27": {
+			"label": "Power Threshold Action",
+			"description": "Defines actions if the power Low/High Threshold are reached.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 20,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power Threshold Action is disable.",
+					"value": 0
+				},
+				{
+					"label": "Power High Group 4 OFF",
+					"value": 1
+				},
+				{
+					"label": "Power High Group 4 ON",
+					"value": 3
+				},
+				{
+					"label": "Power Low Group 5 OFF",
+					"value": 4
+				},
+				{
+					"label": "Power High Group 4 OFF & Power Low Group 5 OFF",
+					"value": 5
+				},
+				{
+					"label": "Power High Group 4 ON & Power Low Group 5 OFF",
+					"value": 7
+				},
+				{
+					"label": "Power High Group 5 ON",
+					"value": 12
+				},
+				{
+					"label": "Power High Group 4 OFF & Power Low Gourp 5 ON",
+					"value": 13
+				},
+				{
+					"label": "Power High Group 4 ON & Power Low Group 5 ON",
+					"value": 15
+				}
+			]
+		}
+	}
 }

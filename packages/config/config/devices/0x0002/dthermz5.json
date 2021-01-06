@@ -1,7 +1,6 @@
 // Danfoss DTHERMZ5
 // Z-Wave room sensor
 {
-	"_approved": true,
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",
 	"label": "DTHERMZ5",

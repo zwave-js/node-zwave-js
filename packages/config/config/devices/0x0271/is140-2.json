@@ -1,7 +1,6 @@
 // STEINEL GmbH IS140-2
 // PIR sensor with relay
 {
-	"_approved": true,
 	"manufacturer": "STEINEL GmbH",
 	"manufacturerId": "0x0271",
 	"label": "IS140-2",

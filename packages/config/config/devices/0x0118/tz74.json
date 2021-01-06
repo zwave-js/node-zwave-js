@@ -1,110 +1,109 @@
 // TKB Home TZ74
 // Insert two channel switch module
 {
-    "_approved": true,
-    "manufacturer": "TKB Home",
-    "manufacturerId": "0x0118",
-    "label": "TZ74",
-    "description": "Insert two channel switch module",
-    "devices": [
-        {
-            "productType": "0x0311",
-            "productId": "0x0304"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Change the state of indicator light",
-            "description": "Default status of socket LED is on as indicator when the load is off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED is off when load is off",
-                    "value": 0
-                },
-                {
-                    "label": "LED is on when load is off",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Memory Function",
-            "description": "Default with memory: the socket staus is same as before when power is on",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "socket status depends on switch",
-                    "value": 0
-                },
-                {
-                    "label": "socket status is same as before power outage",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Invert switch",
-            "description": "In the edge mode invert switch - no effect if Pulse or Edge-toggle modes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "In the edge mode invert switch",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Edge, Pulse, or Edge Toggle Mode",
-            "description": "Set how the switch controls the module",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Edge Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Pulse Mode",
-                    "value": 2
-                },
-                {
-                    "label": "Edge-toggle Mode",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "TZ74",
+	"description": "Insert two channel switch module",
+	"devices": [
+		{
+			"productType": "0x0311",
+			"productId": "0x0304"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Change the state of indicator light",
+			"description": "Default status of socket LED is on as indicator when the load is off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED is off when load is off",
+					"value": 0
+				},
+				{
+					"label": "LED is on when load is off",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Memory Function",
+			"description": "Default with memory: the socket staus is same as before when power is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "socket status depends on switch",
+					"value": 0
+				},
+				{
+					"label": "socket status is same as before power outage",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Invert switch",
+			"description": "In the edge mode invert switch - no effect if Pulse or Edge-toggle modes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "In the edge mode invert switch",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Edge, Pulse, or Edge Toggle Mode",
+			"description": "Set how the switch controls the module",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Edge Mode",
+					"value": 1
+				},
+				{
+					"label": "Pulse Mode",
+					"value": 2
+				},
+				{
+					"label": "Edge-toggle Mode",
+					"value": 3
+				}
+			]
+		}
+	}
 }

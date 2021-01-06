@@ -1,7 +1,6 @@
 // Willis Electric Co., Ltd. NZW96
 // Outdoor Plug-in Module (1-Channel)
 {
-	"_approved": true,
 	"manufacturer": "Willis Electric Co., Ltd.",
 	"manufacturerId": "0x015d",
 	"label": "NZW96",

@@ -1,7 +1,6 @@
 // FortrezZ LLC MIMO2+
 // Dual Digital or Analog Voltage input and Dual Contact Relay
 {
-	"_approved": true,
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
 	"label": "MIMO2+",

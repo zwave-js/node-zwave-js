@@ -1,165 +1,164 @@
 // Everspring AC301
 // Thermostatic Radiator Valve
 {
-    "_approved": true,
-    "manufacturer": "Everspring",
-    "manufacturerId": "0x0060",
-    "label": "AC301",
-    "description": "Thermostatic Radiator Valve",
-    "devices": [
-        {
-            "productType": "0x0015",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Temperature Auto Report period setting",
-            "description": "Temperature Auto Report period setting",
-            "unit": "minutes",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 120,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Temperature offset for internal sensor",
-            "description": "Temperature offset for internal sensor (-80~+80 Offsets the measured temperature by -8.0°C~+8.0°C)",
-            "valueSize": 1,
-            "unit": "1/10 °C",
-            "minValue": -80,
-            "maxValue": 80,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Maximum Set point value",
-            "description": "Maximum Set point value",
-            "valueSize": 1,
-            "unit": "°C",
-            "minValue": 5,
-            "maxValue": 35,
-            "defaultValue": 35,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Minimum Set point value",
-            "description": "Minimum Set point value",
-            "valueSize": 1,
-            "unit": "°C",
-            "minValue": 5,
-            "maxValue": 35,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Frost protection temperature",
-            "description": "Frost protection temperature",
-            "valueSize": 1,
-            "unit": "°C",
-            "minValue": 5,
-            "maxValue": 15,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Open window detect function",
-            "description": "Open window detect function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Open window detect time period",
-            "description": "Open window detect time period",
-            "unit": "minutes",
-            "valueSize": 1,
-            "minValue": 2,
-            "maxValue": 30,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Open window detect temperature drop setting",
-            "valueSize": 1,
-            "minValue": 4,
-            "maxValue": 8,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "2 °C",
-                    "value": 4
-                },
-                {
-                    "label": "2.5 °C",
-                    "value": 5
-                },
-                {
-                    "label": "3 °C",
-                    "value": 6
-                },
-                {
-                    "label": "3.5 °C",
-                    "value": 7
-                },
-                {
-                    "label": "4 °C",
-                    "value": 8
-                }
-            ]
-        },
-        "9": {
-            "label": "Open window detect delay time select",
-            "description": "Open window detect delay time select",
-            "unit": "minutes",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 60,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "AC301",
+	"description": "Thermostatic Radiator Valve",
+	"devices": [
+		{
+			"productType": "0x0015",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Temperature Auto Report period setting",
+			"description": "Temperature Auto Report period setting",
+			"unit": "minutes",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 120,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Temperature offset for internal sensor",
+			"description": "Temperature offset for internal sensor (-80~+80 Offsets the measured temperature by -8.0°C~+8.0°C)",
+			"valueSize": 1,
+			"unit": "1/10 °C",
+			"minValue": -80,
+			"maxValue": 80,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Maximum Set point value",
+			"description": "Maximum Set point value",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 5,
+			"maxValue": 35,
+			"defaultValue": 35,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Minimum Set point value",
+			"description": "Minimum Set point value",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 5,
+			"maxValue": 35,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Frost protection temperature",
+			"description": "Frost protection temperature",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 5,
+			"maxValue": 15,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Open window detect function",
+			"description": "Open window detect function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Open window detect time period",
+			"description": "Open window detect time period",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 30,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Open window detect temperature drop setting",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 8,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2 °C",
+					"value": 4
+				},
+				{
+					"label": "2.5 °C",
+					"value": 5
+				},
+				{
+					"label": "3 °C",
+					"value": 6
+				},
+				{
+					"label": "3.5 °C",
+					"value": 7
+				},
+				{
+					"label": "4 °C",
+					"value": 8
+				}
+			]
+		},
+		"9": {
+			"label": "Open window detect delay time select",
+			"description": "Open window detect delay time select",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 60,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

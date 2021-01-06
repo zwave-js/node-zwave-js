@@ -1,7 +1,6 @@
 // Leviton DZ1KD
 // 1000W Dimmer
 {
-	"_approved": true,
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "DZ1KD",

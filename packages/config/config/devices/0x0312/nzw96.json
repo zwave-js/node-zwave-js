@@ -1,7 +1,6 @@
 // NIE Technology Co., Ltd. NZW96
 // Outdoor Z-Wave Plug-In Module (1-Channel)
 {
-	"_approved": true,
 	"manufacturer": "NIE Technology Co., Ltd.",
 	"manufacturerId": "0x0312",
 	"label": "NZW96",

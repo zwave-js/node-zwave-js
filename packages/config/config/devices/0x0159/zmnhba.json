@@ -1,7 +1,6 @@
 // Qubino ZMNHBA
 // Flush 2 relays
 {
-	"_approved": true,
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHBA",
@@ -28,7 +27,7 @@
 		"3": {
 			"label": "Default Reporting Group",
 			"maxNodes": 4,
-			"isLifeline": true,
+			"isLifeline": true
 		}
 	},
 	"paramInformation": {

@@ -1,19 +1,18 @@
 // Intermatic HA03
 // Lamp Module
 {
-    "_approved": true,
-    "manufacturer": "Intermatic",
-    "manufacturerId": "0x0005",
-    "label": "HA03",
-    "description": "Lamp Module",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Intermatic",
+	"manufacturerId": "0x0005",
+	"label": "HA03",
+	"description": "Lamp Module",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

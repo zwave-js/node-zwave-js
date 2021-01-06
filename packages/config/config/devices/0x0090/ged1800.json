@@ -1,14 +1,6 @@
 // Spectrum Brands GED1800
 // SmartCode 10 Touchpad Electronic Deadbolt
 {
-	"_approved": false,
-	"_errors": [
-		"Overview information is not set",
-		"Command Class \"ASSOCIATION_GROUP_INFO\" in endpoint 0 is duplicated!"
-	],
-	"_warnings": [
-		"No channels have been assigned even though there are user configurable command classes."
-	],
 	"manufacturer": "Spectrum Brands",
 	"manufacturerId": "0x0090",
 	"label": "GED1800",

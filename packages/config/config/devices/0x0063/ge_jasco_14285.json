@@ -1,108 +1,107 @@
 // Jasco Products GE/Jasco 14285
 // Direct Wire Indoor/Outdoor Smart Switch
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "GE/Jasco 14285",
-    "description": "Direct Wire Indoor/Outdoor Smart Switch",
-    "devices": [
-        {
-            "productType": "0x4f44",
-            "productId": "0x3032"
-        },
-        {
-            "productType": "0x5042",
-            "productId": "0x4004"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Product State after Power Reset",
-            "description": "Product State after Power Reset",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Return to last state",
-                    "value": 0
-                },
-                {
-                    "label": "Return to off",
-                    "value": 1
-                },
-                {
-                    "label": "Return to on",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Energy Report Mode",
-            "description": "Energy Report Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Once monthly",
-                    "value": 0
-                },
-                {
-                    "label": "Reports based on Parameter 3 setting",
-                    "value": 1
-                },
-                {
-                    "label": "Once daily",
-                    "value": 2
-                }
-            ]
-        },
-        "3": {
-            "label": "Energy Report Frequency",
-            "description": "Energy Report Frequency",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 60,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19": {
-            "label": "Alternate Exclusion",
-            "description": "Alternate Exclusion",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Default",
-                    "value": 0
-                },
-                {
-                    "label": "Alternate Exclusion (3 button presses)",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "GE/Jasco 14285",
+	"description": "Direct Wire Indoor/Outdoor Smart Switch",
+	"devices": [
+		{
+			"productType": "0x4f44",
+			"productId": "0x3032"
+		},
+		{
+			"productType": "0x5042",
+			"productId": "0x4004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Product State after Power Reset",
+			"description": "Product State after Power Reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Return to last state",
+					"value": 0
+				},
+				{
+					"label": "Return to off",
+					"value": 1
+				},
+				{
+					"label": "Return to on",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Energy Report Mode",
+			"description": "Energy Report Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Once monthly",
+					"value": 0
+				},
+				{
+					"label": "Reports based on Parameter 3 setting",
+					"value": 1
+				},
+				{
+					"label": "Once daily",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Energy Report Frequency",
+			"description": "Energy Report Frequency",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 60,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "Alternate Exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Alternate Exclusion (3 button presses)",
+					"value": 1
+				}
+			]
+		}
+	}
 }

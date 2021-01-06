@@ -1,7 +1,6 @@
 // ACT - Advanced Control Technologies ZDW103
 // Wall Mounted 3-Way Dimmer Receiver
 {
-	"_approved": true,
 	"manufacturer": "ACT - Advanced Control Technologies",
 	"manufacturerId": "0x0001",
 	"label": "ZDW103",

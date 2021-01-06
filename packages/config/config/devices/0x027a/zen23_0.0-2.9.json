@@ -1,37 +1,36 @@
 // Zooz ZEN23
 // Z-Wave Plus On/Off Toggle Switch V1
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN23",
-    "description": "Z-Wave Plus On/Off Toggle Switch V1",
-    "devices": [
-        {
-            "productType": "0x1111",
-            "productId": "0x1e1c"
-        },
-        {
-            "productType": "0xb111",
-            "productId": "0x251c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "2.9"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Toggle Control",
-            "description": "Determines whether up is on and down is off; or up is off, down is on",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN23",
+	"description": "Z-Wave Plus On/Off Toggle Switch V1",
+	"devices": [
+		{
+			"productType": "0x1111",
+			"productId": "0x1e1c"
+		},
+		{
+			"productType": "0xb111",
+			"productId": "0x251c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "2.9"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Toggle Control",
+			"description": "Determines whether up is on and down is off; or up is off, down is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

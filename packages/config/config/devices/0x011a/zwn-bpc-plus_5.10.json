@@ -1,33 +1,32 @@
 // Wenzhou MTLC Electric Appliances Co., Ltd. ZWN-BPC-PLUS
 // PIR Sensor
 {
-    "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
-    "manufacturerId": "0x011a",
-    "label": "ZWN-BPC-PLUS",
-    "description": "PIR Sensor",
-    "devices": [
-        {
-            "productType": "0x0601",
-            "productId": "0x0901"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "5.10",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Motion timeout",
-            "description": "Multiplier to wakeup timer interval",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
+	"label": "ZWN-BPC-PLUS",
+	"description": "PIR Sensor",
+	"devices": [
+		{
+			"productType": "0x0601",
+			"productId": "0x0901"
+		}
+	],
+	"firmwareVersion": {
+		"min": "5.10",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Motion timeout",
+			"description": "Multiplier to wakeup timer interval",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

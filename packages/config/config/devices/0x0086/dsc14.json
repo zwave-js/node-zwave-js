@@ -1,7 +1,6 @@
 // AEON Labs DSC14
 // Micro Motor Controller
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSC14",

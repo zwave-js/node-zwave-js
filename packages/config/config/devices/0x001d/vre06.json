@@ -1,30 +1,29 @@
 // Leviton VRE06
 // Electronic Low Voltage Scene Capable Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRE06",
-    "description": "Electronic Low Voltage Scene Capable Dimmer",
-    "devices": [
-        {
-            "productType": "0x0e01",
-            "productId": "0x0209"
-        },
-        {
-            "productType": "0x0e01",
-            "productId": "0x0334"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRE06",
+	"description": "Electronic Low Voltage Scene Capable Dimmer",
+	"devices": [
+		{
+			"productType": "0x0e01",
+			"productId": "0x0209"
+		},
+		{
+			"productType": "0x0e01",
+			"productId": "0x0334"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

@@ -1,53 +1,48 @@
 // Trane Corporation AZEMT500BB32MA
 // American Standard Z-Wave Programmable Thermostat
 {
-    "_approved": true,
-    "_warnings": [
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "Trane Corporation",
-    "manufacturerId": "0x008b",
-    "label": "AZEMT500BB32MA",
-    "description": "American Standard Z-Wave Programmable Thermostat",
-    "devices": [
-        {
-            "productType": "0x5452",
-            "productId": "0x5435"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Reports",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "132": {
-            "label": "Schedule Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Hold",
-                    "value": 0
-                },
-                {
-                    "label": "Schedule",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Trane Corporation",
+	"manufacturerId": "0x008b",
+	"label": "AZEMT500BB32MA",
+	"description": "American Standard Z-Wave Programmable Thermostat",
+	"devices": [
+		{
+			"productType": "0x5452",
+			"productId": "0x5435"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Reports",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"132": {
+			"label": "Schedule Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hold",
+					"value": 0
+				},
+				{
+					"label": "Schedule",
+					"value": 1
+				}
+			]
+		}
+	}
 }

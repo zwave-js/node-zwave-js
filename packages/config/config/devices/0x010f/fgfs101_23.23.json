@@ -1,7 +1,6 @@
 // Fibargroup FGFS101
 // Flood Sensor
 {
-	"_approved": true,
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGFS101",

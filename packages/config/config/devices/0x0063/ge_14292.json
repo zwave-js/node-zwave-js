@@ -1,43 +1,42 @@
 // Jasco Products GE 14292
 // In-Wall Toggle Switch
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "GE 14292",
-    "description": "In-Wall Toggle Switch",
-    "devices": [
-        {
-            "productType": "0x4952",
-            "productId": "0x3037"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "4": {
-            "label": "Invert Switch",
-            "description": "Invert Switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal Switch Install",
-                    "value": 0
-                },
-                {
-                    "label": "Inverted Switch Install",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "GE 14292",
+	"description": "In-Wall Toggle Switch",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3037"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"4": {
+			"label": "Invert Switch",
+			"description": "Invert Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Switch Install",
+					"value": 0
+				},
+				{
+					"label": "Inverted Switch Install",
+					"value": 1
+				}
+			]
+		}
+	}
 }

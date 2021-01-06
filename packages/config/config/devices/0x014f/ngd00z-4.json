@@ -1,34 +1,33 @@
 // Nortek Security & Control LLC NGD00Z-4
 // Garage Door Controller
 {
-    "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "NGD00Z-4",
-    "description": "Garage Door Controller",
-    "devices": [
-        {
-            "productType": "0x4744",
-            "productId": "0x3030"
-        },
-        {
-            "productType": "0x4744",
-            "productId": "0x3032"
-        },
-        {
-            "productType": "0x4744",
-            "productId": "0x3530"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "NGD00Z-4",
+	"description": "Garage Door Controller",
+	"devices": [
+		{
+			"productType": "0x4744",
+			"productId": "0x3030"
+		},
+		{
+			"productType": "0x4744",
+			"productId": "0x3032"
+		},
+		{
+			"productType": "0x4744",
+			"productId": "0x3530"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }

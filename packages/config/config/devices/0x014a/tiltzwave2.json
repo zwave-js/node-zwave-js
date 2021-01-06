@@ -1,7 +1,6 @@
 // Ecolink TILTZWAVE2
 // Z-Wave Garage Door Sensor
 {
-	"_approved": true,
 	"manufacturer": "Ecolink",
 	"manufacturerId": "0x014a",
 	"label": "TILTZWAVE2",

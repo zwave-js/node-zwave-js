@@ -1,53 +1,52 @@
 // Jasco Products 12727
 // GE 12727 Z-Wave Wireless Lighting Control Smart Toggle Switch
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "12727",
-    "description": "GE 12727 Z-Wave Wireless Lighting Control Smart Toggle Switch",
-    "devices": [
-        {
-            "productType": "0x4952",
-            "productId": "0x3033"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "4": {
-            "label": "Invert switch",
-            "description": "Invert switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal switch install",
-                    "value": 0
-                },
-                {
-                    "label": "Inverted switch",
-                    "value": 1
-                }
-            ]
-        },
-        "29": {
-            "label": "Load Sensing",
-            "description": "Load Sensing",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "12727",
+	"description": "GE 12727 Z-Wave Wireless Lighting Control Smart Toggle Switch",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3033"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"4": {
+			"label": "Invert switch",
+			"description": "Invert switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal switch install",
+					"value": 0
+				},
+				{
+					"label": "Inverted switch",
+					"value": 1
+				}
+			]
+		},
+		"29": {
+			"label": "Load Sensing",
+			"description": "Load Sensing",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

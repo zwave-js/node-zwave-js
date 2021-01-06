@@ -1,48 +1,47 @@
 // Jasco Products 46201
 // GE Quick-fit Smart In-Wall Paddle Switch
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "46201",
-    "description": "GE Quick-fit Smart In-Wall Paddle Switch",
-    "devices": [
-        {
-            "productType": "0x4952",
-            "productId": "0x3135"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "Blue LED Night Light",
-            "description": "Blue LED Night Light",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED ON when switch is OFF",
-                    "value": 0
-                },
-                {
-                    "label": "LED ON when switch is ON",
-                    "value": 1
-                },
-                {
-                    "label": "LED always OFF",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "46201",
+	"description": "GE Quick-fit Smart In-Wall Paddle Switch",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3135"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "Blue LED Night Light",
+			"description": "Blue LED Night Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when switch is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED ON when switch is ON",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				}
+			]
+		}
+	}
 }

@@ -1,34 +1,33 @@
 // McoHome Technology Co., Ltd. MH10-PM2.5-WA
 // PM2.5 Monitor
 {
-    "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH10-PM2.5-WA",
-    "description": "PM2.5 Monitor",
-    "devices": [
-        {
-            "productType": "0x0a01",
-            "productId": "0x3102"
-        },
-        {
-            "productType": "0x0a05",
-            "productId": "0x0100"
-        },
-        {
-            "productType": "0x0a05",
-            "productId": "0x0201"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH10-PM2.5-WA",
+	"description": "PM2.5 Monitor",
+	"devices": [
+		{
+			"productType": "0x0a01",
+			"productId": "0x3102"
+		},
+		{
+			"productType": "0x0a05",
+			"productId": "0x0100"
+		},
+		{
+			"productType": "0x0a05",
+			"productId": "0x0201"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

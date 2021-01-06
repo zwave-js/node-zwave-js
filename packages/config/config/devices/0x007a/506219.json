@@ -1,117 +1,113 @@
 // Merten 506219
 // Battery Powered Wall Controller
 {
-    "_approved": true,
-    "_warnings": [
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "Merten",
-    "manufacturerId": "0x007a",
-    "label": "506219",
-    "description": "Battery Powered Wall Controller",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0004"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Left top button",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Left bottom button",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Right top button",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "4": {
-            "label": "Right bottom button",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "0": {
-            "label": "Switching/dimming/shutters dual-surface:",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Switching single-surface",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "44": {
-            "label": "Doorbell function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "52": {
-            "label": "LOWER shutter as long as button is pressed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "54": {
-            "label": "Move shutter single-surface",
-            "description": "direction of  movement changes after each switching  process",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "55": {
-            "label": "RAISE shutter as long as button is pressed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "60": {
-            "label": "Retrieve/save scene",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Merten",
+	"manufacturerId": "0x007a",
+	"label": "506219",
+	"description": "Battery Powered Wall Controller",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Left top button",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Left bottom button",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Right top button",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"4": {
+			"label": "Right bottom button",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"0": {
+			"label": "Switching/dimming/shutters dual-surface:",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Switching single-surface",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"44": {
+			"label": "Doorbell function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "LOWER shutter as long as button is pressed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"54": {
+			"label": "Move shutter single-surface",
+			"description": "direction of  movement changes after each switching  process",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"55": {
+			"label": "RAISE shutter as long as button is pressed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"60": {
+			"label": "Retrieve/save scene",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,7 +1,6 @@
 // ASSA ABLOY YRD216
 // Yale Real Living Assure Lock Push Button Deadbolt
 {
-	"_approved": true,
 	"manufacturer": "ASSA ABLOY",
 	"manufacturerId": "0x0129",
 	"label": "YRD216",

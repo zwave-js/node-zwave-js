@@ -1,322 +1,321 @@
 // Fibargroup FGFS101
 // Flood Sensor
 {
-    "_approved": true,
-    "manufacturer": "Fibargroup",
-    "manufacturerId": "0x010f",
-    "label": "FGFS101",
-    "description": "Flood Sensor",
-    "devices": [
-        {
-            "productType": "0x0b00",
-            "productId": "0x1001"
-        },
-        {
-            "productType": "0x0b01",
-            "productId": "0x1002"
-        },
-        {
-            "productType": "0x0b01",
-            "productId": "0x1003"
-        },
-        {
-            "productType": "0x0b01",
-            "productId": "0x2002"
-        },
-        {
-            "productType": "0x0b01",
-            "productId": "0x3002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.2",
-        "max": "23.0"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Alarm cancellation delay",
-            "description": "Time in seconds that the flood state is retained after flooding event",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 3600,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Select alarm type (visual/acoustic)",
-            "description": "This parameter allows for deactivation visual and acoustic alarm.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Acoustic and visual alarms inactive",
-                    "value": 0
-                },
-                {
-                    "label": "Acoustic alarm inactive, visual alarm active",
-                    "value": 1
-                },
-                {
-                    "label": "Acoustic alarm active, visual alarm inactive",
-                    "value": 2
-                },
-                {
-                    "label": "Acoustic and visual alarms active",
-                    "value": 3
-                }
-            ]
-        },
-        "7": {
-            "label": "Requested dimming level to 2nd assoc. group",
-            "description": "“On” level to be sent to devices from 2nd association group on flood event",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Device off and alarm cancellations",
-            "description": "Enable/disable device off/alarm cancellation updates to 2nd/3rd assoc groups",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Alarm (flooding) cancellation inactive",
-                    "value": 0
-                },
-                {
-                    "label": "Alarm (flooding) cancellation active",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "Temperature measurement interval",
-            "description": "Seconds between consecutive measurements of battery level/temperature",
-            "unit": "seconds",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Temperature measurement hysteresis",
-            "description": "Minimum change in temperature value for report to be sent to controller",
-            "unit": "0.01 degrees C",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 1000,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "50": {
-            "label": "Low temperature alarm threshold",
-            "description": "Temperature value below which visual indicator blinks",
-            "unit": "0.01 degrees C",
-            "valueSize": 2,
-            "minValue": -10000,
-            "maxValue": 10000,
-            "defaultValue": 1500,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "51": {
-            "label": "High temperature alarm threshold",
-            "description": "Temperature value above which visual indicator blinks",
-            "unit": "0.01°C",
-            "valueSize": 2,
-            "minValue": -10000,
-            "maxValue": 10000,
-            "defaultValue": 3500,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "61": {
-            "label": "Low temperature alarm indicator colour",
-            "description": "Parameter stores RGB colour value.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 16777215,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "62": {
-            "label": "High temperature alarm indicator colour",
-            "description": "Parameter stores RGB colour value.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 16777215,
-            "defaultValue": 16711680,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "63": {
-            "label": "Visual temperature indicator",
-            "description": "Enable or disable visual temperature indicator via device's LED",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No temperature indication",
-                    "value": 0
-                },
-                {
-                    "label": "Every measurement (Battery)",
-                    "value": 1
-                },
-                {
-                    "label": "Evert measurement (Power mode)",
-                    "value": 2
-                }
-            ]
-        },
-        "73": {
-            "label": "Temperature measurement compensation",
-            "description": "Offset to current temperature to account temperature difference",
-            "unit": "0.01°C",
-            "valueSize": 2,
-            "minValue": -10000,
-            "maxValue": 10000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "74": {
-            "label": "Alarm frame for movement/tamper",
-            "description": "Movement/tamper alarm sent to 1st & 4th assoc. group",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Tamper alarm inactive",
-                    "value": 0
-                },
-                {
-                    "label": "Button tamper alarm active",
-                    "value": 1
-                },
-                {
-                    "label": "Movement tamper alarm active",
-                    "value": 2
-                },
-                {
-                    "label": "Button and movement tampers alarm active",
-                    "value": 3
-                }
-            ]
-        },
-        "75": {
-            "label": "Alarms signalization duration",
-            "description": "Turn off alarm after given timeout",
-            "unit": "seconds",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "76": {
-            "label": "Alarm signalization reactivation period",
-            "description": "Time period after which an alarm will be turned back on",
-            "unit": "seconds",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "77": {
-            "label": "Flood sensor functionality turned off",
-            "description": "Allows the internal flood sensor to be turned off.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Flood sensor On (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Built-in flood sensor TURNED OFF",
-                    "value": 1
-                }
-            ]
-        },
-        "78": {
-            "label": "Associations in Z-Wave network security mode",
-            "description": "Defines whether commands are sent as secure or non-secure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 7,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None of the groups are sent as secure",
-                    "value": 0
-                },
-                {
-                    "label": "2nd group ”Control” sent as secure",
-                    "value": 1
-                },
-                {
-                    "label": "3rd group ”Alarm” sent as secure",
-                    "value": 2
-                },
-                {
-                    "label": "4th group \"Tamper” sent as secure",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGFS101",
+	"description": "Flood Sensor",
+	"devices": [
+		{
+			"productType": "0x0b00",
+			"productId": "0x1001"
+		},
+		{
+			"productType": "0x0b01",
+			"productId": "0x1002"
+		},
+		{
+			"productType": "0x0b01",
+			"productId": "0x1003"
+		},
+		{
+			"productType": "0x0b01",
+			"productId": "0x2002"
+		},
+		{
+			"productType": "0x0b01",
+			"productId": "0x3002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.2",
+		"max": "23.0"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Alarm cancellation delay",
+			"description": "Time in seconds that the flood state is retained after flooding event",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Select alarm type (visual/acoustic)",
+			"description": "This parameter allows for deactivation visual and acoustic alarm.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Acoustic and visual alarms inactive",
+					"value": 0
+				},
+				{
+					"label": "Acoustic alarm inactive, visual alarm active",
+					"value": 1
+				},
+				{
+					"label": "Acoustic alarm active, visual alarm inactive",
+					"value": 2
+				},
+				{
+					"label": "Acoustic and visual alarms active",
+					"value": 3
+				}
+			]
+		},
+		"7": {
+			"label": "Requested dimming level to 2nd assoc. group",
+			"description": "“On” level to be sent to devices from 2nd association group on flood event",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Device off and alarm cancellations",
+			"description": "Enable/disable device off/alarm cancellation updates to 2nd/3rd assoc groups",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Alarm (flooding) cancellation inactive",
+					"value": 0
+				},
+				{
+					"label": "Alarm (flooding) cancellation active",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Temperature measurement interval",
+			"description": "Seconds between consecutive measurements of battery level/temperature",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Temperature measurement hysteresis",
+			"description": "Minimum change in temperature value for report to be sent to controller",
+			"unit": "0.01 degrees C",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1000,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"50": {
+			"label": "Low temperature alarm threshold",
+			"description": "Temperature value below which visual indicator blinks",
+			"unit": "0.01 degrees C",
+			"valueSize": 2,
+			"minValue": -10000,
+			"maxValue": 10000,
+			"defaultValue": 1500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "High temperature alarm threshold",
+			"description": "Temperature value above which visual indicator blinks",
+			"unit": "0.01°C",
+			"valueSize": 2,
+			"minValue": -10000,
+			"maxValue": 10000,
+			"defaultValue": 3500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"61": {
+			"label": "Low temperature alarm indicator colour",
+			"description": "Parameter stores RGB colour value.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 16777215,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"62": {
+			"label": "High temperature alarm indicator colour",
+			"description": "Parameter stores RGB colour value.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 16777215,
+			"defaultValue": 16711680,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"63": {
+			"label": "Visual temperature indicator",
+			"description": "Enable or disable visual temperature indicator via device's LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No temperature indication",
+					"value": 0
+				},
+				{
+					"label": "Every measurement (Battery)",
+					"value": 1
+				},
+				{
+					"label": "Evert measurement (Power mode)",
+					"value": 2
+				}
+			]
+		},
+		"73": {
+			"label": "Temperature measurement compensation",
+			"description": "Offset to current temperature to account temperature difference",
+			"unit": "0.01°C",
+			"valueSize": 2,
+			"minValue": -10000,
+			"maxValue": 10000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"74": {
+			"label": "Alarm frame for movement/tamper",
+			"description": "Movement/tamper alarm sent to 1st & 4th assoc. group",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Tamper alarm inactive",
+					"value": 0
+				},
+				{
+					"label": "Button tamper alarm active",
+					"value": 1
+				},
+				{
+					"label": "Movement tamper alarm active",
+					"value": 2
+				},
+				{
+					"label": "Button and movement tampers alarm active",
+					"value": 3
+				}
+			]
+		},
+		"75": {
+			"label": "Alarms signalization duration",
+			"description": "Turn off alarm after given timeout",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"76": {
+			"label": "Alarm signalization reactivation period",
+			"description": "Time period after which an alarm will be turned back on",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"77": {
+			"label": "Flood sensor functionality turned off",
+			"description": "Allows the internal flood sensor to be turned off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Flood sensor On (default)",
+					"value": 0
+				},
+				{
+					"label": "Built-in flood sensor TURNED OFF",
+					"value": 1
+				}
+			]
+		},
+		"78": {
+			"label": "Associations in Z-Wave network security mode",
+			"description": "Defines whether commands are sent as secure or non-secure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None of the groups are sent as secure",
+					"value": 0
+				},
+				{
+					"label": "2nd group ”Control” sent as secure",
+					"value": 1
+				},
+				{
+					"label": "3rd group ”Alarm” sent as secure",
+					"value": 2
+				},
+				{
+					"label": "4th group \"Tamper” sent as secure",
+					"value": 3
+				}
+			]
+		}
+	}
 }

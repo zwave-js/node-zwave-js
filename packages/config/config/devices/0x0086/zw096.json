@@ -1,7 +1,6 @@
 // AEON Labs ZW096
 // Smart Switch 6
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW096",

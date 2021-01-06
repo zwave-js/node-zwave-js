@@ -1,7 +1,6 @@
 // zwaveproducts.com ZL-PD-100
 // Plug-In Dimmer
 {
-	"_approved": true,
 	"manufacturer": "zwaveproducts.com",
 	"manufacturerId": "0x0315",
 	"label": "ZL-PD-100",

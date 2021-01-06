@@ -1,20 +1,19 @@
 // Willis Electric Co., Ltd. NZW37
 // Inovelli Smart Plug (2 Channel with Scene Control)
 {
-    "_approved": true,
-    "manufacturer": "Willis Electric Co., Ltd.",
-    "manufacturerId": "0x015d",
-    "label": "NZW37",
-    "description": "Inovelli Smart Plug (2 Channel with Scene Control)",
-    "devices": [
-        {
-            "productType": "0x2500",
-            "productId": "0x2500"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "NZW37",
+	"description": "Inovelli Smart Plug (2 Channel with Scene Control)",
+	"devices": [
+		{
+			"productType": "0x2500",
+			"productId": "0x2500"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

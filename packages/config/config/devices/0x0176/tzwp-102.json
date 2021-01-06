@@ -1,130 +1,129 @@
 // Telldus Technologies AB TZWP-102
 // Telldus socket and energy meter
 {
-    "_approved": true,
-    "manufacturer": "Telldus Technologies AB",
-    "manufacturerId": "0x0176",
-    "label": "TZWP-102",
-    "description": "Telldus socket and energy meter",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Overcurrent protection",
-            "description": "If current exceeds 16A load will be switched off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "device status after power failure",
-            "description": "Remember device status after power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Remember Status",
-                    "value": 0
-                },
-                {
-                    "label": "Always ON",
-                    "value": 1
-                },
-                {
-                    "label": "Always OFF",
-                    "value": 2
-                }
-            ]
-        },
-        "3": {
-            "label": "Status send when load changes",
-            "description": "Send status in Lifeline when Load status change",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Send Basic Report",
-                    "value": 1
-                },
-                {
-                    "label": "Basic Report when Load status not changed by ZWave",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Configure LED mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "The LED follows the load status",
-                    "value": 0
-                },
-                {
-                    "label": "When operating plug, the LED is lit for 5 seconds",
-                    "value": 1
-                }
-            ]
-        },
-        "16": {
-            "label": "Report on change of power consumption",
-            "description": "Send report on change of power consumption (W)",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 2500,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                }
-            ]
-        }
-    }
+	"manufacturer": "Telldus Technologies AB",
+	"manufacturerId": "0x0176",
+	"label": "TZWP-102",
+	"description": "Telldus socket and energy meter",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Overcurrent protection",
+			"description": "If current exceeds 16A load will be switched off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "device status after power failure",
+			"description": "Remember device status after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Remember Status",
+					"value": 0
+				},
+				{
+					"label": "Always ON",
+					"value": 1
+				},
+				{
+					"label": "Always OFF",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Status send when load changes",
+			"description": "Send status in Lifeline when Load status change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Report",
+					"value": 1
+				},
+				{
+					"label": "Basic Report when Load status not changed by ZWave",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Configure LED mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The LED follows the load status",
+					"value": 0
+				},
+				{
+					"label": "When operating plug, the LED is lit for 5 seconds",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Report on change of power consumption",
+			"description": "Send report on change of power consumption (W)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 2500,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		}
+	}
 }

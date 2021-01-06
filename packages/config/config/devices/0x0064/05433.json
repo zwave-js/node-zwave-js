@@ -1,26 +1,25 @@
 // Reitz-Group.de 05433
 // One Paddle Wall Dimmer Insert
 {
-    "_approved": true,
-    "manufacturer": "Reitz-Group.de",
-    "manufacturerId": "0x0064",
-    "label": "05433",
-    "description": "One Paddle Wall Dimmer Insert",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Basic On/Off Group",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Reitz-Group.de",
+	"manufacturerId": "0x0064",
+	"label": "05433",
+	"description": "One Paddle Wall Dimmer Insert",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Basic On/Off Group",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

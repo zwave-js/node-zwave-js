@@ -1,341 +1,340 @@
 // ConnectHome CH-201
 // CH-201 Thermostat
 {
-    "_approved": true,
-    "manufacturer": "ConnectHome",
-    "manufacturerId": "0x0179",
-    "label": "CH-201",
-    "description": "CH-201 Thermostat",
-    "devices": [
-        {
-            "productType": "0x0013",
-            "productId": "0x0021"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Target for temperature and alarm reports",
-            "maxNodes": 10,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Relay mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Reverse",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Temperature threshold",
-            "description": "Set temperature threshold",
-            "unit": "Δ°С",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Point mode",
-            "description": "Set point mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Mode 0",
-                    "value": 0
-                },
-                {
-                    "label": "Mode 1",
-                    "value": 1
-                },
-                {
-                    "label": "Mode 2",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Thermostat status at failure",
-            "description": "Operating mode in case a thermostat doesn't receive data from a temp sensor",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Max waiting time from temp sensor",
-            "description": "Max time of data expectation from room temperature sensor",
-            "unit": "sec",
-            "valueSize": 2,
-            "minValue": 100,
-            "maxValue": 30000,
-            "defaultValue": 30000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Minimum allowable temperature",
-            "description": "Set minimum allowable temperature",
-            "unit": "°С",
-            "valueSize": 2,
-            "minValue": -127,
-            "maxValue": 127,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Maximum alowable temperature",
-            "description": "Set maximum alowable temperature",
-            "unit": "°С",
-            "valueSize": 2,
-            "minValue": -127,
-            "maxValue": 127,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Time turbo mode",
-            "description": "Set time turbo mode",
-            "unit": "sec",
-            "valueSize": 2,
-            "minValue": 100,
-            "maxValue": 1200,
-            "defaultValue": 120,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Power on turbo mode",
-            "description": "Set power on turbo mode",
-            "unit": "sec",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Temperature sensor mode",
-            "description": "Set temperature sensor mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Standard temperature sensor",
-                    "value": 0
-                },
-                {
-                    "label": "Polling the room temperature sensor",
-                    "value": 1
-                },
-                {
-                    "label": "Waiting for data from the room temperature sensor",
-                    "value": 2
-                }
-            ]
-        },
-        "11": {
-            "label": "Polling period of the room sensor",
-            "description": "Set polling period of the room sensor",
-            "unit": "sec",
-            "valueSize": 2,
-            "minValue": 15,
-            "maxValue": 600,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Temprature threshold to send data",
-            "description": "The value that temprature should be changed to send data",
-            "unit": "Δ°С",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 16,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Interval for forced sending data",
-            "description": "Set Interval for forced sending data",
-            "valueSize": 2,
-            "minValue": 100,
-            "maxValue": 600,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Type of switch 1",
-            "description": "Set Type of switch 1 (thermostat operating mode)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Monostable",
-                    "value": 0
-                },
-                {
-                    "label": "Bistable, fixed position 1",
-                    "value": 1
-                },
-                {
-                    "label": "Bistable, fixed position 2",
-                    "value": 2
-                },
-                {
-                    "label": "Bistable",
-                    "value": 3
-                }
-            ]
-        },
-        "16": {
-            "label": "Type of switch 2",
-            "description": "Set type of switch 2 (turbo mode)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Monostable",
-                    "value": 0
-                },
-                {
-                    "label": "Bistable, fixed position 1",
-                    "value": 1
-                },
-                {
-                    "label": "Bistable, fixed position 2",
-                    "value": 2
-                },
-                {
-                    "label": "Bistable",
-                    "value": 3
-                }
-            ]
-        },
-        "40": {
-            "label": "Adjusment of a temperature sensor",
-            "description": "Adjust temperature sensor if required.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 10,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Send the actual temperature (further t);",
-                    "value": 0
-                },
-                {
-                    "label": "t +1°С",
-                    "value": 1
-                },
-                {
-                    "label": "t +2°С",
-                    "value": 2
-                },
-                {
-                    "label": "t +3°С",
-                    "value": 3
-                },
-                {
-                    "label": "t +4°С",
-                    "value": 4
-                },
-                {
-                    "label": "t +5°С",
-                    "value": 5
-                },
-                {
-                    "label": "t -1°С",
-                    "value": 6
-                },
-                {
-                    "label": "t -2°С;",
-                    "value": 7
-                },
-                {
-                    "label": "t -3°С;",
-                    "value": 8
-                },
-                {
-                    "label": "t -4°С",
-                    "value": 9
-                },
-                {
-                    "label": "t -5°С;",
-                    "value": 10
-                }
-            ]
-        }
-    }
+	"manufacturer": "ConnectHome",
+	"manufacturerId": "0x0179",
+	"label": "CH-201",
+	"description": "CH-201 Thermostat",
+	"devices": [
+		{
+			"productType": "0x0013",
+			"productId": "0x0021"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Target for temperature and alarm reports",
+			"maxNodes": 10,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Relay mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Reverse",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Temperature threshold",
+			"description": "Set temperature threshold",
+			"unit": "Δ°С",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Point mode",
+			"description": "Set point mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Mode 0",
+					"value": 0
+				},
+				{
+					"label": "Mode 1",
+					"value": 1
+				},
+				{
+					"label": "Mode 2",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Thermostat status at failure",
+			"description": "Operating mode in case a thermostat doesn't receive data from a temp sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Max waiting time from temp sensor",
+			"description": "Max time of data expectation from room temperature sensor",
+			"unit": "sec",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 30000,
+			"defaultValue": 30000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Minimum allowable temperature",
+			"description": "Set minimum allowable temperature",
+			"unit": "°С",
+			"valueSize": 2,
+			"minValue": -127,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Maximum alowable temperature",
+			"description": "Set maximum alowable temperature",
+			"unit": "°С",
+			"valueSize": 2,
+			"minValue": -127,
+			"maxValue": 127,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Time turbo mode",
+			"description": "Set time turbo mode",
+			"unit": "sec",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 1200,
+			"defaultValue": 120,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Power on turbo mode",
+			"description": "Set power on turbo mode",
+			"unit": "sec",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Temperature sensor mode",
+			"description": "Set temperature sensor mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard temperature sensor",
+					"value": 0
+				},
+				{
+					"label": "Polling the room temperature sensor",
+					"value": 1
+				},
+				{
+					"label": "Waiting for data from the room temperature sensor",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "Polling period of the room sensor",
+			"description": "Set polling period of the room sensor",
+			"unit": "sec",
+			"valueSize": 2,
+			"minValue": 15,
+			"maxValue": 600,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Temprature threshold to send data",
+			"description": "The value that temprature should be changed to send data",
+			"unit": "Δ°С",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 16,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Interval for forced sending data",
+			"description": "Set Interval for forced sending data",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 600,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Type of switch 1",
+			"description": "Set Type of switch 1 (thermostat operating mode)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monostable",
+					"value": 0
+				},
+				{
+					"label": "Bistable, fixed position 1",
+					"value": 1
+				},
+				{
+					"label": "Bistable, fixed position 2",
+					"value": 2
+				},
+				{
+					"label": "Bistable",
+					"value": 3
+				}
+			]
+		},
+		"16": {
+			"label": "Type of switch 2",
+			"description": "Set type of switch 2 (turbo mode)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monostable",
+					"value": 0
+				},
+				{
+					"label": "Bistable, fixed position 1",
+					"value": 1
+				},
+				{
+					"label": "Bistable, fixed position 2",
+					"value": 2
+				},
+				{
+					"label": "Bistable",
+					"value": 3
+				}
+			]
+		},
+		"40": {
+			"label": "Adjusment of a temperature sensor",
+			"description": "Adjust temperature sensor if required.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send the actual temperature (further t);",
+					"value": 0
+				},
+				{
+					"label": "t +1°С",
+					"value": 1
+				},
+				{
+					"label": "t +2°С",
+					"value": 2
+				},
+				{
+					"label": "t +3°С",
+					"value": 3
+				},
+				{
+					"label": "t +4°С",
+					"value": 4
+				},
+				{
+					"label": "t +5°С",
+					"value": 5
+				},
+				{
+					"label": "t -1°С",
+					"value": 6
+				},
+				{
+					"label": "t -2°С;",
+					"value": 7
+				},
+				{
+					"label": "t -3°С;",
+					"value": 8
+				},
+				{
+					"label": "t -4°С",
+					"value": 9
+				},
+				{
+					"label": "t -5°С;",
+					"value": 10
+				}
+			]
+		}
+	}
 }

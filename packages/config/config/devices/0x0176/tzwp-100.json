@@ -1,7 +1,6 @@
 // Telldus Technologies AB TZWP-100
 // Wall Plug Switch
 {
-	"_approved": true,
 	"manufacturer": "Telldus Technologies AB",
 	"manufacturerId": "0x0176",
 	"label": "TZWP-100",

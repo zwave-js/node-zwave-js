@@ -1,7 +1,6 @@
 // AEON Labs ZW130
 // WallMote Quad
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW130",

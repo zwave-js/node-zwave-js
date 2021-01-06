@@ -1,69 +1,68 @@
 // Jasco Products ZW4005, 12722
 // On/Off Relay Switch
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "ZW4005, 12722",
-    "description": "On/Off Relay Switch",
-    "devices": [
-        {
-            "productType": "0x4952",
-            "productId": "0x3032"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "3": {
-            "label": "Night Light",
-            "description": "Night Light",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED on when switch is OFF",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when switch is ON",
-                    "value": 1
-                },
-                {
-                    "label": "LED always off",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Invert Switch",
-            "description": "Invert Switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No",
-                    "value": 0
-                },
-                {
-                    "label": "Yes",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "ZW4005, 12722",
+	"description": "On/Off Relay Switch",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3032"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Night Light",
+			"description": "Night Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when switch is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED on when switch is ON",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "Invert Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		}
+	}
 }

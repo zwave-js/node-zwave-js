@@ -1,104 +1,103 @@
 // Jasco Products ZW3107 / GE 14280
 // Plug-In Smart Dimmer (Dual Linked Outlets)
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "ZW3107 / GE 14280",
-    "description": "Plug-In Smart Dimmer (Dual Linked Outlets)",
-    "devices": [
-        {
-            "productType": "0x5044",
-            "productId": "0x3033"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED Light",
-            "description": "LED Light",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED Light on when Z-Wave turned OFF",
-                    "value": 0
-                },
-                {
-                    "label": "LED Light on when Z-Wave Turned On",
-                    "value": 1
-                },
-                {
-                    "label": "LED Light always OFF",
-                    "value": 2
-                }
-            ]
-        },
-        "7": {
-            "label": "Dim Rate",
-            "description": "number of steps or levels",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Dim Rate Adjustments (From Z-Wave Controller)",
-            "description": "Timing of the steps",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Dim rate Adjustments (When Manually Controlled)",
-            "description": "number of steps or levels",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Dim Timing  (When Manually Controlled)",
-            "description": "(When Manually Controlled)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Dim Rate Adjustments",
-            "description": "(When Receiving All-On/All-Off Command)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "ZW3107 / GE 14280",
+	"description": "Plug-In Smart Dimmer (Dual Linked Outlets)",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3033"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Light on when Z-Wave turned OFF",
+					"value": 0
+				},
+				{
+					"label": "LED Light on when Z-Wave Turned On",
+					"value": 1
+				},
+				{
+					"label": "LED Light always OFF",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Dim Rate",
+			"description": "number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Dim Rate Adjustments (From Z-Wave Controller)",
+			"description": "Timing of the steps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Dim rate Adjustments (When Manually Controlled)",
+			"description": "number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dim Timing  (When Manually Controlled)",
+			"description": "(When Manually Controlled)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Dim Rate Adjustments",
+			"description": "(When Receiving All-On/All-Off Command)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

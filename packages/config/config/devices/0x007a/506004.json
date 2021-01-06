@@ -1,109 +1,99 @@
 // Merten 506004
 // Transmitter Flush-Mounted 4-Gang Switch
 {
-    "_approved": false,
-    "_errors": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set",
-        "No endpoints are configured",
-        "Device has configuration parameters defined, but does not support the CONFIGURATION command class.",
-        "Device has association groups defined, but does not support the ASSOCIATION command class.",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "manufacturer": "Merten",
-    "manufacturerId": "0x007a",
-    "label": "506004",
-    "description": "Transmitter Flush-Mounted 4-Gang Switch",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0004"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Red Cables",
-            "maxNodes": 12
-        },
-        "2": {
-            "label": "Green Cables",
-            "maxNodes": 12
-        },
-        "3": {
-            "label": "Brown Cables",
-            "maxNodes": 12
-        },
-        "4": {
-            "label": "Blue Cables",
-            "maxNodes": 12
-        }
-    },
-    "paramInformation": {
-        "0": {
-            "label": "Switching/dimming/shutters",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Switching single-surface",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "44": {
-            "label": "Doorbell function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "52": {
-            "label": "LOWER shutter as long as button is pressed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "54": {
-            "label": "Move shutter single-surface",
-            "description": "Direction of movement changes after each switching process",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "55": {
-            "label": "RAISE shutter as long as button is pressed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Merten",
+	"manufacturerId": "0x007a",
+	"label": "506004",
+	"description": "Transmitter Flush-Mounted 4-Gang Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Red Cables",
+			"maxNodes": 12
+		},
+		"2": {
+			"label": "Green Cables",
+			"maxNodes": 12
+		},
+		"3": {
+			"label": "Brown Cables",
+			"maxNodes": 12
+		},
+		"4": {
+			"label": "Blue Cables",
+			"maxNodes": 12
+		}
+	},
+	"paramInformation": {
+		"0": {
+			"label": "Switching/dimming/shutters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Switching single-surface",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"44": {
+			"label": "Doorbell function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "LOWER shutter as long as button is pressed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"54": {
+			"label": "Move shutter single-surface",
+			"description": "Direction of movement changes after each switching process",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"55": {
+			"label": "RAISE shutter as long as button is pressed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

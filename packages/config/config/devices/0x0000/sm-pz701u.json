@@ -1,29 +1,19 @@
 // Sigma Designs (Former Zensys) SM-PZ701U
 // Z-Wave power plug
 {
-    "_approved": true,
-    "_errors": [
-        "Device category is not set.",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "Sigma Designs (Former Zensys)",
-    "manufacturerId": "0x0000",
-    "label": "SM-PZ701U",
-    "description": "Z-Wave power plug",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Sigma Designs (Former Zensys)",
+	"manufacturerId": "0x0000",
+	"label": "SM-PZ701U",
+	"description": "Z-Wave power plug",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

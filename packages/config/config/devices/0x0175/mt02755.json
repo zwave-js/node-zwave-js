@@ -1,7 +1,6 @@
 // Devolo MT02755
 // Humidity Sensor
 {
-	"_approved": true,
 	"manufacturer": "Devolo",
 	"manufacturerId": "0x0175",
 	"label": "MT02755",

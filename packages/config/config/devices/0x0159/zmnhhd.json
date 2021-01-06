@@ -1,306 +1,305 @@
 // Qubino ZMNHHD
 // Mini Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Qubino",
-    "manufacturerId": "0x0159",
-    "label": "ZMNHHD",
-    "description": "Mini Dimmer",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0055"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "In-wall Switch Type for Load to control I1",
-            "description": "In-wall Switch Type for Load to control I1",
-            "unit": "/",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "push-button (momentary)",
-                    "value": 0
-                },
-                {
-                    "label": "on/off toggle switch",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Working mode",
-            "description": "Working mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Dimmer mode",
-                    "value": 0
-                },
-                {
-                    "label": "Switch mode",
-                    "value": 1
-                }
-            ]
-        },
-        "11": {
-            "label": "Turn Load 1 Off Automatically with Timer",
-            "description": "Turn Load 1 Off Automatically with Timer",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32536,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Turn Load 1 On Automatically with Timer",
-            "description": "Turn Load 1 On Automatically with Timer",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32536,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "Enable/Disable the Double click function",
-            "description": "Enable/Disable the Double click function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Double click disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Double click enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "30": {
-            "label": "Restore on/off status for load after power failure",
-            "description": "Restore on/off status for load after power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Save last on/off status",
-                    "value": 0
-                },
-                {
-                    "label": "Don't save last on/off status",
-                    "value": 1
-                }
-            ]
-        },
-        "40": {
-            "label": "Power Consumption Threshold",
-            "description": "Power Consumption Threshold",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "42": {
-            "label": "Power Consumption Threshold (time)",
-            "description": "Power Consumption Threshold (time)",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "60": {
-            "label": "Minimum dimming value",
-            "description": "Minimum dimming value",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 98,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "61": {
-            "label": "Maximum dimming value",
-            "description": "Maximum dimming value",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "65": {
-            "label": "Dimming time when key pressed",
-            "description": "Dimming time when key pressed",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "66": {
-            "label": "Dimming time when key hold",
-            "description": "Dimming time when key hold",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "67": {
-            "label": "Ignore start level",
-            "description": "Ignore start level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "use the start level value",
-                    "value": 0
-                },
-                {
-                    "label": "ignore the start level value",
-                    "value": 1
-                }
-            ]
-        },
-        "68": {
-            "label": "Dimming duration",
-            "description": "Dimming duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "70": {
-            "label": "Overload safety switch",
-            "description": "Overload safety switch",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 200,
-            "defaultValue": 200,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "71": {
-            "label": "Calibration trigger",
-            "description": "Calibration trigger",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "calibration after exclusion",
-                    "value": 0
-                },
-                {
-                    "label": "calibration after power cycle",
-                    "value": 1
-                },
-                {
-                    "label": "force calibration",
-                    "value": 2
-                }
-            ]
-        },
-        "72": {
-            "label": "Calibration status (read only)",
-            "description": "Calibration status (read only)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "calibration was successful",
-                    "value": 1
-                },
-                {
-                    "label": "calibration failed",
-                    "value": 2
-                }
-            ]
-        },
-        "73": {
-            "label": "Alarm/Notification events",
-            "description": "Alarm/Notification events",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "74": {
-            "label": "Alarm/Notification time interval",
-            "description": "Alarm/Notification time interval",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 125,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHHD",
+	"description": "Mini Dimmer",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0055"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "In-wall Switch Type for Load to control I1",
+			"description": "In-wall Switch Type for Load to control I1",
+			"unit": "/",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "push-button (momentary)",
+					"value": 0
+				},
+				{
+					"label": "on/off toggle switch",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Working mode",
+			"description": "Working mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dimmer mode",
+					"value": 0
+				},
+				{
+					"label": "Switch mode",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Turn Load 1 Off Automatically with Timer",
+			"description": "Turn Load 1 Off Automatically with Timer",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32536,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Turn Load 1 On Automatically with Timer",
+			"description": "Turn Load 1 On Automatically with Timer",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32536,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Enable/Disable the Double click function",
+			"description": "Enable/Disable the Double click function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Double click disabled",
+					"value": 0
+				},
+				{
+					"label": "Double click enabled",
+					"value": 1
+				}
+			]
+		},
+		"30": {
+			"label": "Restore on/off status for load after power failure",
+			"description": "Restore on/off status for load after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Save last on/off status",
+					"value": 0
+				},
+				{
+					"label": "Don't save last on/off status",
+					"value": 1
+				}
+			]
+		},
+		"40": {
+			"label": "Power Consumption Threshold",
+			"description": "Power Consumption Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Power Consumption Threshold (time)",
+			"description": "Power Consumption Threshold (time)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"60": {
+			"label": "Minimum dimming value",
+			"description": "Minimum dimming value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 98,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"61": {
+			"label": "Maximum dimming value",
+			"description": "Maximum dimming value",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"65": {
+			"label": "Dimming time when key pressed",
+			"description": "Dimming time when key pressed",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"66": {
+			"label": "Dimming time when key hold",
+			"description": "Dimming time when key hold",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"67": {
+			"label": "Ignore start level",
+			"description": "Ignore start level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "use the start level value",
+					"value": 0
+				},
+				{
+					"label": "ignore the start level value",
+					"value": 1
+				}
+			]
+		},
+		"68": {
+			"label": "Dimming duration",
+			"description": "Dimming duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"70": {
+			"label": "Overload safety switch",
+			"description": "Overload safety switch",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 200,
+			"defaultValue": 200,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"71": {
+			"label": "Calibration trigger",
+			"description": "Calibration trigger",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "calibration after exclusion",
+					"value": 0
+				},
+				{
+					"label": "calibration after power cycle",
+					"value": 1
+				},
+				{
+					"label": "force calibration",
+					"value": 2
+				}
+			]
+		},
+		"72": {
+			"label": "Calibration status (read only)",
+			"description": "Calibration status (read only)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "calibration was successful",
+					"value": 1
+				},
+				{
+					"label": "calibration failed",
+					"value": 2
+				}
+			]
+		},
+		"73": {
+			"label": "Alarm/Notification events",
+			"description": "Alarm/Notification events",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"74": {
+			"label": "Alarm/Notification time interval",
+			"description": "Alarm/Notification time interval",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 125,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

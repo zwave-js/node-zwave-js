@@ -1,184 +1,183 @@
 // STEINEL GmbH RS LED D2 Z-Wave
 // Indoor LED-light with motion sensor
 {
-    "_approved": true,
-    "manufacturer": "STEINEL GmbH",
-    "manufacturerId": "0x0271",
-    "label": "RS LED D2 Z-Wave",
-    "description": "Indoor LED-light with motion sensor",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x1a74"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Time [s]",
-            "description": "Duration of light after motion detection.",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 5,
-            "maxValue": 900,
-            "defaultValue": 180,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Light threshold [lx]",
-            "description": "LIGHT",
-            "valueSize": 2,
-            "minValue": 2,
-            "maxValue": 2000,
-            "defaultValue": 2000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Motion Radar Range [cm]",
-            "description": "RANGE",
-            "unit": "cm",
-            "valueSize": 2,
-            "minValue": 100,
-            "maxValue": 500,
-            "defaultValue": 500,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Motion Radar Sensitivity [%]",
-            "description": "SENSITIVITY",
-            "valueSize": 1,
-            "minValue": 2,
-            "maxValue": 100,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Brightness measuring interval [min]",
-            "description": "(only SLAMP)",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 120,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Use external Ambient Light value",
-            "description": "GLOBAL_LIGHT",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Disable local control",
-            "description": "SLAVE_MODE",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Off behaviour (timeout)",
-            "description": "OFF_BEHAVIOUR",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 209,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Lamp/relay is switched off for TIME (cfg 1)",
-                    "value": 255
-                }
-            ]
-        },
-        "11": {
-            "label": "On behaviour (timeout)",
-            "description": "ON_BEHAVIOUR",
-            "valueSize": 2,
-            "minValue": 2,
-            "maxValue": 209,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "On behaviour time over (timeout)",
-            "description": "ON_TIME_OVER",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 209,
-            "defaultValue": 204,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Sequence On-Off behaviour (timeout)",
-            "description": "ON_OFF_ BEHAVIOUR",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 209,
-            "defaultValue": 204,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "Sequence Off-On behaviour (timeout)",
-            "description": "OFF_ON_ BEHAVIOUR",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 209,
-            "defaultValue": 204,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Sequence timing",
-            "description": "SEQUENCE_TIME",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 50,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "Motion Off behaviour (timeout)",
-            "description": "MOTION_ DISABLE",
-            "valueSize": 2,
-            "minValue": 2,
-            "maxValue": 209,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "STEINEL GmbH",
+	"manufacturerId": "0x0271",
+	"label": "RS LED D2 Z-Wave",
+	"description": "Indoor LED-light with motion sensor",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x1a74"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Time [s]",
+			"description": "Duration of light after motion detection.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 900,
+			"defaultValue": 180,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Light threshold [lx]",
+			"description": "LIGHT",
+			"valueSize": 2,
+			"minValue": 2,
+			"maxValue": 2000,
+			"defaultValue": 2000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Motion Radar Range [cm]",
+			"description": "RANGE",
+			"unit": "cm",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 500,
+			"defaultValue": 500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Motion Radar Sensitivity [%]",
+			"description": "SENSITIVITY",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Brightness measuring interval [min]",
+			"description": "(only SLAMP)",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 120,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Use external Ambient Light value",
+			"description": "GLOBAL_LIGHT",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Disable local control",
+			"description": "SLAVE_MODE",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Off behaviour (timeout)",
+			"description": "OFF_BEHAVIOUR",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 209,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Lamp/relay is switched off for TIME (cfg 1)",
+					"value": 255
+				}
+			]
+		},
+		"11": {
+			"label": "On behaviour (timeout)",
+			"description": "ON_BEHAVIOUR",
+			"valueSize": 2,
+			"minValue": 2,
+			"maxValue": 209,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "On behaviour time over (timeout)",
+			"description": "ON_TIME_OVER",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 209,
+			"defaultValue": 204,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Sequence On-Off behaviour (timeout)",
+			"description": "ON_OFF_ BEHAVIOUR",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 209,
+			"defaultValue": 204,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Sequence Off-On behaviour (timeout)",
+			"description": "OFF_ON_ BEHAVIOUR",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 209,
+			"defaultValue": 204,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Sequence timing",
+			"description": "SEQUENCE_TIME",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Motion Off behaviour (timeout)",
+			"description": "MOTION_ DISABLE",
+			"valueSize": 2,
+			"minValue": 2,
+			"maxValue": 209,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

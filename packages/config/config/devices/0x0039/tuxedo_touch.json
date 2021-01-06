@@ -1,22 +1,18 @@
 // Honeywell Tuxedo Touch
 // Tuxedo Touch Keypad and Z-Wave Controller
 {
-    "_approved": true,
-    "_warnings": [
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
-    "manufacturer": "Honeywell",
-    "manufacturerId": "0x0039",
-    "label": "Tuxedo Touch",
-    "description": "Tuxedo Touch Keypad and Z-Wave Controller",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "Tuxedo Touch",
+	"description": "Tuxedo Touch Keypad and Z-Wave Controller",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

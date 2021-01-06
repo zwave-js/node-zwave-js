@@ -1,7 +1,6 @@
 // Willis Electric Co., Ltd. NZW39
 // Dimming Plug
 {
-	"_approved": true,
 	"manufacturer": "Willis Electric Co., Ltd.",
 	"manufacturerId": "0x015d",
 	"label": "NZW39",

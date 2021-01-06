@@ -1,7 +1,6 @@
 // AEON Labs DSC24
 // Smart Energy Switch G2
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSC24",

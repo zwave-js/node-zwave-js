@@ -1,22 +1,18 @@
 // Somfy ZRTSI
 // Z-Wave to RTS Interface Controller
 {
-    "_approved": true,
-    "_warnings": [
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
-    "manufacturer": "Somfy",
-    "manufacturerId": "0x0047",
-    "label": "ZRTSI",
-    "description": "Z-Wave to RTS Interface Controller",
-    "devices": [
-        {
-            "productType": "0x5a52",
-            "productId": "0x5400"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Somfy",
+	"manufacturerId": "0x0047",
+	"label": "ZRTSI",
+	"description": "Z-Wave to RTS Interface Controller",
+	"devices": [
+		{
+			"productType": "0x5a52",
+			"productId": "0x5400"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

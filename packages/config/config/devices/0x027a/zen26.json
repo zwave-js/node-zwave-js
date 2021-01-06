@@ -1,7 +1,6 @@
 // Zooz ZEN26
 // Z-Wave Plus S2 ON/OFF Switch
 {
-	"_approved": true,
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN26",

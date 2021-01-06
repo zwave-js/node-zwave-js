@@ -1,7 +1,6 @@
 // SimonTech S.L.U 10002041-13X
 // iO Cover for the Simon 100 Schuko Plug Socket
 {
-	"_approved": true,
 	"manufacturer": "SimonTech S.L.U",
 	"manufacturerId": "0x0267",
 	"label": "10002041-13X",

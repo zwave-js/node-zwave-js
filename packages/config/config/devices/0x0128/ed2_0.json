@@ -1,121 +1,120 @@
 // Prodrive Technologies ED2.0
 // Eneco Meter Adapter
 {
-    "_approved": true,
-    "manufacturer": "Prodrive Technologies",
-    "manufacturerId": "0x0128",
-    "label": "ED2.0",
-    "description": "Eneco Meter Adapter",
-    "devices": [
-        {
-            "productType": "0x0000",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Analog gas/heat port mode",
-            "description": "Analog gas/heat port mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Gas enabled",
-                    "value": 1
-                },
-                {
-                    "label": "Heat enabled",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Analog gas/heat port resolution",
-            "description": "Analog gas/heat port resolution",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 400,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Analog electricity port mode",
-            "description": "Analog electricity port mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Electricity import enabled",
-                    "value": 1
-                },
-                {
-                    "label": "Electricity export enabled",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Analog electricity port resolution",
-            "description": "Analog electricity port resolution",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 400,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Restart device",
-            "description": "Restart device or metering chip",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Restart entire device",
-                    "value": 1
-                },
-                {
-                    "label": "Restart metering chip",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Prodrive Technologies",
+	"manufacturerId": "0x0128",
+	"label": "ED2.0",
+	"description": "Eneco Meter Adapter",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Analog gas/heat port mode",
+			"description": "Analog gas/heat port mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Gas enabled",
+					"value": 1
+				},
+				{
+					"label": "Heat enabled",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Analog gas/heat port resolution",
+			"description": "Analog gas/heat port resolution",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 400,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Analog electricity port mode",
+			"description": "Analog electricity port mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "disabled",
+					"value": 0
+				},
+				{
+					"label": "Electricity import enabled",
+					"value": 1
+				},
+				{
+					"label": "Electricity export enabled",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Analog electricity port resolution",
+			"description": "Analog electricity port resolution",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 400,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Restart device",
+			"description": "Restart device or metering chip",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Restart entire device",
+					"value": 1
+				},
+				{
+					"label": "Restart metering chip",
+					"value": 2
+				}
+			]
+		}
+	}
 }

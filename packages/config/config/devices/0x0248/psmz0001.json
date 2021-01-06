@@ -1,43 +1,42 @@
 // neusta next GmbH & Co. KG PSMZ0001
 // Plug module
 {
-    "_approved": true,
-    "manufacturer": "neusta next GmbH & Co. KG",
-    "manufacturerId": "0x0248",
-    "label": "PSMZ0001",
-    "description": "Plug module",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "31": {
-            "label": "Local Control",
-            "description": "Local Control ON/OFF",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Local Control On",
-                    "value": 0
-                },
-                {
-                    "label": "Local Control Off",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "neusta next GmbH & Co. KG",
+	"manufacturerId": "0x0248",
+	"label": "PSMZ0001",
+	"description": "Plug module",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"31": {
+			"label": "Local Control",
+			"description": "Local Control ON/OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Local Control On",
+					"value": 0
+				},
+				{
+					"label": "Local Control Off",
+					"value": 1
+				}
+			]
+		}
+	}
 }

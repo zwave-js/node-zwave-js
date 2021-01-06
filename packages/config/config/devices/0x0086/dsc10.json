@@ -1,187 +1,186 @@
 // AEON Labs DSC10
 // Heavy Duty Smart Switch
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSC10",
-    "description": "Heavy Duty Smart Switch",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x000a"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "3": {
-            "label": "Current Overload Protection",
-            "description": "See overview",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Activate Overload Protection",
-                    "value": 0
-                },
-                {
-                    "label": "Deactivate Overload Protection",
-                    "value": 1
-                }
-            ]
-        },
-        "20": {
-            "label": "Output Load Status",
-            "description": "Configure the output load status after re‐power on.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Last Status",
-                    "value": 0
-                },
-                {
-                    "label": "Always ON",
-                    "value": 1
-                },
-                {
-                    "label": "Always OFF",
-                    "value": 2
-                }
-            ]
-        },
-        "80": {
-            "label": "Notification on Status Change",
-            "description": "The type of report to send when the device status changes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Nothing",
-                    "value": 0
-                },
-                {
-                    "label": "Hail",
-                    "value": 1
-                },
-                {
-                    "label": "Basic CC Report",
-                    "value": 2
-                }
-            ]
-        },
-        "90": {
-            "label": "Enables/disables parameter 91/92",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Enable parameters 91 and 92",
-                    "value": 0
-                },
-                {
-                    "label": "Disable parameters 91 and 92",
-                    "value": 1
-                }
-            ]
-        },
-        "91": {
-            "label": "Minimum Change to send Report (Watt)",
-            "description": "The value represents the minimum change in wattage for a Report to be sent.",
-            "unit": "Watts",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32000,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "92": {
-            "label": "Minimum Change to send Report (%)",
-            "description": "The minimum change in wattage Percent for a report to be sent",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "200": {
-            "label": "Partner ID",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Aeon Labs",
-                    "value": 0
-                },
-                {
-                    "label": "Other",
-                    "value": 1
-                }
-            ]
-        },
-        "252": {
-            "label": "Lock/unlock Configuration Changes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Unlocked",
-                    "value": 0
-                },
-                {
-                    "label": "Locked",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSC10",
+	"description": "Heavy Duty Smart Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x000a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Current Overload Protection",
+			"description": "See overview",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Activate Overload Protection",
+					"value": 0
+				},
+				{
+					"label": "Deactivate Overload Protection",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "Output Load Status",
+			"description": "Configure the output load status after re‐power on.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Last Status",
+					"value": 0
+				},
+				{
+					"label": "Always ON",
+					"value": 1
+				},
+				{
+					"label": "Always OFF",
+					"value": 2
+				}
+			]
+		},
+		"80": {
+			"label": "Notification on Status Change",
+			"description": "The type of report to send when the device status changes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Nothing",
+					"value": 0
+				},
+				{
+					"label": "Hail",
+					"value": 1
+				},
+				{
+					"label": "Basic CC Report",
+					"value": 2
+				}
+			]
+		},
+		"90": {
+			"label": "Enables/disables parameter 91/92",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Enable parameters 91 and 92",
+					"value": 0
+				},
+				{
+					"label": "Disable parameters 91 and 92",
+					"value": 1
+				}
+			]
+		},
+		"91": {
+			"label": "Minimum Change to send Report (Watt)",
+			"description": "The value represents the minimum change in wattage for a Report to be sent.",
+			"unit": "Watts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"92": {
+			"label": "Minimum Change to send Report (%)",
+			"description": "The minimum change in wattage Percent for a report to be sent",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"200": {
+			"label": "Partner ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Aeon Labs",
+					"value": 0
+				},
+				{
+					"label": "Other",
+					"value": 1
+				}
+			]
+		},
+		"252": {
+			"label": "Lock/unlock Configuration Changes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Unlocked",
+					"value": 0
+				},
+				{
+					"label": "Locked",
+					"value": 1
+				}
+			]
+		}
+	}
 }

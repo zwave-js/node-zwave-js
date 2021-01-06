@@ -1,135 +1,134 @@
 // McoHome Technology Co., Ltd. MH7H
 // Water / Electrical Heating Thermostat
 {
-    "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH7H",
-    "description": "Water / Electrical Heating Thermostat",
-    "devices": [
-        {
-            "productType": "0x0701",
-            "productId": "0x5102"
-        },
-        {
-            "productType": "0x0702",
-            "productId": "0x5102"
-        },
-        {
-            "productType": "0x0712",
-            "productId": "0x5102"
-        },
-        {
-            "productType": "0x0732",
-            "productId": "0x5102"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Upload temperature format automatically",
-            "description": "Upload temperature format automatically",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Celsius",
-                    "value": 0
-                },
-                {
-                    "label": "Fahrenheit",
-                    "value": 1
-                },
-                {
-                    "label": "Follow the main display",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Upload temperature and humidity automatically",
-            "description": "Upload temperature and humidity automatically",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Upload the difference value only",
-                    "value": 1
-                },
-                {
-                    "label": "Timing upload mode only",
-                    "value": 2
-                },
-                {
-                    "label": "Upload the difference+timing upload mode",
-                    "value": 3
-                }
-            ]
-        },
-        "3": {
-            "label": "Upload temperature difference",
-            "description": "Base on 0.1°C unit, 5 by default, 5*0.1°C=0.5°C",
-            "valueSize": 2,
-            "minValue": 3,
-            "maxValue": 1000,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Upload time interval regularly",
-            "description": "Base on 1s unit, it suggest to be set above 30s",
-            "valueSize": 2,
-            "minValue": 19,
-            "maxValue": 65535,
-            "defaultValue": 30,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Upload humidity difference",
-            "description": "Upload when percent difference exceeded",
-            "valueSize": 1,
-            "minValue": 2,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Factory setting",
-            "description": "Restore the factory setting - write only, set to 85 to reset",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH7H",
+	"description": "Water / Electrical Heating Thermostat",
+	"devices": [
+		{
+			"productType": "0x0701",
+			"productId": "0x5102"
+		},
+		{
+			"productType": "0x0702",
+			"productId": "0x5102"
+		},
+		{
+			"productType": "0x0712",
+			"productId": "0x5102"
+		},
+		{
+			"productType": "0x0732",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Upload temperature format automatically",
+			"description": "Upload temperature format automatically",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				},
+				{
+					"label": "Follow the main display",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Upload temperature and humidity automatically",
+			"description": "Upload temperature and humidity automatically",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "Upload the difference value only",
+					"value": 1
+				},
+				{
+					"label": "Timing upload mode only",
+					"value": 2
+				},
+				{
+					"label": "Upload the difference+timing upload mode",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Upload temperature difference",
+			"description": "Base on 0.1°C unit, 5 by default, 5*0.1°C=0.5°C",
+			"valueSize": 2,
+			"minValue": 3,
+			"maxValue": 1000,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Upload time interval regularly",
+			"description": "Base on 1s unit, it suggest to be set above 30s",
+			"valueSize": 2,
+			"minValue": 19,
+			"maxValue": 65535,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Upload humidity difference",
+			"description": "Upload when percent difference exceeded",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Factory setting",
+			"description": "Restore the factory setting - write only, set to 85 to reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		}
+	}
 }

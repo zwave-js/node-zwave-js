@@ -1,47 +1,46 @@
 // Jasco Products GE Plug in Smart Switch
 // GE Plug in Smart Switch Zwave Plus
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "GE Plug in Smart Switch",
-    "description": "GE Plug in Smart Switch Zwave Plus",
-    "devices": [
-        {
-            "productType": "0x5052",
-            "productId": "0x3033"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED light",
-            "description": "control LED light behavior.  Default is on when connected device is off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "reset to factory default",
-                    "value": 0
-                },
-                {
-                    "label": "LED is on when connected device is on",
-                    "value": 1
-                },
-                {
-                    "label": "LED is off at all times",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "GE Plug in Smart Switch",
+	"description": "GE Plug in Smart Switch Zwave Plus",
+	"devices": [
+		{
+			"productType": "0x5052",
+			"productId": "0x3033"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED light",
+			"description": "control LED light behavior.  Default is on when connected device is off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "reset to factory default",
+					"value": 0
+				},
+				{
+					"label": "LED is on when connected device is on",
+					"value": 1
+				},
+				{
+					"label": "LED is off at all times",
+					"value": 2
+				}
+			]
+		}
+	}
 }

@@ -1,7 +1,6 @@
 // Fibargroup FGWP102
 // Metered Wall Plug Switch
 {
-	"_approved": true,
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGWP102",

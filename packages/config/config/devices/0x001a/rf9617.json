@@ -1,119 +1,118 @@
 // Eaton RF9617
 // Z-Wave Plus smart accessory switch
 {
-    "_approved": true,
-    "manufacturer": "Eaton",
-    "manufacturerId": "0x001a",
-    "label": "RF9617",
-    "description": "Z-Wave Plus smart accessory switch",
-    "devices": [
-        {
-            "productType": "0x5352",
-            "productId": "0x0504"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Delayed Off Time",
-            "unit": "sec",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Panic On Time",
-            "unit": "sec",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Panic Off Time",
-            "unit": "sec",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Power Up State",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 1
-                },
-                {
-                    "label": "On",
-                    "value": 2
-                },
-                {
-                    "label": "Last State",
-                    "value": 3
-                }
-            ]
-        },
-        "6": {
-            "label": "Panic Mode Enable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                }
-            ]
-        },
-        "13": {
-            "label": "Blue LED Brightness Level while Switch is ON",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "Blue LED Brightness Level while Switch is OFF",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RF9617",
+	"description": "Z-Wave Plus smart accessory switch",
+	"devices": [
+		{
+			"productType": "0x5352",
+			"productId": "0x0504"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Delayed Off Time",
+			"unit": "sec",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Panic On Time",
+			"unit": "sec",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Panic Off Time",
+			"unit": "sec",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Power Up State",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 1
+				},
+				{
+					"label": "On",
+					"value": 2
+				},
+				{
+					"label": "Last State",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Panic Mode Enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "Blue LED Brightness Level while Switch is ON",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Blue LED Brightness Level while Switch is OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

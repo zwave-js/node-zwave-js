@@ -1,26 +1,25 @@
 // McoHome Technology Co., Ltd. MH3900
 // Boiler Thermostat
 {
-    "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH3900",
-    "description": "Boiler Thermostat",
-    "devices": [
-        {
-            "productType": "0x3900",
-            "productId": "0x5102"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH3900",
+	"description": "Boiler Thermostat",
+	"devices": [
+		{
+			"productType": "0x3900",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }

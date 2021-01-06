@@ -1,70 +1,69 @@
 // zwaveproducts.com WS-100
 // Switch
 {
-    "_approved": true,
-    "manufacturer": "zwaveproducts.com",
-    "manufacturerId": "0x0315",
-    "label": "WS-100",
-    "description": "Switch",
-    "devices": [
-        {
-            "productType": "0x4447",
-            "productId": "0x3033"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED Indicator",
-            "description": "Controls LED behavior when switch state is on/off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "off/on",
-                    "value": 0
-                },
-                {
-                    "label": "on/off",
-                    "value": 1
-                },
-                {
-                    "label": "off",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Orientation",
-            "description": "Controls the on/off orientation of the rocker switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Inverted",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "zwaveproducts.com",
+	"manufacturerId": "0x0315",
+	"label": "WS-100",
+	"description": "Switch",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x3033"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED Indicator",
+			"description": "Controls LED behavior when switch state is on/off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "off/on",
+					"value": 0
+				},
+				{
+					"label": "on/off",
+					"value": 1
+				},
+				{
+					"label": "off",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Orientation",
+			"description": "Controls the on/off orientation of the rocker switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Inverted",
+					"value": 1
+				}
+			]
+		}
+	}
 }

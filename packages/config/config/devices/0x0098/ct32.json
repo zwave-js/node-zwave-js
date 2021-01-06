@@ -1,255 +1,254 @@
 // Radio Thermostat Company of America (RTC) CT32
 // Z-Wave Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Radio Thermostat Company of America (RTC)",
-    "manufacturerId": "0x0098",
-    "label": "CT32",
-    "description": "Z-Wave Thermostat",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0100"
-        },
-        {
-            "productType": "0x2002",
-            "productId": "0x0100"
-        },
-        {
-            "productType": "0x2002",
-            "productId": "0x0102"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Temperature Reporting Threshold",
-            "description": "Sets the reporting threshold for changes in ambient temperature.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "0.5F",
-                    "value": 1
-                },
-                {
-                    "label": "1.0F",
-                    "value": 2
-                },
-                {
-                    "label": "1.5F",
-                    "value": 3
-                },
-                {
-                    "label": "2.0F",
-                    "value": 4
-                }
-            ]
-        },
-        "3": {
-            "label": "Utility Lock Enable/Disable",
-            "description": "Enables or Disables the Utility Lock.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Utility lock disable",
-                    "value": 0
-                },
-                {
-                    "label": "Utility lock enable",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Humidity Reporting Threshold",
-            "description": "Sets the reporting threshold for changes in humidity.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "3%RH",
-                    "value": 1
-                },
-                {
-                    "label": "5%RH",
-                    "value": 2
-                },
-                {
-                    "label": "10%RH",
-                    "value": 3
-                }
-            ]
-        },
-        "6": {
-            "label": "Auxiliary/Emergency",
-            "description": "Enables or Disables the Aux / Emergency Heat.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Auxiliary/Emergency heat disable",
-                    "value": 0
-                },
-                {
-                    "label": "Auxiliary/Emergency heat enable",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Swing Temperature",
-            "description": "Sets the swing threshold before turning on / off HVAC.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 8,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "0.0F",
-                    "value": 1
-                },
-                {
-                    "label": "1F",
-                    "value": 2
-                },
-                {
-                    "label": "1.5F",
-                    "value": 3
-                },
-                {
-                    "label": "2F",
-                    "value": 4
-                },
-                {
-                    "label": "2.5F",
-                    "value": 5
-                },
-                {
-                    "label": "3F",
-                    "value": 6
-                },
-                {
-                    "label": "3.5F",
-                    "value": 7
-                },
-                {
-                    "label": "4F",
-                    "value": 8
-                }
-            ]
-        },
-        "8": {
-            "label": "Thermostat Diff Temperature",
-            "description": "Set's the differential temperature for multi-stage HVAC systems.",
-            "valueSize": 2,
-            "minValue": 4,
-            "maxValue": 3084,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Thermostat Recovery Mode",
-            "description": "This parameter defines the thermostat recovery mode.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Recovery Mode is set to fast.",
-                    "value": 1
-                },
-                {
-                    "label": "Recovery Mode is set to economy.",
-                    "value": 2
-                }
-            ]
-        },
-        "11": {
-            "label": "Simple UI Mode Enable/Disable",
-            "description": "Enables or Disables Simple UI Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Simple UI Mode Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Simple UI Mode Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "12": {
-            "label": "Multicast Enable/Disable",
-            "description": "If set to 0, multicast is disabled, if set to 1, will enable the multicast.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Multicast Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Function is enabled.",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Radio Thermostat Company of America (RTC)",
+	"manufacturerId": "0x0098",
+	"label": "CT32",
+	"description": "Z-Wave Thermostat",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0100"
+		},
+		{
+			"productType": "0x2002",
+			"productId": "0x0100"
+		},
+		{
+			"productType": "0x2002",
+			"productId": "0x0102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Temperature Reporting Threshold",
+			"description": "Sets the reporting threshold for changes in ambient temperature.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "0.5F",
+					"value": 1
+				},
+				{
+					"label": "1.0F",
+					"value": 2
+				},
+				{
+					"label": "1.5F",
+					"value": 3
+				},
+				{
+					"label": "2.0F",
+					"value": 4
+				}
+			]
+		},
+		"3": {
+			"label": "Utility Lock Enable/Disable",
+			"description": "Enables or Disables the Utility Lock.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Utility lock disable",
+					"value": 0
+				},
+				{
+					"label": "Utility lock enable",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Humidity Reporting Threshold",
+			"description": "Sets the reporting threshold for changes in humidity.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "3%RH",
+					"value": 1
+				},
+				{
+					"label": "5%RH",
+					"value": 2
+				},
+				{
+					"label": "10%RH",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Auxiliary/Emergency",
+			"description": "Enables or Disables the Aux / Emergency Heat.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Auxiliary/Emergency heat disable",
+					"value": 0
+				},
+				{
+					"label": "Auxiliary/Emergency heat enable",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Swing Temperature",
+			"description": "Sets the swing threshold before turning on / off HVAC.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0.0F",
+					"value": 1
+				},
+				{
+					"label": "1F",
+					"value": 2
+				},
+				{
+					"label": "1.5F",
+					"value": 3
+				},
+				{
+					"label": "2F",
+					"value": 4
+				},
+				{
+					"label": "2.5F",
+					"value": 5
+				},
+				{
+					"label": "3F",
+					"value": 6
+				},
+				{
+					"label": "3.5F",
+					"value": 7
+				},
+				{
+					"label": "4F",
+					"value": 8
+				}
+			]
+		},
+		"8": {
+			"label": "Thermostat Diff Temperature",
+			"description": "Set's the differential temperature for multi-stage HVAC systems.",
+			"valueSize": 2,
+			"minValue": 4,
+			"maxValue": 3084,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Thermostat Recovery Mode",
+			"description": "This parameter defines the thermostat recovery mode.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Recovery Mode is set to fast.",
+					"value": 1
+				},
+				{
+					"label": "Recovery Mode is set to economy.",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "Simple UI Mode Enable/Disable",
+			"description": "Enables or Disables Simple UI Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Simple UI Mode Disabled",
+					"value": 0
+				},
+				{
+					"label": "Simple UI Mode Enabled",
+					"value": 1
+				}
+			]
+		},
+		"12": {
+			"label": "Multicast Enable/Disable",
+			"description": "If set to 0, multicast is disabled, if set to 1, will enable the multicast.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Multicast Disabled",
+					"value": 0
+				},
+				{
+					"label": "Function is enabled.",
+					"value": 1
+				}
+			]
+		}
+	}
 }

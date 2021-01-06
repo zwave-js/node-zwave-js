@@ -1,20 +1,19 @@
 // Ecolink FLF-ZWAVE5 R1
 // Z-Wave Wireless Flood/Freeze Sensor
 {
-    "_approved": true,
-    "manufacturer": "Ecolink",
-    "manufacturerId": "0x014a",
-    "label": "FLF-ZWAVE5 R1",
-    "description": "Z-Wave Wireless Flood/Freeze Sensor",
-    "devices": [
-        {
-            "productType": "0x0005",
-            "productId": "0x0010"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "FLF-ZWAVE5 R1",
+	"description": "Z-Wave Wireless Flood/Freeze Sensor",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0010"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

@@ -1,143 +1,142 @@
 // Eaton RF9542
 // Dimmer Accessory Switch
 {
-    "_approved": true,
-    "manufacturer": "Eaton",
-    "manufacturerId": "0x001a",
-    "label": "RF9542",
-    "description": "Dimmer Accessory Switch",
-    "devices": [
-        {
-            "productType": "0x4441",
-            "productId": "0x0000"
-        },
-        {
-            "productType": "0x4441",
-            "productId": "0xaa00"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Delayed OFF time",
-            "description": "delay time in seconds",
-            "unit": "s",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Panic ON time",
-            "description": "time in seconds for panic mode",
-            "unit": "s",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Panic OFF time",
-            "description": "off time in seconds for panic mode",
-            "unit": "s",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Basic Set Value",
-            "description": "send this value to associated devices",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Power Up State",
-            "description": "Power Up State of the switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 1
-                },
-                {
-                    "label": "ON",
-                    "value": 2
-                },
-                {
-                    "label": "Last State",
-                    "value": 3
-                }
-            ]
-        },
-        "6": {
-            "label": "Panic mode enable",
-            "description": "Enables this switch to participate in panic mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 1
-                },
-                {
-                    "label": "ON",
-                    "value": 2
-                }
-            ]
-        },
-        "7": {
-            "label": "Dimmer Ramp Time",
-            "description": "time in seconds to ramp to desired level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RF9542",
+	"description": "Dimmer Accessory Switch",
+	"devices": [
+		{
+			"productType": "0x4441",
+			"productId": "0x0000"
+		},
+		{
+			"productType": "0x4441",
+			"productId": "0xaa00"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Delayed OFF time",
+			"description": "delay time in seconds",
+			"unit": "s",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Panic ON time",
+			"description": "time in seconds for panic mode",
+			"unit": "s",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Panic OFF time",
+			"description": "off time in seconds for panic mode",
+			"unit": "s",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Basic Set Value",
+			"description": "send this value to associated devices",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Power Up State",
+			"description": "Power Up State of the switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				},
+				{
+					"label": "Last State",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Panic mode enable",
+			"description": "Enables this switch to participate in panic mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Dimmer Ramp Time",
+			"description": "time in seconds to ramp to desired level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,20 +1,19 @@
 // Z-Wave.Me UZB
 // Z-Wave USB Stick
 {
-    "_approved": true,
-    "manufacturer": "Z-Wave.Me",
-    "manufacturerId": "0x0115",
-    "label": "UZB",
-    "description": "Z-Wave USB Stick",
-    "devices": [
-        {
-            "productType": "0x0400",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Z-Wave.Me",
+	"manufacturerId": "0x0115",
+	"label": "UZB",
+	"description": "Z-Wave USB Stick",
+	"devices": [
+		{
+			"productType": "0x0400",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

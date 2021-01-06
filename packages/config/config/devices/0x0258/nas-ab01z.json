@@ -1,125 +1,124 @@
 // Shenzhen Neo Electronics Co., Ltd. NAS-AB01Z
 // Siren Alarm
 {
-    "_approved": true,
-    "manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
-    "manufacturerId": "0x0258",
-    "label": "NAS-AB01Z",
-    "description": "Siren Alarm",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0088"
-        },
-        {
-            "productType": "0x0003",
-            "productId": "0x1088"
-        },
-        {
-            "productType": "0x0003",
-            "productId": "0x6088"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Group2",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Configure Alarm music volume",
-            "description": "Configure Alarm music volume",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Alarm music duration time",
-            "description": "Alarm music duration time",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 2,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Door bell music duration time",
-            "description": "Door bell music duration time",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Door bell music volume",
-            "description": "Door bell music volume",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Alarm music index",
-            "description": "Alarm music index",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 9,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Door bell music index",
-            "description": "Door bell music index",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Default Siren on mode",
-            "description": "Default Siren on mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
+	"manufacturerId": "0x0258",
+	"label": "NAS-AB01Z",
+	"description": "Siren Alarm",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0088"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x1088"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x6088"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Group2",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Configure Alarm music volume",
+			"description": "Configure Alarm music volume",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Alarm music duration time",
+			"description": "Alarm music duration time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Door bell music duration time",
+			"description": "Door bell music duration time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Door bell music volume",
+			"description": "Door bell music volume",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Alarm music index",
+			"description": "Alarm music index",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 9,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Door bell music index",
+			"description": "Door bell music index",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Default Siren on mode",
+			"description": "Default Siren on mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

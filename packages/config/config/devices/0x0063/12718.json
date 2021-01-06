@@ -1,65 +1,64 @@
 // Jasco Products 12718
 // Smart Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "12718",
-    "description": "Smart Dimmer",
-    "devices": [
-        {
-            "productType": "0x5044",
-            "productId": "0x3031"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "7": {
-            "label": "Dimmer steps",
-            "description": "number of steps or levels",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Time between dimmer steps",
-            "description": "Timing of the steps (10ms increments)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "29": {
-            "label": "Load sensing",
-            "description": "Turn load sensing on or off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "disable (default)",
-                    "value": 0
-                },
-                {
-                    "label": "enable load sensing",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "12718",
+	"description": "Smart Dimmer",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"7": {
+			"label": "Dimmer steps",
+			"description": "number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Time between dimmer steps",
+			"description": "Timing of the steps (10ms increments)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"29": {
+			"label": "Load sensing",
+			"description": "Turn load sensing on or off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable (default)",
+					"value": 0
+				},
+				{
+					"label": "enable load sensing",
+					"value": 1
+				}
+			]
+		}
+	}
 }

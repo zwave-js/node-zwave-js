@@ -1,53 +1,52 @@
 // Popp & Co 700793
 // Power Plug
 {
-    "_approved": true,
-    "manufacturer": "Popp & Co",
-    "manufacturerId": "0x0154",
-    "label": "700793",
-    "description": "Power Plug",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x1002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Condition after power failure",
-            "description": "Condition after power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Always Off",
-                    "value": 0
-                },
-                {
-                    "label": "Always On",
-                    "value": 1
-                },
-                {
-                    "label": "Last state",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "700793",
+	"description": "Power Plug",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x1002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Condition after power failure",
+			"description": "Condition after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always Off",
+					"value": 0
+				},
+				{
+					"label": "Always On",
+					"value": 1
+				},
+				{
+					"label": "Last state",
+					"value": 2
+				}
+			]
+		}
+	}
 }

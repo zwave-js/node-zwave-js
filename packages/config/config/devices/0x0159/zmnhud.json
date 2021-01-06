@@ -1,7 +1,6 @@
 // Qubino ZMNHUD
 // Flush pilot (DIN version)
 {
-	"_approved": true,
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHUD",

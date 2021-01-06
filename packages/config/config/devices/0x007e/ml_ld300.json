@@ -1,26 +1,25 @@
 // Monster Cable ML LD300
 // Scene Capable Plug-in Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Monster Cable",
-    "manufacturerId": "0x007e",
-    "label": "ML LD300",
-    "description": "Scene Capable Plug-in Dimmer",
-    "devices": [
-        {
-            "productType": "0x0200",
-            "productId": "0x014e"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Monster Cable",
+	"manufacturerId": "0x007e",
+	"label": "ML LD300",
+	"description": "Scene Capable Plug-in Dimmer",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x014e"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

@@ -1,7 +1,6 @@
 // Zipato PSP02
 // Door/temp/illumination/motion sensor
 {
-	"_approved": true,
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "PSP02",

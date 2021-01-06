@@ -1,149 +1,148 @@
 // AEON Labs DSB45
 // Water Sensor
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSB45",
-    "description": "Water Sensor",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x002d"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Sensor Binary Report",
-            "description": "Toggle the sensor binary report value",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Open: 00, Close: FF",
-                    "value": 0
-                },
-                {
-                    "label": "Open: FF, Close: 00",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Wake up",
-            "description": "Enable wake up 10 minutes when the power is switched on.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Basic set value",
-            "description": "Toggle the basic set value when the Magnet switch is opened /closed.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Open: 00, Close: FF",
-                    "value": 0
-                },
-                {
-                    "label": "Open: FF, Close: 00",
-                    "value": 1
-                }
-            ]
-        },
-        "121[0xff]": {
-            "label": "Reports that will be sent",
-            "description": "configuration Value 4(LSB)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 17,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Do not send anything",
-                    "value": 0
-                },
-                {
-                    "label": "Send battery report",
-                    "value": 1
-                },
-                {
-                    "label": "Send Sensor Binary report",
-                    "value": 16
-                },
-                {
-                    "label": "Send Sensor Binary and Battery reports",
-                    "value": 17
-                }
-            ]
-        },
-        "121[0xff00]": {
-            "label": "Parameter 121 Value 3",
-            "description": "See documentation",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 17,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Do not send anything",
-                    "value": 0
-                },
-                {
-                    "label": "Send Basic Set",
-                    "value": 1
-                },
-                {
-                    "label": "Send ALARM",
-                    "value": 16
-                },
-                {
-                    "label": "Send Basic Set and ALARM",
-                    "value": 17
-                }
-            ]
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSB45",
+	"description": "Water Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x002d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Sensor Binary Report",
+			"description": "Toggle the sensor binary report value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Open: 00, Close: FF",
+					"value": 0
+				},
+				{
+					"label": "Open: FF, Close: 00",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Wake up",
+			"description": "Enable wake up 10 minutes when the power is switched on.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Basic set value",
+			"description": "Toggle the basic set value when the Magnet switch is opened /closed.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Open: 00, Close: FF",
+					"value": 0
+				},
+				{
+					"label": "Open: FF, Close: 00",
+					"value": 1
+				}
+			]
+		},
+		"121[0xff]": {
+			"label": "Reports that will be sent",
+			"description": "configuration Value 4(LSB)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 17,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do not send anything",
+					"value": 0
+				},
+				{
+					"label": "Send battery report",
+					"value": 1
+				},
+				{
+					"label": "Send Sensor Binary report",
+					"value": 16
+				},
+				{
+					"label": "Send Sensor Binary and Battery reports",
+					"value": 17
+				}
+			]
+		},
+		"121[0xff00]": {
+			"label": "Parameter 121 Value 3",
+			"description": "See documentation",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 17,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do not send anything",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Set",
+					"value": 1
+				},
+				{
+					"label": "Send ALARM",
+					"value": 16
+				},
+				{
+					"label": "Send Basic Set and ALARM",
+					"value": 17
+				}
+			]
+		}
+	}
 }

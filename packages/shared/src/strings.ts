@@ -16,8 +16,8 @@ export function num2hex(
 	return "0x" + ret;
 }
 
-export function stringify(arg: unknown): string {
-	return JSON.stringify(arg, null, 4);
+export function stringify(arg: unknown, space: 4 | "\t" = 4): string {
+	return JSON.stringify(arg, null, space);
 }
 
 export function buffer2hex(buffer: Buffer, uppercase: boolean = false): string {

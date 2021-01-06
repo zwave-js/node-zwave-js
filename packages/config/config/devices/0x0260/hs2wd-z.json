@@ -1,20 +1,19 @@
 // Shenzhen Heiman Technology Co., Ltd. HS2WD-Z
 // Smart Siren
 {
-    "_approved": true,
-    "manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
-    "manufacturerId": "0x0260",
-    "label": "HS2WD-Z",
-    "description": "Smart Siren",
-    "devices": [
-        {
-            "productType": "0x8009",
-            "productId": "0x1000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
+	"manufacturerId": "0x0260",
+	"label": "HS2WD-Z",
+	"description": "Smart Siren",
+	"devices": [
+		{
+			"productType": "0x8009",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

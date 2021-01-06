@@ -1,23 +1,19 @@
 // Willis Electric Co., Ltd. ZW691
 // Show Home, In-Wall-Smart-Outlet BSI
 {
-    "_approved": true,
-    "_warnings": [
-        "Inclusion information is not set"
-    ],
-    "manufacturer": "Willis Electric Co., Ltd.",
-    "manufacturerId": "0x015d",
-    "label": "ZW691",
-    "description": "Show Home, In-Wall-Smart-Outlet BSI",
-    "devices": [
-        {
-            "productType": "0x1215",
-            "productId": "0x262c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "ZW691",
+	"description": "Show Home, In-Wall-Smart-Outlet BSI",
+	"devices": [
+		{
+			"productType": "0x1215",
+			"productId": "0x262c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

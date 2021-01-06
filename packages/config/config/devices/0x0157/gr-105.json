@@ -1,7 +1,6 @@
 // EcoNet Controls GR-105
 // Water Shutoff Valve
 {
-	"_approved": true,
 	"manufacturer": "EcoNet Controls",
 	"manufacturerId": "0x0157",
 	"label": "GR-105",

@@ -1,337 +1,336 @@
 // Allegion BE469ZP
 // Touchscreen Deadbolt Z-Wave Plus
 {
-    "_approved": true,
-    "manufacturer": "Allegion",
-    "manufacturerId": "0x003b",
-    "label": "BE469ZP",
-    "description": "Touchscreen Deadbolt Z-Wave Plus",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0469"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "Beeper",
-            "description": "Keypad beeper to be turned ON or OFF",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Beeper",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Beeper",
-                    "value": 255
-                }
-            ]
-        },
-        "4": {
-            "label": "Vacation Mode",
-            "description": "Vacation Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Vacation Mode",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Vacation Mode",
-                    "value": 255
-                }
-            ]
-        },
-        "5": {
-            "label": "Lock and Leave Mode",
-            "description": "Controls button push for throwing the deadbolt.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Lock and Leave Mode",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Lock and Leave Mode",
-                    "value": 255
-                }
-            ]
-        },
-        "6": {
-            "label": "User Slot Bit Field",
-            "description": "Occupied slots for User Codes",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Alarm Mode",
-            "description": "Lock Specific Alarm Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Alarm Off",
-                    "value": 0
-                },
-                {
-                    "label": "Alert",
-                    "value": 1
-                },
-                {
-                    "label": "Tamper",
-                    "value": 2
-                },
-                {
-                    "label": "Forced Entry",
-                    "value": 3
-                }
-            ]
-        },
-        "8": {
-            "label": "Alarm Alert Sensitivity",
-            "description": "Lock Specific Alarm Alert Sensitivity",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 5,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Most Sensitive",
-                    "value": 1
-                },
-                {
-                    "label": "More Sensitive",
-                    "value": 2
-                },
-                {
-                    "label": "Medium Sensitivity",
-                    "value": 3
-                },
-                {
-                    "label": "Less Sensitive",
-                    "value": 4
-                },
-                {
-                    "label": "Least Sensitive",
-                    "value": 5
-                }
-            ]
-        },
-        "9": {
-            "label": "Alarm Tamper Sensitivity",
-            "description": "Lock Specific Alarm Tamper Sensitivity",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 5,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Most Sensitive",
-                    "value": 1
-                },
-                {
-                    "label": "More Sensitive",
-                    "value": 2
-                },
-                {
-                    "label": "Medium Sensitivity",
-                    "value": 3
-                },
-                {
-                    "label": "Less Sensitive",
-                    "value": 4
-                },
-                {
-                    "label": "Least Sensitive",
-                    "value": 5
-                }
-            ]
-        },
-        "10": {
-            "label": "Alarm Kick Sensitivity",
-            "description": "Lock Specific Alarm Kick Sensitivity",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 5,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Most Sensitive",
-                    "value": 1
-                },
-                {
-                    "label": "More Sensitive",
-                    "value": 2
-                },
-                {
-                    "label": "Medium Sensitivity",
-                    "value": 3
-                },
-                {
-                    "label": "Less Sensitive",
-                    "value": 4
-                },
-                {
-                    "label": "Least Sensitive",
-                    "value": 5
-                }
-            ]
-        },
-        "11": {
-            "label": "Alarm Disable Local Controls",
-            "description": "Lock Specific Alarm Disable Local Controls",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Alarm Disable Local Controls",
-                    "value": 0
-                },
-                {
-                    "label": "Alarm Enable Local Controls",
-                    "value": 255
-                }
-            ]
-        },
-        "12": {
-            "label": "Electronic Transition Count",
-            "description": "Get Electronic Transition Count",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 9999,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Mechanical Transition Count",
-            "description": "Get Mechanical Transition Count",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 9999,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "Electronic Failed Count",
-            "description": "Get Electronic Failed Count",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 9999,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Auto Lock",
-            "description": "Automatically throws the deadbolt 30 after seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Auto Lock",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Auto Lock",
-                    "value": 255
-                }
-            ]
-        },
-        "16": {
-            "label": "User Code PIN Length",
-            "description": "Required length of all User Codes",
-            "valueSize": 1,
-            "minValue": 4,
-            "maxValue": 8,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17": {
-            "label": "Get Electrical High Preload Transition Count",
-            "description": "Count of high preload on the deadbolt",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 9999,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "Get Bootloader Version",
-            "description": "Bootloader Version",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Allegion",
+	"manufacturerId": "0x003b",
+	"label": "BE469ZP",
+	"description": "Touchscreen Deadbolt Z-Wave Plus",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0469"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "Beeper",
+			"description": "Keypad beeper to be turned ON or OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Beeper",
+					"value": 0
+				},
+				{
+					"label": "Enable Beeper",
+					"value": 255
+				}
+			]
+		},
+		"4": {
+			"label": "Vacation Mode",
+			"description": "Vacation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Vacation Mode",
+					"value": 0
+				},
+				{
+					"label": "Enable Vacation Mode",
+					"value": 255
+				}
+			]
+		},
+		"5": {
+			"label": "Lock and Leave Mode",
+			"description": "Controls button push for throwing the deadbolt.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Lock and Leave Mode",
+					"value": 0
+				},
+				{
+					"label": "Enable Lock and Leave Mode",
+					"value": 255
+				}
+			]
+		},
+		"6": {
+			"label": "User Slot Bit Field",
+			"description": "Occupied slots for User Codes",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Alarm Mode",
+			"description": "Lock Specific Alarm Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Alarm Off",
+					"value": 0
+				},
+				{
+					"label": "Alert",
+					"value": 1
+				},
+				{
+					"label": "Tamper",
+					"value": 2
+				},
+				{
+					"label": "Forced Entry",
+					"value": 3
+				}
+			]
+		},
+		"8": {
+			"label": "Alarm Alert Sensitivity",
+			"description": "Lock Specific Alarm Alert Sensitivity",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Most Sensitive",
+					"value": 1
+				},
+				{
+					"label": "More Sensitive",
+					"value": 2
+				},
+				{
+					"label": "Medium Sensitivity",
+					"value": 3
+				},
+				{
+					"label": "Less Sensitive",
+					"value": 4
+				},
+				{
+					"label": "Least Sensitive",
+					"value": 5
+				}
+			]
+		},
+		"9": {
+			"label": "Alarm Tamper Sensitivity",
+			"description": "Lock Specific Alarm Tamper Sensitivity",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Most Sensitive",
+					"value": 1
+				},
+				{
+					"label": "More Sensitive",
+					"value": 2
+				},
+				{
+					"label": "Medium Sensitivity",
+					"value": 3
+				},
+				{
+					"label": "Less Sensitive",
+					"value": 4
+				},
+				{
+					"label": "Least Sensitive",
+					"value": 5
+				}
+			]
+		},
+		"10": {
+			"label": "Alarm Kick Sensitivity",
+			"description": "Lock Specific Alarm Kick Sensitivity",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Most Sensitive",
+					"value": 1
+				},
+				{
+					"label": "More Sensitive",
+					"value": 2
+				},
+				{
+					"label": "Medium Sensitivity",
+					"value": 3
+				},
+				{
+					"label": "Less Sensitive",
+					"value": 4
+				},
+				{
+					"label": "Least Sensitive",
+					"value": 5
+				}
+			]
+		},
+		"11": {
+			"label": "Alarm Disable Local Controls",
+			"description": "Lock Specific Alarm Disable Local Controls",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Alarm Disable Local Controls",
+					"value": 0
+				},
+				{
+					"label": "Alarm Enable Local Controls",
+					"value": 255
+				}
+			]
+		},
+		"12": {
+			"label": "Electronic Transition Count",
+			"description": "Get Electronic Transition Count",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 9999,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Mechanical Transition Count",
+			"description": "Get Mechanical Transition Count",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 9999,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Electronic Failed Count",
+			"description": "Get Electronic Failed Count",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 9999,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Auto Lock",
+			"description": "Automatically throws the deadbolt 30 after seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Auto Lock",
+					"value": 0
+				},
+				{
+					"label": "Enable Auto Lock",
+					"value": 255
+				}
+			]
+		},
+		"16": {
+			"label": "User Code PIN Length",
+			"description": "Required length of all User Codes",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 8,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "Get Electrical High Preload Transition Count",
+			"description": "Count of high preload on the deadbolt",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 9999,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Get Bootloader Version",
+			"description": "Bootloader Version",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

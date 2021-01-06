@@ -1,140 +1,136 @@
 // Wenzhou MTLC Electric Appliances Co., Ltd. Plug-In Smart Meter Dimmer Switch
 // ZWN323M
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
-    "manufacturerId": "0x011a",
-    "label": "Plug-In Smart Meter Dimmer Switch",
-    "description": "ZWN323M",
-    "devices": [
-        {
-            "productType": "0x0111",
-            "productId": "0x0202"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Notifications",
-            "description": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "StatusReport",
-            "description": "Send basic report",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "PowerReport",
-            "description": "PowerReport: Send meter power report",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Synchronization of load power and LED indicator",
-            "description": "Synchronization of load power and LED indicator",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Power on, LED off",
-                    "value": 0
-                },
-                {
-                    "label": "Power on, LED on",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Autosend Interval (METER_REPORT)",
-            "description": "Autosend Interval (METER_REPORT)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Autosend interval (SENSOR_MULTILEVEL_REPORT)",
-            "description": "Autosend interval (SENSOR_MULTILEVEL_REPORT)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Accumulated Autosend Interval (  METER_REPORT)",
-            "description": "Accumulated Autosend Interval (  METER_REPORT)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Enable automatic notifications",
-            "description": "Enable automatic notifications",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Not report (METER_REPORT)",
-                    "value": 0
-                },
-                {
-                    "label": "Send (METER_REPORT) only",
-                    "value": 1
-                },
-                {
-                    "label": "Send (SENSOR_MULTI_LEVEL_REPORT) only",
-                    "value": 2
-                },
-                {
-                    "label": "Send both",
-                    "value": 3
-                }
-            ]
-        },
-        "12": {
-            "label": "Minimum change in wattage report",
-            "description": "Minimum change in wattage report",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
+	"label": "Plug-In Smart Meter Dimmer Switch",
+	"description": "ZWN323M",
+	"devices": [
+		{
+			"productType": "0x0111",
+			"productId": "0x0202"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Notifications",
+			"description": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "StatusReport",
+			"description": "Send basic report",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "PowerReport",
+			"description": "PowerReport: Send meter power report",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Synchronization of load power and LED indicator",
+			"description": "Synchronization of load power and LED indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power on, LED off",
+					"value": 0
+				},
+				{
+					"label": "Power on, LED on",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Autosend Interval (METER_REPORT)",
+			"description": "Autosend Interval (METER_REPORT)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Autosend interval (SENSOR_MULTILEVEL_REPORT)",
+			"description": "Autosend interval (SENSOR_MULTILEVEL_REPORT)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Accumulated Autosend Interval (  METER_REPORT)",
+			"description": "Accumulated Autosend Interval (  METER_REPORT)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Enable automatic notifications",
+			"description": "Enable automatic notifications",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Not report (METER_REPORT)",
+					"value": 0
+				},
+				{
+					"label": "Send (METER_REPORT) only",
+					"value": 1
+				},
+				{
+					"label": "Send (SENSOR_MULTI_LEVEL_REPORT) only",
+					"value": 2
+				},
+				{
+					"label": "Send both",
+					"value": 3
+				}
+			]
+		},
+		"12": {
+			"label": "Minimum change in wattage report",
+			"description": "Minimum change in wattage report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

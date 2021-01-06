@@ -1,7 +1,6 @@
 // Jasco Products ZW4002
 // In-Wall Smart Fan Control
 {
-	"_approved": true,
 	"manufacturer": "Jasco Products",
 	"manufacturerId": "0x0063",
 	"label": "ZW4002",

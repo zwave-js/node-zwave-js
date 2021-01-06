@@ -1,223 +1,222 @@
 // TKB Home TZ04
 // In Wall Dual Relay Switch
 {
-    "_approved": true,
-    "manufacturer": "TKB Home",
-    "manufacturerId": "0x0118",
-    "label": "TZ04",
-    "description": "In Wall Dual Relay Switch",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Relay 1 + 2",
-            "maxNodes": 1
-        },
-        "2": {
-            "label": "Relay 1",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Relay 2",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "W meter report period",
-            "description": "Period for reporting W meter",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 720,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "kWh meter report period",
-            "description": "Period for reporting kWh meter",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 6,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Selected endpoint",
-            "description": "Which endpoint is addressed by the BASIC command class",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Relay 1 + 2",
-                    "value": 1
-                },
-                {
-                    "label": "Relay 1",
-                    "value": 2
-                },
-                {
-                    "label": "Relay 2",
-                    "value": 3
-                }
-            ]
-        },
-        "4": {
-            "label": "Switch mode",
-            "description": "Change the external switch mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Edge mode",
-                    "value": 1
-                },
-                {
-                    "label": "Pulse mode",
-                    "value": 2
-                },
-                {
-                    "label": "Edge-Toggle mode",
-                    "value": 3
-                }
-            ]
-        },
-        "5": {
-            "label": "Threshold of Watt for Load Caution",
-            "description": "If threshold of wattage is reached, a meter report will be generated",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 1500,
-            "defaultValue": 1500,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Threshold of kWh for Load Caution",
-            "description": "If threshold of kWh is reached, a Meter Report will be generated",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 10000,
-            "defaultValue": 10000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Restore switch state mode",
-            "description": "Restore switch state mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch Off",
-                    "value": 0
-                },
-                {
-                    "label": "Last State",
-                    "value": 1
-                },
-                {
-                    "label": "Switch On",
-                    "value": 2
-                }
-            ]
-        },
-        "8": {
-            "label": "Auto Off Timer",
-            "description": "Auto Off Timer",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "RF off command mode",
-            "description": "RF off command mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch Off",
-                    "value": 0
-                },
-                {
-                    "label": "Ignore",
-                    "value": 1
-                },
-                {
-                    "label": "Switch Toggle",
-                    "value": 2
-                },
-                {
-                    "label": "Switch On",
-                    "value": 3
-                }
-            ]
-        },
-        "10": {
-            "label": "Endpoint 3",
-            "description": "Endpoint 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Exists",
-                    "value": 1
-                },
-                {
-                    "label": "Doesn't Exist",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "TZ04",
+	"description": "In Wall Dual Relay Switch",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Relay 1 + 2",
+			"maxNodes": 1
+		},
+		"2": {
+			"label": "Relay 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Relay 2",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "W meter report period",
+			"description": "Period for reporting W meter",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 720,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "kWh meter report period",
+			"description": "Period for reporting kWh meter",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 6,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Selected endpoint",
+			"description": "Which endpoint is addressed by the BASIC command class",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Relay 1 + 2",
+					"value": 1
+				},
+				{
+					"label": "Relay 1",
+					"value": 2
+				},
+				{
+					"label": "Relay 2",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Switch mode",
+			"description": "Change the external switch mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Edge mode",
+					"value": 1
+				},
+				{
+					"label": "Pulse mode",
+					"value": 2
+				},
+				{
+					"label": "Edge-Toggle mode",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Threshold of Watt for Load Caution",
+			"description": "If threshold of wattage is reached, a meter report will be generated",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 1500,
+			"defaultValue": 1500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Threshold of kWh for Load Caution",
+			"description": "If threshold of kWh is reached, a Meter Report will be generated",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10000,
+			"defaultValue": 10000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Restore switch state mode",
+			"description": "Restore switch state mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch Off",
+					"value": 0
+				},
+				{
+					"label": "Last State",
+					"value": 1
+				},
+				{
+					"label": "Switch On",
+					"value": 2
+				}
+			]
+		},
+		"8": {
+			"label": "Auto Off Timer",
+			"description": "Auto Off Timer",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "RF off command mode",
+			"description": "RF off command mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch Off",
+					"value": 0
+				},
+				{
+					"label": "Ignore",
+					"value": 1
+				},
+				{
+					"label": "Switch Toggle",
+					"value": 2
+				},
+				{
+					"label": "Switch On",
+					"value": 3
+				}
+			]
+		},
+		"10": {
+			"label": "Endpoint 3",
+			"description": "Endpoint 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Exists",
+					"value": 1
+				},
+				{
+					"label": "Doesn't Exist",
+					"value": 2
+				}
+			]
+		}
+	}
 }

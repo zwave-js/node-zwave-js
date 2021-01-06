@@ -1,7 +1,6 @@
 // Qubino ZMNHAA
 // Flush 1 relay
 {
-	"_approved": true,
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHAA",
@@ -35,7 +34,7 @@
 		"4": {
 			"label": "Controller Updates",
 			"maxNodes": 1,
-			"isLifeline": true,
+			"isLifeline": true
 		}
 	},
 	"paramInformation": {

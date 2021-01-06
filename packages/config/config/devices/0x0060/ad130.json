@@ -1,19 +1,18 @@
 // Everspring AD130
 // Dimmer Plugin
 {
-    "_approved": true,
-    "manufacturer": "Everspring",
-    "manufacturerId": "0x0060",
-    "label": "AD130",
-    "description": "Dimmer Plugin",
-    "devices": [
-        {
-            "productType": "0x0000",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "AD130",
+	"description": "Dimmer Plugin",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

@@ -1,27 +1,18 @@
 // McoHome Technology Co., Ltd. MH-S511-IL
 // MCOHome touch switch Relay
 {
-    "_approved": true,
-    "_errors": [
-        "Device category is not set."
-    ],
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH-S511-IL",
-    "description": "MCOHome touch switch Relay",
-    "devices": [
-        {
-            "productType": "0x5111",
-            "productId": "0x1406"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-S511-IL",
+	"description": "MCOHome touch switch Relay",
+	"devices": [
+		{
+			"productType": "0x5111",
+			"productId": "0x1406"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

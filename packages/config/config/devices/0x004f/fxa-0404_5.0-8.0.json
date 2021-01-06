@@ -1,40 +1,31 @@
 // Flex Automation FXA-0404
 // Touch Panel- 4 Dimmers plus 4 ON-OFF- 5 Scenes
 {
-    "_approved": true,
-    "_errors": [
-        "Manufacturer thingID is not set.",
-        "Manufacturer reference is not set",
-        "Device has configuration parameters defined, but does not support the CONFIGURATION command class."
-    ],
-    "_warnings": [
-        "No endpoints are configured"
-    ],
-    "manufacturer": "Flex Automation",
-    "manufacturerId": "0x004f",
-    "label": "FXA-0404",
-    "description": "Touch Panel- 4 Dimmers plus 4 ON-OFF- 5 Scenes",
-    "devices": [
-        {
-            "productType": "0x0000",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "5.0",
-        "max": "8.0"
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Set Buzzer",
-            "description": "Turn On or Off the Flex Panel Buzzer",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Flex Automation",
+	"manufacturerId": "0x004f",
+	"label": "FXA-0404",
+	"description": "Touch Panel- 4 Dimmers plus 4 ON-OFF- 5 Scenes",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "5.0",
+		"max": "8.0"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Set Buzzer",
+			"description": "Turn On or Off the Flex Panel Buzzer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

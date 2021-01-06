@@ -1,27 +1,26 @@
 // McoHome Technology Co., Ltd. MH7
 // Water/Electrical Heating Thermostat
 {
-    "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH7",
-    "description": "Water/Electrical Heating Thermostat",
-    "devices": [
-        {
-            "productType": "0x0702",
-            "productId": "0x3102"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Gateway",
-            "description": "For sending temperature, working mode, etc. notifications",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH7",
+	"description": "Water/Electrical Heating Thermostat",
+	"devices": [
+		{
+			"productType": "0x0702",
+			"productId": "0x3102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Gateway",
+			"description": "For sending temperature, working mode, etc. notifications",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }

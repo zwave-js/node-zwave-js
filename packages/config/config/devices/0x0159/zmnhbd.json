@@ -1,7 +1,6 @@
 // Qubino ZMNHBD
 // Flush 2 relays
 {
-	"_approved": true,
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHBD",

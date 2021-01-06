@@ -1,230 +1,229 @@
 // ID-RF Soft Remote
 // Remote Control
 {
-    "_approved": true,
-    "manufacturer": "ID-RF",
-    "manufacturerId": "0x0165",
-    "label": "Soft Remote",
-    "description": "Remote Control",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Buttons 1 and 3 profile",
-            "description": "To set-up the profile of buttons 1 and 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Scene",
-                    "value": 0
-                },
-                {
-                    "label": "Mono",
-                    "value": 1
-                },
-                {
-                    "label": "Duo",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Buttons 2 and 4 profile",
-            "description": "To set-up the profile of buttons 2 and 4",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Scene",
-                    "value": 0
-                },
-                {
-                    "label": "Mono",
-                    "value": 1
-                },
-                {
-                    "label": "Duo",
-                    "value": 2
-                }
-            ]
-        },
-        "3": {
-            "label": "Scene Type",
-            "description": "To choose the way of sending Scene to the gateway",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Central Scene",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Activation",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Button 1 configuration",
-            "description": "To set-up the how button 1 behaves, when set in MONO Profile",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Control group 2",
-                    "value": 0
-                },
-                {
-                    "label": "All switches ON",
-                    "value": 1
-                },
-                {
-                    "label": "All switches OFF",
-                    "value": 2
-                }
-            ]
-        },
-        "5": {
-            "label": "Button 2 configuration",
-            "description": "To set-up the how button 2 behaves, when set in MONO Profile",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Control group 3",
-                    "value": 0
-                },
-                {
-                    "label": "All switches ON",
-                    "value": 1
-                },
-                {
-                    "label": "All switches OFF",
-                    "value": 2
-                }
-            ]
-        },
-        "6": {
-            "label": "Button 3 configuration",
-            "description": "To set-up the how button 3 behaves, when set in MONO Profile",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Control group 4",
-                    "value": 0
-                },
-                {
-                    "label": "All switches ON",
-                    "value": 1
-                },
-                {
-                    "label": "All switches OFF",
-                    "value": 2
-                }
-            ]
-        },
-        "7": {
-            "label": "Button 4 configuration",
-            "description": "To set-up the how button 4 behaves, when set in MONO Profile",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Control group 5",
-                    "value": 0
-                },
-                {
-                    "label": "All switches ON",
-                    "value": 1
-                },
-                {
-                    "label": "All switches OFF",
-                    "value": 2
-                }
-            ]
-        },
-        "8": {
-            "label": "LED Management",
-            "description": "How to set up LED behaviour",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No LED",
-                    "value": 0
-                },
-                {
-                    "label": "Flash Blue after button press",
-                    "value": 1
-                },
-                {
-                    "label": "Blink to confirm command",
-                    "value": 2
-                },
-                {
-                    "label": "Flash Blue and blink to confirm command",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "ID-RF",
+	"manufacturerId": "0x0165",
+	"label": "Soft Remote",
+	"description": "Remote Control",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Buttons 1 and 3 profile",
+			"description": "To set-up the profile of buttons 1 and 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene",
+					"value": 0
+				},
+				{
+					"label": "Mono",
+					"value": 1
+				},
+				{
+					"label": "Duo",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Buttons 2 and 4 profile",
+			"description": "To set-up the profile of buttons 2 and 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene",
+					"value": 0
+				},
+				{
+					"label": "Mono",
+					"value": 1
+				},
+				{
+					"label": "Duo",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Scene Type",
+			"description": "To choose the way of sending Scene to the gateway",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central Scene",
+					"value": 0
+				},
+				{
+					"label": "Scene Activation",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Button 1 configuration",
+			"description": "To set-up the how button 1 behaves, when set in MONO Profile",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Control group 2",
+					"value": 0
+				},
+				{
+					"label": "All switches ON",
+					"value": 1
+				},
+				{
+					"label": "All switches OFF",
+					"value": 2
+				}
+			]
+		},
+		"5": {
+			"label": "Button 2 configuration",
+			"description": "To set-up the how button 2 behaves, when set in MONO Profile",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Control group 3",
+					"value": 0
+				},
+				{
+					"label": "All switches ON",
+					"value": 1
+				},
+				{
+					"label": "All switches OFF",
+					"value": 2
+				}
+			]
+		},
+		"6": {
+			"label": "Button 3 configuration",
+			"description": "To set-up the how button 3 behaves, when set in MONO Profile",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Control group 4",
+					"value": 0
+				},
+				{
+					"label": "All switches ON",
+					"value": 1
+				},
+				{
+					"label": "All switches OFF",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Button 4 configuration",
+			"description": "To set-up the how button 4 behaves, when set in MONO Profile",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Control group 5",
+					"value": 0
+				},
+				{
+					"label": "All switches ON",
+					"value": 1
+				},
+				{
+					"label": "All switches OFF",
+					"value": 2
+				}
+			]
+		},
+		"8": {
+			"label": "LED Management",
+			"description": "How to set up LED behaviour",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No LED",
+					"value": 0
+				},
+				{
+					"label": "Flash Blue after button press",
+					"value": 1
+				},
+				{
+					"label": "Blink to confirm command",
+					"value": 2
+				},
+				{
+					"label": "Flash Blue and blink to confirm command",
+					"value": 3
+				}
+			]
+		}
+	}
 }

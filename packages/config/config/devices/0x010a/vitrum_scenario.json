@@ -1,32 +1,25 @@
 // VDA Vitrum Scenario
 // Vitrum Scenario controller
 {
-    "_approved": true,
-    "_errors": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "manufacturer": "VDA",
-    "manufacturerId": "0x010a",
-    "label": "Vitrum Scenario",
-    "description": "Vitrum Scenario controller",
-    "devices": [
-        {
-            "productType": "0x1500",
-            "productId": "0x6900"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 8,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "VDA",
+	"manufacturerId": "0x010a",
+	"label": "Vitrum Scenario",
+	"description": "Vitrum Scenario controller",
+	"devices": [
+		{
+			"productType": "0x1500",
+			"productId": "0x6900"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 8,
+			"isLifeline": true
+		}
+	}
 }

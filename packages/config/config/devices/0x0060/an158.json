@@ -1,7 +1,6 @@
 // Everspring AN158
 // Switch Meter Plugin
 {
-	"_approved": true,
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
 	"label": "AN158",

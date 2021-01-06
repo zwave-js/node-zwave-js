@@ -1,20 +1,19 @@
 // Ecolink TLS-ZWAVE5
 // Automated Light Switch
 {
-    "_approved": true,
-    "manufacturer": "Ecolink",
-    "manufacturerId": "0x014a",
-    "label": "TLS-ZWAVE5",
-    "description": "Automated Light Switch",
-    "devices": [
-        {
-            "productType": "0x0006",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "TLS-ZWAVE5",
+	"description": "Automated Light Switch",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

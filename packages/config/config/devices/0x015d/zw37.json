@@ -1,20 +1,19 @@
 // Willis Electric Co., Ltd. ZW37
 // Inovelli 2 channel smart plug
 {
-    "_approved": true,
-    "manufacturer": "Willis Electric Co., Ltd.",
-    "manufacturerId": "0x015d",
-    "label": "ZW37",
-    "description": "Inovelli 2 channel smart plug",
-    "devices": [
-        {
-            "productType": "0x0221",
-            "productId": "0x251c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "ZW37",
+	"description": "Inovelli 2 channel smart plug",
+	"devices": [
+		{
+			"productType": "0x0221",
+			"productId": "0x251c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

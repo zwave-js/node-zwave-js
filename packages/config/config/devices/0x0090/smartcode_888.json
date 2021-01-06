@@ -1,182 +1,181 @@
 // Spectrum Brands SmartCode 888
 // Touchpad Electronic Deadbolt
 {
-    "_approved": true,
-    "manufacturer": "Spectrum Brands",
-    "manufacturerId": "0x0090",
-    "label": "SmartCode 888",
-    "description": "Touchpad Electronic Deadbolt",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0541"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "33": {
-            "label": "SKU",
-            "description": "Set the first four most significant bytes of the SKU",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "34": {
-            "label": "SKU (Last 4)",
-            "description": "The four least significant bytes of the SKU",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "35": {
-            "label": "Interior Status LED",
-            "description": "Allows user to get/set the value for the Interior Status LED control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                }
-            ]
-        },
-        "37": {
-            "label": "Audio Feature Control",
-            "description": "Allows the user to get/set the audio feed back command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                }
-            ]
-        },
-        "40": {
-            "label": "Factory Default",
-            "description": "Reset to factory default settings",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Factory Default",
-                    "value": 1
-                }
-            ]
-        },
-        "47": {
-            "label": "Motor Load Control",
-            "description": "Allows the device to send motor load alarms",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                }
-            ]
-        },
-        "36[0x01]": {
-            "label": "Auto-Lock Feature Control",
-            "description": "Enables or disables automatically re-locking of door",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                }
-            ]
-        },
-        "36[0xff00]": {
-            "label": "Auto-Lock Feature Control Timing",
-            "description": "The number of seconds before the Auto-Lock will occur",
-            "valueSize": 2,
-            "minValue": 30,
-            "maxValue": 180,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Thirty seconds",
-                    "value": 30
-                },
-                {
-                    "label": "Sixty Seconds",
-                    "value": 60
-                },
-                {
-                    "label": "Ninety Seconds",
-                    "value": 90
-                },
-                {
-                    "label": "One-Twenty Seconds",
-                    "value": 120
-                },
-                {
-                    "label": "One-Eighty Seconds",
-                    "value": 180
-                }
-            ]
-        }
-    }
+	"manufacturer": "Spectrum Brands",
+	"manufacturerId": "0x0090",
+	"label": "SmartCode 888",
+	"description": "Touchpad Electronic Deadbolt",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0541"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"33": {
+			"label": "SKU",
+			"description": "Set the first four most significant bytes of the SKU",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "SKU (Last 4)",
+			"description": "The four least significant bytes of the SKU",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35": {
+			"label": "Interior Status LED",
+			"description": "Allows user to get/set the value for the Interior Status LED control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				}
+			]
+		},
+		"37": {
+			"label": "Audio Feature Control",
+			"description": "Allows the user to get/set the audio feed back command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				}
+			]
+		},
+		"40": {
+			"label": "Factory Default",
+			"description": "Reset to factory default settings",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Factory Default",
+					"value": 1
+				}
+			]
+		},
+		"47": {
+			"label": "Motor Load Control",
+			"description": "Allows the device to send motor load alarms",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				}
+			]
+		},
+		"36[0x01]": {
+			"label": "Auto-Lock Feature Control",
+			"description": "Enables or disables automatically re-locking of door",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				}
+			]
+		},
+		"36[0xff00]": {
+			"label": "Auto-Lock Feature Control Timing",
+			"description": "The number of seconds before the Auto-Lock will occur",
+			"valueSize": 2,
+			"minValue": 30,
+			"maxValue": 180,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Thirty seconds",
+					"value": 30
+				},
+				{
+					"label": "Sixty Seconds",
+					"value": 60
+				},
+				{
+					"label": "Ninety Seconds",
+					"value": 90
+				},
+				{
+					"label": "One-Twenty Seconds",
+					"value": 120
+				},
+				{
+					"label": "One-Eighty Seconds",
+					"value": 180
+				}
+			]
+		}
+	}
 }

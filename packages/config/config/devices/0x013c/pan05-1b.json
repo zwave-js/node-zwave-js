@@ -1,159 +1,158 @@
 // Philio Technology Corp PAN05-1B
 // Single relay in-wall switch module
 {
-    "_approved": true,
-    "manufacturer": "Philio Technology Corp",
-    "manufacturerId": "0x013c",
-    "label": "PAN05-1B",
-    "description": "Single relay in-wall switch module",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0010"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Mode",
-            "description": "Mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Edge mode",
-                    "value": 1
-                },
-                {
-                    "label": "Pulse mode",
-                    "value": 2
-                },
-                {
-                    "label": "Edge-Toggle mode",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Restore switch state mode",
-            "description": "Restore switch state mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch Off",
-                    "value": 0
-                },
-                {
-                    "label": "Last Switch State",
-                    "value": 1
-                },
-                {
-                    "label": "Switch On",
-                    "value": 2
-                }
-            ]
-        },
-        "3": {
-            "label": "Manual On/Off mode",
-            "description": "Manual On/Off mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable manual On/Off",
-                    "value": 0
-                },
-                {
-                    "label": "Enable manual On/Off",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "LED indication mode",
-            "description": "LED indication mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Show switch state",
-                    "value": 1
-                },
-                {
-                    "label": "Show night mode",
-                    "value": 2
-                },
-                {
-                    "label": "One flash mode",
-                    "value": 3
-                }
-            ]
-        },
-        "5": {
-            "label": "Auto off timer",
-            "description": "Auto off timer",
-            "unit": "second",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "RF Off command mode",
-            "description": "RF Off command mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch off",
-                    "value": 0
-                },
-                {
-                    "label": "Ignore",
-                    "value": 1
-                },
-                {
-                    "label": "Switch toggle",
-                    "value": 2
-                },
-                {
-                    "label": "Switch on",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PAN05-1B",
+	"description": "Single relay in-wall switch module",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0010"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Mode",
+			"description": "Mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Edge mode",
+					"value": 1
+				},
+				{
+					"label": "Pulse mode",
+					"value": 2
+				},
+				{
+					"label": "Edge-Toggle mode",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Restore switch state mode",
+			"description": "Restore switch state mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch Off",
+					"value": 0
+				},
+				{
+					"label": "Last Switch State",
+					"value": 1
+				},
+				{
+					"label": "Switch On",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Manual On/Off mode",
+			"description": "Manual On/Off mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable manual On/Off",
+					"value": 0
+				},
+				{
+					"label": "Enable manual On/Off",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "LED indication mode",
+			"description": "LED indication mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Show switch state",
+					"value": 1
+				},
+				{
+					"label": "Show night mode",
+					"value": 2
+				},
+				{
+					"label": "One flash mode",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Auto off timer",
+			"description": "Auto off timer",
+			"unit": "second",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "RF Off command mode",
+			"description": "RF Off command mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch off",
+					"value": 0
+				},
+				{
+					"label": "Ignore",
+					"value": 1
+				},
+				{
+					"label": "Switch toggle",
+					"value": 2
+				},
+				{
+					"label": "Switch on",
+					"value": 3
+				}
+			]
+		}
+	}
 }

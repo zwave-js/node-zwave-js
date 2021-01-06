@@ -1,20 +1,19 @@
 // Honeywell Plug-in Outdoor Smart Switch
 // Plug-in Outdoor Smart Switch ZW4201 / 39346
 {
-    "_approved": true,
-    "manufacturer": "Honeywell",
-    "manufacturerId": "0x0039",
-    "label": "Plug-in Outdoor Smart Switch",
-    "description": "Plug-in Outdoor Smart Switch ZW4201 / 39346",
-    "devices": [
-        {
-            "productType": "0x4f50",
-            "productId": "0x3032"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "Plug-in Outdoor Smart Switch",
+	"description": "Plug-in Outdoor Smart Switch ZW4201 / 39346",
+	"devices": [
+		{
+			"productType": "0x4f50",
+			"productId": "0x3032"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

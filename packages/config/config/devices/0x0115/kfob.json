@@ -1,7 +1,6 @@
 // Z-Wave.Me KFOB
 // 4 button keyfob
 {
-	"_approved": true,
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
 	"label": "KFOB",

@@ -1,187 +1,183 @@
 // AEON Labs ZW129
 // Dual Wallmote
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "ZW129",
-    "description": "Dual Wallmote",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0081"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x0081"
-        },
-        {
-            "productType": "0x0202",
-            "productId": "0x0081"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Z-Wave Plus Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Button 1 basic",
-            "description": "On/off control via button 1",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Button 1 multilevel",
-            "description": "Dim control via button 1",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Button 2 basic",
-            "description": "On/off control via button 2",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Button 2 multilevel",
-            "description": "Dim control via button 2",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Touch sound",
-            "description": "Enable/disable the touch sound.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Touch vibration",
-            "description": "Enable/disable the touch vibration.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Button slide",
-            "description": "Enable/disable the function of button slide.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Notification report",
-            "description": "Which notification to be sent to the associated devices.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Central scene",
-                    "value": 1
-                },
-                {
-                    "label": "Central scene and config",
-                    "value": 3
-                }
-            ]
-        },
-        "5": {
-            "label": "Color",
-            "description": "Configure which color will be displayed when a button is pressed",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 65280,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "39": {
-            "label": "Low battery value",
-            "description": "Set the low battery value",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 50,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Reset the WallMote Quad",
-            "description": "Reset the WallMote Quad to factory default.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Reset to factory default",
-                    "value": 0
-                },
-                {
-                    "label": "Reset and remove",
-                    "value": 1431655765
-                }
-            ]
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW129",
+	"description": "Dual Wallmote",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0081"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x0081"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x0081"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"description": "Z-Wave Plus Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button 1 basic",
+			"description": "On/off control via button 1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Button 1 multilevel",
+			"description": "Dim control via button 1",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Button 2 basic",
+			"description": "On/off control via button 2",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Button 2 multilevel",
+			"description": "Dim control via button 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Touch sound",
+			"description": "Enable/disable the touch sound.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Touch vibration",
+			"description": "Enable/disable the touch vibration.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Button slide",
+			"description": "Enable/disable the function of button slide.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Notification report",
+			"description": "Which notification to be sent to the associated devices.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central scene",
+					"value": 1
+				},
+				{
+					"label": "Central scene and config",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Color",
+			"description": "Configure which color will be displayed when a button is pressed",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 65280,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39": {
+			"label": "Low battery value",
+			"description": "Set the low battery value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Reset the WallMote Quad",
+			"description": "Reset the WallMote Quad to factory default.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset to factory default",
+					"value": 0
+				},
+				{
+					"label": "Reset and remove",
+					"value": 1431655765
+				}
+			]
+		}
+	}
 }

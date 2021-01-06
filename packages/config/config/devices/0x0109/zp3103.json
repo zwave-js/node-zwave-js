@@ -1,29 +1,25 @@
 // Vision Security ZP3103
 // Shock Sensor
 {
-    "_approved": true,
-    "_warnings": [
-        "Overview information is not set"
-    ],
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZP3103",
-    "description": "Shock Sensor",
-    "devices": [
-        {
-            "productType": "0x2003",
-            "productId": "0x0302"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZP3103",
+	"description": "Shock Sensor",
+	"devices": [
+		{
+			"productType": "0x2003",
+			"productId": "0x0302"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

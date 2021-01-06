@@ -1,358 +1,357 @@
 // Allegion BE469
 // Touchscreen Deadbolt
 {
-    "_approved": true,
-    "manufacturer": "Allegion",
-    "manufacturerId": "0x003b",
-    "label": "BE469",
-    "description": "Touchscreen Deadbolt",
-    "devices": [
-        {
-            "productType": "0x6341",
-            "productId": "0x5044"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Alarm Reports",
-            "maxNodes": 2,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "3": {
-            "label": "Beeper",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Beeper",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Beeper",
-                    "value": 255
-                }
-            ]
-        },
-        "4": {
-            "label": "Vacation Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Vacation Mode",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Vacation Mode",
-                    "value": 255
-                }
-            ]
-        },
-        "5": {
-            "label": "Lock & Leave",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Lock & Leave",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Lock & Leave",
-                    "value": 255
-                }
-            ]
-        },
-        "6": {
-            "label": "User Slot Status",
-            "description": "User slot status",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Lock Specific Alarm Mode",
-            "description": "BE469 Only",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Alarm Off",
-                    "value": 0
-                },
-                {
-                    "label": "Alert",
-                    "value": 1
-                },
-                {
-                    "label": "Tamper",
-                    "value": 2
-                },
-                {
-                    "label": "Forced Entry",
-                    "value": 3
-                }
-            ]
-        },
-        "8": {
-            "label": "Lock Specific Alarm Alert Sensitivity",
-            "unit": "BE469 Only",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Not Supported",
-                    "value": 0
-                },
-                {
-                    "label": "Most Sensitive",
-                    "value": 1
-                },
-                {
-                    "label": "More Sensitive",
-                    "value": 2
-                },
-                {
-                    "label": "Medium Sensitivity",
-                    "value": 3
-                },
-                {
-                    "label": "Less Sensitive",
-                    "value": 4
-                },
-                {
-                    "label": "Least Sensitive",
-                    "value": 5
-                }
-            ]
-        },
-        "9": {
-            "label": "Lock Specific Alarm Tamper Sensitivity",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Not Supported",
-                    "value": 0
-                },
-                {
-                    "label": "Most Sensitive",
-                    "value": 1
-                },
-                {
-                    "label": "More Sensitive",
-                    "value": 2
-                },
-                {
-                    "label": "Medium Sensitivity",
-                    "value": 3
-                },
-                {
-                    "label": "Less Sensitive",
-                    "value": 4
-                },
-                {
-                    "label": "Least Sensitive",
-                    "value": 5
-                }
-            ]
-        },
-        "10": {
-            "label": "Lock Specific Alarm Kick Sensitivity",
-            "description": "BE469 Only",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Not Supported",
-                    "value": 0
-                },
-                {
-                    "label": "Most Sensitive",
-                    "value": 1
-                },
-                {
-                    "label": "More Sensitive",
-                    "value": 2
-                },
-                {
-                    "label": "Medium Sensitivity",
-                    "value": 3
-                },
-                {
-                    "label": "Less Sensitive",
-                    "value": 4
-                },
-                {
-                    "label": "Least Sensitive",
-                    "value": 5
-                }
-            ]
-        },
-        "11": {
-            "label": "Lock Specific Alarm Disable—Local Controls",
-            "unit": "BE469 Only",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Local Control",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Local Control",
-                    "value": 255
-                }
-            ]
-        },
-        "12": {
-            "label": "Electronic Transition Count",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Mechanical Transition Count",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "Electronic Failed Count",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Auto Lock",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Auto Lock",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Auto Lock",
-                    "value": 255
-                }
-            ]
-        },
-        "16": {
-            "label": "User Code PIN Length",
-            "description": "User Code PIN length, a value between 4 and 8 (default 4)",
-            "valueSize": 1,
-            "minValue": 4,
-            "maxValue": 8,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Four Digits",
-                    "value": 4
-                },
-                {
-                    "label": "Five Digits",
-                    "value": 5
-                },
-                {
-                    "label": "Six Digits",
-                    "value": 6
-                },
-                {
-                    "label": "Seven Digits",
-                    "value": 7
-                },
-                {
-                    "label": "Eight Digits",
-                    "value": 8
-                }
-            ]
-        },
-        "18": {
-            "label": "Get Bootloader Version",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Allegion",
+	"manufacturerId": "0x003b",
+	"label": "BE469",
+	"description": "Touchscreen Deadbolt",
+	"devices": [
+		{
+			"productType": "0x6341",
+			"productId": "0x5044"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Alarm Reports",
+			"maxNodes": 2,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Beeper",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Beeper",
+					"value": 0
+				},
+				{
+					"label": "Enable Beeper",
+					"value": 255
+				}
+			]
+		},
+		"4": {
+			"label": "Vacation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Vacation Mode",
+					"value": 0
+				},
+				{
+					"label": "Enable Vacation Mode",
+					"value": 255
+				}
+			]
+		},
+		"5": {
+			"label": "Lock & Leave",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Lock & Leave",
+					"value": 0
+				},
+				{
+					"label": "Enable Lock & Leave",
+					"value": 255
+				}
+			]
+		},
+		"6": {
+			"label": "User Slot Status",
+			"description": "User slot status",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Lock Specific Alarm Mode",
+			"description": "BE469 Only",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Alarm Off",
+					"value": 0
+				},
+				{
+					"label": "Alert",
+					"value": 1
+				},
+				{
+					"label": "Tamper",
+					"value": 2
+				},
+				{
+					"label": "Forced Entry",
+					"value": 3
+				}
+			]
+		},
+		"8": {
+			"label": "Lock Specific Alarm Alert Sensitivity",
+			"unit": "BE469 Only",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Not Supported",
+					"value": 0
+				},
+				{
+					"label": "Most Sensitive",
+					"value": 1
+				},
+				{
+					"label": "More Sensitive",
+					"value": 2
+				},
+				{
+					"label": "Medium Sensitivity",
+					"value": 3
+				},
+				{
+					"label": "Less Sensitive",
+					"value": 4
+				},
+				{
+					"label": "Least Sensitive",
+					"value": 5
+				}
+			]
+		},
+		"9": {
+			"label": "Lock Specific Alarm Tamper Sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Not Supported",
+					"value": 0
+				},
+				{
+					"label": "Most Sensitive",
+					"value": 1
+				},
+				{
+					"label": "More Sensitive",
+					"value": 2
+				},
+				{
+					"label": "Medium Sensitivity",
+					"value": 3
+				},
+				{
+					"label": "Less Sensitive",
+					"value": 4
+				},
+				{
+					"label": "Least Sensitive",
+					"value": 5
+				}
+			]
+		},
+		"10": {
+			"label": "Lock Specific Alarm Kick Sensitivity",
+			"description": "BE469 Only",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Not Supported",
+					"value": 0
+				},
+				{
+					"label": "Most Sensitive",
+					"value": 1
+				},
+				{
+					"label": "More Sensitive",
+					"value": 2
+				},
+				{
+					"label": "Medium Sensitivity",
+					"value": 3
+				},
+				{
+					"label": "Less Sensitive",
+					"value": 4
+				},
+				{
+					"label": "Least Sensitive",
+					"value": 5
+				}
+			]
+		},
+		"11": {
+			"label": "Lock Specific Alarm Disable—Local Controls",
+			"unit": "BE469 Only",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Local Control",
+					"value": 0
+				},
+				{
+					"label": "Enable Local Control",
+					"value": 255
+				}
+			]
+		},
+		"12": {
+			"label": "Electronic Transition Count",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Mechanical Transition Count",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Electronic Failed Count",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Auto Lock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Auto Lock",
+					"value": 0
+				},
+				{
+					"label": "Enable Auto Lock",
+					"value": 255
+				}
+			]
+		},
+		"16": {
+			"label": "User Code PIN Length",
+			"description": "User Code PIN length, a value between 4 and 8 (default 4)",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 8,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Four Digits",
+					"value": 4
+				},
+				{
+					"label": "Five Digits",
+					"value": 5
+				},
+				{
+					"label": "Six Digits",
+					"value": 6
+				},
+				{
+					"label": "Seven Digits",
+					"value": 7
+				},
+				{
+					"label": "Eight Digits",
+					"value": 8
+				}
+			]
+		},
+		"18": {
+			"label": "Get Bootloader Version",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

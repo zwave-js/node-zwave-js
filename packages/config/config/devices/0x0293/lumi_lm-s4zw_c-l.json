@@ -1,26 +1,19 @@
 // Home controls Lumi LM-S4ZW (C-L)
 // Z-Wave Switch with 2 on/off light switches and 2 up/down blinds switches
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!",
-        "Endpoint 1 contains both switch and dimmer channels. It probably should only include dimmer!",
-        "Endpoint 2 contains both switch and dimmer channels. It probably should only include dimmer!",
-        "Endpoint 3 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Home controls",
-    "manufacturerId": "0x0293",
-    "label": "Lumi LM-S4ZW (C-L)",
-    "description": "Z-Wave Switch with 2 on/off light switches and 2 up/down blinds switches",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0024"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Home controls",
+	"manufacturerId": "0x0293",
+	"label": "Lumi LM-S4ZW (C-L)",
+	"description": "Z-Wave Switch with 2 on/off light switches and 2 up/down blinds switches",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0024"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

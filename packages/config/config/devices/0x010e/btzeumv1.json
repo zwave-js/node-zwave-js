@@ -1,20 +1,19 @@
 // Poly-control BTZEUMV1
 // Danalock Universal Module V1
 {
-    "_approved": true,
-    "manufacturer": "Poly-control",
-    "manufacturerId": "0x010e",
-    "label": "BTZEUMV1",
-    "description": "Danalock Universal Module V1",
-    "devices": [
-        {
-            "productType": "0x0008",
-            "productId": "0x0004"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Poly-control",
+	"manufacturerId": "0x010e",
+	"label": "BTZEUMV1",
+	"description": "Danalock Universal Module V1",
+	"devices": [
+		{
+			"productType": "0x0008",
+			"productId": "0x0004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

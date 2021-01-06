@@ -1,536 +1,535 @@
 // Building 36 Technologies ADC-T 2000
 // Alarm.com Smart Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Building 36 Technologies",
-    "manufacturerId": "0x0190",
-    "label": "ADC-T 2000",
-    "description": "Alarm.com Smart Thermostat",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "HVAC System Type",
-            "description": "Configures the type of heating system used.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Heat Pump",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Number of Heat Stages",
-            "description": "Heat Stages 0-3 Default is 2.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Number of Cool Stages",
-            "description": "Cool Stages 0-2 Default is 2.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Heat Fuel Type",
-            "description": "Choose type of fuel. Reality - whether unit is boiler vs forced air.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Fossil Fuel",
-                    "value": 0
-                },
-                {
-                    "label": "Electric",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Calibration Temperature",
-            "description": "Calibration Temperature Range (in deg. F) Precision is tenths of a degree.",
-            "valueSize": 4,
-            "minValue": -100,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Overshoot",
-            "description": "Overshoot Range (in deg. F) Precision is tenths of a degree. Default is 5.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 30,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Swing",
-            "description": "Swing Range (in deg. F) Precision is tenths of a degree.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 30,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Heat Staging Delay",
-            "description": "Heat Staging Delay (in min)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 60,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Cool Staging Delay",
-            "description": "Cool Staging Delay (in min)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 60,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Balance Setpoint",
-            "description": "Balance Setpont Range (in deg. F) Precision is tenths of a degree.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 950,
-            "defaultValue": 350,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Recovery Settings",
-            "description": "Whether thermostat uses intelligence to try and make the best of energy usage.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Comfort",
-                    "value": 0
-                },
-                {
-                    "label": "Efficient",
-                    "value": 1
-                }
-            ]
-        },
-        "12": {
-            "label": "Fan Circulation Period",
-            "description": "Fan Circulation Period (in min)",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 240,
-            "defaultValue": 20,
+	"manufacturer": "Building 36 Technologies",
+	"manufacturerId": "0x0190",
+	"label": "ADC-T 2000",
+	"description": "Alarm.com Smart Thermostat",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "HVAC System Type",
+			"description": "Configures the type of heating system used.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Heat Pump",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Number of Heat Stages",
+			"description": "Heat Stages 0-3 Default is 2.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Number of Cool Stages",
+			"description": "Cool Stages 0-2 Default is 2.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Heat Fuel Type",
+			"description": "Choose type of fuel. Reality - whether unit is boiler vs forced air.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Fossil Fuel",
+					"value": 0
+				},
+				{
+					"label": "Electric",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Calibration Temperature",
+			"description": "Calibration Temperature Range (in deg. F) Precision is tenths of a degree.",
+			"valueSize": 4,
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Overshoot",
+			"description": "Overshoot Range (in deg. F) Precision is tenths of a degree. Default is 5.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Swing",
+			"description": "Swing Range (in deg. F) Precision is tenths of a degree.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Heat Staging Delay",
+			"description": "Heat Staging Delay (in min)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Cool Staging Delay",
+			"description": "Cool Staging Delay (in min)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Balance Setpoint",
+			"description": "Balance Setpont Range (in deg. F) Precision is tenths of a degree.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 950,
+			"defaultValue": 350,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Recovery Settings",
+			"description": "Whether thermostat uses intelligence to try and make the best of energy usage.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Comfort",
+					"value": 0
+				},
+				{
+					"label": "Efficient",
+					"value": 1
+				}
+			]
+		},
+		"12": {
+			"label": "Fan Circulation Period",
+			"description": "Fan Circulation Period (in min)",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 240,
+			"defaultValue": 20,
 			"unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Fan Circulation Duty Cycle",
-            "description": "Duty Cycle (percentage)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 25,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "Fan Purge Time",
-            "description": "Purge Time (in s)",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 3600,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Maximum Heat Setpoint",
-            "description": "Max Heat Setpoint Range (in deg. F) Precision is tenths of a degree.",
-            "valueSize": 4,
-            "minValue": 350,
-            "maxValue": 950,
-            "defaultValue": 950,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "Minimum Heat Setpoint",
-            "description": "Min Heat Setpoint Range (in deg. F) Precision is tenths of a degree.",
-            "valueSize": 4,
-            "minValue": 350,
-            "maxValue": 950,
-            "defaultValue": 350,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17": {
-            "label": "Maximum Cool Setpoint",
-            "description": "Max Cool Setpoint Range(in deg. F) Precision is tenths of a degree.",
-            "valueSize": 4,
-            "minValue": 500,
-            "maxValue": 950,
-            "defaultValue": 950,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "Minimum Cool Setpoint",
-            "description": "Min Cool Setpoint (in deg. F) Precision is tenths of a degree.",
-            "valueSize": 4,
-            "minValue": 500,
-            "maxValue": 950,
-            "defaultValue": 500,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19": {
-            "label": "Thermostat Lock",
-            "description": "Lock out physical thermostat controls.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "20": {
-            "label": "Compressor Delay",
-            "description": "Compressor Delay (in min)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 60,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "Demand Response Period",
-            "description": "Demand Response Period (in min)",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 240,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "Demand Response Duty Cycle",
-            "description": "Demand Response Duty Cycle (percentage)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 25,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "23": {
-            "label": "Temperature Display Units",
-            "description": "Celsius or Farenheit for temperature display.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Celsius",
-                    "value": 0
-                },
-                {
-                    "label": "Farenheit",
-                    "value": 1
-                }
-            ]
-        },
-        "24": {
-            "label": "HVAC Modes Enabled",
-            "description": "Which heating/cooling modes are available.",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 31,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off, Heat",
-                    "value": 3
-                },
-                {
-                    "label": "Off, Cool",
-                    "value": 5
-                },
-                {
-                    "label": "Off, Heat, Cool",
-                    "value": 7
-                },
-                {
-                    "label": "Off, Heat, Cool, Auto (Default)",
-                    "value": 15
-                },
-                {
-                    "label": "Off, Heat, Emergency Heat",
-                    "value": 19
-                },
-                {
-                    "label": "Off, Heat, Cool, Emergency Heat",
-                    "value": 23
-                },
-                {
-                    "label": "Off, Heat, Cool, Auto, Emergency Heat",
-                    "value": 31
-                }
-            ]
-        },
-        "25": {
-            "label": "Configurable Terminal Setting",
-            "description": "Changes control of configurable terminal",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "W3",
-                    "value": 1
-                },
-                {
-                    "label": "H",
-                    "value": 2
-                },
-                {
-                    "label": "DH",
-                    "value": 3
-                }
-            ]
-        },
-        "26": {
-            "label": "Power Source",
-            "description": "Which source of power is utilized.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Battery",
-                    "value": 0
-                },
-                {
-                    "label": "C-Wire",
-                    "value": 1
-                }
-            ]
-        },
-        "27": {
-            "label": "Battery Alert Threshold Low",
-            "description": "Battery Alert Range (percentage)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "28": {
-            "label": "Battery Alert Threshold Very Low",
-            "description": "Very Low Battery Alert Range (percentage)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "30": {
-            "label": "Remote Temperature Enable",
-            "description": "Enables remote temperature sensor instead of built-in.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "31": {
-            "label": "Heat Differential",
-            "description": "Heat Differential (in deg. F) Precision is tenths of a degree.",
-            "valueSize": 4,
-            "minValue": 10,
-            "maxValue": 100,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "32": {
-            "label": "Cool Differential",
-            "description": "Cool Differential (in deg. F) Precision is tenths of a degree.",
-            "valueSize": 4,
-            "minValue": 10,
-            "maxValue": 100,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "33": {
-            "label": "Temperature Reporting Threshold",
-            "description": "Temperature Reporting Range (in deg. F) Precision is tenths of a degree.",
-            "valueSize": 4,
-            "minValue": 5,
-            "maxValue": 20,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "34": {
-            "label": "O/B Select",
-            "description": "Configuration of O/B terminal.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "O/B as B",
-                    "value": 0
-                },
-                {
-                    "label": "O/B as O",
-                    "value": 1
-                }
-            ]
-        },
-        "35": {
-            "label": "Z-Wave Echo Association Reports",
-            "description": "Enable/Disabled Echo Assoc. Reports.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Fan Circulation Duty Cycle",
+			"description": "Duty Cycle (percentage)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 25,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Fan Purge Time",
+			"description": "Purge Time (in s)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 3600,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Maximum Heat Setpoint",
+			"description": "Max Heat Setpoint Range (in deg. F) Precision is tenths of a degree.",
+			"valueSize": 4,
+			"minValue": 350,
+			"maxValue": 950,
+			"defaultValue": 950,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Minimum Heat Setpoint",
+			"description": "Min Heat Setpoint Range (in deg. F) Precision is tenths of a degree.",
+			"valueSize": 4,
+			"minValue": 350,
+			"maxValue": 950,
+			"defaultValue": 350,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "Maximum Cool Setpoint",
+			"description": "Max Cool Setpoint Range(in deg. F) Precision is tenths of a degree.",
+			"valueSize": 4,
+			"minValue": 500,
+			"maxValue": 950,
+			"defaultValue": 950,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Minimum Cool Setpoint",
+			"description": "Min Cool Setpoint (in deg. F) Precision is tenths of a degree.",
+			"valueSize": 4,
+			"minValue": 500,
+			"maxValue": 950,
+			"defaultValue": 500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Thermostat Lock",
+			"description": "Lock out physical thermostat controls.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "Compressor Delay",
+			"description": "Compressor Delay (in min)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Demand Response Period",
+			"description": "Demand Response Period (in min)",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 240,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Demand Response Duty Cycle",
+			"description": "Demand Response Duty Cycle (percentage)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 25,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "Temperature Display Units",
+			"description": "Celsius or Farenheit for temperature display.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Farenheit",
+					"value": 1
+				}
+			]
+		},
+		"24": {
+			"label": "HVAC Modes Enabled",
+			"description": "Which heating/cooling modes are available.",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 31,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off, Heat",
+					"value": 3
+				},
+				{
+					"label": "Off, Cool",
+					"value": 5
+				},
+				{
+					"label": "Off, Heat, Cool",
+					"value": 7
+				},
+				{
+					"label": "Off, Heat, Cool, Auto (Default)",
+					"value": 15
+				},
+				{
+					"label": "Off, Heat, Emergency Heat",
+					"value": 19
+				},
+				{
+					"label": "Off, Heat, Cool, Emergency Heat",
+					"value": 23
+				},
+				{
+					"label": "Off, Heat, Cool, Auto, Emergency Heat",
+					"value": 31
+				}
+			]
+		},
+		"25": {
+			"label": "Configurable Terminal Setting",
+			"description": "Changes control of configurable terminal",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "W3",
+					"value": 1
+				},
+				{
+					"label": "H",
+					"value": 2
+				},
+				{
+					"label": "DH",
+					"value": 3
+				}
+			]
+		},
+		"26": {
+			"label": "Power Source",
+			"description": "Which source of power is utilized.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Battery",
+					"value": 0
+				},
+				{
+					"label": "C-Wire",
+					"value": 1
+				}
+			]
+		},
+		"27": {
+			"label": "Battery Alert Threshold Low",
+			"description": "Battery Alert Range (percentage)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"28": {
+			"label": "Battery Alert Threshold Very Low",
+			"description": "Very Low Battery Alert Range (percentage)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"label": "Remote Temperature Enable",
+			"description": "Enables remote temperature sensor instead of built-in.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"31": {
+			"label": "Heat Differential",
+			"description": "Heat Differential (in deg. F) Precision is tenths of a degree.",
+			"valueSize": 4,
+			"minValue": 10,
+			"maxValue": 100,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Cool Differential",
+			"description": "Cool Differential (in deg. F) Precision is tenths of a degree.",
+			"valueSize": 4,
+			"minValue": 10,
+			"maxValue": 100,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "Temperature Reporting Threshold",
+			"description": "Temperature Reporting Range (in deg. F) Precision is tenths of a degree.",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 20,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "O/B Select",
+			"description": "Configuration of O/B terminal.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "O/B as B",
+					"value": 0
+				},
+				{
+					"label": "O/B as O",
+					"value": 1
+				}
+			]
+		},
+		"35": {
+			"label": "Z-Wave Echo Association Reports",
+			"description": "Enable/Disabled Echo Assoc. Reports.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

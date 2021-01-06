@@ -1,26 +1,25 @@
 // Sigma Designs (Former Zensys) PS9EP
 // Z-wave 9 channel_module
 {
-    "_approved": true,
-    "manufacturer": "Sigma Designs (Former Zensys)",
-    "manufacturerId": "0x0000",
-    "label": "PS9EP",
-    "description": "Z-wave 9 channel_module",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x000b"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Sigma Designs (Former Zensys)",
+	"manufacturerId": "0x0000",
+	"label": "PS9EP",
+	"description": "Z-wave 9 channel_module",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x000b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

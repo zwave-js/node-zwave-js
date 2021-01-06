@@ -1,7 +1,6 @@
 // Fibargroup FGDW002
 // Fibaro Door Window Sensor 2
 {
-	"_approved": true,
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGDW002",

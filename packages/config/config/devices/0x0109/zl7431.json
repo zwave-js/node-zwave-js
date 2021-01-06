@@ -1,54 +1,53 @@
 // Vision Security ZL7431
 // In Wall Relay Switch
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZL7431",
-    "description": "In Wall Relay Switch",
-    "devices": [
-        {
-            "productType": "0x200c",
-            "productId": "0x0c02"
-        },
-        {
-            "productType": "0x2016",
-            "productId": "0x1616"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Update Controller",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Indicator Light",
-            "description": "Indicator Light",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "without Indicator Light",
-                    "value": 1
-                },
-                {
-                    "label": "with Indicator Light",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZL7431",
+	"description": "In Wall Relay Switch",
+	"devices": [
+		{
+			"productType": "0x200c",
+			"productId": "0x0c02"
+		},
+		{
+			"productType": "0x2016",
+			"productId": "0x1616"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Update Controller",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Indicator Light",
+			"description": "Indicator Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "without Indicator Light",
+					"value": 1
+				},
+				{
+					"label": "with Indicator Light",
+					"value": 2
+				}
+			]
+		}
+	}
 }

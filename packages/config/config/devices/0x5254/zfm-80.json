@@ -1,7 +1,6 @@
 // Remotec ZFM-80
 // Fixture Switch Module
 {
-	"_approved": true,
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
 	"label": "ZFM-80",

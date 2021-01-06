@@ -1,19 +1,18 @@
 // Vision Security ZM1701
 // Monoprice keypad door lock
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZM1701",
-    "description": "Monoprice keypad door lock",
-    "devices": [
-        {
-            "productType": "0x2006",
-            "productId": "0x0621"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZM1701",
+	"description": "Monoprice keypad door lock",
+	"devices": [
+		{
+			"productType": "0x2006",
+			"productId": "0x0621"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

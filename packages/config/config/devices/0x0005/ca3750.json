@@ -1,19 +1,18 @@
 // Intermatic CA3750
 // Contactor/Switch
 {
-    "_approved": true,
-    "manufacturer": "Intermatic",
-    "manufacturerId": "0x0005",
-    "label": "CA3750",
-    "description": "Contactor/Switch",
-    "devices": [
-        {
-            "productType": "0x4341",
-            "productId": "0x3750"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Intermatic",
+	"manufacturerId": "0x0005",
+	"label": "CA3750",
+	"description": "Contactor/Switch",
+	"devices": [
+		{
+			"productType": "0x4341",
+			"productId": "0x3750"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

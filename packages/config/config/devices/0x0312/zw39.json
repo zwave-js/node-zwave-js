@@ -1,20 +1,19 @@
 // NIE Technology Co., Ltd. ZW39
 // Dimmable Smart Plug
 {
-    "_approved": true,
-    "manufacturer": "NIE Technology Co., Ltd.",
-    "manufacturerId": "0x0312",
-    "label": "ZW39",
-    "description": "Dimmable Smart Plug",
-    "devices": [
-        {
-            "productType": "0xc000",
-            "productId": "0xc002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "ZW39",
+	"description": "Dimmable Smart Plug",
+	"devices": [
+		{
+			"productType": "0xc000",
+			"productId": "0xc002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

@@ -1,26 +1,25 @@
 // Monoprice 10795
 // Door Window Sensor
 {
-    "_approved": true,
-    "manufacturer": "Monoprice",
-    "manufacturerId": "0x0202",
-    "label": "10795",
-    "description": "Door Window Sensor",
-    "devices": [
-        {
-            "productType": "0x2001",
-            "productId": "0x0102"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Controller Updates",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Monoprice",
+	"manufacturerId": "0x0202",
+	"label": "10795",
+	"description": "Door Window Sensor",
+	"devices": [
+		{
+			"productType": "0x2001",
+			"productId": "0x0102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Controller Updates",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

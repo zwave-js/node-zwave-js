@@ -1,33 +1,32 @@
 // Jasco Products 32563
 // Smart Door Sensor
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "32563",
-    "description": "Smart Door Sensor",
-    "devices": [
-        {
-            "productType": "0x4953",
-            "productId": "0x3032"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "20": {
-            "label": "Report Method",
-            "description": "Change Open/Close Report Method",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "32563",
+	"description": "Smart Door Sensor",
+	"devices": [
+		{
+			"productType": "0x4953",
+			"productId": "0x3032"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"20": {
+			"label": "Report Method",
+			"description": "Change Open/Close Report Method",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

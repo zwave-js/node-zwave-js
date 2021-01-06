@@ -1,58 +1,57 @@
 // Nortek Security & Control LLC GoControl Smart Irrigation Controller
 // Sprinkler Controller Supporting Flow Sensors, Rain Sensors and Moisture Sensors
 {
-    "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "GoControl Smart Irrigation Controller",
-    "description": "Sprinkler Controller Supporting Flow Sensors, Rain Sensors and Moisture Sensors",
-    "devices": [
-        {
-            "productType": "0x5749",
-            "productId": "0x3135"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "2": {
-            "label": "Master Valve Delay",
-            "description": "Delay in seconds",
-            "unit": "Number",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Flow Sensor K value",
-            "description": "Unique to flow sensor",
-            "unit": "Number",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Flow Sensor Offset value",
-            "description": "Unique to the flow sensor",
-            "unit": "Number",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "GoControl Smart Irrigation Controller",
+	"description": "Sprinkler Controller Supporting Flow Sensors, Rain Sensors and Moisture Sensors",
+	"devices": [
+		{
+			"productType": "0x5749",
+			"productId": "0x3135"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "Master Valve Delay",
+			"description": "Delay in seconds",
+			"unit": "Number",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Flow Sensor K value",
+			"description": "Unique to flow sensor",
+			"unit": "Number",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Flow Sensor Offset value",
+			"description": "Unique to the flow sensor",
+			"unit": "Number",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

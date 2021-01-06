@@ -1,7 +1,6 @@
 // Eaton RF9540-N
 // All Load Dimmer Light Switch
 {
-	"_approved": true,
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RF9540-N",

@@ -1,11 +1,6 @@
 // Jasco Products ZW3102
 // Jasco Energy Monitoring Lamp Dimmer
 {
-	"_approved": true,
-	"_warnings": [
-		"Inclusion information is not set",
-		"Exclusion information is not set"
-	],
 	"manufacturer": "Jasco Products",
 	"manufacturerId": "0x0063",
 	"label": "ZW3102",

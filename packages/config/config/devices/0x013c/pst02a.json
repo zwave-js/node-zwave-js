@@ -1,230 +1,229 @@
 // Philio Technology Corp PST02A
 // Slim Multi-Sensor (PIR/Door/Temperature/Illumination)
 {
-    "_approved": true,
-    "manufacturer": "Philio Technology Corp",
-    "manufacturerId": "0x013c",
-    "label": "PST02A",
-    "description": "Slim Multi-Sensor (PIR/Door/Temperature/Illumination)",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x000c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "2": {
-            "label": "Basic Set Level",
-            "description": "Setting the BASIC command value to turn on the light.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 100,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Turn light OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Turn light ON",
-                    "value": 255
-                }
-            ]
-        },
-        "3": {
-            "label": "PIR Sensitivity",
-            "description": "PIR Sensitivity setting.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 70,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable Motion Detection",
-                    "value": 0
-                }
-            ]
-        },
-        "4": {
-            "label": "Light Threshold",
-            "description": "Illumination threshold for turning on associated lights.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable Illumination Detection",
-                    "value": 0
-                }
-            ]
-        },
-        "5": {
-            "label": "Operation Mode",
-            "description": "Mode of operation and enabled multisensor functions",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Set Celsius",
-                    "value": 8
-                },
-                {
-                    "label": "Preset: Celsius and LED on = Bits: 00001010 = 10",
-                    "value": 10
-                }
-            ]
-        },
-        "6": {
-            "label": "Multi-Sensor Function Switch",
-            "description": "Enable or disable functions of the multisensor.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Customer Function",
-            "description": "Enable or disable functions of the multisensor.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Setting: 0010100",
-                    "value": 20
-                },
-                {
-                    "label": "Setting: 00010110",
-                    "value": 22
-                }
-            ]
-        },
-        "8": {
-            "label": "PIR Re-Detect Interval Time",
-            "description": "Time period to wait until reporting motion detected again.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Turn Off Light Time",
-            "description": "Time to wait before sending command to turn off lights",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Auto Report Battery Time",
-            "description": "The interval time for auto reporting the battery level.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Auto Report Door/Window State Time",
-            "description": "The interval time for auto reporting the door/window state",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Auto Report Illumination Time",
-            "description": "The interval time for auto reporting the illumination state",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Auto Report Temperature Time",
-            "description": "The interval time for auto reporting the temperature state",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Auto Report Tick Interval",
-            "description": "The interval time for each auto report tick.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 30,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "Temperature Differential Report",
-            "description": "The temperature differential to report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "Illumination Differential Report",
-            "description": "The illumination differential to report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PST02A",
+	"description": "Slim Multi-Sensor (PIR/Door/Temperature/Illumination)",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x000c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "Basic Set Level",
+			"description": "Setting the BASIC command value to turn on the light.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Turn light OFF",
+					"value": 0
+				},
+				{
+					"label": "Turn light ON",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "PIR Sensitivity",
+			"description": "PIR Sensitivity setting.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 70,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable Motion Detection",
+					"value": 0
+				}
+			]
+		},
+		"4": {
+			"label": "Light Threshold",
+			"description": "Illumination threshold for turning on associated lights.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable Illumination Detection",
+					"value": 0
+				}
+			]
+		},
+		"5": {
+			"label": "Operation Mode",
+			"description": "Mode of operation and enabled multisensor functions",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Set Celsius",
+					"value": 8
+				},
+				{
+					"label": "Preset: Celsius and LED on = Bits: 00001010 = 10",
+					"value": 10
+				}
+			]
+		},
+		"6": {
+			"label": "Multi-Sensor Function Switch",
+			"description": "Enable or disable functions of the multisensor.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Customer Function",
+			"description": "Enable or disable functions of the multisensor.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Setting: 0010100",
+					"value": 20
+				},
+				{
+					"label": "Setting: 00010110",
+					"value": 22
+				}
+			]
+		},
+		"8": {
+			"label": "PIR Re-Detect Interval Time",
+			"description": "Time period to wait until reporting motion detected again.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Turn Off Light Time",
+			"description": "Time to wait before sending command to turn off lights",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Auto Report Battery Time",
+			"description": "The interval time for auto reporting the battery level.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Auto Report Door/Window State Time",
+			"description": "The interval time for auto reporting the door/window state",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Auto Report Illumination Time",
+			"description": "The interval time for auto reporting the illumination state",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Auto Report Temperature Time",
+			"description": "The interval time for auto reporting the temperature state",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Auto Report Tick Interval",
+			"description": "The interval time for each auto report tick.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Temperature Differential Report",
+			"description": "The temperature differential to report.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Illumination Differential Report",
+			"description": "The illumination differential to report.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

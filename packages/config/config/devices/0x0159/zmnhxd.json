@@ -1,188 +1,187 @@
 // Qubino ZMNHXD
 // Qubino 3-Phase Smart Meter
 {
-    "_approved": true,
-    "manufacturer": "Qubino",
-    "manufacturerId": "0x0159",
-    "label": "ZMNHXD",
-    "description": "Qubino 3-Phase Smart Meter",
-    "devices": [
-        {
-            "productType": "0x0007",
-            "productId": "0x0054"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "7": {
-            "label": "Input switch (i1) function selection",
-            "description": "Available configuration parameters for input switch I1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "disabled",
-                    "value": 0
-                },
-                {
-                    "label": "IR ext relay ctrl – mono stable push btn",
-                    "value": 2
-                },
-                {
-                    "label": "IR external relay control – bi-stable switch",
-                    "value": 3
-                },
-                {
-                    "label": "External relay control – mono stable push button",
-                    "value": 4
-                },
-                {
-                    "label": "External relay control – bi-stable switch",
-                    "value": 5
-                }
-            ]
-        },
-        "40": {
-            "label": "Reporting on power change",
-            "description": "This parameter is valid for Active Powers Total, Phase1,  Phase2 and Phase3.",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "reporting disabled",
-                    "value": 0
-                }
-            ]
-        },
-        "42": {
-            "label": "Reporting on time interval",
-            "description": "Energy report time intervals",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 600,
-            "maxValue": 65535,
-            "defaultValue": 600,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "reporting disabled",
-                    "value": 0
-                }
-            ]
-        },
-        "43": {
-            "label": "Other Values - Reporting on time interval",
-            "description": "Energy reports for  Voltage, Current, Total Power Factor, Total Reactive Power",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 600,
-            "maxValue": 65535,
-            "defaultValue": 600,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "reporting disabled",
-                    "value": 0
-                }
-            ]
-        },
-        "100": {
-            "label": "Enable / Disable External IR relay (BICOM)",
-            "description": "Enable / Disable External IR relay (BICOM)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "External IR relay disabled",
-                    "value": 0
-                },
-                {
-                    "label": "IR relay enabled for all 3 phases",
-                    "value": 1
-                },
-                {
-                    "label": "IR relay enabled for Phase 1",
-                    "value": 2
-                }
-            ]
-        },
-        "101": {
-            "label": "Enable / Disable External relay (IKA)",
-            "description": "Enable / Disable External relay (IKA)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "External relay disabled",
-                    "value": 0
-                },
-                {
-                    "label": "External relay enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "106": {
-            "label": "maximum power threshold of all phases together",
-            "description": "maximum power threshold of all phases together",
-            "unit": "W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 60000,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "112": {
-            "label": "Power threshold – Delay before power on",
-            "description": "Power threshold – Delay before power on",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "External relay will not turn back on",
-                    "value": 0
-                }
-            ]
-        }
-    }
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHXD",
+	"description": "Qubino 3-Phase Smart Meter",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x0054"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"7": {
+			"label": "Input switch (i1) function selection",
+			"description": "Available configuration parameters for input switch I1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "disabled",
+					"value": 0
+				},
+				{
+					"label": "IR ext relay ctrl – mono stable push btn",
+					"value": 2
+				},
+				{
+					"label": "IR external relay control – bi-stable switch",
+					"value": 3
+				},
+				{
+					"label": "External relay control – mono stable push button",
+					"value": 4
+				},
+				{
+					"label": "External relay control – bi-stable switch",
+					"value": 5
+				}
+			]
+		},
+		"40": {
+			"label": "Reporting on power change",
+			"description": "This parameter is valid for Active Powers Total, Phase1,  Phase2 and Phase3.",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "reporting disabled",
+					"value": 0
+				}
+			]
+		},
+		"42": {
+			"label": "Reporting on time interval",
+			"description": "Energy report time intervals",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 600,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "reporting disabled",
+					"value": 0
+				}
+			]
+		},
+		"43": {
+			"label": "Other Values - Reporting on time interval",
+			"description": "Energy reports for  Voltage, Current, Total Power Factor, Total Reactive Power",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 600,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "reporting disabled",
+					"value": 0
+				}
+			]
+		},
+		"100": {
+			"label": "Enable / Disable External IR relay (BICOM)",
+			"description": "Enable / Disable External IR relay (BICOM)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "External IR relay disabled",
+					"value": 0
+				},
+				{
+					"label": "IR relay enabled for all 3 phases",
+					"value": 1
+				},
+				{
+					"label": "IR relay enabled for Phase 1",
+					"value": 2
+				}
+			]
+		},
+		"101": {
+			"label": "Enable / Disable External relay (IKA)",
+			"description": "Enable / Disable External relay (IKA)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "External relay disabled",
+					"value": 0
+				},
+				{
+					"label": "External relay enabled",
+					"value": 1
+				}
+			]
+		},
+		"106": {
+			"label": "maximum power threshold of all phases together",
+			"description": "maximum power threshold of all phases together",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"112": {
+			"label": "Power threshold – Delay before power on",
+			"description": "Power threshold – Delay before power on",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "External relay will not turn back on",
+					"value": 0
+				}
+			]
+		}
+	}
 }

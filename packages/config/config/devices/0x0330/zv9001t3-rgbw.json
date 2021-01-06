@@ -1,20 +1,19 @@
 // Sunricher ZV9001T3-RGBW
 // RGBW 3-Zone Wall Mount Touch Panel
 {
-    "_approved": true,
-    "manufacturer": "Sunricher",
-    "manufacturerId": "0x0330",
-    "label": "ZV9001T3-RGBW",
-    "description": "RGBW 3-Zone Wall Mount Touch Panel",
-    "devices": [
-        {
-            "productType": "0x0301",
-            "productId": "0xa105"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0330",
+	"label": "ZV9001T3-RGBW",
+	"description": "RGBW 3-Zone Wall Mount Touch Panel",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0xa105"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

@@ -1,182 +1,181 @@
 // Philio Technology Corp PAN16
 // Smart Energy Plug In Switch
 {
-    "_approved": true,
-    "manufacturer": "Philio Technology Corp",
-    "manufacturerId": "0x013c",
-    "label": "PAN16",
-    "description": "Smart Energy Plug In Switch",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0000"
-        },
-        {
-            "productType": "0x0001",
-            "productId": "0x0029"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "1.2",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Watt Meter Report Period",
-            "description": "Watt Meter Report Period",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 720,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "KWH Meter Report Period",
-            "description": "KWH Meter Report Period",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Threshold of current for Load caution",
-            "description": "Threshold of current for Load caution",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 1300,
-            "defaultValue": 1300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Threshold of KWh for Load caution",
-            "description": "Threshold of KWh for Load caution",
-            "unit": "Kwh",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 10000,
-            "defaultValue": 10000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Restore switch state mode",
-            "description": "Restore switch state mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch off",
-                    "value": 0
-                },
-                {
-                    "label": "Last switch state",
-                    "value": 1
-                },
-                {
-                    "label": "Switch on",
-                    "value": 2
-                }
-            ]
-        },
-        "6": {
-            "label": "Mode of Switch Off function",
-            "description": "Mode of Switch Off function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "LED indication mode",
-            "description": "LED indication mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Show switch state",
-                    "value": 1
-                },
-                {
-                    "label": "Show night mode",
-                    "value": 2
-                },
-                {
-                    "label": "One flash mode",
-                    "value": 3
-                }
-            ]
-        },
-        "8": {
-            "label": "Auto off timer",
-            "description": "Auto off timer",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "RF off command mode",
-            "description": "RF off command mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch off",
-                    "value": 0
-                },
-                {
-                    "label": "Ignore",
-                    "value": 1
-                },
-                {
-                    "label": "Switch toggle",
-                    "value": 2
-                },
-                {
-                    "label": "Switch on",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PAN16",
+	"description": "Smart Energy Plug In Switch",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0000"
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x0029"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.2",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Watt Meter Report Period",
+			"description": "Watt Meter Report Period",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 720,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "KWH Meter Report Period",
+			"description": "KWH Meter Report Period",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Threshold of current for Load caution",
+			"description": "Threshold of current for Load caution",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 1300,
+			"defaultValue": 1300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Threshold of KWh for Load caution",
+			"description": "Threshold of KWh for Load caution",
+			"unit": "Kwh",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10000,
+			"defaultValue": 10000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Restore switch state mode",
+			"description": "Restore switch state mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch off",
+					"value": 0
+				},
+				{
+					"label": "Last switch state",
+					"value": 1
+				},
+				{
+					"label": "Switch on",
+					"value": 2
+				}
+			]
+		},
+		"6": {
+			"label": "Mode of Switch Off function",
+			"description": "Mode of Switch Off function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "LED indication mode",
+			"description": "LED indication mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Show switch state",
+					"value": 1
+				},
+				{
+					"label": "Show night mode",
+					"value": 2
+				},
+				{
+					"label": "One flash mode",
+					"value": 3
+				}
+			]
+		},
+		"8": {
+			"label": "Auto off timer",
+			"description": "Auto off timer",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "RF off command mode",
+			"description": "RF off command mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch off",
+					"value": 0
+				},
+				{
+					"label": "Ignore",
+					"value": 1
+				},
+				{
+					"label": "Switch toggle",
+					"value": 2
+				},
+				{
+					"label": "Switch on",
+					"value": 3
+				}
+			]
+		}
+	}
 }

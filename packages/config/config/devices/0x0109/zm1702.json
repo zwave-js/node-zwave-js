@@ -1,27 +1,26 @@
 // Vision Security ZM1702
 // Door Lock with Handle
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZM1702",
-    "description": "Door Lock with Handle",
-    "devices": [
-        {
-            "productType": "0x2006",
-            "productId": "0x0620"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Report",
-            "description": "Target for Door Lock Operation Report commands",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZM1702",
+	"description": "Door Lock with Handle",
+	"devices": [
+		{
+			"productType": "0x2006",
+			"productId": "0x0620"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Report",
+			"description": "Target for Door Lock Operation Report commands",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

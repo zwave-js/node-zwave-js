@@ -1,42 +1,41 @@
 // FortrezZ LLC SSA1/SSA2
 // Siren and Strobe Alarm
 {
-    "_approved": true,
-    "manufacturer": "FortrezZ LLC",
-    "manufacturerId": "0x0084",
-    "label": "SSA1/SSA2",
-    "description": "Siren and Strobe Alarm",
-    "devices": [
-        {
-            "productType": "0x0311",
-            "productId": "0x010b"
-        },
-        {
-            "productType": "0x0313",
-            "productId": "0x0108"
-        },
-        {
-            "productType": "0x0313",
-            "productId": "0x010b"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Delay before accept of Basic Set Off",
-            "description": "Delay, from the time the siren-strobe turns on",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "FortrezZ LLC",
+	"manufacturerId": "0x0084",
+	"label": "SSA1/SSA2",
+	"description": "Siren and Strobe Alarm",
+	"devices": [
+		{
+			"productType": "0x0311",
+			"productId": "0x010b"
+		},
+		{
+			"productType": "0x0313",
+			"productId": "0x0108"
+		},
+		{
+			"productType": "0x0313",
+			"productId": "0x010b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Delay before accept of Basic Set Off",
+			"description": "Delay, from the time the siren-strobe turns on",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

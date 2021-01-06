@@ -1,7 +1,6 @@
 // ID Lock AS ID-150
 // Z wave module for ID Lock 150 and 101
 {
-	"_approved": true,
 	"manufacturer": "ID Lock AS",
 	"manufacturerId": "0x0373",
 	"label": "ID-150",

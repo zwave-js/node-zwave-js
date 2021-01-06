@@ -1,68 +1,67 @@
 // HomeSeer Technologies HS-WS100+
 // Scene Capable Wall Switch
 {
-    "_approved": true,
-    "manufacturer": "HomeSeer Technologies",
-    "manufacturerId": "0x000c",
-    "label": "HS-WS100+",
-    "description": "Scene Capable Wall Switch",
-    "devices": [
-        {
-            "productType": "0x4447",
-            "productId": "0x3033"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "Indicator LED",
-            "description": "Defines the behavior of the indicator LED.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED on when switch is OFF",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when switch is ON",
-                    "value": 1
-                },
-                {
-                    "label": "LED always off",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Orientation",
-            "description": "Controls the on/off orientation of the rocker switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Inverted",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-WS100+",
+	"description": "Scene Capable Wall Switch",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x3033"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "Indicator LED",
+			"description": "Defines the behavior of the indicator LED.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when switch is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED on when switch is ON",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Orientation",
+			"description": "Controls the on/off orientation of the rocker switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Inverted",
+					"value": 1
+				}
+			]
+		}
+	}
 }

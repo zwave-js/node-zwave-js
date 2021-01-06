@@ -1,220 +1,219 @@
 // Devolo MT02647
 // Motion Sensor
 {
-    "_approved": true,
-    "manufacturer": "Devolo",
-    "manufacturerId": "0x0175",
-    "label": "MT02647",
-    "description": "Motion Sensor",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x000d"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Reports",
-            "maxNodes": 8,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Light Control",
-            "maxNodes": 8
-        }
-    },
-    "paramInformation": {
-        "2": {
-            "label": "Basic Set Level",
-            "description": "Setting the BASIC command value to turn on the light.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 255
-                }
-            ]
-        },
-        "3": {
-            "label": "PIR Sensitivity",
-            "description": "Set the sensitivity for the PIR (Passive Infrared Sensor).",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 70,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "4": {
-            "label": "Light Threshold",
-            "description": "Set the illumination threshold to turn on the light.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "5": {
-            "label": "Operation Mode",
-            "description": "Parameter to set the Operation Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Multi-Sensor Function Switch",
-            "description": "Parameter to set the sensor functions.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Customer Function",
-            "description": "Parameter to set the Customer Function.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "PIR Re-Detect Interval Time",
-            "description": "Setting the re-detect time after motion detected",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Turn Off Light Time",
-            "description": "Setting delay time to turn off the light when no motion",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Auto Report Battery Time",
-            "description": "The interval time for auto reporting the battery level.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Auto Report Door/Window State Time",
-            "description": "Interval time for auto reporting the door/window state.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Auto Report Illumination Time",
-            "description": "The Interval time for auto reporting the illumination state.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Auto Report Temperature Time",
-            "description": "The interval time for auto reporting the temperature state.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Auto Report Tick Interval",
-            "description": "The interval time for each auto report tick.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 30,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "Temperature Differential Report",
-            "description": "The temperature differential to report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "Illumination Differential Report",
-            "description": "The illumination differential to report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Devolo",
+	"manufacturerId": "0x0175",
+	"label": "MT02647",
+	"description": "Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x000d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Reports",
+			"maxNodes": 8,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Light Control",
+			"maxNodes": 8
+		}
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Basic Set Level",
+			"description": "Setting the BASIC command value to turn on the light.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "PIR Sensitivity",
+			"description": "Set the sensitivity for the PIR (Passive Infrared Sensor).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 70,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"4": {
+			"label": "Light Threshold",
+			"description": "Set the illumination threshold to turn on the light.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"5": {
+			"label": "Operation Mode",
+			"description": "Parameter to set the Operation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Multi-Sensor Function Switch",
+			"description": "Parameter to set the sensor functions.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Customer Function",
+			"description": "Parameter to set the Customer Function.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "PIR Re-Detect Interval Time",
+			"description": "Setting the re-detect time after motion detected",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Turn Off Light Time",
+			"description": "Setting delay time to turn off the light when no motion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Auto Report Battery Time",
+			"description": "The interval time for auto reporting the battery level.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Auto Report Door/Window State Time",
+			"description": "Interval time for auto reporting the door/window state.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Auto Report Illumination Time",
+			"description": "The Interval time for auto reporting the illumination state.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Auto Report Temperature Time",
+			"description": "The interval time for auto reporting the temperature state.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Auto Report Tick Interval",
+			"description": "The interval time for each auto report tick.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Temperature Differential Report",
+			"description": "The temperature differential to report.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Illumination Differential Report",
+			"description": "The illumination differential to report.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

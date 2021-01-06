@@ -1,20 +1,19 @@
 // Zooz ZSE29
 // Outdoor Motion Sensor
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZSE29",
-    "description": "Outdoor Motion Sensor",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0005"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZSE29",
+	"description": "Outdoor Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0005"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

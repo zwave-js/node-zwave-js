@@ -1,93 +1,92 @@
 // TKB Home TZ78
 // In Wall Micro Switch
 {
-    "_approved": true,
-    "manufacturer": "TKB Home",
-    "manufacturerId": "0x0118",
-    "label": "TZ78",
-    "description": "In Wall Micro Switch",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0005"
-        },
-        {
-            "productType": "0x0121",
-            "productId": "0x0133"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Change the state of indicator light",
-            "description": "Default status of socket LED is on as indicator when the load is off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED ON when load is ON",
-                    "value": 0
-                },
-                {
-                    "label": "LED ON when load is OFF",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Memory Function",
-            "description": "Default with memory: the socket status is same as before when power on",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No state memory after pwr failure",
-                    "value": 0
-                },
-                {
-                    "label": "State memory after pwr failure",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Switch Mode",
-            "description": "Edge or Pulse mode or EdgeToggle mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Edge mode",
-                    "value": 1
-                },
-                {
-                    "label": "Pulse mode",
-                    "value": 2
-                },
-                {
-                    "label": "Edge-Toggle mode",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "TZ78",
+	"description": "In Wall Micro Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0005"
+		},
+		{
+			"productType": "0x0121",
+			"productId": "0x0133"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Change the state of indicator light",
+			"description": "Default status of socket LED is on as indicator when the load is off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is ON",
+					"value": 0
+				},
+				{
+					"label": "LED ON when load is OFF",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Memory Function",
+			"description": "Default with memory: the socket status is same as before when power on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No state memory after pwr failure",
+					"value": 0
+				},
+				{
+					"label": "State memory after pwr failure",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Switch Mode",
+			"description": "Edge or Pulse mode or EdgeToggle mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Edge mode",
+					"value": 1
+				},
+				{
+					"label": "Pulse mode",
+					"value": 2
+				},
+				{
+					"label": "Edge-Toggle mode",
+					"value": 3
+				}
+			]
+		}
+	}
 }

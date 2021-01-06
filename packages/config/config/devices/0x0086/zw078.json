@@ -1,7 +1,6 @@
 // AEON Labs ZW078
 // Heavy Duty Switch
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW078",

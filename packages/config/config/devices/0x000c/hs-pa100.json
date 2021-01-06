@@ -1,47 +1,46 @@
 // HomeSeer Technologies HS-PA100+
 // Appliance Module
 {
-    "_approved": true,
-    "manufacturer": "HomeSeer Technologies",
-    "manufacturerId": "0x000c",
-    "label": "HS-PA100+",
-    "description": "Appliance Module",
-    "devices": [
-        {
-            "productType": "0x4447",
-            "productId": "0x3031"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "Night Light",
-            "description": "Night Light",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED OFF when light is ON",
-                    "value": 0
-                },
-                {
-                    "label": "LED ON when light is OFF",
-                    "value": 1
-                },
-                {
-                    "label": "LED always OFF",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-PA100+",
+	"description": "Appliance Module",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x3031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "Night Light",
+			"description": "Night Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED OFF when light is ON",
+					"value": 0
+				},
+				{
+					"label": "LED ON when light is OFF",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				}
+			]
+		}
+	}
 }

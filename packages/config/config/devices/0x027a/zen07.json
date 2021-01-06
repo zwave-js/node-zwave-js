@@ -1,7 +1,6 @@
 // Zooz ZEN07
 // Mini Plug On / Off Module ZEN07
 {
-	"_approved": true,
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN07",

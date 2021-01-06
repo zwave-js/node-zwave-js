@@ -1,1741 +1,1740 @@
 // Aeotec Ltd. ZW164
 // Indoor Siren 6 and Doorbell 6
 {
-    "_approved": true,
-    "manufacturer": "Aeotec Ltd.",
-    "manufacturerId": "0x0371",
-    "label": "ZW164",
-    "description": "Indoor Siren 6 and Doorbell 6",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x00a2"
-        },
-        {
-            "productType": "0x0003",
-            "productId": "0x00a4"
-        },
-        {
-            "productType": "0x0103",
-            "productId": "0x00a2"
-        },
-        {
-            "productType": "0x0103",
-            "productId": "0x00a4"
-        },
-        {
-            "productType": "0x0203",
-            "productId": "0x00a4"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "32": {
-            "label": "Sending Basic Set to nodes in Group 2.",
-            "description": "Sending Basic Set to nodes in Group 2.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Don’t send Basic Set.",
-                    "value": 0
-                },
-                {
-                    "label": "Option 1",
-                    "value": 1
-                },
-                {
-                    "label": "Option 2",
-                    "value": 2
-                },
-                {
-                    "label": "Option 3 (default)",
-                    "value": 3
-                },
-                {
-                    "label": "Option 4",
-                    "value": 4
-                }
-            ]
-        },
-        "33": {
-            "label": "Sending Basic Set to nodes in Group 3 .",
-            "description": "Sending Basic Set to nodes in Group 3 .",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Don’t send Basic Set.",
-                    "value": 0
-                },
-                {
-                    "label": "Option 1",
-                    "value": 1
-                },
-                {
-                    "label": "Option 2",
-                    "value": 2
-                },
-                {
-                    "label": "Option 3 (default)",
-                    "value": 3
-                },
-                {
-                    "label": "Option 4",
-                    "value": 4
-                }
-            ]
-        },
-        "34": {
-            "label": "Sending Basic Set to nodes in Group 4.",
-            "description": "Sending Basic Set to nodes in Group 4.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Don’t send Basic Set.",
-                    "value": 0
-                },
-                {
-                    "label": "Option 1",
-                    "value": 1
-                },
-                {
-                    "label": "Option 2",
-                    "value": 2
-                },
-                {
-                    "label": "Option 3 (default)",
-                    "value": 3
-                },
-                {
-                    "label": "Option 4",
-                    "value": 4
-                }
-            ]
-        },
-        "35": {
-            "label": "Sending Basic Set to nodes in Group 5.",
-            "description": "Sending Basic Set to nodes in Group 5.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Don’t send Basic Set.",
-                    "value": 0
-                },
-                {
-                    "label": "Option 1",
-                    "value": 1
-                },
-                {
-                    "label": "Option 2",
-                    "value": 2
-                },
-                {
-                    "label": "Option 3 (default)",
-                    "value": 3
-                },
-                {
-                    "label": "Option 4",
-                    "value": 4
-                }
-            ]
-        },
-        "36": {
-            "label": "Sending Basic Set to nodes in Group 6 .",
-            "description": "Sending Basic Set to nodes in Group 6 .",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Don’t send Basic Set.",
-                    "value": 0
-                },
-                {
-                    "label": "Option 1",
-                    "value": 1
-                },
-                {
-                    "label": "Option 2",
-                    "value": 2
-                },
-                {
-                    "label": "Option 3 (default)",
-                    "value": 3
-                },
-                {
-                    "label": "Option 4",
-                    "value": 4
-                }
-            ]
-        },
-        "37": {
-            "label": "Sending Basic Set to nodes in Group 7 .",
-            "description": "Sending Basic Set to nodes in Group 7 .",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Don’t send Basic Set.",
-                    "value": 0
-                },
-                {
-                    "label": "Option 1",
-                    "value": 1
-                },
-                {
-                    "label": "Option 2",
-                    "value": 2
-                },
-                {
-                    "label": "Option 3 (default)",
-                    "value": 3
-                },
-                {
-                    "label": "Option 4",
-                    "value": 4
-                }
-            ]
-        },
-        "38": {
-            "label": "Sending Basic Set to nodes in Group 8 .",
-            "description": "Sending Basic Set to nodes in Group 8 .",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Don’t send Basic Set.",
-                    "value": 0
-                },
-                {
-                    "label": "Option 1",
-                    "value": 1
-                },
-                {
-                    "label": "Option 2",
-                    "value": 2
-                },
-                {
-                    "label": "Option 3 (default)",
-                    "value": 3
-                },
-                {
-                    "label": "Option 4",
-                    "value": 4
-                }
-            ]
-        },
-        "39": {
-            "label": "Sending Basic Set to nodes in Group 9 .",
-            "description": "Sending Basic Set to nodes in Group 9 .",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Don’t send Basic Set.",
-                    "value": 0
-                },
-                {
-                    "label": "Option 1",
-                    "value": 1
-                },
-                {
-                    "label": "Option 2",
-                    "value": 2
-                },
-                {
-                    "label": "Option 3 (default)",
-                    "value": 3
-                },
-                {
-                    "label": "Option 4",
-                    "value": 4
-                }
-            ]
-        },
-        "48": {
-            "label": "Trigger Unpairing Button Mode (Write Only)",
-            "description": "Trigger Unpairing Button Mode (Write Only)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Trigger Unpairing #1 Button Mode .",
-                    "value": 1
-                },
-                {
-                    "label": "Trigger Unpairing #2 Button Mode .",
-                    "value": 2
-                },
-                {
-                    "label": "Trigger Unpairing #2 and #1 Button Mode .",
-                    "value": 3
-                },
-                {
-                    "label": "Trigger Unpairing #3 Button Mode.",
-                    "value": 4
-                },
-                {
-                    "label": "Trigger Unpairing #3 and #1 Button Mode.",
-                    "value": 5
-                },
-                {
-                    "label": "Trigger Unpairing #3 and #2 Button Mode.",
-                    "value": 6
-                },
-                {
-                    "label": "Trigger Unpairing #3, #2 and #1 Button Mode.",
-                    "value": 7
-                }
-            ]
-        },
-        "49": {
-            "label": "Trigger Pairing Button Mode (Write Only)",
-            "description": "Trigger Pairing Button Mode (Write Only)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Exit Pairing Button Mode.",
-                    "value": 0
-                },
-                {
-                    "label": "Trigger Pairing #1 Button Mode .",
-                    "value": 1
-                },
-                {
-                    "label": "Trigger Pairing #2 Button Mode .",
-                    "value": 2
-                },
-                {
-                    "label": "Trigger Pairing #3 Button Mode .",
-                    "value": 4
-                }
-            ]
-        },
-        "50": {
-            "label": "Report which Pairing Button Mode is triggered",
-            "description": "Report which Pairing Button Mode is triggered ( Read Only)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "There is no Pairing Button Mode being triggered.",
-                    "value": 0
-                },
-                {
-                    "label": "Pairing #1 Button Mode is triggered.",
-                    "value": 1
-                },
-                {
-                    "label": "Pairing #2 Button Mode is triggered.",
-                    "value": 2
-                },
-                {
-                    "label": "Pairing #3 Button Mode is triggered.",
-                    "value": 4
-                }
-            ]
-        },
-        "51": {
-            "label": "Report which Buttons had been paired",
-            "description": "Report which Buttons had been paired",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "There is no paired Button .",
-                    "value": 0
-                },
-                {
-                    "label": "#1 Button had been paired.",
-                    "value": 1
-                },
-                {
-                    "label": "#2 Button had been paired.",
-                    "value": 2
-                },
-                {
-                    "label": "#2 and #1 Button had been paired.",
-                    "value": 3
-                },
-                {
-                    "label": "#3 Button had been paired.",
-                    "value": 4
-                },
-                {
-                    "label": "#3 and #1 Button had been paired.",
-                    "value": 5
-                },
-                {
-                    "label": "#3 and #2 Button had been paired.",
-                    "value": 6
-                },
-                {
-                    "label": "#3, #2 and #1 Button had been paired.",
-                    "value": 7
-                }
-            ]
-        },
-        "96": {
-            "label": "Click the Action Button to stop a playing tone",
-            "description": "Click the Action Button to stop a playing tone",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "255": {
-            "label": "Factory Reset or Initialization",
-            "description": "Factory Reset or Initialization",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1431655765,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true
-        },
-        "1[0xff0000]": {
-            "label": "Tone Play Mode for Endpoint 1 (Browse)",
-            "description": "Tone Play Mode for Endpoint 1 (Browse)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Single Playback (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Single Loop Playback",
-                    "value": 1
-                },
-                {
-                    "label": "List loop playback for auto-selecting tone",
-                    "value": 2
-                },
-                {
-                    "label": "List random playback for auto-selecting tone",
-                    "value": 3
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "1[0x7f000000]": {
-            "label": "Light Effect Index for Endpoint 1 (Browse)",
-            "description": "Light Effect Index for Endpoint 1 (Browse)",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "#1 Light Effect, mapping to Parameter 16 .",
-                    "value": 1
-                },
-                {
-                    "label": "#2 Light Effect, mapping to Parameter 17.",
-                    "value": 2
-                },
-                {
-                    "label": "#3 Light Effect, mapping to Parameter 18 .",
-                    "value": 4
-                },
-                {
-                    "label": "#4 Light Effect, mapping to Parameter 19 .",
-                    "value": 8
-                },
-                {
-                    "label": "#5 Light Effect, mapping to Parameter 20 .",
-                    "value": 16
-                },
-                {
-                    "label": "#6 Light Effect, mapping to Parameter 21 .",
-                    "value": 32
-                },
-                {
-                    "label": "#7 Light Effect, mapping to Parameter 22 .",
-                    "value": 64
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 127
-                }
-            ]
-        },
-        "2[0xff]": {
-            "label": "Tone Play Count for Endpoint 2 (Tampering)",
-            "description": "Tone Play Count for Endpoint 2 (Tampering)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Unlimited playback until stop by user.",
-                    "value": 0
-                },
-                {
-                    "label": "(1) time (default)",
-                    "value": 1
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "2[0xff00]": {
-            "label": "Interval between 2 tones for EP 2 (Tampering)",
-            "description": "Interval between 2 tones for Endpoint 2 (Tampering)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "No interval. (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "2[0xff0000]": {
-            "label": "Intercepting tone duration for EP 2 (Tampering)",
-            "description": "Intercepting duration of a tone for Endpoint 2 (Tampering)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "No Interception (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "2[0x7f000000]": {
-            "label": "Light Effect  for EP 2 (Tampering)",
-            "description": "Light Effect for EP 2 (Tampering)",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "#1 Light Effect, mapping to Parameter 16 .",
-                    "value": 1
-                },
-                {
-                    "label": "#2 Light Effect, mapping to Parameter 17 .",
-                    "value": 2
-                },
-                {
-                    "label": "#3 Light Effect, mapping to Parameter 18 .",
-                    "value": 4
-                },
-                {
-                    "label": "#4 Light Effect, mapping to Parameter 19 .",
-                    "value": 8
-                },
-                {
-                    "label": "#5 Light Effect, mapping to Parameter 20 .",
-                    "value": 16
-                },
-                {
-                    "label": "#6 Light Effect, mapping to Parameter 21 .",
-                    "value": 32
-                },
-                {
-                    "label": "#7 Light Effect, mapping to Parameter 22.",
-                    "value": 64
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 127
-                }
-            ]
-        },
-        "3[0xff]": {
-            "label": "Tone Play Count for EP3 (Doorbell 1)",
-            "description": "Tone Play Count for EP3 (Doorbell 1)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Unlimited playback until stop by user.",
-                    "value": 0
-                },
-                {
-                    "label": "(1) Time (default)",
-                    "value": 1
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "3[0xff00]": {
-            "label": "Interval between 2 tones for EP3 (Doorbell 1)",
-            "description": "Interval between 2 tones for EP3 (Doorbell 1)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "No interval.",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "3[0xff0000]": {
-            "label": "Intercepting duration of a tone EP 3(Doorbell 1)",
-            "description": "Intercepting duration of a tone Endpoint 3(Doorbell 1)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Keep the original duration of a tone",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "3[0x7f000000]": {
-            "label": "Light Effect for Endpoint 3(Doorbell 1)",
-            "description": "Light Effect for Endpoint 3(Doorbell 1)",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "#1 Light Effect, mapping to Parameter 16.",
-                    "value": 1
-                },
-                {
-                    "label": "#2 Light Effect, mapping to Parameter 17.",
-                    "value": 2
-                },
-                {
-                    "label": "#3 Light Effect, mapping to Parameter 18.",
-                    "value": 4
-                },
-                {
-                    "label": "#4 Light Effect, mapping to Parameter 19.",
-                    "value": 8
-                },
-                {
-                    "label": "#5 Light Effect, mapping to Parameter 20.",
-                    "value": 16
-                },
-                {
-                    "label": "#6 Light Effect, mapping to Parameter 21.",
-                    "value": 32
-                },
-                {
-                    "label": "#7 Light Effect, mapping to Parameter 22.",
-                    "value": 64
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 127
-                }
-            ]
-        },
-        "4[0xff]": {
-            "label": "Tone Play Count for EP4 (Doorbell 2)",
-            "description": "Tone Play Count for EP4 (Doorbell 2)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Unlimited playback until stop by user.",
-                    "value": 0
-                },
-                {
-                    "label": "(1) Time (default)",
-                    "value": 1
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "4[0xff00]": {
-            "label": "Tone Interval for EP4 (Doorbell 2)",
-            "description": "Tone Interval for EP4 (Doorbell 2)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "No interval. (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "4[0xff0000]": {
-            "label": "Duration of Tone for EP4(Doorbell 2)",
-            "description": "Duration of Tone for EP4(Doorbell 2)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Keep the original duration of a tone",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "4[0x7f000000]": {
-            "label": "Light Effect for EP 4 (Doorbell 2)",
-            "description": "Light Effect for EP 4 (Doorbell 2)",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "#1 Light Effect, mapping to Parameter 16.",
-                    "value": 1
-                },
-                {
-                    "label": "#2 Light Effect, mapping to Parameter 17.",
-                    "value": 2
-                },
-                {
-                    "label": "#3 Light Effect, mapping to Parameter 18.",
-                    "value": 4
-                },
-                {
-                    "label": "#4 Light Effect, mapping to Parameter 19.",
-                    "value": 8
-                },
-                {
-                    "label": "#5 Light Effect, mapping to Parameter 20.",
-                    "value": 16
-                },
-                {
-                    "label": "#6 Light Effect, mapping to Parameter 21.",
-                    "value": 32
-                },
-                {
-                    "label": "#7 Light Effect, mapping to Parameter 22.",
-                    "value": 64
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 127
-                }
-            ]
-        },
-        "5[0xff]": {
-            "label": "Tone Play Count for EP5 (Doorbell 3)",
-            "description": "Tone Play Count for EP5 (Doorbell 3)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Unlimited playback until stop by user.",
-                    "value": 0
-                },
-                {
-                    "label": "(1) time (default)",
-                    "value": 1
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "5[0xff00]": {
-            "label": "Interval between 2 tones for EP5 (Doorbell 3)",
-            "description": "Interval between 2 tones for EP5 (Doorbell 3)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "No interval. (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "5[0xff0000]": {
-            "label": "Intercepting tone duration for EP5 (Doorbell 3)",
-            "description": "Intercepting tone duration for EP5 (Doorbell 3)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Keep the original duration of a tone",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "5[0x7f000000]": {
-            "label": "Light Effect for EP 5 (Doorbell 3) .",
-            "description": "Light Effect for EP 5 (Doorbell 3) .",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "#1 Light Effect, mapping to Parameter 16.",
-                    "value": 1
-                },
-                {
-                    "label": "#2 Light Effect, mapping to Parameter 17.",
-                    "value": 2
-                },
-                {
-                    "label": "#3 Light Effect, mapping to Parameter 18.",
-                    "value": 4
-                },
-                {
-                    "label": "#4 Light Effect, mapping to Parameter 19.",
-                    "value": 8
-                },
-                {
-                    "label": "#5 Light Effect, mapping to Parameter 20.",
-                    "value": 16
-                },
-                {
-                    "label": "#6 Light Effect, mapping to Parameter 21.",
-                    "value": 32
-                },
-                {
-                    "label": "#7 Light Effect, mapping to Parameter 22.",
-                    "value": 64
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 127
-                }
-            ]
-        },
-        "6[0xff]": {
-            "label": "Tone Play Count for EP 6 (Environment)",
-            "description": "Tone Play Count for EP 6 (Environment)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Unlimited playback until stop by user.",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "6[0xff00]": {
-            "label": "Interval between 2 tones for EP 6 (Environment)",
-            "description": "Interval between 2 tones for EP 6 (Environment)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "No interval.",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "6[0xff0000]": {
-            "label": "Duration of a tone for EP 6 (Environment)",
-            "description": "Duration of a tone for EP 6 (Environment)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Keep the original duration of a tone",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "6[0x7f000000]": {
-            "label": "Light Effect for EP 6 (Environment)",
-            "description": "Light Effect for EP 6 (Environment)",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "#1 Light Effect, mapping to Parameter 16.",
-                    "value": 1
-                },
-                {
-                    "label": "#2 Light Effect, mapping to Parameter 17.",
-                    "value": 2
-                },
-                {
-                    "label": "#3 Light Effect, mapping to Parameter 18.",
-                    "value": 4
-                },
-                {
-                    "label": "#4 Light Effect, mapping to Parameter 19.",
-                    "value": 8
-                },
-                {
-                    "label": "#5 Light Effect, mapping to Parameter 20.",
-                    "value": 16
-                },
-                {
-                    "label": "#6 Light Effect, mapping to Parameter 21.",
-                    "value": 32
-                },
-                {
-                    "label": "#7 Light Effect, mapping to Parameter 22.",
-                    "value": 64
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 127
-                }
-            ]
-        },
-        "7[0xff]": {
-            "label": "Tone play count for EP7 (Security)",
-            "description": "Tone play count for EP7 (Security)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Unlimited playback until stop by user.",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "7[0xff00]": {
-            "label": "Interval between 2 tones for EP7 (Security)",
-            "description": "Interval between 2 tones for EP7 (Security)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "No interval.  (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "7[0xff0000]": {
-            "label": "Duration of a tone for EP 7 (Security)",
-            "description": "Duration of a tone for EP 7 (Security)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Keep the original duration of a tone",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "7[0x7f000000]": {
-            "label": "Light Effect for EP 7 (Security)",
-            "description": "Light Effect for EP 7 (Security)",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "#1 Light Effect, mapping to Parameter 16.",
-                    "value": 1
-                },
-                {
-                    "label": "#2 Light Effect, mapping to Parameter 17.",
-                    "value": 2
-                },
-                {
-                    "label": "#3 Light Effect, mapping to Parameter 18.",
-                    "value": 4
-                },
-                {
-                    "label": "#4 Light Effect, mapping to Parameter 19.",
-                    "value": 8
-                },
-                {
-                    "label": "#5 Light Effect, mapping to Parameter 20.",
-                    "value": 16
-                },
-                {
-                    "label": "#6 Light Effect, mapping to Parameter 21.",
-                    "value": 32
-                },
-                {
-                    "label": "#7 Light Effect, mapping to Parameter 22.",
-                    "value": 64
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 127
-                }
-            ]
-        },
-        "8[0xff]": {
-            "label": "Tone Play Count for EP8 (Emergency)",
-            "description": "Tone Play Count for EP8 (Emergency)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Unlimited playback until stop by user.",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "8[0xff00]": {
-            "label": "Interval between 2 tones for EP8 (Emergency)",
-            "description": "Interval between 2 tones for EP8 (Emergency)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "No interval. (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "8[0xff0000]": {
-            "label": "Tone Duration for EP8 (Emergency)",
-            "description": "Tone Duration for EP8 (Emergency)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Keep the original duration of a tone",
-                    "value": 0
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 255
-                }
-            ]
-        },
-        "8[0x7f000000]": {
-            "label": "Light Effect for EP8 (Emergency)",
-            "description": "Light Effect for EP8 (Emergency)",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "#1 Light Effect, mapping to Parameter 16.",
-                    "value": 1
-                },
-                {
-                    "label": "#2 Light Effect, mapping to Parameter 17.",
-                    "value": 2
-                },
-                {
-                    "label": "#3 Light Effect, mapping to Parameter 18.",
-                    "value": 4
-                },
-                {
-                    "label": "#4 Light Effect, mapping to Parameter 19.",
-                    "value": 8
-                },
-                {
-                    "label": "#5 Light Effect, mapping to Parameter 20.",
-                    "value": 16
-                },
-                {
-                    "label": "#6 Light Effect, mapping to Parameter 21.",
-                    "value": 32
-                },
-                {
-                    "label": "#7 Light Effect, mapping to Parameter 22.",
-                    "value": 64
-                },
-                {
-                    "label": "Use the last valid configuration value.",
-                    "value": 127
-                }
-            ]
-        },
-        "16[0xff]": {
-            "label": "Time Off for Light Effect #1",
-            "description": "Time Off for Light Effect #1",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16[0xff00]": {
-            "label": "Time On for Light Effect #1",
-            "description": "Time On for Light Effect #1",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16[0x7f0000]": {
-            "label": "Dim Off duration for Light Effect #1",
-            "description": "Dim Off duration for Light Effect #1",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 25,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16[0x7f000000]": {
-            "label": "Dim On Duration for Light Effect #1",
-            "description": "Dim On Duration for Light Effect #1",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 75,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17[0xff]": {
-            "label": "Light Off Duration for Light Effect #2",
-            "description": "Light Off Duration for Light Effect #2",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17[0xff00]": {
-            "label": "Light On duration for Light Effect #2",
-            "description": "Light On duration for Light Effect #2",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17[0x7f0000]": {
-            "label": "Dim Off duration for Light Effect #2",
-            "description": "Dim Off duration for Light Effect #2",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17[0x7f000000]": {
-            "label": "Dim On duration for Light Effect #2",
-            "description": "Dim On duration for Light Effect #2",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18[0xff]": {
-            "label": "Light Off duration for Light Effect #3",
-            "description": "Light Off duration for Light Effect #3",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18[0xff00]": {
-            "label": "Light On duration for Light Effect #3",
-            "description": "Light On duration for Light Effect #3",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18[0x7f0000]": {
-            "label": "Dim Off duration for Light Effect #3",
-            "description": "Dim Off duration for Light Effect #3",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 33,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18[0x7f000000]": {
-            "label": "Dim On duration for Light Effect #3",
-            "description": "Dim On duration for Light Effect #3",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19[0xff]": {
-            "label": "Light Off duration for Light Effect #4",
-            "description": "Light Off duration for Light Effect #4",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19[0xff00]": {
-            "label": "Light On duration for Light Effect #4",
-            "description": "Light On duration for Light Effect #4",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19[0x7f0000]": {
-            "label": "Dim Off duration for Light Effect #4",
-            "description": "Dim Off duration for Light Effect #4",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19[0x7f000000]": {
-            "label": "Dim On duration for Light Effect #4",
-            "description": "Dim On duration for Light Effect #4",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 33,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20[0xff]": {
-            "label": "Light Off duration for Light Effect #5",
-            "description": "Light Off duration for Light Effect #5",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20[0xff00]": {
-            "label": "Light On duration for Light Effect #5",
-            "description": "Light On duration for Light Effect #5",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20[0x7f0000]": {
-            "label": "Dim Off duration for Light Effect #5",
-            "description": "Dim Off duration for Light Effect #5",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20[0x7f000000]": {
-            "label": "Dim On duration for Light Effect #5",
-            "description": "Dim On duration for Light Effect #5",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21[0xff]": {
-            "label": "Light Off duration for Light Effect #6",
-            "description": "Light Off duration for Light Effect #6",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21[0xff00]": {
-            "label": "Light On duration for Light Effect #6",
-            "description": "Light On duration for Light Effect #6",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21[0x7f0000]": {
-            "label": "Dim Off duration for Light Effect #6",
-            "description": "Dim Off duration for Light Effect #6",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21[0x7f000000]": {
-            "label": "Dim On duration for Light Effect #6",
-            "description": "Dim On duration for Light Effect #6",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22[0xff]": {
-            "label": "Light Off duration for Light Effect #7",
-            "description": "Light Off duration for Light Effect #7",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22[0xff00]": {
-            "label": "Light On duration for Light Effect #7",
-            "description": "Light On duration for Light Effect #7",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22[0x7f0000]": {
-            "label": "Dim Off duration for Light Effect #7",
-            "description": "Dim Off duration for Light Effect #7",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22[0x7f000000]": {
-            "label": "Dim On duration for Light Effect #7",
-            "description": "Dim On duration for Light Effect #7",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 33,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "52[0xffff]": {
-            "label": "Button #1 Software Version",
-            "description": "Button #1 Software Version",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Button is Unpaired",
-                    "value": 0
-                }
-            ]
-        },
-        "52[0x7fff0000]": {
-            "label": "Button #1 Battery Voltage",
-            "description": "Button #1 Battery Voltage",
-            "unit": "mV",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Button is Unpaired",
-                    "value": 0
-                }
-            ]
-        },
-        "53[0xffff]": {
-            "label": "Button #2 Software Version",
-            "description": "Button #2 Software Version",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Button is unpaired.",
-                    "value": 0
-                }
-            ]
-        },
-        "53[0x7fff0000]": {
-            "label": "Button #2 Battery Voltage",
-            "description": "Button #2 Battery Voltage",
-            "unit": "mV",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Button is unpaired.",
-                    "value": 0
-                }
-            ]
-        },
-        "54[0xffff]": {
-            "label": "Button #3 Software Version",
-            "description": "Button #3 Software Version",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Button is unpaired.",
-                    "value": 0
-                }
-            ]
-        },
-        "54[0x7fff0000]": {
-            "label": "Button #3 Battery Voltage",
-            "description": "Button #3 Battery Voltage",
-            "unit": "mV",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Button is unpaired.",
-                    "value": 0
-                }
-            ]
-        }
-    }
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZW164",
+	"description": "Indoor Siren 6 and Doorbell 6",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x00a2"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x00a4"
+		},
+		{
+			"productType": "0x0103",
+			"productId": "0x00a2"
+		},
+		{
+			"productType": "0x0103",
+			"productId": "0x00a4"
+		},
+		{
+			"productType": "0x0203",
+			"productId": "0x00a4"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"32": {
+			"label": "Sending Basic Set to nodes in Group 2.",
+			"description": "Sending Basic Set to nodes in Group 2.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don’t send Basic Set.",
+					"value": 0
+				},
+				{
+					"label": "Option 1",
+					"value": 1
+				},
+				{
+					"label": "Option 2",
+					"value": 2
+				},
+				{
+					"label": "Option 3 (default)",
+					"value": 3
+				},
+				{
+					"label": "Option 4",
+					"value": 4
+				}
+			]
+		},
+		"33": {
+			"label": "Sending Basic Set to nodes in Group 3 .",
+			"description": "Sending Basic Set to nodes in Group 3 .",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don’t send Basic Set.",
+					"value": 0
+				},
+				{
+					"label": "Option 1",
+					"value": 1
+				},
+				{
+					"label": "Option 2",
+					"value": 2
+				},
+				{
+					"label": "Option 3 (default)",
+					"value": 3
+				},
+				{
+					"label": "Option 4",
+					"value": 4
+				}
+			]
+		},
+		"34": {
+			"label": "Sending Basic Set to nodes in Group 4.",
+			"description": "Sending Basic Set to nodes in Group 4.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don’t send Basic Set.",
+					"value": 0
+				},
+				{
+					"label": "Option 1",
+					"value": 1
+				},
+				{
+					"label": "Option 2",
+					"value": 2
+				},
+				{
+					"label": "Option 3 (default)",
+					"value": 3
+				},
+				{
+					"label": "Option 4",
+					"value": 4
+				}
+			]
+		},
+		"35": {
+			"label": "Sending Basic Set to nodes in Group 5.",
+			"description": "Sending Basic Set to nodes in Group 5.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don’t send Basic Set.",
+					"value": 0
+				},
+				{
+					"label": "Option 1",
+					"value": 1
+				},
+				{
+					"label": "Option 2",
+					"value": 2
+				},
+				{
+					"label": "Option 3 (default)",
+					"value": 3
+				},
+				{
+					"label": "Option 4",
+					"value": 4
+				}
+			]
+		},
+		"36": {
+			"label": "Sending Basic Set to nodes in Group 6 .",
+			"description": "Sending Basic Set to nodes in Group 6 .",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don’t send Basic Set.",
+					"value": 0
+				},
+				{
+					"label": "Option 1",
+					"value": 1
+				},
+				{
+					"label": "Option 2",
+					"value": 2
+				},
+				{
+					"label": "Option 3 (default)",
+					"value": 3
+				},
+				{
+					"label": "Option 4",
+					"value": 4
+				}
+			]
+		},
+		"37": {
+			"label": "Sending Basic Set to nodes in Group 7 .",
+			"description": "Sending Basic Set to nodes in Group 7 .",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don’t send Basic Set.",
+					"value": 0
+				},
+				{
+					"label": "Option 1",
+					"value": 1
+				},
+				{
+					"label": "Option 2",
+					"value": 2
+				},
+				{
+					"label": "Option 3 (default)",
+					"value": 3
+				},
+				{
+					"label": "Option 4",
+					"value": 4
+				}
+			]
+		},
+		"38": {
+			"label": "Sending Basic Set to nodes in Group 8 .",
+			"description": "Sending Basic Set to nodes in Group 8 .",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don’t send Basic Set.",
+					"value": 0
+				},
+				{
+					"label": "Option 1",
+					"value": 1
+				},
+				{
+					"label": "Option 2",
+					"value": 2
+				},
+				{
+					"label": "Option 3 (default)",
+					"value": 3
+				},
+				{
+					"label": "Option 4",
+					"value": 4
+				}
+			]
+		},
+		"39": {
+			"label": "Sending Basic Set to nodes in Group 9 .",
+			"description": "Sending Basic Set to nodes in Group 9 .",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don’t send Basic Set.",
+					"value": 0
+				},
+				{
+					"label": "Option 1",
+					"value": 1
+				},
+				{
+					"label": "Option 2",
+					"value": 2
+				},
+				{
+					"label": "Option 3 (default)",
+					"value": 3
+				},
+				{
+					"label": "Option 4",
+					"value": 4
+				}
+			]
+		},
+		"48": {
+			"label": "Trigger Unpairing Button Mode (Write Only)",
+			"description": "Trigger Unpairing Button Mode (Write Only)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Trigger Unpairing #1 Button Mode .",
+					"value": 1
+				},
+				{
+					"label": "Trigger Unpairing #2 Button Mode .",
+					"value": 2
+				},
+				{
+					"label": "Trigger Unpairing #2 and #1 Button Mode .",
+					"value": 3
+				},
+				{
+					"label": "Trigger Unpairing #3 Button Mode.",
+					"value": 4
+				},
+				{
+					"label": "Trigger Unpairing #3 and #1 Button Mode.",
+					"value": 5
+				},
+				{
+					"label": "Trigger Unpairing #3 and #2 Button Mode.",
+					"value": 6
+				},
+				{
+					"label": "Trigger Unpairing #3, #2 and #1 Button Mode.",
+					"value": 7
+				}
+			]
+		},
+		"49": {
+			"label": "Trigger Pairing Button Mode (Write Only)",
+			"description": "Trigger Pairing Button Mode (Write Only)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Exit Pairing Button Mode.",
+					"value": 0
+				},
+				{
+					"label": "Trigger Pairing #1 Button Mode .",
+					"value": 1
+				},
+				{
+					"label": "Trigger Pairing #2 Button Mode .",
+					"value": 2
+				},
+				{
+					"label": "Trigger Pairing #3 Button Mode .",
+					"value": 4
+				}
+			]
+		},
+		"50": {
+			"label": "Report which Pairing Button Mode is triggered",
+			"description": "Report which Pairing Button Mode is triggered ( Read Only)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "There is no Pairing Button Mode being triggered.",
+					"value": 0
+				},
+				{
+					"label": "Pairing #1 Button Mode is triggered.",
+					"value": 1
+				},
+				{
+					"label": "Pairing #2 Button Mode is triggered.",
+					"value": 2
+				},
+				{
+					"label": "Pairing #3 Button Mode is triggered.",
+					"value": 4
+				}
+			]
+		},
+		"51": {
+			"label": "Report which Buttons had been paired",
+			"description": "Report which Buttons had been paired",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "There is no paired Button .",
+					"value": 0
+				},
+				{
+					"label": "#1 Button had been paired.",
+					"value": 1
+				},
+				{
+					"label": "#2 Button had been paired.",
+					"value": 2
+				},
+				{
+					"label": "#2 and #1 Button had been paired.",
+					"value": 3
+				},
+				{
+					"label": "#3 Button had been paired.",
+					"value": 4
+				},
+				{
+					"label": "#3 and #1 Button had been paired.",
+					"value": 5
+				},
+				{
+					"label": "#3 and #2 Button had been paired.",
+					"value": 6
+				},
+				{
+					"label": "#3, #2 and #1 Button had been paired.",
+					"value": 7
+				}
+			]
+		},
+		"96": {
+			"label": "Click the Action Button to stop a playing tone",
+			"description": "Click the Action Button to stop a playing tone",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Factory Reset or Initialization",
+			"description": "Factory Reset or Initialization",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1431655765,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"1[0xff0000]": {
+			"label": "Tone Play Mode for Endpoint 1 (Browse)",
+			"description": "Tone Play Mode for Endpoint 1 (Browse)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single Playback (Default)",
+					"value": 0
+				},
+				{
+					"label": "Single Loop Playback",
+					"value": 1
+				},
+				{
+					"label": "List loop playback for auto-selecting tone",
+					"value": 2
+				},
+				{
+					"label": "List random playback for auto-selecting tone",
+					"value": 3
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"1[0x7f000000]": {
+			"label": "Light Effect Index for Endpoint 1 (Browse)",
+			"description": "Light Effect Index for Endpoint 1 (Browse)",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "#1 Light Effect, mapping to Parameter 16 .",
+					"value": 1
+				},
+				{
+					"label": "#2 Light Effect, mapping to Parameter 17.",
+					"value": 2
+				},
+				{
+					"label": "#3 Light Effect, mapping to Parameter 18 .",
+					"value": 4
+				},
+				{
+					"label": "#4 Light Effect, mapping to Parameter 19 .",
+					"value": 8
+				},
+				{
+					"label": "#5 Light Effect, mapping to Parameter 20 .",
+					"value": 16
+				},
+				{
+					"label": "#6 Light Effect, mapping to Parameter 21 .",
+					"value": 32
+				},
+				{
+					"label": "#7 Light Effect, mapping to Parameter 22 .",
+					"value": 64
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 127
+				}
+			]
+		},
+		"2[0xff]": {
+			"label": "Tone Play Count for Endpoint 2 (Tampering)",
+			"description": "Tone Play Count for Endpoint 2 (Tampering)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Unlimited playback until stop by user.",
+					"value": 0
+				},
+				{
+					"label": "(1) time (default)",
+					"value": 1
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"2[0xff00]": {
+			"label": "Interval between 2 tones for EP 2 (Tampering)",
+			"description": "Interval between 2 tones for Endpoint 2 (Tampering)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No interval. (default)",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"2[0xff0000]": {
+			"label": "Intercepting tone duration for EP 2 (Tampering)",
+			"description": "Intercepting duration of a tone for Endpoint 2 (Tampering)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No Interception (default)",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"2[0x7f000000]": {
+			"label": "Light Effect  for EP 2 (Tampering)",
+			"description": "Light Effect for EP 2 (Tampering)",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "#1 Light Effect, mapping to Parameter 16 .",
+					"value": 1
+				},
+				{
+					"label": "#2 Light Effect, mapping to Parameter 17 .",
+					"value": 2
+				},
+				{
+					"label": "#3 Light Effect, mapping to Parameter 18 .",
+					"value": 4
+				},
+				{
+					"label": "#4 Light Effect, mapping to Parameter 19 .",
+					"value": 8
+				},
+				{
+					"label": "#5 Light Effect, mapping to Parameter 20 .",
+					"value": 16
+				},
+				{
+					"label": "#6 Light Effect, mapping to Parameter 21 .",
+					"value": 32
+				},
+				{
+					"label": "#7 Light Effect, mapping to Parameter 22.",
+					"value": 64
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 127
+				}
+			]
+		},
+		"3[0xff]": {
+			"label": "Tone Play Count for EP3 (Doorbell 1)",
+			"description": "Tone Play Count for EP3 (Doorbell 1)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Unlimited playback until stop by user.",
+					"value": 0
+				},
+				{
+					"label": "(1) Time (default)",
+					"value": 1
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"3[0xff00]": {
+			"label": "Interval between 2 tones for EP3 (Doorbell 1)",
+			"description": "Interval between 2 tones for EP3 (Doorbell 1)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No interval.",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"3[0xff0000]": {
+			"label": "Intercepting duration of a tone EP 3(Doorbell 1)",
+			"description": "Intercepting duration of a tone Endpoint 3(Doorbell 1)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Keep the original duration of a tone",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"3[0x7f000000]": {
+			"label": "Light Effect for Endpoint 3(Doorbell 1)",
+			"description": "Light Effect for Endpoint 3(Doorbell 1)",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "#1 Light Effect, mapping to Parameter 16.",
+					"value": 1
+				},
+				{
+					"label": "#2 Light Effect, mapping to Parameter 17.",
+					"value": 2
+				},
+				{
+					"label": "#3 Light Effect, mapping to Parameter 18.",
+					"value": 4
+				},
+				{
+					"label": "#4 Light Effect, mapping to Parameter 19.",
+					"value": 8
+				},
+				{
+					"label": "#5 Light Effect, mapping to Parameter 20.",
+					"value": 16
+				},
+				{
+					"label": "#6 Light Effect, mapping to Parameter 21.",
+					"value": 32
+				},
+				{
+					"label": "#7 Light Effect, mapping to Parameter 22.",
+					"value": 64
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 127
+				}
+			]
+		},
+		"4[0xff]": {
+			"label": "Tone Play Count for EP4 (Doorbell 2)",
+			"description": "Tone Play Count for EP4 (Doorbell 2)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Unlimited playback until stop by user.",
+					"value": 0
+				},
+				{
+					"label": "(1) Time (default)",
+					"value": 1
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"4[0xff00]": {
+			"label": "Tone Interval for EP4 (Doorbell 2)",
+			"description": "Tone Interval for EP4 (Doorbell 2)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No interval. (default)",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"4[0xff0000]": {
+			"label": "Duration of Tone for EP4(Doorbell 2)",
+			"description": "Duration of Tone for EP4(Doorbell 2)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Keep the original duration of a tone",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"4[0x7f000000]": {
+			"label": "Light Effect for EP 4 (Doorbell 2)",
+			"description": "Light Effect for EP 4 (Doorbell 2)",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "#1 Light Effect, mapping to Parameter 16.",
+					"value": 1
+				},
+				{
+					"label": "#2 Light Effect, mapping to Parameter 17.",
+					"value": 2
+				},
+				{
+					"label": "#3 Light Effect, mapping to Parameter 18.",
+					"value": 4
+				},
+				{
+					"label": "#4 Light Effect, mapping to Parameter 19.",
+					"value": 8
+				},
+				{
+					"label": "#5 Light Effect, mapping to Parameter 20.",
+					"value": 16
+				},
+				{
+					"label": "#6 Light Effect, mapping to Parameter 21.",
+					"value": 32
+				},
+				{
+					"label": "#7 Light Effect, mapping to Parameter 22.",
+					"value": 64
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 127
+				}
+			]
+		},
+		"5[0xff]": {
+			"label": "Tone Play Count for EP5 (Doorbell 3)",
+			"description": "Tone Play Count for EP5 (Doorbell 3)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Unlimited playback until stop by user.",
+					"value": 0
+				},
+				{
+					"label": "(1) time (default)",
+					"value": 1
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"5[0xff00]": {
+			"label": "Interval between 2 tones for EP5 (Doorbell 3)",
+			"description": "Interval between 2 tones for EP5 (Doorbell 3)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No interval. (default)",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"5[0xff0000]": {
+			"label": "Intercepting tone duration for EP5 (Doorbell 3)",
+			"description": "Intercepting tone duration for EP5 (Doorbell 3)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Keep the original duration of a tone",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"5[0x7f000000]": {
+			"label": "Light Effect for EP 5 (Doorbell 3) .",
+			"description": "Light Effect for EP 5 (Doorbell 3) .",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "#1 Light Effect, mapping to Parameter 16.",
+					"value": 1
+				},
+				{
+					"label": "#2 Light Effect, mapping to Parameter 17.",
+					"value": 2
+				},
+				{
+					"label": "#3 Light Effect, mapping to Parameter 18.",
+					"value": 4
+				},
+				{
+					"label": "#4 Light Effect, mapping to Parameter 19.",
+					"value": 8
+				},
+				{
+					"label": "#5 Light Effect, mapping to Parameter 20.",
+					"value": 16
+				},
+				{
+					"label": "#6 Light Effect, mapping to Parameter 21.",
+					"value": 32
+				},
+				{
+					"label": "#7 Light Effect, mapping to Parameter 22.",
+					"value": 64
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 127
+				}
+			]
+		},
+		"6[0xff]": {
+			"label": "Tone Play Count for EP 6 (Environment)",
+			"description": "Tone Play Count for EP 6 (Environment)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Unlimited playback until stop by user.",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"6[0xff00]": {
+			"label": "Interval between 2 tones for EP 6 (Environment)",
+			"description": "Interval between 2 tones for EP 6 (Environment)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No interval.",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"6[0xff0000]": {
+			"label": "Duration of a tone for EP 6 (Environment)",
+			"description": "Duration of a tone for EP 6 (Environment)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Keep the original duration of a tone",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"6[0x7f000000]": {
+			"label": "Light Effect for EP 6 (Environment)",
+			"description": "Light Effect for EP 6 (Environment)",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "#1 Light Effect, mapping to Parameter 16.",
+					"value": 1
+				},
+				{
+					"label": "#2 Light Effect, mapping to Parameter 17.",
+					"value": 2
+				},
+				{
+					"label": "#3 Light Effect, mapping to Parameter 18.",
+					"value": 4
+				},
+				{
+					"label": "#4 Light Effect, mapping to Parameter 19.",
+					"value": 8
+				},
+				{
+					"label": "#5 Light Effect, mapping to Parameter 20.",
+					"value": 16
+				},
+				{
+					"label": "#6 Light Effect, mapping to Parameter 21.",
+					"value": 32
+				},
+				{
+					"label": "#7 Light Effect, mapping to Parameter 22.",
+					"value": 64
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 127
+				}
+			]
+		},
+		"7[0xff]": {
+			"label": "Tone play count for EP7 (Security)",
+			"description": "Tone play count for EP7 (Security)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Unlimited playback until stop by user.",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"7[0xff00]": {
+			"label": "Interval between 2 tones for EP7 (Security)",
+			"description": "Interval between 2 tones for EP7 (Security)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No interval.  (default)",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"7[0xff0000]": {
+			"label": "Duration of a tone for EP 7 (Security)",
+			"description": "Duration of a tone for EP 7 (Security)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Keep the original duration of a tone",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"7[0x7f000000]": {
+			"label": "Light Effect for EP 7 (Security)",
+			"description": "Light Effect for EP 7 (Security)",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "#1 Light Effect, mapping to Parameter 16.",
+					"value": 1
+				},
+				{
+					"label": "#2 Light Effect, mapping to Parameter 17.",
+					"value": 2
+				},
+				{
+					"label": "#3 Light Effect, mapping to Parameter 18.",
+					"value": 4
+				},
+				{
+					"label": "#4 Light Effect, mapping to Parameter 19.",
+					"value": 8
+				},
+				{
+					"label": "#5 Light Effect, mapping to Parameter 20.",
+					"value": 16
+				},
+				{
+					"label": "#6 Light Effect, mapping to Parameter 21.",
+					"value": 32
+				},
+				{
+					"label": "#7 Light Effect, mapping to Parameter 22.",
+					"value": 64
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 127
+				}
+			]
+		},
+		"8[0xff]": {
+			"label": "Tone Play Count for EP8 (Emergency)",
+			"description": "Tone Play Count for EP8 (Emergency)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Unlimited playback until stop by user.",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"8[0xff00]": {
+			"label": "Interval between 2 tones for EP8 (Emergency)",
+			"description": "Interval between 2 tones for EP8 (Emergency)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No interval. (default)",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"8[0xff0000]": {
+			"label": "Tone Duration for EP8 (Emergency)",
+			"description": "Tone Duration for EP8 (Emergency)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Keep the original duration of a tone",
+					"value": 0
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 255
+				}
+			]
+		},
+		"8[0x7f000000]": {
+			"label": "Light Effect for EP8 (Emergency)",
+			"description": "Light Effect for EP8 (Emergency)",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "#1 Light Effect, mapping to Parameter 16.",
+					"value": 1
+				},
+				{
+					"label": "#2 Light Effect, mapping to Parameter 17.",
+					"value": 2
+				},
+				{
+					"label": "#3 Light Effect, mapping to Parameter 18.",
+					"value": 4
+				},
+				{
+					"label": "#4 Light Effect, mapping to Parameter 19.",
+					"value": 8
+				},
+				{
+					"label": "#5 Light Effect, mapping to Parameter 20.",
+					"value": 16
+				},
+				{
+					"label": "#6 Light Effect, mapping to Parameter 21.",
+					"value": 32
+				},
+				{
+					"label": "#7 Light Effect, mapping to Parameter 22.",
+					"value": 64
+				},
+				{
+					"label": "Use the last valid configuration value.",
+					"value": 127
+				}
+			]
+		},
+		"16[0xff]": {
+			"label": "Time Off for Light Effect #1",
+			"description": "Time Off for Light Effect #1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16[0xff00]": {
+			"label": "Time On for Light Effect #1",
+			"description": "Time On for Light Effect #1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16[0x7f0000]": {
+			"label": "Dim Off duration for Light Effect #1",
+			"description": "Dim Off duration for Light Effect #1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 25,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16[0x7f000000]": {
+			"label": "Dim On Duration for Light Effect #1",
+			"description": "Dim On Duration for Light Effect #1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 75,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17[0xff]": {
+			"label": "Light Off Duration for Light Effect #2",
+			"description": "Light Off Duration for Light Effect #2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17[0xff00]": {
+			"label": "Light On duration for Light Effect #2",
+			"description": "Light On duration for Light Effect #2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17[0x7f0000]": {
+			"label": "Dim Off duration for Light Effect #2",
+			"description": "Dim Off duration for Light Effect #2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17[0x7f000000]": {
+			"label": "Dim On duration for Light Effect #2",
+			"description": "Dim On duration for Light Effect #2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18[0xff]": {
+			"label": "Light Off duration for Light Effect #3",
+			"description": "Light Off duration for Light Effect #3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18[0xff00]": {
+			"label": "Light On duration for Light Effect #3",
+			"description": "Light On duration for Light Effect #3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18[0x7f0000]": {
+			"label": "Dim Off duration for Light Effect #3",
+			"description": "Dim Off duration for Light Effect #3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 33,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18[0x7f000000]": {
+			"label": "Dim On duration for Light Effect #3",
+			"description": "Dim On duration for Light Effect #3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19[0xff]": {
+			"label": "Light Off duration for Light Effect #4",
+			"description": "Light Off duration for Light Effect #4",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19[0xff00]": {
+			"label": "Light On duration for Light Effect #4",
+			"description": "Light On duration for Light Effect #4",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19[0x7f0000]": {
+			"label": "Dim Off duration for Light Effect #4",
+			"description": "Dim Off duration for Light Effect #4",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19[0x7f000000]": {
+			"label": "Dim On duration for Light Effect #4",
+			"description": "Dim On duration for Light Effect #4",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 33,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20[0xff]": {
+			"label": "Light Off duration for Light Effect #5",
+			"description": "Light Off duration for Light Effect #5",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20[0xff00]": {
+			"label": "Light On duration for Light Effect #5",
+			"description": "Light On duration for Light Effect #5",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20[0x7f0000]": {
+			"label": "Dim Off duration for Light Effect #5",
+			"description": "Dim Off duration for Light Effect #5",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20[0x7f000000]": {
+			"label": "Dim On duration for Light Effect #5",
+			"description": "Dim On duration for Light Effect #5",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21[0xff]": {
+			"label": "Light Off duration for Light Effect #6",
+			"description": "Light Off duration for Light Effect #6",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21[0xff00]": {
+			"label": "Light On duration for Light Effect #6",
+			"description": "Light On duration for Light Effect #6",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21[0x7f0000]": {
+			"label": "Dim Off duration for Light Effect #6",
+			"description": "Dim Off duration for Light Effect #6",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21[0x7f000000]": {
+			"label": "Dim On duration for Light Effect #6",
+			"description": "Dim On duration for Light Effect #6",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22[0xff]": {
+			"label": "Light Off duration for Light Effect #7",
+			"description": "Light Off duration for Light Effect #7",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22[0xff00]": {
+			"label": "Light On duration for Light Effect #7",
+			"description": "Light On duration for Light Effect #7",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22[0x7f0000]": {
+			"label": "Dim Off duration for Light Effect #7",
+			"description": "Dim Off duration for Light Effect #7",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22[0x7f000000]": {
+			"label": "Dim On duration for Light Effect #7",
+			"description": "Dim On duration for Light Effect #7",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 33,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52[0xffff]": {
+			"label": "Button #1 Software Version",
+			"description": "Button #1 Software Version",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Button is Unpaired",
+					"value": 0
+				}
+			]
+		},
+		"52[0x7fff0000]": {
+			"label": "Button #1 Battery Voltage",
+			"description": "Button #1 Battery Voltage",
+			"unit": "mV",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Button is Unpaired",
+					"value": 0
+				}
+			]
+		},
+		"53[0xffff]": {
+			"label": "Button #2 Software Version",
+			"description": "Button #2 Software Version",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Button is unpaired.",
+					"value": 0
+				}
+			]
+		},
+		"53[0x7fff0000]": {
+			"label": "Button #2 Battery Voltage",
+			"description": "Button #2 Battery Voltage",
+			"unit": "mV",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Button is unpaired.",
+					"value": 0
+				}
+			]
+		},
+		"54[0xffff]": {
+			"label": "Button #3 Software Version",
+			"description": "Button #3 Software Version",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Button is unpaired.",
+					"value": 0
+				}
+			]
+		},
+		"54[0x7fff0000]": {
+			"label": "Button #3 Battery Voltage",
+			"description": "Button #3 Battery Voltage",
+			"unit": "mV",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Button is unpaired.",
+					"value": 0
+				}
+			]
+		}
+	}
 }

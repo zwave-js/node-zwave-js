@@ -1,625 +1,624 @@
 // Fibargroup FGMS001
 // Motion Sensor
 {
-    "_approved": true,
-    "manufacturer": "Fibargroup",
-    "manufacturerId": "0x010f",
-    "label": "FGMS001",
-    "description": "Motion Sensor",
-    "devices": [
-        {
-            "productType": "0x0801",
-            "productId": "0x1001"
-        },
-        {
-            "productType": "0x0801",
-            "productId": "0x1002"
-        },
-        {
-            "productType": "0x0801",
-            "productId": "0x2001"
-        },
-        {
-            "productType": "0x0801",
-            "productId": "0x2002"
-        },
-        {
-            "productType": "0x0801",
-            "productId": "0x3001"
-        },
-        {
-            "productType": "0x0801",
-            "productId": "0x3002"
-        },
-        {
-            "productType": "0x0801",
-            "productId": "0x4001"
-        },
-        {
-            "productType": "0x0801",
-            "productId": "0x4002"
-        },
-        {
-            "productType": "0x8800",
-            "productId": "0x3001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.2",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Motion detection - sensitivity",
-            "description": "The lower the value, the more sensitive the PIR sensor.",
-            "valueSize": 2,
-            "minValue": 8,
-            "maxValue": 255,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Motion detection - blind time",
-            "description": "Period of time through which the PIR sensor is “blind”.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Motion detection - pulse counter",
-            "description": "Sets the number of moves required for the PIR sensor to report motion.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "1 pulse",
-                    "value": 0
-                },
-                {
-                    "label": "2 pulses",
-                    "value": 1
-                },
-                {
-                    "label": "3 pulses",
-                    "value": 2
-                },
-                {
-                    "label": "4 pulses",
-                    "value": 3
-                }
-            ]
-        },
-        "4": {
-            "label": "Motion detection - window time",
-            "description": "The higher the value, the more sensitive the PIR sensor.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "4 seconds",
-                    "value": 0
-                },
-                {
-                    "label": "8 seconds",
-                    "value": 1
-                },
-                {
-                    "label": "12 seconds",
-                    "value": 2
-                },
-                {
-                    "label": "16 seconds",
-                    "value": 3
-                }
-            ]
-        },
-        "6": {
-            "label": "Motion detection - alarm cancellation delay",
-            "description": "Period of time after wich Motion alarm will be cancelled.",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Motion detection - operating mode",
-            "description": "The parameter determines the part of day in which the PIR sensor will be active.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "PIR sensor always active",
-                    "value": 0
-                },
-                {
-                    "label": "PIR sensor active during the day only",
-                    "value": 1
-                },
-                {
-                    "label": "PIR sensor active during the night only",
-                    "value": 2
-                }
-            ]
-        },
-        "9": {
-            "label": "Motion detection - night/day",
-            "description": "The parameter defines the difference between night and day.",
-            "unit": "lux",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 200,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "BASIC command class configuration",
-            "description": "Determines the command frames sent in 2nd association group.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "BASIC ON and BASIC OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Only the BASIC ON",
-                    "value": 1
-                },
-                {
-                    "label": "Only the BASIC OFF",
-                    "value": 2
-                }
-            ]
-        },
-        "14": {
-            "label": "BASIC ON command frame value",
-            "description": "The value of 255 allows to turn ON a device.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "BASIC OFF command frame value",
-            "description": "The value of 0 allows to turn OFF a device.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "Associations in Z-Wave network Security Mode",
-            "description": "This parameter defines how commands are sent in specified association groups",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Tamper - sensitivity",
-            "description": "Change in force that will result in tamper alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 121,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "Tamper - alarm cancellation delay",
-            "description": "Time period after which a tamper alarm will be cancelled.",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "24": {
-            "label": "Tamper - operating modes",
-            "description": "This parameter determines function of the tamper and sent reports",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Only tamper (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Tamper and earthquake detector",
-                    "value": 1
-                },
-                {
-                    "label": "Tamper and orientation in space",
-                    "value": 2
-                }
-            ]
-        },
-        "25": {
-            "label": "Tamper - alarm cancellation",
-            "description": "This parameter allows to disable cancellation of the tamper alarm.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Do not send tamper cancellation report",
-                    "value": 0
-                },
-                {
-                    "label": "Send tamper cancellation report",
-                    "value": 1
-                }
-            ]
-        },
-        "28": {
-            "label": "Tamper - broadcast mode",
-            "description": "Determines whether the tamper alarm frame will  be sent in broadcast mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Reported to association groups.",
-                    "value": 0
-                },
-                {
-                    "label": "Reported in broadcast mode to 3rd assoc grp",
-                    "value": 1
-                }
-            ]
-        },
-        "29": {
-            "label": "Tamper - backward compatible broadcast mode",
-            "description": "Determines whether the tamper alarm frame will be sent in broadcast mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Reported to association groups.",
-                    "value": 0
-                },
-                {
-                    "label": "Reported in broadcast mode to 5th assoc grp",
-                    "value": 1
-                }
-            ]
-        },
-        "40": {
-            "label": "Illuminance report - threshold",
-            "description": "Change in light intensity level resulting in illumination report",
-            "unit": "lux",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 200,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "42": {
-            "label": "Illuminance report - interval",
-            "description": "Time interval between consecutive illumination reports",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 3600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "60": {
-            "label": "Temperature report - threshold",
-            "description": "The change in temperature resulting in temperature report",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "62": {
-            "label": "Temperature measuring - interval",
-            "description": "How often the temperature will be measured",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 900,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "64": {
-            "label": "Temperature report - interval",
-            "description": "How often the temperature reports will be sent",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "66": {
-            "label": "Temperature offset",
-            "description": "Value added to the actual temperature",
-            "unit": "degrees celcius",
-            "valueSize": 2,
-            "minValue": -1000,
-            "maxValue": 1000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "80": {
-            "label": "LED - signalling mode",
-            "description": "LED signalling mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED inactive.",
-                    "value": 0
-                },
-                {
-                    "label": "Long / None colour  temperature dependent",
-                    "value": 1
-                },
-                {
-                    "label": "Long / None Flashlight mode",
-                    "value": 2
-                },
-                {
-                    "label": "Long / None White.",
-                    "value": 3
-                },
-                {
-                    "label": "Long / None Red.",
-                    "value": 4
-                },
-                {
-                    "label": "Long / None Green.",
-                    "value": 5
-                },
-                {
-                    "label": "Long / None Blue.",
-                    "value": 6
-                },
-                {
-                    "label": "Long / None Yellow.",
-                    "value": 7
-                },
-                {
-                    "label": "Long / None Cyan.",
-                    "value": 8
-                },
-                {
-                    "label": "Long / None Magenta.",
-                    "value": 9
-                },
-                {
-                    "label": "Long / Short colour temperature dependent",
-                    "value": 10
-                },
-                {
-                    "label": "Long / Short Flashlight mode",
-                    "value": 11
-                },
-                {
-                    "label": "Long / Short White.",
-                    "value": 12
-                },
-                {
-                    "label": "Long / Short Red.",
-                    "value": 13
-                },
-                {
-                    "label": "Long / Short Green.",
-                    "value": 14
-                },
-                {
-                    "label": "Long / Short Blue.",
-                    "value": 15
-                },
-                {
-                    "label": "Long / Short Yellow.",
-                    "value": 16
-                },
-                {
-                    "label": "Long / Short Cyan.",
-                    "value": 17
-                },
-                {
-                    "label": "Long / Short Magenta.",
-                    "value": 18
-                },
-                {
-                    "label": "Long / 2 Short colour  temperature dependent",
-                    "value": 19
-                },
-                {
-                    "label": "Long / 2 Short White.",
-                    "value": 20
-                },
-                {
-                    "label": "Long / 2 Short Red.",
-                    "value": 21
-                },
-                {
-                    "label": "Long / 2 Short Green.",
-                    "value": 22
-                },
-                {
-                    "label": "Long / 2 Short Blue.",
-                    "value": 23
-                },
-                {
-                    "label": "Long / 2 Short Yellow.",
-                    "value": 24
-                },
-                {
-                    "label": "Long / 2 Short Cyan.",
-                    "value": 25
-                },
-                {
-                    "label": "Long / 2 Short Magenta.",
-                    "value": 26
-                }
-            ]
-        },
-        "81": {
-            "label": "LED - brightness",
-            "description": "LED brightness",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "82": {
-            "label": "LED - illuminance for low indicator brightness",
-            "description": "Light intensity level below which brightness of visual indicator is set to 1%.",
-            "unit": "lux",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "83": {
-            "label": "LED - illuminance for high indicator brightness",
-            "description": "Light intensity level above which brightness of visual indicator is set to 100%.",
-            "unit": "lux",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 1000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "86": {
-            "label": "LED - temperature for blue colour",
-            "description": "Minimum temperature resulting in blue LED illumination",
-            "unit": "degrees celcius",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 18,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "87": {
-            "label": "LED - temperature for red colour",
-            "description": "Minimum temperature resulting in red LED illumination",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 28,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "89": {
-            "label": "LED - tamper alarm",
-            "description": "Indicating mode resembles a police car (white, red and blue",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED does not indicate tamper alarm.",
-                    "value": 0
-                },
-                {
-                    "label": "LED indicates tamper alarm.",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGMS001",
+	"description": "Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0801",
+			"productId": "0x1001"
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x1002"
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x2001"
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x2002"
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x3001"
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x3002"
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x4001"
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x4002"
+		},
+		{
+			"productType": "0x8800",
+			"productId": "0x3001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.2",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Motion detection - sensitivity",
+			"description": "The lower the value, the more sensitive the PIR sensor.",
+			"valueSize": 2,
+			"minValue": 8,
+			"maxValue": 255,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Motion detection - blind time",
+			"description": "Period of time through which the PIR sensor is “blind”.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Motion detection - pulse counter",
+			"description": "Sets the number of moves required for the PIR sensor to report motion.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "1 pulse",
+					"value": 0
+				},
+				{
+					"label": "2 pulses",
+					"value": 1
+				},
+				{
+					"label": "3 pulses",
+					"value": 2
+				},
+				{
+					"label": "4 pulses",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Motion detection - window time",
+			"description": "The higher the value, the more sensitive the PIR sensor.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "4 seconds",
+					"value": 0
+				},
+				{
+					"label": "8 seconds",
+					"value": 1
+				},
+				{
+					"label": "12 seconds",
+					"value": 2
+				},
+				{
+					"label": "16 seconds",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Motion detection - alarm cancellation delay",
+			"description": "Period of time after wich Motion alarm will be cancelled.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Motion detection - operating mode",
+			"description": "The parameter determines the part of day in which the PIR sensor will be active.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "PIR sensor always active",
+					"value": 0
+				},
+				{
+					"label": "PIR sensor active during the day only",
+					"value": 1
+				},
+				{
+					"label": "PIR sensor active during the night only",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Motion detection - night/day",
+			"description": "The parameter defines the difference between night and day.",
+			"unit": "lux",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 200,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "BASIC command class configuration",
+			"description": "Determines the command frames sent in 2nd association group.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "BASIC ON and BASIC OFF",
+					"value": 0
+				},
+				{
+					"label": "Only the BASIC ON",
+					"value": 1
+				},
+				{
+					"label": "Only the BASIC OFF",
+					"value": 2
+				}
+			]
+		},
+		"14": {
+			"label": "BASIC ON command frame value",
+			"description": "The value of 255 allows to turn ON a device.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "BASIC OFF command frame value",
+			"description": "The value of 0 allows to turn OFF a device.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Associations in Z-Wave network Security Mode",
+			"description": "This parameter defines how commands are sent in specified association groups",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Tamper - sensitivity",
+			"description": "Change in force that will result in tamper alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 121,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Tamper - alarm cancellation delay",
+			"description": "Time period after which a tamper alarm will be cancelled.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Tamper - operating modes",
+			"description": "This parameter determines function of the tamper and sent reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Only tamper (default)",
+					"value": 0
+				},
+				{
+					"label": "Tamper and earthquake detector",
+					"value": 1
+				},
+				{
+					"label": "Tamper and orientation in space",
+					"value": 2
+				}
+			]
+		},
+		"25": {
+			"label": "Tamper - alarm cancellation",
+			"description": "This parameter allows to disable cancellation of the tamper alarm.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do not send tamper cancellation report",
+					"value": 0
+				},
+				{
+					"label": "Send tamper cancellation report",
+					"value": 1
+				}
+			]
+		},
+		"28": {
+			"label": "Tamper - broadcast mode",
+			"description": "Determines whether the tamper alarm frame will  be sent in broadcast mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reported to association groups.",
+					"value": 0
+				},
+				{
+					"label": "Reported in broadcast mode to 3rd assoc grp",
+					"value": 1
+				}
+			]
+		},
+		"29": {
+			"label": "Tamper - backward compatible broadcast mode",
+			"description": "Determines whether the tamper alarm frame will be sent in broadcast mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reported to association groups.",
+					"value": 0
+				},
+				{
+					"label": "Reported in broadcast mode to 5th assoc grp",
+					"value": 1
+				}
+			]
+		},
+		"40": {
+			"label": "Illuminance report - threshold",
+			"description": "Change in light intensity level resulting in illumination report",
+			"unit": "lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 200,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Illuminance report - interval",
+			"description": "Time interval between consecutive illumination reports",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"60": {
+			"label": "Temperature report - threshold",
+			"description": "The change in temperature resulting in temperature report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"62": {
+			"label": "Temperature measuring - interval",
+			"description": "How often the temperature will be measured",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 900,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"64": {
+			"label": "Temperature report - interval",
+			"description": "How often the temperature reports will be sent",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"66": {
+			"label": "Temperature offset",
+			"description": "Value added to the actual temperature",
+			"unit": "degrees celcius",
+			"valueSize": 2,
+			"minValue": -1000,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"80": {
+			"label": "LED - signalling mode",
+			"description": "LED signalling mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED inactive.",
+					"value": 0
+				},
+				{
+					"label": "Long / None colour  temperature dependent",
+					"value": 1
+				},
+				{
+					"label": "Long / None Flashlight mode",
+					"value": 2
+				},
+				{
+					"label": "Long / None White.",
+					"value": 3
+				},
+				{
+					"label": "Long / None Red.",
+					"value": 4
+				},
+				{
+					"label": "Long / None Green.",
+					"value": 5
+				},
+				{
+					"label": "Long / None Blue.",
+					"value": 6
+				},
+				{
+					"label": "Long / None Yellow.",
+					"value": 7
+				},
+				{
+					"label": "Long / None Cyan.",
+					"value": 8
+				},
+				{
+					"label": "Long / None Magenta.",
+					"value": 9
+				},
+				{
+					"label": "Long / Short colour temperature dependent",
+					"value": 10
+				},
+				{
+					"label": "Long / Short Flashlight mode",
+					"value": 11
+				},
+				{
+					"label": "Long / Short White.",
+					"value": 12
+				},
+				{
+					"label": "Long / Short Red.",
+					"value": 13
+				},
+				{
+					"label": "Long / Short Green.",
+					"value": 14
+				},
+				{
+					"label": "Long / Short Blue.",
+					"value": 15
+				},
+				{
+					"label": "Long / Short Yellow.",
+					"value": 16
+				},
+				{
+					"label": "Long / Short Cyan.",
+					"value": 17
+				},
+				{
+					"label": "Long / Short Magenta.",
+					"value": 18
+				},
+				{
+					"label": "Long / 2 Short colour  temperature dependent",
+					"value": 19
+				},
+				{
+					"label": "Long / 2 Short White.",
+					"value": 20
+				},
+				{
+					"label": "Long / 2 Short Red.",
+					"value": 21
+				},
+				{
+					"label": "Long / 2 Short Green.",
+					"value": 22
+				},
+				{
+					"label": "Long / 2 Short Blue.",
+					"value": 23
+				},
+				{
+					"label": "Long / 2 Short Yellow.",
+					"value": 24
+				},
+				{
+					"label": "Long / 2 Short Cyan.",
+					"value": 25
+				},
+				{
+					"label": "Long / 2 Short Magenta.",
+					"value": 26
+				}
+			]
+		},
+		"81": {
+			"label": "LED - brightness",
+			"description": "LED brightness",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"82": {
+			"label": "LED - illuminance for low indicator brightness",
+			"description": "Light intensity level below which brightness of visual indicator is set to 1%.",
+			"unit": "lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"83": {
+			"label": "LED - illuminance for high indicator brightness",
+			"description": "Light intensity level above which brightness of visual indicator is set to 100%.",
+			"unit": "lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 1000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"86": {
+			"label": "LED - temperature for blue colour",
+			"description": "Minimum temperature resulting in blue LED illumination",
+			"unit": "degrees celcius",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 18,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"87": {
+			"label": "LED - temperature for red colour",
+			"description": "Minimum temperature resulting in red LED illumination",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 28,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"89": {
+			"label": "LED - tamper alarm",
+			"description": "Indicating mode resembles a police car (white, red and blue",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED does not indicate tamper alarm.",
+					"value": 0
+				},
+				{
+					"label": "LED indicates tamper alarm.",
+					"value": 1
+				}
+			]
+		}
+	}
 }

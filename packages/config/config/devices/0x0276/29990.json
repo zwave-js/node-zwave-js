@@ -1,77 +1,76 @@
 // Systemair Sverige AB 29990
 // Remotely Controlled Ventilation
 {
-    "_approved": true,
-    "manufacturer": "Systemair Sverige AB",
-    "manufacturerId": "0x0276",
-    "label": "29990",
-    "description": "Remotely Controlled Ventilation",
-    "devices": [
-        {
-            "productType": "0x0139",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "System Type (read-only)",
-            "description": "Ventilation System Type.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Filter - Period (read-only)",
-            "description": "In step of 30 days; 6=180days.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 12,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Filter - Days",
-            "description": "How many days has been used since the last change",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Boost Mode Remaining Time",
-            "description": "How many seconds are left for Boost mode.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Temperature Setpoint Step (read-only)",
-            "description": "The min change available in degree Celsius x 10; 25 = 2.5 C.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Systemair Sverige AB",
+	"manufacturerId": "0x0276",
+	"label": "29990",
+	"description": "Remotely Controlled Ventilation",
+	"devices": [
+		{
+			"productType": "0x0139",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "System Type (read-only)",
+			"description": "Ventilation System Type.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Filter - Period (read-only)",
+			"description": "In step of 30 days; 6=180days.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 12,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Filter - Days",
+			"description": "How many days has been used since the last change",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Boost Mode Remaining Time",
+			"description": "How many seconds are left for Boost mode.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Temperature Setpoint Step (read-only)",
+			"description": "The min change available in degree Celsius x 10; 25 = 2.5 C.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

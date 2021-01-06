@@ -1,7 +1,6 @@
 // FortrezZ LLC FMI
 // Flow Meter
 {
-	"_approved": true,
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
 	"label": "FMI",

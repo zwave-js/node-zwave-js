@@ -1,22 +1,18 @@
 // Leviton VRC0P (v1)
 // RS-232 Serial Interface
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRC0P (v1)",
-    "description": "RS-232 Serial Interface",
-    "devices": [
-        {
-            "productType": "0x0b01",
-            "productId": "0x0209"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRC0P (v1)",
+	"description": "RS-232 Serial Interface",
+	"devices": [
+		{
+			"productType": "0x0b01",
+			"productId": "0x0209"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

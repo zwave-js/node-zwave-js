@@ -1,34 +1,33 @@
 // Leviton VRPD3
 // Scene Capable Plug-in Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRPD3",
-    "description": "Scene Capable Plug-in Dimmer",
-    "devices": [
-        {
-            "productType": "0x1705",
-            "productId": "0x0334"
-        },
-        {
-            "productType": "0x1706",
-            "productId": "0x0334"
-        },
-        {
-            "productType": "0x5893",
-            "productId": "0x0820"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRPD3",
+	"description": "Scene Capable Plug-in Dimmer",
+	"devices": [
+		{
+			"productType": "0x1705",
+			"productId": "0x0334"
+		},
+		{
+			"productType": "0x1706",
+			"productId": "0x0334"
+		},
+		{
+			"productType": "0x5893",
+			"productId": "0x0820"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

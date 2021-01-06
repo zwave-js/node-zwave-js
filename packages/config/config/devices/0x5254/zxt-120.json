@@ -1,7 +1,6 @@
 // Remotec ZXT-120
 // AC IR Remote
 {
-	"_approved": true,
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
 	"label": "ZXT-120",

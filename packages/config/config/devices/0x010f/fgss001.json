@@ -1,343 +1,342 @@
 // Fibargroup FGSS001
 // Smoke Sensor
 {
-    "_approved": true,
-    "manufacturer": "Fibargroup",
-    "manufacturerId": "0x010f",
-    "label": "FGSS001",
-    "description": "Smoke Sensor",
-    "devices": [
-        {
-            "productType": "0x0c00",
-            "productId": "0x1000"
-        },
-        {
-            "productType": "0x0c00",
-            "productId": "0x3000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Fire Status",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "TMP Button",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Device Status",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Alarm Cancellation Delay",
-            "description": "Alarm Cancellation Delay",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 3600,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Alarm acoustic and visual signals",
-            "description": "Alarm acoustic and visual signals",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "acoustic and visual alarms inactive",
-                    "value": 0
-                },
-                {
-                    "label": "acoustic alarm inactive, visual alarm active",
-                    "value": 1
-                },
-                {
-                    "label": "acoustic alarm active, visual alarm inactive",
-                    "value": 2
-                },
-                {
-                    "label": "acoustic and visual alarms active",
-                    "value": 3
-                }
-            ]
-        },
-        "5": {
-            "label": "Type of alarm to 1st association group (SMOKE)",
-            "description": "Type of alarm to 1st association group (SMOKE)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "ALARM SENSOR (SMOKE)",
-                    "value": 0
-                },
-                {
-                    "label": "BASIC_SET",
-                    "value": 255
-                }
-            ]
-        },
-        "7": {
-            "label": "Forced Level of Dimming group 1",
-            "description": "Forced Level of Dimming group 1",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Interval between temperature  readings",
-            "description": "Interval between temperature  readings",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Insensitiveness to temperature changes.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Frame broadcast mode",
-            "description": "Frame broadcast mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Broadcast inactive",
-                    "value": 0
-                },
-                {
-                    "label": "Smoke mode active, Tamper mode inactive",
-                    "value": 1
-                },
-                {
-                    "label": "Smoke mode inactive, Tamper mode active",
-                    "value": 2
-                },
-                {
-                    "label": "Smoke and Tamper broadcast mode active",
-                    "value": 3
-                }
-            ]
-        },
-        "73": {
-            "label": "Temperature measurement compensation",
-            "description": "Temperature measurement compensation",
-            "valueSize": 2,
-            "minValue": -1000,
-            "maxValue": 1000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "80": {
-            "label": "Z-Wave range test interval",
-            "description": "Z-Wave range test interval",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "81": {
-            "label": "Temperature alarm threshold",
-            "description": "Temperature alarm threshold",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 54,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "82": {
-            "label": "Smoke Sensor sensitivity",
-            "description": "Smoke Sensor sensitivity",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "High",
-                    "value": 1
-                },
-                {
-                    "label": "Medium",
-                    "value": 2
-                },
-                {
-                    "label": "Low",
-                    "value": 3
-                }
-            ]
-        },
-        "83": {
-            "label": "Black Box sensitivity level",
-            "description": "Black Box sensitivity level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "High",
-                    "value": 1
-                },
-                {
-                    "label": "Medium",
-                    "value": 2
-                },
-                {
-                    "label": "Low",
-                    "value": 3
-                }
-            ]
-        },
-        "84": {
-            "label": "Malfunction alarm",
-            "description": "Malfunction alarm",
-            "valueSize": 1,
-            "minValue": -126,
-            "maxValue": 127,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "85": {
-            "label": "Temperature alarm",
-            "description": "Temperature alarm",
-            "valueSize": 1,
-            "minValue": -126,
-            "maxValue": 127,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "86": {
-            "label": "Lack of the Z-Wave range alarm",
-            "description": "Lack of the Z-Wave range alarm",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 17280,
-            "defaultValue": 360,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "87": {
-            "label": "Low battery alarm",
-            "description": "Low battery alarm",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 17280,
-            "defaultValue": 360,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "88": {
-            "label": "Temperature measurement compensation for report",
-            "description": "Temperature measurement compensation for report",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Ignore temperature compensation",
-                    "value": 0
-                },
-                {
-                    "label": "Include temperature compensation",
-                    "value": 1
-                }
-            ]
-        },
-        "89": {
-            "label": "Tamper alarm",
-            "description": "Activates/inactivates temper switch alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Tamper alarm inactive",
-                    "value": 0
-                },
-                {
-                    "label": "Tamper alarm active, with cancellation option",
-                    "value": 1
-                },
-                {
-                    "label": "Tamper alarm active, without cancellation option",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGSS001",
+	"description": "Smoke Sensor",
+	"devices": [
+		{
+			"productType": "0x0c00",
+			"productId": "0x1000"
+		},
+		{
+			"productType": "0x0c00",
+			"productId": "0x3000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Fire Status",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "TMP Button",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Device Status",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Alarm Cancellation Delay",
+			"description": "Alarm Cancellation Delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Alarm acoustic and visual signals",
+			"description": "Alarm acoustic and visual signals",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "acoustic and visual alarms inactive",
+					"value": 0
+				},
+				{
+					"label": "acoustic alarm inactive, visual alarm active",
+					"value": 1
+				},
+				{
+					"label": "acoustic alarm active, visual alarm inactive",
+					"value": 2
+				},
+				{
+					"label": "acoustic and visual alarms active",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Type of alarm to 1st association group (SMOKE)",
+			"description": "Type of alarm to 1st association group (SMOKE)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALARM SENSOR (SMOKE)",
+					"value": 0
+				},
+				{
+					"label": "BASIC_SET",
+					"value": 255
+				}
+			]
+		},
+		"7": {
+			"label": "Forced Level of Dimming group 1",
+			"description": "Forced Level of Dimming group 1",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Interval between temperature  readings",
+			"description": "Interval between temperature  readings",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Insensitiveness to temperature changes.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Frame broadcast mode",
+			"description": "Frame broadcast mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Broadcast inactive",
+					"value": 0
+				},
+				{
+					"label": "Smoke mode active, Tamper mode inactive",
+					"value": 1
+				},
+				{
+					"label": "Smoke mode inactive, Tamper mode active",
+					"value": 2
+				},
+				{
+					"label": "Smoke and Tamper broadcast mode active",
+					"value": 3
+				}
+			]
+		},
+		"73": {
+			"label": "Temperature measurement compensation",
+			"description": "Temperature measurement compensation",
+			"valueSize": 2,
+			"minValue": -1000,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"80": {
+			"label": "Z-Wave range test interval",
+			"description": "Z-Wave range test interval",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"81": {
+			"label": "Temperature alarm threshold",
+			"description": "Temperature alarm threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 54,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"82": {
+			"label": "Smoke Sensor sensitivity",
+			"description": "Smoke Sensor sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "Low",
+					"value": 3
+				}
+			]
+		},
+		"83": {
+			"label": "Black Box sensitivity level",
+			"description": "Black Box sensitivity level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "Low",
+					"value": 3
+				}
+			]
+		},
+		"84": {
+			"label": "Malfunction alarm",
+			"description": "Malfunction alarm",
+			"valueSize": 1,
+			"minValue": -126,
+			"maxValue": 127,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"85": {
+			"label": "Temperature alarm",
+			"description": "Temperature alarm",
+			"valueSize": 1,
+			"minValue": -126,
+			"maxValue": 127,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"86": {
+			"label": "Lack of the Z-Wave range alarm",
+			"description": "Lack of the Z-Wave range alarm",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 17280,
+			"defaultValue": 360,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"87": {
+			"label": "Low battery alarm",
+			"description": "Low battery alarm",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 17280,
+			"defaultValue": 360,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"88": {
+			"label": "Temperature measurement compensation for report",
+			"description": "Temperature measurement compensation for report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ignore temperature compensation",
+					"value": 0
+				},
+				{
+					"label": "Include temperature compensation",
+					"value": 1
+				}
+			]
+		},
+		"89": {
+			"label": "Tamper alarm",
+			"description": "Activates/inactivates temper switch alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Tamper alarm inactive",
+					"value": 0
+				},
+				{
+					"label": "Tamper alarm active, with cancellation option",
+					"value": 1
+				},
+				{
+					"label": "Tamper alarm active, without cancellation option",
+					"value": 2
+				}
+			]
+		}
+	}
 }

@@ -574,7 +574,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": true
 		},
 		"27": {
 			"label": "Fan LED Strip Timeout",

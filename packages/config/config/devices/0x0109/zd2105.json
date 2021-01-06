@@ -1,20 +1,19 @@
 // Vision Security ZD2105
 // Recessed Door Window Sensor
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZD2105",
-    "description": "Recessed Door Window Sensor",
-    "devices": [
-        {
-            "productType": "0x2022",
-            "productId": "0x2201"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZD2105",
+	"description": "Recessed Door Window Sensor",
+	"devices": [
+		{
+			"productType": "0x2022",
+			"productId": "0x2201"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

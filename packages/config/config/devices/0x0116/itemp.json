@@ -1,112 +1,111 @@
 // Chromagic Technologies Corporation ITEMP
 // Contact and temperature sensor
 {
-    "_approved": true,
-    "manufacturer": "Chromagic Technologies Corporation",
-    "manufacturerId": "0x0116",
-    "label": "ITEMP",
-    "description": "Contact and temperature sensor",
-    "devices": [
-        {
-            "productType": "0x1182",
-            "productId": "0x4501"
-        },
-        {
-            "productType": "0x1188",
-            "productId": "0x4501"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Binary input Group",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "Alarm Group",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Reset to factory default",
-            "description": "Delete configuration but keeps inclusion",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Execute reset",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Command sent on external dry contact",
-            "description": "Configure what te external contact sends when trigger",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Alarm Resport Type 2 (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Basic On or Basic Off",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Operating Mode",
-            "description": "Operating Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal Wakeup (default)",
-                    "value": 1
-                },
-                {
-                    "label": "Always awake",
-                    "value": 3
-                }
-            ]
-        },
-        "6": {
-            "label": "Temperature Offset",
-            "description": "Temperature Offset",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 15300,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Chromagic Technologies Corporation",
+	"manufacturerId": "0x0116",
+	"label": "ITEMP",
+	"description": "Contact and temperature sensor",
+	"devices": [
+		{
+			"productType": "0x1182",
+			"productId": "0x4501"
+		},
+		{
+			"productType": "0x1188",
+			"productId": "0x4501"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Binary input Group",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Alarm Group",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Reset to factory default",
+			"description": "Delete configuration but keeps inclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No (default)",
+					"value": 0
+				},
+				{
+					"label": "Execute reset",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Command sent on external dry contact",
+			"description": "Configure what te external contact sends when trigger",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Alarm Resport Type 2 (default)",
+					"value": 0
+				},
+				{
+					"label": "Basic On or Basic Off",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Operating Mode",
+			"description": "Operating Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Wakeup (default)",
+					"value": 1
+				},
+				{
+					"label": "Always awake",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Temperature Offset",
+			"description": "Temperature Offset",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 15300,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

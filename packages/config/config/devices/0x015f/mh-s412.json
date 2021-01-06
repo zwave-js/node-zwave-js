@@ -1,43 +1,33 @@
 // McoHome Technology Co., Ltd. MH-S412
 // Touch Panel Switch (Dual)
 {
-    "_approved": true,
-    "_errors": [
-        "Device category is not set.",
-        "At least one manufacturers product image must be uploaded"
-    ],
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH-S412",
-    "description": "Touch Panel Switch (Dual)",
-    "devices": [
-        {
-            "productType": "0x4102",
-            "productId": "0x0202"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Switch Button Group 1",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "Switch Button Group 2",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Status Reports",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-S412",
+	"description": "Touch Panel Switch (Dual)",
+	"devices": [
+		{
+			"productType": "0x4102",
+			"productId": "0x0202"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Switch Button Group 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Switch Button Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Status Reports",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }

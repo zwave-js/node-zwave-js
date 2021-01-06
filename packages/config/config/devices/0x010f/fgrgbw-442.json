@@ -1,7 +1,6 @@
 // Fibargroup FGRGBW-442
 // RGBW CONTROLLER 2
 {
-	"_approved": false,
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGRGBW-442",

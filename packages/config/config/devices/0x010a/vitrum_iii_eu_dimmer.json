@@ -1,32 +1,31 @@
 // VDA Vitrum III EU Dimmer
 {
-    "_approved": true,
-    "manufacturer": "VDA",
-    "manufacturerId": "0x010a",
-    "label": "Vitrum III EU Dimmer",
-    "description": "",
-    "devices": [
-        {
-            "productType": "0x1100",
-            "productId": "0x4b00"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Switch channel 1",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "Dimmer Channel 2",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Dimmer Channel 3",
-            "maxNodes": 5
-        }
-    }
+	"manufacturer": "VDA",
+	"manufacturerId": "0x010a",
+	"label": "Vitrum III EU Dimmer",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x1100",
+			"productId": "0x4b00"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Switch channel 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Dimmer Channel 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Dimmer Channel 3",
+			"maxNodes": 5
+		}
+	}
 }

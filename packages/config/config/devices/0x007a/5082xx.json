@@ -1,79 +1,78 @@
 // Merten 5082xx
 // Battery Powered Wall Controller MOVE
 {
-    "_approved": true,
-    "manufacturer": "Merten",
-    "manufacturerId": "0x007a",
-    "label": "5082xx",
-    "description": "Battery Powered Wall Controller MOVE",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Button",
-            "maxNodes": 12,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "4": {
-            "label": "Switching single-surface",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "44": {
-            "label": "Doorbell function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "52": {
-            "label": "LOWER shutter as long as button is pressed",
-            "description": "Direction of movement changes after each switching process",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "54": {
-            "label": "Move shutter single-surface",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "55": {
-            "label": "RAISE shutter as long as button is pressed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Merten",
+	"manufacturerId": "0x007a",
+	"label": "5082xx",
+	"description": "Battery Powered Wall Controller MOVE",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Button",
+			"maxNodes": 12,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"4": {
+			"label": "Switching single-surface",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"44": {
+			"label": "Doorbell function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "LOWER shutter as long as button is pressed",
+			"description": "Direction of movement changes after each switching process",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"54": {
+			"label": "Move shutter single-surface",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"55": {
+			"label": "RAISE shutter as long as button is pressed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

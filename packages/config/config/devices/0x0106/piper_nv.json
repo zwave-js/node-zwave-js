@@ -1,27 +1,19 @@
 // iControl Piper NV
 // Piper NV Security camera / sensor
 {
-    "_approved": false,
-    "_errors": [
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "_warnings": [
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
-    "manufacturer": "iControl",
-    "manufacturerId": "0x0106",
-    "label": "Piper NV",
-    "description": "Piper NV Security camera / sensor",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "iControl",
+	"manufacturerId": "0x0106",
+	"label": "Piper NV",
+	"description": "Piper NV Security camera / sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

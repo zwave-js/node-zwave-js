@@ -1,7 +1,6 @@
 // BeNext P1-dongle
 // P1-dongle
 {
-	"_approved": true,
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
 	"label": "P1-dongle",

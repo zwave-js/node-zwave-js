@@ -1,10 +1,6 @@
 // Qubino ZMNHJD
 // Flush Pilot
 {
-	"_approved": true,
-	"_warnings": [
-		"Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-	],
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
 	"label": "ZMNHJD",

@@ -1,20 +1,19 @@
 // Home controls HTP-8S0-XX
 // 8 way touch light switch
 {
-    "_approved": true,
-    "manufacturer": "Home controls",
-    "manufacturerId": "0x0293",
-    "label": "HTP-8S0-XX",
-    "description": "8 way touch light switch",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0018"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Home controls",
+	"manufacturerId": "0x0293",
+	"label": "HTP-8S0-XX",
+	"description": "8 way touch light switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0018"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

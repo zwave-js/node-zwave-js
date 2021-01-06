@@ -1,84 +1,83 @@
 // NIE Technology Co., Ltd. NZW30
 // In-Wall Switch (On/Off)
 {
-    "_approved": true,
-    "manufacturer": "NIE Technology Co., Ltd.",
-    "manufacturerId": "0x0312",
-    "label": "NZW30",
-    "description": "In-Wall Switch (On/Off)",
-    "devices": [
-        {
-            "productType": "0x1e01",
-            "productId": "0x1e01"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "ledIndicator",
-            "description": "Set the LED light behavior",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Turn LED indicator on when switch is off",
-                    "value": 0
-                },
-                {
-                    "label": "Turn LED indicator on when switch is on",
-                    "value": 1
-                },
-                {
-                    "label": "Indicator LED is always off",
-                    "value": 2
-                },
-                {
-                    "label": "Indicator LED is always on",
-                    "value": 3
-                }
-            ]
-        },
-        "4": {
-            "label": "invert",
-            "description": "Invert on & off on the physical switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No",
-                    "value": 0
-                },
-                {
-                    "label": "Yes",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "autoOff",
-            "description": "Automatically turn switch off after this number of seconds",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "NZW30",
+	"description": "In-Wall Switch (On/Off)",
+	"devices": [
+		{
+			"productType": "0x1e01",
+			"productId": "0x1e01"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "ledIndicator",
+			"description": "Set the LED light behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn LED indicator on when switch is off",
+					"value": 0
+				},
+				{
+					"label": "Turn LED indicator on when switch is on",
+					"value": 1
+				},
+				{
+					"label": "Indicator LED is always off",
+					"value": 2
+				},
+				{
+					"label": "Indicator LED is always on",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "invert",
+			"description": "Invert on & off on the physical switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "autoOff",
+			"description": "Automatically turn switch off after this number of seconds",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

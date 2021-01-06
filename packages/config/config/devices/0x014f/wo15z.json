@@ -1,43 +1,42 @@
 // Nortek Security & Control LLC WO15Z
 // Single Wall Outlet
 {
-    "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "WO15Z",
-    "description": "Single Wall Outlet",
-    "devices": [
-        {
-            "productType": "0x5252",
-            "productId": "0x3530"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "3": {
-            "label": "Night Light",
-            "description": "LED mode for attached load",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "On when load is on",
-                    "value": 0
-                },
-                {
-                    "label": "Off when load is on",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "WO15Z",
+	"description": "Single Wall Outlet",
+	"devices": [
+		{
+			"productType": "0x5252",
+			"productId": "0x3530"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Night Light",
+			"description": "LED mode for attached load",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On when load is on",
+					"value": 0
+				},
+				{
+					"label": "Off when load is on",
+					"value": 1
+				}
+			]
+		}
+	}
 }

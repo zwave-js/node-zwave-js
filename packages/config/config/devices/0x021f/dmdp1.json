@@ -1,171 +1,170 @@
 // Elexa Consumer Products Inc. DMDP1
 // Dome Window and Door Sensor Pro
 {
-    "_approved": true,
-    "manufacturer": "Elexa Consumer Products Inc.",
-    "manufacturerId": "0x021f",
-    "label": "DMDP1",
-    "description": "Dome Window and Door Sensor Pro",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0201"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Enable/Disable LED Indicator",
-            "description": "Enable/Disable LED Indicator",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Open/Close LED Indicator Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Open/Close LED Indicator Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Configure Open/Close Reports Sent",
-            "description": "Configure Open/Close Reports Sent",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Reports Closed when Magnet is close",
-                    "value": 0
-                },
-                {
-                    "label": "Reports Open when Magnet is close",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Switch Between Notification and Binary Sensor",
-            "description": "Switch Between Notification and Binary Sensor Command Classes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Notification Command Class is Used",
-                    "value": 0
-                },
-                {
-                    "label": "Binary Sensor Command Class is Used",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Enable/Disable Temperature Sensor",
-            "description": "Enable/Disable Temperature Sensor",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Temperature Sensor Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Temperature Sensor Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Temperature offset",
-            "description": "Temperature offset",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Temperature Units",
-            "description": "Temperature Units",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Temperature Reported in Fahrenheit",
-                    "value": 0
-                },
-                {
-                    "label": "Temperature Reported in Celsius",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Basic Set Value (Group 2)",
-            "description": "Basic Set Value (Group 2)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Basic Set Value (Group 3)",
-            "description": "Basic Set Value (Group 3)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Basic Set Value (Group 4)",
-            "description": "Basic Set Value (Group 4)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Elexa Consumer Products Inc.",
+	"manufacturerId": "0x021f",
+	"label": "DMDP1",
+	"description": "Dome Window and Door Sensor Pro",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0201"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Enable/Disable LED Indicator",
+			"description": "Enable/Disable LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Open/Close LED Indicator Disabled",
+					"value": 0
+				},
+				{
+					"label": "Open/Close LED Indicator Enabled",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Configure Open/Close Reports Sent",
+			"description": "Configure Open/Close Reports Sent",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reports Closed when Magnet is close",
+					"value": 0
+				},
+				{
+					"label": "Reports Open when Magnet is close",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Switch Between Notification and Binary Sensor",
+			"description": "Switch Between Notification and Binary Sensor Command Classes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Notification Command Class is Used",
+					"value": 0
+				},
+				{
+					"label": "Binary Sensor Command Class is Used",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Enable/Disable Temperature Sensor",
+			"description": "Enable/Disable Temperature Sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Temperature Sensor Disabled",
+					"value": 0
+				},
+				{
+					"label": "Temperature Sensor Enabled",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Temperature offset",
+			"description": "Temperature offset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Temperature Units",
+			"description": "Temperature Units",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Temperature Reported in Fahrenheit",
+					"value": 0
+				},
+				{
+					"label": "Temperature Reported in Celsius",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Basic Set Value (Group 2)",
+			"description": "Basic Set Value (Group 2)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Basic Set Value (Group 3)",
+			"description": "Basic Set Value (Group 3)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Basic Set Value (Group 4)",
+			"description": "Basic Set Value (Group 4)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

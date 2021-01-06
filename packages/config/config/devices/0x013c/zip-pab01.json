@@ -1,57 +1,56 @@
 // Philio Technology Corp ZIP-PAB01
 // Zipato Micromodule Energy Meter
 {
-    "_approved": true,
-    "manufacturer": "Philio Technology Corp",
-    "manufacturerId": "0x013c",
-    "label": "ZIP-PAB01",
-    "description": "Zipato Micromodule Energy Meter",
-    "devices": [
-        {
-            "productType": "0x0006",
-            "productId": "0x001a"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Power meter report period",
-            "description": "Power meter report period, in 5 seconds unit. 720 -> 1 hour",
-            "unit": "5sec",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 720,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Energy meter report period",
-            "description": "The accumulated power consumption report period",
-            "unit": "5sec",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 720,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Selected default endpoint",
-            "description": "1 => CT1 and CT2, 2 => CT1, 3 => CT2",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "ZIP-PAB01",
+	"description": "Zipato Micromodule Energy Meter",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x001a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Power meter report period",
+			"description": "Power meter report period, in 5 seconds unit. 720 -> 1 hour",
+			"unit": "5sec",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 720,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Energy meter report period",
+			"description": "The accumulated power consumption report period",
+			"unit": "5sec",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 720,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Selected default endpoint",
+			"description": "1 => CT1 and CT2, 2 => CT1, 3 => CT2",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

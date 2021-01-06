@@ -1,43 +1,42 @@
 // TKB Home TZE96
 // Color Touch Heating Thermostat
 {
-    "_approved": true,
-    "manufacturer": "TKB Home",
-    "manufacturerId": "0x0118",
-    "label": "TZE96",
-    "description": "Color Touch Heating Thermostat",
-    "devices": [
-        {
-            "productType": "0x0311",
-            "productId": "0x0506"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "4": {
-            "label": "Power failure",
-            "description": "Remember device status before the power failure.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switched OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Restore state",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "TZE96",
+	"description": "Color Touch Heating Thermostat",
+	"devices": [
+		{
+			"productType": "0x0311",
+			"productId": "0x0506"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"4": {
+			"label": "Power failure",
+			"description": "Remember device status before the power failure.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switched OFF",
+					"value": 0
+				},
+				{
+					"label": "Restore state",
+					"value": 1
+				}
+			]
+		}
+	}
 }

@@ -1,7 +1,6 @@
 // Zooz ZEN06
 // Smart Plug with 2 USB ports
 {
-	"_approved": true,
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN06",
