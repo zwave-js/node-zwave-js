@@ -16,6 +16,23 @@
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
+	"associations": {
+		// One entry for each association group
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic - Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Basic - Double Tap", // required
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"4": {
 			"label": "Invert Switch",
@@ -104,5 +121,8 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		"disableBasicMapping": true
 	}
 }

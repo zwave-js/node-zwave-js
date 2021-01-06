@@ -129,5 +129,8 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		"disableBasicMapping": true
 	}
 }
