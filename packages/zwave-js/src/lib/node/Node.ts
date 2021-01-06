@@ -1842,10 +1842,13 @@ version:               ${this.version}`;
 	}
 
 	private handleHail(_command: HailCC): void {
-		log.controller.logNode(this.id, {
-			message: `TODO: Handle Hail`,
-			direction: "inbound",
+		// treat this as a sign that the node is awake
+		this.markAsAwake();
+
+		log.controller.logNode(this.nodeId, {
+			message: `Hail received from node, refreshing actuator and sensor values...`,
 		});
+		void this.refreshValues();
 	}
 
 	/** Stores information about a currently held down key */
