@@ -1,7 +1,6 @@
 // ASSA ABLOY SD-L1000-CH
 // Yale Conexis L1
 {
-	"_approved": true,
 	"manufacturer": "ASSA ABLOY",
 	"manufacturerId": "0x0129",
 	"label": "SD-L1000-CH",

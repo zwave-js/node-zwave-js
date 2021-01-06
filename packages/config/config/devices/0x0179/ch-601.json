@@ -1,7 +1,6 @@
 // ConnectHome CH-601
 // CH-601 THE ELECTRIC CRANE
 {
-	"_approved": true,
 	"manufacturer": "ConnectHome",
 	"manufacturerId": "0x0179",
 	"label": "CH-601",

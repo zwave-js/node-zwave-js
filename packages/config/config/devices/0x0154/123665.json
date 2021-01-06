@@ -1,120 +1,119 @@
 // Popp & Co 123665
 // Wall Plug Meter Switch
 {
-    "_approved": true,
-    "manufacturer": "Popp & Co",
-    "manufacturerId": "0x0154",
-    "label": "123665",
-    "description": "Wall Plug Meter Switch",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Switch State",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Watt Meter Report Period",
-            "description": "Time frame for reporting instant power consumption",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 720,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "KWH Meter Report Period",
-            "description": "Time frame for reporting Accumulated Power Consumption",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 6,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Threshold of Watt for Load caution",
-            "description": "Warn when wattage of load over the preset threshold value",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 3000,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Threshold of KWh for Load caution",
-            "description": "Warn if Acc. Power Consumption exceeds the set value",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 10000,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Ignore start level after pwr outage",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch Off",
-                    "value": 0
-                },
-                {
-                    "label": "Last Switch State (Default)",
-                    "value": 1
-                },
-                {
-                    "label": "Switch On",
-                    "value": 2
-                }
-            ]
-        },
-        "11": {
-            "label": "Disable Switching Funktion",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled (Default)",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "123665",
+	"description": "Wall Plug Meter Switch",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Switch State",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Watt Meter Report Period",
+			"description": "Time frame for reporting instant power consumption",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 720,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "KWH Meter Report Period",
+			"description": "Time frame for reporting Accumulated Power Consumption",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 6,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Threshold of Watt for Load caution",
+			"description": "Warn when wattage of load over the preset threshold value",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 3000,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Threshold of KWh for Load caution",
+			"description": "Warn if Acc. Power Consumption exceeds the set value",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 10000,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Ignore start level after pwr outage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch Off",
+					"value": 0
+				},
+				{
+					"label": "Last Switch State (Default)",
+					"value": 1
+				},
+				{
+					"label": "Switch On",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "Disable Switching Funktion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled (Default)",
+					"value": 1
+				}
+			]
+		}
+	}
 }

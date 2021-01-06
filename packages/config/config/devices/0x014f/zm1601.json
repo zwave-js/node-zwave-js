@@ -1,78 +1,77 @@
 // Nortek Security & Control LLC ZM1601
 // Battery Operated Siren
 {
-    "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "ZM1601",
-    "description": "Battery Operated Siren",
-    "devices": [
-        {
-            "productType": "0x2005",
-            "productId": "0x0508"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Siren Strobe Mode",
-            "description": "Defines the reaction of the siren",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "All Enabled",
-                    "value": 0
-                },
-                {
-                    "label": "Siren Only",
-                    "value": 1
-                },
-                {
-                    "label": "Strobe Only",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Alarm auto stop",
-            "description": "Defines the auto time out of the alarm indication",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "30 seconds",
-                    "value": 0
-                },
-                {
-                    "label": "60 seconds",
-                    "value": 1
-                },
-                {
-                    "label": "120 seconds",
-                    "value": 2
-                },
-                {
-                    "label": "Continuous",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "ZM1601",
+	"description": "Battery Operated Siren",
+	"devices": [
+		{
+			"productType": "0x2005",
+			"productId": "0x0508"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Siren Strobe Mode",
+			"description": "Defines the reaction of the siren",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All Enabled",
+					"value": 0
+				},
+				{
+					"label": "Siren Only",
+					"value": 1
+				},
+				{
+					"label": "Strobe Only",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Alarm auto stop",
+			"description": "Defines the auto time out of the alarm indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "30 seconds",
+					"value": 0
+				},
+				{
+					"label": "60 seconds",
+					"value": 1
+				},
+				{
+					"label": "120 seconds",
+					"value": 2
+				},
+				{
+					"label": "Continuous",
+					"value": 3
+				}
+			]
+		}
+	}
 }

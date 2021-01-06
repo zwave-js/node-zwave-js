@@ -1,97 +1,96 @@
 // Danfoss 014G0210
 // HC-Z Hydronic Floor Heating Controller
 {
-    "_approved": true,
-    "manufacturer": "Danfoss",
-    "manufacturerId": "0x0002",
-    "label": "014G0210",
-    "description": "HC-Z Hydronic Floor Heating Controller",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x400a"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Valve Type",
-            "description": "Type of Valve being controlled",
-            "unit": "NO/NC",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NC",
-                    "value": 0
-                },
-                {
-                    "label": "NO",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Heat Load Strategy",
-            "description": "Set Head Load Strategy (0 = Stacking, 1 = Spreading)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Stacking (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Spreading",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "PWM period",
-            "description": "Pulse-width modulation period",
-            "unit": "min",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "15 minutes",
-                    "value": 0
-                },
-                {
-                    "label": "30 minutes",
-                    "value": 1
-                },
-                {
-                    "label": "60 minutes",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "014G0210",
+	"description": "HC-Z Hydronic Floor Heating Controller",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x400a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Valve Type",
+			"description": "Type of Valve being controlled",
+			"unit": "NO/NC",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NC",
+					"value": 0
+				},
+				{
+					"label": "NO",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Heat Load Strategy",
+			"description": "Set Head Load Strategy (0 = Stacking, 1 = Spreading)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Stacking (Default)",
+					"value": 0
+				},
+				{
+					"label": "Spreading",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "PWM period",
+			"description": "Pulse-width modulation period",
+			"unit": "min",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "15 minutes",
+					"value": 0
+				},
+				{
+					"label": "30 minutes",
+					"value": 1
+				},
+				{
+					"label": "60 minutes",
+					"value": 2
+				}
+			]
+		}
+	}
 }

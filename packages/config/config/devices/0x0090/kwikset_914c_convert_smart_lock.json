@@ -1,81 +1,80 @@
 // Spectrum Brands Kwikset 914C Convert Smart Lock
 // Smart Lock
 {
-    "_approved": true,
-    "manufacturer": "Spectrum Brands",
-    "manufacturerId": "0x0090",
-    "label": "Kwikset 914C Convert Smart Lock",
-    "description": "Smart Lock",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0446"
-        },
-        {
-            "productType": "0x0003",
-            "productId": "0x0642"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "31": {
-            "label": "Dipswitch Settings",
-            "description": "Dipswitch Settings",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
-            "defaultValue": 5,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "33": {
-            "label": "First 4 bytes of SKU",
-            "description": "SKU (length = 8 bytes)",
-            "valueSize": 4,
-            "minValue": 32,
-            "maxValue": 126,
-            "defaultValue": 32,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "34": {
-            "label": "Last 4 bytes of SKU",
-            "description": "SKU (length = 8 bytes)",
-            "valueSize": 4,
-            "minValue": 32,
-            "maxValue": 126,
-            "defaultValue": 32,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "35": {
-            "label": "Lock Type",
-            "description": "Report the Unique ID of the lock type",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "40": {
-            "label": "Factory Reset",
-            "description": "Reset Lock to Factory Default",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Spectrum Brands",
+	"manufacturerId": "0x0090",
+	"label": "Kwikset 914C Convert Smart Lock",
+	"description": "Smart Lock",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0446"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x0642"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"31": {
+			"label": "Dipswitch Settings",
+			"description": "Dipswitch Settings",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 5,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "First 4 bytes of SKU",
+			"description": "SKU (length = 8 bytes)",
+			"valueSize": 4,
+			"minValue": 32,
+			"maxValue": 126,
+			"defaultValue": 32,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "Last 4 bytes of SKU",
+			"description": "SKU (length = 8 bytes)",
+			"valueSize": 4,
+			"minValue": 32,
+			"maxValue": 126,
+			"defaultValue": 32,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35": {
+			"label": "Lock Type",
+			"description": "Report the Unique ID of the lock type",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Factory Reset",
+			"description": "Reset Lock to Factory Default",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

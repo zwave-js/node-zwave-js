@@ -1,7 +1,6 @@
 // Cloud Media A803N
 // Motion Sensor
 {
-	"_approved": true,
 	"manufacturer": "Cloud Media",
 	"manufacturerId": "0x0200",
 	"label": "A803N",

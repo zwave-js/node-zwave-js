@@ -1,19 +1,18 @@
 // Evolve LOM15
 // Duplex Receptacle
 {
-    "_approved": true,
-    "manufacturer": "Evolve",
-    "manufacturerId": "0x0113",
-    "label": "LOM15",
-    "description": "Duplex Receptacle",
-    "devices": [
-        {
-            "productType": "0x5252",
-            "productId": "0x3530"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Evolve",
+	"manufacturerId": "0x0113",
+	"label": "LOM15",
+	"description": "Duplex Receptacle",
+	"devices": [
+		{
+			"productType": "0x5252",
+			"productId": "0x3530"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

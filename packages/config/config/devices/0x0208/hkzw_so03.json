@@ -1,117 +1,116 @@
 // HANK Electronics Ltd. HKZW_SO03
 // Smart Plug
 {
-    "_approved": true,
-    "manufacturer": "HANK Electronics Ltd.",
-    "manufacturerId": "0x0208",
-    "label": "HKZW_SO03",
-    "description": "Smart Plug",
-    "devices": [
-        {
-            "productType": "0x0101",
-            "productId": "0x000a"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "20": {
-            "label": "Overload Protection",
-            "description": "Overload Protection",
-            "unit": "decimal",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled (default)",
-                    "value": 1
-                }
-            ]
-        },
-        "21": {
-            "label": "On/Off Status Recovery After Power Failure",
-            "description": "On/Off Status Recovery After Power Failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Remember Status",
-                    "value": 0
-                },
-                {
-                    "label": "Turn ON (default)",
-                    "value": 1
-                },
-                {
-                    "label": "Turn OFF",
-                    "value": 2
-                }
-            ]
-        },
-        "24": {
-            "label": "On/Off Status Change Notifications",
-            "description": "On/Off Status Change Notifications",
-            "unit": "decimal",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Always Send (default)",
-                    "value": 1
-                },
-                {
-                    "label": "Only Manual Changes",
-                    "value": 2
-                }
-            ]
-        },
-        "27": {
-            "label": "Led Indicator Control",
-            "description": "Led Indicator Control",
-            "unit": "decimal",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Always On (default)",
-                    "value": 0
-                },
-                {
-                    "label": "5 Seconds",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "HKZW_SO03",
+	"description": "Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x000a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"20": {
+			"label": "Overload Protection",
+			"description": "Overload Protection",
+			"unit": "decimal",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled (default)",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "On/Off Status Recovery After Power Failure",
+			"description": "On/Off Status Recovery After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Remember Status",
+					"value": 0
+				},
+				{
+					"label": "Turn ON (default)",
+					"value": 1
+				},
+				{
+					"label": "Turn OFF",
+					"value": 2
+				}
+			]
+		},
+		"24": {
+			"label": "On/Off Status Change Notifications",
+			"description": "On/Off Status Change Notifications",
+			"unit": "decimal",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Always Send (default)",
+					"value": 1
+				},
+				{
+					"label": "Only Manual Changes",
+					"value": 2
+				}
+			]
+		},
+		"27": {
+			"label": "Led Indicator Control",
+			"description": "Led Indicator Control",
+			"unit": "decimal",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always On (default)",
+					"value": 0
+				},
+				{
+					"label": "5 Seconds",
+					"value": 1
+				}
+			]
+		}
+	}
 }

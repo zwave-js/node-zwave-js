@@ -1,44 +1,43 @@
 // Zipato PH-PSG01
 // Smoke Sensor
 {
-    "_approved": true,
-    "manufacturer": "Zipato",
-    "manufacturerId": "0x0131",
-    "label": "PH-PSG01",
-    "description": "Smoke Sensor",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x001e"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "7": {
-            "label": "Customer Function",
-            "description": "Customer Function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Auto Report Battery Time",
-            "description": "Auto Report Battery Time",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 127,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "PH-PSG01",
+	"description": "Smoke Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x001e"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"7": {
+			"label": "Customer Function",
+			"description": "Customer Function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Auto Report Battery Time",
+			"description": "Auto Report Battery Time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 127,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

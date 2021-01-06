@@ -1,7 +1,6 @@
 // Secure Meters (UK) Ltd. SSP302
 // Switch Meter Plugin
 {
-	"_approved": true,
 	"manufacturer": "Secure Meters (UK) Ltd.",
 	"manufacturerId": "0x0059",
 	"label": "SSP302",

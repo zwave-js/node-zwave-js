@@ -1,54 +1,53 @@
 // Reitz-Group.de ZW ESJ 300
 // Duwi ZW ESJ 300 Blind Control
 {
-    "_approved": true,
-    "manufacturer": "Reitz-Group.de",
-    "manufacturerId": "0x0064",
-    "label": "ZW ESJ 300",
-    "description": "Duwi ZW ESJ 300 Blind Control",
-    "devices": [
-        {
-            "productType": "0x4001",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "0": {
-            "label": "Running time",
-            "description": "Adjustment of the operating times of the sun blind control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "1": {
-            "label": "Stop-functionality",
-            "description": "Adjusting the Stop-Functionality",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled (default)",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Reitz-Group.de",
+	"manufacturerId": "0x0064",
+	"label": "ZW ESJ 300",
+	"description": "Duwi ZW ESJ 300 Blind Control",
+	"devices": [
+		{
+			"productType": "0x4001",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"0": {
+			"label": "Running time",
+			"description": "Adjustment of the operating times of the sun blind control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1": {
+			"label": "Stop-functionality",
+			"description": "Adjusting the Stop-Functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled (default)",
+					"value": 1
+				}
+			]
+		}
+	}
 }

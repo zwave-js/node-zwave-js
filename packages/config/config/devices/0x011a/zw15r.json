@@ -1,42 +1,41 @@
 // Wenzhou MTLC Electric Appliances Co., Ltd. ZW15R
 // Duplex receptacle
 {
-    "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
-    "manufacturerId": "0x011a",
-    "label": "ZW15R",
-    "description": "Duplex receptacle",
-    "devices": [
-        {
-            "productType": "0x0101",
-            "productId": "0x0103"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "1": {
-            "label": "configure LED light state",
-            "description": "configure LED light state",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Power on, LED off",
-                    "value": 0
-                },
-                {
-                    "label": "Power on, LED on",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
+	"label": "ZW15R",
+	"description": "Duplex receptacle",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0103"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "configure LED light state",
+			"description": "configure LED light state",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power on, LED off",
+					"value": 0
+				},
+				{
+					"label": "Power on, LED on",
+					"value": 1
+				}
+			]
+		}
+	}
 }

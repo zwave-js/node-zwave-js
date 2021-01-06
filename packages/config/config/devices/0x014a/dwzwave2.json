@@ -1,78 +1,77 @@
 // Ecolink DWZWAVE2
 // Z-Wave Door/Window Sensor
 {
-    "_approved": true,
-    "manufacturer": "Ecolink",
-    "manufacturerId": "0x014a",
-    "label": "DWZWAVE2",
-    "description": "Z-Wave Door/Window Sensor",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Association Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Association Group 2",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Sending Basic Sets to Association group 2",
-            "description": "Sending Basic Sets to Association group 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 255
-                }
-            ]
-        },
-        "2": {
-            "label": "Sending sensor binary report",
-            "description": "Sending sensor binary report",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 255
-                }
-            ]
-        }
-    }
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "DWZWAVE2",
+	"description": "Z-Wave Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Association Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"description": "Association Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Sending Basic Sets to Association group 2",
+			"description": "Sending Basic Sets to Association group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"2": {
+			"label": "Sending sensor binary report",
+			"description": "Sending sensor binary report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		}
+	}
 }

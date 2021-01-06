@@ -1,7 +1,6 @@
 // Fibargroup FGRGBW
 // RGBW Controller
 {
-	"_approved": true,
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGRGBW",

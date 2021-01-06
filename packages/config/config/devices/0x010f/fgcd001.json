@@ -1,349 +1,348 @@
 // Fibargroup FGCD001
 // Carbon Monoxide Sensor
 {
-    "_approved": true,
-    "manufacturer": "Fibargroup",
-    "manufacturerId": "0x010f",
-    "label": "FGCD001",
-    "description": "Carbon Monoxide Sensor",
-    "devices": [
-        {
-            "productType": "0x1201",
-            "productId": "0x1000"
-        },
-        {
-            "productType": "0x1201",
-            "productId": "0x1001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "2": {
-            "label": "Z-Wave notifications",
-            "description": "Set the actions sent to controller",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Both actions disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Tampering (opened casing)",
-                    "value": 1
-                },
-                {
-                    "label": "Exceeding the temperature",
-                    "value": 2
-                },
-                {
-                    "label": "Both actions enabled",
-                    "value": 3
-                }
-            ]
-        },
-        "3": {
-            "label": "LED diode indications",
-            "description": "Set the actions which result in LED diode indications",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "All actions disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Tampering (opened casing)",
-                    "value": 1
-                },
-                {
-                    "label": "Exceeding the temperature",
-                    "value": 2
-                },
-                {
-                    "label": "Tampering AND Exceeding the temperature",
-                    "value": 3
-                },
-                {
-                    "label": "Lack of Z-Wave range",
-                    "value": 4
-                },
-                {
-                    "label": "Tampering (opened casing) AND Lack of Z-Wave range",
-                    "value": 5
-                },
-                {
-                    "label": "Exceeding the temperature AND Lack of Z-Wave range",
-                    "value": 6
-                },
-                {
-                    "label": "Tampering AND Exceeding the temp AND Lack of range",
-                    "value": 7
-                }
-            ]
-        },
-        "4": {
-            "label": "Acoustic signals",
-            "description": "Set the actions which result in acoustic signals",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "All actions disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Tampering (opened casing)",
-                    "value": 1
-                },
-                {
-                    "label": "Exceeding the temperature",
-                    "value": 2
-                },
-                {
-                    "label": "Tampering AND Exceeding the temperature",
-                    "value": 3
-                },
-                {
-                    "label": "Lack of Z-Wave range",
-                    "value": 4
-                },
-                {
-                    "label": "Tampering AND Lack of Z-Wave range",
-                    "value": 5
-                },
-                {
-                    "label": "Exceeding the temperature AND Lack of Z-Wave range",
-                    "value": 6
-                },
-                {
-                    "label": "Tampering AND Exceeding temp AND Lack of range",
-                    "value": 7
-                }
-            ]
-        },
-        "7": {
-            "label": "Associations in Z-Wave network security mode",
-            "description": "Secure or non-secure commands to assoc groups",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 63,
-            "defaultValue": 63,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Commands sent to 2nd association group (CO Alarm)",
-            "description": "Commands sent to devices in 2nd association group",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "BASIC ON",
-                    "value": 1
-                },
-                {
-                    "label": "BASIC OFF",
-                    "value": 2
-                },
-                {
-                    "label": "BASIC ON & BASIC OFF",
-                    "value": 3
-                }
-            ]
-        },
-        "11": {
-            "label": "Value of BASIC ON command sent to 2nd assoc group",
-            "description": "Define value of BASIC ON cmd sent to 2nd assoc group",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Turning associated devices off",
-                    "value": 0
-                },
-                {
-                    "label": "Forcing level of associated devices",
-                    "value": 1
-                },
-                {
-                    "label": "Setting assoc device to last value or ON",
-                    "value": 255
-                }
-            ]
-        },
-        "12": {
-            "label": "Value of BASIC OFF cmd sent to 2nd assoc group",
-            "description": "Defines value of BASIC OFF cmd sent 2nd assoc group",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Commands sent to 4th association group (CO Level)",
-            "description": "Defines cmd sent to devices in 4th association group",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "CO level for sending BASIC ON to 4th assoc group",
-            "description": "Defines min level of CO concentration starting timer",
-            "valueSize": 2,
-            "minValue": 25,
-            "maxValue": 400,
-            "defaultValue": 40,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Time required for BASIC ON cmd to 4th assoc group",
-            "description": "Defines time of CO concentration should remain above param values",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 2880,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "Value of BASIC ON cmd sent to 4th assoc group",
-            "description": "Defines value of BASIC ON cmd to 4th assoc group",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17": {
-            "label": "CO Level for sending BASIC OFF to 4th assoc group",
-            "description": "Defines level of CO concentration for BASIC OFF to 4th assoc group",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 400,
-            "defaultValue": 25,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19": {
-            "label": "Value of BASIC OFF cmd sent to 4th assoc group",
-            "description": "Defines value of BASIC OFF sent to 4th association group",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Temperature reporting time interval",
-            "description": "Time interval between consecutive reports of temperature",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1440,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "Temperature reporting hysteresis",
-            "description": "Min change in temperature resulting in a report being sent",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 20,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "Threshold of exceeding the temperature",
-            "description": "Temp level resulting in sending actions (parameters 2, 3 and 4)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 85,
-            "defaultValue": 55,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "23": {
-            "label": "CO meter activation",
-            "description": "Activates reporting of CO concentration to controller.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "25": {
-            "label": "CO level reporting hysteresis",
-            "description": "Minchange in CO concentration resulting in sending new value to controller",
-            "valueSize": 1,
-            "minValue": 2,
-            "maxValue": 6,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "26": {
-            "label": "Threshold of CO meter activation",
-            "description": "Defines CO concentration level sending a new value to controller",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 255,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGCD001",
+	"description": "Carbon Monoxide Sensor",
+	"devices": [
+		{
+			"productType": "0x1201",
+			"productId": "0x1000"
+		},
+		{
+			"productType": "0x1201",
+			"productId": "0x1001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "Z-Wave notifications",
+			"description": "Set the actions sent to controller",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Both actions disabled",
+					"value": 0
+				},
+				{
+					"label": "Tampering (opened casing)",
+					"value": 1
+				},
+				{
+					"label": "Exceeding the temperature",
+					"value": 2
+				},
+				{
+					"label": "Both actions enabled",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "LED diode indications",
+			"description": "Set the actions which result in LED diode indications",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All actions disabled",
+					"value": 0
+				},
+				{
+					"label": "Tampering (opened casing)",
+					"value": 1
+				},
+				{
+					"label": "Exceeding the temperature",
+					"value": 2
+				},
+				{
+					"label": "Tampering AND Exceeding the temperature",
+					"value": 3
+				},
+				{
+					"label": "Lack of Z-Wave range",
+					"value": 4
+				},
+				{
+					"label": "Tampering (opened casing) AND Lack of Z-Wave range",
+					"value": 5
+				},
+				{
+					"label": "Exceeding the temperature AND Lack of Z-Wave range",
+					"value": 6
+				},
+				{
+					"label": "Tampering AND Exceeding the temp AND Lack of range",
+					"value": 7
+				}
+			]
+		},
+		"4": {
+			"label": "Acoustic signals",
+			"description": "Set the actions which result in acoustic signals",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All actions disabled",
+					"value": 0
+				},
+				{
+					"label": "Tampering (opened casing)",
+					"value": 1
+				},
+				{
+					"label": "Exceeding the temperature",
+					"value": 2
+				},
+				{
+					"label": "Tampering AND Exceeding the temperature",
+					"value": 3
+				},
+				{
+					"label": "Lack of Z-Wave range",
+					"value": 4
+				},
+				{
+					"label": "Tampering AND Lack of Z-Wave range",
+					"value": 5
+				},
+				{
+					"label": "Exceeding the temperature AND Lack of Z-Wave range",
+					"value": 6
+				},
+				{
+					"label": "Tampering AND Exceeding temp AND Lack of range",
+					"value": 7
+				}
+			]
+		},
+		"7": {
+			"label": "Associations in Z-Wave network security mode",
+			"description": "Secure or non-secure commands to assoc groups",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 63,
+			"defaultValue": 63,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Commands sent to 2nd association group (CO Alarm)",
+			"description": "Commands sent to devices in 2nd association group",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "BASIC ON",
+					"value": 1
+				},
+				{
+					"label": "BASIC OFF",
+					"value": 2
+				},
+				{
+					"label": "BASIC ON & BASIC OFF",
+					"value": 3
+				}
+			]
+		},
+		"11": {
+			"label": "Value of BASIC ON command sent to 2nd assoc group",
+			"description": "Define value of BASIC ON cmd sent to 2nd assoc group",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turning associated devices off",
+					"value": 0
+				},
+				{
+					"label": "Forcing level of associated devices",
+					"value": 1
+				},
+				{
+					"label": "Setting assoc device to last value or ON",
+					"value": 255
+				}
+			]
+		},
+		"12": {
+			"label": "Value of BASIC OFF cmd sent to 2nd assoc group",
+			"description": "Defines value of BASIC OFF cmd sent 2nd assoc group",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Commands sent to 4th association group (CO Level)",
+			"description": "Defines cmd sent to devices in 4th association group",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "CO level for sending BASIC ON to 4th assoc group",
+			"description": "Defines min level of CO concentration starting timer",
+			"valueSize": 2,
+			"minValue": 25,
+			"maxValue": 400,
+			"defaultValue": 40,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Time required for BASIC ON cmd to 4th assoc group",
+			"description": "Defines time of CO concentration should remain above param values",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2880,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Value of BASIC ON cmd sent to 4th assoc group",
+			"description": "Defines value of BASIC ON cmd to 4th assoc group",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "CO Level for sending BASIC OFF to 4th assoc group",
+			"description": "Defines level of CO concentration for BASIC OFF to 4th assoc group",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 400,
+			"defaultValue": 25,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Value of BASIC OFF cmd sent to 4th assoc group",
+			"description": "Defines value of BASIC OFF sent to 4th association group",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Temperature reporting time interval",
+			"description": "Time interval between consecutive reports of temperature",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1440,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Temperature reporting hysteresis",
+			"description": "Min change in temperature resulting in a report being sent",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 20,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Threshold of exceeding the temperature",
+			"description": "Temp level resulting in sending actions (parameters 2, 3 and 4)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 85,
+			"defaultValue": 55,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "CO meter activation",
+			"description": "Activates reporting of CO concentration to controller.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"25": {
+			"label": "CO level reporting hysteresis",
+			"description": "Minchange in CO concentration resulting in sending new value to controller",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 6,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"26": {
+			"label": "Threshold of CO meter activation",
+			"description": "Defines CO concentration level sending a new value to controller",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

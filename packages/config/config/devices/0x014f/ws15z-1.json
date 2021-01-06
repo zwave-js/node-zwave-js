@@ -1,72 +1,68 @@
 // Nortek Security & Control LLC WS15Z-1
 // Wall Mounted Switch
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "WS15Z-1",
-    "description": "Wall Mounted Switch",
-    "devices": [
-        {
-            "productType": "0x5257",
-            "productId": "0x3533"
-        },
-        {
-            "productType": "0x5753",
-            "productId": "0x3535"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "3": {
-            "label": "Night Light",
-            "description": "By default, the LED will turn OFF when the lead attached is turned ON.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "On when load is on",
-                    "value": 0
-                },
-                {
-                    "label": "Off when load is on",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Invert Switch",
-            "description": "To change the top of the switch to OFF and the bottom of the switch ON.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Top-ON, Bottom-OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Bottom-ON, Top-OFF",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "WS15Z-1",
+	"description": "Wall Mounted Switch",
+	"devices": [
+		{
+			"productType": "0x5257",
+			"productId": "0x3533"
+		},
+		{
+			"productType": "0x5753",
+			"productId": "0x3535"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Night Light",
+			"description": "By default, the LED will turn OFF when the lead attached is turned ON.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On when load is on",
+					"value": 0
+				},
+				{
+					"label": "Off when load is on",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "To change the top of the switch to OFF and the bottom of the switch ON.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Top-ON, Bottom-OFF",
+					"value": 0
+				},
+				{
+					"label": "Bottom-ON, Top-OFF",
+					"value": 1
+				}
+			]
+		}
+	}
 }

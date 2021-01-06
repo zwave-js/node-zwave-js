@@ -1,7 +1,6 @@
 // Vemmio MT-100
 // Motion and Light Mini Sensor
 {
-	"_approved": true,
 	"manufacturer": "Vemmio",
 	"manufacturerId": "0x030f",
 	"label": "MT-100",

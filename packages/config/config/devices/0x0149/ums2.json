@@ -1,172 +1,171 @@
 // wiDom UMS2
 // WiDom Smart Roller Shutter
 {
-    "_approved": true,
-    "manufacturer": "wiDom",
-    "manufacturerId": "0x0149",
-    "label": "UMS2",
-    "description": "WiDom Smart Roller Shutter",
-    "devices": [
-        {
-            "productType": "0x1214",
-            "productId": "0x0800"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Numbers of clicks to control the local load",
-            "description": "Define which sequences of click control the local load",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "DISABLED",
-                    "value": 0
-                },
-                {
-                    "label": "ONE_CLICK",
-                    "value": 1
-                },
-                {
-                    "label": "TWO_CLICKS",
-                    "value": 2
-                },
-                {
-                    "label": "ONE_CLICK and TWO_CLICKS",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Favorite level for ON position",
-            "description": "Favorite level for ON position",
-            "valueSize": 1,
-            "minValue": 50,
-            "maxValue": 100,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Favorite level for OFF position",
-            "description": "Favorite level for OFF position",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 49,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Value for Group 2 with 1 click on  UP button",
-            "description": "Value for Group 2 with 1 click on  UP button",
-            "valueSize": 1,
-            "minValue": -1,
-            "maxValue": 99,
-            "defaultValue": -1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Value for Group 2 with 1 click on DOWN button",
-            "description": "Value for Group 2 with 1 click on DOWN button",
-            "valueSize": 1,
-            "minValue": -1,
-            "maxValue": 99,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Value for Group 3 with 2 clicks on UP button",
-            "description": "Value for Group 3 with 2 clicks on UP button",
-            "valueSize": 1,
-            "minValue": -1,
-            "maxValue": 99,
-            "defaultValue": -1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Value for Group 3 with 2 clicks on DOWN button",
-            "description": "Value for Group 3 with 2 clicks on DOWN button",
-            "valueSize": 1,
-            "minValue": -1,
-            "maxValue": 99,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Value for Group 4 with 3 clicks on UP button",
-            "description": "Value for Group 4 with 3 clicks on UP button",
-            "valueSize": 1,
-            "minValue": -1,
-            "maxValue": 99,
-            "defaultValue": -1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Value for Group 4 with 3 clicks on DOWN button",
-            "description": "Value for Group 4 with 3 clicks on DOWN button",
-            "valueSize": 1,
-            "minValue": -1,
-            "maxValue": 99,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Calibration",
-            "description": "Defines the status of the calibration procedure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "Motor idle state definition",
-            "description": "Motor idle state definition",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 3000,
-            "defaultValue": 1000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "Limit switch recognition",
-            "description": "Limit switch recognition",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "wiDom",
+	"manufacturerId": "0x0149",
+	"label": "UMS2",
+	"description": "WiDom Smart Roller Shutter",
+	"devices": [
+		{
+			"productType": "0x1214",
+			"productId": "0x0800"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Numbers of clicks to control the local load",
+			"description": "Define which sequences of click control the local load",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "DISABLED",
+					"value": 0
+				},
+				{
+					"label": "ONE_CLICK",
+					"value": 1
+				},
+				{
+					"label": "TWO_CLICKS",
+					"value": 2
+				},
+				{
+					"label": "ONE_CLICK and TWO_CLICKS",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Favorite level for ON position",
+			"description": "Favorite level for ON position",
+			"valueSize": 1,
+			"minValue": 50,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Favorite level for OFF position",
+			"description": "Favorite level for OFF position",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 49,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Value for Group 2 with 1 click on  UP button",
+			"description": "Value for Group 2 with 1 click on  UP button",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 99,
+			"defaultValue": -1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Value for Group 2 with 1 click on DOWN button",
+			"description": "Value for Group 2 with 1 click on DOWN button",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Value for Group 3 with 2 clicks on UP button",
+			"description": "Value for Group 3 with 2 clicks on UP button",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 99,
+			"defaultValue": -1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Value for Group 3 with 2 clicks on DOWN button",
+			"description": "Value for Group 3 with 2 clicks on DOWN button",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Value for Group 4 with 3 clicks on UP button",
+			"description": "Value for Group 4 with 3 clicks on UP button",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 99,
+			"defaultValue": -1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Value for Group 4 with 3 clicks on DOWN button",
+			"description": "Value for Group 4 with 3 clicks on DOWN button",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Calibration",
+			"description": "Defines the status of the calibration procedure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Motor idle state definition",
+			"description": "Motor idle state definition",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3000,
+			"defaultValue": 1000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Limit switch recognition",
+			"description": "Limit switch recognition",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

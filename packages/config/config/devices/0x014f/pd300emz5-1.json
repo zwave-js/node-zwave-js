@@ -1,179 +1,178 @@
 // Nortek Security & Control LLC PD300EMZ5-1
 // 300 Watt, Plug-In Dimmer Series 500
 {
-    "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "PD300EMZ5-1",
-    "description": "300 Watt, Plug-In Dimmer Series 500",
-    "devices": [
-        {
-            "productType": "0x5044",
-            "productId": "0x3533"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "2": {
-            "label": "LED Intensity",
-            "description": "How bright the device LEDs should be",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Night Light",
-            "description": "LED \"Night Light\" behavior",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED on when load is on, off when load is off",
-                    "value": 0
-                },
-                {
-                    "label": "LED off when load is on, on when load is off",
-                    "value": 1
-                },
-                {
-                    "label": "LED is always on",
-                    "value": 2
-                },
-                {
-                    "label": "LED is always off",
-                    "value": 3
-                }
-            ]
-        },
-        "7": {
-            "label": "Remote Dim Step",
-            "description": "How many levels the dimmer will change each time the Dim Timer expires",
-            "unit": "Steps",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Remote Dim Time",
-            "description": "How often the dim level will change (in 10 ms resolution)",
-            "unit": "10 ms",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Local Dim Step",
-            "description": "How many levels the dimmer will change each time the Dim Timer expires",
-            "unit": "Steps",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Power Monitoring",
-            "description": "Provide a visual display of the ammount of energy being consumed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Power Monitoring Off",
-                    "value": 0
-                },
-                {
-                    "label": "Power Monitoring On",
-                    "value": 1
-                }
-            ]
-        },
-        "12": {
-            "label": "Energy display duration",
-            "description": "Number of seconds LED displays power level usage",
-            "unit": "Seconds",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Engery report frequency",
-            "description": "Number of minutes between automatic reporting",
-            "unit": "Minutes",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "Local Dim Time",
-            "description": "How often the dim level will change (in 10 ms resolution)",
-            "unit": "10 ms",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17": {
-            "label": "AllSwitch Dim Step",
-            "description": "How many levels the dimmer will change each time the Dim Timer expires",
-            "unit": "Steps",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "AllSwitch Dim Time",
-            "description": "How often the dim level will change (in 10 ms resolution)",
-            "unit": "10 ms",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "PD300EMZ5-1",
+	"description": "300 Watt, Plug-In Dimmer Series 500",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3533"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "LED Intensity",
+			"description": "How bright the device LEDs should be",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Night Light",
+			"description": "LED \"Night Light\" behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when load is on, off when load is off",
+					"value": 0
+				},
+				{
+					"label": "LED off when load is on, on when load is off",
+					"value": 1
+				},
+				{
+					"label": "LED is always on",
+					"value": 2
+				},
+				{
+					"label": "LED is always off",
+					"value": 3
+				}
+			]
+		},
+		"7": {
+			"label": "Remote Dim Step",
+			"description": "How many levels the dimmer will change each time the Dim Timer expires",
+			"unit": "Steps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Remote Dim Time",
+			"description": "How often the dim level will change (in 10 ms resolution)",
+			"unit": "10 ms",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Local Dim Step",
+			"description": "How many levels the dimmer will change each time the Dim Timer expires",
+			"unit": "Steps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Power Monitoring",
+			"description": "Provide a visual display of the ammount of energy being consumed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power Monitoring Off",
+					"value": 0
+				},
+				{
+					"label": "Power Monitoring On",
+					"value": 1
+				}
+			]
+		},
+		"12": {
+			"label": "Energy display duration",
+			"description": "Number of seconds LED displays power level usage",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Engery report frequency",
+			"description": "Number of minutes between automatic reporting",
+			"unit": "Minutes",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Local Dim Time",
+			"description": "How often the dim level will change (in 10 ms resolution)",
+			"unit": "10 ms",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "AllSwitch Dim Step",
+			"description": "How many levels the dimmer will change each time the Dim Timer expires",
+			"unit": "Steps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "AllSwitch Dim Time",
+			"description": "How often the dim level will change (in 10 ms resolution)",
+			"unit": "10 ms",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

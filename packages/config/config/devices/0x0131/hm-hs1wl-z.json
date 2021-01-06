@@ -1,20 +1,19 @@
 // Zipato HM-HS1WL-Z
 // Smart Water Leakage Sensor
 {
-    "_approved": true,
-    "manufacturer": "Zipato",
-    "manufacturerId": "0x0131",
-    "label": "HM-HS1WL-Z",
-    "description": "Smart Water Leakage Sensor",
-    "devices": [
-        {
-            "productType": "0x8004",
-            "productId": "0x1000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "HM-HS1WL-Z",
+	"description": "Smart Water Leakage Sensor",
+	"devices": [
+		{
+			"productType": "0x8004",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

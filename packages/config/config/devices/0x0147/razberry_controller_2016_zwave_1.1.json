@@ -1,17 +1,6 @@
 // Z-Wave.me RaZberry Controller 2016 ZWave+
 // Z-Wave.Me Razberry daughtercard
 {
-	"_approved": false,
-	"_errors": [
-		"Overview information is not set",
-		"Inclusion information is not set",
-		"Exclusion information is not set",
-		"Device category is not set.",
-		"At least one device manual must be uploaded as PDF"
-	],
-	"_warnings": [
-		"No channels have been assigned even though there are user configurable command classes."
-	],
 	"manufacturer": "Z-Wave.me",
 	"manufacturerId": "0x0147",
 	"label": "RaZberry Controller 2016 ZWave+",

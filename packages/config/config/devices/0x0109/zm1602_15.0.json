@@ -1,82 +1,81 @@
 // Vision Security ZM1602
 // AC/DC Siren
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZM1602",
-    "description": "AC/DC Siren",
-    "devices": [
-        {
-            "productType": "0x2009",
-            "productId": "0x0903"
-        },
-        {
-            "productType": "0x2009",
-            "productId": "0x0908"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "15.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Siren Strobe Mode",
-            "description": "Defines the reaction of the siren",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Strobe and Siren",
-                    "value": 0
-                },
-                {
-                    "label": "Siren",
-                    "value": 1
-                },
-                {
-                    "label": "Strobe",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Alarm auto stop",
-            "description": "Defines the auto time out of the alarm indication",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "30 seconds",
-                    "value": 0
-                },
-                {
-                    "label": "60 seconds",
-                    "value": 1
-                },
-                {
-                    "label": "120 seconds",
-                    "value": 2
-                },
-                {
-                    "label": "Continuous",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZM1602",
+	"description": "AC/DC Siren",
+	"devices": [
+		{
+			"productType": "0x2009",
+			"productId": "0x0903"
+		},
+		{
+			"productType": "0x2009",
+			"productId": "0x0908"
+		}
+	],
+	"firmwareVersion": {
+		"min": "15.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Siren Strobe Mode",
+			"description": "Defines the reaction of the siren",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Strobe and Siren",
+					"value": 0
+				},
+				{
+					"label": "Siren",
+					"value": 1
+				},
+				{
+					"label": "Strobe",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Alarm auto stop",
+			"description": "Defines the auto time out of the alarm indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "30 seconds",
+					"value": 0
+				},
+				{
+					"label": "60 seconds",
+					"value": 1
+				},
+				{
+					"label": "120 seconds",
+					"value": 2
+				},
+				{
+					"label": "Continuous",
+					"value": 3
+				}
+			]
+		}
+	}
 }

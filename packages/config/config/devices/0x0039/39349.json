@@ -1,47 +1,46 @@
 // Honeywell 39349
 // Smart Outlet
 {
-    "_approved": true,
-    "manufacturer": "Honeywell",
-    "manufacturerId": "0x0039",
-    "label": "39349",
-    "description": "Smart Outlet",
-    "devices": [
-        {
-            "productType": "0x4952",
-            "productId": "0x3133"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED light",
-            "description": "Configuration of LED light",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED ON when Load is OFF, LED OFF when ON",
-                    "value": 0
-                },
-                {
-                    "label": "LED ON when Load is ON, LED OFF when load is OFF",
-                    "value": 1
-                },
-                {
-                    "label": "LED always OFF",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39349",
+	"description": "Smart Outlet",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3133"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED light",
+			"description": "Configuration of LED light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when Load is OFF, LED OFF when ON",
+					"value": 0
+				},
+				{
+					"label": "LED ON when Load is ON, LED OFF when load is OFF",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				}
+			]
+		}
+	}
 }

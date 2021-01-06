@@ -1,87 +1,86 @@
 // Philio Technology Corp PSR04
 // Smart Color Button
 {
-    "_approved": true,
-    "manufacturer": "Philio Technology Corp",
-    "manufacturerId": "0x013c",
-    "label": "PSR04",
-    "description": "Smart Color Button",
-    "devices": [
-        {
-            "productType": "0x0009",
-            "productId": "0x0022"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Basic Set OFF level",
-            "description": "Control the value represented by the left-side in area D.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Basic Set ON level",
-            "description": "Control the value represented by the right-side in area D.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Auto Report Battery Time",
-            "description": "The interval time for auto reporting the Battery level.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "25": {
-            "label": "Customer Function",
-            "description": "Bit 0: Dimmer setting method. Bit 1: Disable buzzer in timer mode.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "26": {
-            "label": "Disable Scene Holding report",
-            "description": "Send Central Scene Holding when the button is held.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PSR04",
+	"description": "Smart Color Button",
+	"devices": [
+		{
+			"productType": "0x0009",
+			"productId": "0x0022"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Basic Set OFF level",
+			"description": "Control the value represented by the left-side in area D.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Basic Set ON level",
+			"description": "Control the value represented by the right-side in area D.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Auto Report Battery Time",
+			"description": "The interval time for auto reporting the Battery level.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"25": {
+			"label": "Customer Function",
+			"description": "Bit 0: Dimmer setting method. Bit 1: Disable buzzer in timer mode.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"26": {
+			"label": "Disable Scene Holding report",
+			"description": "Send Central Scene Holding when the button is held.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	}
 }

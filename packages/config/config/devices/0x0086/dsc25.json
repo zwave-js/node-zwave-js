@@ -1,7 +1,6 @@
 // AEON Labs DSC25
 // Smart Energy Illuminator G2
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSC25",

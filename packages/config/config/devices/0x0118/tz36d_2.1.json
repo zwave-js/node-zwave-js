@@ -1,135 +1,134 @@
 // TKB Home TZ36D
 // Dual Paddle Wall Switch
 {
-    "_approved": true,
-    "manufacturer": "TKB Home",
-    "manufacturerId": "0x0118",
-    "label": "TZ36D",
-    "description": "Dual Paddle Wall Switch",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0003"
-        },
-        {
-            "productType": "0x0311",
-            "productId": "0x0202"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "2.1",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Night light",
-            "description": "LED behaviour control.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch off = LED off",
-                    "value": 0
-                },
-                {
-                    "label": "Switch off = LED on",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Memory function",
-            "description": "Memory function behaviour control.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Memory function off",
-                    "value": 0
-                },
-                {
-                    "label": "Memory function on",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Invert switch",
-            "description": "Swap top and bottom switch/button.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal behaviour.",
-                    "value": 0
-                },
-                {
-                    "label": "Switch top and buttom button.",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "LED transmission indication",
-            "description": "LED transmission indication",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Do not flicker.",
-                    "value": 0
-                },
-                {
-                    "label": "Flicker for 1 second at the beginning",
-                    "value": 1
-                },
-                {
-                    "label": "Flicker entire time when transmitting.",
-                    "value": 2
-                }
-            ]
-        },
-        "5": {
-            "label": "Suspend group 4",
-            "description": "Group 4 command sending behaviour control.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Sending commands to Group 4 is enabled.",
-                    "value": 0
-                },
-                {
-                    "label": "Do not sen commands to Group 4.",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "TZ36D",
+	"description": "Dual Paddle Wall Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003"
+		},
+		{
+			"productType": "0x0311",
+			"productId": "0x0202"
+		}
+	],
+	"firmwareVersion": {
+		"min": "2.1",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Night light",
+			"description": "LED behaviour control.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch off = LED off",
+					"value": 0
+				},
+				{
+					"label": "Switch off = LED on",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Memory function",
+			"description": "Memory function behaviour control.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Memory function off",
+					"value": 0
+				},
+				{
+					"label": "Memory function on",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Invert switch",
+			"description": "Swap top and bottom switch/button.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal behaviour.",
+					"value": 0
+				},
+				{
+					"label": "Switch top and buttom button.",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "LED transmission indication",
+			"description": "LED transmission indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do not flicker.",
+					"value": 0
+				},
+				{
+					"label": "Flicker for 1 second at the beginning",
+					"value": 1
+				},
+				{
+					"label": "Flicker entire time when transmitting.",
+					"value": 2
+				}
+			]
+		},
+		"5": {
+			"label": "Suspend group 4",
+			"description": "Group 4 command sending behaviour control.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Sending commands to Group 4 is enabled.",
+					"value": 0
+				},
+				{
+					"label": "Do not sen commands to Group 4.",
+					"value": 1
+				}
+			]
+		}
+	}
 }

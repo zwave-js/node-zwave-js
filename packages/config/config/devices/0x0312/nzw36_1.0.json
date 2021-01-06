@@ -1,23 +1,19 @@
 // NIE Technology Co., Ltd. NZW36
 // Show home, Inovelli 1 channel smart plug, ZWave Plus
 {
-    "_approved": true,
-    "_warnings": [
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "NIE Technology Co., Ltd.",
-    "manufacturerId": "0x0312",
-    "label": "NZW36",
-    "description": "Show home, Inovelli 1 channel smart plug, ZWave Plus",
-    "devices": [
-        {
-            "productType": "0x2400",
-            "productId": "0x2400"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "1.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "NZW36",
+	"description": "Show home, Inovelli 1 channel smart plug, ZWave Plus",
+	"devices": [
+		{
+			"productType": "0x2400",
+			"productId": "0x2400"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

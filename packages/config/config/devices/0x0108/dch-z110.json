@@ -1,7 +1,6 @@
 // D-Link DCH-Z110
 // Door & Window Sensor
 {
-	"_approved": true,
 	"manufacturer": "D-Link",
 	"manufacturerId": "0x0108",
 	"label": "DCH-Z110",

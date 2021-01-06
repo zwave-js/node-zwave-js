@@ -1,73 +1,72 @@
 // Jasco Products 45603
 // Fluorescent Light & Appliance Module
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "45603",
-    "description": "Fluorescent Light & Appliance Module",
-    "devices": [
-        {
-            "productType": "0x5052",
-            "productId": "0x3031"
-        },
-        {
-            "productType": "0x5250",
-            "productId": "0x3030"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "3": {
-            "label": "Night Light",
-            "description": "Defines the behavior of the blue LED; default has LED on when switch is off.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED on when switch is OFF",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when switch is ON",
-                    "value": 1
-                },
-                {
-                    "label": "LED always off",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Invert Switch",
-            "description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No",
-                    "value": 0
-                },
-                {
-                    "label": "Yes",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "45603",
+	"description": "Fluorescent Light & Appliance Module",
+	"devices": [
+		{
+			"productType": "0x5052",
+			"productId": "0x3031"
+		},
+		{
+			"productType": "0x5250",
+			"productId": "0x3030"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Night Light",
+			"description": "Defines the behavior of the blue LED; default has LED on when switch is off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when switch is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED on when switch is ON",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		}
+	}
 }

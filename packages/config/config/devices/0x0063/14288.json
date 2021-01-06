@@ -1,47 +1,46 @@
 // Jasco Products 14288
 // In-Wall Outlet
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "14288",
-    "description": "In-Wall Outlet",
-    "devices": [
-        {
-            "productType": "0x4952",
-            "productId": "0x3133"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED Light configuration",
-            "description": "LED Light configuration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED On when load is Off",
-                    "value": 0
-                },
-                {
-                    "label": "LED On when load is On",
-                    "value": 1
-                },
-                {
-                    "label": "LED always off",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "14288",
+	"description": "In-Wall Outlet",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3133"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED Light configuration",
+			"description": "LED Light configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED On when load is Off",
+					"value": 0
+				},
+				{
+					"label": "LED On when load is On",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				}
+			]
+		}
+	}
 }

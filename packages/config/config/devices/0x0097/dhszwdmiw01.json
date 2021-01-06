@@ -1,19 +1,18 @@
 // Wintop DHSZWDMIW01
 // DHS Z-Wave Micro Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Wintop",
-    "manufacturerId": "0x0097",
-    "label": "DHSZWDMIW01",
-    "description": "DHS Z-Wave Micro Dimmer",
-    "devices": [
-        {
-            "productType": "0x1200",
-            "productId": "0x5502"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Wintop",
+	"manufacturerId": "0x0097",
+	"label": "DHSZWDMIW01",
+	"description": "DHS Z-Wave Micro Dimmer",
+	"devices": [
+		{
+			"productType": "0x1200",
+			"productId": "0x5502"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

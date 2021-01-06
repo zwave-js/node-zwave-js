@@ -1,96 +1,95 @@
 // Wintop Multisensor
 // Multi-sensor
 {
-    "_approved": true,
-    "manufacturer": "Wintop",
-    "manufacturerId": "0x0097",
-    "label": "Multisensor",
-    "description": "Multi-sensor",
-    "devices": [
-        {
-            "productType": "0x1180",
-            "productId": "0x5501"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Set to default",
-            "description": "Set all config values to default values (factory settings).",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Mode Timeout",
-            "description": "The time used in mode 2 to turn the sensor off .",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 3600,
-            "defaultValue": 900,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Switch off time",
-            "description": "Switch off time starts after timeout.",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 7200,
-            "defaultValue": 2700,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Sensitivity",
-            "description": "The sensitivity of the motion circuit",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 80,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Mode",
-            "description": "The mode that is entered after detection",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "The temperature offset",
-            "description": "An offset for the temperature.",
-            "valueSize": 2,
-            "minValue": -10,
-            "maxValue": 10,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Wintop",
+	"manufacturerId": "0x0097",
+	"label": "Multisensor",
+	"description": "Multi-sensor",
+	"devices": [
+		{
+			"productType": "0x1180",
+			"productId": "0x5501"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Set to default",
+			"description": "Set all config values to default values (factory settings).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Mode Timeout",
+			"description": "The time used in mode 2 to turn the sensor off .",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 900,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Switch off time",
+			"description": "Switch off time starts after timeout.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 7200,
+			"defaultValue": 2700,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Sensitivity",
+			"description": "The sensitivity of the motion circuit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 80,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Mode",
+			"description": "The mode that is entered after detection",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "The temperature offset",
+			"description": "An offset for the temperature.",
+			"valueSize": 2,
+			"minValue": -10,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

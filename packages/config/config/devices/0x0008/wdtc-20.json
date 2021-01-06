@@ -1,19 +1,18 @@
 // Wayne Dalton WDTC-20
 // Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Wayne Dalton",
-    "manufacturerId": "0x0008",
-    "label": "WDTC-20",
-    "description": "Thermostat",
-    "devices": [
-        {
-            "productType": "0x0007",
-            "productId": "0x0020"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Wayne Dalton",
+	"manufacturerId": "0x0008",
+	"label": "WDTC-20",
+	"description": "Thermostat",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x0020"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

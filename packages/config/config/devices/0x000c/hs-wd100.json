@@ -1,7 +1,6 @@
 // HomeSeer Technologies HS-WD100+
 // Scene Capable Wall Dimmer Switch
 {
-	"_approved": true,
 	"manufacturer": "HomeSeer Technologies",
 	"manufacturerId": "0x000c",
 	"label": "HS-WD100+",

@@ -1,7 +1,6 @@
 // wiDom DRY
 // Widom Smart Dry contact
 {
-	"_approved": true,
 	"manufacturer": "wiDom",
 	"manufacturerId": "0x0149",
 	"label": "DRY",

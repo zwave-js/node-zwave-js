@@ -1,20 +1,19 @@
 // Zipato HM-HS1CA
 // CO Sensor with acoustic alarm
 {
-    "_approved": true,
-    "manufacturer": "Zipato",
-    "manufacturerId": "0x0131",
-    "label": "HM-HS1CA",
-    "description": "CO Sensor with acoustic alarm",
-    "devices": [
-        {
-            "productType": "0x8005",
-            "productId": "0x1000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "HM-HS1CA",
+	"description": "CO Sensor with acoustic alarm",
+	"devices": [
+		{
+			"productType": "0x8005",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

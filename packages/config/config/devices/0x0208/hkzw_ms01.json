@@ -1,108 +1,107 @@
 // HANK Electronics Ltd. HKZW_MS01
 // Multisensor
 {
-    "_approved": true,
-    "manufacturer": "HANK Electronics Ltd.",
-    "manufacturerId": "0x0208",
-    "label": "HKZW_MS01",
-    "description": "Multisensor",
-    "devices": [
-        {
-            "productType": "0x0201",
-            "productId": "0x0006"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "12": {
-            "label": "Motion Sensor`s Sensitivity",
-            "description": "The higher the value,the more sensitive the PIR sensor",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 8,
-            "defaultValue": 8,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Sensitivity 1",
-                    "value": 1
-                },
-                {
-                    "label": "Sensitivity 2",
-                    "value": 2
-                },
-                {
-                    "label": "Sensitivity 3",
-                    "value": 3
-                },
-                {
-                    "label": "Sensitivity 4",
-                    "value": 4
-                },
-                {
-                    "label": "Sensitivity 5",
-                    "value": 5
-                },
-                {
-                    "label": "Sensitivity 6",
-                    "value": 6
-                },
-                {
-                    "label": "Sensitivity 7",
-                    "value": 7
-                },
-                {
-                    "label": "Sensitivity 8",
-                    "value": 8
-                }
-            ]
-        },
-        "14": {
-            "label": "Enable/Disable Basic Set Command",
-            "description": "The motion Sensor can reverse its value of BASIC SET when motion is triggered",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "value of basic set command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "send off",
-                    "value": 0
-                },
-                {
-                    "label": "send on",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "HKZW_MS01",
+	"description": "Multisensor",
+	"devices": [
+		{
+			"productType": "0x0201",
+			"productId": "0x0006"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"12": {
+			"label": "Motion Sensor`s Sensitivity",
+			"description": "The higher the value,the more sensitive the PIR sensor",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Sensitivity 1",
+					"value": 1
+				},
+				{
+					"label": "Sensitivity 2",
+					"value": 2
+				},
+				{
+					"label": "Sensitivity 3",
+					"value": 3
+				},
+				{
+					"label": "Sensitivity 4",
+					"value": 4
+				},
+				{
+					"label": "Sensitivity 5",
+					"value": 5
+				},
+				{
+					"label": "Sensitivity 6",
+					"value": 6
+				},
+				{
+					"label": "Sensitivity 7",
+					"value": 7
+				},
+				{
+					"label": "Sensitivity 8",
+					"value": 8
+				}
+			]
+		},
+		"14": {
+			"label": "Enable/Disable Basic Set Command",
+			"description": "The motion Sensor can reverse its value of BASIC SET when motion is triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "value of basic set command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "send off",
+					"value": 0
+				},
+				{
+					"label": "send on",
+					"value": 1
+				}
+			]
+		}
+	}
 }

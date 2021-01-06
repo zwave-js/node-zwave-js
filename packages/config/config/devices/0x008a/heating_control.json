@@ -1,10 +1,6 @@
 // BeNext Heating Control
 // Thermostat for controlling the opentherm protocol
 {
-	"_approved": false,
-	"_errors": [
-		"Channel \"sensor_temperature\" in endpoint 0 command class SENSOR_MULTILEVEL is duplicated!"
-	],
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
 	"label": "Heating Control",

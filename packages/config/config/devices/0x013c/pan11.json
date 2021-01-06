@@ -1,185 +1,184 @@
 // Philio Technology Corp PAN11
 // Smart Energy Plug In Switch
 {
-    "_approved": true,
-    "manufacturer": "Philio Technology Corp",
-    "manufacturerId": "0x013c",
-    "label": "PAN11",
-    "description": "Smart Energy Plug In Switch",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        },
-        {
-            "productType": "0x0001",
-            "productId": "0x0011"
-        },
-        {
-            "productType": "0x0001",
-            "productId": "0x0030"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "W meter report period",
-            "description": "Set automatic W meter reporting interval",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 720,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "kWh meter report period",
-            "description": "Set automatic kWh meter reporting interval.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Threshold of Watt for load caution",
-            "description": "Set threshold of wattage meter value for load caution .",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 1300,
-            "defaultValue": 1300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Threshold of kWh for Load Caution",
-            "description": "If threshold of kWh is reached, a Meter Report will be generated",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 10000,
-            "defaultValue": 10000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Restore switch state mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch Off",
-                    "value": 0
-                },
-                {
-                    "label": "Last State",
-                    "value": 1
-                },
-                {
-                    "label": "Switch On",
-                    "value": 2
-                }
-            ]
-        },
-        "6": {
-            "label": "Mode of switch Off function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "SWITCH OFF commands received are ignored.",
-                    "value": 0
-                },
-                {
-                    "label": "SWITCH OFF commands received are honored.",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "LED indication mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "The LED follows the state of the switch.",
-                    "value": 1
-                },
-                {
-                    "label": "LED off with load ON",
-                    "value": 2
-                },
-                {
-                    "label": "One flash mode",
-                    "value": 3
-                }
-            ]
-        },
-        "8": {
-            "label": "Auto Off Timer",
-            "description": "Auto off timer. 0 will disable the auto off function.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "RF Off command mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch Off",
-                    "value": 0
-                },
-                {
-                    "label": "Ignore",
-                    "value": 1
-                },
-                {
-                    "label": "Switch Toggle",
-                    "value": 2
-                },
-                {
-                    "label": "Switch On",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PAN11",
+	"description": "Smart Energy Plug In Switch",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x0011"
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x0030"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "W meter report period",
+			"description": "Set automatic W meter reporting interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 720,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "kWh meter report period",
+			"description": "Set automatic kWh meter reporting interval.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Threshold of Watt for load caution",
+			"description": "Set threshold of wattage meter value for load caution .",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 1300,
+			"defaultValue": 1300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Threshold of kWh for Load Caution",
+			"description": "If threshold of kWh is reached, a Meter Report will be generated",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10000,
+			"defaultValue": 10000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Restore switch state mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch Off",
+					"value": 0
+				},
+				{
+					"label": "Last State",
+					"value": 1
+				},
+				{
+					"label": "Switch On",
+					"value": 2
+				}
+			]
+		},
+		"6": {
+			"label": "Mode of switch Off function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "SWITCH OFF commands received are ignored.",
+					"value": 0
+				},
+				{
+					"label": "SWITCH OFF commands received are honored.",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "LED indication mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "The LED follows the state of the switch.",
+					"value": 1
+				},
+				{
+					"label": "LED off with load ON",
+					"value": 2
+				},
+				{
+					"label": "One flash mode",
+					"value": 3
+				}
+			]
+		},
+		"8": {
+			"label": "Auto Off Timer",
+			"description": "Auto off timer. 0 will disable the auto off function.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "RF Off command mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch Off",
+					"value": 0
+				},
+				{
+					"label": "Ignore",
+					"value": 1
+				},
+				{
+					"label": "Switch Toggle",
+					"value": 2
+				},
+				{
+					"label": "Switch On",
+					"value": 3
+				}
+			]
+		}
+	}
 }

@@ -1,7 +1,6 @@
 // Residential Control Systems, Inc. (RCS) TBZ48
 // Thermostat
 {
-	"_approved": true,
 	"manufacturer": "Residential Control Systems, Inc. (RCS)",
 	"manufacturerId": "0x0010",
 	"label": "TBZ48",

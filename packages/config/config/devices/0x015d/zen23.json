@@ -1,43 +1,42 @@
 // Willis Electric Co., Ltd. ZEN23
 // Wall mounted switch
 {
-    "_approved": true,
-    "manufacturer": "Willis Electric Co., Ltd.",
-    "manufacturerId": "0x015d",
-    "label": "ZEN23",
-    "description": "Wall mounted switch",
-    "devices": [
-        {
-            "productType": "0x1111",
-            "productId": "0x1e1c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Control mode",
-            "description": "Control mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Mode 1",
-                    "value": 0
-                },
-                {
-                    "label": "Mode 2",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "ZEN23",
+	"description": "Wall mounted switch",
+	"devices": [
+		{
+			"productType": "0x1111",
+			"productId": "0x1e1c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Control mode",
+			"description": "Control mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Mode 1",
+					"value": 0
+				},
+				{
+					"label": "Mode 2",
+					"value": 1
+				}
+			]
+		}
+	}
 }

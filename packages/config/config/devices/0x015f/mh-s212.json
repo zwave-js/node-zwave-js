@@ -1,36 +1,25 @@
 // McoHome Technology Co., Ltd. MH-S212
 // Mini Combo Switch
 {
-    "_approved": true,
-    "_errors": [
-        "Device category is not set.",
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH-S212",
-    "description": "Mini Combo Switch",
-    "devices": [
-        {
-            "productType": "0x2121",
-            "productId": "0x1352"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Report",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-S212",
+	"description": "Mini Combo Switch",
+	"devices": [
+		{
+			"productType": "0x2121",
+			"productId": "0x1352"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Report",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

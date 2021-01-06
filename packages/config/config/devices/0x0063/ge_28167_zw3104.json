@@ -1,113 +1,112 @@
 // Jasco Products GE 28167 (ZW3104)
 // Plug-In Smart Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "GE 28167 (ZW3104)",
-    "description": "Plug-In Smart Dimmer",
-    "devices": [
-        {
-            "productType": "0x5044",
-            "productId": "0x3038"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED Light",
-            "description": "LED Light",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED On when light is turned Off",
-                    "value": 0
-                },
-                {
-                    "label": "LED On when light is turned On",
-                    "value": 1
-                },
-                {
-                    "label": "LED always Off",
-                    "value": 2
-                }
-            ]
-        },
-        "7": {
-            "label": "Dim Steps (From Z-Wave Controller)",
-            "description": "Dim Rate Adjustments (From Z-Wave Controller)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Dim Timing (From Z-Wave Controller)",
-            "description": "Dim Rate Adjustments (From Z-Wave Controller)",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Dim Steps (When Manually Controlled)",
-            "description": "Dim Rate Adjustments (When Manually Controlled)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Dim Timing  (When Manually Controlled)",
-            "description": "Dim Rate Adjustments (When Manually Controlled)",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Dim Steps (All-On/Off Commands)",
-            "description": "Dim Rate Adjustments (All-On/Off Commands)",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Dim Rate Adjustments (All-On/Off Command)",
-            "description": "Dim Rate Adjustments (All-On/Off Command)",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "GE 28167 (ZW3104)",
+	"description": "Plug-In Smart Dimmer",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3038"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED On when light is turned Off",
+					"value": 0
+				},
+				{
+					"label": "LED On when light is turned On",
+					"value": 1
+				},
+				{
+					"label": "LED always Off",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Dim Steps (From Z-Wave Controller)",
+			"description": "Dim Rate Adjustments (From Z-Wave Controller)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Dim Timing (From Z-Wave Controller)",
+			"description": "Dim Rate Adjustments (From Z-Wave Controller)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Dim Steps (When Manually Controlled)",
+			"description": "Dim Rate Adjustments (When Manually Controlled)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dim Timing  (When Manually Controlled)",
+			"description": "Dim Rate Adjustments (When Manually Controlled)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Dim Steps (All-On/Off Commands)",
+			"description": "Dim Rate Adjustments (All-On/Off Commands)",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Dim Rate Adjustments (All-On/Off Command)",
+			"description": "Dim Rate Adjustments (All-On/Off Command)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

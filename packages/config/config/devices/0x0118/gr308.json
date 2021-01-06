@@ -1,29 +1,18 @@
 // TKB Home GR308
 // Lifting Controller (Blinds Controller)
 {
-    "_approved": true,
-    "_errors": [
-        "Device category is not set.",
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "TKB Home",
-    "manufacturerId": "0x0118",
-    "label": "GR308",
-    "description": "Lifting Controller (Blinds Controller)",
-    "devices": [
-        {
-            "productType": "0x0b00",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "GR308",
+	"description": "Lifting Controller (Blinds Controller)",
+	"devices": [
+		{
+			"productType": "0x0b00",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

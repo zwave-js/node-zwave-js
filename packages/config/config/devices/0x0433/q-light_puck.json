@@ -1,224 +1,224 @@
 {
-    "manufacturer": "Q-light",
-    "manufacturerId": "0x0433",
-    "label": "Z-Wave Puck",
-    "description": "Q-Light Puck",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0005"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off(S1) - Basic command", // Mirror of endpoint 1, group 2
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Dimmer(S1) - Multilevel switch command", // Mirror of endpoint 1, group 3
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "On/Off(S2) - Basic command", // Mirror of endpoint 2, group 2
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Dimmer(S2) - Multilevel switch command", // Mirror of endpoint 2, group 3
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Minimum brightness level",
-            "description": "Set the desired value from 1 to 98% for the minimum dim level that the dimmer is restricted to, the dimmer will not go lower than the value set here.",
-            "valueSize": 1,
-            "unit": "%",
-            "minValue": 1,
-            "maxValue": 98,
-            "defaultValue": 15,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Maximum brightness level",
-            "description": "Set the desired value from 2 to 99% for the maximum dim level that the dimmer is restricted to, the dimmer will not go higher than the value set here.",
-            "valueSize": 1,
-            "unit": "%",
-            "minValue": 2,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Automatic control - dimming step size",
-            "description": "This parameter defines the percentage value of dimming step during the automatic control.",
-            "valueSize": 1,
-            "unit": "%",
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Automatic control - time of a dimming step",
-            "description": "This parameter defines the time of single dimming step set in parameter 3 during the automatic control.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Manual control - dimming step size",
-            "description": "This parameter defines the percentage value of dimming step during the manual control.",
-            "valueSize": 1,
-            "unit": "%",
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Manual control - time of a dimming step",
-            "description": "This parameter defines the time of single dimming step setin parameter 5 during the manual control.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Memory function after power failure",
-            "description": "Set the desired value from 0 to 1 to turn on/off the memory function.Setting this value to 0 turns off the dimmer's Memory fucntion.Setting this value to 1 truns on the dimmer's Memory function.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Device does not save the state before a power failure, it returns to off position",
-                    "value": 0
-                },
-                {
-                    "label": "Device restores it's state before power failure",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Switch type",
-            "description": "Choose between momentary, ON/OFF and roller blind switch. Available settings: 0 – momentary (Push) switch. 1 – ON/OFF switch. 2– roller blind switch-two switchs operate the device(S1 to brighter, S2 to dim",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "momentary (Push) switch",
-                    "value": 0
-                },
-                {
-                    "label": "ON/OFF switch",
-                    "value": 1
-                },
-                {
-                    "label": "roller blind switch-two switchs operate the device(S1 to brighter, S2 to dim)",
-                    "value": 2
-                }
-            ]
-        },
-        "9": {
-            "label": "Switch functionality of S1 and S2",
-            "description": "Set the desired value from 0 to 1 to turn on/off the memory function.Setting this value to 0 turns off the dimmer's Memory fucntion.Setting this value to 1 truns on the dimmer's Memory function.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Standard mode",
-                    "value": 0
-                },
-                {
-                    "label": "S1 operates as S2, S2 operates as S1",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "S1 Scene ID set",
-            "description": "When you press S1 five times,the light is dimmed to the brightness set in Scene ID 3 . S1 Scene ID is set by this configuration. Note: The actual action of each SCENE ID are set by SCE-NE_ACTUATOR_CONF(0x26) command.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "S1 Scene ID set",
-            "description": "When you press S1 five times,the light is dimmed to the brightness set in Scene ID 5. S2 Scene ID is set by this configuration. Note: The actual action of each SCENE ID are set by SCE-NE_ACTUATOR_CONF(0x26) command.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 2,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Timer functionality (auto - off)",
-            "description": "This parameter allows to automatically switch off the device after specified time from switching on the light source. It may be useful when the Zerodim Z-Wave is installed in the stairway. Available settings: 0 - Function disabled. 1-32767 - time to turn off measured in seconds (1s-9.1h)",
-            "valueSize": 2,
-            "unit": "seconds",
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Q-light",
+	"manufacturerId": "0x0433",
+	"label": "Z-Wave Puck",
+	"description": "Q-Light Puck",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0005"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off(S1) - Basic command", // Mirror of endpoint 1, group 2
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Dimmer(S1) - Multilevel switch command", // Mirror of endpoint 1, group 3
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "On/Off(S2) - Basic command", // Mirror of endpoint 2, group 2
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Dimmer(S2) - Multilevel switch command", // Mirror of endpoint 2, group 3
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Minimum brightness level",
+			"description": "Set the desired value from 1 to 98% for the minimum dim level that the dimmer is restricted to, the dimmer will not go lower than the value set here.",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 98,
+			"defaultValue": 15,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Maximum brightness level",
+			"description": "Set the desired value from 2 to 99% for the maximum dim level that the dimmer is restricted to, the dimmer will not go higher than the value set here.",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 2,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Automatic control - dimming step size",
+			"description": "This parameter defines the percentage value of dimming step during the automatic control.",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Automatic control - time of a dimming step",
+			"description": "This parameter defines the time of single dimming step set in parameter 3 during the automatic control.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Manual control - dimming step size",
+			"description": "This parameter defines the percentage value of dimming step during the manual control.",
+			"valueSize": 1,
+			"unit": "%",
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Manual control - time of a dimming step",
+			"description": "This parameter defines the time of single dimming step setin parameter 5 during the manual control.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Memory function after power failure",
+			"description": "Set the desired value from 0 to 1 to turn on/off the memory function.Setting this value to 0 turns off the dimmer's Memory fucntion.Setting this value to 1 truns on the dimmer's Memory function.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Device does not save the state before a power failure, it returns to off position",
+					"value": 0
+				},
+				{
+					"label": "Device restores it's state before power failure",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Switch type",
+			"description": "Choose between momentary, ON/OFF and roller blind switch. Available settings: 0 – momentary (Push) switch. 1 – ON/OFF switch. 2– roller blind switch-two switchs operate the device(S1 to brighter, S2 to dim",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "momentary (Push) switch",
+					"value": 0
+				},
+				{
+					"label": "ON/OFF switch",
+					"value": 1
+				},
+				{
+					"label": "roller blind switch-two switchs operate the device(S1 to brighter, S2 to dim)",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Switch functionality of S1 and S2",
+			"description": "Set the desired value from 0 to 1 to turn on/off the memory function.Setting this value to 0 turns off the dimmer's Memory fucntion.Setting this value to 1 truns on the dimmer's Memory function.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard mode",
+					"value": 0
+				},
+				{
+					"label": "S1 operates as S2, S2 operates as S1",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "S1 Scene ID set",
+			"description": "When you press S1 five times,the light is dimmed to the brightness set in Scene ID 3 . S1 Scene ID is set by this configuration. Note: The actual action of each SCENE ID are set by SCE-NE_ACTUATOR_CONF(0x26) command.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "S1 Scene ID set",
+			"description": "When you press S1 five times,the light is dimmed to the brightness set in Scene ID 5. S2 Scene ID is set by this configuration. Note: The actual action of each SCENE ID are set by SCE-NE_ACTUATOR_CONF(0x26) command.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Timer functionality (auto - off)",
+			"description": "This parameter allows to automatically switch off the device after specified time from switching on the light source. It may be useful when the Zerodim Z-Wave is installed in the stairway. Available settings: 0 - Function disabled. 1-32767 - time to turn off measured in seconds (1s-9.1h)",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

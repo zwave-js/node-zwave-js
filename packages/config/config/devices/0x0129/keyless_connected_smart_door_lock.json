@@ -1,87 +1,86 @@
 // ASSA ABLOY Keyless Connected Smart Door Lock
 // Smart door lock with z-wave module.
 {
-    "_approved": true,
-    "manufacturer": "ASSA ABLOY",
-    "manufacturerId": "0x0129",
-    "label": "Keyless Connected Smart Door Lock",
-    "description": "Smart door lock with z-wave module.",
-    "devices": [
-        {
-            "productType": "0x0007",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Audio Volume",
-            "description": "Sets the volume level of the beeps and voice prompts",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Silent",
-                    "value": 1
-                },
-                {
-                    "label": "Low",
-                    "value": 2
-                },
-                {
-                    "label": "High",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Auto Re-lock",
-            "description": "When enabled, the unit will automatically re-lock",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "On",
-                    "value": 255
-                }
-            ]
-        },
-        "3": {
-            "label": "Re-lock Time",
-            "description": "Time after unlocking that the device will lock",
-            "valueSize": 1,
-            "minValue": 7,
-            "maxValue": 90,
-            "defaultValue": 7,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Wrong Code Entry Limit",
-            "description": "The number of invalid tries before the lock shutdowns and sends an alarm",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "Keyless Connected Smart Door Lock",
+	"description": "Smart door lock with z-wave module.",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Audio Volume",
+			"description": "Sets the volume level of the beeps and voice prompts",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Silent",
+					"value": 1
+				},
+				{
+					"label": "Low",
+					"value": 2
+				},
+				{
+					"label": "High",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Auto Re-lock",
+			"description": "When enabled, the unit will automatically re-lock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Re-lock Time",
+			"description": "Time after unlocking that the device will lock",
+			"valueSize": 1,
+			"minValue": 7,
+			"maxValue": 90,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Wrong Code Entry Limit",
+			"description": "The number of invalid tries before the lock shutdowns and sends an alarm",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

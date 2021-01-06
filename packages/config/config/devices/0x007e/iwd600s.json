@@ -1,30 +1,29 @@
 // Monster Cable IWD600S
 // Dimmer switch 600w incandescent
 {
-    "_approved": true,
-    "manufacturer": "Monster Cable",
-    "manufacturerId": "0x007e",
-    "label": "IWD600S",
-    "description": "Dimmer switch 600w incandescent",
-    "devices": [
-        {
-            "productType": "0x0400",
-            "productId": "0x014e"
-        },
-        {
-            "productType": "0x0401",
-            "productId": "0x0206"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Controller Updates",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Monster Cable",
+	"manufacturerId": "0x007e",
+	"label": "IWD600S",
+	"description": "Dimmer switch 600w incandescent",
+	"devices": [
+		{
+			"productType": "0x0400",
+			"productId": "0x014e"
+		},
+		{
+			"productType": "0x0401",
+			"productId": "0x0206"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Controller Updates",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }

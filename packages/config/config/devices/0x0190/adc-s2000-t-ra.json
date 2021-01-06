@@ -1,7 +1,6 @@
 // Building 36 Technologies ADC-S2000-T-RA
 // Temperature Sensor
 {
-	"_approved": true,
 	"manufacturer": "Building 36 Technologies",
 	"manufacturerId": "0x0190",
 	"label": "ADC-S2000-T-RA",

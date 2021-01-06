@@ -1,271 +1,270 @@
 // Wink Inc. Siren
 // Wink Siren
 {
-    "_approved": true,
-    "manufacturer": "Wink Inc.",
-    "manufacturerId": "0x017f",
-    "label": "Siren",
-    "description": "Wink Siren",
-    "devices": [
-        {
-            "productType": "0x0200",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Primary Notification Volume Level",
-            "description": "Set the volume level",
-            "valueSize": 1,
-            "minValue": -1,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Low Volume",
-                    "value": 1
-                },
-                {
-                    "label": "Medium Volume",
-                    "value": 2
-                },
-                {
-                    "label": "High Volume",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Primary Notification Length",
-            "description": "Set the Notification Length",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Plays until battery dies",
-                    "value": -1
-                },
-                {
-                    "label": "30 Sec",
-                    "value": 1
-                },
-                {
-                    "label": "I min",
-                    "value": 2
-                },
-                {
-                    "label": "5 min",
-                    "value": 3
-                }
-            ]
-        },
-        "3": {
-            "label": "Secondary Notification Length",
-            "description": "Secondary Notification Length",
-            "valueSize": 1,
-            "minValue": -128,
-            "maxValue": 127,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Chime Will Not Play",
-                    "value": -1
-                },
-                {
-                    "label": "Does Not Stop",
-                    "value": 0
-                },
-                {
-                    "label": "Time 1 min",
-                    "value": 1
-                },
-                {
-                    "label": "Time 2 Min",
-                    "value": 2
-                },
-                {
-                    "label": "Time 5 Min",
-                    "value": 5
-                }
-            ]
-        },
-        "4": {
-            "label": "Secondary Notification Volume Level",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Low Volume",
-                    "value": 1
-                },
-                {
-                    "label": "Medium Volume",
-                    "value": 2
-                },
-                {
-                    "label": "High Volume",
-                    "value": 3
-                }
-            ]
-        },
-        "5": {
-            "label": "Primary Notification Sound",
-            "description": "Primary Notification Sound",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 9,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Tone 1",
-                    "value": 1
-                },
-                {
-                    "label": "Tone 2",
-                    "value": 2
-                },
-                {
-                    "label": "Tone 3",
-                    "value": 3
-                },
-                {
-                    "label": "Tone 4",
-                    "value": 4
-                },
-                {
-                    "label": "Tone 5",
-                    "value": 5
-                },
-                {
-                    "label": "Tone 6",
-                    "value": 6
-                },
-                {
-                    "label": "Tone 7",
-                    "value": 7
-                },
-                {
-                    "label": "Tone 8",
-                    "value": 8
-                },
-                {
-                    "label": "Tone 9",
-                    "value": 9
-                },
-                {
-                    "label": "Tone 10",
-                    "value": 10
-                }
-            ]
-        },
-        "6": {
-            "label": "Secondary Notification Sound",
-            "description": "Secondary Notification Sound",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 9,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Tone 1",
-                    "value": 1
-                },
-                {
-                    "label": "Tone 2",
-                    "value": 2
-                },
-                {
-                    "label": "Tone 3",
-                    "value": 3
-                },
-                {
-                    "label": "Tone 4",
-                    "value": 4
-                },
-                {
-                    "label": "Tone 5",
-                    "value": 5
-                },
-                {
-                    "label": "Tone 6",
-                    "value": 6
-                },
-                {
-                    "label": "Tone 7",
-                    "value": 7
-                },
-                {
-                    "label": "Tone 8",
-                    "value": 8
-                },
-                {
-                    "label": "Tone 9",
-                    "value": 9
-                },
-                {
-                    "label": "Tone 10",
-                    "value": 10
-                }
-            ]
-        },
-        "7": {
-            "label": "Toggle Secondary Chime",
-            "description": "Toggle Secondary Chime",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Primary Notification Will Play",
-                    "value": 1
-                },
-                {
-                    "label": "Secondary Notification Will Play",
-                    "value": 2
-                }
-            ]
-        },
-        "8": {
-            "label": "Power Level",
-            "description": "Power Level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Wink Inc.",
+	"manufacturerId": "0x017f",
+	"label": "Siren",
+	"description": "Wink Siren",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Primary Notification Volume Level",
+			"description": "Set the volume level",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Low Volume",
+					"value": 1
+				},
+				{
+					"label": "Medium Volume",
+					"value": 2
+				},
+				{
+					"label": "High Volume",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Primary Notification Length",
+			"description": "Set the Notification Length",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Plays until battery dies",
+					"value": -1
+				},
+				{
+					"label": "30 Sec",
+					"value": 1
+				},
+				{
+					"label": "I min",
+					"value": 2
+				},
+				{
+					"label": "5 min",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Secondary Notification Length",
+			"description": "Secondary Notification Length",
+			"valueSize": 1,
+			"minValue": -128,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Chime Will Not Play",
+					"value": -1
+				},
+				{
+					"label": "Does Not Stop",
+					"value": 0
+				},
+				{
+					"label": "Time 1 min",
+					"value": 1
+				},
+				{
+					"label": "Time 2 Min",
+					"value": 2
+				},
+				{
+					"label": "Time 5 Min",
+					"value": 5
+				}
+			]
+		},
+		"4": {
+			"label": "Secondary Notification Volume Level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Low Volume",
+					"value": 1
+				},
+				{
+					"label": "Medium Volume",
+					"value": 2
+				},
+				{
+					"label": "High Volume",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Primary Notification Sound",
+			"description": "Primary Notification Sound",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 9,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Tone 1",
+					"value": 1
+				},
+				{
+					"label": "Tone 2",
+					"value": 2
+				},
+				{
+					"label": "Tone 3",
+					"value": 3
+				},
+				{
+					"label": "Tone 4",
+					"value": 4
+				},
+				{
+					"label": "Tone 5",
+					"value": 5
+				},
+				{
+					"label": "Tone 6",
+					"value": 6
+				},
+				{
+					"label": "Tone 7",
+					"value": 7
+				},
+				{
+					"label": "Tone 8",
+					"value": 8
+				},
+				{
+					"label": "Tone 9",
+					"value": 9
+				},
+				{
+					"label": "Tone 10",
+					"value": 10
+				}
+			]
+		},
+		"6": {
+			"label": "Secondary Notification Sound",
+			"description": "Secondary Notification Sound",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 9,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Tone 1",
+					"value": 1
+				},
+				{
+					"label": "Tone 2",
+					"value": 2
+				},
+				{
+					"label": "Tone 3",
+					"value": 3
+				},
+				{
+					"label": "Tone 4",
+					"value": 4
+				},
+				{
+					"label": "Tone 5",
+					"value": 5
+				},
+				{
+					"label": "Tone 6",
+					"value": 6
+				},
+				{
+					"label": "Tone 7",
+					"value": 7
+				},
+				{
+					"label": "Tone 8",
+					"value": 8
+				},
+				{
+					"label": "Tone 9",
+					"value": 9
+				},
+				{
+					"label": "Tone 10",
+					"value": 10
+				}
+			]
+		},
+		"7": {
+			"label": "Toggle Secondary Chime",
+			"description": "Toggle Secondary Chime",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Primary Notification Will Play",
+					"value": 1
+				},
+				{
+					"label": "Secondary Notification Will Play",
+					"value": 2
+				}
+			]
+		},
+		"8": {
+			"label": "Power Level",
+			"description": "Power Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

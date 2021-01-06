@@ -1,20 +1,19 @@
 // Vision Security ZS6301-5
 // Carbon monoxide detector
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZS6301-5",
-    "description": "Carbon monoxide detector",
-    "devices": [
-        {
-            "productType": "0x200f",
-            "productId": "0x0f04"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZS6301-5",
+	"description": "Carbon monoxide detector",
+	"devices": [
+		{
+			"productType": "0x200f",
+			"productId": "0x0f04"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

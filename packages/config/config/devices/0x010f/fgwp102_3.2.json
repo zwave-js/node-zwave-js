@@ -1,542 +1,541 @@
 // Fibargroup FGWP102
 // Metered Wall Plug Switch
 {
-    "_approved": true,
-    "manufacturer": "Fibargroup",
-    "manufacturerId": "0x010f",
-    "label": "FGWP102",
-    "description": "Metered Wall Plug Switch",
-    "devices": [
-        {
-            "productType": "0x0602",
-            "productId": "0x1001"
-        },
-        {
-            "productType": "0x0602",
-            "productId": "0x1003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.2",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "“Always On” mode",
-            "description": "Will turn on connected device permanently",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "function inactive",
-                    "value": 0
-                },
-                {
-                    "label": "function activated",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Remember device status before the power failure",
-            "description": "determines how the Wall Plug will react in the event of power supply failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "device remains switched off",
-                    "value": 0
-                },
-                {
-                    "label": "Remember state before power failure",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Overload safety switch",
-            "description": "allows to turn off the controlled device in case of exceeding the defined power.",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 30000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "function inactive",
-                    "value": 0
-                }
-            ]
-        },
-        "10": {
-            "label": "High priority power report",
-            "description": "minimum percentage change in active power",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 100,
-            "defaultValue": 80,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Standard power report",
-            "description": "minimum percentage change in active power",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 100,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Power reporting interval",
-            "description": "defines the time interval of sending at most 5 standard power reports",
-            "valueSize": 2,
-            "minValue": 5,
-            "maxValue": 600,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Energy reporting threshold",
-            "description": "specifies the minimum change in energy consumption",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 500,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "energy reports inactive",
-                    "value": 0
-                }
-            ]
-        },
-        "14": {
-            "label": "Power and energy periodic reports",
-            "description": "defines time period between independent reports sent",
-            "valueSize": 2,
-            "minValue": 5,
-            "maxValue": 32400,
-            "defaultValue": 3600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "periodic reports inactive",
-                    "value": 0
-                }
-            ]
-        },
-        "15": {
-            "label": "Measuring energy consumed by the Wall Plug itself",
-            "description": "determines whether power metering should include the amount of power",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "function inactive",
-                    "value": 0
-                },
-                {
-                    "label": "function activated",
-                    "value": 1
-                }
-            ]
-        },
-        "20": {
-            "label": "„On/Off (Button)” association group (2)",
-            "description": "Control of „On/Off (Button)” association group (2) devices",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "control as the Wall Plug",
-                    "value": 0
-                },
-                {
-                    "label": "control opposite to the Wall Plug",
-                    "value": 1
-                }
-            ]
-        },
-        "21": {
-            "label": "DOWN value - association group (3)",
-            "description": "DOWN value - „On/Off (Power)” for association group (3)",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 24900,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "UP value - association group (3)",
-            "description": "UP value - „On/Off (Power)” for association group (3)",
-            "valueSize": 2,
-            "minValue": 100,
-            "maxValue": 25000,
-            "defaultValue": 500,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "23": {
-            "label": "The response after exceeding defined power values",
-            "description": "defines the way that 3rd association group devices are controlled.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "turn the associated devices ON (DOWN)",
-                    "value": 1
-                },
-                {
-                    "label": "turn the associated devices OFF (DOWN)",
-                    "value": 2
-                },
-                {
-                    "label": "turn the associated devices ON (UP)",
-                    "value": 3
-                },
-                {
-                    "label": "turn the associated devices OFF (UP)",
-                    "value": 4
-                },
-                {
-                    "label": "combination of 1 and 4",
-                    "value": 5
-                },
-                {
-                    "label": "combination of 2 and 3",
-                    "value": 6
-                }
-            ]
-        },
-        "24": {
-            "label": "SWITCH ON value - „On/Off” association groups",
-            "description": "SWITCH ON value - „On/Off” association groups",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Default",
-                    "value": 255
-                }
-            ]
-        },
-        "30": {
-            "label": "Active alarms",
-            "description": "Define Z-Wave network alarms to which the Wall Plug will respond",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 63,
-            "defaultValue": 63,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "general alarm",
-                    "value": 1
-                },
-                {
-                    "label": "smoke alarm",
-                    "value": 2
-                },
-                {
-                    "label": "CO alarm",
-                    "value": 4
-                },
-                {
-                    "label": "CO2 alarm",
-                    "value": 8
-                },
-                {
-                    "label": "high temperature alarm",
-                    "value": 16
-                },
-                {
-                    "label": "flood alarm",
-                    "value": 32
-                },
-                {
-                    "label": "All",
-                    "value": 63
-                }
-            ]
-        },
-        "31": {
-            "label": "Response to alarm frames",
-            "description": "defines how the Wall Plug will respond to alarms",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 50,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "no reaction",
-                    "value": 0
-                },
-                {
-                    "label": "turn connected device on",
-                    "value": 1
-                },
-                {
-                    "label": "turn connected device off",
-                    "value": 2
-                }
-            ]
-        },
-        "32": {
-            "label": "Alarm state duration",
-            "description": "specifies the duration of alarm state",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32400,
-            "defaultValue": 600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "40": {
-            "label": "Power load for violet colour",
-            "description": "determines maximum active power value",
-            "valueSize": 2,
-            "minValue": 1000,
-            "maxValue": 30000,
-            "defaultValue": 25000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "41": {
-            "label": "LED ring colour (device is ON)",
-            "description": "LED ring colour when controlled device is on",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "illumination turned off completely",
-                    "value": 0
-                },
-                {
-                    "label": "colour changes depending on active power",
-                    "value": 1
-                },
-                {
-                    "label": "colour changes in steps depending on active power",
-                    "value": 2
-                },
-                {
-                    "label": "white",
-                    "value": 3
-                },
-                {
-                    "label": "red",
-                    "value": 4
-                },
-                {
-                    "label": "green",
-                    "value": 5
-                },
-                {
-                    "label": "blue",
-                    "value": 6
-                },
-                {
-                    "label": "yellow",
-                    "value": 7
-                },
-                {
-                    "label": "cyan",
-                    "value": 8
-                },
-                {
-                    "label": "magenta",
-                    "value": 9
-                }
-            ]
-        },
-        "42": {
-            "label": "LED ring colour (device is OFF)",
-            "description": "LED ring colour when controlled device is off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "illumination turned off completely",
-                    "value": 0
-                },
-                {
-                    "label": "LED ring is illuminated",
-                    "value": 1
-                },
-                {
-                    "label": "white",
-                    "value": 3
-                },
-                {
-                    "label": "red",
-                    "value": 4
-                },
-                {
-                    "label": "green",
-                    "value": 5
-                },
-                {
-                    "label": "blue",
-                    "value": 6
-                },
-                {
-                    "label": "yellow",
-                    "value": 7
-                },
-                {
-                    "label": "cyan",
-                    "value": 8
-                },
-                {
-                    "label": "magenta",
-                    "value": 9
-                }
-            ]
-        },
-        "43": {
-            "label": "LED ring colour (alarm detection)",
-            "description": "LED ring colour at the Z-Wave network alarm detection",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 9,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "illumination turned off completely",
-                    "value": 0
-                },
-                {
-                    "label": "no change in colour",
-                    "value": 1
-                },
-                {
-                    "label": "LED ring flashes red/blue/white",
-                    "value": 2
-                },
-                {
-                    "label": "white",
-                    "value": 3
-                },
-                {
-                    "label": "red",
-                    "value": 4
-                },
-                {
-                    "label": "green",
-                    "value": 5
-                },
-                {
-                    "label": "blue",
-                    "value": 6
-                },
-                {
-                    "label": "yellow",
-                    "value": 7
-                },
-                {
-                    "label": "cyan",
-                    "value": 8
-                },
-                {
-                    "label": "magenta",
-                    "value": 9
-                }
-            ]
-        },
-        "50": {
-            "label": "Associations in Z-Wave network security mode",
-            "description": "defines how commands are sent in specified association groups",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "none of the groups sent as secure",
-                    "value": 0
-                },
-                {
-                    "label": "2nd group sent as secure",
-                    "value": 1
-                },
-                {
-                    "label": "3rd group sent as secure",
-                    "value": 2
-                },
-                {
-                    "label": "2nd and 3rd group sent as secure",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGWP102",
+	"description": "Metered Wall Plug Switch",
+	"devices": [
+		{
+			"productType": "0x0602",
+			"productId": "0x1001"
+		},
+		{
+			"productType": "0x0602",
+			"productId": "0x1003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.2",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "“Always On” mode",
+			"description": "Will turn on connected device permanently",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "function inactive",
+					"value": 0
+				},
+				{
+					"label": "function activated",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Remember device status before the power failure",
+			"description": "determines how the Wall Plug will react in the event of power supply failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "device remains switched off",
+					"value": 0
+				},
+				{
+					"label": "Remember state before power failure",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Overload safety switch",
+			"description": "allows to turn off the controlled device in case of exceeding the defined power.",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 30000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "function inactive",
+					"value": 0
+				}
+			]
+		},
+		"10": {
+			"label": "High priority power report",
+			"description": "minimum percentage change in active power",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 80,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Standard power report",
+			"description": "minimum percentage change in active power",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Power reporting interval",
+			"description": "defines the time interval of sending at most 5 standard power reports",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 600,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Energy reporting threshold",
+			"description": "specifies the minimum change in energy consumption",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "energy reports inactive",
+					"value": 0
+				}
+			]
+		},
+		"14": {
+			"label": "Power and energy periodic reports",
+			"description": "defines time period between independent reports sent",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "periodic reports inactive",
+					"value": 0
+				}
+			]
+		},
+		"15": {
+			"label": "Measuring energy consumed by the Wall Plug itself",
+			"description": "determines whether power metering should include the amount of power",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "function inactive",
+					"value": 0
+				},
+				{
+					"label": "function activated",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "„On/Off (Button)” association group (2)",
+			"description": "Control of „On/Off (Button)” association group (2) devices",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "control as the Wall Plug",
+					"value": 0
+				},
+				{
+					"label": "control opposite to the Wall Plug",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "DOWN value - association group (3)",
+			"description": "DOWN value - „On/Off (Power)” for association group (3)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 24900,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "UP value - association group (3)",
+			"description": "UP value - „On/Off (Power)” for association group (3)",
+			"valueSize": 2,
+			"minValue": 100,
+			"maxValue": 25000,
+			"defaultValue": 500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "The response after exceeding defined power values",
+			"description": "defines the way that 3rd association group devices are controlled.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "turn the associated devices ON (DOWN)",
+					"value": 1
+				},
+				{
+					"label": "turn the associated devices OFF (DOWN)",
+					"value": 2
+				},
+				{
+					"label": "turn the associated devices ON (UP)",
+					"value": 3
+				},
+				{
+					"label": "turn the associated devices OFF (UP)",
+					"value": 4
+				},
+				{
+					"label": "combination of 1 and 4",
+					"value": 5
+				},
+				{
+					"label": "combination of 2 and 3",
+					"value": 6
+				}
+			]
+		},
+		"24": {
+			"label": "SWITCH ON value - „On/Off” association groups",
+			"description": "SWITCH ON value - „On/Off” association groups",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Default",
+					"value": 255
+				}
+			]
+		},
+		"30": {
+			"label": "Active alarms",
+			"description": "Define Z-Wave network alarms to which the Wall Plug will respond",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 63,
+			"defaultValue": 63,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "general alarm",
+					"value": 1
+				},
+				{
+					"label": "smoke alarm",
+					"value": 2
+				},
+				{
+					"label": "CO alarm",
+					"value": 4
+				},
+				{
+					"label": "CO2 alarm",
+					"value": 8
+				},
+				{
+					"label": "high temperature alarm",
+					"value": 16
+				},
+				{
+					"label": "flood alarm",
+					"value": 32
+				},
+				{
+					"label": "All",
+					"value": 63
+				}
+			]
+		},
+		"31": {
+			"label": "Response to alarm frames",
+			"description": "defines how the Wall Plug will respond to alarms",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "no reaction",
+					"value": 0
+				},
+				{
+					"label": "turn connected device on",
+					"value": 1
+				},
+				{
+					"label": "turn connected device off",
+					"value": 2
+				}
+			]
+		},
+		"32": {
+			"label": "Alarm state duration",
+			"description": "specifies the duration of alarm state",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Power load for violet colour",
+			"description": "determines maximum active power value",
+			"valueSize": 2,
+			"minValue": 1000,
+			"maxValue": 30000,
+			"defaultValue": 25000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41": {
+			"label": "LED ring colour (device is ON)",
+			"description": "LED ring colour when controlled device is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "illumination turned off completely",
+					"value": 0
+				},
+				{
+					"label": "colour changes depending on active power",
+					"value": 1
+				},
+				{
+					"label": "colour changes in steps depending on active power",
+					"value": 2
+				},
+				{
+					"label": "white",
+					"value": 3
+				},
+				{
+					"label": "red",
+					"value": 4
+				},
+				{
+					"label": "green",
+					"value": 5
+				},
+				{
+					"label": "blue",
+					"value": 6
+				},
+				{
+					"label": "yellow",
+					"value": 7
+				},
+				{
+					"label": "cyan",
+					"value": 8
+				},
+				{
+					"label": "magenta",
+					"value": 9
+				}
+			]
+		},
+		"42": {
+			"label": "LED ring colour (device is OFF)",
+			"description": "LED ring colour when controlled device is off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "illumination turned off completely",
+					"value": 0
+				},
+				{
+					"label": "LED ring is illuminated",
+					"value": 1
+				},
+				{
+					"label": "white",
+					"value": 3
+				},
+				{
+					"label": "red",
+					"value": 4
+				},
+				{
+					"label": "green",
+					"value": 5
+				},
+				{
+					"label": "blue",
+					"value": 6
+				},
+				{
+					"label": "yellow",
+					"value": 7
+				},
+				{
+					"label": "cyan",
+					"value": 8
+				},
+				{
+					"label": "magenta",
+					"value": 9
+				}
+			]
+		},
+		"43": {
+			"label": "LED ring colour (alarm detection)",
+			"description": "LED ring colour at the Z-Wave network alarm detection",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 9,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "illumination turned off completely",
+					"value": 0
+				},
+				{
+					"label": "no change in colour",
+					"value": 1
+				},
+				{
+					"label": "LED ring flashes red/blue/white",
+					"value": 2
+				},
+				{
+					"label": "white",
+					"value": 3
+				},
+				{
+					"label": "red",
+					"value": 4
+				},
+				{
+					"label": "green",
+					"value": 5
+				},
+				{
+					"label": "blue",
+					"value": 6
+				},
+				{
+					"label": "yellow",
+					"value": 7
+				},
+				{
+					"label": "cyan",
+					"value": 8
+				},
+				{
+					"label": "magenta",
+					"value": 9
+				}
+			]
+		},
+		"50": {
+			"label": "Associations in Z-Wave network security mode",
+			"description": "defines how commands are sent in specified association groups",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "none of the groups sent as secure",
+					"value": 0
+				},
+				{
+					"label": "2nd group sent as secure",
+					"value": 1
+				},
+				{
+					"label": "3rd group sent as secure",
+					"value": 2
+				},
+				{
+					"label": "2nd and 3rd group sent as secure",
+					"value": 3
+				}
+			]
+		}
+	}
 }

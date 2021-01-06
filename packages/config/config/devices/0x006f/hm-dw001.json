@@ -1,55 +1,54 @@
 // Erone HM-DW001
 // Door/Window Contact
 {
-    "_approved": true,
-    "manufacturer": "Erone",
-    "manufacturerId": "0x006f",
-    "label": "HM-DW001",
-    "description": "Door/Window Contact",
-    "devices": [
-        {
-            "productType": "0x0102",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Tamper Event Report (Alarm Report)",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Control other Z-Wave Devices",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Basic Set Level",
-            "description": "Value to be sent with a BASIC SET command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Configuring the OFF Delay",
-            "description": "OFF Delay in seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Erone",
+	"manufacturerId": "0x006f",
+	"label": "HM-DW001",
+	"description": "Door/Window Contact",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Tamper Event Report (Alarm Report)",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Control other Z-Wave Devices",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Basic Set Level",
+			"description": "Value to be sent with a BASIC SET command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Configuring the OFF Delay",
+			"description": "OFF Delay in seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

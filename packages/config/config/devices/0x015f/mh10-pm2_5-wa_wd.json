@@ -1,103 +1,102 @@
 // McoHome Technology Co., Ltd. MH10-PM2.5-WA/WD
 // PM2.5 Monitor (Zwave Plus)
 {
-    "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH10-PM2.5-WA/WD",
-    "description": "PM2.5 Monitor (Zwave Plus)",
-    "devices": [
-        {
-            "productType": "0x0a01",
-            "productId": "0x5102"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "2": {
-            "label": "PM2.5 report interval",
-            "description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
-            "unit": "0.1μg/m³",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Report Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Report every whole 1μg/m³ change (default)",
-                    "value": 10
-                }
-            ]
-        },
-        "3": {
-            "label": "Temperature Report Interval",
-            "description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
-            "unit": "0.5°C",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Report Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Report if changed 0.5℃",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Humidity Report Interval",
-            "description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
-            "unit": "2%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Factory Setting",
-            "description": "85 (0x55) to restore factory setting",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal Operation",
-                    "value": 0
-                },
-                {
-                    "label": "Reset to factory settings",
-                    "value": 85
-                }
-            ]
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH10-PM2.5-WA/WD",
+	"description": "PM2.5 Monitor (Zwave Plus)",
+	"devices": [
+		{
+			"productType": "0x0a01",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "PM2.5 report interval",
+			"description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
+			"unit": "0.1μg/m³",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Report Disabled",
+					"value": 0
+				},
+				{
+					"label": "Report every whole 1μg/m³ change (default)",
+					"value": 10
+				}
+			]
+		},
+		"3": {
+			"label": "Temperature Report Interval",
+			"description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
+			"unit": "0.5°C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Report Disabled",
+					"value": 0
+				},
+				{
+					"label": "Report if changed 0.5℃",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Humidity Report Interval",
+			"description": "=0 report disabled, ≥10 report when change ≥n*0.1μg/m³",
+			"unit": "2%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Factory Setting",
+			"description": "85 (0x55) to restore factory setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Reset to factory settings",
+					"value": 85
+				}
+			]
+		}
+	}
 }

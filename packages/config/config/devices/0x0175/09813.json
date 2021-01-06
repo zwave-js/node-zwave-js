@@ -1,7 +1,6 @@
 // Devolo 09813
 // Home Control Smoke Detector
 {
-	"_approved": true,
 	"manufacturer": "Devolo",
 	"manufacturerId": "0x0175",
 	"label": "09813",

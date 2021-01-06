@@ -1,19 +1,18 @@
 // EcoNet Controls EV100
 // Z-Vent ZWave Controlled HVAC Air Register
 {
-    "_approved": true,
-    "manufacturer": "EcoNet Controls",
-    "manufacturerId": "0x0157",
-    "label": "EV100",
-    "description": "Z-Vent ZWave Controlled HVAC Air Register",
-    "devices": [
-        {
-            "productType": "0x0100",
-            "productId": "0x0100"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "EcoNet Controls",
+	"manufacturerId": "0x0157",
+	"label": "EV100",
+	"description": "Z-Vent ZWave Controlled HVAC Air Register",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0100"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

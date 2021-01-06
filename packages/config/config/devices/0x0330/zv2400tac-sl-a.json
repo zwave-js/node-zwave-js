@@ -1,296 +1,295 @@
 // Sunricher ZV2400TAC-SL-A
 // Knob Smart Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Sunricher",
-    "manufacturerId": "0x0330",
-    "label": "ZV2400TAC-SL-A",
-    "description": "Knob Smart Dimmer",
-    "devices": [
-        {
-            "productType": "0x0200",
-            "productId": "0xd010"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "2": {
-            "label": "State before power failure",
-            "description": "Saving load state before power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "shutoff load",
-                    "value": 0
-                },
-                {
-                    "label": "turn on load",
-                    "value": 1
-                },
-                {
-                    "label": "save load state before power failure",
-                    "value": 2
-                }
-            ]
-        },
-        "3": {
-            "label": "Send Basic report",
-            "description": "send the basic report to the Lifeline when the load state changed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable to send Basic report",
-                    "value": 0
-                },
-                {
-                    "label": "Enable to send Basic report",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Default fade time",
-            "description": "Default fade time",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Instantly",
-                    "value": 0
-                },
-                {
-                    "label": "from 1 to 127 seconds",
-                    "value": 1
-                },
-                {
-                    "label": "1  to 127 minutes",
-                    "value": 80
-                },
-                {
-                    "label": "Factory default duration. (3 second)",
-                    "value": 255
-                }
-            ]
-        },
-        "5": {
-            "label": "Minimum brightness value",
-            "description": "Setting minimum brightness value",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 50,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Maximum brightness value",
-            "description": "Setting maximum brightness value",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "MOSFET driving type",
-            "description": "Choose MOSFET driving type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "trailing edge",
-                    "value": 0
-                },
-                {
-                    "label": "leading edge",
-                    "value": 1
-                }
-            ]
-        },
-        "9": {
-            "label": "Added to and removed from a network",
-            "description": "Added to and removed from a network",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "disable",
-                    "value": 0
-                },
-                {
-                    "label": "enable",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "Detect load",
-            "description": "Enable/disable to detect load",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "disable",
-                    "value": 0
-                },
-                {
-                    "label": "enable",
-                    "value": 1
-                },
-                {
-                    "label": "enable to detect only after first re-power",
-                    "value": 2
-                }
-            ]
-        },
-        "11": {
-            "label": "Wiring type",
-            "description": "Wiring type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Load type",
-            "description": "Load type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Over current protection",
-            "description": "Enable/disable over current protection",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "disable",
-                    "value": 0
-                },
-                {
-                    "label": "enable",
-                    "value": 1
-                }
-            ]
-        },
-        "14": {
-            "label": "Threshold, unit is W",
-            "description": "Threshold, unit is W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Threshold, unit is %",
-            "description": "Threshold, unit is %",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "Power metering time cycle",
-            "description": "Power metering time cycle",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2678400,
-            "defaultValue": 600,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "Energy metering time cycle",
-            "description": "Energy metering time cycle",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2678400,
-            "defaultValue": 1800,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "23": {
-            "label": "Voltage metering time cycle",
-            "description": "Voltage metering time cycle",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "24": {
-            "label": "Current metering time cycle",
-            "description": "Current metering time cycle",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0330",
+	"label": "ZV2400TAC-SL-A",
+	"description": "Knob Smart Dimmer",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0xd010"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "State before power failure",
+			"description": "Saving load state before power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "shutoff load",
+					"value": 0
+				},
+				{
+					"label": "turn on load",
+					"value": 1
+				},
+				{
+					"label": "save load state before power failure",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Send Basic report",
+			"description": "send the basic report to the Lifeline when the load state changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable to send Basic report",
+					"value": 0
+				},
+				{
+					"label": "Enable to send Basic report",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Default fade time",
+			"description": "Default fade time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Instantly",
+					"value": 0
+				},
+				{
+					"label": "from 1 to 127 seconds",
+					"value": 1
+				},
+				{
+					"label": "1  to 127 minutes",
+					"value": 80
+				},
+				{
+					"label": "Factory default duration. (3 second)",
+					"value": 255
+				}
+			]
+		},
+		"5": {
+			"label": "Minimum brightness value",
+			"description": "Setting minimum brightness value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Maximum brightness value",
+			"description": "Setting maximum brightness value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "MOSFET driving type",
+			"description": "Choose MOSFET driving type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "trailing edge",
+					"value": 0
+				},
+				{
+					"label": "leading edge",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Added to and removed from a network",
+			"description": "Added to and removed from a network",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable",
+					"value": 0
+				},
+				{
+					"label": "enable",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Detect load",
+			"description": "Enable/disable to detect load",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable",
+					"value": 0
+				},
+				{
+					"label": "enable",
+					"value": 1
+				},
+				{
+					"label": "enable to detect only after first re-power",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "Wiring type",
+			"description": "Wiring type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Load type",
+			"description": "Load type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Over current protection",
+			"description": "Enable/disable over current protection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable",
+					"value": 0
+				},
+				{
+					"label": "enable",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Threshold, unit is W",
+			"description": "Threshold, unit is W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Threshold, unit is %",
+			"description": "Threshold, unit is %",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Power metering time cycle",
+			"description": "Power metering time cycle",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Energy metering time cycle",
+			"description": "Energy metering time cycle",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 1800,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "Voltage metering time cycle",
+			"description": "Voltage metering time cycle",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Current metering time cycle",
+			"description": "Current metering time cycle",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

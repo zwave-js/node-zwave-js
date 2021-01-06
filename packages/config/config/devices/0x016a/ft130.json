@@ -1,138 +1,137 @@
 // Fantem FT130
 // Wall-mount four Button
 {
-    "_approved": true,
-    "manufacturer": "Fantem",
-    "manufacturerId": "0x016a",
-    "label": "FT130",
-    "description": "Wall-mount four Button",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0082"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Touch sound",
-            "description": "Enable/disable the touch sound.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Touch vibration",
-            "description": "Enable/disable the touch vibration.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Button slide",
-            "description": "Enable/disable the function of button slide.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Notification report",
-            "description": "Which notification to be sent to the associated devices.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Central scene",
-                    "value": 1
-                },
-                {
-                    "label": "Central scene and config",
-                    "value": 3
-                }
-            ]
-        },
-        "39": {
-            "label": "Low battery value",
-            "description": "Set the low battery value",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 50,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Reset the WallMote Quad",
-            "description": "Reset the WallMote Quad to factory default.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Reset to factory default",
-                    "value": 0
-                },
-                {
-                    "label": "Reset and remove",
-                    "value": 1431655765
-                }
-            ]
-        }
-    }
+	"manufacturer": "Fantem",
+	"manufacturerId": "0x016a",
+	"label": "FT130",
+	"description": "Wall-mount four Button",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0082"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Touch sound",
+			"description": "Enable/disable the touch sound.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Touch vibration",
+			"description": "Enable/disable the touch vibration.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Button slide",
+			"description": "Enable/disable the function of button slide.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Notification report",
+			"description": "Which notification to be sent to the associated devices.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Central scene",
+					"value": 1
+				},
+				{
+					"label": "Central scene and config",
+					"value": 3
+				}
+			]
+		},
+		"39": {
+			"label": "Low battery value",
+			"description": "Set the low battery value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Reset the WallMote Quad",
+			"description": "Reset the WallMote Quad to factory default.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset to factory default",
+					"value": 0
+				},
+				{
+					"label": "Reset and remove",
+					"value": 1431655765
+				}
+			]
+		}
+	}
 }

@@ -1,20 +1,19 @@
 // Willis Electric Co., Ltd. ZEN21
 // Zooz Z-Wave On / Off Light Switch
 {
-    "_approved": true,
-    "manufacturer": "Willis Electric Co., Ltd.",
-    "manufacturerId": "0x015d",
-    "label": "ZEN21",
-    "description": "Zooz Z-Wave On / Off Light Switch",
-    "devices": [
-        {
-            "productType": "0x0111",
-            "productId": "0x231c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "ZEN21",
+	"description": "Zooz Z-Wave On / Off Light Switch",
+	"devices": [
+		{
+			"productType": "0x0111",
+			"productId": "0x231c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

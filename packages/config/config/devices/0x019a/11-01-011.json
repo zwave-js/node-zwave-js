@@ -1,76 +1,75 @@
 // Sensative AB 11-01-011
 // Strips-MaZw
 {
-    "_approved": true,
-    "manufacturer": "Sensative AB",
-    "manufacturerId": "0x019a",
-    "label": "11-01-011",
-    "description": "Strips-MaZw",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Notification type",
-            "description": "Define the notification type.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Binary Sensor report",
-                    "value": 0
-                },
-                {
-                    "label": "Notification report",
-                    "value": 1
-                },
-                {
-                    "label": "Basic report",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "LED indication",
-            "description": "Specify if LED should indicate special event.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Sensative AB",
+	"manufacturerId": "0x019a",
+	"label": "11-01-011",
+	"description": "Strips-MaZw",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Notification type",
+			"description": "Define the notification type.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Binary Sensor report",
+					"value": 0
+				},
+				{
+					"label": "Notification report",
+					"value": 1
+				},
+				{
+					"label": "Basic report",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "LED indication",
+			"description": "Specify if LED should indicate special event.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				}
+			]
+		}
+	}
 }

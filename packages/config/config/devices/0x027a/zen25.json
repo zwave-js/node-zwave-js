@@ -1,305 +1,304 @@
 // Zooz ZEN25
 // Double Plug
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN25",
-    "description": "Double Plug",
-    "devices": [
-        {
-            "productType": "0xa000",
-            "productId": "0xa003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "On/Off After Power",
-            "description": "On/Off Status After Power Failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Previous State",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                },
-                {
-                    "label": "Off",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Wattage Threshold",
-            "description": "Power Wattage Report Value Threshold",
-            "unit": "Watta",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "3": {
-            "label": "Wattage Frequency",
-            "description": "Power Wattage Report Frequency",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 30,
-            "maxValue": 2678400,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Energy Frequency",
-            "description": "Energy (kWh) Report Frequency",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 30,
-            "maxValue": 2678400,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Voltage Frequency",
-            "description": "Voltage (V) Report Frequency",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 30,
-            "maxValue": 2678400,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Current Frequency",
-            "description": "Electrical Current (A) Report Frequency",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 30,
-            "maxValue": 2678400,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Overload Protection",
-            "description": "Overload Protection",
-            "unit": "Amps",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Enable Auto-Off (Left)",
-            "description": "Enable Auto Turn-Off Timer for Left Outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "9": {
-            "label": "Turn-Off Time (Left)",
-            "description": "Auto Turn-Off Time for Left Outlet",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Enable Auto-On (Left)",
-            "description": "Enable Auto Turn-On Timer for Left Outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "11": {
-            "label": "Turn-On Time (Left)",
-            "description": "Auto Turn-On Time for Left Outlet",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Enable Auto-Off (Right)",
-            "description": "Enable Auto Turn-Off Timer for Right Outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "13": {
-            "label": "Turn-Off Time (Right)",
-            "description": "Auto Turn-Off Time for Right Outlet",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "Enable Auto-On (Right)",
-            "description": "Enable Auto Turn-On Timer for Right Outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "Turn-On Time (Right)",
-            "description": "Auto Turn-On Time for Right Outlet",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "Manual Control",
-            "description": "Enable/Disable Manual Control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "17": {
-            "label": "LED Mode",
-            "description": "LED Indicator Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Always On",
-                    "value": 0
-                },
-                {
-                    "label": "Follow Outlet",
-                    "value": 1
-                },
-                {
-                    "label": "Momentary",
-                    "value": 2
-                },
-                {
-                    "label": "Always Off",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN25",
+	"description": "Double Plug",
+	"devices": [
+		{
+			"productType": "0xa000",
+			"productId": "0xa003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "On/Off After Power",
+			"description": "On/Off Status After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Previous State",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				},
+				{
+					"label": "Off",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Wattage Threshold",
+			"description": "Power Wattage Report Value Threshold",
+			"unit": "Watta",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"3": {
+			"label": "Wattage Frequency",
+			"description": "Power Wattage Report Frequency",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 30,
+			"maxValue": 2678400,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Energy Frequency",
+			"description": "Energy (kWh) Report Frequency",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 30,
+			"maxValue": 2678400,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Voltage Frequency",
+			"description": "Voltage (V) Report Frequency",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 30,
+			"maxValue": 2678400,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Current Frequency",
+			"description": "Electrical Current (A) Report Frequency",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 30,
+			"maxValue": 2678400,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Overload Protection",
+			"description": "Overload Protection",
+			"unit": "Amps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Enable Auto-Off (Left)",
+			"description": "Enable Auto Turn-Off Timer for Left Outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Turn-Off Time (Left)",
+			"description": "Auto Turn-Off Time for Left Outlet",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Enable Auto-On (Left)",
+			"description": "Enable Auto Turn-On Timer for Left Outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Turn-On Time (Left)",
+			"description": "Auto Turn-On Time for Left Outlet",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Enable Auto-Off (Right)",
+			"description": "Enable Auto Turn-Off Timer for Right Outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "Turn-Off Time (Right)",
+			"description": "Auto Turn-Off Time for Right Outlet",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Enable Auto-On (Right)",
+			"description": "Enable Auto Turn-On Timer for Right Outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Turn-On Time (Right)",
+			"description": "Auto Turn-On Time for Right Outlet",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Manual Control",
+			"description": "Enable/Disable Manual Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"17": {
+			"label": "LED Mode",
+			"description": "LED Indicator Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always On",
+					"value": 0
+				},
+				{
+					"label": "Follow Outlet",
+					"value": 1
+				},
+				{
+					"label": "Momentary",
+					"value": 2
+				},
+				{
+					"label": "Always Off",
+					"value": 3
+				}
+			]
+		}
+	}
 }

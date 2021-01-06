@@ -1,68 +1,67 @@
 // Honeywell 39351 / Jasco ZW3010
 // In-Wall Smart Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Honeywell",
-    "manufacturerId": "0x0039",
-    "label": "39351 / Jasco ZW3010",
-    "description": "In-Wall Smart Dimmer",
-    "devices": [
-        {
-            "productType": "0x4944",
-            "productId": "0x3235"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED Light",
-            "description": "LED status when device on or off.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED ON when load is OFF",
-                    "value": 0
-                },
-                {
-                    "label": "LED ON when load is ON",
-                    "value": 1
-                },
-                {
-                    "label": "LED always OFF",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Invert Switch",
-            "description": "Switch orientation.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Default",
-                    "value": 0
-                },
-                {
-                    "label": "Invert Switch",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39351 / Jasco ZW3010",
+	"description": "In-Wall Smart Dimmer",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3235"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED ON when load is ON",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "Switch orientation.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Invert Switch",
+					"value": 1
+				}
+			]
+		}
+	}
 }

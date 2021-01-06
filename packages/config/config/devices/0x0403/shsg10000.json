@@ -1,20 +1,19 @@
 // ABUS Security-Center GmbH & Co. KG SHSG10000
 // High-volume siren (95 dB) and LED strobe light
 {
-    "_approved": true,
-    "manufacturer": "ABUS Security-Center GmbH & Co. KG",
-    "manufacturerId": "0x0403",
-    "label": "SHSG10000",
-    "description": "High-volume siren (95 dB) and LED strobe light",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
+	"manufacturerId": "0x0403",
+	"label": "SHSG10000",
+	"description": "High-volume siren (95 dB) and LED strobe light",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

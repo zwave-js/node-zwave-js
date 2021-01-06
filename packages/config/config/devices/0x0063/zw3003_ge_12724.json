@@ -1,7 +1,6 @@
 // Jasco Products ZW3003, GE 12724
 // In-Wall Dimmer
 {
-	"_approved": true,
 	"manufacturer": "Jasco Products",
 	"manufacturerId": "0x0063",
 	"label": "ZW3003, GE 12724",

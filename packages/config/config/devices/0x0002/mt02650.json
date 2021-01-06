@@ -1,7 +1,6 @@
 // Danfoss MT02650
 // Devolo Thermostat (09356)
 {
-	"_approved": true,
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",
 	"label": "MT02650",
@@ -32,15 +31,8 @@
 		// think it is not connected and show error E5
 		"queryOnWakeup": [
 			// ["CommandClass", "API method", ...arguments]
-			[
-				"Battery",
-				"get"
-			],
-			[
-				"Thermostat Setpoint",
-				"get",
-				1
-			]
+			["Battery", "get"],
+			["Thermostat Setpoint", "get", 1]
 		]
 	}
 }

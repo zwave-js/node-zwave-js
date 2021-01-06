@@ -1,28 +1,18 @@
 // Monster Cable ML LAS1000
 // Plugin Appliance Module
 {
-    "_approved": false,
-    "_errors": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set",
-        "No endpoints are configured",
-        "Device category is not set.",
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "manufacturer": "Monster Cable",
-    "manufacturerId": "0x007e",
-    "label": "ML LAS1000",
-    "description": "Plugin Appliance Module",
-    "devices": [
-        {
-            "productType": "0x0101",
-            "productId": "0x0206"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Monster Cable",
+	"manufacturerId": "0x007e",
+	"label": "ML LAS1000",
+	"description": "Plugin Appliance Module",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0206"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

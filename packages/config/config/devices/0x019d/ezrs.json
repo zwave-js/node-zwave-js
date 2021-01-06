@@ -1,75 +1,71 @@
 // MOBILUS MOTOR Spółka z o.o. EZRS
 // Mobilus Tubular Motor
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "MOBILUS MOTOR Spółka z o.o.",
-    "manufacturerId": "0x019d",
-    "label": "EZRS",
-    "description": "Mobilus Tubular Motor",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0001"
-        },
-        {
-            "productType": "0x0003",
-            "productId": "0x0010"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "12": {
-            "label": "Motor state mode",
-            "description": "Allows to change motor state (normal/calibration/discalibration mode)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal mode (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Calibration mode",
-                    "value": 1
-                },
-                {
-                    "label": "Discalibration mode",
-                    "value": 2
-                }
-            ]
-        },
-        "13": {
-            "label": "BASIC SET Respone",
-            "description": "Allows to change motor behavior after receiving BASIC_SET with value 0xFF",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "last known non-zero position (default)",
-                    "value": 0
-                },
-                {
-                    "label": "max open",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "MOBILUS MOTOR Spółka z o.o.",
+	"manufacturerId": "0x019d",
+	"label": "EZRS",
+	"description": "Mobilus Tubular Motor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x0010"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"12": {
+			"label": "Motor state mode",
+			"description": "Allows to change motor state (normal/calibration/discalibration mode)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal mode (default)",
+					"value": 0
+				},
+				{
+					"label": "Calibration mode",
+					"value": 1
+				},
+				{
+					"label": "Discalibration mode",
+					"value": 2
+				}
+			]
+		},
+		"13": {
+			"label": "BASIC SET Respone",
+			"description": "Allows to change motor behavior after receiving BASIC_SET with value 0xFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "last known non-zero position (default)",
+					"value": 0
+				},
+				{
+					"label": "max open",
+					"value": 1
+				}
+			]
+		}
+	}
 }

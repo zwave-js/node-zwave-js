@@ -1,19 +1,18 @@
 // Vision Security PID11995
 // Monoprice ZWave On/Off Plugin
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "PID11995",
-    "description": "Monoprice ZWave On/Off Plugin",
-    "devices": [
-        {
-            "productType": "0x2007",
-            "productId": "0x0703"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "PID11995",
+	"description": "Monoprice ZWave On/Off Plugin",
+	"devices": [
+		{
+			"productType": "0x2007",
+			"productId": "0x0703"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

@@ -1,206 +1,205 @@
 // HANK Electronics Ltd. HKZW_FLD01
 // Flood Sensor FLD01
 {
-    "_approved": true,
-    "manufacturer": "HANK Electronics Ltd.",
-    "manufacturerId": "0x0208",
-    "label": "HKZW_FLD01",
-    "description": "Flood Sensor FLD01",
-    "devices": [
-        {
-            "productType": "0x0200",
-            "productId": "0x000f"
-        },
-        {
-            "productType": "0x0201",
-            "productId": "0x000f"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "14": {
-            "label": "Enable/Disable Basic Set Command",
-            "description": "The flood sensor can send BASIC SET command to nodes associated",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "value of the Basic Set",
-            "description": "The flood sensor can send BASIC SET command to nodes associated",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "17": {
-            "label": "Flooding Alarm",
-            "description": "Enable/Disable flooding alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "18": {
-            "label": "Shock Alarm",
-            "description": "Enable/Disable shock alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "19": {
-            "label": "High Temperature Alarm",
-            "description": "Enable/Disable high temperature alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "20": {
-            "label": "Set the high temperature alarm trigger value",
-            "description": "Available setting(US):-67°c to -257°c",
-            "valueSize": 2,
-            "minValue": -670,
-            "maxValue": 2570,
-            "defaultValue": 1040,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "Low Temperature Alarm",
-            "description": "Enable/Disable low temperature alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "22": {
-            "label": "Set the low temperature alarm trigger value",
-            "description": "Available setting(US):-67°c to -257°c",
-            "valueSize": 2,
-            "minValue": -670,
-            "maxValue": 2570,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "24": {
-            "label": "Blinking LED",
-            "description": "Enable/Disable blinking LED when alarm being triggerd",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "32": {
-            "label": "Level of low battery",
-            "description": "This parameter defines a battery level as the \"low bettery\"",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 50,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "HKZW_FLD01",
+	"description": "Flood Sensor FLD01",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x000f"
+		},
+		{
+			"productType": "0x0201",
+			"productId": "0x000f"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"14": {
+			"label": "Enable/Disable Basic Set Command",
+			"description": "The flood sensor can send BASIC SET command to nodes associated",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "value of the Basic Set",
+			"description": "The flood sensor can send BASIC SET command to nodes associated",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"17": {
+			"label": "Flooding Alarm",
+			"description": "Enable/Disable flooding alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"18": {
+			"label": "Shock Alarm",
+			"description": "Enable/Disable shock alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "High Temperature Alarm",
+			"description": "Enable/Disable high temperature alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "Set the high temperature alarm trigger value",
+			"description": "Available setting(US):-67°c to -257°c",
+			"valueSize": 2,
+			"minValue": -670,
+			"maxValue": 2570,
+			"defaultValue": 1040,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Low Temperature Alarm",
+			"description": "Enable/Disable low temperature alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"22": {
+			"label": "Set the low temperature alarm trigger value",
+			"description": "Available setting(US):-67°c to -257°c",
+			"valueSize": 2,
+			"minValue": -670,
+			"maxValue": 2570,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Blinking LED",
+			"description": "Enable/Disable blinking LED when alarm being triggerd",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"32": {
+			"label": "Level of low battery",
+			"description": "This parameter defines a battery level as the \"low bettery\"",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,39 +1,29 @@
 // McoHome Technology Co., Ltd. MH-S411
 // Touch Panel Switch (Single)
 {
-    "_approved": true,
-    "_errors": [
-        "Device category is not set.",
-        "At least one manufacturers product image must be uploaded"
-    ],
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH-S411",
-    "description": "Touch Panel Switch (Single)",
-    "devices": [
-        {
-            "productType": "0x4102",
-            "productId": "0x0201"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Switching of associated devices",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "Status Reports",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-S411",
+	"description": "Touch Panel Switch (Single)",
+	"devices": [
+		{
+			"productType": "0x4102",
+			"productId": "0x0201"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Switching of associated devices",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Status Reports",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }

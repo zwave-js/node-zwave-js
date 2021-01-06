@@ -1,74 +1,73 @@
 // HomeSeer Technologies HS-DS100+
 // Homeseer Z-Wave Door/Window Sensor
 {
-    "_approved": true,
-    "manufacturer": "HomeSeer Technologies",
-    "manufacturerId": "0x000c",
-    "label": "HS-DS100+",
-    "description": "Homeseer Z-Wave Door/Window Sensor",
-    "devices": [
-        {
-            "productType": "0x0201",
-            "productId": "0x0008"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "14": {
-            "label": "Enable / Disable BASIC SET command",
-            "description": "Enable / Disable BASIC SET command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "Value of BASIC SET",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Sends 255 value for open and 0 value for closed",
-                    "value": 0
-                },
-                {
-                    "label": "Sends 0 value for open and 255 value for closed",
-                    "value": 1
-                }
-            ]
-        },
-        "32": {
-            "label": "Defines value of LOW BATTERY",
-            "description": "Defines value of LOW BATTERY",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 50,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-DS100+",
+	"description": "Homeseer Z-Wave Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0201",
+			"productId": "0x0008"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"14": {
+			"label": "Enable / Disable BASIC SET command",
+			"description": "Enable / Disable BASIC SET command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Value of BASIC SET",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Sends 255 value for open and 0 value for closed",
+					"value": 0
+				},
+				{
+					"label": "Sends 0 value for open and 255 value for closed",
+					"value": 1
+				}
+			]
+		},
+		"32": {
+			"label": "Defines value of LOW BATTERY",
+			"description": "Defines value of LOW BATTERY",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

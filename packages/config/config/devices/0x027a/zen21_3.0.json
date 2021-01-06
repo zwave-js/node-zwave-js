@@ -1,209 +1,208 @@
 // Zooz ZEN21
 // Paddle Switch
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN21",
-    "description": "Paddle Switch",
-    "devices": [
-        {
-            "productType": "0xb111",
-            "productId": "0x1e1c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Paddle Control",
-            "description": "Reverse switch direction",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Top-ON, Bottom-OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Top-OFF, Bottom-ON",
-                    "value": 1
-                },
-                {
-                    "label": "Any paddle turns light on/off",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "LED Indicator Control",
-            "description": "LED Indicator Control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED ON - Switch OFF",
-                    "value": 0
-                },
-                {
-                    "label": "LED ON - Switch ON",
-                    "value": 1
-                },
-                {
-                    "label": "LED always OFF",
-                    "value": 2
-                },
-                {
-                    "label": "LED always ON",
-                    "value": 3
-                }
-            ]
-        },
-        "3": {
-            "label": "Auto Turn-off enable / disable",
-            "description": "Enable / Disable Auto Turn-off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Timer enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Auto-Turn-off time",
-            "description": "Auto-Turn-off time",
-            "unit": "minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Auto Turn-on enable/disable",
-            "description": "Auto Turn-on enable/disable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Timer enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Auto Turn-on timer",
-            "description": "Auto Turn-on timer",
-            "unit": "minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Status after Power Failure",
-            "description": "Status after Power Failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Forced to OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Forced to ON",
-                    "value": 1
-                },
-                {
-                    "label": "Restore prior status (default)",
-                    "value": 2
-                }
-            ]
-        },
-        "9": {
-            "label": "Scene Control enable/disable",
-            "description": "Scene Control enable/disable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Scene Control disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Control enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "Paddle control enable/disable",
-            "description": "Paddle control enable/disable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Local paddle control disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Local paddle control enabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN21",
+	"description": "Paddle Switch",
+	"devices": [
+		{
+			"productType": "0xb111",
+			"productId": "0x1e1c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Paddle Control",
+			"description": "Reverse switch direction",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Top-ON, Bottom-OFF",
+					"value": 0
+				},
+				{
+					"label": "Top-OFF, Bottom-ON",
+					"value": 1
+				},
+				{
+					"label": "Any paddle turns light on/off",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "LED Indicator Control",
+			"description": "LED Indicator Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON - Switch OFF",
+					"value": 0
+				},
+				{
+					"label": "LED ON - Switch ON",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				},
+				{
+					"label": "LED always ON",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Auto Turn-off enable / disable",
+			"description": "Enable / Disable Auto Turn-off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Auto-Turn-off time",
+			"description": "Auto-Turn-off time",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Auto Turn-on enable/disable",
+			"description": "Auto Turn-on enable/disable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Auto Turn-on timer",
+			"description": "Auto Turn-on timer",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Status after Power Failure",
+			"description": "Status after Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Forced to OFF",
+					"value": 0
+				},
+				{
+					"label": "Forced to ON",
+					"value": 1
+				},
+				{
+					"label": "Restore prior status (default)",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Scene Control enable/disable",
+			"description": "Scene Control enable/disable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Scene Control disabled",
+					"value": 0
+				},
+				{
+					"label": "Scene Control enabled",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Paddle control enable/disable",
+			"description": "Paddle control enable/disable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Local paddle control disabled",
+					"value": 0
+				},
+				{
+					"label": "Local paddle control enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

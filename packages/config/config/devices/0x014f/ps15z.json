@@ -1,46 +1,40 @@
 // Nortek Security & Control LLC PS15Z
 // Plug-In Appliance Module
 {
-    "_approved": true,
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "PS15Z",
-    "description": "Plug-In Appliance Module",
-    "devices": [
-        {
-            "productType": "0x5250",
-            "productId": "0x3030"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "104": {
-            "label": "Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Flash Mode",
-                    "value": 0
-                },
-                {
-                    "label": "ON/OFF Operation",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "PS15Z",
+	"description": "Plug-In Appliance Module",
+	"devices": [
+		{
+			"productType": "0x5250",
+			"productId": "0x3030"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"104": {
+			"label": "Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Flash Mode",
+					"value": 0
+				},
+				{
+					"label": "ON/OFF Operation",
+					"value": 1
+				}
+			]
+		}
+	}
 }

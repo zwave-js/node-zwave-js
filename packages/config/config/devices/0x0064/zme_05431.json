@@ -1,10 +1,6 @@
 // Reitz-Group.de ZME_05431
 // Switch
 {
-	"_approved": true,
-	"_warnings": [
-		"Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-	],
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
 	"label": "ZME_05431",

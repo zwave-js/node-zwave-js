@@ -1,99 +1,98 @@
 // Elexa Consumer Products Inc. DMMZ1
 // Dome Battery powered Z-Wave Plus enabled mousetrap
 {
-    "_approved": true,
-    "manufacturer": "Elexa Consumer Products Inc.",
-    "manufacturerId": "0x021f",
-    "label": "DMMZ1",
-    "description": "Dome Battery powered Z-Wave Plus enabled mousetrap",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0104"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "BASIC_SET Level",
-            "description": "Sets the value sent by the BASIC_SET command to Association Group 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Set Firing Mode",
-            "description": "This parameter sets the “firing mode” of the Mouser.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Continuous Fire",
-                    "value": 1
-                },
-                {
-                    "label": "Burst Fire",
-                    "value": 2
-                }
-            ]
-        },
-        "3": {
-            "label": "High Voltage Duration Time",
-            "description": "How long the Mouser will fire continuously before it starts to burst-fire",
-            "valueSize": 2,
-            "minValue": 64,
-            "maxValue": 168,
-            "defaultValue": 64,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Enable/Disable LED Alarm",
-            "description": "Enables or disables the indicator LED alarm when the trap is tripped",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED Alarm Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "LED Alarm Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "LED Alarm Duration",
-            "description": "Sets the amount of time the LED Indicator blinks after the trap is tripped",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Elexa Consumer Products Inc.",
+	"manufacturerId": "0x021f",
+	"label": "DMMZ1",
+	"description": "Dome Battery powered Z-Wave Plus enabled mousetrap",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0104"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "BASIC_SET Level",
+			"description": "Sets the value sent by the BASIC_SET command to Association Group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Set Firing Mode",
+			"description": "This parameter sets the “firing mode” of the Mouser.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Continuous Fire",
+					"value": 1
+				},
+				{
+					"label": "Burst Fire",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "High Voltage Duration Time",
+			"description": "How long the Mouser will fire continuously before it starts to burst-fire",
+			"valueSize": 2,
+			"minValue": 64,
+			"maxValue": 168,
+			"defaultValue": 64,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Enable/Disable LED Alarm",
+			"description": "Enables or disables the indicator LED alarm when the trap is tripped",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Alarm Disabled",
+					"value": 0
+				},
+				{
+					"label": "LED Alarm Enabled",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "LED Alarm Duration",
+			"description": "Sets the amount of time the LED Indicator blinks after the trap is tripped",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

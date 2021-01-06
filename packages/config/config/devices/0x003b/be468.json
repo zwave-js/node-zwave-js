@@ -1,127 +1,126 @@
 // Allegion BE468
 // Touchscreen Deadbolt
 {
-    "_approved": true,
-    "manufacturer": "Allegion",
-    "manufacturerId": "0x003b",
-    "label": "BE468",
-    "description": "Touchscreen Deadbolt",
-    "devices": [
-        {
-            "productType": "0x6349",
-            "productId": "0x5044"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 2,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "3": {
-            "label": "Beeper",
-            "description": "Audio feedback when keypad pressed during normal operation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 255
-                }
-            ]
-        },
-        "4": {
-            "label": "Vacation Mode",
-            "description": "Prevents all user codes from unlocking the deadbolt",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 255
-                }
-            ]
-        },
-        "5": {
-            "label": "Lock & Leave",
-            "description": "Press the Schlage button to lock the deadbolt",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 255
-                }
-            ]
-        },
-        "15": {
-            "label": "Auto Lock",
-            "description": "Automatically locks 30 seconds after unlocking",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 255
-                }
-            ]
-        },
-        "16": {
-            "label": "User Code PIN Length",
-            "description": "User codes can be 4-8 digits. Changing length will delete all existing codes.",
-            "valueSize": 1,
-            "minValue": 4,
-            "maxValue": 8,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Allegion",
+	"manufacturerId": "0x003b",
+	"label": "BE468",
+	"description": "Touchscreen Deadbolt",
+	"devices": [
+		{
+			"productType": "0x6349",
+			"productId": "0x5044"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 2,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Beeper",
+			"description": "Audio feedback when keypad pressed during normal operation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		"4": {
+			"label": "Vacation Mode",
+			"description": "Prevents all user codes from unlocking the deadbolt",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		"5": {
+			"label": "Lock & Leave",
+			"description": "Press the Schlage button to lock the deadbolt",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		"15": {
+			"label": "Auto Lock",
+			"description": "Automatically locks 30 seconds after unlocking",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 255
+				}
+			]
+		},
+		"16": {
+			"label": "User Code PIN Length",
+			"description": "User codes can be 4-8 digits. Changing length will delete all existing codes.",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 8,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

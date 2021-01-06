@@ -1,1976 +1,1975 @@
 // Avadesign Technology Co. Da Vinci v9
 {
-    "_approved": true,
-    "manufacturer": "Avadesign Technology Co.",
-    "manufacturerId": "0x025d",
-    "label": "Da Vinci v9",
-    "description": "",
-    "devices": [
-        {
-            "productType": "0x0100",
-            "productId": "0x0100"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "EP1_SWITCH_BINARY_SET",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "EP1_SWITCH_BINARY_REPORT",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "EP1_SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "EP1_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5
-        },
-        "6": {
-            "label": "EP2_SWITCH_BINARY_SET",
-            "maxNodes": 5
-        },
-        "7": {
-            "label": "EP2_SWITCH_BINARY_REPORT",
-            "maxNodes": 5
-        },
-        "8": {
-            "label": "EP2_SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5
-        },
-        "9": {
-            "label": "EP2_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5
-        },
-        "10": {
-            "label": "EP3_SWITCH_BINARY_SET",
-            "maxNodes": 5
-        },
-        "11": {
-            "label": "EP3_SWITCH_BINARY_REPORT",
-            "maxNodes": 5
-        },
-        "12": {
-            "label": "EP3_SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5
-        },
-        "13": {
-            "label": "EP3_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5
-        },
-        "14": {
-            "label": "EP4_SWITCH_BINARY_SET",
-            "maxNodes": 5
-        },
-        "15": {
-            "label": "EP4_SWITCH_BINARY_REPORT",
-            "maxNodes": 5
-        },
-        "16": {
-            "label": "EP4_SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5
-        },
-        "17": {
-            "label": "EP4_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5
-        },
-        "18": {
-            "label": "EP5_SWITCH_BINARY_SET",
-            "maxNodes": 5
-        },
-        "19": {
-            "label": "EP5_SWITCH_BINARY_REPORT",
-            "maxNodes": 5
-        },
-        "20": {
-            "label": "EP5_SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5
-        },
-        "21": {
-            "label": "EP5_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5
-        },
-        "22": {
-            "label": "EP6_SWITCH_BINARY_SET",
-            "maxNodes": 5
-        },
-        "23": {
-            "label": "EP6_SWITCH_BINARY_REPORT",
-            "maxNodes": 5
-        },
-        "24": {
-            "label": "EP6_SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "25": {
-            "label": "EP6_SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5
-        },
-        "26": {
-            "label": "EP7_ SWITCH_BINARY_SET",
-            "maxNodes": 5
-        },
-        "27": {
-            "label": "EP7_SWITCH_BINARY_REPORT",
-            "maxNodes": 5
-        },
-        "28": {
-            "label": "EP7_ SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5
-        },
-        "29": {
-            "label": "EP7_ SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5
-        },
-        "30": {
-            "label": "EP8_SWITCH_BINARY_SET",
-            "maxNodes": 5
-        },
-        "31": {
-            "label": "EP8_ SWITCH_BINARY_REPORT",
-            "maxNodes": 5
-        },
-        "32": {
-            "label": "EP8_ SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5
-        },
-        "33": {
-            "label": "EP8_ SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5
-        },
-        "34": {
-            "label": "EP9_ SWITCH_BINARY_SET",
-            "maxNodes": 5
-        },
-        "35": {
-            "label": "EP9_SWITCH_BINARY_REPORT",
-            "maxNodes": 5
-        },
-        "36": {
-            "label": "EP9_ SWITCH_MULTILEVEL_SET",
-            "maxNodes": 5
-        },
-        "37": {
-            "label": "EP9_ SWITCH_MULTILEVEL_REPORT",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Button 1 Type",
-            "description": "button 1 Type",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Null",
-                    "value": 0
-                },
-                {
-                    "label": "Switch On/Off",
-                    "value": 1
-                },
-                {
-                    "label": "Blind up",
-                    "value": 2
-                },
-                {
-                    "label": "Blind  down",
-                    "value": 3
-                },
-                {
-                    "label": "Switch multiway",
-                    "value": 4
-                },
-                {
-                    "label": "Blind-up multiway",
-                    "value": 5
-                },
-                {
-                    "label": "Blind-down multiway",
-                    "value": 6
-                }
-            ]
-        },
-        "2": {
-            "label": "Button 1 Partner-Id",
-            "description": "Button 1 Partner-Id",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Partner-Id 0",
-                    "value": 0
-                },
-                {
-                    "label": "Partner-Id 1",
-                    "value": 1
-                },
-                {
-                    "label": "Partner-Id 2",
-                    "value": 2
-                },
-                {
-                    "label": "Partner-Id 3",
-                    "value": 3
-                },
-                {
-                    "label": "Partner-Id 4",
-                    "value": 4
-                },
-                {
-                    "label": "Partner-Id 5",
-                    "value": 5
-                },
-                {
-                    "label": "Partner-Id 6",
-                    "value": 6
-                },
-                {
-                    "label": "Partner-Id 7",
-                    "value": 7
-                },
-                {
-                    "label": "Partner-Id 8",
-                    "value": 8
-                },
-                {
-                    "label": "Partner-Id 9",
-                    "value": 9
-                }
-            ]
-        },
-        "3": {
-            "label": "Button 1 Blind Duration",
-            "description": "Button 1 Blind Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Duration 3 Seconds",
-                    "value": 3
-                },
-                {
-                    "label": "Duration 10 Seconds",
-                    "value": 10
-                },
-                {
-                    "label": "Duration 30 Seconds",
-                    "value": 30
-                },
-                {
-                    "label": "Duration 60 Seconds",
-                    "value": 60
-                },
-                {
-                    "label": "Duration 90 Seconds",
-                    "value": 90
-                },
-                {
-                    "label": "Duration 120 Seconds",
-                    "value": 120
-                }
-            ]
-        },
-        "4": {
-            "label": "Button 1 Output",
-            "description": "Button 1 Output",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No output",
-                    "value": 0
-                },
-                {
-                    "label": "Output number 1",
-                    "value": 1
-                },
-                {
-                    "label": "Output number 2",
-                    "value": 2
-                },
-                {
-                    "label": "Output number 3",
-                    "value": 3
-                },
-                {
-                    "label": "Output number 4",
-                    "value": 4
-                },
-                {
-                    "label": "Output number 5",
-                    "value": 5
-                },
-                {
-                    "label": "Output number 6",
-                    "value": 6
-                }
-            ]
-        },
-        "5": {
-            "label": "Button 1 attributes",
-            "description": "Button 1 attributes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 7,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Only Led",
-                    "value": 1
-                },
-                {
-                    "label": "Only Sound",
-                    "value": 2
-                }
-            ]
-        },
-        "6": {
-            "label": "Button 2 Type",
-            "description": "Button 2 Type",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch On/Off",
-                    "value": 1
-                },
-                {
-                    "label": "Blind up",
-                    "value": 2
-                },
-                {
-                    "label": "Blind down",
-                    "value": 3
-                },
-                {
-                    "label": "Switch multiway",
-                    "value": 4
-                },
-                {
-                    "label": "Blind-up multiway",
-                    "value": 5
-                },
-                {
-                    "label": "Blind-down multiway",
-                    "value": 6
-                }
-            ]
-        },
-        "7": {
-            "label": "Button 2 Partner-Id",
-            "description": "Button 2 Partner-Id",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Partner-Id 0",
-                    "value": 0
-                },
-                {
-                    "label": "Partner-Id 1",
-                    "value": 1
-                },
-                {
-                    "label": "Partner-Id 2",
-                    "value": 2
-                },
-                {
-                    "label": "Partner-Id 3",
-                    "value": 3
-                },
-                {
-                    "label": "Partner-Id 4",
-                    "value": 4
-                },
-                {
-                    "label": "Partner-Id 5",
-                    "value": 5
-                },
-                {
-                    "label": "Partner-Id 6",
-                    "value": 6
-                },
-                {
-                    "label": "Partner-Id 7",
-                    "value": 7
-                },
-                {
-                    "label": "Partner-Id 8",
-                    "value": 8
-                },
-                {
-                    "label": "Partner-Id 9",
-                    "value": 9
-                }
-            ]
-        },
-        "8": {
-            "label": "Button 2 Blind Duration",
-            "description": "Button 2 Blind Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Duration 3 Seconds",
-                    "value": 3
-                },
-                {
-                    "label": "Duration10 Seconds",
-                    "value": 10
-                },
-                {
-                    "label": "Duration 30 Seconds",
-                    "value": 30
-                },
-                {
-                    "label": "Duration 60 Seconds",
-                    "value": 60
-                },
-                {
-                    "label": "Duration 90 Seconds",
-                    "value": 90
-                },
-                {
-                    "label": "Duration 120 Seconds",
-                    "value": 120
-                }
-            ]
-        },
-        "9": {
-            "label": "Button 2 Output",
-            "description": "Button 2 Output",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No output",
-                    "value": 0
-                },
-                {
-                    "label": "Output number 1",
-                    "value": 1
-                },
-                {
-                    "label": "Output number 2",
-                    "value": 2
-                },
-                {
-                    "label": "Output number 3",
-                    "value": 3
-                },
-                {
-                    "label": "Output number 4",
-                    "value": 4
-                },
-                {
-                    "label": "Output number 5",
-                    "value": 5
-                },
-                {
-                    "label": "Output number 6",
-                    "value": 6
-                }
-            ]
-        },
-        "10": {
-            "label": "Button 2 attributes",
-            "description": "Button 2 attributes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 7,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Only Led",
-                    "value": 1
-                },
-                {
-                    "label": "Only Sound",
-                    "value": 2
-                }
-            ]
-        },
-        "11": {
-            "label": "Button 3 Type",
-            "description": "Button 3 Type",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch On/Off",
-                    "value": 1
-                },
-                {
-                    "label": "Blind up",
-                    "value": 2
-                },
-                {
-                    "label": "Blind down",
-                    "value": 3
-                },
-                {
-                    "label": "Switch multiway",
-                    "value": 4
-                },
-                {
-                    "label": "Blind-up multiway",
-                    "value": 5
-                },
-                {
-                    "label": "Blind-down multiway",
-                    "value": 6
-                }
-            ]
-        },
-        "12": {
-            "label": "Button 3 Partner-Id",
-            "description": "Button 3 Partner-Id",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Partner-Id 0",
-                    "value": 0
-                },
-                {
-                    "label": "Partner-Id 1",
-                    "value": 1
-                },
-                {
-                    "label": "Partner-Id 2",
-                    "value": 2
-                },
-                {
-                    "label": "Partner-Id 3",
-                    "value": 3
-                },
-                {
-                    "label": "Partner-Id 4",
-                    "value": 4
-                },
-                {
-                    "label": "Partner-Id 5",
-                    "value": 5
-                },
-                {
-                    "label": "Partner-Id 6",
-                    "value": 6
-                },
-                {
-                    "label": "Partner-Id 7",
-                    "value": 7
-                },
-                {
-                    "label": "Partner-Id 8",
-                    "value": 8
-                },
-                {
-                    "label": "Partner-Id 9",
-                    "value": 9
-                }
-            ]
-        },
-        "13": {
-            "label": "Button 3 Blind Duration",
-            "description": "Button 3 Blind Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Duration 3 Seconds",
-                    "value": 3
-                },
-                {
-                    "label": "Duration 30 Seconds",
-                    "value": 30
-                },
-                {
-                    "label": "Duration 60 Seconds",
-                    "value": 60
-                },
-                {
-                    "label": "Duration 90 Seconds",
-                    "value": 90
-                },
-                {
-                    "label": "Duration 120 Seconds",
-                    "value": 120
-                }
-            ]
-        },
-        "14": {
-            "label": "Button 3 Output",
-            "description": "Button 3 Output",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No output",
-                    "value": 0
-                },
-                {
-                    "label": "Output number 1",
-                    "value": 1
-                },
-                {
-                    "label": "Output number 2",
-                    "value": 2
-                },
-                {
-                    "label": "Output number 3",
-                    "value": 3
-                },
-                {
-                    "label": "Output number 4",
-                    "value": 4
-                },
-                {
-                    "label": "Output number 5",
-                    "value": 5
-                },
-                {
-                    "label": "Output number 6",
-                    "value": 6
-                }
-            ]
-        },
-        "15": {
-            "label": "Button 3 attributes",
-            "description": "Button 3 attributes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 7,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Only Led",
-                    "value": 1
-                },
-                {
-                    "label": "Only Sound",
-                    "value": 2
-                }
-            ]
-        },
-        "16": {
-            "label": "Button 4 Type",
-            "description": "Button 4 Type",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch On/Off",
-                    "value": 1
-                },
-                {
-                    "label": "Blind up",
-                    "value": 2
-                },
-                {
-                    "label": "Blind down",
-                    "value": 3
-                },
-                {
-                    "label": "Switch multiway",
-                    "value": 4
-                },
-                {
-                    "label": "Blind-up multiway",
-                    "value": 5
-                },
-                {
-                    "label": "Blind-down multiway",
-                    "value": 6
-                }
-            ]
-        },
-        "17": {
-            "label": "Button 4 Partner-Id",
-            "description": "Button 4 Partner-Id",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Partner-Id 1",
-                    "value": 1
-                },
-                {
-                    "label": "Partner-Id 2",
-                    "value": 2
-                },
-                {
-                    "label": "Partner-Id 3",
-                    "value": 3
-                },
-                {
-                    "label": "Partner-Id 4",
-                    "value": 4
-                },
-                {
-                    "label": "Partner-Id 5",
-                    "value": 5
-                },
-                {
-                    "label": "Partner-Id 6",
-                    "value": 6
-                },
-                {
-                    "label": "Partner-Id 7",
-                    "value": 7
-                },
-                {
-                    "label": "Partner-Id 8",
-                    "value": 8
-                },
-                {
-                    "label": "Partner-Id 9",
-                    "value": 9
-                }
-            ]
-        },
-        "18": {
-            "label": "Button 4 Blind Duration",
-            "description": "Button 4 Blind Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Duration 3 Seconds",
-                    "value": 3
-                },
-                {
-                    "label": "Duration 30 Seconds",
-                    "value": 30
-                },
-                {
-                    "label": "Duration 60 Seconds",
-                    "value": 60
-                },
-                {
-                    "label": "Duration 90 Seconds",
-                    "value": 90
-                },
-                {
-                    "label": "Duration 120 Seconds",
-                    "value": 120
-                }
-            ]
-        },
-        "19": {
-            "label": "Button 4 Output",
-            "description": "Button 4 Output",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No output",
-                    "value": 0
-                },
-                {
-                    "label": "Output number 1",
-                    "value": 1
-                },
-                {
-                    "label": "Output number 2",
-                    "value": 2
-                },
-                {
-                    "label": "Output number 3",
-                    "value": 3
-                },
-                {
-                    "label": "Output number 4",
-                    "value": 4
-                },
-                {
-                    "label": "Output number 5",
-                    "value": 5
-                },
-                {
-                    "label": "Output number 6",
-                    "value": 6
-                }
-            ]
-        },
-        "20": {
-            "label": "Button 4 attributes",
-            "description": "Button 4 attributes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 7,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Only Led",
-                    "value": 1
-                },
-                {
-                    "label": "Only Sound",
-                    "value": 2
-                }
-            ]
-        },
-        "21": {
-            "label": "Button 5 Type",
-            "description": "Button 5 Type",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch On/Off",
-                    "value": 1
-                },
-                {
-                    "label": "Blind up",
-                    "value": 2
-                },
-                {
-                    "label": "Blind down",
-                    "value": 3
-                },
-                {
-                    "label": "Switch multiway",
-                    "value": 4
-                },
-                {
-                    "label": "Blind-up multiway",
-                    "value": 5
-                },
-                {
-                    "label": "Blind-down multiway",
-                    "value": 6
-                }
-            ]
-        },
-        "22": {
-            "label": "Button 5 Partner-Id",
-            "description": "Button 5 Partner-Id",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Partner-Id 1",
-                    "value": 1
-                },
-                {
-                    "label": "Partner-Id 2",
-                    "value": 2
-                },
-                {
-                    "label": "Partner-Id 3",
-                    "value": 3
-                },
-                {
-                    "label": "Partner-Id 4",
-                    "value": 4
-                },
-                {
-                    "label": "Partner-Id 5",
-                    "value": 5
-                },
-                {
-                    "label": "Partner-Id 6",
-                    "value": 6
-                },
-                {
-                    "label": "Partner-Id 7",
-                    "value": 7
-                },
-                {
-                    "label": "Partner-Id 8",
-                    "value": 8
-                },
-                {
-                    "label": "Partner-Id 9",
-                    "value": 9
-                }
-            ]
-        },
-        "23": {
-            "label": "Button 5 Blind Duration",
-            "description": "Button 5 Blind Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Duration 3 Seconds",
-                    "value": 3
-                },
-                {
-                    "label": "Duration 30 Seconds",
-                    "value": 30
-                },
-                {
-                    "label": "Duration 60 Seconds",
-                    "value": 60
-                },
-                {
-                    "label": "Duration 90 Seconds",
-                    "value": 90
-                },
-                {
-                    "label": "Duration 120 Seconds",
-                    "value": 120
-                }
-            ]
-        },
-        "24": {
-            "label": "Button 5 Output",
-            "description": "Button 5 Output",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No output",
-                    "value": 0
-                },
-                {
-                    "label": "Output number 1",
-                    "value": 1
-                },
-                {
-                    "label": "Output number 2",
-                    "value": 2
-                },
-                {
-                    "label": "Output number 3",
-                    "value": 3
-                },
-                {
-                    "label": "Output number 4",
-                    "value": 4
-                },
-                {
-                    "label": "Output number 5",
-                    "value": 5
-                },
-                {
-                    "label": "Output number 6",
-                    "value": 6
-                }
-            ]
-        },
-        "25": {
-            "label": "Button 5 attributes",
-            "description": "Button 5 attributes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 7,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Only Led",
-                    "value": 1
-                },
-                {
-                    "label": "Only Sound",
-                    "value": 2
-                }
-            ]
-        },
-        "26": {
-            "label": "Button 6 Type",
-            "description": "Button 6 Type",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch On/Off",
-                    "value": 1
-                },
-                {
-                    "label": "Blind up",
-                    "value": 2
-                },
-                {
-                    "label": "Blind down",
-                    "value": 3
-                },
-                {
-                    "label": "Switch multiway",
-                    "value": 4
-                },
-                {
-                    "label": "Blind-up multiway",
-                    "value": 5
-                },
-                {
-                    "label": "Blind-down multiway",
-                    "value": 6
-                }
-            ]
-        },
-        "27": {
-            "label": "Button 6 Partner-Id",
-            "description": "Button 6 Partner-Id",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Partner-Id 1",
-                    "value": 1
-                },
-                {
-                    "label": "Partner-Id 2",
-                    "value": 2
-                },
-                {
-                    "label": "Partner-Id 3",
-                    "value": 3
-                },
-                {
-                    "label": "Partner-Id 4",
-                    "value": 4
-                },
-                {
-                    "label": "Partner-Id 5",
-                    "value": 5
-                },
-                {
-                    "label": "Partner-Id 6",
-                    "value": 6
-                },
-                {
-                    "label": "Partner-Id 7",
-                    "value": 7
-                },
-                {
-                    "label": "Partner-Id 8",
-                    "value": 8
-                },
-                {
-                    "label": "Partner-Id 9",
-                    "value": 9
-                }
-            ]
-        },
-        "28": {
-            "label": "Button 6 Blind Duration",
-            "description": "Button 6 Blind Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Duration 3 Seconds",
-                    "value": 3
-                },
-                {
-                    "label": "Duration 30 Seconds",
-                    "value": 30
-                },
-                {
-                    "label": "Duration 60 Seconds",
-                    "value": 60
-                },
-                {
-                    "label": "Duration 90 Seconds",
-                    "value": 90
-                },
-                {
-                    "label": "Duration 120 Seconds",
-                    "value": 120
-                }
-            ]
-        },
-        "29": {
-            "label": "Button 6 Output",
-            "description": "Button 6 Output",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No output",
-                    "value": 0
-                },
-                {
-                    "label": "Output number 1",
-                    "value": 1
-                },
-                {
-                    "label": "Output number 2",
-                    "value": 2
-                },
-                {
-                    "label": "Output number 3",
-                    "value": 3
-                },
-                {
-                    "label": "Output number 4",
-                    "value": 4
-                },
-                {
-                    "label": "Output number 5",
-                    "value": 5
-                },
-                {
-                    "label": "Output number 6",
-                    "value": 6
-                }
-            ]
-        },
-        "30": {
-            "label": "Button 6 attributes",
-            "description": "Button 6 attributes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 7,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Only Led",
-                    "value": 1
-                },
-                {
-                    "label": "Only Sound",
-                    "value": 2
-                }
-            ]
-        },
-        "31": {
-            "label": "Button 7 Type",
-            "description": "Button 7 Type",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "On/Off Switch",
-                    "value": 1
-                },
-                {
-                    "label": "Blind up",
-                    "value": 2
-                },
-                {
-                    "label": "Blind  down",
-                    "value": 3
-                },
-                {
-                    "label": "Switch multiway",
-                    "value": 4
-                },
-                {
-                    "label": "Blind-up multiway",
-                    "value": 5
-                },
-                {
-                    "label": "Blind-down multiway",
-                    "value": 6
-                }
-            ]
-        },
-        "32": {
-            "label": "Button 7 Partner-Id",
-            "description": "Button 7 Partner-Id",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Partner-Id 1",
-                    "value": 1
-                },
-                {
-                    "label": "Partner-Id 2",
-                    "value": 2
-                },
-                {
-                    "label": "Partner-Id 3",
-                    "value": 3
-                },
-                {
-                    "label": "Partner-Id 4",
-                    "value": 4
-                },
-                {
-                    "label": "Partner-Id 5",
-                    "value": 5
-                },
-                {
-                    "label": "Partner-Id 6",
-                    "value": 6
-                },
-                {
-                    "label": "Partner-Id 7",
-                    "value": 7
-                },
-                {
-                    "label": "Partner-Id 8",
-                    "value": 8
-                },
-                {
-                    "label": "Partner-Id 9",
-                    "value": 9
-                }
-            ]
-        },
-        "33": {
-            "label": "Button 7 Blind Duration",
-            "description": "Button 7 Blind Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Duration 3 Seconds",
-                    "value": 3
-                },
-                {
-                    "label": "Duration 30 Seconds",
-                    "value": 30
-                },
-                {
-                    "label": "Duration 60 Seconds",
-                    "value": 60
-                },
-                {
-                    "label": "Duration 90 Seconds",
-                    "value": 90
-                },
-                {
-                    "label": "Duration 120 Seconds",
-                    "value": 120
-                }
-            ]
-        },
-        "34": {
-            "label": "Button 7 Output",
-            "description": "Button 7 Output",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Output number 1",
-                    "value": 1
-                },
-                {
-                    "label": "Output number 2",
-                    "value": 2
-                },
-                {
-                    "label": "Output number 3",
-                    "value": 3
-                },
-                {
-                    "label": "Output number 4",
-                    "value": 4
-                },
-                {
-                    "label": "Output number 5",
-                    "value": 5
-                },
-                {
-                    "label": "Output number 6",
-                    "value": 6
-                }
-            ]
-        },
-        "35": {
-            "label": "Button 7 attribute",
-            "description": "Button 7 attribute",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 7,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Only Led",
-                    "value": 1
-                },
-                {
-                    "label": "Only Sound",
-                    "value": 2
-                }
-            ]
-        },
-        "36": {
-            "label": "Button 8 Type",
-            "description": "Button 8 Type",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch On/Off",
-                    "value": 1
-                },
-                {
-                    "label": "Blind up",
-                    "value": 2
-                },
-                {
-                    "label": "Blind down",
-                    "value": 3
-                },
-                {
-                    "label": "Switch multiway",
-                    "value": 4
-                },
-                {
-                    "label": "Blind-up multiway",
-                    "value": 5
-                },
-                {
-                    "label": "Blind-down multiway",
-                    "value": 6
-                }
-            ]
-        },
-        "37": {
-            "label": "Button 8 Partner-Id",
-            "description": "Button 8 Partner-Id",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Partner-Id 1",
-                    "value": 1
-                },
-                {
-                    "label": "Partner-Id 2",
-                    "value": 2
-                },
-                {
-                    "label": "Partner-Id 3",
-                    "value": 3
-                },
-                {
-                    "label": "Partner-Id 4",
-                    "value": 4
-                },
-                {
-                    "label": "Partner-Id 5",
-                    "value": 5
-                },
-                {
-                    "label": "Partner-Id 6",
-                    "value": 6
-                },
-                {
-                    "label": "Partner-Id 7",
-                    "value": 7
-                },
-                {
-                    "label": "Partner-Id 8",
-                    "value": 8
-                },
-                {
-                    "label": "Partner-Id 9",
-                    "value": 9
-                }
-            ]
-        },
-        "38": {
-            "label": "Button 8 Blind Duration",
-            "description": "Button 8 Blind Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Duration 3 Seconds",
-                    "value": 3
-                },
-                {
-                    "label": "Duration 30 Seconds",
-                    "value": 30
-                },
-                {
-                    "label": "Duration 60 Seconds",
-                    "value": 60
-                },
-                {
-                    "label": "Duration 90 Seconds",
-                    "value": 90
-                },
-                {
-                    "label": "Duration 120 Seconds",
-                    "value": 120
-                }
-            ]
-        },
-        "39": {
-            "label": "Button 8 Output",
-            "description": "Button 8 Output",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No output",
-                    "value": 0
-                },
-                {
-                    "label": "Output number 1",
-                    "value": 1
-                },
-                {
-                    "label": "Output number 2",
-                    "value": 2
-                },
-                {
-                    "label": "Output number 3",
-                    "value": 3
-                },
-                {
-                    "label": "Output number 4",
-                    "value": 4
-                },
-                {
-                    "label": "Output number 5",
-                    "value": 5
-                },
-                {
-                    "label": "Output number 6",
-                    "value": 6
-                },
-                {
-                    "label": "BLANK",
-                    "value": 255
-                }
-            ]
-        },
-        "40": {
-            "label": "Button 8 attribute",
-            "description": "Button 8 attribute",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 7,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Only Led",
-                    "value": 1
-                },
-                {
-                    "label": "Only Sound",
-                    "value": 2
-                }
-            ]
-        },
-        "41": {
-            "label": "Button 9 Type",
-            "description": "Button 9 Type",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch On/Off",
-                    "value": 1
-                },
-                {
-                    "label": "Blind up",
-                    "value": 2
-                },
-                {
-                    "label": "Blind down",
-                    "value": 3
-                },
-                {
-                    "label": "Switch multiway",
-                    "value": 4
-                },
-                {
-                    "label": "Blind-up multiway",
-                    "value": 5
-                },
-                {
-                    "label": "Blind-down multiway",
-                    "value": 6
-                }
-            ]
-        },
-        "42": {
-            "label": "Button 9 Partner-Id",
-            "description": "Button 9 Partner-Id",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 9,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Partner-Id 1",
-                    "value": 1
-                },
-                {
-                    "label": "Partner-Id 2",
-                    "value": 2
-                },
-                {
-                    "label": "Partner-Id 3",
-                    "value": 3
-                },
-                {
-                    "label": "Partner-Id 4",
-                    "value": 4
-                },
-                {
-                    "label": "Partner-Id 5",
-                    "value": 5
-                },
-                {
-                    "label": "Partner-Id 6",
-                    "value": 6
-                },
-                {
-                    "label": "Partner-Id 7",
-                    "value": 7
-                },
-                {
-                    "label": "Partner-Id 8",
-                    "value": 8
-                },
-                {
-                    "label": "Partner-Id 9",
-                    "value": 9
-                }
-            ]
-        },
-        "43": {
-            "label": "Button 9 Blind Duration",
-            "description": "Button 9 Blind Duration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Duration 3 Seconds",
-                    "value": 3
-                },
-                {
-                    "label": "Duration 30 Seconds",
-                    "value": 30
-                },
-                {
-                    "label": "Duration 60 Seconds",
-                    "value": 60
-                },
-                {
-                    "label": "Duration 90 Seconds",
-                    "value": 90
-                },
-                {
-                    "label": "Duration 120 Seconds",
-                    "value": 120
-                }
-            ]
-        },
-        "44": {
-            "label": "Button 9 Output",
-            "description": "Button 9 Output",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No output",
-                    "value": 0
-                },
-                {
-                    "label": "Output number 1",
-                    "value": 1
-                },
-                {
-                    "label": "Output number 2",
-                    "value": 2
-                },
-                {
-                    "label": "Output number 3",
-                    "value": 3
-                },
-                {
-                    "label": "Output number 4",
-                    "value": 4
-                },
-                {
-                    "label": "Output number 5",
-                    "value": 5
-                },
-                {
-                    "label": "Output number 6",
-                    "value": 6
-                }
-            ]
-        },
-        "45": {
-            "label": "Button 9 attributes",
-            "description": "Button 9 attributes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 7,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "None",
-                    "value": 0
-                },
-                {
-                    "label": "Only Led",
-                    "value": 1
-                },
-                {
-                    "label": "Only Sound",
-                    "value": 2
-                }
-            ]
-        },
-        "46": {
-            "label": "Device Led on intensity",
-            "description": "Device Led on intensity",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 7,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "47": {
-            "label": "Device Led off intensity",
-            "description": "Device Led off intensity",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "48": {
-            "label": "Device Toggle or Pulse the output",
-            "description": "Device Toggle or Pulse the output",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "49": {
-            "label": "Device Background LEDs Timeout",
-            "description": "Device Background LEDs Timeout",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "50": {
-            "label": "Device touch sensitivity",
-            "description": "Device touch sensitivity",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "51": {
-            "label": "Save and Reset",
-            "description": "Save and Reset",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Do NOT Save and Reset",
-                    "value": 0
-                },
-                {
-                    "label": "Save and Reset",
-                    "value": 255
-                }
-            ]
-        }
-    }
+	"manufacturer": "Avadesign Technology Co.",
+	"manufacturerId": "0x025d",
+	"label": "Da Vinci v9",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0100"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "EP1_SWITCH_BINARY_SET",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "EP1_SWITCH_BINARY_REPORT",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "EP1_SWITCH_MULTILEVEL_SET",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "EP1_SWITCH_MULTILEVEL_REPORT",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "EP2_SWITCH_BINARY_SET",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "EP2_SWITCH_BINARY_REPORT",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "EP2_SWITCH_MULTILEVEL_SET",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "EP2_SWITCH_MULTILEVEL_REPORT",
+			"maxNodes": 5
+		},
+		"10": {
+			"label": "EP3_SWITCH_BINARY_SET",
+			"maxNodes": 5
+		},
+		"11": {
+			"label": "EP3_SWITCH_BINARY_REPORT",
+			"maxNodes": 5
+		},
+		"12": {
+			"label": "EP3_SWITCH_MULTILEVEL_SET",
+			"maxNodes": 5
+		},
+		"13": {
+			"label": "EP3_SWITCH_MULTILEVEL_REPORT",
+			"maxNodes": 5
+		},
+		"14": {
+			"label": "EP4_SWITCH_BINARY_SET",
+			"maxNodes": 5
+		},
+		"15": {
+			"label": "EP4_SWITCH_BINARY_REPORT",
+			"maxNodes": 5
+		},
+		"16": {
+			"label": "EP4_SWITCH_MULTILEVEL_SET",
+			"maxNodes": 5
+		},
+		"17": {
+			"label": "EP4_SWITCH_MULTILEVEL_REPORT",
+			"maxNodes": 5
+		},
+		"18": {
+			"label": "EP5_SWITCH_BINARY_SET",
+			"maxNodes": 5
+		},
+		"19": {
+			"label": "EP5_SWITCH_BINARY_REPORT",
+			"maxNodes": 5
+		},
+		"20": {
+			"label": "EP5_SWITCH_MULTILEVEL_SET",
+			"maxNodes": 5
+		},
+		"21": {
+			"label": "EP5_SWITCH_MULTILEVEL_REPORT",
+			"maxNodes": 5
+		},
+		"22": {
+			"label": "EP6_SWITCH_BINARY_SET",
+			"maxNodes": 5
+		},
+		"23": {
+			"label": "EP6_SWITCH_BINARY_REPORT",
+			"maxNodes": 5
+		},
+		"24": {
+			"label": "EP6_SWITCH_MULTILEVEL_SET",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"25": {
+			"label": "EP6_SWITCH_MULTILEVEL_REPORT",
+			"maxNodes": 5
+		},
+		"26": {
+			"label": "EP7_ SWITCH_BINARY_SET",
+			"maxNodes": 5
+		},
+		"27": {
+			"label": "EP7_SWITCH_BINARY_REPORT",
+			"maxNodes": 5
+		},
+		"28": {
+			"label": "EP7_ SWITCH_MULTILEVEL_SET",
+			"maxNodes": 5
+		},
+		"29": {
+			"label": "EP7_ SWITCH_MULTILEVEL_REPORT",
+			"maxNodes": 5
+		},
+		"30": {
+			"label": "EP8_SWITCH_BINARY_SET",
+			"maxNodes": 5
+		},
+		"31": {
+			"label": "EP8_ SWITCH_BINARY_REPORT",
+			"maxNodes": 5
+		},
+		"32": {
+			"label": "EP8_ SWITCH_MULTILEVEL_SET",
+			"maxNodes": 5
+		},
+		"33": {
+			"label": "EP8_ SWITCH_MULTILEVEL_REPORT",
+			"maxNodes": 5
+		},
+		"34": {
+			"label": "EP9_ SWITCH_BINARY_SET",
+			"maxNodes": 5
+		},
+		"35": {
+			"label": "EP9_SWITCH_BINARY_REPORT",
+			"maxNodes": 5
+		},
+		"36": {
+			"label": "EP9_ SWITCH_MULTILEVEL_SET",
+			"maxNodes": 5
+		},
+		"37": {
+			"label": "EP9_ SWITCH_MULTILEVEL_REPORT",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Button 1 Type",
+			"description": "button 1 Type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Null",
+					"value": 0
+				},
+				{
+					"label": "Switch On/Off",
+					"value": 1
+				},
+				{
+					"label": "Blind up",
+					"value": 2
+				},
+				{
+					"label": "Blind  down",
+					"value": 3
+				},
+				{
+					"label": "Switch multiway",
+					"value": 4
+				},
+				{
+					"label": "Blind-up multiway",
+					"value": 5
+				},
+				{
+					"label": "Blind-down multiway",
+					"value": 6
+				}
+			]
+		},
+		"2": {
+			"label": "Button 1 Partner-Id",
+			"description": "Button 1 Partner-Id",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Partner-Id 0",
+					"value": 0
+				},
+				{
+					"label": "Partner-Id 1",
+					"value": 1
+				},
+				{
+					"label": "Partner-Id 2",
+					"value": 2
+				},
+				{
+					"label": "Partner-Id 3",
+					"value": 3
+				},
+				{
+					"label": "Partner-Id 4",
+					"value": 4
+				},
+				{
+					"label": "Partner-Id 5",
+					"value": 5
+				},
+				{
+					"label": "Partner-Id 6",
+					"value": 6
+				},
+				{
+					"label": "Partner-Id 7",
+					"value": 7
+				},
+				{
+					"label": "Partner-Id 8",
+					"value": 8
+				},
+				{
+					"label": "Partner-Id 9",
+					"value": 9
+				}
+			]
+		},
+		"3": {
+			"label": "Button 1 Blind Duration",
+			"description": "Button 1 Blind Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Duration 3 Seconds",
+					"value": 3
+				},
+				{
+					"label": "Duration 10 Seconds",
+					"value": 10
+				},
+				{
+					"label": "Duration 30 Seconds",
+					"value": 30
+				},
+				{
+					"label": "Duration 60 Seconds",
+					"value": 60
+				},
+				{
+					"label": "Duration 90 Seconds",
+					"value": 90
+				},
+				{
+					"label": "Duration 120 Seconds",
+					"value": 120
+				}
+			]
+		},
+		"4": {
+			"label": "Button 1 Output",
+			"description": "Button 1 Output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No output",
+					"value": 0
+				},
+				{
+					"label": "Output number 1",
+					"value": 1
+				},
+				{
+					"label": "Output number 2",
+					"value": 2
+				},
+				{
+					"label": "Output number 3",
+					"value": 3
+				},
+				{
+					"label": "Output number 4",
+					"value": 4
+				},
+				{
+					"label": "Output number 5",
+					"value": 5
+				},
+				{
+					"label": "Output number 6",
+					"value": 6
+				}
+			]
+		},
+		"5": {
+			"label": "Button 1 attributes",
+			"description": "Button 1 attributes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 7,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Only Led",
+					"value": 1
+				},
+				{
+					"label": "Only Sound",
+					"value": 2
+				}
+			]
+		},
+		"6": {
+			"label": "Button 2 Type",
+			"description": "Button 2 Type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch On/Off",
+					"value": 1
+				},
+				{
+					"label": "Blind up",
+					"value": 2
+				},
+				{
+					"label": "Blind down",
+					"value": 3
+				},
+				{
+					"label": "Switch multiway",
+					"value": 4
+				},
+				{
+					"label": "Blind-up multiway",
+					"value": 5
+				},
+				{
+					"label": "Blind-down multiway",
+					"value": 6
+				}
+			]
+		},
+		"7": {
+			"label": "Button 2 Partner-Id",
+			"description": "Button 2 Partner-Id",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Partner-Id 0",
+					"value": 0
+				},
+				{
+					"label": "Partner-Id 1",
+					"value": 1
+				},
+				{
+					"label": "Partner-Id 2",
+					"value": 2
+				},
+				{
+					"label": "Partner-Id 3",
+					"value": 3
+				},
+				{
+					"label": "Partner-Id 4",
+					"value": 4
+				},
+				{
+					"label": "Partner-Id 5",
+					"value": 5
+				},
+				{
+					"label": "Partner-Id 6",
+					"value": 6
+				},
+				{
+					"label": "Partner-Id 7",
+					"value": 7
+				},
+				{
+					"label": "Partner-Id 8",
+					"value": 8
+				},
+				{
+					"label": "Partner-Id 9",
+					"value": 9
+				}
+			]
+		},
+		"8": {
+			"label": "Button 2 Blind Duration",
+			"description": "Button 2 Blind Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Duration 3 Seconds",
+					"value": 3
+				},
+				{
+					"label": "Duration10 Seconds",
+					"value": 10
+				},
+				{
+					"label": "Duration 30 Seconds",
+					"value": 30
+				},
+				{
+					"label": "Duration 60 Seconds",
+					"value": 60
+				},
+				{
+					"label": "Duration 90 Seconds",
+					"value": 90
+				},
+				{
+					"label": "Duration 120 Seconds",
+					"value": 120
+				}
+			]
+		},
+		"9": {
+			"label": "Button 2 Output",
+			"description": "Button 2 Output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No output",
+					"value": 0
+				},
+				{
+					"label": "Output number 1",
+					"value": 1
+				},
+				{
+					"label": "Output number 2",
+					"value": 2
+				},
+				{
+					"label": "Output number 3",
+					"value": 3
+				},
+				{
+					"label": "Output number 4",
+					"value": 4
+				},
+				{
+					"label": "Output number 5",
+					"value": 5
+				},
+				{
+					"label": "Output number 6",
+					"value": 6
+				}
+			]
+		},
+		"10": {
+			"label": "Button 2 attributes",
+			"description": "Button 2 attributes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 7,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Only Led",
+					"value": 1
+				},
+				{
+					"label": "Only Sound",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "Button 3 Type",
+			"description": "Button 3 Type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch On/Off",
+					"value": 1
+				},
+				{
+					"label": "Blind up",
+					"value": 2
+				},
+				{
+					"label": "Blind down",
+					"value": 3
+				},
+				{
+					"label": "Switch multiway",
+					"value": 4
+				},
+				{
+					"label": "Blind-up multiway",
+					"value": 5
+				},
+				{
+					"label": "Blind-down multiway",
+					"value": 6
+				}
+			]
+		},
+		"12": {
+			"label": "Button 3 Partner-Id",
+			"description": "Button 3 Partner-Id",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Partner-Id 0",
+					"value": 0
+				},
+				{
+					"label": "Partner-Id 1",
+					"value": 1
+				},
+				{
+					"label": "Partner-Id 2",
+					"value": 2
+				},
+				{
+					"label": "Partner-Id 3",
+					"value": 3
+				},
+				{
+					"label": "Partner-Id 4",
+					"value": 4
+				},
+				{
+					"label": "Partner-Id 5",
+					"value": 5
+				},
+				{
+					"label": "Partner-Id 6",
+					"value": 6
+				},
+				{
+					"label": "Partner-Id 7",
+					"value": 7
+				},
+				{
+					"label": "Partner-Id 8",
+					"value": 8
+				},
+				{
+					"label": "Partner-Id 9",
+					"value": 9
+				}
+			]
+		},
+		"13": {
+			"label": "Button 3 Blind Duration",
+			"description": "Button 3 Blind Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Duration 3 Seconds",
+					"value": 3
+				},
+				{
+					"label": "Duration 30 Seconds",
+					"value": 30
+				},
+				{
+					"label": "Duration 60 Seconds",
+					"value": 60
+				},
+				{
+					"label": "Duration 90 Seconds",
+					"value": 90
+				},
+				{
+					"label": "Duration 120 Seconds",
+					"value": 120
+				}
+			]
+		},
+		"14": {
+			"label": "Button 3 Output",
+			"description": "Button 3 Output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No output",
+					"value": 0
+				},
+				{
+					"label": "Output number 1",
+					"value": 1
+				},
+				{
+					"label": "Output number 2",
+					"value": 2
+				},
+				{
+					"label": "Output number 3",
+					"value": 3
+				},
+				{
+					"label": "Output number 4",
+					"value": 4
+				},
+				{
+					"label": "Output number 5",
+					"value": 5
+				},
+				{
+					"label": "Output number 6",
+					"value": 6
+				}
+			]
+		},
+		"15": {
+			"label": "Button 3 attributes",
+			"description": "Button 3 attributes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 7,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Only Led",
+					"value": 1
+				},
+				{
+					"label": "Only Sound",
+					"value": 2
+				}
+			]
+		},
+		"16": {
+			"label": "Button 4 Type",
+			"description": "Button 4 Type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch On/Off",
+					"value": 1
+				},
+				{
+					"label": "Blind up",
+					"value": 2
+				},
+				{
+					"label": "Blind down",
+					"value": 3
+				},
+				{
+					"label": "Switch multiway",
+					"value": 4
+				},
+				{
+					"label": "Blind-up multiway",
+					"value": 5
+				},
+				{
+					"label": "Blind-down multiway",
+					"value": 6
+				}
+			]
+		},
+		"17": {
+			"label": "Button 4 Partner-Id",
+			"description": "Button 4 Partner-Id",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Partner-Id 1",
+					"value": 1
+				},
+				{
+					"label": "Partner-Id 2",
+					"value": 2
+				},
+				{
+					"label": "Partner-Id 3",
+					"value": 3
+				},
+				{
+					"label": "Partner-Id 4",
+					"value": 4
+				},
+				{
+					"label": "Partner-Id 5",
+					"value": 5
+				},
+				{
+					"label": "Partner-Id 6",
+					"value": 6
+				},
+				{
+					"label": "Partner-Id 7",
+					"value": 7
+				},
+				{
+					"label": "Partner-Id 8",
+					"value": 8
+				},
+				{
+					"label": "Partner-Id 9",
+					"value": 9
+				}
+			]
+		},
+		"18": {
+			"label": "Button 4 Blind Duration",
+			"description": "Button 4 Blind Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Duration 3 Seconds",
+					"value": 3
+				},
+				{
+					"label": "Duration 30 Seconds",
+					"value": 30
+				},
+				{
+					"label": "Duration 60 Seconds",
+					"value": 60
+				},
+				{
+					"label": "Duration 90 Seconds",
+					"value": 90
+				},
+				{
+					"label": "Duration 120 Seconds",
+					"value": 120
+				}
+			]
+		},
+		"19": {
+			"label": "Button 4 Output",
+			"description": "Button 4 Output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No output",
+					"value": 0
+				},
+				{
+					"label": "Output number 1",
+					"value": 1
+				},
+				{
+					"label": "Output number 2",
+					"value": 2
+				},
+				{
+					"label": "Output number 3",
+					"value": 3
+				},
+				{
+					"label": "Output number 4",
+					"value": 4
+				},
+				{
+					"label": "Output number 5",
+					"value": 5
+				},
+				{
+					"label": "Output number 6",
+					"value": 6
+				}
+			]
+		},
+		"20": {
+			"label": "Button 4 attributes",
+			"description": "Button 4 attributes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 7,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Only Led",
+					"value": 1
+				},
+				{
+					"label": "Only Sound",
+					"value": 2
+				}
+			]
+		},
+		"21": {
+			"label": "Button 5 Type",
+			"description": "Button 5 Type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch On/Off",
+					"value": 1
+				},
+				{
+					"label": "Blind up",
+					"value": 2
+				},
+				{
+					"label": "Blind down",
+					"value": 3
+				},
+				{
+					"label": "Switch multiway",
+					"value": 4
+				},
+				{
+					"label": "Blind-up multiway",
+					"value": 5
+				},
+				{
+					"label": "Blind-down multiway",
+					"value": 6
+				}
+			]
+		},
+		"22": {
+			"label": "Button 5 Partner-Id",
+			"description": "Button 5 Partner-Id",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Partner-Id 1",
+					"value": 1
+				},
+				{
+					"label": "Partner-Id 2",
+					"value": 2
+				},
+				{
+					"label": "Partner-Id 3",
+					"value": 3
+				},
+				{
+					"label": "Partner-Id 4",
+					"value": 4
+				},
+				{
+					"label": "Partner-Id 5",
+					"value": 5
+				},
+				{
+					"label": "Partner-Id 6",
+					"value": 6
+				},
+				{
+					"label": "Partner-Id 7",
+					"value": 7
+				},
+				{
+					"label": "Partner-Id 8",
+					"value": 8
+				},
+				{
+					"label": "Partner-Id 9",
+					"value": 9
+				}
+			]
+		},
+		"23": {
+			"label": "Button 5 Blind Duration",
+			"description": "Button 5 Blind Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Duration 3 Seconds",
+					"value": 3
+				},
+				{
+					"label": "Duration 30 Seconds",
+					"value": 30
+				},
+				{
+					"label": "Duration 60 Seconds",
+					"value": 60
+				},
+				{
+					"label": "Duration 90 Seconds",
+					"value": 90
+				},
+				{
+					"label": "Duration 120 Seconds",
+					"value": 120
+				}
+			]
+		},
+		"24": {
+			"label": "Button 5 Output",
+			"description": "Button 5 Output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No output",
+					"value": 0
+				},
+				{
+					"label": "Output number 1",
+					"value": 1
+				},
+				{
+					"label": "Output number 2",
+					"value": 2
+				},
+				{
+					"label": "Output number 3",
+					"value": 3
+				},
+				{
+					"label": "Output number 4",
+					"value": 4
+				},
+				{
+					"label": "Output number 5",
+					"value": 5
+				},
+				{
+					"label": "Output number 6",
+					"value": 6
+				}
+			]
+		},
+		"25": {
+			"label": "Button 5 attributes",
+			"description": "Button 5 attributes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 7,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Only Led",
+					"value": 1
+				},
+				{
+					"label": "Only Sound",
+					"value": 2
+				}
+			]
+		},
+		"26": {
+			"label": "Button 6 Type",
+			"description": "Button 6 Type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch On/Off",
+					"value": 1
+				},
+				{
+					"label": "Blind up",
+					"value": 2
+				},
+				{
+					"label": "Blind down",
+					"value": 3
+				},
+				{
+					"label": "Switch multiway",
+					"value": 4
+				},
+				{
+					"label": "Blind-up multiway",
+					"value": 5
+				},
+				{
+					"label": "Blind-down multiway",
+					"value": 6
+				}
+			]
+		},
+		"27": {
+			"label": "Button 6 Partner-Id",
+			"description": "Button 6 Partner-Id",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Partner-Id 1",
+					"value": 1
+				},
+				{
+					"label": "Partner-Id 2",
+					"value": 2
+				},
+				{
+					"label": "Partner-Id 3",
+					"value": 3
+				},
+				{
+					"label": "Partner-Id 4",
+					"value": 4
+				},
+				{
+					"label": "Partner-Id 5",
+					"value": 5
+				},
+				{
+					"label": "Partner-Id 6",
+					"value": 6
+				},
+				{
+					"label": "Partner-Id 7",
+					"value": 7
+				},
+				{
+					"label": "Partner-Id 8",
+					"value": 8
+				},
+				{
+					"label": "Partner-Id 9",
+					"value": 9
+				}
+			]
+		},
+		"28": {
+			"label": "Button 6 Blind Duration",
+			"description": "Button 6 Blind Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Duration 3 Seconds",
+					"value": 3
+				},
+				{
+					"label": "Duration 30 Seconds",
+					"value": 30
+				},
+				{
+					"label": "Duration 60 Seconds",
+					"value": 60
+				},
+				{
+					"label": "Duration 90 Seconds",
+					"value": 90
+				},
+				{
+					"label": "Duration 120 Seconds",
+					"value": 120
+				}
+			]
+		},
+		"29": {
+			"label": "Button 6 Output",
+			"description": "Button 6 Output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No output",
+					"value": 0
+				},
+				{
+					"label": "Output number 1",
+					"value": 1
+				},
+				{
+					"label": "Output number 2",
+					"value": 2
+				},
+				{
+					"label": "Output number 3",
+					"value": 3
+				},
+				{
+					"label": "Output number 4",
+					"value": 4
+				},
+				{
+					"label": "Output number 5",
+					"value": 5
+				},
+				{
+					"label": "Output number 6",
+					"value": 6
+				}
+			]
+		},
+		"30": {
+			"label": "Button 6 attributes",
+			"description": "Button 6 attributes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 7,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Only Led",
+					"value": 1
+				},
+				{
+					"label": "Only Sound",
+					"value": 2
+				}
+			]
+		},
+		"31": {
+			"label": "Button 7 Type",
+			"description": "Button 7 Type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On/Off Switch",
+					"value": 1
+				},
+				{
+					"label": "Blind up",
+					"value": 2
+				},
+				{
+					"label": "Blind  down",
+					"value": 3
+				},
+				{
+					"label": "Switch multiway",
+					"value": 4
+				},
+				{
+					"label": "Blind-up multiway",
+					"value": 5
+				},
+				{
+					"label": "Blind-down multiway",
+					"value": 6
+				}
+			]
+		},
+		"32": {
+			"label": "Button 7 Partner-Id",
+			"description": "Button 7 Partner-Id",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Partner-Id 1",
+					"value": 1
+				},
+				{
+					"label": "Partner-Id 2",
+					"value": 2
+				},
+				{
+					"label": "Partner-Id 3",
+					"value": 3
+				},
+				{
+					"label": "Partner-Id 4",
+					"value": 4
+				},
+				{
+					"label": "Partner-Id 5",
+					"value": 5
+				},
+				{
+					"label": "Partner-Id 6",
+					"value": 6
+				},
+				{
+					"label": "Partner-Id 7",
+					"value": 7
+				},
+				{
+					"label": "Partner-Id 8",
+					"value": 8
+				},
+				{
+					"label": "Partner-Id 9",
+					"value": 9
+				}
+			]
+		},
+		"33": {
+			"label": "Button 7 Blind Duration",
+			"description": "Button 7 Blind Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Duration 3 Seconds",
+					"value": 3
+				},
+				{
+					"label": "Duration 30 Seconds",
+					"value": 30
+				},
+				{
+					"label": "Duration 60 Seconds",
+					"value": 60
+				},
+				{
+					"label": "Duration 90 Seconds",
+					"value": 90
+				},
+				{
+					"label": "Duration 120 Seconds",
+					"value": 120
+				}
+			]
+		},
+		"34": {
+			"label": "Button 7 Output",
+			"description": "Button 7 Output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Output number 1",
+					"value": 1
+				},
+				{
+					"label": "Output number 2",
+					"value": 2
+				},
+				{
+					"label": "Output number 3",
+					"value": 3
+				},
+				{
+					"label": "Output number 4",
+					"value": 4
+				},
+				{
+					"label": "Output number 5",
+					"value": 5
+				},
+				{
+					"label": "Output number 6",
+					"value": 6
+				}
+			]
+		},
+		"35": {
+			"label": "Button 7 attribute",
+			"description": "Button 7 attribute",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 7,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Only Led",
+					"value": 1
+				},
+				{
+					"label": "Only Sound",
+					"value": 2
+				}
+			]
+		},
+		"36": {
+			"label": "Button 8 Type",
+			"description": "Button 8 Type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch On/Off",
+					"value": 1
+				},
+				{
+					"label": "Blind up",
+					"value": 2
+				},
+				{
+					"label": "Blind down",
+					"value": 3
+				},
+				{
+					"label": "Switch multiway",
+					"value": 4
+				},
+				{
+					"label": "Blind-up multiway",
+					"value": 5
+				},
+				{
+					"label": "Blind-down multiway",
+					"value": 6
+				}
+			]
+		},
+		"37": {
+			"label": "Button 8 Partner-Id",
+			"description": "Button 8 Partner-Id",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Partner-Id 1",
+					"value": 1
+				},
+				{
+					"label": "Partner-Id 2",
+					"value": 2
+				},
+				{
+					"label": "Partner-Id 3",
+					"value": 3
+				},
+				{
+					"label": "Partner-Id 4",
+					"value": 4
+				},
+				{
+					"label": "Partner-Id 5",
+					"value": 5
+				},
+				{
+					"label": "Partner-Id 6",
+					"value": 6
+				},
+				{
+					"label": "Partner-Id 7",
+					"value": 7
+				},
+				{
+					"label": "Partner-Id 8",
+					"value": 8
+				},
+				{
+					"label": "Partner-Id 9",
+					"value": 9
+				}
+			]
+		},
+		"38": {
+			"label": "Button 8 Blind Duration",
+			"description": "Button 8 Blind Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Duration 3 Seconds",
+					"value": 3
+				},
+				{
+					"label": "Duration 30 Seconds",
+					"value": 30
+				},
+				{
+					"label": "Duration 60 Seconds",
+					"value": 60
+				},
+				{
+					"label": "Duration 90 Seconds",
+					"value": 90
+				},
+				{
+					"label": "Duration 120 Seconds",
+					"value": 120
+				}
+			]
+		},
+		"39": {
+			"label": "Button 8 Output",
+			"description": "Button 8 Output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No output",
+					"value": 0
+				},
+				{
+					"label": "Output number 1",
+					"value": 1
+				},
+				{
+					"label": "Output number 2",
+					"value": 2
+				},
+				{
+					"label": "Output number 3",
+					"value": 3
+				},
+				{
+					"label": "Output number 4",
+					"value": 4
+				},
+				{
+					"label": "Output number 5",
+					"value": 5
+				},
+				{
+					"label": "Output number 6",
+					"value": 6
+				},
+				{
+					"label": "BLANK",
+					"value": 255
+				}
+			]
+		},
+		"40": {
+			"label": "Button 8 attribute",
+			"description": "Button 8 attribute",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 7,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Only Led",
+					"value": 1
+				},
+				{
+					"label": "Only Sound",
+					"value": 2
+				}
+			]
+		},
+		"41": {
+			"label": "Button 9 Type",
+			"description": "Button 9 Type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch On/Off",
+					"value": 1
+				},
+				{
+					"label": "Blind up",
+					"value": 2
+				},
+				{
+					"label": "Blind down",
+					"value": 3
+				},
+				{
+					"label": "Switch multiway",
+					"value": 4
+				},
+				{
+					"label": "Blind-up multiway",
+					"value": 5
+				},
+				{
+					"label": "Blind-down multiway",
+					"value": 6
+				}
+			]
+		},
+		"42": {
+			"label": "Button 9 Partner-Id",
+			"description": "Button 9 Partner-Id",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 9,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Partner-Id 1",
+					"value": 1
+				},
+				{
+					"label": "Partner-Id 2",
+					"value": 2
+				},
+				{
+					"label": "Partner-Id 3",
+					"value": 3
+				},
+				{
+					"label": "Partner-Id 4",
+					"value": 4
+				},
+				{
+					"label": "Partner-Id 5",
+					"value": 5
+				},
+				{
+					"label": "Partner-Id 6",
+					"value": 6
+				},
+				{
+					"label": "Partner-Id 7",
+					"value": 7
+				},
+				{
+					"label": "Partner-Id 8",
+					"value": 8
+				},
+				{
+					"label": "Partner-Id 9",
+					"value": 9
+				}
+			]
+		},
+		"43": {
+			"label": "Button 9 Blind Duration",
+			"description": "Button 9 Blind Duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Duration 3 Seconds",
+					"value": 3
+				},
+				{
+					"label": "Duration 30 Seconds",
+					"value": 30
+				},
+				{
+					"label": "Duration 60 Seconds",
+					"value": 60
+				},
+				{
+					"label": "Duration 90 Seconds",
+					"value": 90
+				},
+				{
+					"label": "Duration 120 Seconds",
+					"value": 120
+				}
+			]
+		},
+		"44": {
+			"label": "Button 9 Output",
+			"description": "Button 9 Output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No output",
+					"value": 0
+				},
+				{
+					"label": "Output number 1",
+					"value": 1
+				},
+				{
+					"label": "Output number 2",
+					"value": 2
+				},
+				{
+					"label": "Output number 3",
+					"value": 3
+				},
+				{
+					"label": "Output number 4",
+					"value": 4
+				},
+				{
+					"label": "Output number 5",
+					"value": 5
+				},
+				{
+					"label": "Output number 6",
+					"value": 6
+				}
+			]
+		},
+		"45": {
+			"label": "Button 9 attributes",
+			"description": "Button 9 attributes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 7,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Only Led",
+					"value": 1
+				},
+				{
+					"label": "Only Sound",
+					"value": 2
+				}
+			]
+		},
+		"46": {
+			"label": "Device Led on intensity",
+			"description": "Device Led on intensity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"47": {
+			"label": "Device Led off intensity",
+			"description": "Device Led off intensity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"48": {
+			"label": "Device Toggle or Pulse the output",
+			"description": "Device Toggle or Pulse the output",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"49": {
+			"label": "Device Background LEDs Timeout",
+			"description": "Device Background LEDs Timeout",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"50": {
+			"label": "Device touch sensitivity",
+			"description": "Device touch sensitivity",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "Save and Reset",
+			"description": "Save and Reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do NOT Save and Reset",
+					"value": 0
+				},
+				{
+					"label": "Save and Reset",
+					"value": 255
+				}
+			]
+		}
+	}
 }

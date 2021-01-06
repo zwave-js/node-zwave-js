@@ -1,7 +1,6 @@
 // BeNext Alarm Sound
 // Alarm sound
 {
-	"_approved": true,
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
 	"label": "Alarm Sound",

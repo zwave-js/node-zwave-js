@@ -1,71 +1,63 @@
 // LS Control E861C
 // Temperature Sensor
 {
-    "_approved": false,
-    "_errors": [
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
-    "manufacturer": "LS Control",
-    "manufacturerId": "0x0071",
-    "label": "E861C",
-    "description": "Temperature Sensor",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x035d"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Status Reports",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Delta Percentage",
-            "description": "2 % - 56 % -> Delta",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Celsius/Fahrenheit",
-            "description": "0 - 64 -> Celsius : 64 - 127 -> Fahrenheit",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Send Setpoint when WakeUp",
-            "description": "0 - 64 -> SEND : 64 - 127 -> DO NOT SEND",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "LS Control",
+	"manufacturerId": "0x0071",
+	"label": "E861C",
+	"description": "Temperature Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x035d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Status Reports",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Delta Percentage",
+			"description": "2 % - 56 % -> Delta",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Celsius/Fahrenheit",
+			"description": "0 - 64 -> Celsius : 64 - 127 -> Fahrenheit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Send Setpoint when WakeUp",
+			"description": "0 - 64 -> SEND : 64 - 127 -> DO NOT SEND",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

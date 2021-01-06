@@ -1,44 +1,43 @@
 // Bönig und Kallenbach oHG POPE005206
 // Z Weather
 {
-    "_approved": true,
-    "manufacturer": "Bönig und Kallenbach oHG",
-    "manufacturerId": "0x0169",
-    "label": "POPE005206",
-    "description": "Z Weather",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Wind Speed Action Threshold",
-            "description": "Available Parameters: 0  - Off 1 - 30 in milliseconds Default = 6 m/s",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 30,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Twilight Action Threshold",
-            "description": "Set from 0 - 100 % Default = 37% (street lighting)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 37,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Bönig und Kallenbach oHG",
+	"manufacturerId": "0x0169",
+	"label": "POPE005206",
+	"description": "Z Weather",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Wind Speed Action Threshold",
+			"description": "Available Parameters: 0  - Off 1 - 30 in milliseconds Default = 6 m/s",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Twilight Action Threshold",
+			"description": "Set from 0 - 100 % Default = 37% (street lighting)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 37,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

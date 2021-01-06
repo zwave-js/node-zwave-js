@@ -1,141 +1,140 @@
 // BeNext Tag Reader 500
 // WTRFID Mini Keypad
 {
-    "_approved": true,
-    "manufacturer": "BeNext",
-    "manufacturerId": "0x008a",
-    "label": "Tag Reader 500",
-    "description": "WTRFID Mini Keypad",
-    "devices": [
-        {
-            "productType": "0x0007",
-            "productId": "0x0200"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Set to Default",
-            "description": "Set all configuration values to default values (factory settings)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Reset to factory defaults",
-                    "value": 255
-                }
-            ]
-        },
-        "2": {
-            "label": "Feedback time",
-            "description": "the time the beep goes to off",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 15,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Feedback time-out",
-            "description": "waiting for the wake-up-no-more command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "feedback beeps per second",
-            "description": "Amount of beeps a second",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Always awake mode",
-            "description": "Always awake mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "normal operating mode.",
-                    "value": 1
-                },
-                {
-                    "label": "Always awake mode",
-                    "value": 3
-                }
-            ]
-        },
-        "7": {
-            "label": "Operation mode",
-            "description": "Operation mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Gateway mode",
-                    "value": 0
-                },
-                {
-                    "label": "Local mode",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Gateway confirmation",
-            "description": "Gateway confirmation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Confirmation Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Confirmation Enabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "BeNext",
+	"manufacturerId": "0x008a",
+	"label": "Tag Reader 500",
+	"description": "WTRFID Mini Keypad",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x0200"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Set to Default",
+			"description": "Set all configuration values to default values (factory settings)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Reset to factory defaults",
+					"value": 255
+				}
+			]
+		},
+		"2": {
+			"label": "Feedback time",
+			"description": "the time the beep goes to off",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 15,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Feedback time-out",
+			"description": "waiting for the wake-up-no-more command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "feedback beeps per second",
+			"description": "Amount of beeps a second",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Always awake mode",
+			"description": "Always awake mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "normal operating mode.",
+					"value": 1
+				},
+				{
+					"label": "Always awake mode",
+					"value": 3
+				}
+			]
+		},
+		"7": {
+			"label": "Operation mode",
+			"description": "Operation mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Gateway mode",
+					"value": 0
+				},
+				{
+					"label": "Local mode",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Gateway confirmation",
+			"description": "Gateway confirmation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Confirmation Disabled",
+					"value": 0
+				},
+				{
+					"label": "Confirmation Enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

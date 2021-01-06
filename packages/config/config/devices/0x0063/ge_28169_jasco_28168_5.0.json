@@ -1,51 +1,50 @@
 // Jasco Products GE 28169 / Jasco 28168
 // Plug in Smart Switch
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "GE 28169 / Jasco 28168",
-    "description": "Plug in Smart Switch",
-    "devices": [
-        {
-            "productType": "0x5052",
-            "productId": "0x3037"
-        },
-        {
-            "productType": "0x5052",
-            "productId": "0x3038"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "5.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED Light",
-            "description": "Set the state of the LED Light",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "LED Light on when Z-Wave turned OFF (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "LED Light on when Z-Wave turned On",
-                    "value": 1
-                },
-                {
-                    "label": "LED Light Always Off",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "GE 28169 / Jasco 28168",
+	"description": "Plug in Smart Switch",
+	"devices": [
+		{
+			"productType": "0x5052",
+			"productId": "0x3037"
+		},
+		{
+			"productType": "0x5052",
+			"productId": "0x3038"
+		}
+	],
+	"firmwareVersion": {
+		"min": "5.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "Set the state of the LED Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "LED Light on when Z-Wave turned OFF (Default)",
+					"value": 0
+				},
+				{
+					"label": "LED Light on when Z-Wave turned On",
+					"value": 1
+				},
+				{
+					"label": "LED Light Always Off",
+					"value": 2
+				}
+			]
+		}
+	}
 }

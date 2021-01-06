@@ -1,19 +1,18 @@
 // Kichler 15DC200
 // 200W Design Pro LED Controller
 {
-    "_approved": true,
-    "manufacturer": "Kichler",
-    "manufacturerId": "0x0114",
-    "label": "15DC200",
-    "description": "200W Design Pro LED Controller",
-    "devices": [
-        {
-            "productType": "0xb005",
-            "productId": "0x3b60"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Kichler",
+	"manufacturerId": "0x0114",
+	"label": "15DC200",
+	"description": "200W Design Pro LED Controller",
+	"devices": [
+		{
+			"productType": "0xb005",
+			"productId": "0x3b60"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

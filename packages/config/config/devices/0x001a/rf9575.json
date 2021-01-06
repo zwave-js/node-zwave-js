@@ -1,7 +1,6 @@
 // Eaton RF9575
 // Anyplace Switch
 {
-	"_approved": true,
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RF9575",

@@ -1,47 +1,46 @@
 // HANK Electronics Ltd. SCN04
 // Four-key Scene Controller
 {
-    "_approved": true,
-    "manufacturer": "HANK Electronics Ltd.",
-    "manufacturerId": "0x0208",
-    "label": "SCN04",
-    "description": "Four-key Scene Controller",
-    "devices": [
-        {
-            "productType": "0x0200",
-            "productId": "0x000b"
-        },
-        {
-            "productType": "0x0201",
-            "productId": "0x000b"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "254": {
-            "label": "Enable configuration",
-            "description": "Lock/unlock  all  configuration  parameters.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Unlock",
-                    "value": 0
-                },
-                {
-                    "label": "Lock",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "SCN04",
+	"description": "Four-key Scene Controller",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x000b"
+		},
+		{
+			"productType": "0x0201",
+			"productId": "0x000b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"254": {
+			"label": "Enable configuration",
+			"description": "Lock/unlock  all  configuration  parameters.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Unlock",
+					"value": 0
+				},
+				{
+					"label": "Lock",
+					"value": 1
+				}
+			]
+		}
+	}
 }

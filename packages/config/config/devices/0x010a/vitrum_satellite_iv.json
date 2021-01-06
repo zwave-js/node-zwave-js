@@ -1,51 +1,40 @@
 // VDA Vitrum Satellite IV
 // Vitrum touch switch satellite 4 buttons
 {
-    "_approved": true,
-    "_errors": [
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set",
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "VDA",
-    "manufacturerId": "0x010a",
-    "label": "Vitrum Satellite IV",
-    "description": "Vitrum touch switch satellite 4 buttons",
-    "devices": [
-        {
-            "productType": "0x3400",
-            "productId": "0x6400"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Group for Button 1",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Group for Button 2",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Group 3",
-            "description": "Group for Button 3",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Group 4",
-            "description": "Group for Button 4",
-            "maxNodes": 5
-        }
-    }
+	"manufacturer": "VDA",
+	"manufacturerId": "0x010a",
+	"label": "Vitrum Satellite IV",
+	"description": "Vitrum touch switch satellite 4 buttons",
+	"devices": [
+		{
+			"productType": "0x3400",
+			"productId": "0x6400"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Group for Button 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Group 2",
+			"description": "Group for Button 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Group 3",
+			"description": "Group for Button 3",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Group 4",
+			"description": "Group for Button 4",
+			"maxNodes": 5
+		}
+	}
 }

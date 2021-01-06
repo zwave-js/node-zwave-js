@@ -1,20 +1,19 @@
 // Philio Technology Corp ZT1101
 // 4 Button Key Fob
 {
-    "_approved": true,
-    "manufacturer": "Philio Technology Corp",
-    "manufacturerId": "0x013c",
-    "label": "ZT1101",
-    "description": "4 Button Key Fob",
-    "devices": [
-        {
-            "productType": "0x1002",
-            "productId": "0x0202"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "ZT1101",
+	"description": "4 Button Key Fob",
+	"devices": [
+		{
+			"productType": "0x1002",
+			"productId": "0x0202"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

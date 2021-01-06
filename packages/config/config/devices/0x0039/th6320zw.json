@@ -1,105 +1,104 @@
 // Honeywell TH6320ZW
 // T6 Pro Z-Wave Programmable Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Honeywell",
-    "manufacturerId": "0x0039",
-    "label": "TH6320ZW",
-    "description": "T6 Pro Z-Wave Programmable Thermostat",
-    "devices": [
-        {
-            "productType": "0x0011",
-            "productId": "0x0008"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Schedule Type",
-            "description": "On-thermostat schedule type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No schedule on thermostat",
-                    "value": 0
-                },
-                {
-                    "label": "Single schedule",
-                    "value": 1
-                },
-                {
-                    "label": "5-2 schedule",
-                    "value": 2
-                },
-                {
-                    "label": "5-1-1 schedule",
-                    "value": 3
-                },
-                {
-                    "label": "Every day unique schedule",
-                    "value": 4
-                }
-            ]
-        },
-        "10": {
-            "label": "EM Heat Type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Electric",
-                    "value": 0
-                },
-                {
-                    "label": "Gas/Oil",
-                    "value": 1
-                }
-            ]
-        },
-        "11": {
-            "label": "Fossil Kit Control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Thermostat",
-                    "value": 0
-                },
-                {
-                    "label": "External",
-                    "value": 1
-                }
-            ]
-        },
-        "12": {
-            "label": "Auto Changeover",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "TH6320ZW",
+	"description": "T6 Pro Z-Wave Programmable Thermostat",
+	"devices": [
+		{
+			"productType": "0x0011",
+			"productId": "0x0008"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Schedule Type",
+			"description": "On-thermostat schedule type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No schedule on thermostat",
+					"value": 0
+				},
+				{
+					"label": "Single schedule",
+					"value": 1
+				},
+				{
+					"label": "5-2 schedule",
+					"value": 2
+				},
+				{
+					"label": "5-1-1 schedule",
+					"value": 3
+				},
+				{
+					"label": "Every day unique schedule",
+					"value": 4
+				}
+			]
+		},
+		"10": {
+			"label": "EM Heat Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Electric",
+					"value": 0
+				},
+				{
+					"label": "Gas/Oil",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Fossil Kit Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Thermostat",
+					"value": 0
+				},
+				{
+					"label": "External",
+					"value": 1
+				}
+			]
+		},
+		"12": {
+			"label": "Auto Changeover",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

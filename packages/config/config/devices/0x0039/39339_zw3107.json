@@ -1,113 +1,112 @@
 // Honeywell 39339 (ZW3107)
 // Z-Wave Plug-in Smart Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Honeywell",
-    "manufacturerId": "0x0039",
-    "label": "39339 (ZW3107)",
-    "description": "Z-Wave Plug-in Smart Dimmer",
-    "devices": [
-        {
-            "productType": "0x5044",
-            "productId": "0x3033"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "LED Light",
-            "description": "LED Light Control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Set parameter to factory default",
-                    "value": 0
-                },
-                {
-                    "label": "LED On when light is turned On",
-                    "value": 1
-                },
-                {
-                    "label": "LED always Off",
-                    "value": 2
-                }
-            ]
-        },
-        "7": {
-            "label": "Dim Rate Adjustments (Z-Wave Controller)",
-            "description": "Number of steps or levels",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Dim Rate Adjustments (Z-Wave Controller, Timing)",
-            "description": "Timing of steps",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Dim Rate Adjustments (manually controlled)",
-            "description": "Number of steps or levels",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Dim Rate Adjustments (manually controlled, timing)",
-            "description": "Timing of steps",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Dim Rate Adjustments (All-On/Off Commands)",
-            "description": "Number of steps or levels",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Dim Rate Adjustments (All-On/Off Command, Timing)",
-            "description": "Timing of steps",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39339 (ZW3107)",
+	"description": "Z-Wave Plug-in Smart Dimmer",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3033"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED Light Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Set parameter to factory default",
+					"value": 0
+				},
+				{
+					"label": "LED On when light is turned On",
+					"value": 1
+				},
+				{
+					"label": "LED always Off",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Dim Rate Adjustments (Z-Wave Controller)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Dim Rate Adjustments (Z-Wave Controller, Timing)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Dim Rate Adjustments (manually controlled)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dim Rate Adjustments (manually controlled, timing)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Dim Rate Adjustments (All-On/Off Commands)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Dim Rate Adjustments (All-On/Off Command, Timing)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

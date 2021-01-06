@@ -1,284 +1,283 @@
 // Popp & Co POPE700982
 // POPP Door / Window Sensor
 {
-    "_approved": true,
-    "manufacturer": "Popp & Co",
-    "manufacturerId": "0x0154",
-    "label": "POPE700982",
-    "description": "POPP Door / Window Sensor",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0007"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Sensor Operation Mode",
-            "description": "Iinternal magnet sensor or the external terminal",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Internal Magnet Sensor Used",
-                    "value": 0
-                },
-                {
-                    "label": "External Terminal Inputs Used",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Sensor State Polarity",
-            "description": "This parameter deﬁnes the polarity of the magnet sensor",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Closed when Magnet in proximity",
-                    "value": 0
-                },
-                {
-                    "label": "Opened when Magnet in proximity",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Visual LED Indications",
-            "description": "This parameter deﬁnes when the red LED will indicate events",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 7,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "No Indications",
-                    "value": 0
-                },
-                {
-                    "label": "Open/Close Status Change",
-                    "value": 1
-                },
-                {
-                    "label": "Wake Up",
-                    "value": 2
-                },
-                {
-                    "label": "Device Tampering",
-                    "value": 4
-                }
-            ]
-        },
-        "4": {
-            "label": "Range Test after double click",
-            "description": "Allows to enable the activation of a Z-Wave range test",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "2nd Association Group Trigger",
-            "description": "Status of the magnet switch that causes sending command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch after Open and Close",
-                    "value": 0
-                },
-                {
-                    "label": "Switch after Open",
-                    "value": 1
-                },
-                {
-                    "label": "Switch after Close",
-                    "value": 2
-                }
-            ]
-        },
-        "6": {
-            "label": "Command Sent to Devices of Association Group 2",
-            "description": "which commands is sent to 2nd Association Group",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "On",
-                    "value": 0
-                },
-                {
-                    "label": "Off",
-                    "value": 1
-                },
-                {
-                    "label": "On and Off",
-                    "value": 2
-                }
-            ]
-        },
-        "7": {
-            "label": "Value sent to 2nd Association Group on On event",
-            "description": "value sent in case of On event",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "value sent to 2nd Association Group on Off event",
-            "description": "value sent in case of Off event",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Time Delay of On command frame",
-            "description": "sent after a delay",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Time Delay of Off command frame",
-            "description": "sent after a delay",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Delay of Tamper Alarm Cancellation",
-            "description": "Time a tamper alarm is delayed in seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Reporting Tamper Alarm Cancellation",
-            "description": "This parameter deﬁnes if the alarm cancellation event is reported",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Do not send Report",
-                    "value": 0
-                },
-                {
-                    "label": "Send Report",
-                    "value": 1
-                }
-            ]
-        },
-        "13": {
-            "label": "Central Scene Event Functionality",
-            "description": "enables/disables the central scene function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "14": {
-            "label": "Tilt Sensor Functionality",
-            "description": "enables/disables the tilt function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "POPE700982",
+	"description": "POPP Door / Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0007"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Sensor Operation Mode",
+			"description": "Iinternal magnet sensor or the external terminal",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Internal Magnet Sensor Used",
+					"value": 0
+				},
+				{
+					"label": "External Terminal Inputs Used",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Sensor State Polarity",
+			"description": "This parameter deﬁnes the polarity of the magnet sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Closed when Magnet in proximity",
+					"value": 0
+				},
+				{
+					"label": "Opened when Magnet in proximity",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Visual LED Indications",
+			"description": "This parameter deﬁnes when the red LED will indicate events",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No Indications",
+					"value": 0
+				},
+				{
+					"label": "Open/Close Status Change",
+					"value": 1
+				},
+				{
+					"label": "Wake Up",
+					"value": 2
+				},
+				{
+					"label": "Device Tampering",
+					"value": 4
+				}
+			]
+		},
+		"4": {
+			"label": "Range Test after double click",
+			"description": "Allows to enable the activation of a Z-Wave range test",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "2nd Association Group Trigger",
+			"description": "Status of the magnet switch that causes sending command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch after Open and Close",
+					"value": 0
+				},
+				{
+					"label": "Switch after Open",
+					"value": 1
+				},
+				{
+					"label": "Switch after Close",
+					"value": 2
+				}
+			]
+		},
+		"6": {
+			"label": "Command Sent to Devices of Association Group 2",
+			"description": "which commands is sent to 2nd Association Group",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On",
+					"value": 0
+				},
+				{
+					"label": "Off",
+					"value": 1
+				},
+				{
+					"label": "On and Off",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Value sent to 2nd Association Group on On event",
+			"description": "value sent in case of On event",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "value sent to 2nd Association Group on Off event",
+			"description": "value sent in case of Off event",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Time Delay of On command frame",
+			"description": "sent after a delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Time Delay of Off command frame",
+			"description": "sent after a delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Delay of Tamper Alarm Cancellation",
+			"description": "Time a tamper alarm is delayed in seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Reporting Tamper Alarm Cancellation",
+			"description": "This parameter deﬁnes if the alarm cancellation event is reported",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do not send Report",
+					"value": 0
+				},
+				{
+					"label": "Send Report",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "Central Scene Event Functionality",
+			"description": "enables/disables the central scene function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Tilt Sensor Functionality",
+			"description": "enables/disables the tilt function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

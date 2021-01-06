@@ -1,26 +1,25 @@
 // Wintop EasyPlug
 // Wall Plug
 {
-    "_approved": true,
-    "manufacturer": "Wintop",
-    "manufacturerId": "0x0097",
-    "label": "EasyPlug",
-    "description": "Wall Plug",
-    "devices": [
-        {
-            "productType": "0x6943",
-            "productId": "0x4501"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Wintop",
+	"manufacturerId": "0x0097",
+	"label": "EasyPlug",
+	"description": "Wall Plug",
+	"devices": [
+		{
+			"productType": "0x6943",
+			"productId": "0x4501"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

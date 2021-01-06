@@ -1,26 +1,18 @@
 // Zipato 0131
 // Door/Window Sensor
 {
-    "_approved": true,
-    "_errors": [
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "No endpoints are configured"
-    ],
-    "manufacturer": "Zipato",
-    "manufacturerId": "0x0131",
-    "label": "0131",
-    "description": "Door/Window Sensor",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x1082"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.80",
-        "max": "3.80"
-    }
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "0131",
+	"description": "Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x1082"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.80",
+		"max": "3.80"
+	}
 }

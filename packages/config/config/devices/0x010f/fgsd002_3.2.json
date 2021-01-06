@@ -1,304 +1,303 @@
 // Fibargroup FGSD002
 // Smoke Detector
 {
-    "_approved": true,
-    "manufacturer": "Fibargroup",
-    "manufacturerId": "0x010f",
-    "label": "FGSD002",
-    "description": "Smoke Detector",
-    "devices": [
-        {
-            "productType": "0x0c02",
-            "productId": "0x1002"
-        },
-        {
-            "productType": "0x0c02",
-            "productId": "0x1003"
-        },
-        {
-            "productType": "0x0c02",
-            "productId": "0x4002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.2",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Smoke Sensor sensitivity",
-            "description": "There are 3 levels of sensitivity to smoke presence.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 2,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "HIGH Sensitivity",
-                    "value": 1
-                },
-                {
-                    "label": "MEDIUM Sensitivity",
-                    "value": 2
-                },
-                {
-                    "label": "LOW Sensitivity",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Z-Wave notifications status",
-            "description": "This parameter allows to activate excess temperature ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Visual indicator notifications status",
-            "description": "This parameter allows to activate visual indications",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "All notifications disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enclosure opening notification enabled",
-                    "value": 1
-                },
-                {
-                    "label": "Exceeding temp threshold notification enabled",
-                    "value": 2
-                },
-                {
-                    "label": "Enclosure opening notification enabled +",
-                    "value": 3
-                },
-                {
-                    "label": "Lack of Z-Wave range notification",
-                    "value": 4
-                },
-                {
-                    "label": "Enclosure opening notification enabled and",
-                    "value": 5
-                },
-                {
-                    "label": "Exceeding temp threshold notification enabled +",
-                    "value": 6
-                },
-                {
-                    "label": "Enclosure opening notification enabled +",
-                    "value": 7
-                }
-            ]
-        },
-        "4": {
-            "label": "Sound notifications status",
-            "description": "This parameter allows to activate sound signals...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "All notifications disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enclosure opening notification enabled",
-                    "value": 1
-                },
-                {
-                    "label": "Exceeding temp threshold notification enabled",
-                    "value": 2
-                },
-                {
-                    "label": "Enclosure opening notification enabled +",
-                    "value": 3
-                },
-                {
-                    "label": "Lack of Z-Wave range notification",
-                    "value": 4
-                },
-                {
-                    "label": "Enclosure opening notification enabled +",
-                    "value": 5
-                },
-                {
-                    "label": "Exceeding temp threshold notification enabled +",
-                    "value": 6
-                },
-                {
-                    "label": "Enclosure opening notification enabled and",
-                    "value": 7
-                }
-            ]
-        },
-        "10": {
-            "label": "Config of control frames in BASIC command class",
-            "description": "This parameter defines which frames will be sent ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "BASIC ON and BASIC OFF enabled",
-                    "value": 0
-                },
-                {
-                    "label": "BASIC ON enabled",
-                    "value": 1
-                },
-                {
-                    "label": "BASIC OFF enabled",
-                    "value": 2
-                }
-            ]
-        },
-        "11": {
-            "label": "BASIC ON frame value",
-            "description": "BASIC ON frame is sent in case of smoke presence detection ...",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "BASIC OFF frame value",
-            "description": "BASIC OFF frame is sent in case of FIRE ALARM cancellation.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Alarm broadcast",
-            "description": "A value other than 0 means that alarms are being ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "broadcast inactive",
-                    "value": 0
-                },
-                {
-                    "label": "FIRE ALARM broadcast 2nd/4th Association Group...",
-                    "value": 1
-                },
-                {
-                    "label": "FIRE ALARM broadcast 2nd/4th Association Group ...",
-                    "value": 2
-                },
-                {
-                    "label": "FIRE ALARM broadcast 2nd/4th Association Group...",
-                    "value": 3
-                }
-            ]
-        },
-        "14": {
-            "label": "Associations in Z-Wave network security mode",
-            "description": "Associations in Z-Wave network security mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Temperature report interval",
-            "description": "Time interval between consecutive temperature reports.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 8640,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "Temperature report hysteresis",
-            "description": "The temperature report will only be sent if there is a difference ...",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 100,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "30": {
-            "label": "Temperature threshold",
-            "description": "Temperature threshold for activating alarms",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 100,
-            "defaultValue": 55,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "31": {
-            "label": "Excess temperature signaling interval",
-            "description": "Time interval of signaling (visual indication/sound) excess ...",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 8640,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "32": {
-            "label": "Lack of Z-Wave range indication interval",
-            "description": "Time interval of signaling (visual indication/sound) lack of ...",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 8640,
-            "defaultValue": 180,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGSD002",
+	"description": "Smoke Detector",
+	"devices": [
+		{
+			"productType": "0x0c02",
+			"productId": "0x1002"
+		},
+		{
+			"productType": "0x0c02",
+			"productId": "0x1003"
+		},
+		{
+			"productType": "0x0c02",
+			"productId": "0x4002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.2",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Smoke Sensor sensitivity",
+			"description": "There are 3 levels of sensitivity to smoke presence.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "HIGH Sensitivity",
+					"value": 1
+				},
+				{
+					"label": "MEDIUM Sensitivity",
+					"value": 2
+				},
+				{
+					"label": "LOW Sensitivity",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Z-Wave notifications status",
+			"description": "This parameter allows to activate excess temperature ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Visual indicator notifications status",
+			"description": "This parameter allows to activate visual indications",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All notifications disabled",
+					"value": 0
+				},
+				{
+					"label": "Enclosure opening notification enabled",
+					"value": 1
+				},
+				{
+					"label": "Exceeding temp threshold notification enabled",
+					"value": 2
+				},
+				{
+					"label": "Enclosure opening notification enabled +",
+					"value": 3
+				},
+				{
+					"label": "Lack of Z-Wave range notification",
+					"value": 4
+				},
+				{
+					"label": "Enclosure opening notification enabled and",
+					"value": 5
+				},
+				{
+					"label": "Exceeding temp threshold notification enabled +",
+					"value": 6
+				},
+				{
+					"label": "Enclosure opening notification enabled +",
+					"value": 7
+				}
+			]
+		},
+		"4": {
+			"label": "Sound notifications status",
+			"description": "This parameter allows to activate sound signals...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All notifications disabled",
+					"value": 0
+				},
+				{
+					"label": "Enclosure opening notification enabled",
+					"value": 1
+				},
+				{
+					"label": "Exceeding temp threshold notification enabled",
+					"value": 2
+				},
+				{
+					"label": "Enclosure opening notification enabled +",
+					"value": 3
+				},
+				{
+					"label": "Lack of Z-Wave range notification",
+					"value": 4
+				},
+				{
+					"label": "Enclosure opening notification enabled +",
+					"value": 5
+				},
+				{
+					"label": "Exceeding temp threshold notification enabled +",
+					"value": 6
+				},
+				{
+					"label": "Enclosure opening notification enabled and",
+					"value": 7
+				}
+			]
+		},
+		"10": {
+			"label": "Config of control frames in BASIC command class",
+			"description": "This parameter defines which frames will be sent ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "BASIC ON and BASIC OFF enabled",
+					"value": 0
+				},
+				{
+					"label": "BASIC ON enabled",
+					"value": 1
+				},
+				{
+					"label": "BASIC OFF enabled",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "BASIC ON frame value",
+			"description": "BASIC ON frame is sent in case of smoke presence detection ...",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "BASIC OFF frame value",
+			"description": "BASIC OFF frame is sent in case of FIRE ALARM cancellation.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Alarm broadcast",
+			"description": "A value other than 0 means that alarms are being ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "broadcast inactive",
+					"value": 0
+				},
+				{
+					"label": "FIRE ALARM broadcast 2nd/4th Association Group...",
+					"value": 1
+				},
+				{
+					"label": "FIRE ALARM broadcast 2nd/4th Association Group ...",
+					"value": 2
+				},
+				{
+					"label": "FIRE ALARM broadcast 2nd/4th Association Group...",
+					"value": 3
+				}
+			]
+		},
+		"14": {
+			"label": "Associations in Z-Wave network security mode",
+			"description": "Associations in Z-Wave network security mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Temperature report interval",
+			"description": "Time interval between consecutive temperature reports.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 8640,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Temperature report hysteresis",
+			"description": "The temperature report will only be sent if there is a difference ...",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"label": "Temperature threshold",
+			"description": "Temperature threshold for activating alarms",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 55,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "Excess temperature signaling interval",
+			"description": "Time interval of signaling (visual indication/sound) excess ...",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 8640,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Lack of Z-Wave range indication interval",
+			"description": "Time interval of signaling (visual indication/sound) lack of ...",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 8640,
+			"defaultValue": 180,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

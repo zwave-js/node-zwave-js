@@ -1,131 +1,130 @@
 // Remotec ZTS-500
 // Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Remotec",
-    "manufacturerId": "0x5254",
-    "label": "ZTS-500",
-    "description": "Thermostat",
-    "devices": [
-        {
-            "productType": "0x0200",
-            "productId": "0x8170"
-        },
-        {
-            "productType": "0x0202",
-            "productId": "0x8170"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Temp. Scale",
-            "description": "0=C, 1=F",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Celsius",
-                    "value": 0
-                },
-                {
-                    "label": "Fahrenheit",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Swing",
-            "description": "1=1F/0.5C  -  4=4F/2C",
-            "unit": "1F / 0.5C",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 4,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "1F / 0.5C",
-                    "value": 1
-                },
-                {
-                    "label": "2F / 1C",
-                    "value": 2
-                },
-                {
-                    "label": "3F / 1.5C",
-                    "value": 3
-                },
-                {
-                    "label": "4F / 2C",
-                    "value": 4
-                }
-            ]
-        },
-        "3": {
-            "label": "Differential",
-            "description": "1=1F/0.5C - 4=4F/2C",
-            "unit": "1F/0.5C",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 4,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "1F / 0.5C",
-                    "value": 1
-                },
-                {
-                    "label": "2F / 1C",
-                    "value": 2
-                },
-                {
-                    "label": "3F / 1.5C",
-                    "value": 3
-                },
-                {
-                    "label": "4F / 2C",
-                    "value": 4
-                }
-            ]
-        },
-        "4": {
-            "label": "Dead Band",
-            "description": "3=3F/1.5C - 6=6F/3C",
-            "unit": "1F/0.5C",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 6,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Temp. Sensor Calibration",
-            "description": "Changes Temp. Display (-10=-10F/-5C - 10=+10F/5C)",
-            "unit": "1F/0.5C",
-            "valueSize": 1,
-            "minValue": -10,
-            "maxValue": 10,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZTS-500",
+	"description": "Thermostat",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x8170"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x8170"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Temp. Scale",
+			"description": "0=C, 1=F",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Swing",
+			"description": "1=1F/0.5C  -  4=4F/2C",
+			"unit": "1F / 0.5C",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "1F / 0.5C",
+					"value": 1
+				},
+				{
+					"label": "2F / 1C",
+					"value": 2
+				},
+				{
+					"label": "3F / 1.5C",
+					"value": 3
+				},
+				{
+					"label": "4F / 2C",
+					"value": 4
+				}
+			]
+		},
+		"3": {
+			"label": "Differential",
+			"description": "1=1F/0.5C - 4=4F/2C",
+			"unit": "1F/0.5C",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "1F / 0.5C",
+					"value": 1
+				},
+				{
+					"label": "2F / 1C",
+					"value": 2
+				},
+				{
+					"label": "3F / 1.5C",
+					"value": 3
+				},
+				{
+					"label": "4F / 2C",
+					"value": 4
+				}
+			]
+		},
+		"4": {
+			"label": "Dead Band",
+			"description": "3=3F/1.5C - 6=6F/3C",
+			"unit": "1F/0.5C",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 6,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Temp. Sensor Calibration",
+			"description": "Changes Temp. Display (-10=-10F/-5C - 10=+10F/5C)",
+			"unit": "1F/0.5C",
+			"valueSize": 1,
+			"minValue": -10,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

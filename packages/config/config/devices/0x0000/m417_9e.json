@@ -1,31 +1,19 @@
 // Sigma Designs (Former Zensys) M417_9E
 // Smart Temperature & Humidity Sensor
 {
-    "_approved": true,
-    "_errors": [
-        "Device category is not set.",
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set",
-        "Wakeup information is not set"
-    ],
-    "manufacturer": "Sigma Designs (Former Zensys)",
-    "manufacturerId": "0x0000",
-    "label": "M417_9E",
-    "description": "Smart Temperature & Humidity Sensor",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0008"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Sigma Designs (Former Zensys)",
+	"manufacturerId": "0x0000",
+	"label": "M417_9E",
+	"description": "Smart Temperature & Humidity Sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0008"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

@@ -1,20 +1,19 @@
 // Locstar Technology Co., Ltd. LS-8015-ZW
 // KAS-600 Z-Wave Electronic Lock
 {
-    "_approved": true,
-    "manufacturer": "Locstar Technology Co., Ltd.",
-    "manufacturerId": "0x015e",
-    "label": "LS-8015-ZW",
-    "description": "KAS-600 Z-Wave Electronic Lock",
-    "devices": [
-        {
-            "productType": "0x8015",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Locstar Technology Co., Ltd.",
+	"manufacturerId": "0x015e",
+	"label": "LS-8015-ZW",
+	"description": "KAS-600 Z-Wave Electronic Lock",
+	"devices": [
+		{
+			"productType": "0x8015",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

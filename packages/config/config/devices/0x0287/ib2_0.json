@@ -1,55 +1,54 @@
 // HAB Home Intelligence, LLC IB2.0
 // Window Blind Controller
 {
-    "_approved": true,
-    "manufacturer": "HAB Home Intelligence, LLC",
-    "manufacturerId": "0x0287",
-    "label": "IB2.0",
-    "description": "Window Blind Controller",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x000d"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Auto Calibration Torque",
-            "description": "Adjust Torque Value for Auto Calibration",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 5,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Calibrate using default torque",
-                    "value": 1
-                },
-                {
-                    "label": "Reduce calibration torque by 1 factor",
-                    "value": 2
-                },
-                {
-                    "label": "Reduce calibration torque by 2 factors",
-                    "value": 3
-                },
-                {
-                    "label": "Increase calibration torque by .5 factor",
-                    "value": 4
-                },
-                {
-                    "label": "Increase calibration torque by 1 factor",
-                    "value": 5
-                }
-            ]
-        }
-    }
+	"manufacturer": "HAB Home Intelligence, LLC",
+	"manufacturerId": "0x0287",
+	"label": "IB2.0",
+	"description": "Window Blind Controller",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x000d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Auto Calibration Torque",
+			"description": "Adjust Torque Value for Auto Calibration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Calibrate using default torque",
+					"value": 1
+				},
+				{
+					"label": "Reduce calibration torque by 1 factor",
+					"value": 2
+				},
+				{
+					"label": "Reduce calibration torque by 2 factors",
+					"value": 3
+				},
+				{
+					"label": "Increase calibration torque by .5 factor",
+					"value": 4
+				},
+				{
+					"label": "Increase calibration torque by 1 factor",
+					"value": 5
+				}
+			]
+		}
+	}
 }

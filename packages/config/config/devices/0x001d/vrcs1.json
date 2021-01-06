@@ -1,26 +1,25 @@
 // Leviton VRCS1
 // 1-Scene Controller
 {
-    "_approved": true,
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRCS1",
-    "description": "1-Scene Controller",
-    "devices": [
-        {
-            "productType": "0x0902",
-            "productId": "0x0215"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group1",
-            "maxNodes": 32,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRCS1",
+	"description": "1-Scene Controller",
+	"devices": [
+		{
+			"productType": "0x0902",
+			"productId": "0x0215"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group1",
+			"maxNodes": 32,
+			"isLifeline": true
+		}
+	}
 }

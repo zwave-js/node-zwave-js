@@ -1,124 +1,123 @@
 // Poly-control Danalock V3-BTZE
 // Z-Wave controlled door lock with Bluetooth Smart
 {
-    "_approved": true,
-    "manufacturer": "Poly-control",
-    "manufacturerId": "0x010e",
-    "label": "Danalock V3-BTZE",
-    "description": "Z-Wave controlled door lock with Bluetooth Smart",
-    "devices": [
-        {
-            "productType": "0x0009",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Twin Assist",
-            "description": "Helps you to lock and unlock your door lock.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "disabled",
-                    "value": 0
-                },
-                {
-                    "label": "enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Hold and Release",
-            "description": "After a unlock operation the lock holds the lock, so the door can be opened",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                }
-            ]
-        },
-        "3": {
-            "label": "Block to block",
-            "description": "The lock will run the motor until it hits resistance.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "BLE Temporary Allowed",
-            "description": "The BLE is enabled for a number of seconds.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "BLE Always Allowed",
-            "description": "BLE Always Allowed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "BLE Always disabled",
-                    "value": 0
-                },
-                {
-                    "label": "BLE Always enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Autolock",
-            "description": "Lock after an unlock.Value is delay in sec before lock is locked again.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Poly-control",
+	"manufacturerId": "0x010e",
+	"label": "Danalock V3-BTZE",
+	"description": "Z-Wave controlled door lock with Bluetooth Smart",
+	"devices": [
+		{
+			"productType": "0x0009",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Twin Assist",
+			"description": "Helps you to lock and unlock your door lock.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disabled",
+					"value": 0
+				},
+				{
+					"label": "enabled",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Hold and Release",
+			"description": "After a unlock operation the lock holds the lock, so the door can be opened",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"3": {
+			"label": "Block to block",
+			"description": "The lock will run the motor until it hits resistance.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "BLE Temporary Allowed",
+			"description": "The BLE is enabled for a number of seconds.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "BLE Always Allowed",
+			"description": "BLE Always Allowed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "BLE Always disabled",
+					"value": 0
+				},
+				{
+					"label": "BLE Always enabled",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Autolock",
+			"description": "Lock after an unlock.Value is delay in sec before lock is locked again.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -6,4 +6,13 @@ module.exports = {
 	useTabs: true,
 	tabWidth: 4,
 	endOfLine: "lf",
+
+	overrides: [
+		{
+			files: "packages/config/**/*.json",
+			options: {
+				printWidth: 120,
+			},
+		},
+	],
 };

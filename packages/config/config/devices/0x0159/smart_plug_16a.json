@@ -1,155 +1,154 @@
 // Qubino Smart Plug 16A
 // Smart Plug
 {
-    "_approved": true,
-    "manufacturer": "Qubino",
-    "manufacturerId": "0x0159",
-    "label": "Smart Plug 16A",
-    "description": "Smart Plug",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0054"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "10": {
-            "label": "Activate / deactivate functions ALL ON / ALL OFF",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "ALL ON disabled, ALL of disabled",
-                    "value": 0
-                },
-                {
-                    "label": "ALL ON disabled, AL OFF active",
-                    "value": 1
-                },
-                {
-                    "label": "ALL ON active, ALL OFF disabled",
-                    "value": 2
-                },
-                {
-                    "label": "ALL ON active, ALL OFF active",
-                    "value": 255
-                }
-            ]
-        },
-        "11": {
-            "label": "Automatic turning OFF relay after set time",
-            "description": "When the relay is turned ON, it automatically turns OFF after the defined time",
-            "unit": "s",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Auto OFF disabled",
-                    "value": 0
-                }
-            ]
-        },
-        "12": {
-            "label": "On automatically with timer",
-            "description": "Turn Smart plug On Automatically with Timer",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Auto ON Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "please delete this option",
-                    "value": 0
-                }
-            ]
-        },
-        "15": {
-            "label": "Timer Settings Unit",
-            "description": "Set Timer Units to Seconds or Milliseconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "timer set in seconds",
-                    "value": 0
-                },
-                {
-                    "label": "timer set in milliseconds",
-                    "value": 1
-                }
-            ]
-        },
-        "30": {
-            "label": "Restore state ofter power failure",
-            "description": "Restore on/off status for Smart plug 16A after power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Restore state after power failure",
-                    "value": 0
-                },
-                {
-                    "label": "Do not restore state after power failure",
-                    "value": 1
-                }
-            ]
-        },
-        "40": {
-            "label": "Treshold Change in Power  for reporting",
-            "description": "Change of power consumption [Watt] reporting threshold",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "41": {
-            "label": "Treshold time for power reporting",
-            "description": "Treshold time for power reporting [Watt]",
-            "unit": "sec",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "Smart Plug 16A",
+	"description": "Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0054"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"10": {
+			"label": "Activate / deactivate functions ALL ON / ALL OFF",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON disabled, ALL of disabled",
+					"value": 0
+				},
+				{
+					"label": "ALL ON disabled, AL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON active, ALL OFF disabled",
+					"value": 2
+				},
+				{
+					"label": "ALL ON active, ALL OFF active",
+					"value": 255
+				}
+			]
+		},
+		"11": {
+			"label": "Automatic turning OFF relay after set time",
+			"description": "When the relay is turned ON, it automatically turns OFF after the defined time",
+			"unit": "s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Auto OFF disabled",
+					"value": 0
+				}
+			]
+		},
+		"12": {
+			"label": "On automatically with timer",
+			"description": "Turn Smart plug On Automatically with Timer",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Auto ON Disabled",
+					"value": 0
+				},
+				{
+					"label": "please delete this option",
+					"value": 0
+				}
+			]
+		},
+		"15": {
+			"label": "Timer Settings Unit",
+			"description": "Set Timer Units to Seconds or Milliseconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "timer set in seconds",
+					"value": 0
+				},
+				{
+					"label": "timer set in milliseconds",
+					"value": 1
+				}
+			]
+		},
+		"30": {
+			"label": "Restore state ofter power failure",
+			"description": "Restore on/off status for Smart plug 16A after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Restore state after power failure",
+					"value": 0
+				},
+				{
+					"label": "Do not restore state after power failure",
+					"value": 1
+				}
+			]
+		},
+		"40": {
+			"label": "Treshold Change in Power  for reporting",
+			"description": "Change of power consumption [Watt] reporting threshold",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41": {
+			"label": "Treshold time for power reporting",
+			"description": "Treshold time for power reporting [Watt]",
+			"unit": "sec",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

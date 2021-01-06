@@ -1,7 +1,6 @@
 // AEON Labs ZW099
 // Smart Dimmer 6
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW099",

@@ -1,7 +1,6 @@
 // ThermoFloor HEATIT Z-RELAY
 // Multipurpose relay
 {
-	"_approved": true,
 	"manufacturer": "ThermoFloor",
 	"manufacturerId": "0x019b",
 	"label": "HEATIT Z-RELAY",

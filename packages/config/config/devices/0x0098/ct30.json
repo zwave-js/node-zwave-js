@@ -1,213 +1,212 @@
 // Radio Thermostat Company of America (RTC) CT30
 // Z-Wave Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Radio Thermostat Company of America (RTC)",
-    "manufacturerId": "0x0098",
-    "label": "CT30",
-    "description": "Z-Wave Thermostat",
-    "devices": [
-        {
-            "productType": "0x0000",
-            "productId": "0x0000"
-        },
-        {
-            "productType": "0x0001",
-            "productId": "0x001e"
-        },
-        {
-            "productType": "0x0001",
-            "productId": "0x00f0"
-        },
-        {
-            "productType": "0x0001",
-            "productId": "0x00ff"
-        },
-        {
-            "productType": "0x1e10",
-            "productId": "0x0158"
-        },
-        {
-            "productType": "0x1e10",
-            "productId": "0x015c"
-        },
-        {
-            "productType": "0x1e12",
-            "productId": "0x015c"
-        },
-        {
-            "productType": "0x1e12",
-            "productId": "0x015e"
-        },
-        {
-            "productType": "0x3200",
-            "productId": "0x015e"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Temperature Reporting Threshold",
-            "description": "Temperature Reporting Threshold",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "0.5°",
-                    "value": 1
-                },
-                {
-                    "label": "1.0°",
-                    "value": 2
-                },
-                {
-                    "label": "1.5°",
-                    "value": 3
-                },
-                {
-                    "label": "2.0°",
-                    "value": 4
-                }
-            ]
-        },
-        "3": {
-            "label": "Utility Lock Enable/Disable",
-            "description": "Utility Lock Enable/Disable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Utility lock disable",
-                    "value": 0
-                },
-                {
-                    "label": "Utility lock enable",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Humidity Reporting Threshold",
-            "description": "Humidity Reporting Threshold",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "3% RH",
-                    "value": 1
-                },
-                {
-                    "label": "5% RH",
-                    "value": 2
-                },
-                {
-                    "label": "10%RH",
-                    "value": 3
-                }
-            ]
-        },
-        "6": {
-            "label": "Auxiliary/Emergency",
-            "description": "Auxiliary/Emergency",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Auxiliary/Emergency heat disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Auxiliary/Emergency heat enable",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Thermostat Swing Temperature",
-            "description": "Thermostat Swing Temperature",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "0.05F",
-                    "value": 1
-                },
-                {
-                    "label": "0.1F",
-                    "value": 2
-                },
-                {
-                    "label": "4F",
-                    "value": 8
-                }
-            ]
-        },
-        "8": {
-            "label": "Thermostat Diff Temperature",
-            "description": "Thermostat Diff Temperature",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 4,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "2.0 F",
-                    "value": 4
-                },
-                {
-                    "label": "4.0 F",
-                    "value": 8
-                },
-                {
-                    "label": "6.0 F",
-                    "value": 12
-                }
-            ]
-        }
-    }
+	"manufacturer": "Radio Thermostat Company of America (RTC)",
+	"manufacturerId": "0x0098",
+	"label": "CT30",
+	"description": "Z-Wave Thermostat",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0000"
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x001e"
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x00f0"
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x00ff"
+		},
+		{
+			"productType": "0x1e10",
+			"productId": "0x0158"
+		},
+		{
+			"productType": "0x1e10",
+			"productId": "0x015c"
+		},
+		{
+			"productType": "0x1e12",
+			"productId": "0x015c"
+		},
+		{
+			"productType": "0x1e12",
+			"productId": "0x015e"
+		},
+		{
+			"productType": "0x3200",
+			"productId": "0x015e"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Temperature Reporting Threshold",
+			"description": "Temperature Reporting Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "0.5°",
+					"value": 1
+				},
+				{
+					"label": "1.0°",
+					"value": 2
+				},
+				{
+					"label": "1.5°",
+					"value": 3
+				},
+				{
+					"label": "2.0°",
+					"value": 4
+				}
+			]
+		},
+		"3": {
+			"label": "Utility Lock Enable/Disable",
+			"description": "Utility Lock Enable/Disable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Utility lock disable",
+					"value": 0
+				},
+				{
+					"label": "Utility lock enable",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Humidity Reporting Threshold",
+			"description": "Humidity Reporting Threshold",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "3% RH",
+					"value": 1
+				},
+				{
+					"label": "5% RH",
+					"value": 2
+				},
+				{
+					"label": "10%RH",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Auxiliary/Emergency",
+			"description": "Auxiliary/Emergency",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Auxiliary/Emergency heat disabled",
+					"value": 0
+				},
+				{
+					"label": "Auxiliary/Emergency heat enable",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Thermostat Swing Temperature",
+			"description": "Thermostat Swing Temperature",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0.05F",
+					"value": 1
+				},
+				{
+					"label": "0.1F",
+					"value": 2
+				},
+				{
+					"label": "4F",
+					"value": 8
+				}
+			]
+		},
+		"8": {
+			"label": "Thermostat Diff Temperature",
+			"description": "Thermostat Diff Temperature",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "2.0 F",
+					"value": 4
+				},
+				{
+					"label": "4.0 F",
+					"value": 8
+				},
+				{
+					"label": "6.0 F",
+					"value": 12
+				}
+			]
+		}
+	}
 }

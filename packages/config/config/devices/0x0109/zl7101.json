@@ -1,19 +1,18 @@
 // Vision Security ZL7101
 // Lamp Dimmer Module
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZL7101",
-    "description": "Lamp Dimmer Module",
-    "devices": [
-        {
-            "productType": "0x2008",
-            "productId": "0x0801"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZL7101",
+	"description": "Lamp Dimmer Module",
+	"devices": [
+		{
+			"productType": "0x2008",
+			"productId": "0x0801"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

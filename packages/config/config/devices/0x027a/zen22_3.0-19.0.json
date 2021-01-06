@@ -1,224 +1,223 @@
 // Zooz ZEN22
 // Dimmer Paddle Switch
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN22",
-    "description": "Dimmer Paddle Switch",
-    "devices": [
-        {
-            "productType": "0xb112",
-            "productId": "0x1f1c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.0",
-        "max": "19.0"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Paddle Control",
-            "description": "Choose Paddle Functionality",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Upper paddle turns on, lower paddle turns off",
-                    "value": 0
-                },
-                {
-                    "label": "Upper paddle turns off, lower paddle turns on",
-                    "value": 1
-                },
-                {
-                    "label": "Any paddle turns on/off",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "LED Indicator Control",
-            "description": "Choose LED Functionality",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED on when switch off, LED off when switch off",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when switch on, LED off when switch off",
-                    "value": 1
-                },
-                {
-                    "label": "LED always OFF",
-                    "value": 2
-                },
-                {
-                    "label": "LED always ON",
-                    "value": 3
-                }
-            ]
-        },
-        "3": {
-            "label": "Auto Turn-off enable/disable",
-            "description": "Auto Turn-off enable/disable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Timer enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Auto Turn-off time",
-            "description": "Auto Turn-off time",
-            "unit": "minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Auto Turn-on enable/disable",
-            "description": "Auto Turn-on enable/disable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Timer enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Auto Turn-on time",
-            "description": "Auto Turn-on time",
-            "unit": "minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Status after Power failure",
-            "description": "Status after Power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "forced to OFF",
-                    "value": 0
-                },
-                {
-                    "label": "forced to ON",
-                    "value": 1
-                },
-                {
-                    "label": "restore prior status",
-                    "value": 2
-                }
-            ]
-        },
-        "9": {
-            "label": "Dimmer Ramp Rate",
-            "description": "Dimmer Ramp Rate",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Minimum brightness level",
-            "description": "Minimum brightness level",
-            "unit": "percent",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Maximum brightness level",
-            "description": "Maximum brightness level",
-            "unit": "percent",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Double Tap function",
-            "description": "Double Tap function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Full brightness (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Brightness set in parameter 11",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN22",
+	"description": "Dimmer Paddle Switch",
+	"devices": [
+		{
+			"productType": "0xb112",
+			"productId": "0x1f1c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.0",
+		"max": "19.0"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Paddle Control",
+			"description": "Choose Paddle Functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Upper paddle turns on, lower paddle turns off",
+					"value": 0
+				},
+				{
+					"label": "Upper paddle turns off, lower paddle turns on",
+					"value": 1
+				},
+				{
+					"label": "Any paddle turns on/off",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "LED Indicator Control",
+			"description": "Choose LED Functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when switch off, LED off when switch off",
+					"value": 0
+				},
+				{
+					"label": "LED on when switch on, LED off when switch off",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				},
+				{
+					"label": "LED always ON",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Auto Turn-off enable/disable",
+			"description": "Auto Turn-off enable/disable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Auto Turn-off time",
+			"description": "Auto Turn-off time",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Auto Turn-on enable/disable",
+			"description": "Auto Turn-on enable/disable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer disabled",
+					"value": 0
+				},
+				{
+					"label": "Timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Auto Turn-on time",
+			"description": "Auto Turn-on time",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Status after Power failure",
+			"description": "Status after Power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "forced to OFF",
+					"value": 0
+				},
+				{
+					"label": "forced to ON",
+					"value": 1
+				},
+				{
+					"label": "restore prior status",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Dimmer Ramp Rate",
+			"description": "Dimmer Ramp Rate",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Minimum brightness level",
+			"description": "Minimum brightness level",
+			"unit": "percent",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Maximum brightness level",
+			"description": "Maximum brightness level",
+			"unit": "percent",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Double Tap function",
+			"description": "Double Tap function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Full brightness (default)",
+					"value": 0
+				},
+				{
+					"label": "Brightness set in parameter 11",
+					"value": 1
+				}
+			]
+		}
+	}
 }

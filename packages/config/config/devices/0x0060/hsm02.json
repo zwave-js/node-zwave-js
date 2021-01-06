@@ -1,7 +1,6 @@
 // Everspring HSM02
 // Door/Window Contact
 {
-	"_approved": true,
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
 	"label": "HSM02",

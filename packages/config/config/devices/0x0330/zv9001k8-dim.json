@@ -1,24 +1,19 @@
 // Sunricher ZV9001K8-DIM
 // 4 group single color wall mounted remote
 {
-    "_approved": true,
-    "_warnings": [
-        "Wakeup information is not set",
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Sunricher",
-    "manufacturerId": "0x0330",
-    "label": "ZV9001K8-DIM",
-    "description": "4 group single color wall mounted remote",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0xa305"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Sunricher",
+	"manufacturerId": "0x0330",
+	"label": "ZV9001K8-DIM",
+	"description": "4 group single color wall mounted remote",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0xa305"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

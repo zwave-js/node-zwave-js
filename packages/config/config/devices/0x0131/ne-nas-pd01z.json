@@ -1,123 +1,122 @@
 // Zipato NE-NAS-PD01Z
 // PIR motion sensor and light measurement
 {
-    "_approved": true,
-    "manufacturer": "Zipato",
-    "manufacturerId": "0x0131",
-    "label": "NE-NAS-PD01Z",
-    "description": "PIR motion sensor and light measurement",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x1089"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Sensitivity level",
-            "description": "8 = Highest sensitivity, 255 = lowest sesitivity",
-            "valueSize": 1,
-            "minValue": 8,
-            "maxValue": 255,
-            "defaultValue": 12,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "ON / OFF Duration",
-            "description": "How long should the associated devices have ON status.",
-            "valueSize": 2,
-            "minValue": 5,
-            "maxValue": 600,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "BASIC SET Level",
-            "description": "BASIC SET LEVEL",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "PIR detection ENABLED / DISABLED",
-            "description": "Enable og disable the PIR sensor",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Ambent illumination LUX level",
-            "description": "Lux value which determines when the light sensor is activated",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1000,
-            "defaultValue": 100,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Re-Trigger Interval",
-            "description": "Adjust the interval of being re-triggered",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 8,
-            "defaultValue": 8,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Light sensor polling interval",
-            "description": "How often should ambient illumination be evaluated",
-            "valueSize": 2,
-            "minValue": 60,
-            "maxValue": 3600,
-            "defaultValue": 180,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "LUX level function enable",
-            "description": "See overview",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Ambient illumination report",
-            "description": "when lux changes by the number in this setting it is reported",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1000,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "NE-NAS-PD01Z",
+	"description": "PIR motion sensor and light measurement",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x1089"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Sensitivity level",
+			"description": "8 = Highest sensitivity, 255 = lowest sesitivity",
+			"valueSize": 1,
+			"minValue": 8,
+			"maxValue": 255,
+			"defaultValue": 12,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "ON / OFF Duration",
+			"description": "How long should the associated devices have ON status.",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 600,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "BASIC SET Level",
+			"description": "BASIC SET LEVEL",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "PIR detection ENABLED / DISABLED",
+			"description": "Enable og disable the PIR sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Ambent illumination LUX level",
+			"description": "Lux value which determines when the light sensor is activated",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Re-Trigger Interval",
+			"description": "Adjust the interval of being re-triggered",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Light sensor polling interval",
+			"description": "How often should ambient illumination be evaluated",
+			"valueSize": 2,
+			"minValue": 60,
+			"maxValue": 3600,
+			"defaultValue": 180,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "LUX level function enable",
+			"description": "See overview",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Ambient illumination report",
+			"description": "when lux changes by the number in this setting it is reported",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

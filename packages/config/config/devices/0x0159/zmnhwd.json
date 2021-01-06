@@ -1,401 +1,397 @@
 // Qubino ZMNHWD
 // Qubino Flush RGBW Dimmer
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Qubino",
-    "manufacturerId": "0x0159",
-    "label": "ZMNHWD",
-    "description": "Qubino Flush RGBW Dimmer",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0054"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Input IN1 configuration",
-            "description": "Input IN1 configuration",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NORMAL mode – momentary switch type",
-                    "value": 1
-                },
-                {
-                    "label": "NORMAL mode – toggle switch type",
-                    "value": 2
-                },
-                {
-                    "label": "NORMAL mode – toggle with memory switch type",
-                    "value": 3
-                },
-                {
-                    "label": "BRIGHTNESS mode – momentary switch type",
-                    "value": 4
-                },
-                {
-                    "label": "BRIGHTNESS mode – toggle switch type",
-                    "value": 5
-                },
-                {
-                    "label": "BRIGHTNESS mode – toggle with memory switch type",
-                    "value": 6
-                },
-                {
-                    "label": "RAINBOW mode – momentary switch type",
-                    "value": 7
-                },
-                {
-                    "label": "SCENE mode – momentary switch type",
-                    "value": 8
-                },
-                {
-                    "label": "SCENE mode – toggle switch type",
-                    "value": 9
-                },
-                {
-                    "label": "SCENE mode – toggle with memory switch type",
-                    "value": 10
-                }
-            ]
-        },
-        "2": {
-            "label": "Input IN2 configuration",
-            "description": "Input IN2 configuration",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 7,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NORMAL mode – momentary switch type",
-                    "value": 1
-                },
-                {
-                    "label": "NORMAL mode – toggle switch type",
-                    "value": 2
-                },
-                {
-                    "label": "NORMAL mode – toggle with memory switch type",
-                    "value": 3
-                },
-                {
-                    "label": "BRIGHTNESS mode – momentary switch type",
-                    "value": 4
-                },
-                {
-                    "label": "BRIGHTNESS mode – toggle switch type",
-                    "value": 5
-                },
-                {
-                    "label": "BRIGHTNESS – toggle with memory switch",
-                    "value": 6
-                },
-                {
-                    "label": "RAINBOW mode – momentary switch type",
-                    "value": 7
-                },
-                {
-                    "label": "SCENE mode – momentary switch type",
-                    "value": 8
-                },
-                {
-                    "label": "SCENE mode – toggle switch type",
-                    "value": 9
-                },
-                {
-                    "label": "SCENE mode – toggle with memory switch type",
-                    "value": 10
-                }
-            ]
-        },
-        "3": {
-            "label": "Input IN3 configuration",
-            "description": "Input IN3 configuration",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 8,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NORMAL mode – momentary switch type",
-                    "value": 1
-                },
-                {
-                    "label": "NORMAL mode – toggle switch type",
-                    "value": 2
-                },
-                {
-                    "label": "NORMAL mode – toggle with memory switch type",
-                    "value": 3
-                },
-                {
-                    "label": "BRIGHTNESS mode – momentary switch type",
-                    "value": 4
-                },
-                {
-                    "label": "BRIGHTNESS mode – toggle switch type",
-                    "value": 5
-                },
-                {
-                    "label": "BRIGHTNESS mode – toggle with memory switch type",
-                    "value": 6
-                },
-                {
-                    "label": "RAINBOW mode – momentary switch type",
-                    "value": 7
-                },
-                {
-                    "label": "SCENE mode – momentary switch type",
-                    "value": 8
-                },
-                {
-                    "label": "SCENE mode – toggle switch type",
-                    "value": 9
-                },
-                {
-                    "label": "SCENE mode – toggle with memory switch type",
-                    "value": 10
-                }
-            ]
-        },
-        "4": {
-            "label": "Input IN4 configuration",
-            "description": "Input IN4 configuration",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NORMAL mode – momentary switch type",
-                    "value": 1
-                },
-                {
-                    "label": "NORMAL mode – toggle switch type",
-                    "value": 2
-                },
-                {
-                    "label": "NORMAL mode – toggle with memory switch type",
-                    "value": 3
-                },
-                {
-                    "label": "BRIGHTNESS mode – momentary switch type",
-                    "value": 4
-                },
-                {
-                    "label": "BRIGHTNESS mode – toggle switch type",
-                    "value": 5
-                },
-                {
-                    "label": "BRIGHTNESS mode – toggle with memory switch type",
-                    "value": 6
-                },
-                {
-                    "label": "RAINBOW mode – momentary switch type",
-                    "value": 7
-                },
-                {
-                    "label": "SCENE mode – momentary switch type",
-                    "value": 8
-                },
-                {
-                    "label": "SCENE mode – toggle switch type",
-                    "value": 9
-                },
-                {
-                    "label": "SCENE mode – toggle with memory switch type",
-                    "value": 10
-                }
-            ]
-        },
-        "5": {
-            "label": "Auto scene mode set",
-            "description": "Activation of the programmed scene changing color shades.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Ocean",
-                    "value": 1
-                },
-                {
-                    "label": "Lightning",
-                    "value": 2
-                },
-                {
-                    "label": "Rainbow",
-                    "value": 3
-                },
-                {
-                    "label": "Snow",
-                    "value": 4
-                },
-                {
-                    "label": "Romantic",
-                    "value": 5
-                },
-                {
-                    "label": "Party scene",
-                    "value": 6
-                }
-            ]
-        },
-        "6": {
-            "label": "Auto Scene Mode",
-            "description": "Duration between Colour change",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 1127,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Memorize device status at power cut",
-            "description": "Device will be set to status memorized before power cut.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Do not memorize",
-                    "value": 0
-                },
-                {
-                    "label": "Memorize",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Automatic turning off output after set time",
-            "description": "Automatic turning off output after set time",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32536,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Automatic turning on output after set time",
-            "description": "Automatic turning on output after set time",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32536,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "MAX dimming value",
-            "description": "MAX dimming value",
-            "valueSize": 1,
-            "minValue": 2,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "MIN dimming value",
-            "description": "MIN dimming value",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 98,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Dimming time (soft on/off)",
-            "description": "Dimming time (soft on/off)",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 25,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Dimming time when key pressed",
-            "description": "Dimming time when key pressed",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 127,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "4 Dimmers mode",
-            "description": "4 Dimmers mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Four dimmers mode disabled",
-                    "value": 0
-                },
-                {
-                    "label": "4 dimmers mode – momentary switch type",
-                    "value": 1
-                },
-                {
-                    "label": "4 dimmers mode – toggle switch",
-                    "value": 2
-                },
-                {
-                    "label": "4 dimmers mode – toggle with memory switch",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHWD",
+	"description": "Qubino Flush RGBW Dimmer",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0054"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Input IN1 configuration",
+			"description": "Input IN1 configuration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NORMAL mode – momentary switch type",
+					"value": 1
+				},
+				{
+					"label": "NORMAL mode – toggle switch type",
+					"value": 2
+				},
+				{
+					"label": "NORMAL mode – toggle with memory switch type",
+					"value": 3
+				},
+				{
+					"label": "BRIGHTNESS mode – momentary switch type",
+					"value": 4
+				},
+				{
+					"label": "BRIGHTNESS mode – toggle switch type",
+					"value": 5
+				},
+				{
+					"label": "BRIGHTNESS mode – toggle with memory switch type",
+					"value": 6
+				},
+				{
+					"label": "RAINBOW mode – momentary switch type",
+					"value": 7
+				},
+				{
+					"label": "SCENE mode – momentary switch type",
+					"value": 8
+				},
+				{
+					"label": "SCENE mode – toggle switch type",
+					"value": 9
+				},
+				{
+					"label": "SCENE mode – toggle with memory switch type",
+					"value": 10
+				}
+			]
+		},
+		"2": {
+			"label": "Input IN2 configuration",
+			"description": "Input IN2 configuration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 7,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NORMAL mode – momentary switch type",
+					"value": 1
+				},
+				{
+					"label": "NORMAL mode – toggle switch type",
+					"value": 2
+				},
+				{
+					"label": "NORMAL mode – toggle with memory switch type",
+					"value": 3
+				},
+				{
+					"label": "BRIGHTNESS mode – momentary switch type",
+					"value": 4
+				},
+				{
+					"label": "BRIGHTNESS mode – toggle switch type",
+					"value": 5
+				},
+				{
+					"label": "BRIGHTNESS – toggle with memory switch",
+					"value": 6
+				},
+				{
+					"label": "RAINBOW mode – momentary switch type",
+					"value": 7
+				},
+				{
+					"label": "SCENE mode – momentary switch type",
+					"value": 8
+				},
+				{
+					"label": "SCENE mode – toggle switch type",
+					"value": 9
+				},
+				{
+					"label": "SCENE mode – toggle with memory switch type",
+					"value": 10
+				}
+			]
+		},
+		"3": {
+			"label": "Input IN3 configuration",
+			"description": "Input IN3 configuration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NORMAL mode – momentary switch type",
+					"value": 1
+				},
+				{
+					"label": "NORMAL mode – toggle switch type",
+					"value": 2
+				},
+				{
+					"label": "NORMAL mode – toggle with memory switch type",
+					"value": 3
+				},
+				{
+					"label": "BRIGHTNESS mode – momentary switch type",
+					"value": 4
+				},
+				{
+					"label": "BRIGHTNESS mode – toggle switch type",
+					"value": 5
+				},
+				{
+					"label": "BRIGHTNESS mode – toggle with memory switch type",
+					"value": 6
+				},
+				{
+					"label": "RAINBOW mode – momentary switch type",
+					"value": 7
+				},
+				{
+					"label": "SCENE mode – momentary switch type",
+					"value": 8
+				},
+				{
+					"label": "SCENE mode – toggle switch type",
+					"value": 9
+				},
+				{
+					"label": "SCENE mode – toggle with memory switch type",
+					"value": 10
+				}
+			]
+		},
+		"4": {
+			"label": "Input IN4 configuration",
+			"description": "Input IN4 configuration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NORMAL mode – momentary switch type",
+					"value": 1
+				},
+				{
+					"label": "NORMAL mode – toggle switch type",
+					"value": 2
+				},
+				{
+					"label": "NORMAL mode – toggle with memory switch type",
+					"value": 3
+				},
+				{
+					"label": "BRIGHTNESS mode – momentary switch type",
+					"value": 4
+				},
+				{
+					"label": "BRIGHTNESS mode – toggle switch type",
+					"value": 5
+				},
+				{
+					"label": "BRIGHTNESS mode – toggle with memory switch type",
+					"value": 6
+				},
+				{
+					"label": "RAINBOW mode – momentary switch type",
+					"value": 7
+				},
+				{
+					"label": "SCENE mode – momentary switch type",
+					"value": 8
+				},
+				{
+					"label": "SCENE mode – toggle switch type",
+					"value": 9
+				},
+				{
+					"label": "SCENE mode – toggle with memory switch type",
+					"value": 10
+				}
+			]
+		},
+		"5": {
+			"label": "Auto scene mode set",
+			"description": "Activation of the programmed scene changing color shades.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ocean",
+					"value": 1
+				},
+				{
+					"label": "Lightning",
+					"value": 2
+				},
+				{
+					"label": "Rainbow",
+					"value": 3
+				},
+				{
+					"label": "Snow",
+					"value": 4
+				},
+				{
+					"label": "Romantic",
+					"value": 5
+				},
+				{
+					"label": "Party scene",
+					"value": 6
+				}
+			]
+		},
+		"6": {
+			"label": "Auto Scene Mode",
+			"description": "Duration between Colour change",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1127,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Memorize device status at power cut",
+			"description": "Device will be set to status memorized before power cut.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do not memorize",
+					"value": 0
+				},
+				{
+					"label": "Memorize",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Automatic turning off output after set time",
+			"description": "Automatic turning off output after set time",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32536,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Automatic turning on output after set time",
+			"description": "Automatic turning on output after set time",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32536,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "MAX dimming value",
+			"description": "MAX dimming value",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "MIN dimming value",
+			"description": "MIN dimming value",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 98,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Dimming time (soft on/off)",
+			"description": "Dimming time (soft on/off)",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 25,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Dimming time when key pressed",
+			"description": "Dimming time when key pressed",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 127,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "4 Dimmers mode",
+			"description": "4 Dimmers mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Four dimmers mode disabled",
+					"value": 0
+				},
+				{
+					"label": "4 dimmers mode – momentary switch type",
+					"value": 1
+				},
+				{
+					"label": "4 dimmers mode – toggle switch",
+					"value": 2
+				},
+				{
+					"label": "4 dimmers mode – toggle with memory switch",
+					"value": 3
+				}
+			]
+		}
+	}
 }

@@ -1,26 +1,25 @@
 // McoHome Technology Co., Ltd. MH6-HP
 // Programmable Thermostat
 {
-    "_approved": true,
-    "manufacturer": "McoHome Technology Co., Ltd.",
-    "manufacturerId": "0x015f",
-    "label": "MH6-HP",
-    "description": "Programmable Thermostat",
-    "devices": [
-        {
-            "productType": "0x0604",
-            "productId": "0x0101"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Report",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH6-HP",
+	"description": "Programmable Thermostat",
+	"devices": [
+		{
+			"productType": "0x0604",
+			"productId": "0x0101"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Report",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }

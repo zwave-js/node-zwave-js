@@ -1,26 +1,25 @@
 // Eaton RF9500
 // Battery Switch
 {
-    "_approved": true,
-    "manufacturer": "Eaton",
-    "manufacturerId": "0x001a",
-    "label": "RF9500",
-    "description": "Battery Switch",
-    "devices": [
-        {
-            "productType": "0x5342",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RF9500",
+	"description": "Battery Switch",
+	"devices": [
+		{
+			"productType": "0x5342",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

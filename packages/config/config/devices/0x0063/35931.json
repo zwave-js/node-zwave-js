@@ -1,65 +1,64 @@
 // Jasco Products 35931
 // Enbrighten 60W Dimmable Light Bulb
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "35931",
-    "description": "Enbrighten 60W Dimmable Light Bulb",
-    "devices": [
-        {
-            "productType": "0x4c42",
-            "productId": "0x3031"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Dim level when light is turned ON",
-            "description": "Dim level when light is turned ON",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Full brightness",
-                    "value": 0
-                },
-                {
-                    "label": "Last brightness setting",
-                    "value": 1
-                }
-            ]
-        },
-        "9": {
-            "label": "Dimming/Brightening Step Level",
-            "description": "Dimming/Brightening Step Level",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Dimming/Brightening Step Timing",
-            "description": "Dimming/Brightening Step Timing",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "35931",
+	"description": "Enbrighten 60W Dimmable Light Bulb",
+	"devices": [
+		{
+			"productType": "0x4c42",
+			"productId": "0x3031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Dim level when light is turned ON",
+			"description": "Dim level when light is turned ON",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Full brightness",
+					"value": 0
+				},
+				{
+					"label": "Last brightness setting",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Dimming/Brightening Step Level",
+			"description": "Dimming/Brightening Step Level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dimming/Brightening Step Timing",
+			"description": "Dimming/Brightening Step Timing",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

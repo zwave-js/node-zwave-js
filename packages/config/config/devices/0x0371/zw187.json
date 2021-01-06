@@ -1,211 +1,210 @@
 // Aeotec ZW187
 // Recessed Door Sensor 7
 {
-    "_approved": true,
-    "manufacturer": "Aeotec Ltd.",
-    "manufacturerId": "0x0371",
-    "label": "ZW187",
-    "description": "Recessed Door Sensor 7",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x00bb"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Lifeline group. (1) Device Reset Locally Notification: Issued when Factory Reset is performed. (2) Battery Report: lssued periodically to report the current battery level; lssued when battery becomes low. (3) Sensor Binary Report: Issued when Magnet is away or near. (4) Notification Report (Type=0x06; Event=0x16): Issued when sensor state is changed to be Open Status. (5) Notification Report (Type=0x06; Event=0x17): Issued when sensor state is changed to be Close Status. (6) Notification Report (Type=0x08; Event-0x01): Issued when battery voltage change exceeds 20%. (7) Notification Report (Type-0x09; Event=0x04; Param=0x55): Issued when reset due to Watch-Dog Timeout.",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "On/Off control (Access)",
-            "description": "Issue Basic Set when magnet is away or near. (The Basic Set Value is determined by Confiquration Parameter 3)",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Binary Sensor Report",
-            "description": "Enable/Disable Binary Sensor Report. Allow for backward compatibility to report Binary if Notification Report cannot be used for status changes. When enabled the Sensor Binary Report will NOT be issued via Lifeline when the magnet is away or near. When disabled the Sensor Binary Report will be issued via Lifeline when the magnet is away or near.",
-            "unsigned": true,
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Reverse Sensor Reports",
-            "description": "Reverse both Sensor Binary Report and Notification Report.",
-            "unsigned": true,
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Open when magnet is away, close when magnet is near.",
-                    "value": 0
-                },
-                {
-                    "label": "Closed when magnet is away, open when magnet is near.",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Association Group 2 Settings",
-            "description": "Configure the Basic Set value. Determine the Basic Set value to control other Z-Wave devices directly when magnet is away or near.",
-            "unsigned": true,
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable completely.",
-                    "value": 0
-                },
-                {
-                    "label": "Send Basic Set 0xFF when magnet is away and 0x00 when magnet is near",
-                    "value": 1
-                },
-                {
-                    "label": "Send Basic Set 0x00 when magnet is away and 0xFF when magnet is near",
-                    "value": 2
-                },
-                {
-                    "label": "Only send Basic Set 0xFF when magnet is away",
-                    "value": 3
-                },
-                {
-                    "label": "Only send Basic Set 0x00 when magnet is near",
-                    "value": 4
-                },
-                {
-                    "label": "Only send Basic Set 0x00 when magnet is away",
-                    "value": 5
-                },
-                {
-                    "label": "Only send Basic Set 0xFF when magnet is near",
-                    "value": 6
-                }
-            ]
-        },
-        "4[0xff00]": {
-            "label": "Application Layer Retry Max Retries",
-            "description": "Configure max number of retries from 0-5. 0 means disabled. The device supports an application level retry mechanism when the application of the device has detected a transmission error when Basic Set, Sensor Binary Report or Notification Report (Access Control) message is sent but fails to result in an ACK or Supervision Report.",
-            "unsigned": true,
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4[0x00ff]": {
-            "label": "Application Layer Retry Wait Time",
-            "description": "Valid value 0-255. Unit is 100ms",
-            "unsigned": true,
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Supervision Report Wait Time",
-            "description": "Unit is 100ms. Note: Issuing Basic Set, Sensor Binary Report or Notification Report (Access Control) via associatioon groups uses Supervision encapsulation only if sending commands with S2 (or higher security) encapsulation In other words, this parameter can be configured in any network, but works only in S2 (or higher security) network.",
-            "unsigned": true,
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 50,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "81": {
-            "label": "LED Indicator",
-            "description": "Configure whether the LED will flash or not when sending Basic Set, Sensor Binary Report, Notification Report (Access Control) or Wake Up Notification.",
-            "unsigned": true,
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Completely disable LED.",
-                    "value": 0
-                },
-                {
-                    "label": "LED quickly flashes only when sending the Basic Set, Sensor Binary Report or Notification Report (Access Control).",
-                    "value": 1
-                },
-                {
-                    "label": "LED activates only when sending Wake Up Notification.",
-                    "value": 2
-                },
-                {
-                    "label": "LED quickly flashes when sending Basic Set, Sensor Binary Report or Notification Report (Access Control), and activates when sending Wake Up Notification.",
-                    "value": 3
-                }
-            ]
-        },
-        "90": {
-            "label": "Low battery threshold",
-            "description": "Configure the low battery threshold percentage from 10-50. Induces battery report when battery level is less than or equal to threshold. Forward low battery report.",
-            "unsigned": true,
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 50,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "101": {
-            "label": "Timed battery report",
-            "description": "Configure timed battery report from 1-14400. Sets how often battery state is reported in minutes.",
-            "unsigned": true,
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 14400,
-            "defaultValue": 70,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZW187",
+	"description": "Recessed Door Sensor 7",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x00bb"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"description": "Lifeline group. (1) Device Reset Locally Notification: Issued when Factory Reset is performed. (2) Battery Report: lssued periodically to report the current battery level; lssued when battery becomes low. (3) Sensor Binary Report: Issued when Magnet is away or near. (4) Notification Report (Type=0x06; Event=0x16): Issued when sensor state is changed to be Open Status. (5) Notification Report (Type=0x06; Event=0x17): Issued when sensor state is changed to be Close Status. (6) Notification Report (Type=0x08; Event-0x01): Issued when battery voltage change exceeds 20%. (7) Notification Report (Type-0x09; Event=0x04; Param=0x55): Issued when reset due to Watch-Dog Timeout.",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off control (Access)",
+			"description": "Issue Basic Set when magnet is away or near. (The Basic Set Value is determined by Confiquration Parameter 3)",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Binary Sensor Report",
+			"description": "Enable/Disable Binary Sensor Report. Allow for backward compatibility to report Binary if Notification Report cannot be used for status changes. When enabled the Sensor Binary Report will NOT be issued via Lifeline when the magnet is away or near. When disabled the Sensor Binary Report will be issued via Lifeline when the magnet is away or near.",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Reverse Sensor Reports",
+			"description": "Reverse both Sensor Binary Report and Notification Report.",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Open when magnet is away, close when magnet is near.",
+					"value": 0
+				},
+				{
+					"label": "Closed when magnet is away, open when magnet is near.",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Association Group 2 Settings",
+			"description": "Configure the Basic Set value. Determine the Basic Set value to control other Z-Wave devices directly when magnet is away or near.",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable completely.",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Set 0xFF when magnet is away and 0x00 when magnet is near",
+					"value": 1
+				},
+				{
+					"label": "Send Basic Set 0x00 when magnet is away and 0xFF when magnet is near",
+					"value": 2
+				},
+				{
+					"label": "Only send Basic Set 0xFF when magnet is away",
+					"value": 3
+				},
+				{
+					"label": "Only send Basic Set 0x00 when magnet is near",
+					"value": 4
+				},
+				{
+					"label": "Only send Basic Set 0x00 when magnet is away",
+					"value": 5
+				},
+				{
+					"label": "Only send Basic Set 0xFF when magnet is near",
+					"value": 6
+				}
+			]
+		},
+		"4[0xff00]": {
+			"label": "Application Layer Retry Max Retries",
+			"description": "Configure max number of retries from 0-5. 0 means disabled. The device supports an application level retry mechanism when the application of the device has detected a transmission error when Basic Set, Sensor Binary Report or Notification Report (Access Control) message is sent but fails to result in an ACK or Supervision Report.",
+			"unsigned": true,
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4[0x00ff]": {
+			"label": "Application Layer Retry Wait Time",
+			"description": "Valid value 0-255. Unit is 100ms",
+			"unsigned": true,
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Supervision Report Wait Time",
+			"description": "Unit is 100ms. Note: Issuing Basic Set, Sensor Binary Report or Notification Report (Access Control) via associatioon groups uses Supervision encapsulation only if sending commands with S2 (or higher security) encapsulation In other words, this parameter can be configured in any network, but works only in S2 (or higher security) network.",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"81": {
+			"label": "LED Indicator",
+			"description": "Configure whether the LED will flash or not when sending Basic Set, Sensor Binary Report, Notification Report (Access Control) or Wake Up Notification.",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Completely disable LED.",
+					"value": 0
+				},
+				{
+					"label": "LED quickly flashes only when sending the Basic Set, Sensor Binary Report or Notification Report (Access Control).",
+					"value": 1
+				},
+				{
+					"label": "LED activates only when sending Wake Up Notification.",
+					"value": 2
+				},
+				{
+					"label": "LED quickly flashes when sending Basic Set, Sensor Binary Report or Notification Report (Access Control), and activates when sending Wake Up Notification.",
+					"value": 3
+				}
+			]
+		},
+		"90": {
+			"label": "Low battery threshold",
+			"description": "Configure the low battery threshold percentage from 10-50. Induces battery report when battery level is less than or equal to threshold. Forward low battery report.",
+			"unsigned": true,
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101": {
+			"label": "Timed battery report",
+			"description": "Configure timed battery report from 1-14400. Sets how often battery state is reported in minutes.",
+			"unsigned": true,
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 14400,
+			"defaultValue": 70,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

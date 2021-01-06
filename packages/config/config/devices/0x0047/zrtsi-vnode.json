@@ -1,79 +1,78 @@
 // Somfy ZRTSI-VNODE
 // Z-Wave to RTS Interface Virtual Node
 {
-    "_approved": true,
-    "manufacturer": "Somfy",
-    "manufacturerId": "0x0047",
-    "label": "ZRTSI-VNODE",
-    "description": "Z-Wave to RTS Interface Virtual Node",
-    "devices": [
-        {
-            "productType": "0x5a52",
-            "productId": "0x5401"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x5402"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x5403"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x5404"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x5405"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x5406"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x5407"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x5408"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x5409"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x540a"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x540b"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x540c"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x540d"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x540e"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x540f"
-        },
-        {
-            "productType": "0x5a52",
-            "productId": "0x5410"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Somfy",
+	"manufacturerId": "0x0047",
+	"label": "ZRTSI-VNODE",
+	"description": "Z-Wave to RTS Interface Virtual Node",
+	"devices": [
+		{
+			"productType": "0x5a52",
+			"productId": "0x5401"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x5402"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x5403"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x5404"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x5405"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x5406"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x5407"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x5408"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x5409"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x540a"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x540b"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x540c"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x540d"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x540e"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x540f"
+		},
+		{
+			"productType": "0x5a52",
+			"productId": "0x5410"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

@@ -1,57 +1,56 @@
 // Popp & Co POPE700052
 // Water Leakage Sensor
 {
-    "_approved": true,
-    "manufacturer": "Popp & Co",
-    "manufacturerId": "0x0154",
-    "label": "POPE700052",
-    "description": "Water Leakage Sensor",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0008"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Flood Alarm Basic On Value",
-            "description": "Flood detected",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Flood Alarm Basic Off Value",
-            "description": "No Flood detected",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Enable Buzzer Sound on Alarm",
-            "description": "Buzzer enabled during flood detection",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "POPE700052",
+	"description": "Water Leakage Sensor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0008"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Flood Alarm Basic On Value",
+			"description": "Flood detected",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Flood Alarm Basic Off Value",
+			"description": "No Flood detected",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Enable Buzzer Sound on Alarm",
+			"description": "Buzzer enabled during flood detection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

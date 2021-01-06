@@ -1,7 +1,6 @@
 // Express Controls EZMultiPli
 // Multi Sensor
 {
-	"_approved": true,
 	"manufacturer": "Express Controls",
 	"manufacturerId": "0x001e",
 	"label": "EZMultiPli",

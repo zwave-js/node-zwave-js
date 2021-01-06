@@ -1,28 +1,27 @@
 // August Smart Locks ASL-03
 // August Smart Lock Pro 3rd Gen
 {
-    "_approved": true,
-    "manufacturer": "August Smart Locks",
-    "manufacturerId": "0x033f",
-    "label": "ASL-03",
-    "description": "August Smart Lock Pro 3rd Gen",
-    "devices": [
-        {
-            "productType": "0x0000",
-            "productId": "0x0594"
-        },
-        {
-            "productType": "0x0000",
-            "productId": "0xdf29"
-        },
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "August Smart Locks",
+	"manufacturerId": "0x033f",
+	"label": "ASL-03",
+	"description": "August Smart Lock Pro 3rd Gen",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0594"
+		},
+		{
+			"productType": "0x0000",
+			"productId": "0xdf29"
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

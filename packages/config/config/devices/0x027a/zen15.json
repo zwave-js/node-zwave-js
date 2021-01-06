@@ -1,182 +1,181 @@
 // Zooz ZEN15
 // Power Switch
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN15",
-    "description": "Power Switch",
-    "devices": [
-        {
-            "productType": "0x0101",
-            "productId": "0x000d"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "20": {
-            "label": "Overload Protection",
-            "description": "Overload protection.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "21": {
-            "label": "On/Off Status Recovery After Power Failure",
-            "description": "Choose the recovery state for your Power Switch if power outage occurs.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Previous state",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                },
-                {
-                    "label": "OFF",
-                    "value": 2
-                }
-            ]
-        },
-        "24": {
-            "label": "On/Off Status Change Notifications",
-            "description": "Send On/Off Status Change Notifications",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Sends notification if changed manually or remotely",
-                    "value": 1
-                },
-                {
-                    "label": "Sends notification ONLY if changed manually",
-                    "value": 2
-                }
-            ]
-        },
-        "27": {
-            "label": "LED Indicator",
-            "description": "How the LED indicator displays power consumption.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Always On",
-                    "value": 0
-                },
-                {
-                    "label": "Momentary (at status change)",
-                    "value": 1
-                }
-            ]
-        },
-        "151": {
-            "label": "Power Report Value Threshold",
-            "description": "When to report power consumption to your controller",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 50,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "152": {
-            "label": "Power Report Percentage Threshold",
-            "description": "How to report power consumption to your controller by percentage rate",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "171": {
-            "label": "Power Report Frequency",
-            "description": "How often to report power consumption (W) to your controller",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2678400,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "172": {
-            "label": "Energy Report Frequency",
-            "description": "How often to report energy usage (KWH) to your controller",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2678400,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "173": {
-            "label": "Voltage Report Frequency",
-            "description": "How often to report voltage (V) to your controller",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2678400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "174": {
-            "label": "Electricity Report Frequency",
-            "description": "How often to report levels of electrical current (A) to your controller",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2678400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN15",
+	"description": "Power Switch",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x000d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"20": {
+			"label": "Overload Protection",
+			"description": "Overload protection.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "On/Off Status Recovery After Power Failure",
+			"description": "Choose the recovery state for your Power Switch if power outage occurs.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Previous state",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				},
+				{
+					"label": "OFF",
+					"value": 2
+				}
+			]
+		},
+		"24": {
+			"label": "On/Off Status Change Notifications",
+			"description": "Send On/Off Status Change Notifications",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Sends notification if changed manually or remotely",
+					"value": 1
+				},
+				{
+					"label": "Sends notification ONLY if changed manually",
+					"value": 2
+				}
+			]
+		},
+		"27": {
+			"label": "LED Indicator",
+			"description": "How the LED indicator displays power consumption.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always On",
+					"value": 0
+				},
+				{
+					"label": "Momentary (at status change)",
+					"value": 1
+				}
+			]
+		},
+		"151": {
+			"label": "Power Report Value Threshold",
+			"description": "When to report power consumption to your controller",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"152": {
+			"label": "Power Report Percentage Threshold",
+			"description": "How to report power consumption to your controller by percentage rate",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"171": {
+			"label": "Power Report Frequency",
+			"description": "How often to report power consumption (W) to your controller",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"172": {
+			"label": "Energy Report Frequency",
+			"description": "How often to report energy usage (KWH) to your controller",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"173": {
+			"label": "Voltage Report Frequency",
+			"description": "How often to report voltage (V) to your controller",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"174": {
+			"label": "Electricity Report Frequency",
+			"description": "How often to report levels of electrical current (A) to your controller",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

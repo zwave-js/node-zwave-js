@@ -1,7 +1,6 @@
 // Jasco Products ZW3101
 // Lamp Module
 {
-	"_approved": true,
 	"manufacturer": "Jasco Products",
 	"manufacturerId": "0x0063",
 	"label": "ZW3101",

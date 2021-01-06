@@ -1,10 +1,6 @@
 // ThermoFloor HeatIt ZDim
 // Knob Smart Dimmer
 {
-	"_approved": true,
-	"_warnings": [
-		"Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-	],
 	"manufacturer": "ThermoFloor",
 	"manufacturerId": "0x019b",
 	"label": "HeatIt ZDim",

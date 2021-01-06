@@ -1,7 +1,6 @@
 // AEON Labs ZW074
 // 4 in One MultiSensor (G5)
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW074",

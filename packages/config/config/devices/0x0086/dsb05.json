@@ -1,7 +1,6 @@
 // AEON Labs DSB05
 // 4 in One MultiSensor
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSB05",

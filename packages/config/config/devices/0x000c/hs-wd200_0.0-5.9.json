@@ -1,648 +1,647 @@
 // HomeSeer Technologies HS-WD200+
 // Scene Capable Wall Dimmer Switch
 {
-    "_approved": true,
-    "manufacturer": "HomeSeer Technologies",
-    "manufacturerId": "0x000c",
-    "label": "HS-WD200+",
-    "description": "Scene Capable Wall Dimmer Switch",
-    "devices": [
-        {
-            "productType": "0x4447",
-            "productId": "0x3036"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "5.9"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "3": {
-            "label": "Bottom LED Operation",
-            "description": "Sets the operation of the bottom LED",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Bottom LED ON if load is OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Bottom LED OFF if load is OFF",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Orientation",
-            "description": "Set paddle's load orientation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Top of Paddle turns load ON",
-                    "value": 0
-                },
-                {
-                    "label": "Bottom of Paddle turns load ON",
-                    "value": 1
-                }
-            ]
-        },
-        "11": {
-            "label": "Remote Ramp Rate",
-            "description": "Set dimmer ramp rate for remote control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 90,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Local Ramp Rate",
-            "description": "Set dimmer ramp rate for local control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 90,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Status Mode",
-            "description": "Set dimmer display mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Load Status",
-                    "value": 0
-                },
-                {
-                    "label": "Custom Status",
-                    "value": 1
-                }
-            ]
-        },
-        "14": {
-            "label": "Load Status LED Color",
-            "description": "Set the LED color when displaying load status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "White",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Magenta",
-                    "value": 4
-                },
-                {
-                    "label": "Yellow",
-                    "value": 5
-                },
-                {
-                    "label": "Cyan",
-                    "value": 6
-                }
-            ]
-        },
-        "21": {
-            "label": "Status LED 1 Color",
-            "description": "Status LED 1 Color (bottom)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Magenta",
-                    "value": 4
-                },
-                {
-                    "label": "Yellow",
-                    "value": 5
-                },
-                {
-                    "label": "Cyan",
-                    "value": 6
-                },
-                {
-                    "label": "White",
-                    "value": 7
-                }
-            ]
-        },
-        "22": {
-            "label": "Status LED 2 Color",
-            "description": "Status LED 2 Color",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Magenta",
-                    "value": 4
-                },
-                {
-                    "label": "Yellow",
-                    "value": 5
-                },
-                {
-                    "label": "Cyan",
-                    "value": 6
-                },
-                {
-                    "label": "White",
-                    "value": 7
-                }
-            ]
-        },
-        "23": {
-            "label": "Status LED 3 Color",
-            "description": "Status LED 3 Color",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Magenta",
-                    "value": 4
-                },
-                {
-                    "label": "Yellow",
-                    "value": 5
-                },
-                {
-                    "label": "Cyan",
-                    "value": 6
-                },
-                {
-                    "label": "White",
-                    "value": 7
-                }
-            ]
-        },
-        "24": {
-            "label": "Status LED 4 Color",
-            "description": "Status LED 4 Color",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Magenta",
-                    "value": 4
-                },
-                {
-                    "label": "Yellow",
-                    "value": 5
-                },
-                {
-                    "label": "Cyan",
-                    "value": 6
-                },
-                {
-                    "label": "White",
-                    "value": 7
-                }
-            ]
-        },
-        "25": {
-            "label": "Status LED 5 Color",
-            "description": "Status LED 5 Color",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Magenta",
-                    "value": 4
-                },
-                {
-                    "label": "Yellow",
-                    "value": 5
-                },
-                {
-                    "label": "Cyan",
-                    "value": 6
-                },
-                {
-                    "label": "White",
-                    "value": 7
-                }
-            ]
-        },
-        "26": {
-            "label": "Status LED 6 Color",
-            "description": "Status LED 6 Color",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Magenta",
-                    "value": 4
-                },
-                {
-                    "label": "Yellow",
-                    "value": 5
-                },
-                {
-                    "label": "Cyan",
-                    "value": 6
-                },
-                {
-                    "label": "White",
-                    "value": 7
-                }
-            ]
-        },
-        "27": {
-            "label": "Status LED 7 Color",
-            "description": "Status LED 7 Color (top)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 7,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Magenta",
-                    "value": 4
-                },
-                {
-                    "label": "Yellow",
-                    "value": 5
-                },
-                {
-                    "label": "Cyan",
-                    "value": 6
-                },
-                {
-                    "label": "White",
-                    "value": 7
-                }
-            ]
-        },
-        "30": {
-            "label": "Blink Frequency",
-            "description": "Set blink frequency when displaying custom status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "No Blink",
-                    "value": 0
-                },
-                {
-                    "label": "Blink 100ms ON, 100ms OFF",
-                    "value": 1
-                },
-                {
-                    "label": "Blink 200ms ON, 200ms OFF",
-                    "value": 2
-                },
-                {
-                    "label": "Blink 300ms ON, 300ms OFF",
-                    "value": 3
-                },
-                {
-                    "label": "Blink 400ms ON, 400ms OFF",
-                    "value": 4
-                },
-                {
-                    "label": "Blink 500ms ON, 500ms OFF",
-                    "value": 5
-                }
-            ]
-        },
-        "31[0x01]": {
-            "label": "LED 1 Blink Status",
-            "description": "LED 1 Blink Status (bottom)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Solid",
-                    "value": 0
-                },
-                {
-                    "label": "Blink",
-                    "value": 1
-                }
-            ]
-        },
-        "31[0x02]": {
-            "label": "LED 2 Blink Status",
-            "description": "LED 2 Blink Status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Solid",
-                    "value": 0
-                },
-                {
-                    "label": "Blink",
-                    "value": 1
-                }
-            ]
-        },
-        "31[0x04]": {
-            "label": "LED 3 Blink Status",
-            "description": "LED 3 Blink Status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Solid",
-                    "value": 0
-                },
-                {
-                    "label": "Blink",
-                    "value": 1
-                }
-            ]
-        },
-        "31[0x08]": {
-            "label": "LED 4 Blink Status",
-            "description": "LED 4 Blink Status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Solid",
-                    "value": 0
-                },
-                {
-                    "label": "Blink",
-                    "value": 1
-                }
-            ]
-        },
-        "31[0x10]": {
-            "label": "LED 5 Blink Status",
-            "description": "LED 5 Blink Status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Solid",
-                    "value": 0
-                },
-                {
-                    "label": "Blink",
-                    "value": 1
-                }
-            ]
-        },
-        "31[0x20]": {
-            "label": "LED 6 Blink Status",
-            "description": "LED 6 Blink Status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Solid",
-                    "value": 0
-                },
-                {
-                    "label": "Blink",
-                    "value": 1
-                }
-            ]
-        },
-        "31[0x40]": {
-            "label": "LED 7 Blink Status",
-            "description": "LED 7 Blink Status (top)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Solid",
-                    "value": 0
-                },
-                {
-                    "label": "Blink",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-WD200+",
+	"description": "Scene Capable Wall Dimmer Switch",
+	"devices": [
+		{
+			"productType": "0x4447",
+			"productId": "0x3036"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "5.9"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"3": {
+			"label": "Bottom LED Operation",
+			"description": "Sets the operation of the bottom LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Bottom LED ON if load is OFF",
+					"value": 0
+				},
+				{
+					"label": "Bottom LED OFF if load is OFF",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Orientation",
+			"description": "Set paddle's load orientation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Top of Paddle turns load ON",
+					"value": 0
+				},
+				{
+					"label": "Bottom of Paddle turns load ON",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Remote Ramp Rate",
+			"description": "Set dimmer ramp rate for remote control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Local Ramp Rate",
+			"description": "Set dimmer ramp rate for local control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 90,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Status Mode",
+			"description": "Set dimmer display mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Load Status",
+					"value": 0
+				},
+				{
+					"label": "Custom Status",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Load Status LED Color",
+			"description": "Set the LED color when displaying load status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "White",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				}
+			]
+		},
+		"21": {
+			"label": "Status LED 1 Color",
+			"description": "Status LED 1 Color (bottom)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
+		},
+		"22": {
+			"label": "Status LED 2 Color",
+			"description": "Status LED 2 Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
+		},
+		"23": {
+			"label": "Status LED 3 Color",
+			"description": "Status LED 3 Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
+		},
+		"24": {
+			"label": "Status LED 4 Color",
+			"description": "Status LED 4 Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
+		},
+		"25": {
+			"label": "Status LED 5 Color",
+			"description": "Status LED 5 Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
+		},
+		"26": {
+			"label": "Status LED 6 Color",
+			"description": "Status LED 6 Color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
+		},
+		"27": {
+			"label": "Status LED 7 Color",
+			"description": "Status LED 7 Color (top)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				},
+				{
+					"label": "White",
+					"value": 7
+				}
+			]
+		},
+		"30": {
+			"label": "Blink Frequency",
+			"description": "Set blink frequency when displaying custom status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No Blink",
+					"value": 0
+				},
+				{
+					"label": "Blink 100ms ON, 100ms OFF",
+					"value": 1
+				},
+				{
+					"label": "Blink 200ms ON, 200ms OFF",
+					"value": 2
+				},
+				{
+					"label": "Blink 300ms ON, 300ms OFF",
+					"value": 3
+				},
+				{
+					"label": "Blink 400ms ON, 400ms OFF",
+					"value": 4
+				},
+				{
+					"label": "Blink 500ms ON, 500ms OFF",
+					"value": 5
+				}
+			]
+		},
+		"31[0x01]": {
+			"label": "LED 1 Blink Status",
+			"description": "LED 1 Blink Status (bottom)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Solid",
+					"value": 0
+				},
+				{
+					"label": "Blink",
+					"value": 1
+				}
+			]
+		},
+		"31[0x02]": {
+			"label": "LED 2 Blink Status",
+			"description": "LED 2 Blink Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Solid",
+					"value": 0
+				},
+				{
+					"label": "Blink",
+					"value": 1
+				}
+			]
+		},
+		"31[0x04]": {
+			"label": "LED 3 Blink Status",
+			"description": "LED 3 Blink Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Solid",
+					"value": 0
+				},
+				{
+					"label": "Blink",
+					"value": 1
+				}
+			]
+		},
+		"31[0x08]": {
+			"label": "LED 4 Blink Status",
+			"description": "LED 4 Blink Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Solid",
+					"value": 0
+				},
+				{
+					"label": "Blink",
+					"value": 1
+				}
+			]
+		},
+		"31[0x10]": {
+			"label": "LED 5 Blink Status",
+			"description": "LED 5 Blink Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Solid",
+					"value": 0
+				},
+				{
+					"label": "Blink",
+					"value": 1
+				}
+			]
+		},
+		"31[0x20]": {
+			"label": "LED 6 Blink Status",
+			"description": "LED 6 Blink Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Solid",
+					"value": 0
+				},
+				{
+					"label": "Blink",
+					"value": 1
+				}
+			]
+		},
+		"31[0x40]": {
+			"label": "LED 7 Blink Status",
+			"description": "LED 7 Blink Status (top)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Solid",
+					"value": 0
+				},
+				{
+					"label": "Blink",
+					"value": 1
+				}
+			]
+		}
+	}
 }

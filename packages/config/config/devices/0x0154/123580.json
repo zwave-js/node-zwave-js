@@ -1,286 +1,285 @@
 // Popp & Co 123580
 // Wall Plug Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Popp & Co",
-    "manufacturerId": "0x0154",
-    "label": "123580",
-    "description": "Wall Plug Dimmer",
-    "devices": [
-        {
-            "productType": "0x1100",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Switch State",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Set LED indication mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "On when switch on",
-                    "value": 1
-                },
-                {
-                    "label": "On when switch off",
-                    "value": 2
-                },
-                {
-                    "label": "Operated by command",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Automatic switch off time",
-            "description": "If not zero, automatically switch off after a user defined time (in seconds)",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "RF Off command",
-            "description": "RF Off command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Ignore",
-                    "value": 1
-                },
-                {
-                    "label": "Switch ON",
-                    "value": 2
-                },
-                {
-                    "label": "Switch on if load is off else switch off",
-                    "value": 3
-                }
-            ]
-        },
-        "4": {
-            "label": "Ignore start level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No",
-                    "value": 0
-                },
-                {
-                    "label": "Yes",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Speed for fast dimming",
-            "description": "Speed for fast dimming",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 30,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Speed for slow dimming",
-            "description": "Speed for slow dimming",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Behavior when ON received",
-            "description": "Behavior when ON received",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Set to last dim level",
-                    "value": 0
-                },
-                {
-                    "label": "If on already, set to maximum",
-                    "value": 1
-                },
-                {
-                    "label": "Always maximum dim level",
-                    "value": 2
-                }
-            ]
-        },
-        "8": {
-            "label": "Baby dimming time",
-            "description": "Baby dimming time",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Baby target light level",
-            "description": "Baby target level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Baby target time level",
-            "description": "Baby target level",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17": {
-            "label": "Limit minimum light level",
-            "description": "Minimum level should be greater than maximum.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 95,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "Limit maximum light level",
-            "description": "Maximum level should be greater than minimum. Set to 0 to act as a switch.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "19": {
-            "label": "Dim Level on 'Switch On'",
-            "description": "Dim Level on 'Switch On'",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "51": {
-            "label": "Pause before pulse",
-            "description": "Pause before pulse",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 60,
-            "defaultValue": 28,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "52": {
-            "label": "Pause after pulse",
-            "description": "Pause after pulse",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 60,
-            "defaultValue": 28,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "53": {
-            "label": "Pulse width",
-            "description": "Pulse width",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 20,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "54": {
-            "label": "Pulse type",
-            "description": "NB: Do not touch these settings if you are not sure what they mean!",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Long",
-                    "value": 0
-                },
-                {
-                    "label": "Short",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "123580",
+	"description": "Wall Plug Dimmer",
+	"devices": [
+		{
+			"productType": "0x1100",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Switch State",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Set LED indication mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "On when switch on",
+					"value": 1
+				},
+				{
+					"label": "On when switch off",
+					"value": 2
+				},
+				{
+					"label": "Operated by command",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Automatic switch off time",
+			"description": "If not zero, automatically switch off after a user defined time (in seconds)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "RF Off command",
+			"description": "RF Off command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch OFF",
+					"value": 0
+				},
+				{
+					"label": "Ignore",
+					"value": 1
+				},
+				{
+					"label": "Switch ON",
+					"value": 2
+				},
+				{
+					"label": "Switch on if load is off else switch off",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Ignore start level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Speed for fast dimming",
+			"description": "Speed for fast dimming",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Speed for slow dimming",
+			"description": "Speed for slow dimming",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Behavior when ON received",
+			"description": "Behavior when ON received",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Set to last dim level",
+					"value": 0
+				},
+				{
+					"label": "If on already, set to maximum",
+					"value": 1
+				},
+				{
+					"label": "Always maximum dim level",
+					"value": 2
+				}
+			]
+		},
+		"8": {
+			"label": "Baby dimming time",
+			"description": "Baby dimming time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Baby target light level",
+			"description": "Baby target level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Baby target time level",
+			"description": "Baby target level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "Limit minimum light level",
+			"description": "Minimum level should be greater than maximum.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 95,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Limit maximum light level",
+			"description": "Maximum level should be greater than minimum. Set to 0 to act as a switch.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Dim Level on 'Switch On'",
+			"description": "Dim Level on 'Switch On'",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "Pause before pulse",
+			"description": "Pause before pulse",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 60,
+			"defaultValue": 28,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "Pause after pulse",
+			"description": "Pause after pulse",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 60,
+			"defaultValue": 28,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"53": {
+			"label": "Pulse width",
+			"description": "Pulse width",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 20,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"54": {
+			"label": "Pulse type",
+			"description": "NB: Do not touch these settings if you are not sure what they mean!",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Long",
+					"value": 0
+				},
+				{
+					"label": "Short",
+					"value": 1
+				}
+			]
+		}
+	}
 }

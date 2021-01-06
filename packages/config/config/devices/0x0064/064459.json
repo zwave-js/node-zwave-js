@@ -1,22 +1,18 @@
 // Reitz-Group.de 064459
 // Düwi Remote Control
 {
-    "_approved": false,
-    "_errors": [
-        "No endpoints are configured"
-    ],
-    "manufacturer": "Reitz-Group.de",
-    "manufacturerId": "0x0064",
-    "label": "064459",
-    "description": "Düwi Remote Control",
-    "devices": [
-        {
-            "productType": "0x5001",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Reitz-Group.de",
+	"manufacturerId": "0x0064",
+	"label": "064459",
+	"description": "Düwi Remote Control",
+	"devices": [
+		{
+			"productType": "0x5001",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

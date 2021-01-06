@@ -1,188 +1,187 @@
 // HANK Electronics Ltd. HKZW-SO05
 // Smart Plug
 {
-    "_approved": true,
-    "manufacturer": "HANK Electronics Ltd.",
-    "manufacturerId": "0x0208",
-    "label": "HKZW-SO05",
-    "description": "Smart Plug",
-    "devices": [
-        {
-            "productType": "0x0100",
-            "productId": "0x000a"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "20": {
-            "label": "Overload Protection",
-            "description": "Turn off if the load power exceeds 0.5A for more than 5s.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Function Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Function enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "21": {
-            "label": "Device Status After Power Failure.",
-            "description": "Define how the Plug reacts after the power supply is back on.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Memorizes its state after a power failure",
-                    "value": 0
-                },
-                {
-                    "label": "Always on after power failure.",
-                    "value": 1
-                },
-                {
-                    "label": "Always off after power failure.",
-                    "value": 2
-                }
-            ]
-        },
-        "24": {
-            "label": "Load Status Change Notification",
-            "description": "Send notification to associated devices when load is changed.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Function is disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Send Basic Report",
-                    "value": 1
-                },
-                {
-                    "label": "Only when load is not changed",
-                    "value": 2
-                }
-            ]
-        },
-        "27": {
-            "label": "Indicator Modes",
-            "description": "The RGB LED indicator will indicate the load.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Work in indicator mode.",
-                    "value": 0
-                },
-                {
-                    "label": "Indicate for 5 seconds after load has changed.",
-                    "value": 1
-                }
-            ]
-        },
-        "151": {
-            "label": "Power Report Threshold",
-            "description": "Power threashold for when to send reports to associated devices",
-            "unit": "W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 50,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "152": {
-            "label": "Power Report Percentage Threshold",
-            "description": "Percentage threshold for when to send report to associated devices",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "171": {
-            "label": "Power Report Frequence",
-            "description": "The interval of sending power report to association device.",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 5,
-            "maxValue": 2678400,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "172": {
-            "label": "Energy Report Frequence",
-            "description": "The interval of sending energy report to association device.",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 5,
-            "maxValue": 2678400,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "173": {
-            "label": "Voltage Report Frequency",
-            "description": "The interval of sending voltage report to association device.",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2678400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "174": {
-            "label": "Electricity Report Frequency",
-            "description": "The interval of sending electricity report to association device.",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2678400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "HKZW-SO05",
+	"description": "Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x000a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"20": {
+			"label": "Overload Protection",
+			"description": "Turn off if the load power exceeds 0.5A for more than 5s.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Function Disabled",
+					"value": 0
+				},
+				{
+					"label": "Function enabled",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "Device Status After Power Failure.",
+			"description": "Define how the Plug reacts after the power supply is back on.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Memorizes its state after a power failure",
+					"value": 0
+				},
+				{
+					"label": "Always on after power failure.",
+					"value": 1
+				},
+				{
+					"label": "Always off after power failure.",
+					"value": 2
+				}
+			]
+		},
+		"24": {
+			"label": "Load Status Change Notification",
+			"description": "Send notification to associated devices when load is changed.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Function is disabled",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Report",
+					"value": 1
+				},
+				{
+					"label": "Only when load is not changed",
+					"value": 2
+				}
+			]
+		},
+		"27": {
+			"label": "Indicator Modes",
+			"description": "The RGB LED indicator will indicate the load.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Work in indicator mode.",
+					"value": 0
+				},
+				{
+					"label": "Indicate for 5 seconds after load has changed.",
+					"value": 1
+				}
+			]
+		},
+		"151": {
+			"label": "Power Report Threshold",
+			"description": "Power threashold for when to send reports to associated devices",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"152": {
+			"label": "Power Report Percentage Threshold",
+			"description": "Percentage threshold for when to send report to associated devices",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"171": {
+			"label": "Power Report Frequence",
+			"description": "The interval of sending power report to association device.",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"172": {
+			"label": "Energy Report Frequence",
+			"description": "The interval of sending energy report to association device.",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"173": {
+			"label": "Voltage Report Frequency",
+			"description": "The interval of sending voltage report to association device.",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"174": {
+			"label": "Electricity Report Frequency",
+			"description": "The interval of sending electricity report to association device.",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

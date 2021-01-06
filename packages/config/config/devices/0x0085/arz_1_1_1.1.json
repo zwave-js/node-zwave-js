@@ -1,66 +1,62 @@
 // Fakro ARZ 1.1
 // Roller Shutter Module
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Fakro",
-    "manufacturerId": "0x0085",
-    "label": "ARZ 1.1",
-    "description": "Roller Shutter Module",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0111"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "1.1",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "12": {
-            "label": "Calibration Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Calibrated",
-                    "value": 1
-                },
-                {
-                    "label": "Discalibrated",
-                    "value": 2
-                }
-            ]
-        },
-        "13": {
-            "label": "BASIC SET Response",
-            "description": "Allows to change motor behavior after receiving BASIC_SET with value 0xFF",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "FF go to Max",
-                    "value": 1
-                },
-                {
-                    "label": "FF go to previous position",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Fakro",
+	"manufacturerId": "0x0085",
+	"label": "ARZ 1.1",
+	"description": "Roller Shutter Module",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0111"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.1",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"12": {
+			"label": "Calibration Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Calibrated",
+					"value": 1
+				},
+				{
+					"label": "Discalibrated",
+					"value": 2
+				}
+			]
+		},
+		"13": {
+			"label": "BASIC SET Response",
+			"description": "Allows to change motor behavior after receiving BASIC_SET with value 0xFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "FF go to Max",
+					"value": 1
+				},
+				{
+					"label": "FF go to previous position",
+					"value": 2
+				}
+			]
+		}
+	}
 }

@@ -1,19 +1,18 @@
 // Wenzhou MTLC Electric Appliances Co., Ltd. ZWN-333
 // Plug-in Appliance Module
 {
-    "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
-    "manufacturerId": "0x011a",
-    "label": "ZWN-333",
-    "description": "Plug-in Appliance Module",
-    "devices": [
-        {
-            "productType": "0x0101",
-            "productId": "0x0104"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
+	"label": "ZWN-333",
+	"description": "Plug-in Appliance Module",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0104"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

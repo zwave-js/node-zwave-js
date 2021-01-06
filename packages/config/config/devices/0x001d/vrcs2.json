@@ -1,27 +1,26 @@
 // Leviton VRCS2
 // Vizia RF + 2-Button Scene Controller with Switches
 {
-    "_approved": true,
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRCS2",
-    "description": "Vizia RF + 2-Button Scene Controller with Switches",
-    "devices": [
-        {
-            "productType": "0x001d",
-            "productId": "0x0000"
-        },
-        {
-            "productType": "0x001d",
-            "productId": "0x1102"
-        },
-        {
-            "productType": "0x1102",
-            "productId": "0x0243"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRCS2",
+	"description": "Vizia RF + 2-Button Scene Controller with Switches",
+	"devices": [
+		{
+			"productType": "0x001d",
+			"productId": "0x0000"
+		},
+		{
+			"productType": "0x001d",
+			"productId": "0x1102"
+		},
+		{
+			"productType": "0x1102",
+			"productId": "0x0243"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

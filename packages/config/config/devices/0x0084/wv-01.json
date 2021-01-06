@@ -1,64 +1,63 @@
 // FortrezZ LLC WV-01
 // Wireless Z-Wave Water Valve
 {
-    "_approved": true,
-    "manufacturer": "FortrezZ LLC",
-    "manufacturerId": "0x0084",
-    "label": "WV-01",
-    "description": "Wireless Z-Wave Water Valve",
-    "devices": [
-        {
-            "productType": "0x0213",
-            "productId": "0x0214"
-        },
-        {
-            "productType": "0x0213",
-            "productId": "0x0215"
-        },
-        {
-            "productType": "0x0233",
-            "productId": "0xaa06"
-        },
-        {
-            "productType": "0x0243",
-            "productId": "0x0300"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "0": {
-            "label": "Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Alarm Mode",
-                    "value": 0
-                },
-                {
-                    "label": "Level Mode",
-                    "value": 255
-                }
-            ]
-        },
-        "1": {
-            "label": "WaterLevel Timeout",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "FortrezZ LLC",
+	"manufacturerId": "0x0084",
+	"label": "WV-01",
+	"description": "Wireless Z-Wave Water Valve",
+	"devices": [
+		{
+			"productType": "0x0213",
+			"productId": "0x0214"
+		},
+		{
+			"productType": "0x0213",
+			"productId": "0x0215"
+		},
+		{
+			"productType": "0x0233",
+			"productId": "0xaa06"
+		},
+		{
+			"productType": "0x0243",
+			"productId": "0x0300"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"0": {
+			"label": "Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Alarm Mode",
+					"value": 0
+				},
+				{
+					"label": "Level Mode",
+					"value": 255
+				}
+			]
+		},
+		"1": {
+			"label": "WaterLevel Timeout",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

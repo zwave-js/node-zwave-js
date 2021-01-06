@@ -1,52 +1,51 @@
 // Everspring HAC01
 // In-Wall Remote Insert
 {
-    "_approved": true,
-    "manufacturer": "Everspring",
-    "manufacturerId": "0x0060",
-    "label": "HAC01",
-    "description": "In-Wall Remote Insert",
-    "devices": [
-        {
-            "productType": "0x0010",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Switch Input Change",
-            "description": "Target nodes that receive Basic Set command when the switch input changed.",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Basic Set Level",
-            "description": "The Basic Set Command is sent with this value.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Amount Of Delay",
-            "description": "Amount Of Delay (seconds) to send the Basic Set Off command.",
-            "unit": "s",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "HAC01",
+	"description": "In-Wall Remote Insert",
+	"devices": [
+		{
+			"productType": "0x0010",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Switch Input Change",
+			"description": "Target nodes that receive Basic Set command when the switch input changed.",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Basic Set Level",
+			"description": "The Basic Set Command is sent with this value.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Amount Of Delay",
+			"description": "Amount Of Delay (seconds) to send the Basic Set Off command.",
+			"unit": "s",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

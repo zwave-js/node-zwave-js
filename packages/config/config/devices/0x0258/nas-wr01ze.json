@@ -1,201 +1,200 @@
 // Shenzhen Neo Electronics Co., Ltd. NAS-WR01ZE
 // Wall Plug Switch
 {
-    "_approved": true,
-    "manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
-    "manufacturerId": "0x0258",
-    "label": "NAS-WR01ZE",
-    "description": "Wall Plug Switch",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0087"
-        },
-        {
-            "productType": "0x0003",
-            "productId": "0x1087"
-        },
-        {
-            "productType": "0x0003",
-            "productId": "0x1483"
-        },
-        {
-            "productType": "0x0200",
-            "productId": "0x1027"
-        },
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Meter Report Enable",
-            "description": "This parameter defines Disable/Enable meter report measure data to controller.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Report",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Report",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Meter Report Interval",
-            "description": "Interval time reporting data to controller",
-            "unit": "Seconds",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 300,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Maxium over-load current",
-            "description": "maximum current the plug can provide to load",
-            "unit": "Ampere",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 16,
-            "defaultValue": 13,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Maximum alarm current",
-            "description": "Max current for over-current notification",
-            "unit": "Ampere",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 15,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "LED enable",
-            "description": "This parameter defines the LED indication Function ON/OFF.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable LED indication Function",
-                    "value": 0
-                },
-                {
-                    "label": "Enable LED indication Function",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Power Report Threshold",
-            "description": "Power consumed change to be reported",
-            "unit": "percentage",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 100,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Remember Relay ON/OFF status after power failure.",
-            "description": "Plug state after power-on",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Don’t remember relay state",
-                    "value": 0
-                },
-                {
-                    "label": "Remember the Relay Status.",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Plug Time switch Function",
-            "description": "Timer plug OFF after time period",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Time switch Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Time switch Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "9": {
-            "label": "Time switch Period",
-            "description": "Delay time after the plug is switched off (in minutes)",
-            "unit": "Minutes",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 150,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Button On/Off Enable",
-            "description": "Enable/Disable top button function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Button",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Button",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Shenzhen Neo Electronics Co., Ltd.",
+	"manufacturerId": "0x0258",
+	"label": "NAS-WR01ZE",
+	"description": "Wall Plug Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0087"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x1087"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x1483"
+		},
+		{
+			"productType": "0x0200",
+			"productId": "0x1027"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Meter Report Enable",
+			"description": "This parameter defines Disable/Enable meter report measure data to controller.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Report",
+					"value": 0
+				},
+				{
+					"label": "Enable Report",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Meter Report Interval",
+			"description": "Interval time reporting data to controller",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Maxium over-load current",
+			"description": "maximum current the plug can provide to load",
+			"unit": "Ampere",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 16,
+			"defaultValue": 13,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Maximum alarm current",
+			"description": "Max current for over-current notification",
+			"unit": "Ampere",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 15,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "LED enable",
+			"description": "This parameter defines the LED indication Function ON/OFF.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable LED indication Function",
+					"value": 0
+				},
+				{
+					"label": "Enable LED indication Function",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Power Report Threshold",
+			"description": "Power consumed change to be reported",
+			"unit": "percentage",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Remember Relay ON/OFF status after power failure.",
+			"description": "Plug state after power-on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don’t remember relay state",
+					"value": 0
+				},
+				{
+					"label": "Remember the Relay Status.",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Plug Time switch Function",
+			"description": "Timer plug OFF after time period",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Time switch Disable",
+					"value": 0
+				},
+				{
+					"label": "Time switch Enable",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Time switch Period",
+			"description": "Delay time after the plug is switched off (in minutes)",
+			"unit": "Minutes",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 150,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Button On/Off Enable",
+			"description": "Enable/Disable top button function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Button",
+					"value": 0
+				},
+				{
+					"label": "Enable Button",
+					"value": 1
+				}
+			]
+		}
+	}
 }

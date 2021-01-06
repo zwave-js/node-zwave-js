@@ -1,188 +1,187 @@
 // AEON Labs ZW097
 // Dry Contact Sensor
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "ZW097",
-    "description": "Dry Contact Sensor",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0061"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x0061"
-        },
-        {
-            "productType": "0x0202",
-            "productId": "0x0061"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Send Sensor binary report on open/close events",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "On for opened, Off for closed",
-                    "value": 0
-                },
-                {
-                    "label": "Off for opened, On for closed",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Enable wake up 10 minutes when power on",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No",
-                    "value": 0
-                },
-                {
-                    "label": "Yes",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Send Basic Set on open/close event",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "On for opened, Off for closed",
-                    "value": 0
-                },
-                {
-                    "label": "Off for opened, On for closed",
-                    "value": 1
-                }
-            ]
-        },
-        "39": {
-            "label": "Send battery report when less than percentage",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 50,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "111": {
-            "label": "Set the interval time of battery report",
-            "description": "Value is specified in number of seconds.",
-            "unit": "seconds",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "122": {
-            "label": "Notification type to send",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 11,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Smoke alarm",
-                    "value": 1
-                },
-                {
-                    "label": "CO alarm",
-                    "value": 2
-                },
-                {
-                    "label": "CO2 alarm",
-                    "value": 3
-                },
-                {
-                    "label": "Heat alarm",
-                    "value": 4
-                },
-                {
-                    "label": "Water alarm",
-                    "value": 5
-                },
-                {
-                    "label": "Access control",
-                    "value": 6
-                },
-                {
-                    "label": "Home security",
-                    "value": 7
-                },
-                {
-                    "label": "Power management",
-                    "value": 8
-                },
-                {
-                    "label": "System",
-                    "value": 9
-                },
-                {
-                    "label": "Emergency alarm",
-                    "value": 10
-                },
-                {
-                    "label": "Timer ended",
-                    "value": 11
-                }
-            ]
-        },
-        "121[0x10]": {
-            "label": "Send Sensor Binary report to associated devices",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "121[0x0100]": {
-            "label": "Send Basic report to associated devices",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW097",
+	"description": "Dry Contact Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0061"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x0061"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x0061"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Send Sensor binary report on open/close events",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On for opened, Off for closed",
+					"value": 0
+				},
+				{
+					"label": "Off for opened, On for closed",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Enable wake up 10 minutes when power on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Send Basic Set on open/close event",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On for opened, Off for closed",
+					"value": 0
+				},
+				{
+					"label": "Off for opened, On for closed",
+					"value": 1
+				}
+			]
+		},
+		"39": {
+			"label": "Send battery report when less than percentage",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"111": {
+			"label": "Set the interval time of battery report",
+			"description": "Value is specified in number of seconds.",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"122": {
+			"label": "Notification type to send",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 11,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Smoke alarm",
+					"value": 1
+				},
+				{
+					"label": "CO alarm",
+					"value": 2
+				},
+				{
+					"label": "CO2 alarm",
+					"value": 3
+				},
+				{
+					"label": "Heat alarm",
+					"value": 4
+				},
+				{
+					"label": "Water alarm",
+					"value": 5
+				},
+				{
+					"label": "Access control",
+					"value": 6
+				},
+				{
+					"label": "Home security",
+					"value": 7
+				},
+				{
+					"label": "Power management",
+					"value": 8
+				},
+				{
+					"label": "System",
+					"value": 9
+				},
+				{
+					"label": "Emergency alarm",
+					"value": 10
+				},
+				{
+					"label": "Timer ended",
+					"value": 11
+				}
+			]
+		},
+		"121[0x10]": {
+			"label": "Send Sensor Binary report to associated devices",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"121[0x0100]": {
+			"label": "Send Basic report to associated devices",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

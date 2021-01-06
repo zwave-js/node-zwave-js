@@ -1,42 +1,41 @@
 // Wenzhou MTLC Electric Appliances Co., Ltd. ZW20R
 // 20A Tamper Resistant Duplex Receptacle
 {
-    "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
-    "manufacturerId": "0x011a",
-    "label": "ZW20R",
-    "description": "20A Tamper Resistant Duplex Receptacle",
-    "devices": [
-        {
-            "productType": "0x0101",
-            "productId": "0x0603"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Toggle LED mode",
-            "description": "Set to 1 for LED to be in sync with switch.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED is on when switch is off",
-                    "value": 0
-                },
-                {
-                    "label": "LED is on when switch is on",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
+	"label": "ZW20R",
+	"description": "20A Tamper Resistant Duplex Receptacle",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0603"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Toggle LED mode",
+			"description": "Set to 1 for LED to be in sync with switch.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED is on when switch is off",
+					"value": 0
+				},
+				{
+					"label": "LED is on when switch is on",
+					"value": 1
+				}
+			]
+		}
+	}
 }

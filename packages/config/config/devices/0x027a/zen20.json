@@ -1,470 +1,469 @@
 // Zooz ZEN20
 // Z-Wave Plus Power Strip, VER. 2.0
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN20",
-    "description": "Z-Wave Plus Power Strip, VER. 2.0",
-    "devices": [
-        {
-            "productType": "0xa000",
-            "productId": "0xa004"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "On/Off Status Recovery After Power Failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Remember Previous State After Power Failure",
-                    "value": 0
-                },
-                {
-                    "label": "Power Strip Automatically ON After Power Failure",
-                    "value": 1
-                },
-                {
-                    "label": "Power Strip Automatically OFF After Power Failure",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Power Wattage Report Value Threshold",
-            "description": "Choose how you want your Power Strip to report power consumption to your hub",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 5,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Power Wattage Report Frequency",
-            "description": "The number entered as value corresponds to the number of seconds",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 5,
-            "maxValue": 2678400,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Energy (kWh) Report Frequency",
-            "description": "Report interval of power consumption (W) to your controller (hub)",
-            "unit": "Seconds",
-            "valueSize": 4,
-            "minValue": 5,
-            "maxValue": 2678400,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Overload Protection",
-            "description": "Set the Watt level for overload protection to kick in",
-            "unit": "Watts",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1500,
-            "defaultValue": 1500,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "CH1 Auto Turn-Off Timer",
-            "description": "Enable or disable the auto turn-off timer for CH1 outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "CH1 Auto Turn-Off Setting",
-            "description": "Time in minutes to turn off the device connected to CH1 after being turned on",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "CH1 Auto Turn-On Timer",
-            "description": "Enable or disable the auto turn-on timer for CH1 outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "9": {
-            "label": "CH1 Auto Turn-On Setting",
-            "description": "Time in minutes to turn on the device connected to CH1 after being turned off.",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "CH2 Auto Turn-Off Timer",
-            "description": "Enable or disable the auto turn-off timer for CH2 outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "11": {
-            "label": "CH2 Auto Turn-Off Setting",
-            "description": "Time in minutes to turn off the device connected to CH2 after being turned on",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "CH2 Auto Turn-On Timer",
-            "description": "Enable or disable the auto turn-on timer for CH2 outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "13": {
-            "label": "CH2 Auto Turn-On Setting",
-            "description": "Time in minutes to turn on the device connected to CH2 after being turned off",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "CH3 Auto Turn-Off Timer",
-            "description": "Enable or disable the auto turn-off timer for CH3 outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "CH3  Auto Turn-Off Setting",
-            "description": "Time in minutes to turn off the device connected to CH3 after being turned on",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "CH3 Auto Turn-On Timer",
-            "description": "Enable or disable the auto turn-on timer for CH3 outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "17": {
-            "label": "CH3 Auto Turn-On Setting",
-            "description": "Time in minutes to turn on the device connected to CH3 after being turned off",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "CH4 Auto Turn-Off Timer",
-            "description": "Enable or disable the auto turn-off timer for CH4 outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "19": {
-            "label": "CH4 Auto Turn-Off Setting",
-            "description": "Time in minutes to turn off the device connected to CH4 after being turned on.",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "CH4 Auto Turn-On Timer",
-            "description": "Enable or disable the auto turn-on timer for CH4 outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "21": {
-            "label": "CH4 Auto Turn-On Setting",
-            "description": "Time in minutes to turn on the device connected to CH4 after being turned off",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "CH5 Auto Turn-Off Timer",
-            "description": "Enable or disable the auto turn-off timer for CH5 outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "23": {
-            "label": "CH5 Auto Turn-Off Setting",
-            "description": "Time in minutes to turn off the device connected to CH5 after being turned on.",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "24": {
-            "label": "CH5 Auto Turn-On Timer",
-            "description": "Enable or disable the auto turn-on timer for CH5 outlet",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Timer Disabled (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "25": {
-            "label": "CH5 Auto Turn-On Setting",
-            "description": "Time in minutes to turn on the device connected to CH5 after being turned off",
-            "unit": "Minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "26": {
-            "label": "Manual Control",
-            "description": "Enable / Disable Physical Button Functionality",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Manual control disabled for all outlets",
-                    "value": 0
-                },
-                {
-                    "label": "Manual control enabled for all outlets (Default)",
-                    "value": 1
-                }
-            ]
-        },
-        "27": {
-            "label": "LED Indicator Mode",
-            "description": "LED Outlet Indicator Behavior",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED on when power is off and off when power is on",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when power is on and off when power is off",
-                    "value": 1
-                },
-                {
-                    "label": "LED is always off, regardless of power status",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN20",
+	"description": "Z-Wave Plus Power Strip, VER. 2.0",
+	"devices": [
+		{
+			"productType": "0xa000",
+			"productId": "0xa004"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "On/Off Status Recovery After Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Remember Previous State After Power Failure",
+					"value": 0
+				},
+				{
+					"label": "Power Strip Automatically ON After Power Failure",
+					"value": 1
+				},
+				{
+					"label": "Power Strip Automatically OFF After Power Failure",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Power Wattage Report Value Threshold",
+			"description": "Choose how you want your Power Strip to report power consumption to your hub",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Power Wattage Report Frequency",
+			"description": "The number entered as value corresponds to the number of seconds",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Energy (kWh) Report Frequency",
+			"description": "Report interval of power consumption (W) to your controller (hub)",
+			"unit": "Seconds",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Overload Protection",
+			"description": "Set the Watt level for overload protection to kick in",
+			"unit": "Watts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1500,
+			"defaultValue": 1500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "CH1 Auto Turn-Off Timer",
+			"description": "Enable or disable the auto turn-off timer for CH1 outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "CH1 Auto Turn-Off Setting",
+			"description": "Time in minutes to turn off the device connected to CH1 after being turned on",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "CH1 Auto Turn-On Timer",
+			"description": "Enable or disable the auto turn-on timer for CH1 outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "CH1 Auto Turn-On Setting",
+			"description": "Time in minutes to turn on the device connected to CH1 after being turned off.",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "CH2 Auto Turn-Off Timer",
+			"description": "Enable or disable the auto turn-off timer for CH2 outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "CH2 Auto Turn-Off Setting",
+			"description": "Time in minutes to turn off the device connected to CH2 after being turned on",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "CH2 Auto Turn-On Timer",
+			"description": "Enable or disable the auto turn-on timer for CH2 outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"13": {
+			"label": "CH2 Auto Turn-On Setting",
+			"description": "Time in minutes to turn on the device connected to CH2 after being turned off",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "CH3 Auto Turn-Off Timer",
+			"description": "Enable or disable the auto turn-off timer for CH3 outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "CH3  Auto Turn-Off Setting",
+			"description": "Time in minutes to turn off the device connected to CH3 after being turned on",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "CH3 Auto Turn-On Timer",
+			"description": "Enable or disable the auto turn-on timer for CH3 outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"17": {
+			"label": "CH3 Auto Turn-On Setting",
+			"description": "Time in minutes to turn on the device connected to CH3 after being turned off",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "CH4 Auto Turn-Off Timer",
+			"description": "Enable or disable the auto turn-off timer for CH4 outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "CH4 Auto Turn-Off Setting",
+			"description": "Time in minutes to turn off the device connected to CH4 after being turned on.",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "CH4 Auto Turn-On Timer",
+			"description": "Enable or disable the auto turn-on timer for CH4 outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "CH4 Auto Turn-On Setting",
+			"description": "Time in minutes to turn on the device connected to CH4 after being turned off",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "CH5 Auto Turn-Off Timer",
+			"description": "Enable or disable the auto turn-off timer for CH5 outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"23": {
+			"label": "CH5 Auto Turn-Off Setting",
+			"description": "Time in minutes to turn off the device connected to CH5 after being turned on.",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "CH5 Auto Turn-On Timer",
+			"description": "Enable or disable the auto turn-on timer for CH5 outlet",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timer Disabled (Default)",
+					"value": 0
+				},
+				{
+					"label": "Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"25": {
+			"label": "CH5 Auto Turn-On Setting",
+			"description": "Time in minutes to turn on the device connected to CH5 after being turned off",
+			"unit": "Minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"26": {
+			"label": "Manual Control",
+			"description": "Enable / Disable Physical Button Functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Manual control disabled for all outlets",
+					"value": 0
+				},
+				{
+					"label": "Manual control enabled for all outlets (Default)",
+					"value": 1
+				}
+			]
+		},
+		"27": {
+			"label": "LED Indicator Mode",
+			"description": "LED Outlet Indicator Behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when power is off and off when power is on",
+					"value": 0
+				},
+				{
+					"label": "LED on when power is on and off when power is off",
+					"value": 1
+				},
+				{
+					"label": "LED is always off, regardless of power status",
+					"value": 2
+				}
+			]
+		}
+	}
 }

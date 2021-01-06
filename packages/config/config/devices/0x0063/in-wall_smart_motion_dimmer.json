@@ -1,360 +1,359 @@
 // Jasco Products In-Wall Smart Motion Dimmer
 // 26932/26933/ZW3008 In-Wall Smart Motion Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "In-Wall Smart Motion Dimmer",
-    "description": "26932/26933/ZW3008 In-Wall Smart Motion Dimmer",
-    "devices": [
-        {
-            "productType": "0x494d",
-            "productId": "0x3033"
-        },
-        {
-            "productType": "0x494d",
-            "productId": "0x3034"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Timeout Duration",
-            "description": "Amount of time the light stays on after motion stops",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Test (5s)",
-                    "value": 0
-                },
-                {
-                    "label": "1 minute",
-                    "value": 1
-                },
-                {
-                    "label": "5 minutes",
-                    "value": 5
-                },
-                {
-                    "label": "15 minutes",
-                    "value": 15
-                },
-                {
-                    "label": "30 minutes",
-                    "value": 30
-                },
-                {
-                    "label": "Disable timeout",
-                    "value": 255
-                }
-            ]
-        },
-        "2": {
-            "label": "Dim Level",
-            "description": "Brightness of associated light(s)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Operation Mode",
-            "description": "Sets how the light responds to motion",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Manual",
-                    "value": 1
-                },
-                {
-                    "label": "Vacancy",
-                    "value": 2
-                },
-                {
-                    "label": "Occupancy",
-                    "value": 3
-                }
-            ]
-        },
-        "4": {
-            "label": "Association Mode",
-            "description": "Enable/Disable Association Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Invert Switch",
-            "description": "In a 3-way configuration, invert the connected Add-On Switch buttons",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Motion Sensor",
-            "description": "Enable/Disable Motion Sensor",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Remote Control Dim Step",
-            "description": "Sets the step size of the dimmer.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Remote Control Dim Rate",
-            "description": "Set the speed at which the dim level will change. (10 millisecond precision)",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Local Control Dim Step",
-            "description": "Sets the step size of the dimmer.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Local Control Dim Rate",
-            "description": "Set the speed at which the dim level will change. (10 millisecond precision)",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "ALL ON/ALL OFF Dim Step",
-            "description": "Sets the step size of the dimmer.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "ALL ON/ALL OFF Dim Rate",
-            "description": "Set the speed at which the dim level will change. (10 millisecond precision)",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Motion Sensor Sensitivity",
-            "description": "Sets the amount of motion required to trigger the motion sensor.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "High",
-                    "value": 1
-                },
-                {
-                    "label": "Medium",
-                    "value": 2
-                },
-                {
-                    "label": "Low",
-                    "value": 3
-                }
-            ]
-        },
-        "14": {
-            "label": "Light Sensing",
-            "description": "Enable/Disable whether motion sensor only turns light on if room is dark",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "Reset Cycle",
-            "description": "Reset Cycle",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 110,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "16": {
-            "label": "Switch Mode",
-            "description": "Enable / Disable plain switch functionality",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "17": {
-            "label": "Switch Level",
-            "description": "Set power level for plain switch functionality",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 99,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "Dim Up Rate",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Dim up the light quickly (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Dim up the light to the default level slowly",
-                    "value": 1
-                }
-            ]
-        },
-        "19": {
-            "label": "Exclusion mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Press and release any button (Default)",
-                    "value": 0
-                },
-                {
-                    "label": "Press & release “X” btn & then “ON“ btn",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "In-Wall Smart Motion Dimmer",
+	"description": "26932/26933/ZW3008 In-Wall Smart Motion Dimmer",
+	"devices": [
+		{
+			"productType": "0x494d",
+			"productId": "0x3033"
+		},
+		{
+			"productType": "0x494d",
+			"productId": "0x3034"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Timeout Duration",
+			"description": "Amount of time the light stays on after motion stops",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Test (5s)",
+					"value": 0
+				},
+				{
+					"label": "1 minute",
+					"value": 1
+				},
+				{
+					"label": "5 minutes",
+					"value": 5
+				},
+				{
+					"label": "15 minutes",
+					"value": 15
+				},
+				{
+					"label": "30 minutes",
+					"value": 30
+				},
+				{
+					"label": "Disable timeout",
+					"value": 255
+				}
+			]
+		},
+		"2": {
+			"label": "Dim Level",
+			"description": "Brightness of associated light(s)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Operation Mode",
+			"description": "Sets how the light responds to motion",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Manual",
+					"value": 1
+				},
+				{
+					"label": "Vacancy",
+					"value": 2
+				},
+				{
+					"label": "Occupancy",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Association Mode",
+			"description": "Enable/Disable Association Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Invert Switch",
+			"description": "In a 3-way configuration, invert the connected Add-On Switch buttons",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Motion Sensor",
+			"description": "Enable/Disable Motion Sensor",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Remote Control Dim Step",
+			"description": "Sets the step size of the dimmer.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Remote Control Dim Rate",
+			"description": "Set the speed at which the dim level will change. (10 millisecond precision)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Local Control Dim Step",
+			"description": "Sets the step size of the dimmer.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Local Control Dim Rate",
+			"description": "Set the speed at which the dim level will change. (10 millisecond precision)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "ALL ON/ALL OFF Dim Step",
+			"description": "Sets the step size of the dimmer.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "ALL ON/ALL OFF Dim Rate",
+			"description": "Set the speed at which the dim level will change. (10 millisecond precision)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Motion Sensor Sensitivity",
+			"description": "Sets the amount of motion required to trigger the motion sensor.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "Low",
+					"value": 3
+				}
+			]
+		},
+		"14": {
+			"label": "Light Sensing",
+			"description": "Enable/Disable whether motion sensor only turns light on if room is dark",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Reset Cycle",
+			"description": "Reset Cycle",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 110,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Switch Mode",
+			"description": "Enable / Disable plain switch functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"17": {
+			"label": "Switch Level",
+			"description": "Set power level for plain switch functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Dim Up Rate",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dim up the light quickly (Default)",
+					"value": 0
+				},
+				{
+					"label": "Dim up the light to the default level slowly",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "Exclusion mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press and release any button (Default)",
+					"value": 0
+				},
+				{
+					"label": "Press & release “X” btn & then “ON“ btn",
+					"value": 1
+				}
+			]
+		}
+	}
 }

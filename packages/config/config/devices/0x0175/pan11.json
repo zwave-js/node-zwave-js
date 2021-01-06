@@ -1,192 +1,191 @@
 // Devolo PAN11
 // Smart Energy Plug-in Switch
 {
-    "_approved": true,
-    "manufacturer": "Devolo",
-    "manufacturerId": "0x0175",
-    "label": "PAN11",
-    "description": "Smart Energy Plug-in Switch",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Switch will report its latest status to Z-Wave Controller.",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Wall Meter Report Period",
-            "description": "Wall Meter Report Period",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 720,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "KWH Meter Report Period",
-            "description": "KWH Meter Report Period",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 32767,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Threshold of current for Load caution",
-            "description": "Threshold of current for Load caution",
-            "valueSize": 2,
-            "minValue": 10,
-            "maxValue": 1300,
-            "defaultValue": 1300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Threshold of KWH for Load caution",
-            "description": "Threshold of KWH for Load caution",
-            "unit": "KWh",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 10000,
-            "defaultValue": 10000,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Restore switch state mode",
-            "description": "Restore switch state mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Last switch state (default)",
-                    "value": 1
-                },
-                {
-                    "label": "On",
-                    "value": 2
-                }
-            ]
-        },
-        "6": {
-            "label": "Mode of Switch Off function",
-            "description": "Mode of Switch Off function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable (default)",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "LED indication mode",
-            "description": "LED indication mode",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Show switch state",
-                    "value": 1
-                },
-                {
-                    "label": "Show night mode",
-                    "value": 2
-                },
-                {
-                    "label": "Flash mode",
-                    "value": 3
-                }
-            ]
-        },
-        "8": {
-            "label": "Auto off timer",
-            "description": "Auto off timer",
-            "unit": "s",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable auto off function",
-                    "value": 0
-                }
-            ]
-        },
-        "9": {
-            "label": "RF off command mode",
-            "description": "RF off command mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch off (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Ignore",
-                    "value": 1
-                },
-                {
-                    "label": "Switch toggle",
-                    "value": 2
-                },
-                {
-                    "label": "Switch on",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Devolo",
+	"manufacturerId": "0x0175",
+	"label": "PAN11",
+	"description": "Smart Energy Plug-in Switch",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Switch will report its latest status to Z-Wave Controller.",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Wall Meter Report Period",
+			"description": "Wall Meter Report Period",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 720,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "KWH Meter Report Period",
+			"description": "KWH Meter Report Period",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32767,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Threshold of current for Load caution",
+			"description": "Threshold of current for Load caution",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 1300,
+			"defaultValue": 1300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Threshold of KWH for Load caution",
+			"description": "Threshold of KWH for Load caution",
+			"unit": "KWh",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10000,
+			"defaultValue": 10000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Restore switch state mode",
+			"description": "Restore switch state mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Last switch state (default)",
+					"value": 1
+				},
+				{
+					"label": "On",
+					"value": 2
+				}
+			]
+		},
+		"6": {
+			"label": "Mode of Switch Off function",
+			"description": "Mode of Switch Off function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable (default)",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "LED indication mode",
+			"description": "LED indication mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Show switch state",
+					"value": 1
+				},
+				{
+					"label": "Show night mode",
+					"value": 2
+				},
+				{
+					"label": "Flash mode",
+					"value": 3
+				}
+			]
+		},
+		"8": {
+			"label": "Auto off timer",
+			"description": "Auto off timer",
+			"unit": "s",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable auto off function",
+					"value": 0
+				}
+			]
+		},
+		"9": {
+			"label": "RF off command mode",
+			"description": "RF off command mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch off (default)",
+					"value": 0
+				},
+				{
+					"label": "Ignore",
+					"value": 1
+				},
+				{
+					"label": "Switch toggle",
+					"value": 2
+				},
+				{
+					"label": "Switch on",
+					"value": 3
+				}
+			]
+		}
+	}
 }

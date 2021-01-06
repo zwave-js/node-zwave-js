@@ -1,25 +1,18 @@
 // Qees Wall
 // Wall mountable mini 4 button remote
 {
-    "_approved": true,
-    "_warnings": [
-        "Inclusion information is not set",
-        "Exclusion information is not set",
-        "Wakeup information is not set",
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
-    "manufacturer": "Qees",
-    "manufacturerId": "0x0095",
-    "label": "Wall",
-    "description": "Wall mountable mini 4 button remote",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Qees",
+	"manufacturerId": "0x0095",
+	"label": "Wall",
+	"description": "Wall mountable mini 4 button remote",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

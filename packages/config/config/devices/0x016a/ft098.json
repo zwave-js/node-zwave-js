@@ -1,290 +1,289 @@
 // Fantem FT098
 // 9W Color Light Bulb
 {
-    "_approved": true,
-    "manufacturer": "Fantem",
-    "manufacturerId": "0x016a",
-    "label": "FT098",
-    "description": "9W Color Light Bulb",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0062"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Lifeline",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Retransmit",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "20": {
-            "label": "Power-on state",
-            "description": "The bulb's state after power is applied",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Use previous state",
-                    "value": 0
-                },
-                {
-                    "label": "Always on",
-                    "value": 1
-                },
-                {
-                    "label": "Always off",
-                    "value": 2
-                }
-            ]
-        },
-        "32": {
-            "label": "Send report when color is changed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Hail CC",
-                    "value": 1
-                }
-            ]
-        },
-        "33": {
-            "label": "Get the bulb's color value",
-            "description": "Byte 1: reserved, Bytes 2, 3, 4: Red, Green, Blue",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "34": {
-            "label": "Allow external switch to turn the bulb on/off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "35": {
-            "label": "Allow external switch to change the color",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "36": {
-            "label": "Reboot / Save / Exit colorful mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Un-reboot colorful mode",
-                    "value": 0
-                },
-                {
-                    "label": "Reboot colorful mode",
-                    "value": 1
-                },
-                {
-                    "label": "Exit colorful mode",
-                    "value": 2
-                },
-                {
-                    "label": "Save current colorful mode value and then exit",
-                    "value": 3
-                }
-            ]
-        },
-        "37": {
-            "label": "Colorful mode configuration",
-            "description": "Configure the colour cycling modes. See overview for details.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "38": {
-            "label": "Change speed",
-            "description": "Change the speed when going from OFF to ON, ON to OFF. See overview for details.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "39": {
-            "label": "Multi-colour configuration",
-            "description": "Set up to 8 colours to cycle between when the LED is in Multi Colour Mode",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "80": {
-            "label": "Send notifications to associated devices (Group 1)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Hail CC",
-                    "value": 1
-                },
-                {
-                    "label": "Basic CC Report",
-                    "value": 2
-                }
-            ]
-        },
-        "112": {
-            "label": "Dimer mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Parabolic curve",
-                    "value": 0
-                },
-                {
-                    "label": "Index curve",
-                    "value": 1
-                },
-                {
-                    "label": "(Parabolic + Index) / 2",
-                    "value": 2
-                },
-                {
-                    "label": "Linear",
-                    "value": 3
-                }
-            ]
-        },
-        "200": {
-            "label": "Partner ID",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Aeon Labs Standard Product",
-                    "value": 0
-                }
-            ]
-        },
-        "252": {
-            "label": "Enable/disable Lock Configuration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "255": {
-            "label": "Reset to factory defaults",
-            "description": "Reset the bulb, optionally also removing it from the z-wave network",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Fantem",
+	"manufacturerId": "0x016a",
+	"label": "FT098",
+	"description": "9W Color Light Bulb",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0062"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"description": "Retransmit",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"20": {
+			"label": "Power-on state",
+			"description": "The bulb's state after power is applied",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Use previous state",
+					"value": 0
+				},
+				{
+					"label": "Always on",
+					"value": 1
+				},
+				{
+					"label": "Always off",
+					"value": 2
+				}
+			]
+		},
+		"32": {
+			"label": "Send report when color is changed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Hail CC",
+					"value": 1
+				}
+			]
+		},
+		"33": {
+			"label": "Get the bulb's color value",
+			"description": "Byte 1: reserved, Bytes 2, 3, 4: Red, Green, Blue",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "Allow external switch to turn the bulb on/off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"35": {
+			"label": "Allow external switch to change the color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"36": {
+			"label": "Reboot / Save / Exit colorful mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Un-reboot colorful mode",
+					"value": 0
+				},
+				{
+					"label": "Reboot colorful mode",
+					"value": 1
+				},
+				{
+					"label": "Exit colorful mode",
+					"value": 2
+				},
+				{
+					"label": "Save current colorful mode value and then exit",
+					"value": 3
+				}
+			]
+		},
+		"37": {
+			"label": "Colorful mode configuration",
+			"description": "Configure the colour cycling modes. See overview for details.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"38": {
+			"label": "Change speed",
+			"description": "Change the speed when going from OFF to ON, ON to OFF. See overview for details.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39": {
+			"label": "Multi-colour configuration",
+			"description": "Set up to 8 colours to cycle between when the LED is in Multi Colour Mode",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"80": {
+			"label": "Send notifications to associated devices (Group 1)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Hail CC",
+					"value": 1
+				},
+				{
+					"label": "Basic CC Report",
+					"value": 2
+				}
+			]
+		},
+		"112": {
+			"label": "Dimer mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Parabolic curve",
+					"value": 0
+				},
+				{
+					"label": "Index curve",
+					"value": 1
+				},
+				{
+					"label": "(Parabolic + Index) / 2",
+					"value": 2
+				},
+				{
+					"label": "Linear",
+					"value": 3
+				}
+			]
+		},
+		"200": {
+			"label": "Partner ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Aeon Labs Standard Product",
+					"value": 0
+				}
+			]
+		},
+		"252": {
+			"label": "Enable/disable Lock Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset to factory defaults",
+			"description": "Reset the bulb, optionally also removing it from the z-wave network",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

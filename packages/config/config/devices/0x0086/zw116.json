@@ -1,7 +1,6 @@
 // AEON Labs ZW116
 // Aeotec Nano Switch
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW116",

@@ -1,22 +1,18 @@
 // Vision Security AZL7434
 // In-wall Switch
 {
-    "_approved": true,
-    "_errors": [
-        "No endpoints are configured"
-    ],
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "AZL7434",
-    "description": "In-wall Switch",
-    "devices": [
-        {
-            "productType": "0x200c",
-            "productId": "0x0c06"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "5.1",
-        "max": "5.1"
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "AZL7434",
+	"description": "In-wall Switch",
+	"devices": [
+		{
+			"productType": "0x200c",
+			"productId": "0x0c06"
+		}
+	],
+	"firmwareVersion": {
+		"min": "5.1",
+		"max": "5.1"
+	}
 }

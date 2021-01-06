@@ -1,50 +1,49 @@
 // AEON Labs DSA38
 // Panic Button Key Fob
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSA38",
-    "description": "Panic Button Key Fob",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0026"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Scene 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "250": {
-            "label": "Mode of Button 1",
-            "description": "Defines the switching mode of Button 1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Factory Default",
-                    "value": 0
-                },
-                {
-                    "label": "Scene Mode",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSA38",
+	"description": "Panic Button Key Fob",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0026"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Scene 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"250": {
+			"label": "Mode of Button 1",
+			"description": "Defines the switching mode of Button 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Factory Default",
+					"value": 0
+				},
+				{
+					"label": "Scene Mode",
+					"value": 1
+				}
+			]
+		}
+	}
 }

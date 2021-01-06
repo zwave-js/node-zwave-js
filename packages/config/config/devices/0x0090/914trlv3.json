@@ -1,97 +1,96 @@
 // Spectrum Brands 914TRLv3
 // Touchpad Electronic Deadbolt
 {
-    "_approved": true,
-    "manufacturer": "Spectrum Brands",
-    "manufacturerId": "0x0090",
-    "label": "914TRLv3",
-    "description": "Touchpad Electronic Deadbolt",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0440"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "User Code 1 Type",
-            "description": "User Code 1 Type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "33": {
-            "label": "SKU (High 32bits)",
-            "description": "ASCII",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "34": {
-            "label": "SKU (Low 32bits)",
-            "description": "ASCII",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "40": {
-            "label": "Factory Reset",
-            "description": "Have lock perform factory reset. (1 will reset)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true
-        },
-        "31[0x01]": {
-            "label": "Lock Status LED",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "31[0x02]": {
-            "label": "Autolock setting",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "31[0x04]": {
-            "label": "Buzzer",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Spectrum Brands",
+	"manufacturerId": "0x0090",
+	"label": "914TRLv3",
+	"description": "Touchpad Electronic Deadbolt",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0440"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "User Code 1 Type",
+			"description": "User Code 1 Type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "SKU (High 32bits)",
+			"description": "ASCII",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "SKU (Low 32bits)",
+			"description": "ASCII",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Factory Reset",
+			"description": "Have lock perform factory reset. (1 will reset)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"31[0x01]": {
+			"label": "Lock Status LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31[0x02]": {
+			"label": "Autolock setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31[0x04]": {
+			"label": "Buzzer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

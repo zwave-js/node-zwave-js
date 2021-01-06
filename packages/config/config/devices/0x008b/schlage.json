@@ -1,19 +1,18 @@
 // Trane Corporation Schlage
 // LE130
 {
-    "_approved": true,
-    "manufacturer": "Trane Corporation",
-    "manufacturerId": "0x008b",
-    "label": "Schlage",
-    "description": "LE130",
-    "devices": [
-        {
-            "productType": "0x4d53",
-            "productId": "0x4331"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Trane Corporation",
+	"manufacturerId": "0x008b",
+	"label": "Schlage",
+	"description": "LE130",
+	"devices": [
+		{
+			"productType": "0x4d53",
+			"productId": "0x4331"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

@@ -1,7 +1,6 @@
 // AEON Labs ZW075
 // Smart Energy Switch 3rd Edition
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW075",

@@ -1,20 +1,19 @@
 // Zipato PAN04
 // In Wall Dual Relay
 {
-    "_approved": true,
-    "manufacturer": "Zipato",
-    "manufacturerId": "0x0131",
-    "label": "PAN04",
-    "description": "In Wall Dual Relay",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0012"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "PAN04",
+	"description": "In Wall Dual Relay",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0012"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

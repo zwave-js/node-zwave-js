@@ -1,261 +1,260 @@
 // Inovelli LZW30
 // Base model On-Off switch
 {
-    "_approved": true,
-    "manufacturer": "Inovelli",
-    "manufacturerId": "0x031e",
-    "label": "LZW30",
-    "description": "Base model On-Off switch",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Power On State",
-            "description": "Power On State",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Prior State",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 1
-                },
-                {
-                    "label": "Off",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Invert Switch",
-            "description": "Invert Switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Auto Off Timer",
-            "description": "Auto Off Timer (in seconds)",
-            "unit": "Seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Association Behaviour",
-            "description": "Association Behaviour",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 15,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "LED Indicator Color",
-            "description": "LED Indicator Color",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 170,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Red",
-                    "value": 0
-                },
-                {
-                    "label": "Orange",
-                    "value": 21
-                },
-                {
-                    "label": "Yellow",
-                    "value": 42
-                },
-                {
-                    "label": "Green",
-                    "value": 85
-                },
-                {
-                    "label": "Cyan",
-                    "value": 127
-                },
-                {
-                    "label": "Blue",
-                    "value": 170
-                },
-                {
-                    "label": "Violet",
-                    "value": 212
-                },
-                {
-                    "label": "Pink",
-                    "value": 234
-                }
-            ]
-        },
-        "6": {
-            "label": "LED Indicator Intensity (when on)",
-            "description": "LED Indicator Intensity (when on)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 10,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "10 %",
-                    "value": 1
-                },
-                {
-                    "label": "20 %",
-                    "value": 2
-                },
-                {
-                    "label": "30 %",
-                    "value": 3
-                },
-                {
-                    "label": "40 %",
-                    "value": 4
-                },
-                {
-                    "label": "50 %",
-                    "value": 5
-                },
-                {
-                    "label": "60 %",
-                    "value": 6
-                },
-                {
-                    "label": "70 %",
-                    "value": 7
-                },
-                {
-                    "label": "80 %",
-                    "value": 8
-                },
-                {
-                    "label": "90%",
-                    "value": 9
-                },
-                {
-                    "label": "100 %",
-                    "value": 10
-                }
-            ]
-        },
-        "7": {
-            "label": "LED Indicator Intensity (when Off)",
-            "description": "LED Indicator Intensity (when Off)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 10,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "10 %",
-                    "value": 1
-                },
-                {
-                    "label": "20 %",
-                    "value": 2
-                },
-                {
-                    "label": "30 %",
-                    "value": 3
-                },
-                {
-                    "label": "40 %",
-                    "value": 4
-                },
-                {
-                    "label": "50 %",
-                    "value": 5
-                },
-                {
-                    "label": "60 %",
-                    "value": 6
-                },
-                {
-                    "label": "70 %",
-                    "value": 7
-                },
-                {
-                    "label": "80 %",
-                    "value": 8
-                },
-                {
-                    "label": "90 %",
-                    "value": 9
-                },
-                {
-                    "label": "100 %",
-                    "value": 10
-                }
-            ]
-        },
-        "8": {
-            "label": "LED Strip Effect",
-            "description": "Calculated sum of parameters as per overview section",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 83823359,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Inovelli",
+	"manufacturerId": "0x031e",
+	"label": "LZW30",
+	"description": "Base model On-Off switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Power On State",
+			"description": "Power On State",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Prior State",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				},
+				{
+					"label": "Off",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Invert Switch",
+			"description": "Invert Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Auto Off Timer",
+			"description": "Auto Off Timer (in seconds)",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Association Behaviour",
+			"description": "Association Behaviour",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "LED Indicator Color",
+			"description": "LED Indicator Color",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 170,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Red",
+					"value": 0
+				},
+				{
+					"label": "Orange",
+					"value": 21
+				},
+				{
+					"label": "Yellow",
+					"value": 42
+				},
+				{
+					"label": "Green",
+					"value": 85
+				},
+				{
+					"label": "Cyan",
+					"value": 127
+				},
+				{
+					"label": "Blue",
+					"value": 170
+				},
+				{
+					"label": "Violet",
+					"value": 212
+				},
+				{
+					"label": "Pink",
+					"value": 234
+				}
+			]
+		},
+		"6": {
+			"label": "LED Indicator Intensity (when on)",
+			"description": "LED Indicator Intensity (when on)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10 %",
+					"value": 1
+				},
+				{
+					"label": "20 %",
+					"value": 2
+				},
+				{
+					"label": "30 %",
+					"value": 3
+				},
+				{
+					"label": "40 %",
+					"value": 4
+				},
+				{
+					"label": "50 %",
+					"value": 5
+				},
+				{
+					"label": "60 %",
+					"value": 6
+				},
+				{
+					"label": "70 %",
+					"value": 7
+				},
+				{
+					"label": "80 %",
+					"value": 8
+				},
+				{
+					"label": "90%",
+					"value": 9
+				},
+				{
+					"label": "100 %",
+					"value": 10
+				}
+			]
+		},
+		"7": {
+			"label": "LED Indicator Intensity (when Off)",
+			"description": "LED Indicator Intensity (when Off)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "10 %",
+					"value": 1
+				},
+				{
+					"label": "20 %",
+					"value": 2
+				},
+				{
+					"label": "30 %",
+					"value": 3
+				},
+				{
+					"label": "40 %",
+					"value": 4
+				},
+				{
+					"label": "50 %",
+					"value": 5
+				},
+				{
+					"label": "60 %",
+					"value": 6
+				},
+				{
+					"label": "70 %",
+					"value": 7
+				},
+				{
+					"label": "80 %",
+					"value": 8
+				},
+				{
+					"label": "90 %",
+					"value": 9
+				},
+				{
+					"label": "100 %",
+					"value": 10
+				}
+			]
+		},
+		"8": {
+			"label": "LED Strip Effect",
+			"description": "Calculated sum of parameters as per overview section",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 83823359,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

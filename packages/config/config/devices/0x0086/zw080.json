@@ -1,133 +1,132 @@
 // AEON Labs ZW080
 // Siren Gen5
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "ZW080",
-    "description": "Siren Gen5",
-    "devices": [
-        {
-            "productType": "0x0104",
-            "productId": "0x0050"
-        },
-        {
-            "productType": "0x0204",
-            "productId": "0x0050"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "80": {
-            "label": "Enable Notifications to Group 1",
-            "description": "what type of notification to send to Group 1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 25,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "200": {
-            "label": "Partner ID",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "252": {
-            "label": "Enable/disable Configuration Updates",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Enabled",
-                    "value": 0
-                },
-                {
-                    "label": "Disabled",
-                    "value": 1
-                }
-            ]
-        },
-        "37[0xff]": {
-            "label": "Siren Sound",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Do not change the current Siren sound",
-                    "value": 0
-                },
-                {
-                    "label": "Siren sound 1 is selected",
-                    "value": 1
-                },
-                {
-                    "label": "Siren sound 2 is selected",
-                    "value": 2
-                },
-                {
-                    "label": "Siren sound 3 is selected",
-                    "value": 3
-                },
-                {
-                    "label": "Siren sound 4 is selected",
-                    "value": 4
-                },
-                {
-                    "label": "Siren sound 5 is selected",
-                    "value": 5
-                }
-            ]
-        },
-        "37[0xff00]": {
-            "label": "Siren Volume",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Do not change the current volume",
-                    "value": 0
-                },
-                {
-                    "label": "Set the volume to 88 dB",
-                    "value": 1
-                },
-                {
-                    "label": "Set the volume to 100 dB",
-                    "value": 2
-                },
-                {
-                    "label": "Set the volume to 105 dB",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW080",
+	"description": "Siren Gen5",
+	"devices": [
+		{
+			"productType": "0x0104",
+			"productId": "0x0050"
+		},
+		{
+			"productType": "0x0204",
+			"productId": "0x0050"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"80": {
+			"label": "Enable Notifications to Group 1",
+			"description": "what type of notification to send to Group 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 25,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"200": {
+			"label": "Partner ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"252": {
+			"label": "Enable/disable Configuration Updates",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
+					"value": 1
+				}
+			]
+		},
+		"37[0xff]": {
+			"label": "Siren Sound",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Do not change the current Siren sound",
+					"value": 0
+				},
+				{
+					"label": "Siren sound 1 is selected",
+					"value": 1
+				},
+				{
+					"label": "Siren sound 2 is selected",
+					"value": 2
+				},
+				{
+					"label": "Siren sound 3 is selected",
+					"value": 3
+				},
+				{
+					"label": "Siren sound 4 is selected",
+					"value": 4
+				},
+				{
+					"label": "Siren sound 5 is selected",
+					"value": 5
+				}
+			]
+		},
+		"37[0xff00]": {
+			"label": "Siren Volume",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Do not change the current volume",
+					"value": 0
+				},
+				{
+					"label": "Set the volume to 88 dB",
+					"value": 1
+				},
+				{
+					"label": "Set the volume to 100 dB",
+					"value": 2
+				},
+				{
+					"label": "Set the volume to 105 dB",
+					"value": 3
+				}
+			]
+		}
+	}
 }

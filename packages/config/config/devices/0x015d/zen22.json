@@ -1,88 +1,84 @@
 // Willis Electric Co., Ltd. ZEN22
 // Zooz Z-Wave Dimmable Light Switch ZEN22
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Willis Electric Co., Ltd.",
-    "manufacturerId": "0x015d",
-    "label": "ZEN22",
-    "description": "Zooz Z-Wave Dimmable Light Switch ZEN22",
-    "devices": [
-        {
-            "productType": "0x0112",
-            "productId": "0x241c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Paddle Functions",
-            "description": "Paddle Functions",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Upper paddle turns the light on,",
-                    "value": 0
-                },
-                {
-                    "label": "Upper paddle turns the light off",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "LED Indicator Function",
-            "description": "LED Indicator Function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED indicator is on when switch is off",
-                    "value": 0
-                },
-                {
-                    "label": "LED indicator is on when switch is on",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Enable / Disable LED",
-            "description": "Enable / Disable LED",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED enabled",
-                    "value": 0
-                },
-                {
-                    "label": "LED disabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "ZEN22",
+	"description": "Zooz Z-Wave Dimmable Light Switch ZEN22",
+	"devices": [
+		{
+			"productType": "0x0112",
+			"productId": "0x241c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Paddle Functions",
+			"description": "Paddle Functions",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Upper paddle turns the light on,",
+					"value": 0
+				},
+				{
+					"label": "Upper paddle turns the light off",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "LED Indicator Function",
+			"description": "LED Indicator Function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED indicator is on when switch is off",
+					"value": 0
+				},
+				{
+					"label": "LED indicator is on when switch is on",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Enable / Disable LED",
+			"description": "Enable / Disable LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED enabled",
+					"value": 0
+				},
+				{
+					"label": "LED disabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

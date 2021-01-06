@@ -1,7 +1,6 @@
 // Remotec ZXT-600
 // AC Master
 {
-	"_approved": true,
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
 	"label": "ZXT-600",

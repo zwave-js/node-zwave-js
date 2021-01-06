@@ -1,19 +1,18 @@
 // Reitz-Group.de Duewi ZW-ZS-3500
 // Schuko Plug Switch
 {
-    "_approved": true,
-    "manufacturer": "Reitz-Group.de",
-    "manufacturerId": "0x0064",
-    "label": "Duewi ZW-ZS-3500",
-    "description": "Schuko Plug Switch",
-    "devices": [
-        {
-            "productType": "0x3001",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Reitz-Group.de",
+	"manufacturerId": "0x0064",
+	"label": "Duewi ZW-ZS-3500",
+	"description": "Schuko Plug Switch",
+	"devices": [
+		{
+			"productType": "0x3001",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

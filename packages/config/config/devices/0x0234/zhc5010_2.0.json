@@ -1,14 +1,6 @@
 // Logic Group ZHC5010
 // FUGA Wall 4-way Switch with LED + Relay
 {
-	"_approved": true,
-	"_warnings": [
-		"Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!",
-		"Endpoint 1 contains both switch and dimmer channels. It probably should only include dimmer!",
-		"Endpoint 2 contains both switch and dimmer channels. It probably should only include dimmer!",
-		"Endpoint 3 contains both switch and dimmer channels. It probably should only include dimmer!",
-		"Endpoint 4 contains both switch and dimmer channels. It probably should only include dimmer!"
-	],
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "ZHC5010",

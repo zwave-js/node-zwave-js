@@ -1,94 +1,93 @@
 // Merten 5071xx
 // Radio Push-button CONNECT, 1 button
 {
-    "_approved": true,
-    "manufacturer": "Merten",
-    "manufacturerId": "0x007a",
-    "label": "5071xx",
-    "description": "Radio Push-button CONNECT, 1 button",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Button upper part",
-            "maxNodes": 12,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Button lower part",
-            "maxNodes": 12,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "0": {
-            "label": "Switching/dimming/shutters",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Switching single-surface",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "44": {
-            "label": "Doorbell function",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "52": {
-            "label": "LOWER shutter as long as button is pressed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "54": {
-            "label": "Move shutter single-surface",
-            "description": "Direction of movement changes after each switching process",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "55": {
-            "label": "RAISE shutter as long as button is pressed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Merten",
+	"manufacturerId": "0x007a",
+	"label": "5071xx",
+	"description": "Radio Push-button CONNECT, 1 button",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Button upper part",
+			"maxNodes": 12,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Button lower part",
+			"maxNodes": 12,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"0": {
+			"label": "Switching/dimming/shutters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Switching single-surface",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"44": {
+			"label": "Doorbell function",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "LOWER shutter as long as button is pressed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"54": {
+			"label": "Move shutter single-surface",
+			"description": "Direction of movement changes after each switching process",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"55": {
+			"label": "RAISE shutter as long as button is pressed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

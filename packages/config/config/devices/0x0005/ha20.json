@@ -1,26 +1,25 @@
 // Intermatic HA20
 // Dimmer Switch
 {
-    "_approved": true,
-    "manufacturer": "Intermatic",
-    "manufacturerId": "0x0005",
-    "label": "HA20",
-    "description": "Dimmer Switch",
-    "devices": [
-        {
-            "productType": "0x4841",
-            "productId": "0x0020"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 4,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Intermatic",
+	"manufacturerId": "0x0005",
+	"label": "HA20",
+	"description": "Dimmer Switch",
+	"devices": [
+		{
+			"productType": "0x4841",
+			"productId": "0x0020"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 4,
+			"isLifeline": true
+		}
+	}
 }

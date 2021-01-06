@@ -1,52 +1,51 @@
 // Secure Meters (UK) Ltd. SES 302
 // Temperature sensor
 {
-    "_approved": true,
-    "manufacturer": "Secure Meters (UK) Ltd.",
-    "manufacturerId": "0x0059",
-    "label": "SES 302",
-    "description": "Temperature sensor",
-    "devices": [
-        {
-            "productType": "0x000d",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 2,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Delta Temp",
-            "description": "Precision of measured temperature (delta)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Temp Reporting Interval",
-            "description": "Reporting interval in minutes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Secure Meters (UK) Ltd.",
+	"manufacturerId": "0x0059",
+	"label": "SES 302",
+	"description": "Temperature sensor",
+	"devices": [
+		{
+			"productType": "0x000d",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 2,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Delta Temp",
+			"description": "Precision of measured temperature (delta)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Temp Reporting Interval",
+			"description": "Reporting interval in minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

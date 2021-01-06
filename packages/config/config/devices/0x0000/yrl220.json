@@ -1,18 +1,6 @@
 // Sigma Designs (Former Zensys) YRL220
 // Yale Real Living Touchscreen Lever Lock
 {
-	"_approved": false,
-	"_errors": [
-		"Overview information is not set",
-		"Inclusion information is not set",
-		"Exclusion information is not set",
-		"No endpoints are configured",
-		"Device category is not set.",
-		"Device has configuration parameters defined, but does not support the CONFIGURATION command class.",
-		"Device has association groups defined, but does not support the ASSOCIATION command class.",
-		"At least one manufacturers product image must be uploaded",
-		"At least one device manual must be uploaded as PDF"
-	],
 	"manufacturer": "Sigma Designs (Former Zensys)",
 	"manufacturerId": "0x0000",
 	"label": "YRL220",

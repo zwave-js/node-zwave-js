@@ -1,31 +1,19 @@
 // HANK Electronics Ltd. SW es01
 // Siterwell eyesonsor
 {
-    "_approved": true,
-    "_errors": [
-        "Device category is not set.",
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set",
-        "Wakeup information is not set"
-    ],
-    "manufacturer": "HANK Electronics Ltd.",
-    "manufacturerId": "0x0208",
-    "label": "SW es01",
-    "description": "Siterwell eyesonsor",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0300"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "SW es01",
+	"description": "Siterwell eyesonsor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0300"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

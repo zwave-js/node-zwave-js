@@ -1,81 +1,80 @@
 // Aeotec Ltd. ZWA001
 // Bulb 6 Multi-White
 {
-    "_approved": true,
-    "manufacturer": "Aeotec Ltd.",
-    "manufacturerId": "0x0371",
-    "label": "ZWA001",
-    "description": "Bulb 6 Multi-White",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0001"
-        },
-        {
-            "productType": "0x0103",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "80": {
-            "label": "Send notifications to associated devices",
-            "description": "To send notifications to (Group 1) when state change.0 = Nothing.1= Basic CC.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Send Basic Report to associated nodes when state",
-                    "value": 1
-                }
-            ]
-        },
-        "81": {
-            "label": "Adjust color temperature in warm white color comp",
-            "description": "available value: 0x0A8C-1387Warm White(0x0A8C(2700k) ~ 0x1387 (4999k))",
-            "valueSize": 2,
-            "minValue": 2700,
-            "maxValue": 4999,
-            "defaultValue": 2700,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Warm White(0x0A8C(2700k) ~ 0x1387 (4999k))",
-                    "value": 2700
-                }
-            ]
-        },
-        "82": {
-            "label": "Color temperature in cold white color comp",
-            "description": "Available value:0x1388-0x1964Cold White (0x1388 (5000k) ~ 0x1964 (6500k))",
-            "valueSize": 2,
-            "minValue": 5000,
-            "maxValue": 6500,
-            "defaultValue": 6500,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Cold White (0x1388 (5000k) ~ 0x1964 (6500k))",
-                    "value": 5000
-                }
-            ]
-        }
-    }
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA001",
+	"description": "Bulb 6 Multi-White",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0103",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"80": {
+			"label": "Send notifications to associated devices",
+			"description": "To send notifications to (Group 1) when state change.0 = Nothing.1= Basic CC.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Report to associated nodes when state",
+					"value": 1
+				}
+			]
+		},
+		"81": {
+			"label": "Adjust color temperature in warm white color comp",
+			"description": "available value: 0x0A8C-1387Warm White(0x0A8C(2700k) ~ 0x1387 (4999k))",
+			"valueSize": 2,
+			"minValue": 2700,
+			"maxValue": 4999,
+			"defaultValue": 2700,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Warm White(0x0A8C(2700k) ~ 0x1387 (4999k))",
+					"value": 2700
+				}
+			]
+		},
+		"82": {
+			"label": "Color temperature in cold white color comp",
+			"description": "Available value:0x1388-0x1964Cold White (0x1388 (5000k) ~ 0x1964 (6500k))",
+			"valueSize": 2,
+			"minValue": 5000,
+			"maxValue": 6500,
+			"defaultValue": 6500,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Cold White (0x1388 (5000k) ~ 0x1964 (6500k))",
+					"value": 5000
+				}
+			]
+		}
+	}
 }

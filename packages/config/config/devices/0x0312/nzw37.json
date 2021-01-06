@@ -1,28 +1,27 @@
 // NIE Technology Co., Ltd. NZW37
 // 2-Channel Dual Smart Plug
 {
-    "_approved": true,
-    "manufacturer": "NIE Technology Co., Ltd.",
-    "manufacturerId": "0x0312",
-    "label": "NZW37",
-    "description": "2-Channel Dual Smart Plug",
-    "devices": [
-        {
-            "productType": "0x2500",
-            "productId": "0x2500"
-        },
-        {
-            "productType": "0x6100",
-            "productId": "0x6100"
-        },
-        {
-            "productType": "0xb221",
-            "productId": "0x251c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "NZW37",
+	"description": "2-Channel Dual Smart Plug",
+	"devices": [
+		{
+			"productType": "0x2500",
+			"productId": "0x2500"
+		},
+		{
+			"productType": "0x6100",
+			"productId": "0x6100"
+		},
+		{
+			"productType": "0xb221",
+			"productId": "0x251c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

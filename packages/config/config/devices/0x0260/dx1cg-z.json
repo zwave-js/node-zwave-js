@@ -1,30 +1,29 @@
 // Shenzhen Heiman Technology Co., Ltd. DX1CG-Z
 // CH4 Gas Sensor
 {
-    "_approved": true,
-    "manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
-    "manufacturerId": "0x0260",
-    "label": "DX1CG-Z",
-    "description": "CH4 Gas Sensor",
-    "devices": [
-        {
-            "productType": "0x8003",
-            "productId": "0x1000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Root Device group (Notifcation)",
-            "maxNodes": 5
-        }
-    }
+	"manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
+	"manufacturerId": "0x0260",
+	"label": "DX1CG-Z",
+	"description": "CH4 Gas Sensor",
+	"devices": [
+		{
+			"productType": "0x8003",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Root Device group (Notifcation)",
+			"maxNodes": 5
+		}
+	}
 }

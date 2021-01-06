@@ -1,43 +1,42 @@
 // Willis Electric Co., Ltd. Zen24
 // Toggle Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Willis Electric Co., Ltd.",
-    "manufacturerId": "0x015d",
-    "label": "Zen24",
-    "description": "Toggle Dimmer",
-    "devices": [
-        {
-            "productType": "0x0111",
-            "productId": "0x1f1c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Control Mode",
-            "description": "Control Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Mode 1",
-                    "value": 0
-                },
-                {
-                    "label": "Mode 2",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "Zen24",
+	"description": "Toggle Dimmer",
+	"devices": [
+		{
+			"productType": "0x0111",
+			"productId": "0x1f1c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Control Mode",
+			"description": "Control Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Mode 1",
+					"value": 0
+				},
+				{
+					"label": "Mode 2",
+					"value": 1
+				}
+			]
+		}
+	}
 }

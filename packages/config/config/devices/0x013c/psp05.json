@@ -1,7 +1,6 @@
 // Philio Technology Corp PSP05
 // Motion Sensor
 {
-	"_approved": true,
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PSP05",

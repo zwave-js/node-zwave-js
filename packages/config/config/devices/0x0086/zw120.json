@@ -1,156 +1,155 @@
 // AEON Labs ZW120
 // Door/Window sensor Gen5
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "ZW120",
-    "description": "Door/Window sensor Gen5",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0078"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x0078"
-        },
-        {
-            "productType": "0x0202",
-            "productId": "0x0078"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Magnet ON/OFF",
-            "description": "Value sent when the Magnet is triggered On/Off.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Close=0xFF, Open=0x00",
-                    "value": 0
-                },
-                {
-                    "label": "Close=0x00, Open=0xFF",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Wake up 10 minutes",
-            "description": "Default setting: Disable",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Basic Set Report",
-            "description": "Which value of the Basic Set will be sent when the door is Opened/Closed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Open: 0xFF, Close: 0x00",
-                    "value": 0
-                },
-                {
-                    "label": "Open: 0x00, Close: 0xFF",
-                    "value": 1
-                }
-            ]
-        },
-        "39": {
-            "label": "Set the low battery value.",
-            "description": "10% to 50%",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 50,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "111": {
-            "label": "Set the interval time of low battery checking.",
-            "description": "Minimum interval is 4 minutes, Range is 0 to 2147483647",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2147483647,
-            "defaultValue": 86640,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "121": {
-            "label": "Report type",
-            "description": "Sensor report sent when triggered Opened/Closed",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Reset To Factory Defaults.",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Reset to factory default setting",
-                    "value": 0
-                },
-                {
-                    "label": "Normal",
-                    "value": 1
-                },
-                {
-                    "label": "Reset to factory default",
-                    "value": 1431655765
-                }
-            ]
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW120",
+	"description": "Door/Window sensor Gen5",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0078"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x0078"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x0078"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Magnet ON/OFF",
+			"description": "Value sent when the Magnet is triggered On/Off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Close=0xFF, Open=0x00",
+					"value": 0
+				},
+				{
+					"label": "Close=0x00, Open=0xFF",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Wake up 10 minutes",
+			"description": "Default setting: Disable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Basic Set Report",
+			"description": "Which value of the Basic Set will be sent when the door is Opened/Closed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Open: 0xFF, Close: 0x00",
+					"value": 0
+				},
+				{
+					"label": "Open: 0x00, Close: 0xFF",
+					"value": 1
+				}
+			]
+		},
+		"39": {
+			"label": "Set the low battery value.",
+			"description": "10% to 50%",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"111": {
+			"label": "Set the interval time of low battery checking.",
+			"description": "Minimum interval is 4 minutes, Range is 0 to 2147483647",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 86640,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"121": {
+			"label": "Report type",
+			"description": "Sensor report sent when triggered Opened/Closed",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Reset To Factory Defaults.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reset to factory default setting",
+					"value": 0
+				},
+				{
+					"label": "Normal",
+					"value": 1
+				},
+				{
+					"label": "Reset to factory default",
+					"value": 1431655765
+				}
+			]
+		}
+	}
 }

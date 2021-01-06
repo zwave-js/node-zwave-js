@@ -1,19 +1,18 @@
 // Intermatic HA-01C
 // In-Wall Dual Receptacle
 {
-    "_approved": true,
-    "manufacturer": "Intermatic",
-    "manufacturerId": "0x0005",
-    "label": "HA-01C",
-    "description": "In-Wall Dual Receptacle",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Intermatic",
+	"manufacturerId": "0x0005",
+	"label": "HA-01C",
+	"description": "In-Wall Dual Receptacle",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

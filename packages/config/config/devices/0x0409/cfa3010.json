@@ -1,7 +1,6 @@
 // ABUS CFA3010
 // Z-Wave Door Lock
 {
-	"_approved": true,
 	"manufacturer": "ABUS",
 	"manufacturerId": "0x0409",
 	"label": "CFA3010",

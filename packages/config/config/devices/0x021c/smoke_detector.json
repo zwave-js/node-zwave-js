@@ -1,20 +1,19 @@
 // Shenzhen iSurpass Technology Co. , Ltd. Smoke Detector
 // Carbon monoxide detector, smoke detector
 {
-    "_approved": true,
-    "manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
-    "manufacturerId": "0x021c",
-    "label": "Smoke Detector",
-    "description": "Carbon monoxide detector, smoke detector",
-    "devices": [
-        {
-            "productType": "0x8002",
-            "productId": "0x1000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
+	"manufacturerId": "0x021c",
+	"label": "Smoke Detector",
+	"description": "Carbon monoxide detector, smoke detector",
+	"devices": [
+		{
+			"productType": "0x8002",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

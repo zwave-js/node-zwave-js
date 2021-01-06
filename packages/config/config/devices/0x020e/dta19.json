@@ -1,79 +1,78 @@
 // Domitech Products, LLC DTA19
 // Smart LED Light
 {
-    "_approved": true,
-    "manufacturer": "Domitech Products, LLC",
-    "manufacturerId": "0x020e",
-    "label": "DTA19",
-    "description": "Smart LED Light",
-    "devices": [
-        {
-            "productType": "0x4754",
-            "productId": "0x3038"
-        },
-        {
-            "productType": "0x4c42",
-            "productId": "0x3134"
-        },
-        {
-            "productType": "0x4c42",
-            "productId": "0x3135"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Dim level when the bulb is turned on",
-            "description": "Dim level when the bulb is turned on",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Full brightness",
-                    "value": 0
-                },
-                {
-                    "label": "Last setting",
-                    "value": 1
-                }
-            ]
-        },
-        "9": {
-            "label": "Dimming / brightening step level",
-            "description": "Controls the speed of dimming / brightening",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Dimming / brightening step timing",
-            "description": "Dimming / brightening step timing",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Domitech Products, LLC",
+	"manufacturerId": "0x020e",
+	"label": "DTA19",
+	"description": "Smart LED Light",
+	"devices": [
+		{
+			"productType": "0x4754",
+			"productId": "0x3038"
+		},
+		{
+			"productType": "0x4c42",
+			"productId": "0x3134"
+		},
+		{
+			"productType": "0x4c42",
+			"productId": "0x3135"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Dim level when the bulb is turned on",
+			"description": "Dim level when the bulb is turned on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Full brightness",
+					"value": 0
+				},
+				{
+					"label": "Last setting",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Dimming / brightening step level",
+			"description": "Controls the speed of dimming / brightening",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dimming / brightening step timing",
+			"description": "Dimming / brightening step timing",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

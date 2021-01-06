@@ -1,126 +1,125 @@
 // Quby EN00
 // Engie Meter Adapter
 {
-    "_approved": true,
-    "manufacturer": "Quby",
-    "manufacturerId": "0x0130",
-    "label": "EN00",
-    "description": "Engie Meter Adapter",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Analog gas/heat port mode",
-            "description": "Analog gas/heat port mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Gas Enabled",
-                    "value": 1
-                },
-                {
-                    "label": "Heat Enabled",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Analog gas/heat port resolution",
-            "description": "Analog gas/heat port resolution",
-            "valueSize": 4,
-            "minValue": 120,
-            "maxValue": 40000,
-            "defaultValue": 400,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Analog electricity port mode",
-            "description": "Analog electricity port mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Electricity import enabled",
-                    "value": 1
-                },
-                {
-                    "label": "Electricity export enabled",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Analog electricity port resolution",
-            "description": "Analog electricity port resolution",
-            "valueSize": 4,
-            "minValue": 120,
-            "maxValue": 40000,
-            "defaultValue": 400,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Digital port mode",
-            "description": "Digital port mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Restart device",
-            "description": "Restart device",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Restart entire device",
-                    "value": 1
-                },
-                {
-                    "label": "Restart metering chip",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Quby",
+	"manufacturerId": "0x0130",
+	"label": "EN00",
+	"description": "Engie Meter Adapter",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Analog gas/heat port mode",
+			"description": "Analog gas/heat port mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Gas Enabled",
+					"value": 1
+				},
+				{
+					"label": "Heat Enabled",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Analog gas/heat port resolution",
+			"description": "Analog gas/heat port resolution",
+			"valueSize": 4,
+			"minValue": 120,
+			"maxValue": 40000,
+			"defaultValue": 400,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Analog electricity port mode",
+			"description": "Analog electricity port mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Electricity import enabled",
+					"value": 1
+				},
+				{
+					"label": "Electricity export enabled",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Analog electricity port resolution",
+			"description": "Analog electricity port resolution",
+			"valueSize": 4,
+			"minValue": 120,
+			"maxValue": 40000,
+			"defaultValue": 400,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Digital port mode",
+			"description": "Digital port mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Restart device",
+			"description": "Restart device",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Restart entire device",
+					"value": 1
+				},
+				{
+					"label": "Restart metering chip",
+					"value": 2
+				}
+			]
+		}
+	}
 }

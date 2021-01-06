@@ -1,110 +1,109 @@
 // Popp & Co 700045
 // Battery driven IP44 keypad for access control.
 {
-    "_approved": true,
-    "manufacturer": "Popp & Co",
-    "manufacturerId": "0x0154",
-    "label": "700045",
-    "description": "Battery driven IP44 keypad for access control.",
-    "devices": [
-        {
-            "productType": "0x0005",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Automatic Secure Timeout",
-            "description": "After this time a CLOSE is sent to the door lock.",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Ring Button OFF Timeout",
-            "description": "After this time the Door Bell will receive an OFF.",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 3,
-            "maxValue": 127,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Ring Button ON Command",
-            "description": "Value to send on ring button press.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Ring Button OFF Command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Central Scene ID",
-            "description": "Defines if different user codes shall cause individual or similar scene ID.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Constant Scene ID 20 for all User Codes",
-                    "value": 0
-                },
-                {
-                    "label": "Individual User Codes 1 ... 20",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Buzzer Confirmation",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "700045",
+	"description": "Battery driven IP44 keypad for access control.",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Automatic Secure Timeout",
+			"description": "After this time a CLOSE is sent to the door lock.",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Ring Button OFF Timeout",
+			"description": "After this time the Door Bell will receive an OFF.",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 127,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Ring Button ON Command",
+			"description": "Value to send on ring button press.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Ring Button OFF Command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Central Scene ID",
+			"description": "Defines if different user codes shall cause individual or similar scene ID.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Constant Scene ID 20 for all User Codes",
+					"value": 0
+				},
+				{
+					"label": "Individual User Codes 1 ... 20",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Buzzer Confirmation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

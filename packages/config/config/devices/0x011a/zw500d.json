@@ -1,74 +1,73 @@
 // Wenzhou MTLC Electric Appliances Co., Ltd. ZW500D
 // Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
-    "manufacturerId": "0x011a",
-    "label": "ZW500D",
-    "description": "Dimmer",
-    "devices": [
-        {
-            "productType": "0x0102",
-            "productId": "0x0201"
-        },
-        {
-            "productType": "0x0102",
-            "productId": "0x0202"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "configure LED light state",
-            "description": "configure LED light state",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED off with load on",
-                    "value": 0
-                },
-                {
-                    "label": "LED on with load on",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Reverse installed direction",
-            "description": "Control if switch up is on or off",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "normal install - up is on",
-                    "value": 0
-                },
-                {
-                    "label": "invert switch",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
+	"label": "ZW500D",
+	"description": "Dimmer",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x0201"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x0202"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "configure LED light state",
+			"description": "configure LED light state",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED off with load on",
+					"value": 0
+				},
+				{
+					"label": "LED on with load on",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Reverse installed direction",
+			"description": "Control if switch up is on or off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "normal install - up is on",
+					"value": 0
+				},
+				{
+					"label": "invert switch",
+					"value": 1
+				}
+			]
+		}
+	}
 }

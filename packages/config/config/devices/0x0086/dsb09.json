@@ -1,926 +1,925 @@
 // AEON Labs DSB09
 // Home Energy Meter
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSB09",
-    "description": "Home Energy Meter",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0009"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Report group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Report group 2",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Report group 3",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Voltage",
-            "description": "Voltage to calculate wattage from amperage.",
-            "unit": "V",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32000,
-            "defaultValue": 240,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Current Threshold - Whole HEM",
-            "description": "Threshold change in wattage to induce an automatic report (Whole HEM).",
-            "unit": "W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 60000,
-            "defaultValue": 50,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Current Threshold - Clamp 1",
-            "description": "Threshold change in wattage to induce an automatic report (Clamp 1)",
-            "unit": "W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 60000,
-            "defaultValue": 50,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Current Threshold - Clamp 2",
-            "description": "Threshold change in wattage to induce an automatic report (Clamp 2)",
-            "unit": "W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 60000,
-            "defaultValue": 50,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Current Threshold - Clamp 3",
-            "description": "Threshold change in wattage to induce an automatic report (Clamp 3)",
-            "unit": "W",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 60000,
-            "defaultValue": 50,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Percent Change - Whole HEM",
-            "description": "Percentage change in wattage to induce an automatic report (Whole HEM)",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "9": {
-            "label": "Percent Change - Clamp 1",
-            "description": "Percentage change in wattage to induce an automatic report (Clamp 1)",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Percent Change - Clamp 2",
-            "description": "Percentage change in wattage to induce an automatic report (Clamp 2)",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Percent Change - Clamp 3",
-            "description": "Percentage change in wattage to induce an automatic report (Clamp 3)",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "100": {
-            "label": "Set parameters 101-103 to default values",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No change",
-                    "value": 0
-                },
-                {
-                    "label": "Reset",
-                    "value": 1
-                }
-            ]
-        },
-        "110": {
-            "label": "Set parameters 111-113 to default values",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No change",
-                    "value": 0
-                },
-                {
-                    "label": "Reset",
-                    "value": 1
-                }
-            ]
-        },
-        "111": {
-            "label": "Interval to send Report Group 1",
-            "unit": "seconds",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 2678400,
-            "defaultValue": 720,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "112": {
-            "label": "Interval to send Report Group 2",
-            "unit": "seconds",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 2678400,
-            "defaultValue": 720,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "113": {
-            "label": "Interval to send Report Group 3",
-            "unit": "seconds",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 2678400,
-            "defaultValue": 720,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "255": {
-            "label": "Reset to Factory",
-            "description": "Reset all settings to factory defaults",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Do nothing",
-                    "value": 0
-                },
-                {
-                    "label": "Reset to factory defaults",
-                    "value": 1
-                }
-            ]
-        },
-        "3[0x01]": {
-            "label": "Selective Reporting: Whole HEM",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "3[0x02]": {
-            "label": "Selective Reporting: Clamp 1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "3[0x04]": {
-            "label": "Selective Reporting: Clamp 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "3[0x08]": {
-            "label": "Selective Reporting: Clamp 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "101[0x01]": {
-            "label": "Report Group 1: Battery Report",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "101[0x02]": {
-            "label": "Group 1: MultiSensor Report for Watt (whole HEM)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "101[0x04]": {
-            "label": "Group 1: Meter Report for Watt (whole device)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "101[0x08]": {
-            "label": "Group 1: Meter Report for kWh (whole HEM)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "101[0x0100]": {
-            "label": "Group 1: Meter Report for Watt (clamp 1)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "101[0x0200]": {
-            "label": "Group 1: Meter Report for Watt (clamp 2)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "101[0x0400]": {
-            "label": "Report Group 1: Meter Report for Watt (clamp 3)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "101[0x0800]": {
-            "label": "Report Group 1: Meter Report for kWh (clamp 1)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "101[0x1000]": {
-            "label": "Report Group 1: Meter Report for kWh (clamp 2)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "101[0x2000]": {
-            "label": "Report Group 1: Meter Report for kWh (clamp 3)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "102[0x01]": {
-            "label": "Report Group 2: Battery Report",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "102[0x02]": {
-            "label": "Group 2: MultiSensor Report for Watt (whole HEM)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "102[0x04]": {
-            "label": "Group 2: Meter Report for Watt (whole device)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "102[0x08]": {
-            "label": "Group 2: Meter Report for kWh (whole HEM)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "102[0x0100]": {
-            "label": "Report Group 2: Meter Report for Watt (clamp 1)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "102[0x0200]": {
-            "label": "Report Group 2: Meter Report for Watt (clamp 2)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "102[0x0400]": {
-            "label": "Report Group 2: Meter Report for Watt (clamp 3)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "102[0x0800]": {
-            "label": "Report Group 2: Meter Report for kWh (clamp 1)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "102[0x1000]": {
-            "label": "Report Group 2: Meter Report for kWh (clamp 2)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "102[0x2000]": {
-            "label": "Report Group 2: Meter Report for kWh (clamp 3)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "103[0x01]": {
-            "label": "Report Group 3: Battery Report",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "103[0x02]": {
-            "label": "Group 3: MultiSensor Report for Watt (whole HEM)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "103[0x04]": {
-            "label": "Group 3: Meter Report for Watt (whole device)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "103[0x08]": {
-            "label": "Report Group 3: Meter Report for kWh (whole HEM)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "103[0x0100]": {
-            "label": "Report Group 3: Meter Report for Watt (clamp 1)",
-            "unit": "W",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "103[0x0200]": {
-            "label": "Report Group 3: Meter Report for Watt (clamp 2)",
-            "unit": "W",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "103[0x0400]": {
-            "label": "Report Group 3: Meter Report for Watt (clamp 3)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "103[0x0800]": {
-            "label": "Report Group 3: Meter Report for kWh (clamp 1)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "103[0x1000]": {
-            "label": "Report Group 3: Meter Report for kWh (clamp 2)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "103[0x2000]": {
-            "label": "Report Group 3: Meter Report for kWh (clamp 3)",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSB09",
+	"description": "Home Energy Meter",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0009"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Report group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Report group 2",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Report group 3",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Voltage",
+			"description": "Voltage to calculate wattage from amperage.",
+			"unit": "V",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 240,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Current Threshold - Whole HEM",
+			"description": "Threshold change in wattage to induce an automatic report (Whole HEM).",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Current Threshold - Clamp 1",
+			"description": "Threshold change in wattage to induce an automatic report (Clamp 1)",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Current Threshold - Clamp 2",
+			"description": "Threshold change in wattage to induce an automatic report (Clamp 2)",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Current Threshold - Clamp 3",
+			"description": "Threshold change in wattage to induce an automatic report (Clamp 3)",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Percent Change - Whole HEM",
+			"description": "Percentage change in wattage to induce an automatic report (Whole HEM)",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Percent Change - Clamp 1",
+			"description": "Percentage change in wattage to induce an automatic report (Clamp 1)",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Percent Change - Clamp 2",
+			"description": "Percentage change in wattage to induce an automatic report (Clamp 2)",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Percent Change - Clamp 3",
+			"description": "Percentage change in wattage to induce an automatic report (Clamp 3)",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"100": {
+			"label": "Set parameters 101-103 to default values",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No change",
+					"value": 0
+				},
+				{
+					"label": "Reset",
+					"value": 1
+				}
+			]
+		},
+		"110": {
+			"label": "Set parameters 111-113 to default values",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No change",
+					"value": 0
+				},
+				{
+					"label": "Reset",
+					"value": 1
+				}
+			]
+		},
+		"111": {
+			"label": "Interval to send Report Group 1",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2678400,
+			"defaultValue": 720,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"112": {
+			"label": "Interval to send Report Group 2",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2678400,
+			"defaultValue": 720,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"113": {
+			"label": "Interval to send Report Group 3",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2678400,
+			"defaultValue": 720,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Reset to Factory",
+			"description": "Reset all settings to factory defaults",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do nothing",
+					"value": 0
+				},
+				{
+					"label": "Reset to factory defaults",
+					"value": 1
+				}
+			]
+		},
+		"3[0x01]": {
+			"label": "Selective Reporting: Whole HEM",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"3[0x02]": {
+			"label": "Selective Reporting: Clamp 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"3[0x04]": {
+			"label": "Selective Reporting: Clamp 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"3[0x08]": {
+			"label": "Selective Reporting: Clamp 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"101[0x01]": {
+			"label": "Report Group 1: Battery Report",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"101[0x02]": {
+			"label": "Group 1: MultiSensor Report for Watt (whole HEM)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"101[0x04]": {
+			"label": "Group 1: Meter Report for Watt (whole device)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"101[0x08]": {
+			"label": "Group 1: Meter Report for kWh (whole HEM)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"101[0x0100]": {
+			"label": "Group 1: Meter Report for Watt (clamp 1)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"101[0x0200]": {
+			"label": "Group 1: Meter Report for Watt (clamp 2)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"101[0x0400]": {
+			"label": "Report Group 1: Meter Report for Watt (clamp 3)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"101[0x0800]": {
+			"label": "Report Group 1: Meter Report for kWh (clamp 1)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"101[0x1000]": {
+			"label": "Report Group 1: Meter Report for kWh (clamp 2)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"101[0x2000]": {
+			"label": "Report Group 1: Meter Report for kWh (clamp 3)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"102[0x01]": {
+			"label": "Report Group 2: Battery Report",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"102[0x02]": {
+			"label": "Group 2: MultiSensor Report for Watt (whole HEM)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"102[0x04]": {
+			"label": "Group 2: Meter Report for Watt (whole device)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"102[0x08]": {
+			"label": "Group 2: Meter Report for kWh (whole HEM)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"102[0x0100]": {
+			"label": "Report Group 2: Meter Report for Watt (clamp 1)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"102[0x0200]": {
+			"label": "Report Group 2: Meter Report for Watt (clamp 2)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"102[0x0400]": {
+			"label": "Report Group 2: Meter Report for Watt (clamp 3)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"102[0x0800]": {
+			"label": "Report Group 2: Meter Report for kWh (clamp 1)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"102[0x1000]": {
+			"label": "Report Group 2: Meter Report for kWh (clamp 2)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"102[0x2000]": {
+			"label": "Report Group 2: Meter Report for kWh (clamp 3)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"103[0x01]": {
+			"label": "Report Group 3: Battery Report",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"103[0x02]": {
+			"label": "Group 3: MultiSensor Report for Watt (whole HEM)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"103[0x04]": {
+			"label": "Group 3: Meter Report for Watt (whole device)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"103[0x08]": {
+			"label": "Report Group 3: Meter Report for kWh (whole HEM)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"103[0x0100]": {
+			"label": "Report Group 3: Meter Report for Watt (clamp 1)",
+			"unit": "W",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"103[0x0200]": {
+			"label": "Report Group 3: Meter Report for Watt (clamp 2)",
+			"unit": "W",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"103[0x0400]": {
+			"label": "Report Group 3: Meter Report for Watt (clamp 3)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"103[0x0800]": {
+			"label": "Report Group 3: Meter Report for kWh (clamp 1)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"103[0x1000]": {
+			"label": "Report Group 3: Meter Report for kWh (clamp 2)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"103[0x2000]": {
+			"label": "Report Group 3: Meter Report for kWh (clamp 3)",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	}
 }

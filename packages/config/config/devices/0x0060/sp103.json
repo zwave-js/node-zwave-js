@@ -1,76 +1,75 @@
 // Everspring SP103
 // Motion Detector
 {
-    "_approved": true,
-    "manufacturer": "Everspring",
-    "manufacturerId": "0x0060",
-    "label": "SP103",
-    "description": "Motion Detector",
-    "devices": [
-        {
-            "productType": "0x0101",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Triggered Report",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Phase level on command",
-            "description": "Defines which command to send when sensor triggers",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Set OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Set ON",
-                    "value": 1
-                },
-                {
-                    "label": "Set LAST Level",
-                    "value": 9
-                }
-            ]
-        },
-        "2": {
-            "label": "Enable/Disable Sleeping",
-            "description": "Enables/Disables sleeping for debug purposes",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "SP103",
+	"description": "Motion Detector",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Triggered Report",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Phase level on command",
+			"description": "Defines which command to send when sensor triggers",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Set OFF",
+					"value": 0
+				},
+				{
+					"label": "Set ON",
+					"value": 1
+				},
+				{
+					"label": "Set LAST Level",
+					"value": 9
+				}
+			]
+		},
+		"2": {
+			"label": "Enable/Disable Sleeping",
+			"description": "Enables/Disables sleeping for debug purposes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

@@ -1,22 +1,18 @@
 // AEON Labs DSA02203
 // Z-Stick S2 USB Controller
 {
-    "_approved": true,
-    "_warnings": [
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "DSA02203",
-    "description": "Z-Stick S2 USB Controller",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSA02203",
+	"description": "Z-Stick S2 USB Controller",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

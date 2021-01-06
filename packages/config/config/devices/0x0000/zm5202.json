@@ -1,11 +1,6 @@
 // Sigma Designs (Former Zensys) ZM5202
 // endpoints for dimming and on/off
 {
-	"_approved": false,
-	"_errors": [
-		"Parameter 1 has label duplicated with another parameter.",
-		"Parameter 2 has label duplicated with another parameter."
-	],
 	"manufacturer": "Sigma Designs (Former Zensys)",
 	"manufacturerId": "0x0000",
 	"label": "ZM5202",

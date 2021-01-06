@@ -1,194 +1,193 @@
 // ACT - Advanced Control Technologies ZRW230
 // Wall Mounted 3-Way Switch
 {
-    "_approved": true,
-    "manufacturer": "ACT - Advanced Control Technologies",
-    "manufacturerId": "0x0001",
-    "label": "ZRW230",
-    "description": "Wall Mounted 3-Way Switch",
-    "devices": [
-        {
-            "productType": "0x5257",
-            "productId": "0x3330"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Tapping paddle once",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Tapping paddle twice",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Tapping paddle three times",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "4": {
-            "label": "By command to the ZRW230",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Set Ignore Start Level Bit",
-            "description": "Set Ignore Start Level Bit When Transmitting Dim Commands",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Dimmer will not ignore the start level",
-                    "value": 0
-                },
-                {
-                    "label": "Dimmer will ignore the start level",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Suspend Group 4",
-            "description": "Stop transmitting to devices that are “associated” into Group 4",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Enable transmitting to Group 4",
-                    "value": 0
-                },
-                {
-                    "label": "Stop transmitting to Group 4",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Night Light",
-            "description": "LED behaviour of the ZRW230 switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Turn LED ON when the load is turned ON",
-                    "value": 0
-                },
-                {
-                    "label": "Turn LED ON when the load is turned OFF",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Invert Switch",
-            "description": "Switch (paddle) behaviour.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Top of switch is ON, bottom is OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Top of switch is OFF, bottom is ON",
-                    "value": 1
-                }
-            ]
-        },
-        "14": {
-            "label": "Enable Shade Control Group 2",
-            "description": "The ZRW230 can operate shade control devices via its group 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable operation via group 2",
-                    "value": 0
-                },
-                {
-                    "label": "Enable operation via group 2",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "Enable Shade Control Group 3",
-            "description": "The ZRW230 can operate shade control devices via its group 3",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable operation via group 3",
-                    "value": 0
-                },
-                {
-                    "label": "Enable operation via group 3",
-                    "value": 1
-                }
-            ]
-        },
-        "19": {
-            "label": "LED Transmission Indication",
-            "description": "LED Transmission Indication",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED will not flicker",
-                    "value": 0
-                },
-                {
-                    "label": "LED will flicker the entire time",
-                    "value": 1
-                },
-                {
-                    "label": "LED will flicker 1 second",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturerId": "0x0001",
+	"label": "ZRW230",
+	"description": "Wall Mounted 3-Way Switch",
+	"devices": [
+		{
+			"productType": "0x5257",
+			"productId": "0x3330"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Tapping paddle once",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Tapping paddle twice",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Tapping paddle three times",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"4": {
+			"label": "By command to the ZRW230",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Set Ignore Start Level Bit",
+			"description": "Set Ignore Start Level Bit When Transmitting Dim Commands",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dimmer will not ignore the start level",
+					"value": 0
+				},
+				{
+					"label": "Dimmer will ignore the start level",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Suspend Group 4",
+			"description": "Stop transmitting to devices that are “associated” into Group 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable transmitting to Group 4",
+					"value": 0
+				},
+				{
+					"label": "Stop transmitting to Group 4",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Night Light",
+			"description": "LED behaviour of the ZRW230 switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Turn LED ON when the load is turned ON",
+					"value": 0
+				},
+				{
+					"label": "Turn LED ON when the load is turned OFF",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "Switch (paddle) behaviour.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Top of switch is ON, bottom is OFF",
+					"value": 0
+				},
+				{
+					"label": "Top of switch is OFF, bottom is ON",
+					"value": 1
+				}
+			]
+		},
+		"14": {
+			"label": "Enable Shade Control Group 2",
+			"description": "The ZRW230 can operate shade control devices via its group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable operation via group 2",
+					"value": 0
+				},
+				{
+					"label": "Enable operation via group 2",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Enable Shade Control Group 3",
+			"description": "The ZRW230 can operate shade control devices via its group 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable operation via group 3",
+					"value": 0
+				},
+				{
+					"label": "Enable operation via group 3",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "LED Transmission Indication",
+			"description": "LED Transmission Indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED will not flicker",
+					"value": 0
+				},
+				{
+					"label": "LED will flicker the entire time",
+					"value": 1
+				},
+				{
+					"label": "LED will flicker 1 second",
+					"value": 2
+				}
+			]
+		}
+	}
 }

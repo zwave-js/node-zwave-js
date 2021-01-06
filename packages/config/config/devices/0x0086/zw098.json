@@ -1,7 +1,6 @@
 // AEON Labs ZW098
 // LED Bulb
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW098",

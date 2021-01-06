@@ -1,26 +1,25 @@
 // Vision Security ZS6101
 // Smoke Detector
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZS6101",
-    "description": "Smoke Detector",
-    "devices": [
-        {
-            "productType": "0x2004",
-            "productId": "0x0403"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Alarm Messages",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZS6101",
+	"description": "Smoke Detector",
+	"devices": [
+		{
+			"productType": "0x2004",
+			"productId": "0x0403"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Alarm Messages",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

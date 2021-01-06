@@ -1,472 +1,471 @@
 // Fibargroup FGGC001
 // Fibaro Swipe Scene Controller
 {
-    "_approved": true,
-    "manufacturer": "Fibargroup",
-    "manufacturerId": "0x010f",
-    "label": "FGGC001",
-    "description": "Fibaro Swipe Scene Controller",
-    "devices": [
-        {
-            "productType": "0x0d01",
-            "productId": "0x1000"
-        },
-        {
-            "productType": "0x0d01",
-            "productId": "0x2000"
-        },
-        {
-            "productType": "0x0d01",
-            "productId": "0x3000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Device Orientation",
-            "description": "Orientation in relation to default position.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Default Orientation",
-                    "value": 0
-                },
-                {
-                    "label": "180° rotation",
-                    "value": 1
-                },
-                {
-                    "label": "90° clockwise rotation",
-                    "value": 2
-                },
-                {
-                    "label": "90° counter-clockwise rotation",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Buzzer - acoustic signal settings",
-            "description": "Acoustic signalling of gestures detection.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Gestures detection is not signalled",
-                    "value": 0
-                },
-                {
-                    "label": "Gestures detection is signalled",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "LED diode - visual indicator settings",
-            "description": "Visual indication of gestures detection",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Gestures detection is not indicated",
-                    "value": 0
-                },
-                {
-                    "label": "Gestures detection is indicated",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Buzzer - signalling result of gesture recognition",
-            "description": "Acoustic signalling of gesture recognition result (using the built-in buzzer).",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Only successful recognition is signalled",
-                    "value": 1
-                },
-                {
-                    "label": "Only failed recognition is signalled",
-                    "value": 2
-                },
-                {
-                    "label": "Successful and failed recognition is signalled",
-                    "value": 3
-                }
-            ]
-        },
-        "5": {
-            "label": "Powering mode update interval",
-            "description": "Check if the USB pwr supply is connected, update pwr mode",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1080,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Powering mode is not updated",
-                    "value": 0
-                },
-                {
-                    "label": "Time interval (in minutes)",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Power saving mode (battery mode)",
-            "description": "This parameter determines operation of gesture detection when battery powered.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Standby mode",
-                    "value": 0
-                },
-                {
-                    "label": "Simple mode",
-                    "value": 1
-                },
-                {
-                    "label": "Swipe does not enter power saving mode",
-                    "value": 2
-                }
-            ]
-        },
-        "7": {
-            "label": "Hold gesture to enter the menu",
-            "description": "Choose if the menu can be entered using the Hold gesture.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Hold gesture to enter the menu enabled",
-                    "value": 0
-                },
-                {
-                    "label": "Hold gesture to enter the menu disabled",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "Scenes sent to the controller",
-            "description": "Defines which actions result in sending scenes to 1st “Lifeline” group.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 63,
-            "defaultValue": 15,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Scenes for flick UP gesture enabled",
-                    "value": 1
-                },
-                {
-                    "label": "Scenes for flick DOWN gesture enabled",
-                    "value": 2
-                },
-                {
-                    "label": "Scenes for flick LEFT gesture enabled",
-                    "value": 4
-                },
-                {
-                    "label": "Scenes for flick RIGHT gesture enabled",
-                    "value": 8
-                },
-                {
-                    "label": "Scenes for clockwise circular gesture enabled",
-                    "value": 16
-                },
-                {
-                    "label": "Scenes for CCW circular gesture enabled",
-                    "value": 32
-                },
-                {
-                    "label": "All commands enabled",
-                    "value": 63
-                }
-            ]
-        },
-        "11": {
-            "label": "Associations in Z-Wave network security mode",
-            "description": "Define sent command for specified association groups.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 31,
-            "defaultValue": 31,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "2nd group ”Flick UP” sent as secure",
-                    "value": 1
-                },
-                {
-                    "label": "3rd group ”Flick DOWN” sent as secure",
-                    "value": 2
-                },
-                {
-                    "label": "4th group \"Flick LEFT” sent as secure",
-                    "value": 4
-                },
-                {
-                    "label": "5th group \"Flick RIGHT” sent as secure",
-                    "value": 8
-                },
-                {
-                    "label": "6th group \"Circular AirWheel” sent as secure",
-                    "value": 16
-                }
-            ]
-        },
-        "12": {
-            "label": "Mode of 2nd-5th \"Flick UP/DOWN/LEFT/RIGHT”",
-            "description": "Choose control mode for 2nd-5th groups and scenes.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 15,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Toggle Mode enabled for 2nd association group",
-                    "value": 1
-                },
-                {
-                    "label": "Toggle Mode enabled for 3rd association group",
-                    "value": 2
-                },
-                {
-                    "label": "Toggle Mode enabled for 4th association group",
-                    "value": 4
-                },
-                {
-                    "label": "Toggle Mode enabled for 5th association group",
-                    "value": 8
-                }
-            ]
-        },
-        "13": {
-            "label": "Rate of smooth level control",
-            "description": "Choose gesture time for \"AirWheel\" to reach max/min level.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "SWITCH ON control frame value for FLICK UP gesture",
-            "description": "Value sent in SWITCH ON command",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "SWITCH OFF frame value for FLICK UP",
-            "description": "Value sent in SWITCH OFF command frame.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "SWITCH ON frame value  for FLICK DOWN",
-            "description": "Value sent in SWITCH ON command frame.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "23": {
-            "label": "SWITCH OFF frame value for FLICK DOWN",
-            "description": "Value sent in SWITCH OFF command frame.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "24": {
-            "label": "SWITCH ON frame value for FLICK LEFT",
-            "description": "Value sent in SWITCH ON command frame.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "25": {
-            "label": "SWITCH OFF frame value for FLICK LEFT",
-            "description": "Value sent in SWITCH OFF command frame.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "26": {
-            "label": "SWITCH ON frame value for FLICK RIGHT",
-            "description": "Value sent in SWITCH ON command frame.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "27": {
-            "label": "SWITCH OFF frame value for FLICK RIGHT",
-            "description": "Value sent in SWITCH OFF command frame.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "30": {
-            "label": "Sequence learning mode",
-            "description": "Launch sequence learning procedure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "31": {
-            "label": "1st gestures sequence (SLOT 1)",
-            "description": "Value containing sequence of gestures.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1076,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "32": {
-            "label": "2nd gestures sequence (SLOT 2)",
-            "description": "Value containing sequence of gestures.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1076,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "33": {
-            "label": "3rd gestures sequence (SLOT 3)",
-            "description": "Value containing sequence of gestures.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1076,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "34": {
-            "label": "4th gestures sequence (SLOT 4)",
-            "description": "Value containing sequence of gestures.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1076,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "35": {
-            "label": "5th gestures sequence (SLOT 5)",
-            "description": "Value containing sequence of gestures.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1076,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "36": {
-            "label": "6th gestures sequence (SLOT 6)",
-            "description": "Value containing sequence of gestures.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1076,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGGC001",
+	"description": "Fibaro Swipe Scene Controller",
+	"devices": [
+		{
+			"productType": "0x0d01",
+			"productId": "0x1000"
+		},
+		{
+			"productType": "0x0d01",
+			"productId": "0x2000"
+		},
+		{
+			"productType": "0x0d01",
+			"productId": "0x3000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Device Orientation",
+			"description": "Orientation in relation to default position.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default Orientation",
+					"value": 0
+				},
+				{
+					"label": "180° rotation",
+					"value": 1
+				},
+				{
+					"label": "90° clockwise rotation",
+					"value": 2
+				},
+				{
+					"label": "90° counter-clockwise rotation",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Buzzer - acoustic signal settings",
+			"description": "Acoustic signalling of gestures detection.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Gestures detection is not signalled",
+					"value": 0
+				},
+				{
+					"label": "Gestures detection is signalled",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "LED diode - visual indicator settings",
+			"description": "Visual indication of gestures detection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Gestures detection is not indicated",
+					"value": 0
+				},
+				{
+					"label": "Gestures detection is indicated",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Buzzer - signalling result of gesture recognition",
+			"description": "Acoustic signalling of gesture recognition result (using the built-in buzzer).",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Only successful recognition is signalled",
+					"value": 1
+				},
+				{
+					"label": "Only failed recognition is signalled",
+					"value": 2
+				},
+				{
+					"label": "Successful and failed recognition is signalled",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Powering mode update interval",
+			"description": "Check if the USB pwr supply is connected, update pwr mode",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1080,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Powering mode is not updated",
+					"value": 0
+				},
+				{
+					"label": "Time interval (in minutes)",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Power saving mode (battery mode)",
+			"description": "This parameter determines operation of gesture detection when battery powered.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standby mode",
+					"value": 0
+				},
+				{
+					"label": "Simple mode",
+					"value": 1
+				},
+				{
+					"label": "Swipe does not enter power saving mode",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Hold gesture to enter the menu",
+			"description": "Choose if the menu can be entered using the Hold gesture.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hold gesture to enter the menu enabled",
+					"value": 0
+				},
+				{
+					"label": "Hold gesture to enter the menu disabled",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Scenes sent to the controller",
+			"description": "Defines which actions result in sending scenes to 1st “Lifeline” group.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 63,
+			"defaultValue": 15,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Scenes for flick UP gesture enabled",
+					"value": 1
+				},
+				{
+					"label": "Scenes for flick DOWN gesture enabled",
+					"value": 2
+				},
+				{
+					"label": "Scenes for flick LEFT gesture enabled",
+					"value": 4
+				},
+				{
+					"label": "Scenes for flick RIGHT gesture enabled",
+					"value": 8
+				},
+				{
+					"label": "Scenes for clockwise circular gesture enabled",
+					"value": 16
+				},
+				{
+					"label": "Scenes for CCW circular gesture enabled",
+					"value": 32
+				},
+				{
+					"label": "All commands enabled",
+					"value": 63
+				}
+			]
+		},
+		"11": {
+			"label": "Associations in Z-Wave network security mode",
+			"description": "Define sent command for specified association groups.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 31,
+			"defaultValue": 31,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "2nd group ”Flick UP” sent as secure",
+					"value": 1
+				},
+				{
+					"label": "3rd group ”Flick DOWN” sent as secure",
+					"value": 2
+				},
+				{
+					"label": "4th group \"Flick LEFT” sent as secure",
+					"value": 4
+				},
+				{
+					"label": "5th group \"Flick RIGHT” sent as secure",
+					"value": 8
+				},
+				{
+					"label": "6th group \"Circular AirWheel” sent as secure",
+					"value": 16
+				}
+			]
+		},
+		"12": {
+			"label": "Mode of 2nd-5th \"Flick UP/DOWN/LEFT/RIGHT”",
+			"description": "Choose control mode for 2nd-5th groups and scenes.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Toggle Mode enabled for 2nd association group",
+					"value": 1
+				},
+				{
+					"label": "Toggle Mode enabled for 3rd association group",
+					"value": 2
+				},
+				{
+					"label": "Toggle Mode enabled for 4th association group",
+					"value": 4
+				},
+				{
+					"label": "Toggle Mode enabled for 5th association group",
+					"value": 8
+				}
+			]
+		},
+		"13": {
+			"label": "Rate of smooth level control",
+			"description": "Choose gesture time for \"AirWheel\" to reach max/min level.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "SWITCH ON control frame value for FLICK UP gesture",
+			"description": "Value sent in SWITCH ON command",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "SWITCH OFF frame value for FLICK UP",
+			"description": "Value sent in SWITCH OFF command frame.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "SWITCH ON frame value  for FLICK DOWN",
+			"description": "Value sent in SWITCH ON command frame.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "SWITCH OFF frame value for FLICK DOWN",
+			"description": "Value sent in SWITCH OFF command frame.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "SWITCH ON frame value for FLICK LEFT",
+			"description": "Value sent in SWITCH ON command frame.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"25": {
+			"label": "SWITCH OFF frame value for FLICK LEFT",
+			"description": "Value sent in SWITCH OFF command frame.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"26": {
+			"label": "SWITCH ON frame value for FLICK RIGHT",
+			"description": "Value sent in SWITCH ON command frame.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"27": {
+			"label": "SWITCH OFF frame value for FLICK RIGHT",
+			"description": "Value sent in SWITCH OFF command frame.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"label": "Sequence learning mode",
+			"description": "Launch sequence learning procedure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "1st gestures sequence (SLOT 1)",
+			"description": "Value containing sequence of gestures.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1076,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "2nd gestures sequence (SLOT 2)",
+			"description": "Value containing sequence of gestures.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1076,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "3rd gestures sequence (SLOT 3)",
+			"description": "Value containing sequence of gestures.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1076,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "4th gestures sequence (SLOT 4)",
+			"description": "Value containing sequence of gestures.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1076,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35": {
+			"label": "5th gestures sequence (SLOT 5)",
+			"description": "Value containing sequence of gestures.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1076,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"36": {
+			"label": "6th gestures sequence (SLOT 6)",
+			"description": "Value containing sequence of gestures.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1076,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,7 +1,6 @@
 // Vision Security ZD2201
 // Multisensor 4in1
 {
-	"_approved": true,
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZD2201",

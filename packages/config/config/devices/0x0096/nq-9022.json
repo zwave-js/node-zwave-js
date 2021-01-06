@@ -1,7 +1,6 @@
 // NorthQ NQ-9022
 // Electrical Meter
 {
-	"_approved": true,
 	"manufacturer": "NorthQ",
 	"manufacturerId": "0x0096",
 	"label": "NQ-9022",

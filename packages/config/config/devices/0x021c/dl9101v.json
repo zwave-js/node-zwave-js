@@ -1,20 +1,19 @@
 // Shenzhen iSurpass Technology Co. , Ltd. DL9101V
 // Door Lock with Handle
 {
-    "_approved": true,
-    "manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
-    "manufacturerId": "0x021c",
-    "label": "DL9101V",
-    "description": "Door Lock with Handle",
-    "devices": [
-        {
-            "productType": "0x5000",
-            "productId": "0x1000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
+	"manufacturerId": "0x021c",
+	"label": "DL9101V",
+	"description": "Door Lock with Handle",
+	"devices": [
+		{
+			"productType": "0x5000",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

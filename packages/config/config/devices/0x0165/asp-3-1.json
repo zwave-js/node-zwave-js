@@ -1,136 +1,135 @@
 // ID-RF ASP-3-1
 // Smart Plug
 {
-    "_approved": true,
-    "manufacturer": "ID-RF",
-    "manufacturerId": "0x0165",
-    "label": "ASP-3-1",
-    "description": "Smart Plug",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Default State",
-            "description": "Default State",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 63,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                },
-                {
-                    "label": "Status before Power Failure",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Power Failure",
-            "description": "Power Failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 63,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Power Failure detection disable",
-                    "value": 0
-                },
-                {
-                    "label": "Power Failure enable (report to Lifeline only)",
-                    "value": 1
-                },
-                {
-                    "label": "Enable group 4",
-                    "value": 2
-                },
-                {
-                    "label": "Enable group 5",
-                    "value": 4
-                },
-                {
-                    "label": "Enable group 6",
-                    "value": 8
-                },
-                {
-                    "label": "Enable group 7",
-                    "value": 16
-                },
-                {
-                    "label": "Enable group 8",
-                    "value": 32
-                }
-            ]
-        },
-        "3": {
-            "label": "Follow State",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable group 2 & 3",
-                    "value": 0
-                },
-                {
-                    "label": "Enable group 2",
-                    "value": 1
-                },
-                {
-                    "label": "Enable group 3",
-                    "value": 2
-                },
-                {
-                    "label": "Enable group 2 & 3",
-                    "value": 3
-                }
-            ]
-        },
-        "4": {
-            "label": "Always On",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Always ON disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Always ON enabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "ID-RF",
+	"manufacturerId": "0x0165",
+	"label": "ASP-3-1",
+	"description": "Smart Plug",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Default State",
+			"description": "Default State",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 63,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				},
+				{
+					"label": "Status before Power Failure",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Power Failure",
+			"description": "Power Failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 63,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Power Failure detection disable",
+					"value": 0
+				},
+				{
+					"label": "Power Failure enable (report to Lifeline only)",
+					"value": 1
+				},
+				{
+					"label": "Enable group 4",
+					"value": 2
+				},
+				{
+					"label": "Enable group 5",
+					"value": 4
+				},
+				{
+					"label": "Enable group 6",
+					"value": 8
+				},
+				{
+					"label": "Enable group 7",
+					"value": 16
+				},
+				{
+					"label": "Enable group 8",
+					"value": 32
+				}
+			]
+		},
+		"3": {
+			"label": "Follow State",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable group 2 & 3",
+					"value": 0
+				},
+				{
+					"label": "Enable group 2",
+					"value": 1
+				},
+				{
+					"label": "Enable group 3",
+					"value": 2
+				},
+				{
+					"label": "Enable group 2 & 3",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Always On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Always ON disabled",
+					"value": 0
+				},
+				{
+					"label": "Always ON enabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

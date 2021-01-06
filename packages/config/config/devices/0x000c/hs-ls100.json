@@ -1,163 +1,162 @@
 // HomeSeer Technologies HS-LS100+
 // HomeSeer Z-Wave Plus Leak Sensor
 {
-    "_approved": true,
-    "manufacturer": "HomeSeer Technologies",
-    "manufacturerId": "0x000c",
-    "label": "HS-LS100+",
-    "description": "HomeSeer Z-Wave Plus Leak Sensor",
-    "devices": [
-        {
-            "productType": "0x0201",
-            "productId": "0x000a"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "14": {
-            "label": "Enabe/Disable BASIC SET command",
-            "description": "Enabe/Disable BASIC SET command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "Value of the BASIC SET",
-            "description": "Value of the BASIC SET",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "BASIC SET 255",
-                    "value": 0
-                },
-                {
-                    "label": "BASIC SET 0",
-                    "value": 1
-                }
-            ]
-        },
-        "17": {
-            "label": "Set flooding alarm interval (Minute)",
-            "description": "Set flooding alarm interval (Minute)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 5,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "Enabe/Disable shock alarm",
-            "description": "Enabe/Disable shock alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "19": {
-            "label": "Temperature report time (minute)",
-            "description": "Temperature report time (minute)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Set the high temperature alarm trigger value",
-            "description": "Set the high temperature alarm trigger value",
-            "valueSize": 2,
-            "minValue": -670,
-            "maxValue": 2570,
-            "defaultValue": 1040,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "22": {
-            "label": "Set the low temperature alarm trigger value",
-            "description": "Set the low temperature alarm trigger value",
-            "valueSize": 2,
-            "minValue": -670,
-            "maxValue": 2570,
-            "defaultValue": 320,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "24": {
-            "label": "Enable/Disable blinking alarm LED",
-            "description": "Enable/Disable blinking alarm LED",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "32": {
-            "label": "Level of low battery",
-            "description": "Level of low battery",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 50,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-LS100+",
+	"description": "HomeSeer Z-Wave Plus Leak Sensor",
+	"devices": [
+		{
+			"productType": "0x0201",
+			"productId": "0x000a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"14": {
+			"label": "Enabe/Disable BASIC SET command",
+			"description": "Enabe/Disable BASIC SET command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "Value of the BASIC SET",
+			"description": "Value of the BASIC SET",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "BASIC SET 255",
+					"value": 0
+				},
+				{
+					"label": "BASIC SET 0",
+					"value": 1
+				}
+			]
+		},
+		"17": {
+			"label": "Set flooding alarm interval (Minute)",
+			"description": "Set flooding alarm interval (Minute)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Enabe/Disable shock alarm",
+			"description": "Enabe/Disable shock alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "Temperature report time (minute)",
+			"description": "Temperature report time (minute)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Set the high temperature alarm trigger value",
+			"description": "Set the high temperature alarm trigger value",
+			"valueSize": 2,
+			"minValue": -670,
+			"maxValue": 2570,
+			"defaultValue": 1040,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Set the low temperature alarm trigger value",
+			"description": "Set the low temperature alarm trigger value",
+			"valueSize": 2,
+			"minValue": -670,
+			"maxValue": 2570,
+			"defaultValue": 320,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Enable/Disable blinking alarm LED",
+			"description": "Enable/Disable blinking alarm LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"32": {
+			"label": "Level of low battery",
+			"description": "Level of low battery",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

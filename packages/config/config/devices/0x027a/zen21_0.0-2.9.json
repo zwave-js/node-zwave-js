@@ -1,85 +1,84 @@
 // Zooz ZEN21
 // Light Switch
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN21",
-    "description": "Light Switch",
-    "devices": [
-        {
-            "productType": "0xb111",
-            "productId": "0x1e1c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "2.9"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Paddle Control",
-            "description": "Reverse switch direction",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Top-ON, Bottom-OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Top-OFF, Bottom-ON",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "LED Indicator Control",
-            "description": "LED Indicator Control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED ON - Switch OFF",
-                    "value": 0
-                },
-                {
-                    "label": "LED ON - Switch ON",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "LED Indicator",
-            "description": "Enable / Disable LED Indicator",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED Enabled",
-                    "value": 0
-                },
-                {
-                    "label": "LED Disabled",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN21",
+	"description": "Light Switch",
+	"devices": [
+		{
+			"productType": "0xb111",
+			"productId": "0x1e1c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "2.9"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Paddle Control",
+			"description": "Reverse switch direction",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Top-ON, Bottom-OFF",
+					"value": 0
+				},
+				{
+					"label": "Top-OFF, Bottom-ON",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "LED Indicator Control",
+			"description": "LED Indicator Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON - Switch OFF",
+					"value": 0
+				},
+				{
+					"label": "LED ON - Switch ON",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "LED Indicator",
+			"description": "Enable / Disable LED Indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Enabled",
+					"value": 0
+				},
+				{
+					"label": "LED Disabled",
+					"value": 1
+				}
+			]
+		}
+	}
 }

@@ -1,201 +1,200 @@
 // Popp & Co 05438
 // Indoor/Outdoor Wall Plug Switch
 {
-    "_approved": true,
-    "manufacturer": "Popp & Co",
-    "manufacturerId": "0x0154",
-    "label": "05438",
-    "description": "Indoor/Outdoor Wall Plug Switch",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Send Reports on switch state change.",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Controlled by buttons",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "LED indication mode",
-            "description": "Set LED indication mode.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Show switch state (default)",
-                    "value": 1
-                },
-                {
-                    "label": "Operated by Indicator Command Class",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Automatically switch off after x seconds.",
-            "description": "If not zero, automatically switch device off after a user defined time",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "What to do on RF off command.",
-            "description": "Defines how to interpret RF Off-Command.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Switch off (default)",
-                    "value": 0
-                },
-                {
-                    "label": "Ignore",
-                    "value": 1
-                },
-                {
-                    "label": "Switch on",
-                    "value": 2
-                },
-                {
-                    "label": "Switch on if load is off, else switch off",
-                    "value": 3
-                }
-            ]
-        },
-        "5": {
-            "label": "Restore switch state after power cycle.",
-            "description": "Defines if the switch should restore switch state.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No, turn off",
-                    "value": 0
-                },
-                {
-                    "label": "Yes, default",
-                    "value": 1
-                }
-            ]
-        },
-        "20": {
-            "label": "Specify the consumption of the load in watts",
-            "description": "Maximum load 3500 Watts",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 3500,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "21": {
-            "label": "LED Off color",
-            "description": "Color for Off state.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Yellow",
-                    "value": 4
-                }
-            ]
-        },
-        "22": {
-            "label": "LED On color.",
-            "description": "Color for On state.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 3,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "Red",
-                    "value": 1
-                },
-                {
-                    "label": "Green",
-                    "value": 2
-                },
-                {
-                    "label": "Blue",
-                    "value": 3
-                },
-                {
-                    "label": "Yellow",
-                    "value": 4
-                }
-            ]
-        }
-    }
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "05438",
+	"description": "Indoor/Outdoor Wall Plug Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Send Reports on switch state change.",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Controlled by buttons",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "LED indication mode",
+			"description": "Set LED indication mode.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Show switch state (default)",
+					"value": 1
+				},
+				{
+					"label": "Operated by Indicator Command Class",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Automatically switch off after x seconds.",
+			"description": "If not zero, automatically switch device off after a user defined time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "What to do on RF off command.",
+			"description": "Defines how to interpret RF Off-Command.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch off (default)",
+					"value": 0
+				},
+				{
+					"label": "Ignore",
+					"value": 1
+				},
+				{
+					"label": "Switch on",
+					"value": 2
+				},
+				{
+					"label": "Switch on if load is off, else switch off",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Restore switch state after power cycle.",
+			"description": "Defines if the switch should restore switch state.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No, turn off",
+					"value": 0
+				},
+				{
+					"label": "Yes, default",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "Specify the consumption of the load in watts",
+			"description": "Maximum load 3500 Watts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3500,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "LED Off color",
+			"description": "Color for Off state.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				}
+			]
+		},
+		"22": {
+			"label": "LED On color.",
+			"description": "Color for On state.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Red",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Blue",
+					"value": 3
+				},
+				{
+					"label": "Yellow",
+					"value": 4
+				}
+			]
+		}
+	}
 }

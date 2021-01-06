@@ -1,10 +1,6 @@
 // INNOVUS SmoothRemote
 // SmoothRemote
 {
-	"_approved": true,
-	"_warnings": [
-		"No channels have been assigned even though there are user configurable command classes."
-	],
 	"manufacturer": "INNOVUS",
 	"manufacturerId": "0x0077",
 	"label": "SmoothRemote",

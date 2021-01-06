@@ -1,28 +1,24 @@
 // Somfy ZDMI 1870171
 // ZDMI/ILT Z-Wave Interface
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Somfy",
-    "manufacturerId": "0x0047",
-    "label": "ZDMI 1870171",
-    "description": "ZDMI/ILT Z-Wave Interface",
-    "devices": [
-        {
-            "productType": "0x4c54",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5
-        }
-    }
+	"manufacturer": "Somfy",
+	"manufacturerId": "0x0047",
+	"label": "ZDMI 1870171",
+	"description": "ZDMI/ILT Z-Wave Interface",
+	"devices": [
+		{
+			"productType": "0x4c54",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5
+		}
+	}
 }

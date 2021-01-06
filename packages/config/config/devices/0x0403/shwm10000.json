@@ -1,20 +1,19 @@
 // ABUS Security-Center GmbH & Co. KG SHWM10000
 // Flood Sensor
 {
-    "_approved": true,
-    "manufacturer": "ABUS Security-Center GmbH & Co. KG",
-    "manufacturerId": "0x0403",
-    "label": "SHWM10000",
-    "description": "Flood Sensor",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
+	"manufacturerId": "0x0403",
+	"label": "SHWM10000",
+	"description": "Flood Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

@@ -1,20 +1,19 @@
 // Jasco Products GE Outdoor Switch
 // Weather Resistant Outdoor Switch
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "GE Outdoor Switch",
-    "description": "Weather Resistant Outdoor Switch",
-    "devices": [
-        {
-            "productType": "0x4f50",
-            "productId": "0x3032"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "GE Outdoor Switch",
+	"description": "Weather Resistant Outdoor Switch",
+	"devices": [
+		{
+			"productType": "0x4f50",
+			"productId": "0x3032"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

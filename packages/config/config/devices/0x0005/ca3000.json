@@ -1,19 +1,18 @@
 // Intermatic CA3000
 // Wall Switch
 {
-    "_approved": true,
-    "manufacturer": "Intermatic",
-    "manufacturerId": "0x0005",
-    "label": "CA3000",
-    "description": "Wall Switch",
-    "devices": [
-        {
-            "productType": "0x4341",
-            "productId": "0x3000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Intermatic",
+	"manufacturerId": "0x0005",
+	"label": "CA3000",
+	"description": "Wall Switch",
+	"devices": [
+		{
+			"productType": "0x4341",
+			"productId": "0x3000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

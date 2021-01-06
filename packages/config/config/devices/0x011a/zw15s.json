@@ -1,48 +1,47 @@
 // Wenzhou MTLC Electric Appliances Co., Ltd. ZW15S
 // Binary Switch
 {
-    "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
-    "manufacturerId": "0x011a",
-    "label": "ZW15S",
-    "description": "Binary Switch",
-    "devices": [
-        {
-            "productType": "0x0101",
-            "productId": "0x0102"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "LED State",
-            "description": "LED State",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Power on, LED off",
-                    "value": 0
-                },
-                {
-                    "label": "Power on, LED on",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
+	"label": "ZW15S",
+	"description": "Binary Switch",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "LED State",
+			"description": "LED State",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power on, LED off",
+					"value": 0
+				},
+				{
+					"label": "Power on, LED on",
+					"value": 1
+				}
+			]
+		}
+	}
 }

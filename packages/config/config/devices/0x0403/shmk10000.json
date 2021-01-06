@@ -1,20 +1,19 @@
 // ABUS Security-Center GmbH & Co. KG SHMK10000
 // Magnetic Contact
 {
-    "_approved": true,
-    "manufacturer": "ABUS Security-Center GmbH & Co. KG",
-    "manufacturerId": "0x0403",
-    "label": "SHMK10000",
-    "description": "Magnetic Contact",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
+	"manufacturerId": "0x0403",
+	"label": "SHMK10000",
+	"description": "Magnetic Contact",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

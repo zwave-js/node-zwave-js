@@ -1,188 +1,187 @@
 // Elexa Consumer Products Inc. DMOF1
 // Dome On/Off zwave wall plug for controlling small appliances and lights.
 {
-    "_approved": true,
-    "manufacturer": "Elexa Consumer Products Inc.",
-    "manufacturerId": "0x021f",
-    "label": "DMOF1",
-    "description": "Dome On/Off zwave wall plug for controlling small appliances and lights.",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0087"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Disable Meter Functionality",
-            "description": "Enable/Disable the meter report.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Meter Functionality",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Meter Functionality",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "METER_REPORT",
-            "description": "The time between meter reports.",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 300,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Set \"Overload\" Current level",
-            "description": "Maximum current the plug will pass",
-            "unit": "amps",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 16,
-            "defaultValue": 13,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Set \"Alert\" Current Level",
-            "description": "Current level warning threshold",
-            "unit": "amps",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 16,
-            "defaultValue": 12,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Enable/Disable Indicator LED",
-            "description": "This parameter enables or disables the indicator LED.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable LED",
-                    "value": 0
-                },
-                {
-                    "label": "Enable LED",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Current change METER_REPORT level",
-            "description": "Report of relative change in current flow",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 64,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Remember On/Off status",
-            "description": "Remember status from last plug in.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Don't Remember",
-                    "value": 0
-                },
-                {
-                    "label": "Remember",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Enable/Disable Timer Function",
-            "description": "Timer once plugged in before it turn off the device.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "9": {
-            "label": "Set Timer Time Interval",
-            "description": "Time before auto shut off if on.",
-            "unit": "minute(s)",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 96,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Enable/Disable BUTTON",
-            "description": "Turn off the button",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Button",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Button",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Elexa Consumer Products Inc.",
+	"manufacturerId": "0x021f",
+	"label": "DMOF1",
+	"description": "Dome On/Off zwave wall plug for controlling small appliances and lights.",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0087"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Disable Meter Functionality",
+			"description": "Enable/Disable the meter report.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Meter Functionality",
+					"value": 0
+				},
+				{
+					"label": "Enable Meter Functionality",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "METER_REPORT",
+			"description": "The time between meter reports.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Set \"Overload\" Current level",
+			"description": "Maximum current the plug will pass",
+			"unit": "amps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 16,
+			"defaultValue": 13,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Set \"Alert\" Current Level",
+			"description": "Current level warning threshold",
+			"unit": "amps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 16,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Enable/Disable Indicator LED",
+			"description": "This parameter enables or disables the indicator LED.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable LED",
+					"value": 0
+				},
+				{
+					"label": "Enable LED",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Current change METER_REPORT level",
+			"description": "Report of relative change in current flow",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 64,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Remember On/Off status",
+			"description": "Remember status from last plug in.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Don't Remember",
+					"value": 0
+				},
+				{
+					"label": "Remember",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Enable/Disable Timer Function",
+			"description": "Timer once plugged in before it turn off the device.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Set Timer Time Interval",
+			"description": "Time before auto shut off if on.",
+			"unit": "minute(s)",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 96,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Enable/Disable BUTTON",
+			"description": "Turn off the button",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Button",
+					"value": 0
+				},
+				{
+					"label": "Enable Button",
+					"value": 1
+				}
+			]
+		}
+	}
 }

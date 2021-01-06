@@ -1,107 +1,106 @@
 // BeNext doorSensor
 // Door Sensor
 {
-    "_approved": true,
-    "manufacturer": "BeNext",
-    "manufacturerId": "0x008a",
-    "label": "doorSensor",
-    "description": "Door Sensor",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0100"
-        },
-        {
-            "productType": "0x0004",
-            "productId": "0x0101"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Send frame to (internal contact) nodes",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Send frame to external contact nodes",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Reset to factory settings",
-            "description": "Set all configuration values to default values (factory settings).",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "External contact behavior",
-            "description": "Configure what the external contact sends when triggered.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Send alarm",
-                    "value": 0
-                },
-                {
-                    "label": "Send basic frame",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Operating mode.",
-            "description": "The main operating mode for the device.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 1
-                },
-                {
-                    "label": "Mode 1 report",
-                    "value": 2
-                },
-                {
-                    "label": "Always-on",
-                    "value": 3
-                }
-            ]
-        },
-        "6": {
-            "label": "Temperature offset",
-            "description": "An offset for the temperature.",
-            "valueSize": 2,
-            "minValue": -32768,
-            "maxValue": 32767,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "BeNext",
+	"manufacturerId": "0x008a",
+	"label": "doorSensor",
+	"description": "Door Sensor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0100"
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0101"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Send frame to (internal contact) nodes",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Send frame to external contact nodes",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Reset to factory settings",
+			"description": "Set all configuration values to default values (factory settings).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "External contact behavior",
+			"description": "Configure what the external contact sends when triggered.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send alarm",
+					"value": 0
+				},
+				{
+					"label": "Send basic frame",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Operating mode.",
+			"description": "The main operating mode for the device.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 1
+				},
+				{
+					"label": "Mode 1 report",
+					"value": 2
+				},
+				{
+					"label": "Always-on",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Temperature offset",
+			"description": "An offset for the temperature.",
+			"valueSize": 2,
+			"minValue": -32768,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

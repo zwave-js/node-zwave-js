@@ -1,165 +1,164 @@
 // GreenWave Reality Inc. GWPN1
 // Single-socket PowerNode
 {
-    "_approved": true,
-    "manufacturer": "GreenWave Reality Inc.",
-    "manufacturerId": "0x0099",
-    "label": "GWPN1",
-    "description": "Single-socket PowerNode",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Wheel position change",
-            "maxNodes": 1
-        },
-        "2": {
-            "label": "Current leakage on relay",
-            "maxNodes": 1
-        },
-        "3": {
-            "label": "Power level change",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "4": {
-            "label": "Over-current detection",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "0": {
-            "label": "Min. variation of load current",
-            "description": "Minimum variation in load current before a message is sent.",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "1": {
-            "label": "No communication light",
-            "description": "Minutes after which the device will flash if controller communicate is lost",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 2,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Wheel position",
-            "description": "Wheel position on the GreenWave device (read-only)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Black",
-                    "value": 128
-                },
-                {
-                    "label": "Green",
-                    "value": 129
-                },
-                {
-                    "label": "Dark Blue",
-                    "value": 130
-                },
-                {
-                    "label": "Red",
-                    "value": 131
-                },
-                {
-                    "label": "Yellow",
-                    "value": 132
-                },
-                {
-                    "label": "Purple",
-                    "value": 133
-                },
-                {
-                    "label": "Orange",
-                    "value": 134
-                },
-                {
-                    "label": "Light Blue",
-                    "value": 135
-                },
-                {
-                    "label": "Pink",
-                    "value": 136
-                },
-                {
-                    "label": "Locked",
-                    "value": 137
-                }
-            ]
-        },
-        "3": {
-            "label": "Power-on state",
-            "description": "Default state after power loss",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "All OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Remember last state",
-                    "value": 1
-                },
-                {
-                    "label": "All ON",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "LED for network error",
-            "description": "If the LED should indicate a network error by flashing or not",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable the LED for network error",
-                    "value": 0
-                },
-                {
-                    "label": "Enable the LED for network error",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "GreenWave Reality Inc.",
+	"manufacturerId": "0x0099",
+	"label": "GWPN1",
+	"description": "Single-socket PowerNode",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Wheel position change",
+			"maxNodes": 1
+		},
+		"2": {
+			"label": "Current leakage on relay",
+			"maxNodes": 1
+		},
+		"3": {
+			"label": "Power level change",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"4": {
+			"label": "Over-current detection",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"0": {
+			"label": "Min. variation of load current",
+			"description": "Minimum variation in load current before a message is sent.",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1": {
+			"label": "No communication light",
+			"description": "Minutes after which the device will flash if controller communicate is lost",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Wheel position",
+			"description": "Wheel position on the GreenWave device (read-only)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Black",
+					"value": 128
+				},
+				{
+					"label": "Green",
+					"value": 129
+				},
+				{
+					"label": "Dark Blue",
+					"value": 130
+				},
+				{
+					"label": "Red",
+					"value": 131
+				},
+				{
+					"label": "Yellow",
+					"value": 132
+				},
+				{
+					"label": "Purple",
+					"value": 133
+				},
+				{
+					"label": "Orange",
+					"value": 134
+				},
+				{
+					"label": "Light Blue",
+					"value": 135
+				},
+				{
+					"label": "Pink",
+					"value": 136
+				},
+				{
+					"label": "Locked",
+					"value": 137
+				}
+			]
+		},
+		"3": {
+			"label": "Power-on state",
+			"description": "Default state after power loss",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All OFF",
+					"value": 0
+				},
+				{
+					"label": "Remember last state",
+					"value": 1
+				},
+				{
+					"label": "All ON",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "LED for network error",
+			"description": "If the LED should indicate a network error by flashing or not",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable the LED for network error",
+					"value": 0
+				},
+				{
+					"label": "Enable the LED for network error",
+					"value": 1
+				}
+			]
+		}
+	}
 }

@@ -1,19 +1,18 @@
 // Erone HM-LM001
 // Lighting Module
 {
-    "_approved": true,
-    "manufacturer": "Erone",
-    "manufacturerId": "0x006f",
-    "label": "HM-LM001",
-    "description": "Lighting Module",
-    "devices": [
-        {
-            "productType": "0x0103",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Erone",
+	"manufacturerId": "0x006f",
+	"label": "HM-LM001",
+	"description": "Lighting Module",
+	"devices": [
+		{
+			"productType": "0x0103",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

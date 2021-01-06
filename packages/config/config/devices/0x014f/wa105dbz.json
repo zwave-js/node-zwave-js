@@ -1,84 +1,78 @@
 // Nortek Security & Control LLC WA105DBZ
 // Siren and Strobe
 {
-    "_approved": true,
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "WA105DBZ",
-    "description": "Siren and Strobe",
-    "devices": [
-        {
-            "productType": "0x2005",
-            "productId": "0x0503"
-        },
-        {
-            "productType": "0x2009",
-            "productId": "0x0903"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "0": {
-            "label": "Siren Strobe Mode",
-            "description": "Defines the reaction of the siren",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "All Enabled",
-                    "value": 0
-                },
-                {
-                    "label": "Siren Only",
-                    "value": 1
-                },
-                {
-                    "label": "Strobe Only",
-                    "value": 2
-                }
-            ]
-        },
-        "1": {
-            "label": "Alarm auto stop",
-            "description": "Defines the auto time out of the alarm indication",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "30 seconds",
-                    "value": 0
-                },
-                {
-                    "label": "60 seconds",
-                    "value": 1
-                },
-                {
-                    "label": "120 seconds",
-                    "value": 2
-                },
-                {
-                    "label": "Continuous",
-                    "value": 3
-                }
-            ]
-        }
-    }
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "WA105DBZ",
+	"description": "Siren and Strobe",
+	"devices": [
+		{
+			"productType": "0x2005",
+			"productId": "0x0503"
+		},
+		{
+			"productType": "0x2009",
+			"productId": "0x0903"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"0": {
+			"label": "Siren Strobe Mode",
+			"description": "Defines the reaction of the siren",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All Enabled",
+					"value": 0
+				},
+				{
+					"label": "Siren Only",
+					"value": 1
+				},
+				{
+					"label": "Strobe Only",
+					"value": 2
+				}
+			]
+		},
+		"1": {
+			"label": "Alarm auto stop",
+			"description": "Defines the auto time out of the alarm indication",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "30 seconds",
+					"value": 0
+				},
+				{
+					"label": "60 seconds",
+					"value": 1
+				},
+				{
+					"label": "120 seconds",
+					"value": 2
+				},
+				{
+					"label": "Continuous",
+					"value": 3
+				}
+			]
+		}
+	}
 }

@@ -1,252 +1,251 @@
 // Elexa Consumer Products Inc. DMS01
 // Dome Wireless Siren
 {
-    "_approved": true,
-    "manufacturer": "Elexa Consumer Products Inc.",
-    "manufacturerId": "0x021f",
-    "label": "DMS01",
-    "description": "Dome Wireless Siren",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0088"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Primary Notification Volume Level",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Low Volume",
-                    "value": 1
-                },
-                {
-                    "label": "Medium Volume",
-                    "value": 2
-                },
-                {
-                    "label": "High Volume",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Primary Notification Length",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "30 Seconds",
-                    "value": 1
-                },
-                {
-                    "label": "1 Minute",
-                    "value": 2
-                },
-                {
-                    "label": "5 Minutes",
-                    "value": 3
-                },
-                {
-                    "label": "Plays Until Battery Is Depleted",
-                    "value": 255
-                }
-            ]
-        },
-        "3": {
-            "label": "Secondary Notification Length",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Does Not Stop",
-                    "value": 0
-                },
-                {
-                    "label": "One Minute",
-                    "value": 1
-                },
-                {
-                    "label": "Five Minutes",
-                    "value": 5
-                },
-                {
-                    "label": "Chime Will Not Play",
-                    "value": 255
-                }
-            ]
-        },
-        "4": {
-            "label": "Secondary Notification Volume Level",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Low Volume",
-                    "value": 1
-                },
-                {
-                    "label": "Medium Volume",
-                    "value": 2
-                },
-                {
-                    "label": "High Volume",
-                    "value": 3
-                }
-            ]
-        },
-        "5": {
-            "label": "Primary Notification Sound",
-            "description": "Set the siren primary notification sound.",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 9,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Ding dong",
-                    "value": 1
-                },
-                {
-                    "label": "Fur Elise",
-                    "value": 2
-                },
-                {
-                    "label": "Westminster Chime",
-                    "value": 3
-                },
-                {
-                    "label": "Dingdongdingdongdingdong",
-                    "value": 4
-                },
-                {
-                    "label": "William Tell Overture",
-                    "value": 5
-                },
-                {
-                    "label": "Classical",
-                    "value": 6
-                },
-                {
-                    "label": "Weeooeeooeeooeeoo",
-                    "value": 7
-                },
-                {
-                    "label": "Err-err-err-err-err",
-                    "value": 8
-                },
-                {
-                    "label": "Beepbeepbeepbeep (Default)",
-                    "value": 9
-                },
-                {
-                    "label": "beeeep-beeeep-beeeep",
-                    "value": 10
-                }
-            ]
-        },
-        "6": {
-            "label": "Secondary Notification Sound",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 10,
-            "defaultValue": 9,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Ding dong",
-                    "value": 1
-                },
-                {
-                    "label": "Fur Elise",
-                    "value": 2
-                },
-                {
-                    "label": "Westminster Chime",
-                    "value": 3
-                },
-                {
-                    "label": "Dingdongdingdongdingdong",
-                    "value": 4
-                },
-                {
-                    "label": "William Tell Overture",
-                    "value": 5
-                },
-                {
-                    "label": "Classical",
-                    "value": 6
-                },
-                {
-                    "label": "Weeooeeooeeooeeoo",
-                    "value": 7
-                },
-                {
-                    "label": "Err-err-err-err-err",
-                    "value": 8
-                },
-                {
-                    "label": "Beepbeepbeepbeep (Default)",
-                    "value": 9
-                },
-                {
-                    "label": "beeeep-beeeep-beeeep",
-                    "value": 10
-                }
-            ]
-        },
-        "7": {
-            "label": "Toggle secondary chime",
-            "description": "Toggles between primary and secondary chime for binary switch",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Primary notification will play",
-                    "value": 1
-                },
-                {
-                    "label": "Secondary notification will play",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Elexa Consumer Products Inc.",
+	"manufacturerId": "0x021f",
+	"label": "DMS01",
+	"description": "Dome Wireless Siren",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0088"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Primary Notification Volume Level",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Low Volume",
+					"value": 1
+				},
+				{
+					"label": "Medium Volume",
+					"value": 2
+				},
+				{
+					"label": "High Volume",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Primary Notification Length",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "30 Seconds",
+					"value": 1
+				},
+				{
+					"label": "1 Minute",
+					"value": 2
+				},
+				{
+					"label": "5 Minutes",
+					"value": 3
+				},
+				{
+					"label": "Plays Until Battery Is Depleted",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Secondary Notification Length",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Does Not Stop",
+					"value": 0
+				},
+				{
+					"label": "One Minute",
+					"value": 1
+				},
+				{
+					"label": "Five Minutes",
+					"value": 5
+				},
+				{
+					"label": "Chime Will Not Play",
+					"value": 255
+				}
+			]
+		},
+		"4": {
+			"label": "Secondary Notification Volume Level",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Low Volume",
+					"value": 1
+				},
+				{
+					"label": "Medium Volume",
+					"value": 2
+				},
+				{
+					"label": "High Volume",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Primary Notification Sound",
+			"description": "Set the siren primary notification sound.",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 9,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ding dong",
+					"value": 1
+				},
+				{
+					"label": "Fur Elise",
+					"value": 2
+				},
+				{
+					"label": "Westminster Chime",
+					"value": 3
+				},
+				{
+					"label": "Dingdongdingdongdingdong",
+					"value": 4
+				},
+				{
+					"label": "William Tell Overture",
+					"value": 5
+				},
+				{
+					"label": "Classical",
+					"value": 6
+				},
+				{
+					"label": "Weeooeeooeeooeeoo",
+					"value": 7
+				},
+				{
+					"label": "Err-err-err-err-err",
+					"value": 8
+				},
+				{
+					"label": "Beepbeepbeepbeep (Default)",
+					"value": 9
+				},
+				{
+					"label": "beeeep-beeeep-beeeep",
+					"value": 10
+				}
+			]
+		},
+		"6": {
+			"label": "Secondary Notification Sound",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 9,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ding dong",
+					"value": 1
+				},
+				{
+					"label": "Fur Elise",
+					"value": 2
+				},
+				{
+					"label": "Westminster Chime",
+					"value": 3
+				},
+				{
+					"label": "Dingdongdingdongdingdong",
+					"value": 4
+				},
+				{
+					"label": "William Tell Overture",
+					"value": 5
+				},
+				{
+					"label": "Classical",
+					"value": 6
+				},
+				{
+					"label": "Weeooeeooeeooeeoo",
+					"value": 7
+				},
+				{
+					"label": "Err-err-err-err-err",
+					"value": 8
+				},
+				{
+					"label": "Beepbeepbeepbeep (Default)",
+					"value": 9
+				},
+				{
+					"label": "beeeep-beeeep-beeeep",
+					"value": 10
+				}
+			]
+		},
+		"7": {
+			"label": "Toggle secondary chime",
+			"description": "Toggles between primary and secondary chime for binary switch",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Primary notification will play",
+					"value": 1
+				},
+				{
+					"label": "Secondary notification will play",
+					"value": 2
+				}
+			]
+		}
+	}
 }

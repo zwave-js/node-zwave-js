@@ -1,88 +1,87 @@
 // Spectrum Brands Kwikset SmartCode 912
 // Touch Pad Keyed Entry Lever
 {
-    "_approved": true,
-    "manufacturer": "Spectrum Brands",
-    "manufacturerId": "0x0090",
-    "label": "Kwikset SmartCode 912",
-    "description": "Touch Pad Keyed Entry Lever",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0339"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "31": {
-            "label": "Dipswitch Settings",
-            "description": "Dipswitch Settings",
-            "unit": "Dipswitch Settings",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "33": {
-            "label": "first four most significant bytes of the SKU",
-            "description": "SKU (length = 8 bytes)",
-            "valueSize": 4,
-            "minValue": 32,
-            "maxValue": 126,
-            "defaultValue": 32,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "34": {
-            "label": "four least significant bytes of the SKU.",
-            "description": "SKU (length = 8 bytes)",
-            "valueSize": 4,
-            "minValue": 32,
-            "maxValue": 126,
-            "defaultValue": 32,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "35": {
-            "label": "Lock Type",
-            "description": "Report the Unique ID of the lock type",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "40": {
-            "label": "Factory Reset",
-            "description": "Reset Lock to Factory Default",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal Operation",
-                    "value": 0
-                },
-                {
-                    "label": "Have lock perform factory reset",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Spectrum Brands",
+	"manufacturerId": "0x0090",
+	"label": "Kwikset SmartCode 912",
+	"description": "Touch Pad Keyed Entry Lever",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0339"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"31": {
+			"label": "Dipswitch Settings",
+			"description": "Dipswitch Settings",
+			"unit": "Dipswitch Settings",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "first four most significant bytes of the SKU",
+			"description": "SKU (length = 8 bytes)",
+			"valueSize": 4,
+			"minValue": 32,
+			"maxValue": 126,
+			"defaultValue": 32,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "four least significant bytes of the SKU.",
+			"description": "SKU (length = 8 bytes)",
+			"valueSize": 4,
+			"minValue": 32,
+			"maxValue": 126,
+			"defaultValue": 32,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35": {
+			"label": "Lock Type",
+			"description": "Report the Unique ID of the lock type",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Factory Reset",
+			"description": "Reset Lock to Factory Default",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Have lock perform factory reset",
+					"value": 1
+				}
+			]
+		}
+	}
 }

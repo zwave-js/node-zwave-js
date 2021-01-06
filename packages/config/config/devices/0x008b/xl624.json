@@ -1,70 +1,69 @@
 // Trane Corporation XL624
 // Touchscreen Comfort Control Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Trane Corporation",
-    "manufacturerId": "0x008b",
-    "label": "XL624",
-    "description": "Touchscreen Comfort Control Thermostat",
-    "devices": [
-        {
-            "productType": "0x5452",
-            "productId": "0x5439"
-        },
-        {
-            "productType": "0x5452",
-            "productId": "0x5443"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "10": {
-            "label": "Minimum Off Time",
-            "description": "Minimum Off Time",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 9,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Minimum Run Time",
-            "description": "Minimum Run Time",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 9,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Heating Delta Stage 1 ON",
-            "description": "Heating Delta Stage 1 ON",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 8,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "Heating Delta Stage 1 OFF",
-            "description": "Heating Delta Stage 1 OFF",
-            "unit": "degrees",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 8,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Trane Corporation",
+	"manufacturerId": "0x008b",
+	"label": "XL624",
+	"description": "Touchscreen Comfort Control Thermostat",
+	"devices": [
+		{
+			"productType": "0x5452",
+			"productId": "0x5439"
+		},
+		{
+			"productType": "0x5452",
+			"productId": "0x5443"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"10": {
+			"label": "Minimum Off Time",
+			"description": "Minimum Off Time",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 9,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Minimum Run Time",
+			"description": "Minimum Run Time",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 9,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Heating Delta Stage 1 ON",
+			"description": "Heating Delta Stage 1 ON",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Heating Delta Stage 1 OFF",
+			"description": "Heating Delta Stage 1 OFF",
+			"unit": "degrees",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

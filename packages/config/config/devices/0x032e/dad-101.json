@@ -1,425 +1,424 @@
 // DEFARO DAD-101
 // Dimmer with sensors support
 {
-    "_approved": true,
-    "manufacturer": "DEFARO",
-    "manufacturerId": "0x032e",
-    "label": "DAD-101",
-    "description": "Dimmer with sensors support",
-    "devices": [
-        {
-            "productType": "0x0060",
-            "productId": "0x0031"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Load type",
-            "description": "Dimmer load type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal lamps",
-                    "value": 0
-                },
-                {
-                    "label": "Induction low volt halogen lamps",
-                    "value": 1
-                },
-                {
-                    "label": "Electronic low volt halogen lamps",
-                    "value": 2
-                },
-                {
-                    "label": "LED 220V lamps",
-                    "value": 3
-                },
-                {
-                    "label": "Non-dimmable lamps",
-                    "value": 4
-                }
-            ]
-        },
-        "2": {
-            "label": "Min dimming level",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 94,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Max dimming level",
-            "valueSize": 1,
-            "minValue": 6,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Dimming speed",
-            "description": "Dimming speed",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 120,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Fastest",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Auto Off delay",
-            "description": "Delay to turn device OFF after ON command received",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 650,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "6": {
-            "label": "All ON/OFF behaviour",
-            "description": "All ON/OFF behaviour",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Powerfail recovery",
-            "description": "Powerfail recovery mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Restore previous state",
-                    "value": 0
-                },
-                {
-                    "label": "Always set to OFF state",
-                    "value": 1
-                }
-            ]
-        },
-        "8": {
-            "label": "Lighting autolevel",
-            "description": "Autolevel behavior",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "ON",
-                    "value": 1
-                },
-                {
-                    "label": "Use with motion sensor",
-                    "value": 2
-                }
-            ]
-        },
-        "9": {
-            "label": "Light level",
-            "description": "Light level to maintain",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 4000,
-            "defaultValue": 150,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Default",
-                    "value": 150
-                }
-            ]
-        },
-        "10": {
-            "label": "Lighting change trigger threshold",
-            "description": "Lighting change trigger threshold",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 300,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Min",
-                    "value": 1
-                },
-                {
-                    "label": "Default",
-                    "value": 10
-                },
-                {
-                    "label": "Max",
-                    "value": 300
-                }
-            ]
-        },
-        "12": {
-            "label": "Turn on delay",
-            "description": "Sets turn on delay",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1800,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "13": {
-            "label": "Smart delay for dimmer",
-            "description": "Smart delay for dimmer",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1800,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "14": {
-            "label": "Smart delay mode",
-            "description": "Smart delay mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Load in Watts",
-            "description": "Lamps load in Watts",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 5000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                }
-            ]
-        },
-        "16": {
-            "label": "S1 button mode",
-            "description": "S1 button operation mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Monostable (push button)",
-                    "value": 0
-                },
-                {
-                    "label": "Bistable (switch)",
-                    "value": 1
-                },
-                {
-                    "label": "Bistable (fixed switch)",
-                    "value": 2
-                },
-                {
-                    "label": "Bistable (reversed fixed switch)",
-                    "value": 3
-                },
-                {
-                    "label": "Two monostable switches",
-                    "value": 4
-                }
-            ]
-        },
-        "17": {
-            "label": "S2 button mode",
-            "description": "S2 button operation mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Monostable (push button)",
-                    "value": 0
-                },
-                {
-                    "label": "Bistable (switch button)",
-                    "value": 1
-                },
-                {
-                    "label": "Bistable (fixed switch button)",
-                    "value": 2
-                },
-                {
-                    "label": "Bistable (reversed fixed switch)",
-                    "value": 3
-                }
-            ]
-        },
-        "18": {
-            "label": "Double click to max",
-            "description": "Level up to max on double click",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Ignore double click",
-                    "value": 0
-                },
-                {
-                    "label": "Double click sets 100%",
-                    "value": 1
-                }
-            ]
-        },
-        "21": {
-            "label": "Sensor driven dimmer",
-            "description": "Sets sensor for dimmer control",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Sensor 1",
-                    "value": 1
-                },
-                {
-                    "label": "Sensor 2",
-                    "value": 2
-                }
-            ]
-        },
-        "22": {
-            "label": "Sensor 1 ON command value",
-            "description": "Sensor 1 ON command value",
-            "valueSize": 2,
-            "minValue": -60,
-            "maxValue": 1000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Max",
-                    "value": 1000
-                }
-            ]
-        },
-        "23": {
-            "label": "Sensor 1 command OFF value",
-            "description": "Value to activate OFF command for Sensor 1",
-            "valueSize": 2,
-            "minValue": -60,
-            "maxValue": 1000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "24": {
-            "label": "Sensor 1 ON/OFF command behavior",
-            "description": "Behavior for ON/OFF command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "DEFARO",
+	"manufacturerId": "0x032e",
+	"label": "DAD-101",
+	"description": "Dimmer with sensors support",
+	"devices": [
+		{
+			"productType": "0x0060",
+			"productId": "0x0031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Load type",
+			"description": "Dimmer load type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal lamps",
+					"value": 0
+				},
+				{
+					"label": "Induction low volt halogen lamps",
+					"value": 1
+				},
+				{
+					"label": "Electronic low volt halogen lamps",
+					"value": 2
+				},
+				{
+					"label": "LED 220V lamps",
+					"value": 3
+				},
+				{
+					"label": "Non-dimmable lamps",
+					"value": 4
+				}
+			]
+		},
+		"2": {
+			"label": "Min dimming level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 94,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Max dimming level",
+			"valueSize": 1,
+			"minValue": 6,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Dimming speed",
+			"description": "Dimming speed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 120,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Fastest",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Auto Off delay",
+			"description": "Delay to turn device OFF after ON command received",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 650,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"6": {
+			"label": "All ON/OFF behaviour",
+			"description": "All ON/OFF behaviour",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Powerfail recovery",
+			"description": "Powerfail recovery mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Restore previous state",
+					"value": 0
+				},
+				{
+					"label": "Always set to OFF state",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "Lighting autolevel",
+			"description": "Autolevel behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				},
+				{
+					"label": "Use with motion sensor",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Light level",
+			"description": "Light level to maintain",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 4000,
+			"defaultValue": 150,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Default",
+					"value": 150
+				}
+			]
+		},
+		"10": {
+			"label": "Lighting change trigger threshold",
+			"description": "Lighting change trigger threshold",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 300,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Min",
+					"value": 1
+				},
+				{
+					"label": "Default",
+					"value": 10
+				},
+				{
+					"label": "Max",
+					"value": 300
+				}
+			]
+		},
+		"12": {
+			"label": "Turn on delay",
+			"description": "Sets turn on delay",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1800,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"13": {
+			"label": "Smart delay for dimmer",
+			"description": "Smart delay for dimmer",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1800,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"14": {
+			"label": "Smart delay mode",
+			"description": "Smart delay mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Load in Watts",
+			"description": "Lamps load in Watts",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 5000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"16": {
+			"label": "S1 button mode",
+			"description": "S1 button operation mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monostable (push button)",
+					"value": 0
+				},
+				{
+					"label": "Bistable (switch)",
+					"value": 1
+				},
+				{
+					"label": "Bistable (fixed switch)",
+					"value": 2
+				},
+				{
+					"label": "Bistable (reversed fixed switch)",
+					"value": 3
+				},
+				{
+					"label": "Two monostable switches",
+					"value": 4
+				}
+			]
+		},
+		"17": {
+			"label": "S2 button mode",
+			"description": "S2 button operation mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Monostable (push button)",
+					"value": 0
+				},
+				{
+					"label": "Bistable (switch button)",
+					"value": 1
+				},
+				{
+					"label": "Bistable (fixed switch button)",
+					"value": 2
+				},
+				{
+					"label": "Bistable (reversed fixed switch)",
+					"value": 3
+				}
+			]
+		},
+		"18": {
+			"label": "Double click to max",
+			"description": "Level up to max on double click",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Ignore double click",
+					"value": 0
+				},
+				{
+					"label": "Double click sets 100%",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "Sensor driven dimmer",
+			"description": "Sets sensor for dimmer control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 0
+				},
+				{
+					"label": "Sensor 1",
+					"value": 1
+				},
+				{
+					"label": "Sensor 2",
+					"value": 2
+				}
+			]
+		},
+		"22": {
+			"label": "Sensor 1 ON command value",
+			"description": "Sensor 1 ON command value",
+			"valueSize": 2,
+			"minValue": -60,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Max",
+					"value": 1000
+				}
+			]
+		},
+		"23": {
+			"label": "Sensor 1 command OFF value",
+			"description": "Value to activate OFF command for Sensor 1",
+			"valueSize": 2,
+			"minValue": -60,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Sensor 1 ON/OFF command behavior",
+			"description": "Behavior for ON/OFF command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

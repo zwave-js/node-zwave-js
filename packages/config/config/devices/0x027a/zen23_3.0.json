@@ -1,159 +1,158 @@
 // Zooz ZEN23
 // Z-Wave Plus On/Off Toggle Switch V3
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN23",
-    "description": "Z-Wave Plus On/Off Toggle Switch V3",
-    "devices": [
-        {
-            "productType": "0x1111",
-            "productId": "0x1e1c"
-        },
-        {
-            "productType": "0xb111",
-            "productId": "0x251c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Toggle Control",
-            "description": "Determines whether up is on and down is off; or up is off, down is on",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "UP=On, DOWN=Off",
-                    "value": 0
-                },
-                {
-                    "label": "UP=Off, DOWN=On",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Auto Turn-Off Timer",
-            "description": "Use this parameter to enable or disable the auto turn-off timer",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Auto Turn-Off Timer Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Auto Turn-Off Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Auto Turn-Off Timer Time",
-            "description": "Time after which the switch automatically turns off",
-            "unit": "minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Auto Turn-On Timer",
-            "description": "Use this parameter to enable or disable the auto turn-on timer",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Auto Turn-On Timer Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Auto Turn-On Timer Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Auto Turn-On Timer Time",
-            "description": "Set the time after which the switch automatically turns on",
-            "unit": "minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "On Off Status After Power Failure",
-            "description": "Set the on off status for the switch after power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "forced to OFF",
-                    "value": 0
-                },
-                {
-                    "label": "forced to ON",
-                    "value": 1
-                },
-                {
-                    "label": "Restore Previous Status",
-                    "value": 2
-                }
-            ]
-        },
-        "9": {
-            "label": "Enable/Disable Scene Control",
-            "description": "Enable or disable scene control functionality for quick 2-tap.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable Scene Control",
-                    "value": 0
-                },
-                {
-                    "label": "Enable Scene Control",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN23",
+	"description": "Z-Wave Plus On/Off Toggle Switch V3",
+	"devices": [
+		{
+			"productType": "0x1111",
+			"productId": "0x1e1c"
+		},
+		{
+			"productType": "0xb111",
+			"productId": "0x251c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Toggle Control",
+			"description": "Determines whether up is on and down is off; or up is off, down is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "UP=On, DOWN=Off",
+					"value": 0
+				},
+				{
+					"label": "UP=Off, DOWN=On",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Auto Turn-Off Timer",
+			"description": "Use this parameter to enable or disable the auto turn-off timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Auto Turn-Off Timer Disabled",
+					"value": 0
+				},
+				{
+					"label": "Auto Turn-Off Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Auto Turn-Off Timer Time",
+			"description": "Time after which the switch automatically turns off",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Auto Turn-On Timer",
+			"description": "Use this parameter to enable or disable the auto turn-on timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Auto Turn-On Timer Disabled",
+					"value": 0
+				},
+				{
+					"label": "Auto Turn-On Timer Enabled",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Auto Turn-On Timer Time",
+			"description": "Set the time after which the switch automatically turns on",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "On Off Status After Power Failure",
+			"description": "Set the on off status for the switch after power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "forced to OFF",
+					"value": 0
+				},
+				{
+					"label": "forced to ON",
+					"value": 1
+				},
+				{
+					"label": "Restore Previous Status",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Enable/Disable Scene Control",
+			"description": "Enable or disable scene control functionality for quick 2-tap.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Scene Control",
+					"value": 0
+				},
+				{
+					"label": "Enable Scene Control",
+					"value": 1
+				}
+			]
+		}
+	}
 }

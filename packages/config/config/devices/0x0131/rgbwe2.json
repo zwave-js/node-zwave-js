@@ -1,98 +1,97 @@
 // Zipato RGBWE2
 // RGBW Bulb  V2
 {
-    "_approved": true,
-    "manufacturer": "Zipato",
-    "manufacturerId": "0x0131",
-    "label": "RGBWE2",
-    "description": "RGBW Bulb  V2",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Internal bulb temperature",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Strobe light interval",
-            "description": "Strobe light interval",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 25,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Strobe light pulse count",
-            "description": "Strobe light pulse count",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Infinite flashing",
-                    "value": 127
-                }
-            ]
-        },
-        "4": {
-            "label": "Random strobe pulse colors",
-            "description": "Random strobe pulse colors",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Random strobe pulse colors OFF",
-                    "value": 0
-                },
-                {
-                    "label": "Random strobe pulse colors ON",
-                    "value": 1
-                }
-            ]
-        },
-        "255": {
-            "label": "Reset bulb to factory settings",
-            "description": "Reset bulb to factory settings",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": true,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Reset bulb to factory settings",
-                    "value": 255
-                }
-            ]
-        }
-    }
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "RGBWE2",
+	"description": "RGBW Bulb  V2",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Internal bulb temperature",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Strobe light interval",
+			"description": "Strobe light interval",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 25,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Strobe light pulse count",
+			"description": "Strobe light pulse count",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Infinite flashing",
+					"value": 127
+				}
+			]
+		},
+		"4": {
+			"label": "Random strobe pulse colors",
+			"description": "Random strobe pulse colors",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Random strobe pulse colors OFF",
+					"value": 0
+				},
+				{
+					"label": "Random strobe pulse colors ON",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset bulb to factory settings",
+			"description": "Reset bulb to factory settings",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Reset bulb to factory settings",
+					"value": 255
+				}
+			]
+		}
+	}
 }

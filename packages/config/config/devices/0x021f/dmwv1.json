@@ -1,23 +1,19 @@
 // Elexa Consumer Products Inc. DMWV1
 // Dome Water Main Shut Off
 {
-    "_approved": true,
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "Elexa Consumer Products Inc.",
-    "manufacturerId": "0x021f",
-    "label": "DMWV1",
-    "description": "Dome Water Main Shut Off",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Elexa Consumer Products Inc.",
+	"manufacturerId": "0x021f",
+	"label": "DMWV1",
+	"description": "Dome Water Main Shut Off",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

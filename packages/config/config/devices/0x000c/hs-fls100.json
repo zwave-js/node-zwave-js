@@ -1,77 +1,76 @@
 // HomeSeer Technologies HS-FLS100+
 // Floodlight Sensor
 {
-    "_approved": true,
-    "manufacturer": "HomeSeer Technologies",
-    "manufacturerId": "0x000c",
-    "label": "HS-FLS100+",
-    "description": "Floodlight Sensor",
-    "devices": [
-        {
-            "productType": "0x0201",
-            "productId": "0x000b"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "PIR Trigger Off Period",
-            "description": "Period to send Trigger Off command after PIR is triggered.",
-            "unit": "Seconds",
-            "valueSize": 2,
-            "minValue": 8,
-            "maxValue": 720,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Lux sensor threshold",
-            "description": "Lux level to activate the PIR",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 50,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Auto Report luminance interval",
-            "description": "sets the interval of periodic lux level report to the controller",
-            "unit": "min",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1440,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Basic Report",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "not send Basic Report",
-                    "value": 0
-                },
-                {
-                    "label": "send Basic Report",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-FLS100+",
+	"description": "Floodlight Sensor",
+	"devices": [
+		{
+			"productType": "0x0201",
+			"productId": "0x000b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "PIR Trigger Off Period",
+			"description": "Period to send Trigger Off command after PIR is triggered.",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 8,
+			"maxValue": 720,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Lux sensor threshold",
+			"description": "Lux level to activate the PIR",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Auto Report luminance interval",
+			"description": "sets the interval of periodic lux level report to the controller",
+			"unit": "min",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1440,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Basic Report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "not send Basic Report",
+					"value": 0
+				},
+				{
+					"label": "send Basic Report",
+					"value": 1
+				}
+			]
+		}
+	}
 }

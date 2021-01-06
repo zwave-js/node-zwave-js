@@ -1,123 +1,122 @@
 // Secure Meters (UK) Ltd. SWM301
 // Z-Wave Module for Water Meter
 {
-    "_approved": true,
-    "manufacturer": "Secure Meters (UK) Ltd.",
-    "manufacturerId": "0x0059",
-    "label": "SWM301",
-    "description": "Z-Wave Module for Water Meter",
-    "devices": [
-        {
-            "productType": "0x000f",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Meter reading",
-            "description": "Group receiving meter readings",
-            "maxNodes": 2,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "low battery",
-            "description": "Group receiving battery warnings",
-            "maxNodes": 2,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Temperature and low temp alarm",
-            "description": "Group receiving temperature",
-            "maxNodes": 2,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Meter register offset",
-            "description": "current meter reading",
-            "unit": "Litre",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 99999999,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Meter reading reporting intervals",
-            "description": "how often meter reading is sent",
-            "unit": "minute",
-            "valueSize": 2,
-            "minValue": 1,
-            "maxValue": 10000,
-            "defaultValue": 1440,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Delta config for meter reading",
-            "description": "min. delta for automatic report",
-            "unit": "Litre",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 10000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Mechanical meter serial number",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Temperature monitor on / off",
-            "description": "enable temperature monitor",
-            "unit": "Boolean",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Temperature delta",
-            "description": "change in temperature for report",
-            "unit": "deg. Celsius",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 30,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Temperature Alarm Threshold",
-            "description": "temperature triggering alarm",
-            "unit": "deg. Celsius",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 40,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Secure Meters (UK) Ltd.",
+	"manufacturerId": "0x0059",
+	"label": "SWM301",
+	"description": "Z-Wave Module for Water Meter",
+	"devices": [
+		{
+			"productType": "0x000f",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Meter reading",
+			"description": "Group receiving meter readings",
+			"maxNodes": 2,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "low battery",
+			"description": "Group receiving battery warnings",
+			"maxNodes": 2,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Temperature and low temp alarm",
+			"description": "Group receiving temperature",
+			"maxNodes": 2,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Meter register offset",
+			"description": "current meter reading",
+			"unit": "Litre",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 99999999,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Meter reading reporting intervals",
+			"description": "how often meter reading is sent",
+			"unit": "minute",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 10000,
+			"defaultValue": 1440,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Delta config for meter reading",
+			"description": "min. delta for automatic report",
+			"unit": "Litre",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 10000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Mechanical meter serial number",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Temperature monitor on / off",
+			"description": "enable temperature monitor",
+			"unit": "Boolean",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Temperature delta",
+			"description": "change in temperature for report",
+			"unit": "deg. Celsius",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Temperature Alarm Threshold",
+			"description": "temperature triggering alarm",
+			"unit": "deg. Celsius",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 40,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

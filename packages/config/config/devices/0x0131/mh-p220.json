@@ -1,7 +1,6 @@
 // Zipato MH-P220
 // MINI ENERGY DIMMER
 {
-	"_approved": true,
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "MH-P220",

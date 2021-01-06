@@ -1,26 +1,25 @@
 // Vision Security ZL7432
 // In Wall Dual Relay Switch
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZL7432",
-    "description": "In Wall Dual Relay Switch",
-    "devices": [
-        {
-            "productType": "0x2017",
-            "productId": "0x1717"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Update Controller",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZL7432",
+	"description": "In Wall Dual Relay Switch",
+	"devices": [
+		{
+			"productType": "0x2017",
+			"productId": "0x1717"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Update Controller",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

@@ -1,19 +1,18 @@
 // Frostdale FDN2300
 // 3way switch with temp sensor
 {
-    "_approved": true,
-    "manufacturer": "Frostdale",
-    "manufacturerId": "0x0110",
-    "label": "FDN2300",
-    "description": "3way switch with temp sensor",
-    "devices": [
-        {
-            "productType": "0x7333",
-            "productId": "0x0031"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Frostdale",
+	"manufacturerId": "0x0110",
+	"label": "FDN2300",
+	"description": "3way switch with temp sensor",
+	"devices": [
+		{
+			"productType": "0x7333",
+			"productId": "0x0031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

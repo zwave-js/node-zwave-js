@@ -1,27 +1,26 @@
 // Jasco Products 45604
 // Outdoor Lighting Control Module
 {
-    "_approved": true,
-    "manufacturer": "Jasco Products",
-    "manufacturerId": "0x0063",
-    "label": "45604",
-    "description": "Outdoor Lighting Control Module",
-    "devices": [
-        {
-            "productType": "0x4f50",
-            "productId": "0x3031"
-        },
-        {
-            "productType": "0x5250",
-            "productId": "0x3130"
-        },
-        {
-            "productType": "0x6363",
-            "productId": "0x3130"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Jasco Products",
+	"manufacturerId": "0x0063",
+	"label": "45604",
+	"description": "Outdoor Lighting Control Module",
+	"devices": [
+		{
+			"productType": "0x4f50",
+			"productId": "0x3031"
+		},
+		{
+			"productType": "0x5250",
+			"productId": "0x3130"
+		},
+		{
+			"productType": "0x6363",
+			"productId": "0x3130"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

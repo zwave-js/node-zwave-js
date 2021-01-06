@@ -1,27 +1,26 @@
 // Leviton RZI06-1L
 // Dimmer switch 600w incandescent
 {
-    "_approved": true,
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "RZI06-1L",
-    "description": "Dimmer switch 600w incandescent",
-    "devices": [
-        {
-            "productType": "0x0401",
-            "productId": "0x0206"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Association group 1",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "RZI06-1L",
+	"description": "Dimmer switch 600w incandescent",
+	"devices": [
+		{
+			"productType": "0x0401",
+			"productId": "0x0206"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Association group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
 }

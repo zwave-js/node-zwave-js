@@ -1,7 +1,6 @@
 // NIE Technology Co., Ltd. NZW31
 // In-wall Dimming Switch
 {
-	"_approved": true,
 	"manufacturer": "NIE Technology Co., Ltd.",
 	"manufacturerId": "0x0312",
 	"label": "NZW31",

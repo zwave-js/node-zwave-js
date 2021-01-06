@@ -1,44 +1,43 @@
 // Nortek Security & Control LLC LB60Z-1
 // Dimmable LED Light Bulb
 {
-    "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "LB60Z-1",
-    "description": "Dimmable LED Light Bulb",
-    "devices": [
-        {
-            "productType": "0x4754",
-            "productId": "0x3038"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Dim Level Memory",
-            "description": "Dim Settings",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable dim level memory",
-                    "value": 0
-                },
-                {
-                    "label": "Enable dim level memory",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "LB60Z-1",
+	"description": "Dimmable LED Light Bulb",
+	"devices": [
+		{
+			"productType": "0x4754",
+			"productId": "0x3038"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Dim Level Memory",
+			"description": "Dim Settings",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable dim level memory",
+					"value": 0
+				},
+				{
+					"label": "Enable dim level memory",
+					"value": 1
+				}
+			]
+		}
+	}
 }

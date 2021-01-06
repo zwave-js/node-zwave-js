@@ -1,7 +1,6 @@
 // Aeotec Ltd. ZWA002
 // Bulb 6 Multi-Color
 {
-	"_approved": true,
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
 	"label": "ZWA002",

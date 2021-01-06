@@ -1,54 +1,48 @@
 // Wenzhou MTLC Electric Appliances Co., Ltd. ZWN-SC7
 // Scene Controller
 {
-    "_approved": true,
-    "_warnings": [
-        "Overview information is not set",
-        "Inclusion information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
-    "manufacturerId": "0x011a",
-    "label": "ZWN-SC7",
-    "description": "Scene Controller",
-    "devices": [
-        {
-            "productType": "0x0801",
-            "productId": "0x0b03"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "Group 2",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Group 3",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Group 4",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Group 5",
-            "maxNodes": 5
-        },
-        "6": {
-            "label": "Group 6",
-            "maxNodes": 5
-        },
-        "7": {
-            "label": "Group 7",
-            "maxNodes": 5
-        }
-    }
+	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
+	"label": "ZWN-SC7",
+	"description": "Scene Controller",
+	"devices": [
+		{
+			"productType": "0x0801",
+			"productId": "0x0b03"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Group 4",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Group 5",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Group 6",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "Group 7",
+			"maxNodes": 5
+		}
+	}
 }

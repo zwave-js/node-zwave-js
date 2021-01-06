@@ -1,342 +1,341 @@
 // Qubino ZMNHAD
 // Flush 1 relay
 {
-    "_approved": true,
-    "manufacturer": "Qubino",
-    "manufacturerId": "0x0159",
-    "label": "ZMNHAD",
-    "description": "Flush 1 relay",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0052"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Input 1 switch type",
-            "description": "Input 1 switch type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "mono-stable switch type (push button)",
-                    "value": 0
-                },
-                {
-                    "label": "bi-stable switch type",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Input 2 contact type",
-            "description": "Input 2 contact type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NO (normaly open) input type",
-                    "value": 0
-                },
-                {
-                    "label": "NC (normaly close) input type",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Input 3 contact type",
-            "description": "Input 3 contact type",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NO (normaly open) input type",
-                    "value": 0
-                },
-                {
-                    "label": "NC (normaly close) input type",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "Activate /deactivate ALL ON/ALL OFF",
-            "description": "module responds to commands ALL ON / ALL OFF",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "ALL ON is not active ALL OFF is not active",
-                    "value": 0
-                },
-                {
-                    "label": "ALL ON is not active ALL OFF active",
-                    "value": 1
-                },
-                {
-                    "label": "ALL ON active ALL OFF is not active",
-                    "value": 2
-                },
-                {
-                    "label": "ALL ON active, ALL OFF active",
-                    "value": 255
-                }
-            ]
-        },
-        "11": {
-            "label": "Automatic turning off relay after set time",
-            "description": "When relay goes automatically OFF after this time",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Automatic turning on relay after set time",
-            "description": "When relay goes automatically ON after this time",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32535,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Automatic switching units selection",
-            "description": "NOTE: Parameter is the same for turning OFF or ON.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Seconds selected",
-                    "value": 0
-                },
-                {
-                    "label": "Milliseconds selected",
-                    "value": 1
-                }
-            ]
-        },
-        "30": {
-            "label": "Save the relay state after a power failure",
-            "description": "Save the relay state after a power failure",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Module saves its state before power failure",
-                    "value": 0
-                },
-                {
-                    "label": "Module stays OFF after a power failure",
-                    "value": 1
-                }
-            ]
-        },
-        "40": {
-            "label": "Power reporting in Watts on power change",
-            "description": "Power reporting in Watts on power change",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "42": {
-            "label": "Power reporting in Watts by Time interval",
-            "description": "Set value means time interval when power report is send",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32535,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "63": {
-            "label": "Output Switch selection",
-            "description": "Set the type of the device connected to the output. (NO) / (NC)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "0V (NC).",
-                    "value": 0
-                },
-                {
-                    "label": "230V or 240V (NO).",
-                    "value": 1
-                }
-            ]
-        },
-        "100": {
-            "label": "Endpoints I2 Notification Type and Event",
-            "description": "Enable / Disable Endpoints I2 or select Notification Type and Event",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Endpoint, I2 disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Home Security",
-                    "value": 1
-                },
-                {
-                    "label": "Carbon Monoxide",
-                    "value": 2
-                },
-                {
-                    "label": "Carbon Dioxide",
-                    "value": 3
-                },
-                {
-                    "label": "Water Alarm",
-                    "value": 4
-                },
-                {
-                    "label": "Heat Alarm",
-                    "value": 5
-                },
-                {
-                    "label": "Smoke Alarm",
-                    "value": 6
-                },
-                {
-                    "label": "Sensor binary.",
-                    "value": 9
-                }
-            ]
-        },
-        "101": {
-            "label": "Endpoints I3 Notification Type and Event",
-            "description": "Enable / Disable Endpoints I3 or select Notification Type and Event",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Endpoint, I3 disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Home Security",
-                    "value": 1
-                },
-                {
-                    "label": "Carbon Monoxide",
-                    "value": 2
-                },
-                {
-                    "label": "Carbon Dioxide",
-                    "value": 3
-                },
-                {
-                    "label": "Water Alarm",
-                    "value": 4
-                },
-                {
-                    "label": "Heat Alarm",
-                    "value": 5
-                },
-                {
-                    "label": "Smoke Alarm",
-                    "value": 6
-                },
-                {
-                    "label": "Sensor binary.",
-                    "value": 9
-                }
-            ]
-        },
-        "110": {
-            "label": "Temperature sensor offset settings",
-            "description": "Temperature sensor offset settings",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 32536,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "120": {
-            "label": "Digital temperature sensor reporting",
-            "description": "Digital temperature sensor reporting",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 127,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHAD",
+	"description": "Flush 1 relay",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0052"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Input 1 switch type",
+			"description": "Input 1 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Input 2 contact type",
+			"description": "Input 2 contact type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (normaly open) input type",
+					"value": 0
+				},
+				{
+					"label": "NC (normaly close) input type",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Input 3 contact type",
+			"description": "Input 3 contact type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NO (normaly open) input type",
+					"value": 0
+				},
+				{
+					"label": "NC (normaly close) input type",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Activate /deactivate ALL ON/ALL OFF",
+			"description": "module responds to commands ALL ON / ALL OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON is not active ALL OFF is not active",
+					"value": 0
+				},
+				{
+					"label": "ALL ON is not active ALL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON active ALL OFF is not active",
+					"value": 2
+				},
+				{
+					"label": "ALL ON active, ALL OFF active",
+					"value": 255
+				}
+			]
+		},
+		"11": {
+			"label": "Automatic turning off relay after set time",
+			"description": "When relay goes automatically OFF after this time",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Automatic turning on relay after set time",
+			"description": "When relay goes automatically ON after this time",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Automatic switching units selection",
+			"description": "NOTE: Parameter is the same for turning OFF or ON.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Seconds selected",
+					"value": 0
+				},
+				{
+					"label": "Milliseconds selected",
+					"value": 1
+				}
+			]
+		},
+		"30": {
+			"label": "Save the relay state after a power failure",
+			"description": "Save the relay state after a power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Module saves its state before power failure",
+					"value": 0
+				},
+				{
+					"label": "Module stays OFF after a power failure",
+					"value": 1
+				}
+			]
+		},
+		"40": {
+			"label": "Power reporting in Watts on power change",
+			"description": "Power reporting in Watts on power change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Power reporting in Watts by Time interval",
+			"description": "Set value means time interval when power report is send",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"63": {
+			"label": "Output Switch selection",
+			"description": "Set the type of the device connected to the output. (NO) / (NC)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0V (NC).",
+					"value": 0
+				},
+				{
+					"label": "230V or 240V (NO).",
+					"value": 1
+				}
+			]
+		},
+		"100": {
+			"label": "Endpoints I2 Notification Type and Event",
+			"description": "Enable / Disable Endpoints I2 or select Notification Type and Event",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Endpoint, I2 disabled",
+					"value": 0
+				},
+				{
+					"label": "Home Security",
+					"value": 1
+				},
+				{
+					"label": "Carbon Monoxide",
+					"value": 2
+				},
+				{
+					"label": "Carbon Dioxide",
+					"value": 3
+				},
+				{
+					"label": "Water Alarm",
+					"value": 4
+				},
+				{
+					"label": "Heat Alarm",
+					"value": 5
+				},
+				{
+					"label": "Smoke Alarm",
+					"value": 6
+				},
+				{
+					"label": "Sensor binary.",
+					"value": 9
+				}
+			]
+		},
+		"101": {
+			"label": "Endpoints I3 Notification Type and Event",
+			"description": "Enable / Disable Endpoints I3 or select Notification Type and Event",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Endpoint, I3 disabled",
+					"value": 0
+				},
+				{
+					"label": "Home Security",
+					"value": 1
+				},
+				{
+					"label": "Carbon Monoxide",
+					"value": 2
+				},
+				{
+					"label": "Carbon Dioxide",
+					"value": 3
+				},
+				{
+					"label": "Water Alarm",
+					"value": 4
+				},
+				{
+					"label": "Heat Alarm",
+					"value": 5
+				},
+				{
+					"label": "Smoke Alarm",
+					"value": 6
+				},
+				{
+					"label": "Sensor binary.",
+					"value": 9
+				}
+			]
+		},
+		"110": {
+			"label": "Temperature sensor offset settings",
+			"description": "Temperature sensor offset settings",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 32536,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"120": {
+			"label": "Digital temperature sensor reporting",
+			"description": "Digital temperature sensor reporting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

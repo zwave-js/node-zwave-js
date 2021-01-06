@@ -1,43 +1,42 @@
 // Nortek Security & Control LLC PD300Z-2
 // Plug-in Wall Dimmer
 {
-    "_approved": true,
-    "manufacturer": "Nortek Security & Control LLC",
-    "manufacturerId": "0x014f",
-    "label": "PD300Z-2",
-    "description": "Plug-in Wall Dimmer",
-    "devices": [
-        {
-            "productType": "0x4450",
-            "productId": "0x3030"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "29": {
-            "label": "Load Sense",
-            "description": "Turn load sense on with 1, off with 0",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable load sense",
-                    "value": 0
-                },
-                {
-                    "label": "Enable load sense",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "PD300Z-2",
+	"description": "Plug-in Wall Dimmer",
+	"devices": [
+		{
+			"productType": "0x4450",
+			"productId": "0x3030"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"29": {
+			"label": "Load Sense",
+			"description": "Turn load sense on with 1, off with 0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable load sense",
+					"value": 0
+				},
+				{
+					"label": "Enable load sense",
+					"value": 1
+				}
+			]
+		}
+	}
 }

@@ -1,7 +1,6 @@
 // Reitz-Group.de Reitz 05431
 // Duewi ZW BJ ES 1000 / Reitz 05431 / ZWave.me 05457 Single button wall switch
 {
-	"_approved": true,
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
 	"label": "Reitz 05431",

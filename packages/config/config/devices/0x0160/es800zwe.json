@@ -1,23 +1,19 @@
 // Essence Security ES800ZWE
 // Z-Wave extender
 {
-    "_approved": true,
-    "_warnings": [
-        "No channels have been assigned even though there are user configurable command classes."
-    ],
-    "manufacturer": "Essence Security",
-    "manufacturerId": "0x0160",
-    "label": "ES800ZWE",
-    "description": "Z-Wave extender",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Essence Security",
+	"manufacturerId": "0x0160",
+	"label": "ES800ZWE",
+	"description": "Z-Wave extender",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

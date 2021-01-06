@@ -1,242 +1,241 @@
 // AEON Labs ZW121
 // Aeotec LED Strip
 {
-    "_approved": true,
-    "manufacturer": "AEON Labs",
-    "manufacturerId": "0x0086",
-    "label": "ZW121",
-    "description": "Aeotec LED Strip",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0079"
-        },
-        {
-            "productType": "0x0103",
-            "productId": "0x0079"
-        },
-        {
-            "productType": "0x0203",
-            "productId": "0x0079"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "80": {
-            "label": "Notifications for Association Group 1",
-            "description": "Send notifications about strip state changes to association group 1",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No notifications",
-                    "value": 0
-                },
-                {
-                    "label": "Hail CC",
-                    "value": 1
-                },
-                {
-                    "label": "Basic CC report",
-                    "value": 2
-                }
-            ]
-        },
-        "37[0x1f]": {
-            "label": "Color Change Speed Level",
-            "description": "Applies only when the Color Transition Style is set to Fade Out/In",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 30,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Constant Speed",
-                    "value": 0
-                }
-            ]
-        },
-        "37[0xe0]": {
-            "label": "Time Base of Color Change Speed",
-            "description": "Applies only when the Color Transition Style is  set to Fade Out/In",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Time base is 1s",
-                    "value": 0
-                },
-                {
-                    "label": "Time base is 10ms",
-                    "value": 1
-                },
-                {
-                    "label": "Time base is 100ms",
-                    "value": 2
-                }
-            ]
-        },
-        "37[0xff00]": {
-            "label": "Cycle Count",
-            "description": "Defines the number of repetitions of the color transition cycle",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 254,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "37[0xff0000]": {
-            "label": "Brightness",
-            "description": "Brightness when in color transition mode",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "37[0x07000000]": {
-            "label": "Color Display Cycle",
-            "description": "Defines the mode for determining colors used in color transitions",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Inactive (keep the current configuration value)",
-                    "value": 0
-                },
-                {
-                    "label": "Rainbow mode",
-                    "value": 1
-                },
-                {
-                    "label": "Multi color mode",
-                    "value": 2
-                },
-                {
-                    "label": "Random mode",
-                    "value": 3
-                },
-                {
-                    "label": "Single color mode",
-                    "value": 4
-                }
-            ]
-        },
-        "37[0x38000000]": {
-            "label": "Color Change Speed Option",
-            "description": "Applies only when the Color Transition Style is set to Fade Out/In",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Fade in for 1/2 second and fade out for 1/2 second",
-                    "value": 0
-                },
-                {
-                    "label": "Fade in for 5ms and fade out for 5ms",
-                    "value": 1
-                },
-                {
-                    "label": "Fade in for 50ms and fade out for 50ms",
-                    "value": 2
-                }
-            ]
-        },
-        "37[0x40000000]": {
-            "label": "Color Transition Style",
-            "description": "Defines how the strip transitions between colors",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Smooth color transition",
-                    "value": 0
-                },
-                {
-                    "label": "Fade out fade in transition",
-                    "value": 1
-                }
-            ]
-        },
-        "39[0xff]": {
-            "label": "Multi Color, Single Color or Random Mode - Byte 4",
-            "description": "todo",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "39[0xff00]": {
-            "label": "Multi Color, Single Color, or Random Mode - Byte 3",
-            "description": "todo",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "39[0xff0000]": {
-            "label": "Multi Color, Single Color, or Random Mode - Byte 2",
-            "description": "todo",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 0,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "39[0x7f000000]": {
-            "label": "Multi Color, Single Color, or Random Mode - Byte 1",
-            "description": "todo",
-            "valueSize": 4,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW121",
+	"description": "Aeotec LED Strip",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0079"
+		},
+		{
+			"productType": "0x0103",
+			"productId": "0x0079"
+		},
+		{
+			"productType": "0x0203",
+			"productId": "0x0079"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"80": {
+			"label": "Notifications for Association Group 1",
+			"description": "Send notifications about strip state changes to association group 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No notifications",
+					"value": 0
+				},
+				{
+					"label": "Hail CC",
+					"value": 1
+				},
+				{
+					"label": "Basic CC report",
+					"value": 2
+				}
+			]
+		},
+		"37[0x1f]": {
+			"label": "Color Change Speed Level",
+			"description": "Applies only when the Color Transition Style is set to Fade Out/In",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 30,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Constant Speed",
+					"value": 0
+				}
+			]
+		},
+		"37[0xe0]": {
+			"label": "Time Base of Color Change Speed",
+			"description": "Applies only when the Color Transition Style is  set to Fade Out/In",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Time base is 1s",
+					"value": 0
+				},
+				{
+					"label": "Time base is 10ms",
+					"value": 1
+				},
+				{
+					"label": "Time base is 100ms",
+					"value": 2
+				}
+			]
+		},
+		"37[0xff00]": {
+			"label": "Cycle Count",
+			"description": "Defines the number of repetitions of the color transition cycle",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 254,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"37[0xff0000]": {
+			"label": "Brightness",
+			"description": "Brightness when in color transition mode",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"37[0x07000000]": {
+			"label": "Color Display Cycle",
+			"description": "Defines the mode for determining colors used in color transitions",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive (keep the current configuration value)",
+					"value": 0
+				},
+				{
+					"label": "Rainbow mode",
+					"value": 1
+				},
+				{
+					"label": "Multi color mode",
+					"value": 2
+				},
+				{
+					"label": "Random mode",
+					"value": 3
+				},
+				{
+					"label": "Single color mode",
+					"value": 4
+				}
+			]
+		},
+		"37[0x38000000]": {
+			"label": "Color Change Speed Option",
+			"description": "Applies only when the Color Transition Style is set to Fade Out/In",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Fade in for 1/2 second and fade out for 1/2 second",
+					"value": 0
+				},
+				{
+					"label": "Fade in for 5ms and fade out for 5ms",
+					"value": 1
+				},
+				{
+					"label": "Fade in for 50ms and fade out for 50ms",
+					"value": 2
+				}
+			]
+		},
+		"37[0x40000000]": {
+			"label": "Color Transition Style",
+			"description": "Defines how the strip transitions between colors",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Smooth color transition",
+					"value": 0
+				},
+				{
+					"label": "Fade out fade in transition",
+					"value": 1
+				}
+			]
+		},
+		"39[0xff]": {
+			"label": "Multi Color, Single Color or Random Mode - Byte 4",
+			"description": "todo",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39[0xff00]": {
+			"label": "Multi Color, Single Color, or Random Mode - Byte 3",
+			"description": "todo",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39[0xff0000]": {
+			"label": "Multi Color, Single Color, or Random Mode - Byte 2",
+			"description": "todo",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39[0x7f000000]": {
+			"label": "Multi Color, Single Color, or Random Mode - Byte 1",
+			"description": "todo",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

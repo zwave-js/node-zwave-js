@@ -1,20 +1,19 @@
 // ThermoFloor Heatit Z Push Button 8
 // Wall Mounted Switch
 {
-    "_approved": false,
-    "manufacturer": "ThermoFloor",
-    "manufacturerId": "0x019b",
-    "label": "Heatit Z Push Button 8",
-    "description": "Wall Mounted Switch",
-    "devices": [
-        {
-            "productType": "0x0300",
-            "productId": "0xa305"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "ThermoFloor",
+	"manufacturerId": "0x019b",
+	"label": "Heatit Z Push Button 8",
+	"description": "Wall Mounted Switch",
+	"devices": [
+		{
+			"productType": "0x0300",
+			"productId": "0xa305"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

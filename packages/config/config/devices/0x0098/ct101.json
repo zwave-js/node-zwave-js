@@ -1,153 +1,152 @@
 // Radio Thermostat Company of America (RTC) CT101
 // Z-Wave Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Radio Thermostat Company of America (RTC)",
-    "manufacturerId": "0x0098",
-    "label": "CT101",
-    "description": "Z-Wave Thermostat",
-    "devices": [
-        {
-            "productType": "0x6501",
-            "productId": "0x000c"
-        },
-        {
-            "productType": "0x6501",
-            "productId": "0x000d"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 2,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Temperature Reporting Threshold",
-            "description": "Reporting threshold for changes in the ambient temperature.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "0.5°",
-                    "value": 1
-                },
-                {
-                    "label": "1.0°",
-                    "value": 2
-                },
-                {
-                    "label": "1.5°",
-                    "value": 3
-                },
-                {
-                    "label": "2.0°",
-                    "value": 4
-                }
-            ]
-        },
-        "3": {
-            "label": "Utility Lock Enable/Disable",
-            "description": "Prevents setpoint changes at thermostat.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Utility lock disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Utility lock enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "7": {
-            "label": "Thermostat Swing Temperature",
-            "description": "Variance allowed from setpoint",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 8,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "0.5°",
-                    "value": 1
-                },
-                {
-                    "label": "1.0°",
-                    "value": 2
-                },
-                {
-                    "label": "1.5°",
-                    "value": 3
-                },
-                {
-                    "label": "2.0°",
-                    "value": 4
-                },
-                {
-                    "label": "2.5°",
-                    "value": 5
-                },
-                {
-                    "label": "3.0°",
-                    "value": 6
-                },
-                {
-                    "label": "3.5°",
-                    "value": 7
-                },
-                {
-                    "label": "4.0°",
-                    "value": 8
-                }
-            ]
-        },
-        "9": {
-            "label": "Thermostat Recovery Mode",
-            "description": "Fast or Economy recovery mode.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Fast recovery Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Economy recovery Mode",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Radio Thermostat Company of America (RTC)",
+	"manufacturerId": "0x0098",
+	"label": "CT101",
+	"description": "Z-Wave Thermostat",
+	"devices": [
+		{
+			"productType": "0x6501",
+			"productId": "0x000c"
+		},
+		{
+			"productType": "0x6501",
+			"productId": "0x000d"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 2,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Temperature Reporting Threshold",
+			"description": "Reporting threshold for changes in the ambient temperature.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "0.5°",
+					"value": 1
+				},
+				{
+					"label": "1.0°",
+					"value": 2
+				},
+				{
+					"label": "1.5°",
+					"value": 3
+				},
+				{
+					"label": "2.0°",
+					"value": 4
+				}
+			]
+		},
+		"3": {
+			"label": "Utility Lock Enable/Disable",
+			"description": "Prevents setpoint changes at thermostat.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Utility lock disabled",
+					"value": 0
+				},
+				{
+					"label": "Utility lock enabled",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Thermostat Swing Temperature",
+			"description": "Variance allowed from setpoint",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "0.5°",
+					"value": 1
+				},
+				{
+					"label": "1.0°",
+					"value": 2
+				},
+				{
+					"label": "1.5°",
+					"value": 3
+				},
+				{
+					"label": "2.0°",
+					"value": 4
+				},
+				{
+					"label": "2.5°",
+					"value": 5
+				},
+				{
+					"label": "3.0°",
+					"value": 6
+				},
+				{
+					"label": "3.5°",
+					"value": 7
+				},
+				{
+					"label": "4.0°",
+					"value": 8
+				}
+			]
+		},
+		"9": {
+			"label": "Thermostat Recovery Mode",
+			"description": "Fast or Economy recovery mode.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Fast recovery Mode",
+					"value": 1
+				},
+				{
+					"label": "Economy recovery Mode",
+					"value": 2
+				}
+			]
+		}
+	}
 }

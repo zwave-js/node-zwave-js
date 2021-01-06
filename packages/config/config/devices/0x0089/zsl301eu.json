@@ -1,166 +1,165 @@
 // Team Precision PCL ZSL301EU
 // Single relay switch
 {
-    "_approved": true,
-    "manufacturer": "Team Precision PCL",
-    "manufacturerId": "0x0089",
-    "label": "ZSL301EU",
-    "description": "Single relay switch",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0101"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "paramInformation": {
-        "0": {
-            "label": "Last Status",
-            "description": "Last Status",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Resume after power outage",
-                    "value": 0
-                },
-                {
-                    "label": "ON after power outage",
-                    "value": 1
-                },
-                {
-                    "label": "OFF after power outage",
-                    "value": 2
-                }
-            ]
-        },
-        "1": {
-            "label": "Night Light",
-            "description": "Night Light",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED ON when light ON",
-                    "value": 0
-                },
-                {
-                    "label": "LED ON when light OFF",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Enable LED",
-            "description": "Enable LED",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable LED",
-                    "value": 0
-                },
-                {
-                    "label": "Enable LED",
-                    "value": 1
-                }
-            ]
-        },
-        "3": {
-            "label": "Enable All ON/All OFF",
-            "description": "Enable All ON/All OFF",
-            "valueSize": 1,
-            "minValue": -1,
-            "maxValue": 2,
-            "defaultValue": -1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Enable both All ON and All OFF command",
-                    "value": -1
-                },
-                {
-                    "label": "Disable both All ON and All OFF command.",
-                    "value": 0
-                },
-                {
-                    "label": "Enable only All OFF command.",
-                    "value": 1
-                },
-                {
-                    "label": "Enable only All ON command.",
-                    "value": 2
-                }
-            ]
-        },
-        "4": {
-            "label": "Button Protection",
-            "description": "Button Protection",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "User can use button for ON/OFF manual control.",
-                    "value": 0
-                },
-                {
-                    "label": "Protect Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Disable button from manual control.",
-                    "value": 2
-                }
-            ]
-        },
-        "5": {
-            "label": "Delay In Time",
-            "description": "Delay In Time",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Delay Out Time",
-            "description": "Delay Out Time",
-            "unit": "seconds",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Team Precision PCL",
+	"manufacturerId": "0x0089",
+	"label": "ZSL301EU",
+	"description": "Single relay switch",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0101"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"0": {
+			"label": "Last Status",
+			"description": "Last Status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Resume after power outage",
+					"value": 0
+				},
+				{
+					"label": "ON after power outage",
+					"value": 1
+				},
+				{
+					"label": "OFF after power outage",
+					"value": 2
+				}
+			]
+		},
+		"1": {
+			"label": "Night Light",
+			"description": "Night Light",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when light ON",
+					"value": 0
+				},
+				{
+					"label": "LED ON when light OFF",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Enable LED",
+			"description": "Enable LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable LED",
+					"value": 0
+				},
+				{
+					"label": "Enable LED",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Enable All ON/All OFF",
+			"description": "Enable All ON/All OFF",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 2,
+			"defaultValue": -1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable both All ON and All OFF command",
+					"value": -1
+				},
+				{
+					"label": "Disable both All ON and All OFF command.",
+					"value": 0
+				},
+				{
+					"label": "Enable only All OFF command.",
+					"value": 1
+				},
+				{
+					"label": "Enable only All ON command.",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Button Protection",
+			"description": "Button Protection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "User can use button for ON/OFF manual control.",
+					"value": 0
+				},
+				{
+					"label": "Protect Mode",
+					"value": 1
+				},
+				{
+					"label": "Disable button from manual control.",
+					"value": 2
+				}
+			]
+		},
+		"5": {
+			"label": "Delay In Time",
+			"description": "Delay In Time",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Delay Out Time",
+			"description": "Delay Out Time",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,7 +1,6 @@
 // SIEGENIA-AUBI KG Sensoair
 // Air quality sensor for indoor use
 {
-	"_approved": true,
 	"manufacturer": "SIEGENIA-AUBI KG",
 	"manufacturerId": "0x0081",
 	"label": "Sensoair",

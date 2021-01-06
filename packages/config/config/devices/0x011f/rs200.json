@@ -1,19 +1,18 @@
 // Ingersoll Rand (was Ecolink) RS200
 // Schlage PIR Motion Sensor
 {
-    "_approved": true,
-    "manufacturer": "Ingersoll Rand (was Ecolink)",
-    "manufacturerId": "0x011f",
-    "label": "RS200",
-    "description": "Schlage PIR Motion Sensor",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Ingersoll Rand (was Ecolink)",
+	"manufacturerId": "0x011f",
+	"label": "RS200",
+	"description": "Schlage PIR Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

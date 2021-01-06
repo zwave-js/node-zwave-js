@@ -1,7 +1,6 @@
 // Danfoss HRVCCM
 // Air CCM
 {
-	"_approved": true,
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",
 	"label": "HRVCCM",

@@ -1,161 +1,160 @@
 // HANK Electronics Ltd. HKZW_MS02
 // Motion Sensor
 {
-    "_approved": true,
-    "manufacturer": "HANK Electronics Ltd.",
-    "manufacturerId": "0x0208",
-    "label": "HKZW_MS02",
-    "description": "Motion Sensor",
-    "devices": [
-        {
-            "productType": "0x0200",
-            "productId": "0x0012"
-        },
-        {
-            "productType": "0x0201",
-            "productId": "0x0012"
-        },
-        {
-            "productType": "0x0300",
-            "productId": "0x0012"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "12": {
-            "label": "Motion Sensor`s Sensitivity",
-            "description": "The higher the value,the more sensitive the PIR sensor",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 8,
-            "defaultValue": 8,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Sensitivity 1 (min)",
-                    "value": 1
-                },
-                {
-                    "label": "Sensitivity 2",
-                    "value": 2
-                },
-                {
-                    "label": "Sensitivity 3",
-                    "value": 3
-                },
-                {
-                    "label": "Sensitivity 4",
-                    "value": 4
-                },
-                {
-                    "label": "Sensitivity 5",
-                    "value": 5
-                },
-                {
-                    "label": "Sensitivity 6",
-                    "value": 6
-                },
-                {
-                    "label": "Sensitivity 7",
-                    "value": 7
-                },
-                {
-                    "label": "Sensitivity 8 (max)",
-                    "value": 8
-                }
-            ]
-        },
-        "14": {
-            "label": "Enable/Disable Basic Set Command",
-            "description": "The motion Sensor can reverse its value of BASIC SET when motion is triggered",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "15": {
-            "label": "value of basic set command",
-            "description": "assigned to send Basic Set Command",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "17": {
-            "label": "enable/disable shock alarm",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable",
-                    "value": 0
-                },
-                {
-                    "label": "Enable",
-                    "value": 1
-                }
-            ]
-        },
-        "18": {
-            "label": "Motion Alarm Cancellation Delay",
-            "description": "Period of time after which Motion alarm will be cancelled.",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "32": {
-            "label": "Level of low battery",
-            "description": "Define a battery level ad the \"low battery\"",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 50,
-            "defaultValue": 20,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "HANK Electronics Ltd.",
+	"manufacturerId": "0x0208",
+	"label": "HKZW_MS02",
+	"description": "Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x0012"
+		},
+		{
+			"productType": "0x0201",
+			"productId": "0x0012"
+		},
+		{
+			"productType": "0x0300",
+			"productId": "0x0012"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"12": {
+			"label": "Motion Sensor`s Sensitivity",
+			"description": "The higher the value,the more sensitive the PIR sensor",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Sensitivity 1 (min)",
+					"value": 1
+				},
+				{
+					"label": "Sensitivity 2",
+					"value": 2
+				},
+				{
+					"label": "Sensitivity 3",
+					"value": 3
+				},
+				{
+					"label": "Sensitivity 4",
+					"value": 4
+				},
+				{
+					"label": "Sensitivity 5",
+					"value": 5
+				},
+				{
+					"label": "Sensitivity 6",
+					"value": 6
+				},
+				{
+					"label": "Sensitivity 7",
+					"value": 7
+				},
+				{
+					"label": "Sensitivity 8 (max)",
+					"value": 8
+				}
+			]
+		},
+		"14": {
+			"label": "Enable/Disable Basic Set Command",
+			"description": "The motion Sensor can reverse its value of BASIC SET when motion is triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"15": {
+			"label": "value of basic set command",
+			"description": "assigned to send Basic Set Command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"17": {
+			"label": "enable/disable shock alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"18": {
+			"label": "Motion Alarm Cancellation Delay",
+			"description": "Period of time after which Motion alarm will be cancelled.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Level of low battery",
+			"description": "Define a battery level ad the \"low battery\"",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

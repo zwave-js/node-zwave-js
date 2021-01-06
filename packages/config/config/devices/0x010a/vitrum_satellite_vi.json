@@ -1,54 +1,45 @@
 // VDA Vitrum Satellite VI
 // Vitrum touch switch satellite 6 buttons
 {
-    "_approved": true,
-    "_errors": [
-        "Device category is not set.",
-        "At least one manufacturers product image must be uploaded",
-        "At least one device manual must be uploaded as PDF"
-    ],
-    "_warnings": [
-        "Endpoint 0 contains both switch and dimmer channels. It probably should only include dimmer!"
-    ],
-    "manufacturer": "VDA",
-    "manufacturerId": "0x010a",
-    "label": "Vitrum Satellite VI",
-    "description": "Vitrum touch switch satellite 6 buttons",
-    "devices": [
-        {
-            "productType": "0x1400",
-            "productId": "0x6600"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Button channel 1",
-            "maxNodes": 5
-        },
-        "2": {
-            "label": "Button channel 2",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Button channel 3",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Button channel 4",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Button channel 5",
-            "maxNodes": 5
-        },
-        "6": {
-            "label": "Button channel 6",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "VDA",
+	"manufacturerId": "0x010a",
+	"label": "Vitrum Satellite VI",
+	"description": "Vitrum touch switch satellite 6 buttons",
+	"devices": [
+		{
+			"productType": "0x1400",
+			"productId": "0x6600"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Button channel 1",
+			"maxNodes": 5
+		},
+		"2": {
+			"label": "Button channel 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Button channel 3",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Button channel 4",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Button channel 5",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "Button channel 6",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

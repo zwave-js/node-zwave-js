@@ -1,20 +1,19 @@
 // Shenzhen iSurpass Technology Co. , Ltd. DX1WL-Z
 // Domux Water Leakage Sensor
 {
-    "_approved": true,
-    "manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
-    "manufacturerId": "0x021c",
-    "label": "DX1WL-Z",
-    "description": "Domux Water Leakage Sensor",
-    "devices": [
-        {
-            "productType": "0x8004",
-            "productId": "0x1000"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
+	"manufacturerId": "0x021c",
+	"label": "DX1WL-Z",
+	"description": "Domux Water Leakage Sensor",
+	"devices": [
+		{
+			"productType": "0x8004",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

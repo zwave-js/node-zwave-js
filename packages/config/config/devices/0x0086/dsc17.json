@@ -1,7 +1,6 @@
 // AEON Labs DSC17
 // Micro Double Smart Switch
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSC17",

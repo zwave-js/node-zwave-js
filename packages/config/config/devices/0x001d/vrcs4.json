@@ -1,49 +1,48 @@
 // Leviton VRCS4
 // 4-Scene Controller
 {
-    "_approved": true,
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRCS4",
-    "description": "4-Scene Controller",
-    "devices": [
-        {
-            "productType": "0x0802",
-            "productId": "0x0209"
-        },
-        {
-            "productType": "0x0802",
-            "productId": "0x0261"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "description": "Button 1",
-            "maxNodes": 32,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "description": "Button 2",
-            "maxNodes": 32,
-            "isLifeline": true
-        },
-        "3": {
-            "label": "Group 3",
-            "description": "Button 3",
-            "maxNodes": 32,
-            "isLifeline": true
-        },
-        "4": {
-            "label": "Group 4",
-            "description": "Button 4",
-            "maxNodes": 32,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRCS4",
+	"description": "4-Scene Controller",
+	"devices": [
+		{
+			"productType": "0x0802",
+			"productId": "0x0209"
+		},
+		{
+			"productType": "0x0802",
+			"productId": "0x0261"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "Button 1",
+			"maxNodes": 32,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"description": "Button 2",
+			"maxNodes": 32,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Group 3",
+			"description": "Button 3",
+			"maxNodes": 32,
+			"isLifeline": true
+		},
+		"4": {
+			"label": "Group 4",
+			"description": "Button 4",
+			"maxNodes": 32,
+			"isLifeline": true
+		}
+	}
 }

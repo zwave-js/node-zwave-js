@@ -1,179 +1,178 @@
 // ASSA ABLOY YRD220
 // Yale Real Living Touchscreen Deadbolt
 {
-    "_approved": true,
-    "manufacturer": "ASSA ABLOY",
-    "manufacturerId": "0x0129",
-    "label": "YRD220",
-    "description": "Yale Real Living Touchscreen Deadbolt",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0000"
-        },
-        {
-            "productType": "0x0002",
-            "productId": "0x0209"
-        },
-        {
-            "productType": "0x0002",
-            "productId": "0xaa00"
-        },
-        {
-            "productType": "0x0002",
-            "productId": "0xffff"
-        },
-        {
-            "productType": "0x2022",
-            "productId": "0x0209"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Alarm Reports",
-            "description": "Alarm reports are sent out to all devices in the association group",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Audio Volume",
-            "description": "Sets the volume level of the beeps and voice prompts",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 3,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Silent",
-                    "value": 1
-                },
-                {
-                    "label": "Low",
-                    "value": 2
-                },
-                {
-                    "label": "High",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Auto Re-lock",
-            "description": "When enabled, the unit will automatically re-lock",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Off",
-                    "value": 0
-                },
-                {
-                    "label": "On",
-                    "value": 255
-                }
-            ]
-        },
-        "3": {
-            "label": "Re-lock Time",
-            "description": "Time after unlocking that the device will lock",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 255,
-            "defaultValue": 30,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Wrong Code Entry Limit",
-            "description": "The number of invalid tries before the lock shutdowns and sends an alarm",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Language",
-            "description": "Language used by the voice prompts",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "English",
-                    "value": 1
-                },
-                {
-                    "label": "Spanish",
-                    "value": 2
-                },
-                {
-                    "label": "French",
-                    "value": 3
-                }
-            ]
-        },
-        "7": {
-            "label": "Shutdown Time",
-            "description": "Number of times the device is locked out after the invalid retries are exceeded",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 30,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Operating Mode",
-            "description": "Sets if the unit operates normal, or disables keypad and Z-Wave lock/unlock",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "Vacation Mode",
-                    "value": 1
-                },
-                {
-                    "label": "Privacy Mode",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "YRD220",
+	"description": "Yale Real Living Touchscreen Deadbolt",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0000"
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0209"
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0xaa00"
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0xffff"
+		},
+		{
+			"productType": "0x2022",
+			"productId": "0x0209"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Alarm Reports",
+			"description": "Alarm reports are sent out to all devices in the association group",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Audio Volume",
+			"description": "Sets the volume level of the beeps and voice prompts",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Silent",
+					"value": 1
+				},
+				{
+					"label": "Low",
+					"value": 2
+				},
+				{
+					"label": "High",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Auto Re-lock",
+			"description": "When enabled, the unit will automatically re-lock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Re-lock Time",
+			"description": "Time after unlocking that the device will lock",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Wrong Code Entry Limit",
+			"description": "The number of invalid tries before the lock shutdowns and sends an alarm",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Language",
+			"description": "Language used by the voice prompts",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "English",
+					"value": 1
+				},
+				{
+					"label": "Spanish",
+					"value": 2
+				},
+				{
+					"label": "French",
+					"value": 3
+				}
+			]
+		},
+		"7": {
+			"label": "Shutdown Time",
+			"description": "Number of times the device is locked out after the invalid retries are exceeded",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Operating Mode",
+			"description": "Sets if the unit operates normal, or disables keypad and Z-Wave lock/unlock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "Vacation Mode",
+					"value": 1
+				},
+				{
+					"label": "Privacy Mode",
+					"value": 2
+				}
+			]
+		}
+	}
 }

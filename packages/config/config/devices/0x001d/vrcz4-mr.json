@@ -1,41 +1,36 @@
 // Leviton VRCZ4-MR
 // 4-Zone Controller with local load control
 {
-    "_approved": false,
-    "_errors": [
-        "No endpoints are configured",
-        "Device has association groups defined, but does not support the ASSOCIATION command class."
-    ],
-    "manufacturer": "Leviton",
-    "manufacturerId": "0x001d",
-    "label": "VRCZ4-MR",
-    "description": "4-Zone Controller with local load control",
-    "devices": [
-        {
-            "productType": "0x1202",
-            "productId": "0x0243"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 232
-        },
-        "2": {
-            "label": "Group 2",
-            "maxNodes": 232
-        },
-        "3": {
-            "label": "Group 3",
-            "maxNodes": 232
-        },
-        "4": {
-            "label": "Group 4",
-            "maxNodes": 232
-        }
-    }
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRCZ4-MR",
+	"description": "4-Zone Controller with local load control",
+	"devices": [
+		{
+			"productType": "0x1202",
+			"productId": "0x0243"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 232
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 232
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 232
+		},
+		"4": {
+			"label": "Group 4",
+			"maxNodes": 232
+		}
+	}
 }

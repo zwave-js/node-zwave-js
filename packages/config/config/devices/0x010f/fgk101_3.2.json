@@ -1,305 +1,304 @@
 // Fibargroup FGK101
 // Door Opening Sensor
 {
-    "_approved": true,
-    "manufacturer": "Fibargroup",
-    "manufacturerId": "0x010f",
-    "label": "FGK101",
-    "description": "Door Opening Sensor",
-    "devices": [
-        {
-            "productType": "0x0701",
-            "productId": "0x1001"
-        },
-        {
-            "productType": "0x0701",
-            "productId": "0x2001"
-        },
-        {
-            "productType": "0x0701",
-            "productId": "0x3001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "3.2",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Control",
-            "maxNodes": 5
-        },
-        "3": {
-            "label": "Alarm",
-            "maxNodes": 5
-        },
-        "4": {
-            "label": "Sensor ZW3",
-            "maxNodes": 5
-        },
-        "5": {
-            "label": "Tamper ZW3",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Operations mode",
-            "description": "Parameter defines device operation mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Door/Window or alarm status",
-            "description": "Parameter defines state of the sensor when the magnet ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Visual LED indications",
-            "description": "This parameter defines events indicated by the visual ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 6,
-            "defaultValue": 6,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Range test after double click",
-            "description": "Allows to enable activation of Z-Wave range test with ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "2nd association group triggers",
-            "description": "Parameter defines events which result in sending on/off ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Commands sent to 2nd association group",
-            "description": "Command frames sent to devices added to the 2nd association group.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "ON command  sent to 2nd assoc. group",
-            "description": "Value of ON command frame sent to 2nd association group",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 255,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "OFF command  sent to 2nd assoc. group",
-            "description": "The value of 0 turns OFF the device, 255 turns it ON.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "Time delay of ON command frame",
-            "description": "Time period after which ON command frame will be sent.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "Time delay of OFF command frame",
-            "description": "Time period after which OFF command frame will be sent.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Type of sent alarm frames",
-            "description": "Type of control frames transmitted to the main controller ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 5,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "30": {
-            "label": "Delay of tamper alarm cancellation",
-            "description": "Time period after which a tamper alarm will be cancelled.",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32400,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "31": {
-            "label": "Reporting tamper alarm cancellation",
-            "description": "Reporting cancellation of tamper alarm to the controller ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "50": {
-            "label": "Interval of temperature measurements",
-            "description": "This parameter defines how often the temperature will ...",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32400,
-            "defaultValue": 300,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "51": {
-            "label": "Temperature reports threshold",
-            "description": "This parameter defines the change of temperature in ...",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 300,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "52": {
-            "label": "Interval of temperature reports",
-            "description": "This parameter determines how often the temperature ...",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 32400,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "53": {
-            "label": "Temperature offset",
-            "description": "The value to be added to the actual temperature, measured ...",
-            "valueSize": 4,
-            "minValue": -1000,
-            "maxValue": 1000,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "54": {
-            "label": "Temperature alarm reports",
-            "description": "Temperature alarms reported to the Z-Wave controller.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "55": {
-            "label": "High temperature alarm threshold",
-            "description": "If temperature is higher than set value, overheat ...",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 1000,
-            "defaultValue": 540,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "56": {
-            "label": "Low temperature alarm threshold",
-            "description": "If temperature is lower than the set value, underheat ...",
-            "valueSize": 2,
-            "minValue": -300,
-            "maxValue": 700,
-            "defaultValue": 40,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "70": {
-            "label": "Scene activation functionality",
-            "description": "The device can trigger scenes using scene IDs assigned ...",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 2048,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "71": {
-            "label": "Alarm broadcast",
-            "description": "Settings for broadcasting ON/OFF commands, sensor ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 4,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "72": {
-            "label": "Associations in Z-Wave network Security Mode",
-            "description": "This parameter defines how commands are sent in ...",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 15,
-            "defaultValue": 15,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGK101",
+	"description": "Door Opening Sensor",
+	"devices": [
+		{
+			"productType": "0x0701",
+			"productId": "0x1001"
+		},
+		{
+			"productType": "0x0701",
+			"productId": "0x2001"
+		},
+		{
+			"productType": "0x0701",
+			"productId": "0x3001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.2",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Control",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Alarm",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Sensor ZW3",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "Tamper ZW3",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Operations mode",
+			"description": "Parameter defines device operation mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Door/Window or alarm status",
+			"description": "Parameter defines state of the sensor when the magnet ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Visual LED indications",
+			"description": "This parameter defines events indicated by the visual ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 6,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Range test after double click",
+			"description": "Allows to enable activation of Z-Wave range test with ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "2nd association group triggers",
+			"description": "Parameter defines events which result in sending on/off ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Commands sent to 2nd association group",
+			"description": "Command frames sent to devices added to the 2nd association group.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "ON command  sent to 2nd assoc. group",
+			"description": "Value of ON command frame sent to 2nd association group",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "OFF command  sent to 2nd assoc. group",
+			"description": "The value of 0 turns OFF the device, 255 turns it ON.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Time delay of ON command frame",
+			"description": "Time period after which ON command frame will be sent.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Time delay of OFF command frame",
+			"description": "Time period after which OFF command frame will be sent.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Type of sent alarm frames",
+			"description": "Type of control frames transmitted to the main controller ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"label": "Delay of tamper alarm cancellation",
+			"description": "Time period after which a tamper alarm will be cancelled.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "Reporting tamper alarm cancellation",
+			"description": "Reporting cancellation of tamper alarm to the controller ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"50": {
+			"label": "Interval of temperature measurements",
+			"description": "This parameter defines how often the temperature will ...",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "Temperature reports threshold",
+			"description": "This parameter defines the change of temperature in ...",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 300,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "Interval of temperature reports",
+			"description": "This parameter determines how often the temperature ...",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"53": {
+			"label": "Temperature offset",
+			"description": "The value to be added to the actual temperature, measured ...",
+			"valueSize": 4,
+			"minValue": -1000,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"54": {
+			"label": "Temperature alarm reports",
+			"description": "Temperature alarms reported to the Z-Wave controller.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"55": {
+			"label": "High temperature alarm threshold",
+			"description": "If temperature is higher than set value, overheat ...",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1000,
+			"defaultValue": 540,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"56": {
+			"label": "Low temperature alarm threshold",
+			"description": "If temperature is lower than the set value, underheat ...",
+			"valueSize": 2,
+			"minValue": -300,
+			"maxValue": 700,
+			"defaultValue": 40,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"70": {
+			"label": "Scene activation functionality",
+			"description": "The device can trigger scenes using scene IDs assigned ...",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2048,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"71": {
+			"label": "Alarm broadcast",
+			"description": "Settings for broadcasting ON/OFF commands, sensor ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"72": {
+			"label": "Associations in Z-Wave network Security Mode",
+			"description": "This parameter defines how commands are sent in ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

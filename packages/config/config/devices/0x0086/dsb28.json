@@ -1,7 +1,6 @@
 // AEON Labs DSB28
 // Home Energy Meter G2
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSB28",

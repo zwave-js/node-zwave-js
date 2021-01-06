@@ -1,7 +1,6 @@
 // Jasco Products 26931/ZW4006
 // In-Wall Smart Motion Switch
 {
-	"_approved": true,
 	"manufacturer": "Jasco Products",
 	"manufacturerId": "0x0063",
 	"label": "26931/ZW4006",

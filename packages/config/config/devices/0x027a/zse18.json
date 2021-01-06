@@ -1,101 +1,100 @@
 // Zooz ZSE18
 // Motion and Vibration Sensor
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZSE18",
-    "description": "Motion and Vibration Sensor",
-    "devices": [
-        {
-            "productType": "0x0301",
-            "productId": "0x0012"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "12": {
-            "label": "PIR sensor sensitivity",
-            "description": "1 = low sensitivity and 8 = high sensitivity.",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 8,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "14": {
-            "label": "BASIC SET reports",
-            "description": "0 - disabled, 1 - enabled",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "15": {
-            "label": "reverse BASIC SET",
-            "description": "0: 255 motion, 0 timeout. 1: 0 motion, 255 timeout",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "17": {
-            "label": "vibration sensor",
-            "description": "0=disabled, 1=enabled",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "18": {
-            "label": "trigger interval",
-            "description": "3=6 seconds, 65535=65538 seconds (add 3 seconds to value set)",
-            "unit": "seconds",
-            "valueSize": 2,
-            "minValue": 3,
-            "maxValue": 65535,
-            "defaultValue": 27,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "LED Indicator",
-            "description": "0=disabled, 1=enabled (default)",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "32": {
-            "label": "Low Battery Alert",
-            "description": "percent battery left",
-            "valueSize": 1,
-            "minValue": 10,
-            "maxValue": 50,
-            "defaultValue": 10,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZSE18",
+	"description": "Motion and Vibration Sensor",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0x0012"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"12": {
+			"label": "PIR sensor sensitivity",
+			"description": "1 = low sensitivity and 8 = high sensitivity.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "BASIC SET reports",
+			"description": "0 - disabled, 1 - enabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "reverse BASIC SET",
+			"description": "0: 255 motion, 0 timeout. 1: 0 motion, 255 timeout",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "vibration sensor",
+			"description": "0=disabled, 1=enabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "trigger interval",
+			"description": "3=6 seconds, 65535=65538 seconds (add 3 seconds to value set)",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 3,
+			"maxValue": 65535,
+			"defaultValue": 27,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "LED Indicator",
+			"description": "0=disabled, 1=enabled (default)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Low Battery Alert",
+			"description": "percent battery left",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

@@ -1,17 +1,6 @@
 // Z-Wave.me RaZberry
 // Z-Wave daughtercard
 {
-	"_approved": false,
-	"_errors": [
-		"Overview information is not set",
-		"Inclusion information is not set",
-		"Exclusion information is not set",
-		"No endpoints are configured",
-		"Device category is not set.",
-		"Device has association groups defined, but does not support the ASSOCIATION command class.",
-		"At least one manufacturers product image must be uploaded",
-		"At least one device manual must be uploaded as PDF"
-	],
 	"manufacturer": "Z-Wave.me",
 	"manufacturerId": "0x0147",
 	"label": "RaZberry",

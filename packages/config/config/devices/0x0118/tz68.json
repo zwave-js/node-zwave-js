@@ -1,74 +1,73 @@
 // TKB Home TZ68
 // Wall Plug
 {
-    "_approved": true,
-    "manufacturer": "TKB Home",
-    "manufacturerId": "0x0118",
-    "label": "TZ68",
-    "description": "Wall Plug",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0002"
-        },
-        {
-            "productType": "0x0101",
-            "productId": "0x0103"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group1",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "LED Behavior",
-            "description": "defines the behavior of the blue LED",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "blue indicates off (default)",
-                    "value": 0
-                },
-                {
-                    "label": "blue indicates on",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "Memory function",
-            "description": "Memory function behaviour control.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "do not remember",
-                    "value": 0
-                },
-                {
-                    "label": "do remember state (default)",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "TZ68",
+	"description": "Wall Plug",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002"
+		},
+		{
+			"productType": "0x0101",
+			"productId": "0x0103"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "LED Behavior",
+			"description": "defines the behavior of the blue LED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "blue indicates off (default)",
+					"value": 0
+				},
+				{
+					"label": "blue indicates on",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Memory function",
+			"description": "Memory function behaviour control.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "do not remember",
+					"value": 0
+				},
+				{
+					"label": "do remember state (default)",
+					"value": 1
+				}
+			]
+		}
+	}
 }

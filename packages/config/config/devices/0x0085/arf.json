@@ -1,20 +1,19 @@
 // Fakro ARF
 // Roller blind module
 {
-    "_approved": true,
-    "manufacturer": "Fakro",
-    "manufacturerId": "0x0085",
-    "label": "ARF",
-    "description": "Roller blind module",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0011"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Fakro",
+	"manufacturerId": "0x0085",
+	"label": "ARF",
+	"description": "Roller blind module",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0011"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

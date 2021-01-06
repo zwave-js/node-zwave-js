@@ -1,134 +1,133 @@
 // wiDom WTE
 // Widom Smart Dimmer
 {
-    "_approved": true,
-    "manufacturer": "wiDom",
-    "manufacturerId": "0x0149",
-    "label": "WTE",
-    "description": "Widom Smart Dimmer",
-    "devices": [
-        {
-            "productType": "0x1214",
-            "productId": "0x0a00"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Start-up status",
-            "description": "Defines the status of the device, in term of light level, following a restart.",
-            "valueSize": 1,
-            "minValue": -1,
-            "maxValue": 99,
-            "defaultValue": -1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Fade On Time",
-            "description": "Defines the time spent to switch the load from complete OFF to complete ON",
-            "valueSize": 1,
-            "minValue": -126,
-            "maxValue": 127,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Fade Off Time",
-            "description": "Defines the time spent to switch the load from complete ON to complete OFF",
-            "valueSize": 1,
-            "minValue": -126,
-            "maxValue": 127,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Local Dimming Time",
-            "description": "Defines the time spent to switch the controlled load",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 60,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Minimum Light Level",
-            "description": "Defines which light level will correspond to 1% in the range between 1 and 98%",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 98,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Maximum Light Level",
-            "description": "Defines which light level will correspond to 99% in the range between 2 and 99%",
-            "valueSize": 1,
-            "minValue": 2,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "20": {
-            "label": "Dimmable Load",
-            "description": "Define if the connected loads are dimmable or not",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "NON_DIMMABLE_LOAD",
-                    "value": 0
-                },
-                {
-                    "label": "DIMMABLE LOAD",
-                    "value": 1
-                }
-            ]
-        },
-        "62": {
-            "label": "Type of external switch",
-            "description": "Defines the type of external switch connected to the device",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "IGNORE",
-                    "value": 0
-                },
-                {
-                    "label": "BUTTON",
-                    "value": 1
-                },
-                {
-                    "label": "SWITCH",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "wiDom",
+	"manufacturerId": "0x0149",
+	"label": "WTE",
+	"description": "Widom Smart Dimmer",
+	"devices": [
+		{
+			"productType": "0x1214",
+			"productId": "0x0a00"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Start-up status",
+			"description": "Defines the status of the device, in term of light level, following a restart.",
+			"valueSize": 1,
+			"minValue": -1,
+			"maxValue": 99,
+			"defaultValue": -1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Fade On Time",
+			"description": "Defines the time spent to switch the load from complete OFF to complete ON",
+			"valueSize": 1,
+			"minValue": -126,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Fade Off Time",
+			"description": "Defines the time spent to switch the load from complete ON to complete OFF",
+			"valueSize": 1,
+			"minValue": -126,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Local Dimming Time",
+			"description": "Defines the time spent to switch the controlled load",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Minimum Light Level",
+			"description": "Defines which light level will correspond to 1% in the range between 1 and 98%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 98,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Maximum Light Level",
+			"description": "Defines which light level will correspond to 99% in the range between 2 and 99%",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Dimmable Load",
+			"description": "Define if the connected loads are dimmable or not",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "NON_DIMMABLE_LOAD",
+					"value": 0
+				},
+				{
+					"label": "DIMMABLE LOAD",
+					"value": 1
+				}
+			]
+		},
+		"62": {
+			"label": "Type of external switch",
+			"description": "Defines the type of external switch connected to the device",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "IGNORE",
+					"value": 0
+				},
+				{
+					"label": "BUTTON",
+					"value": 1
+				},
+				{
+					"label": "SWITCH",
+					"value": 2
+				}
+			]
+		}
+	}
 }

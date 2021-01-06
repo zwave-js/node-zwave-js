@@ -1,54 +1,53 @@
 // BRK Brands, Inc. ZCOMBO
 // Smoke and Carbon Monoxide Alarm
 {
-    "_approved": true,
-    "manufacturer": "BRK Brands, Inc.",
-    "manufacturerId": "0x0138",
-    "label": "ZCOMBO",
-    "description": "Smoke and Carbon Monoxide Alarm",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0002"
-        },
-        {
-            "productType": "0x000c",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Send double alarms",
-            "description": "Causes the device to send double alarm messages",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Single Alarm",
-                    "value": 0
-                },
-                {
-                    "label": "Double Alarm",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "BRK Brands, Inc.",
+	"manufacturerId": "0x0138",
+	"label": "ZCOMBO",
+	"description": "Smoke and Carbon Monoxide Alarm",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002"
+		},
+		{
+			"productType": "0x000c",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Send double alarms",
+			"description": "Causes the device to send double alarm messages",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single Alarm",
+					"value": 0
+				},
+				{
+					"label": "Double Alarm",
+					"value": 1
+				}
+			]
+		}
+	}
 }

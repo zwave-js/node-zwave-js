@@ -1,134 +1,133 @@
 // ASSA ABLOY YRD110
 // Yale button deadbolt without keyway
 {
-    "_approved": true,
-    "manufacturer": "ASSA ABLOY",
-    "manufacturerId": "0x0129",
-    "label": "YRD110",
-    "description": "Yale button deadbolt without keyway",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0800"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Receive Alarms",
-            "description": "Group that will receive alarm notices from the lock",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Volume",
-            "description": "Volume of beeps",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 3,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Loud",
-                    "value": 1
-                },
-                {
-                    "label": "Silent",
-                    "value": 3
-                }
-            ]
-        },
-        "2": {
-            "label": "Auto relock",
-            "description": "Auto relocking after unlocked",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "No auto-relock",
-                    "value": 0
-                },
-                {
-                    "label": "Auto relock",
-                    "value": 255
-                }
-            ]
-        },
-        "3": {
-            "label": "Auto relock time",
-            "description": "Time for auto relock",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 255,
-            "defaultValue": 30,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Wrong code limit",
-            "description": "Number of incorrect PINs before lockout",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 7,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Shutdown time",
-            "description": "Incorrect attempts shutdown time",
-            "unit": "Seconds",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 255,
-            "defaultValue": 60,
-            "unsigned": true,
-            "readOnly": true,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Operation Mode",
-            "description": "Operation Mode",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Normal",
-                    "value": 0
-                },
-                {
-                    "label": "vacation",
-                    "value": 1
-                },
-                {
-                    "label": "privacy",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "YRD110",
+	"description": "Yale button deadbolt without keyway",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0800"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Receive Alarms",
+			"description": "Group that will receive alarm notices from the lock",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Volume",
+			"description": "Volume of beeps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Loud",
+					"value": 1
+				},
+				{
+					"label": "Silent",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Auto relock",
+			"description": "Auto relocking after unlocked",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No auto-relock",
+					"value": 0
+				},
+				{
+					"label": "Auto relock",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Auto relock time",
+			"description": "Time for auto relock",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Wrong code limit",
+			"description": "Number of incorrect PINs before lockout",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 7,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Shutdown time",
+			"description": "Incorrect attempts shutdown time",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Operation Mode",
+			"description": "Operation Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal",
+					"value": 0
+				},
+				{
+					"label": "vacation",
+					"value": 1
+				},
+				{
+					"label": "privacy",
+					"value": 2
+				}
+			]
+		}
+	}
 }

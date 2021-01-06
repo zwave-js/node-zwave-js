@@ -1,20 +1,19 @@
 // Vision Security ZF5201EU-5
 // Vision Flood Sensor
 {
-    "_approved": true,
-    "manufacturer": "Vision Security",
-    "manufacturerId": "0x0109",
-    "label": "ZF5201EU-5",
-    "description": "Vision Flood Sensor",
-    "devices": [
-        {
-            "productType": "0x201c",
-            "productId": "0x1c03"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZF5201EU-5",
+	"description": "Vision Flood Sensor",
+	"devices": [
+		{
+			"productType": "0x201c",
+			"productId": "0x1c03"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

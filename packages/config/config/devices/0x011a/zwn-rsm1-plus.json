@@ -1,45 +1,44 @@
 // Wenzhou MTLC Electric Appliances Co., Ltd. ZWN-RSM1-PLUS
 // Smart Relay Switch Module
 {
-    "_approved": true,
-    "manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
-    "manufacturerId": "0x011a",
-    "label": "ZWN-RSM1-PLUS",
-    "description": "Smart Relay Switch Module",
-    "devices": [
-        {
-            "productType": "0x0101",
-            "productId": "0x5605"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Lifeline",
-            "description": "Send device reset locally notification",
-            "maxNodes": 1,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "StatusReport_ EP",
-            "description": "Switch Binary Report",
-            "maxNodes": 3
-        }
-    },
-    "paramInformation": {
-        "3": {
-            "label": "Unsolicited Report Configuration",
-            "description": "Unsolicited Report Configuration",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
+	"manufacturerId": "0x011a",
+	"label": "ZWN-RSM1-PLUS",
+	"description": "Smart Relay Switch Module",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x5605"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"description": "Send device reset locally notification",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "StatusReport_ EP",
+			"description": "Switch Binary Report",
+			"maxNodes": 3
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Unsolicited Report Configuration",
+			"description": "Unsolicited Report Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

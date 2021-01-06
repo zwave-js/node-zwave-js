@@ -1,217 +1,216 @@
 // Zooz ZEN27
 // Z-Wave Plus S2 Dimmer Light Switch
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN27",
-    "description": "Z-Wave Plus S2 Dimmer Light Switch",
-    "devices": [
-        {
-            "productType": "0xa000",
-            "productId": "0xa002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Paddle Control",
-            "description": "Choose Paddle Functionality",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Upper light on, lower light off",
-                    "value": 0
-                },
-                {
-                    "label": "Upper light off, lower light on",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "LED Indicator Control",
-            "description": "Change behavior of the LED indicator",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LED on when switch off, LED off when switch on",
-                    "value": 0
-                },
-                {
-                    "label": "LED on when switch on, LED off when switch off",
-                    "value": 1
-                },
-                {
-                    "label": "LED indicator is always OFF",
-                    "value": 2
-                },
-                {
-                    "label": "LED indicator is always ON",
-                    "value": 3
-                }
-            ]
-        },
-        "3": {
-            "label": "Auto Turn-Off Timer",
-            "description": "enable the Auto Turn-Off Timer",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "timer disabled",
-                    "value": 0
-                },
-                {
-                    "label": "timer enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Auto Turn-Off Timer Duration",
-            "description": "set Auto Turn-Off Timer Duration",
-            "unit": "minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 60,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Auto Turn-On Timer",
-            "description": "enable the Auto Turn-On Timer",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "timer disabled",
-                    "value": 0
-                },
-                {
-                    "label": "timer enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Auto Turn-On Timer Duration",
-            "description": "set Auto Turn-On Timer Duration",
-            "unit": "minutes",
-            "valueSize": 4,
-            "minValue": 1,
-            "maxValue": 65535,
-            "defaultValue": 30,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "On Off Status After Power Failure",
-            "description": "Set the on off status for the switch after power failure.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "forced to OFF",
-                    "value": 0
-                },
-                {
-                    "label": "forced to ON",
-                    "value": 1
-                },
-                {
-                    "label": "remembers on/off status",
-                    "value": 2
-                }
-            ]
-        },
-        "9": {
-            "label": "Ramp Rate Control",
-            "description": "Adjust the ramp rate for your dimmer",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "10": {
-            "label": "Minimum Brightness",
-            "description": "Set the minimum brightness level %",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "Maximum Brightness",
-            "description": "Set the maximum brightness level %",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Double Tap Function",
-            "description": "brightness level after you double-tap upper paddle",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "full brightness",
-                    "value": 0
-                },
-                {
-                    "label": "maximum brightness level set",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN27",
+	"description": "Z-Wave Plus S2 Dimmer Light Switch",
+	"devices": [
+		{
+			"productType": "0xa000",
+			"productId": "0xa002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Paddle Control",
+			"description": "Choose Paddle Functionality",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Upper light on, lower light off",
+					"value": 0
+				},
+				{
+					"label": "Upper light off, lower light on",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "LED Indicator Control",
+			"description": "Change behavior of the LED indicator",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when switch off, LED off when switch on",
+					"value": 0
+				},
+				{
+					"label": "LED on when switch on, LED off when switch off",
+					"value": 1
+				},
+				{
+					"label": "LED indicator is always OFF",
+					"value": 2
+				},
+				{
+					"label": "LED indicator is always ON",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Auto Turn-Off Timer",
+			"description": "enable the Auto Turn-Off Timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "timer disabled",
+					"value": 0
+				},
+				{
+					"label": "timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Auto Turn-Off Timer Duration",
+			"description": "set Auto Turn-Off Timer Duration",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Auto Turn-On Timer",
+			"description": "enable the Auto Turn-On Timer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "timer disabled",
+					"value": 0
+				},
+				{
+					"label": "timer enabled",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Auto Turn-On Timer Duration",
+			"description": "set Auto Turn-On Timer Duration",
+			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "On Off Status After Power Failure",
+			"description": "Set the on off status for the switch after power failure.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "forced to OFF",
+					"value": 0
+				},
+				{
+					"label": "forced to ON",
+					"value": 1
+				},
+				{
+					"label": "remembers on/off status",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Ramp Rate Control",
+			"description": "Adjust the ramp rate for your dimmer",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Minimum Brightness",
+			"description": "Set the minimum brightness level %",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Maximum Brightness",
+			"description": "Set the maximum brightness level %",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Double Tap Function",
+			"description": "brightness level after you double-tap upper paddle",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "full brightness",
+					"value": 0
+				},
+				{
+					"label": "maximum brightness level set",
+					"value": 1
+				}
+			]
+		}
+	}
 }

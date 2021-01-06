@@ -1,19 +1,18 @@
 // Intermatic HA05
 // Screw in lamp module
 {
-    "_approved": true,
-    "manufacturer": "Intermatic",
-    "manufacturerId": "0x0005",
-    "label": "HA05",
-    "description": "Screw in lamp module",
-    "devices": [
-        {
-            "productType": "0x0005",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Intermatic",
+	"manufacturerId": "0x0005",
+	"label": "HA05",
+	"description": "Screw in lamp module",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

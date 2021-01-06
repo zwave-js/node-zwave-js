@@ -1,7 +1,6 @@
 // Intermatic PE653
 // Pool Control
 {
-	"_approved": true,
 	"manufacturer": "Intermatic",
 	"manufacturerId": "0x0005",
 	"label": "PE653",

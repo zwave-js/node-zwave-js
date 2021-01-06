@@ -1,7 +1,6 @@
 // Eaton RF9601
 // Z-Wave Plus wireless switch
 {
-	"_approved": true,
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
 	"label": "RF9601",

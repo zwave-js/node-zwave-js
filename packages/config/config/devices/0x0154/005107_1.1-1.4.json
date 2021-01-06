@@ -1,120 +1,119 @@
 // Popp & Co 005107
 // Solar Powered Outdoor Siren
 {
-    "_approved": true,
-    "manufacturer": "Popp & Co",
-    "manufacturerId": "0x0154",
-    "label": "005107",
-    "description": "Solar Powered Outdoor Siren",
-    "devices": [
-        {
-            "productType": "0x0004",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "1.1",
-        "max": "1.4"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Triggering mode",
-            "description": "Sets the tamper triggering mode when removed from the holder",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Trigger, when removed from holder",
-                    "value": 0
-                },
-                {
-                    "label": "Trigger, when removed,  and turned off",
-                    "value": 1
-                },
-                {
-                    "label": "Don't trigger at all",
-                    "value": 2
-                }
-            ]
-        },
-        "2": {
-            "label": "Temperature adjustments",
-            "description": "Temperature correction with positive and negative offset values",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Temperature adjustments",
-                    "value": 0
-                }
-            ]
-        },
-        "3": {
-            "label": "Send unsolicited  temperature report",
-            "description": "Threshold temperature to send unsolicited report. 10 = 1°C",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 10,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "temperature report",
-            "description": "Send unsolicited  temperature report after N wake up",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 65535,
-            "defaultValue": 15,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Disable report",
-                    "value": 0
-                }
-            ]
-        },
-        "5": {
-            "label": "Switch mode",
-            "description": "Switch mode : siren only, flash only, flash + siren",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 2,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Siren only",
-                    "value": 0
-                },
-                {
-                    "label": "Flash only",
-                    "value": 1
-                },
-                {
-                    "label": "Flash + Siren (Default)",
-                    "value": 2
-                }
-            ]
-        }
-    }
+	"manufacturer": "Popp & Co",
+	"manufacturerId": "0x0154",
+	"label": "005107",
+	"description": "Solar Powered Outdoor Siren",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.1",
+		"max": "1.4"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Triggering mode",
+			"description": "Sets the tamper triggering mode when removed from the holder",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Trigger, when removed from holder",
+					"value": 0
+				},
+				{
+					"label": "Trigger, when removed,  and turned off",
+					"value": 1
+				},
+				{
+					"label": "Don't trigger at all",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Temperature adjustments",
+			"description": "Temperature correction with positive and negative offset values",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Temperature adjustments",
+					"value": 0
+				}
+			]
+		},
+		"3": {
+			"label": "Send unsolicited  temperature report",
+			"description": "Threshold temperature to send unsolicited report. 10 = 1°C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "temperature report",
+			"description": "Send unsolicited  temperature report after N wake up",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 15,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable report",
+					"value": 0
+				}
+			]
+		},
+		"5": {
+			"label": "Switch mode",
+			"description": "Switch mode : siren only, flash only, flash + siren",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Siren only",
+					"value": 0
+				},
+				{
+					"label": "Flash only",
+					"value": 1
+				},
+				{
+					"label": "Flash + Siren (Default)",
+					"value": 2
+				}
+			]
+		}
+	}
 }

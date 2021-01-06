@@ -1,7 +1,6 @@
 // Logic Group ZDB5100
 // MATRIX Switch with Dimmer and Backlight
 {
-	"_approved": true,
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
 	"label": "ZDB5100",

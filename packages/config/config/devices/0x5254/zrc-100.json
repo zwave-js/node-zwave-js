@@ -1,27 +1,22 @@
 // Remotec ZRC-100
 // Remote Control
 {
-    "_approved": true,
-    "_warnings": [
-        "Overview information is not set",
-        "Exclusion information is not set"
-    ],
-    "manufacturer": "Remotec",
-    "manufacturerId": "0x5254",
-    "label": "ZRC-100",
-    "description": "Remote Control",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x8380"
-        },
-        {
-            "productType": "0x0002",
-            "productId": "0x8380"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZRC-100",
+	"description": "Remote Control",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x8380"
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x8380"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }

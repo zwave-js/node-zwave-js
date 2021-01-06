@@ -1,20 +1,19 @@
 // ASSA ABLOY SD-M1100
 // Yale Smart Door Lock Z-Wave Module 2
 {
-    "_approved": true,
-    "manufacturer": "ASSA ABLOY",
-    "manufacturerId": "0x0129",
-    "label": "SD-M1100",
-    "description": "Yale Smart Door Lock Z-Wave Module 2",
-    "devices": [
-        {
-            "productType": "0xc600",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "SD-M1100",
+	"description": "Yale Smart Door Lock Z-Wave Module 2",
+	"devices": [
+		{
+			"productType": "0xc600",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
 }

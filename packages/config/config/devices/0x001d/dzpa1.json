@@ -1,7 +1,6 @@
 // Leviton DZPA1
 // Plug-in Appliance Module
 {
-	"_approved": true,
 	"manufacturer": "Leviton",
 	"manufacturerId": "0x001d",
 	"label": "DZPA1",

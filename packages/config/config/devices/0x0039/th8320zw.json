@@ -1,30 +1,29 @@
 // Honeywell TH8320ZW
 // Touchscreen Programmable Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Honeywell",
-    "manufacturerId": "0x0039",
-    "label": "TH8320ZW",
-    "description": "Touchscreen Programmable Thermostat",
-    "devices": [
-        {
-            "productType": "0x0011",
-            "productId": "0x0001"
-        },
-        {
-            "productType": "0x0011",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Relationship of devices in the network",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "TH8320ZW",
+	"description": "Touchscreen Programmable Thermostat",
+	"devices": [
+		{
+			"productType": "0x0011",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0011",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Relationship of devices in the network",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

@@ -1,33 +1,32 @@
 // Zooz ZEN24
 // Z-Wave Plus Toggle Dimmer Light Switch Ver 2.0
 {
-    "_approved": true,
-    "manufacturer": "Zooz",
-    "manufacturerId": "0x027a",
-    "label": "ZEN24",
-    "description": "Z-Wave Plus Toggle Dimmer Light Switch Ver 2.0",
-    "devices": [
-        {
-            "productType": "0xb112",
-            "productId": "0x261c"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "20.15",
-        "max": "20.15"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "Toggle Control",
-            "description": "Controls behavior of the toggle switch",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN24",
+	"description": "Z-Wave Plus Toggle Dimmer Light Switch Ver 2.0",
+	"devices": [
+		{
+			"productType": "0xb112",
+			"productId": "0x261c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "20.15",
+		"max": "20.15"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Toggle Control",
+			"description": "Controls behavior of the toggle switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

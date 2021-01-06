@@ -1,53 +1,52 @@
 // Ecolink PIR
 // Z-Wave PIR Motion Sensor
 {
-    "_approved": true,
-    "manufacturer": "Ecolink",
-    "manufacturerId": "0x014a",
-    "label": "PIR",
-    "description": "Z-Wave PIR Motion Sensor",
-    "devices": [
-        {
-            "productType": "0x0001",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Group 1",
-            "maxNodes": 5,
-            "isLifeline": true
-        },
-        "2": {
-            "label": "Group 2",
-            "maxNodes": 5
-        }
-    },
-    "paramInformation": {
-        "99": {
-            "label": "Toggle sending clear message to group 2",
-            "description": "Toggle sending clear message to group 2",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disable sending clear message",
-                    "value": 0
-                },
-                {
-                    "label": "Send clear message to group 2",
-                    "value": 1
-                }
-            ]
-        }
-    }
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "PIR",
+	"description": "Z-Wave PIR Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"99": {
+			"label": "Toggle sending clear message to group 2",
+			"description": "Toggle sending clear message to group 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable sending clear message",
+					"value": 0
+				},
+				{
+					"label": "Send clear message to group 2",
+					"value": 1
+				}
+			]
+		}
+	}
 }

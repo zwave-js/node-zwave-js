@@ -1,7 +1,6 @@
 // Willis Electric Co., Ltd. NZW30T
 // Inovelli In-Wall Switch (On/Off) Scene Enabled
 {
-	"_approved": true,
 	"manufacturer": "Willis Electric Co., Ltd.",
 	"manufacturerId": "0x015d",
 	"label": "NZW30T",

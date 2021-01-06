@@ -1,217 +1,216 @@
 // Remotec ZTS-110
 // ZTS-110 Z Wave Thermostat
 {
-    "_approved": true,
-    "manufacturer": "Remotec",
-    "manufacturerId": "0x5254",
-    "label": "ZTS-110",
-    "description": "ZTS-110 Z Wave Thermostat",
-    "devices": [
-        {
-            "productType": "0x0200",
-            "productId": "0x8031"
-        },
-        {
-            "productType": "0x0202",
-            "productId": "0x8031"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Heat Pump",
-            "maxNodes": 4
-        },
-        "2": {
-            "label": "Compressor",
-            "maxNodes": 4
-        },
-        "3": {
-            "label": "Controller Update",
-            "maxNodes": 1,
-            "isLifeline": true
-        }
-    },
-    "paramInformation": {
-        "1": {
-            "label": "Swing",
-            "description": "Set Swing value from 1F/.5C to 4F/2.0C Available settings: 1 - 4",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 4,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "2": {
-            "label": "Differntial",
-            "description": "Set Differential value from 1F/.5C to 4F/2.0C Available settings: 1 - 4",
-            "valueSize": 1,
-            "minValue": 1,
-            "maxValue": 4,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "3": {
-            "label": "Set Filter Counter",
-            "description": "Set filter replacement timer from 500 to 4000 hours.",
-            "valueSize": 2,
-            "minValue": 500,
-            "maxValue": 4000,
-            "defaultValue": 500,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "4": {
-            "label": "Report Filter Counter",
-            "description": "READ ONLY: Data in hours",
-            "valueSize": 2,
-            "minValue": 0,
-            "maxValue": 9999,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "5": {
-            "label": "Scale of Temperature",
-            "description": "Set Temperature Scale to Farhenheit or Centigrade. DEFAULT =1 Farhenheit",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Centigrade",
-                    "value": 0
-                },
-                {
-                    "label": "Farhenheit",
-                    "value": 1
-                }
-            ]
-        },
-        "6": {
-            "label": "Upper Limit of Setpoint A",
-            "description": "Upper Limit of Setpoint A",
-            "valueSize": 2,
-            "minValue": 37,
-            "maxValue": 99,
-            "defaultValue": 99,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Lower Limit of Setpoint B",
-            "description": "Lower Limit of Setpoint B",
-            "valueSize": 2,
-            "minValue": 5,
-            "maxValue": 95,
-            "defaultValue": 41,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "8": {
-            "label": "Easy Mode",
-            "description": "Set Easy Mode 0:DISABLE 1:ENABLED DEFAULT:ENABLED",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Easy Mode Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Easy Mode Enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "9": {
-            "label": "Time Format",
-            "description": "Configures for 12 or 24 Hour format. Default is 12 Hours.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 1,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "24 Hour Format",
-                    "value": 0
-                },
-                {
-                    "label": "12 Hour Format",
-                    "value": 1
-                }
-            ]
-        },
-        "10": {
-            "label": "Repeat Basic Set Counter",
-            "description": "Repeat Basic Set Counter",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 255,
-            "defaultValue": 0,
-            "unsigned": true,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "11": {
-            "label": "AUTO report by room temperature",
-            "description": "AUTO report by room temperature",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 8,
-            "defaultValue": 4,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "12": {
-            "label": "Sensor temperature calibration.",
-            "description": "Sensor temperature calibration.",
-            "valueSize": 1,
-            "minValue": -10,
-            "maxValue": 10,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "13": {
-            "label": "AUTO report by time interval.",
-            "description": "AUTO report by time interval.",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 16,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        }
-    }
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZTS-110",
+	"description": "ZTS-110 Z Wave Thermostat",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x8031"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x8031"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Heat Pump",
+			"maxNodes": 4
+		},
+		"2": {
+			"label": "Compressor",
+			"maxNodes": 4
+		},
+		"3": {
+			"label": "Controller Update",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Swing",
+			"description": "Set Swing value from 1F/.5C to 4F/2.0C Available settings: 1 - 4",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Differntial",
+			"description": "Set Differential value from 1F/.5C to 4F/2.0C Available settings: 1 - 4",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Set Filter Counter",
+			"description": "Set filter replacement timer from 500 to 4000 hours.",
+			"valueSize": 2,
+			"minValue": 500,
+			"maxValue": 4000,
+			"defaultValue": 500,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Report Filter Counter",
+			"description": "READ ONLY: Data in hours",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 9999,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Scale of Temperature",
+			"description": "Set Temperature Scale to Farhenheit or Centigrade. DEFAULT =1 Farhenheit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Centigrade",
+					"value": 0
+				},
+				{
+					"label": "Farhenheit",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Upper Limit of Setpoint A",
+			"description": "Upper Limit of Setpoint A",
+			"valueSize": 2,
+			"minValue": 37,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Lower Limit of Setpoint B",
+			"description": "Lower Limit of Setpoint B",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 95,
+			"defaultValue": 41,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Easy Mode",
+			"description": "Set Easy Mode 0:DISABLE 1:ENABLED DEFAULT:ENABLED",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Easy Mode Disabled",
+					"value": 0
+				},
+				{
+					"label": "Easy Mode Enabled",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Time Format",
+			"description": "Configures for 12 or 24 Hour format. Default is 12 Hours.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "24 Hour Format",
+					"value": 0
+				},
+				{
+					"label": "12 Hour Format",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Repeat Basic Set Counter",
+			"description": "Repeat Basic Set Counter",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "AUTO report by room temperature",
+			"description": "AUTO report by room temperature",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Sensor temperature calibration.",
+			"description": "Sensor temperature calibration.",
+			"valueSize": 1,
+			"minValue": -10,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "AUTO report by time interval.",
+			"description": "AUTO report by time interval.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 16,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
 }

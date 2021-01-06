@@ -1,178 +1,177 @@
 // Eurotronics Spirit
 // Thermostatic Valve
 {
-    "_approved": true,
-    "manufacturer": "Eurotronics",
-    "manufacturerId": "0x0148",
-    "label": "Spirit",
-    "description": "Thermostatic Valve",
-    "devices": [
-        {
-            "productType": "0x0003",
-            "productId": "0x0001"
-        },
-        {
-            "productType": "0x0003",
-            "productId": "0x0003"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    },
-    "supportsZWavePlus": true,
-    "paramInformation": {
-        "1": {
-            "label": "LCD Invert",
-            "description": "LCD Invert",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "LCD-content normal",
-                    "value": 0
-                },
-                {
-                    "label": "LCD-content inverted (UK Edition)",
-                    "value": 1
-                }
-            ]
-        },
-        "2": {
-            "label": "LCD Timeout",
-            "description": "LCD Timeout",
-            "unit": "s",
-            "valueSize": 1,
-            "minValue": 5,
-            "maxValue": 30,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "No Timeout LCD always on",
-                    "value": 0
-                }
-            ]
-        },
-        "3": {
-            "label": "Backlight",
-            "description": "Backlight",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Backlight disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Backlight enabled",
-                    "value": 1
-                }
-            ]
-        },
-        "4": {
-            "label": "Battery report",
-            "description": "Battery report",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 1,
-            "defaultValue": 1,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "system notification",
-                    "value": 0
-                },
-                {
-                    "label": "Send battery status unsolicited once a day.",
-                    "value": 1
-                }
-            ]
-        },
-        "5": {
-            "label": "Measured  Temperature report",
-            "description": "Measured Temperature report",
-            "unit": "°C",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 50,
-            "defaultValue": 5,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "6": {
-            "label": "Valve opening  percentage report",
-            "description": "Valve opening percentage report",
-            "unit": "%",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 100,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true
-        },
-        "7": {
-            "label": "Window open detection",
-            "description": "Window open detection",
-            "valueSize": 1,
-            "minValue": 0,
-            "maxValue": 3,
-            "defaultValue": 2,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": false,
-            "options": [
-                {
-                    "label": "Disabled",
-                    "value": 0
-                },
-                {
-                    "label": "Sensitivity low",
-                    "value": 1
-                },
-                {
-                    "label": "Sensitivity medium",
-                    "value": 2
-                },
-                {
-                    "label": "Sensitivity high",
-                    "value": 3
-                }
-            ]
-        },
-        "8": {
-            "label": "Temperature Offset",
-            "description": "Measured Temperature offset",
-            "unit": "1/10 °C",
-            "valueSize": 1,
-            "minValue": -50,
-            "maxValue": 50,
-            "defaultValue": 0,
-            "readOnly": false,
-            "writeOnly": false,
-            "allowManualEntry": true,
-            "options": [
-                {
-                    "label": "Ext temp sensor be used for regul",
-                    "value": 128
-                }
-            ]
-        }
-    }
+	"manufacturer": "Eurotronics",
+	"manufacturerId": "0x0148",
+	"label": "Spirit",
+	"description": "Thermostatic Valve",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "LCD Invert",
+			"description": "LCD Invert",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LCD-content normal",
+					"value": 0
+				},
+				{
+					"label": "LCD-content inverted (UK Edition)",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "LCD Timeout",
+			"description": "LCD Timeout",
+			"unit": "s",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 30,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No Timeout LCD always on",
+					"value": 0
+				}
+			]
+		},
+		"3": {
+			"label": "Backlight",
+			"description": "Backlight",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Backlight disabled",
+					"value": 0
+				},
+				{
+					"label": "Backlight enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Battery report",
+			"description": "Battery report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "system notification",
+					"value": 0
+				},
+				{
+					"label": "Send battery status unsolicited once a day.",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Measured  Temperature report",
+			"description": "Measured Temperature report",
+			"unit": "°C",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Valve opening  percentage report",
+			"description": "Valve opening percentage report",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Window open detection",
+			"description": "Window open detection",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Sensitivity low",
+					"value": 1
+				},
+				{
+					"label": "Sensitivity medium",
+					"value": 2
+				},
+				{
+					"label": "Sensitivity high",
+					"value": 3
+				}
+			]
+		},
+		"8": {
+			"label": "Temperature Offset",
+			"description": "Measured Temperature offset",
+			"unit": "1/10 °C",
+			"valueSize": 1,
+			"minValue": -50,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Ext temp sensor be used for regul",
+					"value": 128
+				}
+			]
+		}
+	}
 }

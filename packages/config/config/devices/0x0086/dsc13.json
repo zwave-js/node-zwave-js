@@ -1,7 +1,6 @@
 // AEON Labs DSC13
 // Micro Smart Energy Illuminator
 {
-	"_approved": true,
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "DSC13",

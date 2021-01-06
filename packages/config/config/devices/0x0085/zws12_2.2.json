@@ -1,30 +1,29 @@
 // Fakro ZWS12
 // Chain Actuator
 {
-    "_approved": true,
-    "manufacturer": "Fakro",
-    "manufacturerId": "0x0085",
-    "label": "ZWS12",
-    "description": "Chain Actuator",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0001"
-        },
-        {
-            "productType": "0x0011",
-            "productId": "0x0001"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "2.2",
-        "max": "255.255"
-    },
-    "associations": {
-        "1": {
-            "label": "Basic",
-            "maxNodes": 5,
-            "isLifeline": true
-        }
-    }
+	"manufacturer": "Fakro",
+	"manufacturerId": "0x0085",
+	"label": "ZWS12",
+	"description": "Chain Actuator",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0011",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "2.2",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Basic",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	}
 }

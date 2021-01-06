@@ -1,19 +1,18 @@
 // Fakro ARZ
 // Roller Shutter Module
 {
-    "_approved": true,
-    "manufacturer": "Fakro",
-    "manufacturerId": "0x0085",
-    "label": "ARZ",
-    "description": "Roller Shutter Module",
-    "devices": [
-        {
-            "productType": "0x0002",
-            "productId": "0x0002"
-        }
-    ],
-    "firmwareVersion": {
-        "min": "0.0",
-        "max": "255.255"
-    }
+	"manufacturer": "Fakro",
+	"manufacturerId": "0x0085",
+	"label": "ARZ",
+	"description": "Roller Shutter Module",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
 }
