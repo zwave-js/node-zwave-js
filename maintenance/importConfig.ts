@@ -158,7 +158,7 @@ async function fetchIDs(): Promise<number[]> {
 /** Retrieves the definition for a specific device */
 async function fetchDevice(id: number): Promise<string> {
 	const source = (await axios({ url: ohUrlDevice(id) })).data;
-	return stringify(source);
+	return stringify(source, "\t");
 }
 
 /** Downloads ozw master archive and store it on `tmpDir` */
@@ -719,7 +719,10 @@ async function parseOZWProduct(
 	await fs.ensureDir(manufacturerDir);
 
 	// write the updated configuration file
-	await fs.writeFile(fileNameAbsolute, stringify(normalizeConfig(newConfig)));
+	await fs.writeFile(
+		fileNameAbsolute,
+		stringify(normalizeConfig(newConfig), "\t"),
+	);
 }
 
 /**
@@ -775,7 +778,7 @@ async function downloadManufacturers(): Promise<void> {
 	await fs.ensureDir(ohTempDir);
 	await fs.writeFile(
 		importedManufacturersPath,
-		stringify(manufacturers),
+		stringify(manufacturers, "\t"),
 		"utf8",
 	);
 
@@ -836,8 +839,6 @@ async function parseOHConfigFile(
 
 	const ret: Record<string, any> = {
 		revision: json.db_version,
-		...(json.errors?.length ? { _errors: json.errors } : undefined),
-		...(json.warnings?.length ? { _warnings: json.warnings } : undefined),
 		manufacturer: json.manufacturer.label,
 		manufacturerId: formatId(json.manufacturer.reference),
 		label: sanitizeText(json.label),
@@ -979,7 +980,7 @@ async function importConfigFiles(): Promise<void> {
 		// prettier-ignore
 		const output = `// ${parsed.manufacturer} ${parsed.label}${parsed.description ? (`
 // ${parsed.description}`) : ""}
-${stringify(parsed)}`;
+${stringify(parsed, "\t")}`;
 		await fs.writeFile(outFilename, output, "utf8");
 	}
 }
@@ -1047,7 +1048,7 @@ async function generateDeviceIndex(): Promise<void> {
 	await fs.writeFile(
 		path.join(processedDir, "index.json"),
 		`// This file is auto-generated using "yarn run config import -i"
-${stringify(index)}`,
+${stringify(index, "\t")}`,
 		"utf8",
 	);
 }
