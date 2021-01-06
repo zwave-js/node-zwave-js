@@ -246,34 +246,50 @@ wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
 			// We have no intention of changing the interval (maybe some time in the future)
 			// So for now get the current interval and just set the controller ID
 
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "retrieving wakeup interval from the device...",
-				direction: "outbound",
-			});
-			const wakeupResp = await api.getInterval();
-			const logMessage = `received wakeup configuration:
+			if (
+				!(await ignoreTimeout(async () => {
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"retrieving wakeup interval from the device...",
+						direction: "outbound",
+					});
+					const wakeupResp = await api.getInterval();
+					const logMessage = `received wakeup configuration:
 wakeup interval: ${wakeupResp.wakeUpInterval} seconds
 controller node: ${wakeupResp.controllerNodeId}`;
-			log.controller.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
+					log.controller.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
 
-			const ownNodeId = this.driver.controller.ownNodeId!;
-			// Only change the destination if necessary
-			if (wakeupResp.controllerNodeId !== ownNodeId) {
+					const ownNodeId = this.driver.controller.ownNodeId!;
+					// Only change the destination if necessary
+					if (wakeupResp.controllerNodeId !== ownNodeId) {
+						log.controller.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: "configuring wakeup destination node",
+							direction: "outbound",
+						});
+						await api.setInterval(
+							wakeupResp.wakeUpInterval,
+							ownNodeId,
+						);
+						log.controller.logNode(
+							node.id,
+							"wakeup destination node changed!",
+						);
+					}
+				}))
+			) {
 				log.controller.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: "configuring wakeup destination node",
-					direction: "outbound",
+					message:
+						"Timeout while configuring wakeup - have to try again next time",
 				});
-				await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
-				log.controller.logNode(
-					node.id,
-					"wakeup destination node changed!",
-				);
+				// This interview is NOT complete, but we don't abort it here
+				return;
 			}
 		}
 
