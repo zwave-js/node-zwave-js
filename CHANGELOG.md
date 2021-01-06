@@ -4,7 +4,7 @@
 	## __WORK IN PROGRESS__
 -->
 
-## 6.0.0-alpha.3 (2021-01-04)
+## __WORK IN PROGRESS__
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)
 * Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
 * The second (string) parameter of the `"interview failed"` event handler was removed
@@ -16,6 +16,8 @@ To compensate for the change and give the response enough time to reach the cont
 * The options `fs` and `cacheDir` have been renamed to `storage.driver` and `storage.cacheDir`.
 
 ### Config file changes
+* Added missing config parameters to IDLock 150
+* Added Innovelli LZW36 and First Alert ZCOMBO-G
 * Added Technisat Dimmer and series switch
 * Added Lifeline association to Danfoss MT 2649
 * Added product id/type to NAS-WR01ZE
@@ -32,6 +34,8 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * An option was added to control the filesystem access throttling
 * Improved the `label` for `Level low` property in `BatteryCC`
 * Unimplemented CCs may now be sent
+* The version of `zwave-js` is now exported as `libVersion` from the main entry point
+* Implemented `Battery CC V3`
 
 ### Bugfixes
 * Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask.  
@@ -43,6 +47,8 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 ### Changes under the hood
 * Test releases for PRs can now be created with a command
 * PRs titles are now enforced to comply with conventional commits
+* Config json files are now automatically formatted in VSCode and linted
+* We've added @zwave-js-bot to help us manage the repo and to help you contribute
 
 ## 5.7.0 (2020-12-23)
 ### Config file changes
