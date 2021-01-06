@@ -57,6 +57,7 @@ import {
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
 } from "../commandclass/FirmwareUpdateMetaDataCC";
+import { HailCC } from "../commandclass/HailCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
 	getManufacturerIdValueId,
@@ -1726,6 +1727,8 @@ version:               ${this.version}`;
 			return this.handleSecurityNonceGet();
 		} else if (command instanceof SecurityCCNonceReport) {
 			return this.handleSecurityNonceReport(command);
+		} else if (command instanceof HailCC) {
+			return this.handleHail(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
 			return this.handleFirmwareUpdateGet(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCStatusReport) {
@@ -1822,6 +1825,13 @@ version:               ${this.version}`;
 			},
 			{ free: true },
 		);
+	}
+
+	private handleHail(_command: HailCC): void {
+		log.controller.logNode(this.id, {
+			message: `TODO: Handle Hail`,
+			direction: "inbound",
+		});
 	}
 
 	/** Stores information about a currently held down key */
