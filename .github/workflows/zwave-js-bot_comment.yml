@@ -70,6 +70,8 @@ jobs:
         task: publish-pr
         pr: ${{ github.event.issue.number }}
 
+
+  # #########################################################################
   # Fix lint errors when an authorized person posts "@zwave-js-bot pack this"
   fix-lint:
     if: |
@@ -131,6 +133,7 @@ jobs:
         LINT_RESULT=0
         if ! yarn run lint:ts --fix ; then LINT_RESULT=1 ; fi
         if ! yarn run lint:wotan --fix ; then LINT_RESULT=1 ; fi
+        if ! yarn run lint:configjson -w ; then LINT_RESULT=1 ; fi
 
         # Check if something changed
         if ! git diff --quiet ; then
