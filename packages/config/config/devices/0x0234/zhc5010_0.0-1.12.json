@@ -720,5 +720,8 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		"preserveRootApplicationCCValueIDs": true
 	}
 }
