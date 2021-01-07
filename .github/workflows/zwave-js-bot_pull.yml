@@ -6,7 +6,6 @@ on:
 jobs:
   # Offer help to the contributor when he forgot to update the index file
   update-index-comment:
-
     runs-on: [ubuntu-latest]
     steps:
     - name: Checkout code
