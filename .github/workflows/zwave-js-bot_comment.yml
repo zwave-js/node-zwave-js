@@ -214,6 +214,10 @@ jobs:
       if: steps.check.outputs.result == 'true'
       run: yarn install --prefer-offline --frozen-lockfile
 
+    - name: Compile TypeScript code
+      if: steps.check.outputs.result == 'true'
+      run: yarn run build
+
     - name: Update the index file
       if: steps.check.outputs.result == 'true'
       id: fix
@@ -223,7 +227,7 @@ jobs:
         if ! git diff --quiet ; then
           git config user.email "bot@zwave.js"
           git config user.name "Z-Wave JS Bot"
-          git add -A
+          git add packages/config/config/devices/index.json
           git commit -m "fix(config): update device index"
           git push
         else
