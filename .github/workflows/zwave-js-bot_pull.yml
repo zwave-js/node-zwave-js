@@ -39,6 +39,7 @@ jobs:
       id: update-index
       run: |
         yarn run config import -i
+        git diff --name-only
 
         # Check if something changed
         if ! git diff --quiet ; then
