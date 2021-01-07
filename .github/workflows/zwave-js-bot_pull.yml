@@ -39,6 +39,8 @@ jobs:
       id: update-index
       run: |
         yarn run config import -i
+
+        # This changed:
         git diff
 
         # Check if something changed
