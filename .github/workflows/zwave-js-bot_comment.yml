@@ -164,7 +164,7 @@ jobs:
 
   # #########################################################################
   # Update index file when an authorized person posts "@zwave-js-bot update index"
-  fix-lint:
+  update-index:
     if: |
       contains(github.event.issue.html_url, '/pull/') &&
       contains(github.event.comment.body, '@zwave-js-bot update index') &&
