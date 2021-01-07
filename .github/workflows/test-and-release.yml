@@ -47,16 +47,8 @@ jobs:
     - name: Install dependencies
       run: yarn install --prefer-offline --frozen-lockfile
 
-    - name: Use TypeScript build cache
-      uses: actions/cache@v2
-      id: build-cache
-      with:
-        path: |
-          packages/*/build
-          packages/*/*.tsbuildinfo
-          packages/*/*.js
-        # When dependencies change, we likely have to recompile. TS manages the sources itself
-        key: ts-${{ hashFiles('**/yarn.lock') }}
+    - name: Compile TypeScript code
+      run: yarn run build
 
     - name: Lint TypeScript code
       run: yarn run lint
@@ -109,7 +101,7 @@ jobs:
 
     - name: Compile TypeScript code
       run: yarn run build
-    
+
     - name: Lint config files
       run: npx lerna run lint:config --no-prefix
 
