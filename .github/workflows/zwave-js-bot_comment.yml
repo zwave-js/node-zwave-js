@@ -162,85 +162,85 @@ jobs:
           return await bot.fixLintFeedback({github, context});
 
 
-  # #########################################################################
-  # Update index file when an authorized person posts "@zwave-js-bot update index"
-  update-index:
-    if: |
-      contains(github.event.issue.html_url, '/pull/') &&
-      contains(github.event.comment.body, '@zwave-js-bot update index') &&
-      (github.event.comment.user.login != 'zwave-js-bot')
+  # # #########################################################################
+  # # Update index file when an authorized person posts "@zwave-js-bot update index"
+  # update-index:
+  #   if: |
+  #     contains(github.event.issue.html_url, '/pull/') &&
+  #     contains(github.event.comment.body, '@zwave-js-bot update index') &&
+  #     (github.event.comment.user.login != 'zwave-js-bot')
 
-    runs-on: [ubuntu-latest]
-    strategy:
-      matrix:
-        node-version: [14.x]
+  #   runs-on: [ubuntu-latest]
+  #   strategy:
+  #     matrix:
+  #       node-version: [14.x]
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v2
 
-    - name: Check user's permissions to do this
-      id: check
-      uses: actions/github-script@v3
-      with:
-        github-token: ${{secrets.BOT_TOKEN}}
-        result-encoding: string
-        script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          return await bot.updateIndexCheck({github, context});
+  #   - name: Check user's permissions to do this
+  #     id: check
+  #     uses: actions/github-script@v3
+  #     with:
+  #       github-token: ${{secrets.BOT_TOKEN}}
+  #       result-encoding: string
+  #       script: |
+  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+  #         return await bot.updateIndexCheck({github, context});
 
-    # These steps only run if the check was successful
-    - name: Use Node.js ${{ matrix.node-version }}
-      if: steps.check.outputs.result == 'true'
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
+  #   # These steps only run if the check was successful
+  #   - name: Use Node.js ${{ matrix.node-version }}
+  #     if: steps.check.outputs.result == 'true'
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
 
-    - name: Get Yarn cache directory
-      id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
+  #   - name: Get Yarn cache directory
+  #     id: yarn-cache-dir-path
+  #     run: echo "::set-output name=dir::$(yarn cache dir)"
 
-    - name: Use Yarn cache
-      if: steps.check.outputs.result == 'true'
-      uses: actions/cache@v2
-      id: yarn-cache
-      with:
-        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
+  #   - name: Use Yarn cache
+  #     if: steps.check.outputs.result == 'true'
+  #     uses: actions/cache@v2
+  #     id: yarn-cache
+  #     with:
+  #       path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+  #       key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+  #       restore-keys: |
+  #         ${{ runner.os }}-yarn-
 
-    - name: Install dependencies
-      if: steps.check.outputs.result == 'true'
-      run: yarn install --prefer-offline --frozen-lockfile
+  #   - name: Install dependencies
+  #     if: steps.check.outputs.result == 'true'
+  #     run: yarn install --prefer-offline --frozen-lockfile
 
-    - name: Compile TypeScript code
-      if: steps.check.outputs.result == 'true'
-      run: yarn run build
+  #   - name: Compile TypeScript code
+  #     if: steps.check.outputs.result == 'true'
+  #     run: yarn run build
 
-    - name: Update the index file
-      if: steps.check.outputs.result == 'true'
-      id: fix
-      run: |
-        # Run the update script and check if something changed
-        yarn run config import -i
-        if ! git diff --quiet ; then
-          git config user.email "bot@zwave.js"
-          git config user.name "Z-Wave JS Bot"
-          git add packages/config/config/devices/index.json
-          git commit -m "fix(config): update device index"
-          git push
-        else
-          echo "::set-output name=result::unchanged"
-          exit 0
-        fi
+  #   - name: Update the index file
+  #     if: steps.check.outputs.result == 'true'
+  #     id: fix
+  #     run: |
+  #       # Run the update script and check if something changed
+  #       yarn run config import -i
+  #       if ! git diff --quiet ; then
+  #         git config user.email "bot@zwave.js"
+  #         git config user.name "Z-Wave JS Bot"
+  #         git add packages/config/config/devices/index.json
+  #         git commit -m "fix(config): update device index"
+  #         git push
+  #       else
+  #         echo "::set-output name=result::unchanged"
+  #         exit 0
+  #       fi
 
-    - name: Give feedback
-      uses: actions/github-script@v3
-      env:
-        FEEDBACK: ${{ steps.fix.outputs.result }}
-      with:
-        github-token: ${{secrets.BOT_TOKEN}}
-        script: |
-          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          return await bot.updateIndexFeedback({github, context});
+  #   - name: Give feedback
+  #     uses: actions/github-script@v3
+  #     env:
+  #       FEEDBACK: ${{ steps.fix.outputs.result }}
+  #     with:
+  #       github-token: ${{secrets.BOT_TOKEN}}
+  #       script: |
+  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+  #         return await bot.updateIndexFeedback({github, context});
