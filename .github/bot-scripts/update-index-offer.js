@@ -11,7 +11,7 @@ async function main(param) {
 		owner: context.repo.owner,
 		repo: context.repo.repo,
 	};
-	const pr = context.payload.check_run.pull_requests[0].number;
+	const pr = context.payload.number;
 
 	// In order not to post this help too often, check if the bot has commented in the last 12 hours
 	const { data: comments } = await github.issues.listComments({
