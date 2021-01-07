@@ -33,6 +33,9 @@ jobs:
     - name: Install dependencies
       run: yarn install --prefer-offline --frozen-lockfile
 
+    - name: Compile TypeScript code
+      run: yarn run build
+
     - name: Check if index file needs an update
       id: update-index
       run: |
