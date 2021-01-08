@@ -72,13 +72,14 @@ export type ZWaveLogger = Omit<Logger, "log"> & {
 	log: (info: ZWaveLogInfo) => void;
 };
 
-export class LogWrapper {
-	public logger: ZWaveLogger;
-	public loggers: ZWaveLogContainer;
+export class ZWaveLoggerBase {
 	constructor(loggers: ZWaveLogContainer, logLabel: string) {
-		this.loggers = loggers;
-		this.logger = this.loggers.getLogger(logLabel);
+		this.container = loggers;
+		this.logger = this.container.getLogger(logLabel);
 	}
+
+	public logger: ZWaveLogger;
+	public container: ZWaveLogContainer;
 }
 
 export interface LogConfig {
@@ -89,6 +90,7 @@ export interface LogConfig {
 	filename: string;
 	forceConsole: boolean;
 }
+
 export class ZWaveLogContainer extends winston.Container {
 	private fileTransport: Transport | undefined;
 	private consoleTransport: Transport | undefined;

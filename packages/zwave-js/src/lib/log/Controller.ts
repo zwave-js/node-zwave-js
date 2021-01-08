@@ -3,7 +3,6 @@ import {
 	DataDirection,
 	getDirectionPrefix,
 	getNodeTag,
-	LogWrapper,
 	shouldLogNode,
 	tagify,
 	ValueAddedArgs,
@@ -12,6 +11,7 @@ import {
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
 	ZWaveLogContainer,
+	ZWaveLoggerBase,
 } from "@zwave-js/core";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage } from "../node/Types";
@@ -29,7 +29,7 @@ interface LogNodeOptions {
 
 export type LogValueArgs<T> = T & { nodeId: number; internal?: boolean };
 
-export class ControllerLogger extends LogWrapper {
+export class ControllerLogger extends ZWaveLoggerBase {
 	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, CONTROLLER_LABEL);
 	}
@@ -37,7 +37,7 @@ export class ControllerLogger extends LogWrapper {
 	private _isValueLogVisible: boolean | undefined;
 	private isValueLogVisible(): boolean {
 		if (this._isValueLogVisible === undefined) {
-			this._isValueLogVisible = this.loggers.isLoglevelVisible(
+			this._isValueLogVisible = this.container.isLoglevelVisible(
 				VALUE_LOGLEVEL,
 			);
 		}
@@ -46,7 +46,7 @@ export class ControllerLogger extends LogWrapper {
 	private _isControllerLogVisible: boolean | undefined;
 	private isControllerLogVisible(): boolean {
 		if (this._isControllerLogVisible === undefined) {
-			this._isControllerLogVisible = this.loggers.isLoglevelVisible(
+			this._isControllerLogVisible = this.container.isLoglevelVisible(
 				CONTROLLER_LOGLEVEL,
 			);
 		}
@@ -59,7 +59,7 @@ export class ControllerLogger extends LogWrapper {
 	 */
 	public print(message: string, level?: "warn" | "error"): void {
 		const actualLevel = level || CONTROLLER_LOGLEVEL;
-		if (!this.loggers.isLoglevelVisible(actualLevel)) return;
+		if (!this.container.isLoglevelVisible(actualLevel)) return;
 
 		this.logger.log({
 			level: actualLevel,
@@ -99,7 +99,7 @@ export class ControllerLogger extends LogWrapper {
 
 		const { level, message, direction, endpoint } = messageOrOptions;
 		const actualLevel = level || CONTROLLER_LOGLEVEL;
-		if (!this.loggers.isLoglevelVisible(actualLevel)) return;
+		if (!this.container.isLoglevelVisible(actualLevel)) return;
 		if (!shouldLogNode(nodeId)) return;
 
 		this.logger.log({

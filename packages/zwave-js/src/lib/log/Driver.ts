@@ -2,11 +2,11 @@ import * as Sentry from "@sentry/node";
 import {
 	DataDirection,
 	getDirectionPrefix,
-	LogWrapper,
 	messageRecordToLines,
 	shouldLogNode,
 	tagify,
 	ZWaveLogContainer,
+	ZWaveLoggerBase,
 } from "@zwave-js/core";
 import type { SortedList } from "alcalzone-shared/sorted-list";
 import type { CommandClass } from "../commandclass/CommandClass";
@@ -24,7 +24,7 @@ export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
 const SENDQUEUE_LOGLEVEL = "debug";
 
-export class DriverLogger extends LogWrapper {
+export class DriverLogger extends ZWaveLoggerBase {
 	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, DRIVER_LABEL);
 	}
@@ -32,7 +32,7 @@ export class DriverLogger extends LogWrapper {
 	private _isDriverLogVisible: boolean | undefined;
 	private isDriverLogVisible(): boolean {
 		if (this._isDriverLogVisible === undefined) {
-			this._isDriverLogVisible = this.loggers.isLoglevelVisible(
+			this._isDriverLogVisible = this.container.isLoglevelVisible(
 				DRIVER_LOGLEVEL,
 			);
 		}
@@ -41,7 +41,7 @@ export class DriverLogger extends LogWrapper {
 	private _isSendQueueLogVisible: boolean | undefined;
 	private isSendQueueLogVisible(): boolean {
 		if (this._isSendQueueLogVisible === undefined) {
-			this._isSendQueueLogVisible = this.loggers.isLoglevelVisible(
+			this._isSendQueueLogVisible = this.container.isLoglevelVisible(
 				SENDQUEUE_LOGLEVEL,
 			);
 		}
@@ -57,7 +57,7 @@ export class DriverLogger extends LogWrapper {
 		level?: "debug" | "verbose" | "warn" | "error" | "info",
 	): void {
 		const actualLevel = level || DRIVER_LOGLEVEL;
-		if (!this.loggers.isLoglevelVisible(actualLevel)) return;
+		if (!this.container.isLoglevelVisible(actualLevel)) return;
 
 		this.logger.log({
 			level: actualLevel,

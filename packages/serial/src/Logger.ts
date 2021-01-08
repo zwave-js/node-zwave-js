@@ -2,8 +2,8 @@ import * as Sentry from "@sentry/node";
 import {
 	DataDirection,
 	getDirectionPrefix,
-	LogWrapper,
 	ZWaveLogContainer,
+	ZWaveLoggerBase,
 } from "@zwave-js/core";
 import { buffer2hex, num2hex } from "@zwave-js/shared";
 import { MessageHeaders } from "./MessageHeaders";
@@ -11,7 +11,7 @@ import { MessageHeaders } from "./MessageHeaders";
 export const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
 
-export class SerialLogger extends LogWrapper {
+export class SerialLogger extends ZWaveLoggerBase {
 	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, SERIAL_LABEL);
 	}
@@ -19,7 +19,7 @@ export class SerialLogger extends LogWrapper {
 	private _isVisible: boolean | undefined;
 	private isVisible(): boolean {
 		if (this._isVisible === undefined) {
-			this._isVisible = this.loggers.isLoglevelVisible(SERIAL_LOGLEVEL);
+			this._isVisible = this.container.isLoglevelVisible(SERIAL_LOGLEVEL);
 		}
 		return this._isVisible;
 	}

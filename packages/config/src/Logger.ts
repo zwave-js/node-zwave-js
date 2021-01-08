@@ -1,13 +1,13 @@
 import {
 	getDirectionPrefix,
-	LogWrapper,
 	ZWaveLogContainer,
+	ZWaveLoggerBase,
 } from "@zwave-js/core";
 
 export const CONFIG_LABEL = "CONFIG";
 const CONFIG_LOGLEVEL = "debug";
 
-export class ConfigLogger extends LogWrapper {
+export class ConfigLogger extends ZWaveLoggerBase {
 	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, CONFIG_LABEL);
 	}
@@ -21,7 +21,7 @@ export class ConfigLogger extends LogWrapper {
 		level?: "debug" | "verbose" | "warn" | "error" | "info",
 	): void {
 		const actualLevel = level || CONFIG_LOGLEVEL;
-		if (!this.loggers.isLoglevelVisible(actualLevel)) return;
+		if (!this.container.isLoglevelVisible(actualLevel)) return;
 
 		this.logger.log({
 			level: actualLevel,
