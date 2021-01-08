@@ -6,7 +6,7 @@ import {
 	messageRecordToLines,
 	shouldLogNode,
 	tagify,
-	ZwaveLoggers,
+	ZWaveLogContainer,
 } from "@zwave-js/core";
 import type { SortedList } from "alcalzone-shared/sorted-list";
 import type { CommandClass } from "../commandclass/CommandClass";
@@ -25,7 +25,7 @@ const DRIVER_LOGLEVEL = "verbose";
 const SENDQUEUE_LOGLEVEL = "debug";
 
 export class DriverLogger extends LogWrapper {
-	constructor(loggers: ZwaveLoggers) {
+	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, DRIVER_LABEL);
 	}
 

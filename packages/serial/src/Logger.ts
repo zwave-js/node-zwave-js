@@ -3,7 +3,7 @@ import {
 	DataDirection,
 	getDirectionPrefix,
 	LogWrapper,
-	ZwaveLoggers,
+	ZWaveLogContainer,
 } from "@zwave-js/core";
 import { buffer2hex, num2hex } from "@zwave-js/shared";
 import { MessageHeaders } from "./MessageHeaders";
@@ -12,7 +12,7 @@ export const SERIAL_LABEL = "SERIAL";
 const SERIAL_LOGLEVEL = "debug";
 
 export class SerialLogger extends LogWrapper {
-	constructor(loggers: ZwaveLoggers) {
+	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, SERIAL_LABEL);
 	}
 

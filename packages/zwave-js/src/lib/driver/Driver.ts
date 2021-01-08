@@ -21,7 +21,7 @@ import {
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
-	ZwaveLoggers,
+	ZWaveLogContainer,
 } from "@zwave-js/core";
 import {
 	MessageHeaders,
@@ -438,7 +438,7 @@ export class Driver extends EventEmitter {
 		return this._metadataDB;
 	}
 
-	public loggers: ZwaveLoggers;
+	public loggers: ZWaveLogContainer;
 
 	public driverLog: DriverLogger;
 	public controllerLog: ControllerLogger;
@@ -467,7 +467,7 @@ export class Driver extends EventEmitter {
 	) {
 		super();
 
-		this.loggers = new ZwaveLoggers(options?.logConfig);
+		this.loggers = new ZWaveLogContainer(options?.logConfig);
 
 		this.driverLog = new DriverLogger(this.loggers);
 		this.controllerLog = new ControllerLogger(this.loggers);

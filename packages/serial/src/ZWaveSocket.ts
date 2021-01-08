@@ -1,4 +1,4 @@
-import type { ZwaveLoggers } from "@zwave-js/core";
+import type { ZWaveLogContainer } from "@zwave-js/core";
 import * as net from "net";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
 
@@ -10,7 +10,7 @@ export type ZWaveSocketOptions =
 export class ZWaveSocket extends ZWaveSerialPortBase {
 	constructor(
 		private socketOptions: ZWaveSocketOptions,
-		loggers: ZwaveLoggers,
+		loggers: ZWaveLogContainer,
 	) {
 		super(
 			{

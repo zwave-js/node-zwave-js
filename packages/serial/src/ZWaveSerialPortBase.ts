@@ -1,4 +1,4 @@
-import type { ZwaveLoggers } from "@zwave-js/core";
+import type { ZWaveLogContainer } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
 import { Duplex, PassThrough, Readable, Writable } from "stream";
@@ -80,7 +80,7 @@ export class ZWaveSerialPortBase extends PassThrough {
 
 	constructor(
 		private implementation: ZWaveSerialPortImplementation,
-		loggers: ZwaveLoggers,
+		loggers: ZWaveLogContainer,
 	) {
 		super({ readableObjectMode: true });
 

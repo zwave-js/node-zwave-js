@@ -74,8 +74,8 @@ export type ZWaveLogger = Omit<Logger, "log"> & {
 
 export class LogWrapper {
 	public logger: ZWaveLogger;
-	public loggers: ZwaveLoggers;
-	constructor(loggers: ZwaveLoggers, logLabel: string) {
+	public loggers: ZWaveLogContainer;
+	constructor(loggers: ZWaveLogContainer, logLabel: string) {
 		this.loggers = loggers;
 		this.logger = this.loggers.getLogger(logLabel);
 	}
@@ -89,7 +89,7 @@ export interface LogConfig {
 	filename: string;
 	forceConsole: boolean;
 }
-export class ZwaveLoggers extends winston.Container {
+export class ZWaveLogContainer extends winston.Container {
 	private fileTransport: Transport | undefined;
 	private consoleTransport: Transport | undefined;
 	private loglevelVisibleCache = new Map<string, boolean>();

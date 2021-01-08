@@ -1,10 +1,14 @@
-import { getDirectionPrefix, LogWrapper, ZwaveLoggers } from "@zwave-js/core";
+import {
+	getDirectionPrefix,
+	LogWrapper,
+	ZWaveLogContainer,
+} from "@zwave-js/core";
 
 export const CONFIG_LABEL = "CONFIG";
 const CONFIG_LOGLEVEL = "debug";
 
 export class ConfigLogger extends LogWrapper {
-	constructor(loggers: ZwaveLoggers) {
+	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, CONFIG_LABEL);
 	}
 

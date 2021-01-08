@@ -11,7 +11,7 @@ import {
 	ValueNotificationArgs,
 	ValueRemovedArgs,
 	ValueUpdatedArgs,
-	ZwaveLoggers,
+	ZWaveLogContainer,
 } from "@zwave-js/core";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage } from "../node/Types";
@@ -30,7 +30,7 @@ interface LogNodeOptions {
 export type LogValueArgs<T> = T & { nodeId: number; internal?: boolean };
 
 export class ControllerLogger extends LogWrapper {
-	constructor(loggers: ZwaveLoggers) {
+	constructor(loggers: ZWaveLogContainer) {
 		super(loggers, CONTROLLER_LABEL);
 	}
 

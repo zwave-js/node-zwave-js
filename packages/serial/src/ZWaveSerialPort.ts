@@ -1,18 +1,18 @@
-import type { ZwaveLoggers } from "@zwave-js/core";
+import type { ZWaveLogContainer } from "@zwave-js/core";
 import type SerialPort from "serialport";
 import { ZWaveSerialPortBase } from "./ZWaveSerialPortBase";
 
 /** The default version of the Z-Wave serial binding that works using node-serialport */
 export class ZWaveSerialPort extends ZWaveSerialPortBase {
-	constructor(port: string, loggers: ZwaveLoggers);
+	constructor(port: string, loggers: ZWaveLogContainer);
 	/** @internal */ constructor(
 		port: string,
-		loggers: ZwaveLoggers,
+		loggers: ZWaveLogContainer,
 		Binding: typeof SerialPort,
 	);
 	constructor(
 		port: string,
-		loggers: ZwaveLoggers,
+		loggers: ZWaveLogContainer,
 		Binding: typeof SerialPort = require("serialport"),
 	) {
 		super(
