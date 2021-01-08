@@ -2422,6 +2422,16 @@
 	},
 	{
 		"manufacturerId": "0x0063",
+		"productType": "0x4952",
+		"productId": "0x3137",
+		"firmwareVersion": {
+			"min": "0.0",
+			"max": "255.255"
+		},
+		"filename": "0x0063/46202.json"
+	},
+	{
+		"manufacturerId": "0x0063",
 		"productType": "0x4944",
 		"productId": "0x3235",
 		"firmwareVersion": {
@@ -2569,16 +2579,6 @@
 			"max": "5.23"
 		},
 		"filename": "0x0063/ge_28175_zw3106_5.23-5.23.json"
-	},
-	{
-		"manufacturerId": "0x0063",
-		"productType": "0x4952",
-		"productId": "0x3137",
-		"firmwareVersion": {
-			"min": "0.0",
-			"max": "255.255"
-		},
-		"filename": "0x0063/ge_46202.json"
 	},
 	{
 		"manufacturerId": "0x0063",
@@ -9713,22 +9713,22 @@
 	{
 		"manufacturerId": "0x0138",
 		"productType": "0x0001",
-		"productId": "0x0002",
-		"firmwareVersion": {
-			"min": "0.0",
-			"max": "255.255"
-		},
-		"filename": "0x0138/zcombo.json"
-	},
-	{
-		"manufacturerId": "0x0138",
-		"productType": "0x0001",
 		"productId": "0x0003",
 		"firmwareVersion": {
 			"min": "0.0",
 			"max": "255.255"
 		},
 		"filename": "0x0138/zcombo-g.json"
+	},
+	{
+		"manufacturerId": "0x0138",
+		"productType": "0x0001",
+		"productId": "0x0002",
+		"firmwareVersion": {
+			"min": "0.0",
+			"max": "255.255"
+		},
+		"filename": "0x0138/zcombo.json"
 	},
 	{
 		"manufacturerId": "0x0138",
@@ -14642,16 +14642,6 @@
 	},
 	{
 		"manufacturerId": "0x031e",
-		"productType": "0x0001",
-		"productId": "0x0001",
-		"firmwareVersion": {
-			"min": "0.0",
-			"max": "255.255"
-		},
-		"filename": "0x031e/lzw31-sn.json"
-	},
-	{
-		"manufacturerId": "0x031e",
 		"productType": "0x0003",
 		"productId": "0x0001",
 		"firmwareVersion": {
@@ -14659,6 +14649,16 @@
 			"max": "255.255"
 		},
 		"filename": "0x031e/lzw31-bsd.json"
+	},
+	{
+		"manufacturerId": "0x031e",
+		"productType": "0x0001",
+		"productId": "0x0001",
+		"firmwareVersion": {
+			"min": "0.0",
+			"max": "255.255"
+		},
+		"filename": "0x031e/lzw31-sn.json"
 	},
 	{
 		"manufacturerId": "0x031e",
@@ -15022,16 +15022,6 @@
 	},
 	{
 		"manufacturerId": "0x0371",
-		"productType": "0x0002",
-		"productId": "0x0009",
-		"firmwareVersion": {
-			"min": "0.0",
-			"max": "255.255"
-		},
-		"filename": "0x0371/zwa009.json"
-	},
-	{
-		"manufacturerId": "0x0371",
 		"productType": "0x0103",
 		"productId": "0x0002",
 		"firmwareVersion": {
@@ -15099,6 +15089,16 @@
 			"max": "255.255"
 		},
 		"filename": "0x0371/zwa008.json"
+	},
+	{
+		"manufacturerId": "0x0371",
+		"productType": "0x0002",
+		"productId": "0x0009",
+		"firmwareVersion": {
+			"min": "0.0",
+			"max": "255.255"
+		},
+		"filename": "0x0371/zwa009.json"
 	},
 	{
 		"manufacturerId": "0x0371",
