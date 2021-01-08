@@ -110,11 +110,9 @@ export class ZWaveLogContainer extends winston.Container {
 		forceConsole: false,
 	};
 
-	constructor(config?: DeepPartial<LogConfig>) {
+	constructor(config: DeepPartial<LogConfig> = {}) {
 		super();
-		if (config !== undefined) {
-			this.updateConfiguration(config);
-		}
+		this.updateConfiguration(config);
 	}
 
 	public getLogger(label: string): ZWaveLogger {
