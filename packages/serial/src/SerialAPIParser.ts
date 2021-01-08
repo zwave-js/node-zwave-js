@@ -1,6 +1,5 @@
-import type { ZwaveLoggers } from "@zwave-js/core";
 import { Transform, TransformCallback } from "stream";
-import { SerialLogger } from "./Logger";
+import type { SerialLogger } from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 
 /**
@@ -17,12 +16,9 @@ function getMessageLength(data: Buffer): number {
 }
 
 export class SerialAPIParser extends Transform {
-	public logger: SerialLogger;
-
-	constructor(loggers: ZwaveLoggers) {
+	constructor(private logger: SerialLogger) {
 		// We read byte streams but emit messages
 		super({ readableObjectMode: true });
-		this.logger = new SerialLogger(loggers);
 	}
 
 	private receiveBuffer = Buffer.allocUnsafe(0);

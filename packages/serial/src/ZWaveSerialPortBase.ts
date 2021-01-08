@@ -2,6 +2,7 @@ import type { ZwaveLoggers } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
 import { Duplex, PassThrough, Readable, Writable } from "stream";
+import { SerialLogger } from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 import { SerialAPIParser } from "./SerialAPIParser";
 
@@ -72,13 +73,14 @@ export interface ZWaveSerialPortImplementation {
 export class ZWaveSerialPortBase extends PassThrough {
 	protected serial: ReturnType<ZWaveSerialPortImplementation["create"]>;
 	private parser: SerialAPIParser;
+	protected logger: SerialLogger;
 
 	// Allow strongly-typed async iteration
 	public declare [Symbol.asyncIterator]: () => AsyncIterableIterator<ZWaveSerialChunk>;
 
 	constructor(
 		private implementation: ZWaveSerialPortImplementation,
-		private loggers: ZwaveLoggers,
+		loggers: ZwaveLoggers,
 	) {
 		super({ readableObjectMode: true });
 
@@ -103,13 +105,15 @@ export class ZWaveSerialPortBase extends PassThrough {
 			};
 		}
 
+		this.logger = new SerialLogger(loggers);
+
 		this.serial = implementation.create().on("error", (e) => {
 			// Pass errors through
 			this.emit("error", e);
 		});
 
 		// Hook up a parser to the serial port
-		this.parser = new SerialAPIParser(loggers);
+		this.parser = new SerialAPIParser(this.logger);
 		this.serial.pipe(this.parser);
 		// When the wrapper is piped to a stream, pipe the parser instead
 		this.pipe = this.parser.pipe.bind(this.parser);
@@ -154,17 +158,17 @@ export class ZWaveSerialPortBase extends PassThrough {
 		if (data.length === 1) {
 			switch (data[0]) {
 				case MessageHeaders.ACK:
-					this.parser.logger.ACK("outbound");
+					this.logger.ACK("outbound");
 					break;
 				case MessageHeaders.CAN:
-					this.parser.logger.CAN("outbound");
+					this.logger.CAN("outbound");
 					break;
 				case MessageHeaders.NAK:
-					this.parser.logger.NAK("outbound");
+					this.logger.NAK("outbound");
 					break;
 			}
 		} else {
-			this.parser.logger.data("outbound", data);
+			this.logger.data("outbound", data);
 		}
 
 		return new Promise((resolve, reject) => {
