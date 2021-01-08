@@ -22,6 +22,7 @@ import {
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
+	ZwaveLoggers,
 } from "@zwave-js/core";
 import {
 	MessageHeaders,
@@ -437,6 +438,8 @@ export class Driver extends EventEmitter {
 		return this._metadataDB;
 	}
 
+	public loggers: ZwaveLoggers;
+
 	private _controller: ZWaveController | undefined;
 	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */
 	public get controller(): ZWaveController {
@@ -460,6 +463,8 @@ export class Driver extends EventEmitter {
 		options?: DeepPartial<ZWaveOptions>,
 	) {
 		super();
+
+		this.loggers = new ZwaveLoggers(this, options?.logConfig);
 
 		// merge given options with defaults
 		this.options = applyDefaultOptions(
