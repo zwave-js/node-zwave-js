@@ -467,7 +467,7 @@ export class Driver extends EventEmitter {
 	) {
 		super();
 
-		this.loggers = new ZwaveLoggers(this, options?.logConfig);
+		this.loggers = new ZwaveLoggers(options?.logConfig);
 
 		this.driverLog = new DriverLogger(this.loggers, DRIVER_LABEL);
 		this.controllerLog = new ControllerLogger(

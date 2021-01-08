@@ -92,7 +92,6 @@ export interface LogConfig {
 export class ZwaveLoggers extends winston.Container {
 	private fileTransport: Transport | undefined;
 	private consoleTransport: Transport | undefined;
-	private driver: Driver;
 	private loglevelVisibleCache = new Map<string, boolean>();
 
 	private logConfig: LogConfig = {
@@ -109,9 +108,8 @@ export class ZwaveLoggers extends winston.Container {
 		forceConsole: false,
 	};
 
-	constructor(driver: Driver, config: DeepPartial<LogConfig> | undefined) {
+	constructor(config: DeepPartial<LogConfig> | undefined) {
 		super();
-		this.driver = driver;
 		if (config !== undefined) {
 			this.updateConfiguration(config);
 		}
