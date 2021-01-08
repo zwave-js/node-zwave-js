@@ -18,7 +18,6 @@ import {
 	LogConfig,
 	SecurityManager,
 	serializeCacheValue,
-	updateLogConfig,
 	ValueMetadata,
 	ZWaveError,
 	ZWaveErrorCodes,
@@ -86,7 +85,8 @@ import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
-import log from "../log";
+import { ControllerLogger, CONTROLLER_LABEL } from "../log/Controller";
+import { DriverLogger, DRIVER_LABEL } from "../log/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -440,6 +440,9 @@ export class Driver extends EventEmitter {
 
 	public loggers: ZwaveLoggers;
 
+	public driverLog: DriverLogger;
+	public controllerLog: ControllerLogger;
+
 	private _controller: ZWaveController | undefined;
 	/** Encapsulates information about the Z-Wave controller and provides access to its nodes */
 	public get controller(): ZWaveController {
@@ -466,6 +469,9 @@ export class Driver extends EventEmitter {
 
 		this.loggers = new ZwaveLoggers(this, options?.logConfig);
 
+		this.driverLog = new DriverLogger(this, DRIVER_LABEL);
+		this.controllerLog = new ControllerLogger(this, CONTROLLER_LABEL);
+
 		// merge given options with defaults
 		this.options = applyDefaultOptions(
 			options,
@@ -473,10 +479,6 @@ export class Driver extends EventEmitter {
 		) as ZWaveOptions;
 		// And make sure they contain valid values
 		checkOptions(this.options);
-
-		if (this.options.logConfig) {
-			updateLogConfig(this.options.logConfig);
-		}
 
 		this.cacheDir = this.options.storage.cacheDir;
 
@@ -503,7 +505,7 @@ export class Driver extends EventEmitter {
 					delay,
 				) => {
 					if (command === "SendData") {
-						log.controller.logNode(
+						this.controllerLog.logNode(
 							message.getNodeId() ?? 255,
 							`did not respond after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
 							"warn",
@@ -534,7 +536,7 @@ export class Driver extends EventEmitter {
 									"Failed to execute controller command";
 								break;
 						}
-						log.controller.print(
+						this.controllerLog.print(
 							`${errorReason} after ${attempts}/${maxAttempts} attempts. Scheduling next try in ${delay} ms.`,
 							"warn",
 						);
@@ -557,7 +559,7 @@ export class Driver extends EventEmitter {
 		this.sendThread = interpret(sendThreadMachine);
 		// this.sendThread.onTransition((state) => {
 		// 	if (state.changed)
-		// 		log.driver.print(
+		// 		this.driverLog.print(
 		// 			`send thread state: ${state.toStrings().slice(-1)[0]}`,
 		// 			"verbose",
 		// 		);
@@ -600,29 +602,29 @@ export class Driver extends EventEmitter {
 		const spOpenPromise = createDeferredPromise();
 
 		// Log which version is running
-		log.driver.print(libNameString, "info");
-		log.driver.print(`version ${libVersion}`, "info");
-		log.driver.print("", "info");
+		this.driverLog.print(libNameString, "info");
+		this.driverLog.print(`version ${libVersion}`, "info");
+		this.driverLog.print("", "info");
 
-		log.driver.print("starting driver...");
+		this.driverLog.print("starting driver...");
 		this.sendThread.start();
 
 		// Open the serial port
 		if (this.port.startsWith("tcp://")) {
 			const url = new URL(this.port);
-			log.driver.print(`opening serial port ${this.port}`);
+			this.driverLog.print(`opening serial port ${this.port}`);
 			this.serial = new ZWaveSocket({
 				host: url.hostname,
 				port: parseInt(url.port),
 			});
 		} else {
-			log.driver.print(`opening serial port ${this.port}`);
+			this.driverLog.print(`opening serial port ${this.port}`);
 			this.serial = new ZWaveSerialPort(this.port);
 		}
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
 			.on("error", (err) => {
-				log.driver.print(
+				this.driverLog.print(
 					`serial port errored: ${err.message}`,
 					"error",
 				);
@@ -645,7 +647,7 @@ export class Driver extends EventEmitter {
 				await this.serial!.open();
 			} catch (e) {
 				const message = `Failed to open the serial port: ${e.message}`;
-				log.driver.print(message, "error");
+				this.driverLog.print(message, "error");
 
 				spOpenPromise.reject(
 					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
@@ -653,7 +655,7 @@ export class Driver extends EventEmitter {
 				void this.destroy();
 				return;
 			}
-			log.driver.print("serial port opened");
+			this.driverLog.print("serial port opened");
 			this._isOpen = true;
 			spOpenPromise.resolve();
 
@@ -662,7 +664,7 @@ export class Driver extends EventEmitter {
 			await wait(1500, true);
 
 			// Load the necessary configuration
-			log.driver.print("loading configuration...");
+			this.driverLog.print("loading configuration...");
 			try {
 				await loadDeviceClasses();
 				await loadManufacturers();
@@ -674,7 +676,7 @@ export class Driver extends EventEmitter {
 				await loadIndicators();
 			} catch (e) {
 				const message = `Failed to load the configuration: ${e.message}`;
-				log.driver.print(message, "error");
+				this.driverLog.print(message, "error");
 				this.emit(
 					"error",
 					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
@@ -683,7 +685,7 @@ export class Driver extends EventEmitter {
 				return;
 			}
 
-			log.driver.print("beginning interview...");
+			this.driverLog.print("beginning interview...");
 			try {
 				await this.initializeControllerAndNodes();
 			} catch (e: unknown) {
@@ -698,7 +700,7 @@ export class Driver extends EventEmitter {
 						e instanceof Error ? e.message : String(e)
 					}`;
 				}
-				log.driver.print(message, "error");
+				this.driverLog.print(message, "error");
 				this.emit(
 					"error",
 					new ZWaveError(message, ZWaveErrorCodes.Driver_Failed),
@@ -783,7 +785,7 @@ export class Driver extends EventEmitter {
 
 		// in any case we need to emit the driver ready event here
 		this._controllerInterviewed = true;
-		log.driver.print("driver ready");
+		this.driverLog.print("driver ready");
 		this.emit("driver ready");
 
 		// Add event handlers for the nodes
@@ -837,7 +839,7 @@ export class Driver extends EventEmitter {
 			if (!(await node.interview())) {
 				// Find out if we may retry the interview
 				if (node.status === NodeStatus.Dead) {
-					log.controller.logNode(
+					this.controllerLog.logNode(
 						node.id,
 						`Interview attempt (${node.interviewAttempts}/${maxInterviewAttempts}) failed, node is dead.`,
 						"warn",
@@ -852,7 +854,7 @@ export class Driver extends EventEmitter {
 						30000,
 						node.interviewAttempts * 5000,
 					);
-					log.controller.logNode(
+					this.controllerLog.logNode(
 						node.id,
 						`Interview attempt ${node.interviewAttempts}/${maxInterviewAttempts} failed, retrying in ${retryTimeout} ms...`,
 						"warn",
@@ -872,7 +874,7 @@ export class Driver extends EventEmitter {
 						}, retryTimeout).unref(),
 					);
 				} else {
-					log.controller.logNode(
+					this.controllerLog.logNode(
 						node.id,
 						`Failed all interview attempts, giving up.`,
 						"warn",
@@ -894,7 +896,7 @@ export class Driver extends EventEmitter {
 					// This only happens when a node is removed during the interview - we don't log this
 					return;
 				}
-				log.controller.logNode(
+				this.controllerLog.logNode(
 					node.id,
 					`Error during node interview: ${e.message}`,
 					"error",
@@ -932,7 +934,7 @@ export class Driver extends EventEmitter {
 
 	/** Is called when a node wakes up */
 	private onNodeWakeUp(node: ZWaveNode, oldStatus: NodeStatus): void {
-		log.controller.logNode(
+		this.controllerLog.logNode(
 			node.id,
 			`The node is ${
 				oldStatus === NodeStatus.Unknown ? "" : "now "
@@ -959,7 +961,7 @@ export class Driver extends EventEmitter {
 
 	/** Is called when a node goes to sleep */
 	private onNodeSleep(node: ZWaveNode, oldStatus: NodeStatus): void {
-		log.controller.logNode(
+		this.controllerLog.logNode(
 			node.id,
 			`The node is ${
 				oldStatus === NodeStatus.Unknown ? "" : "now "
@@ -973,7 +975,7 @@ export class Driver extends EventEmitter {
 
 	/** Is called when a previously dead node starts communicating again */
 	private onNodeAlive(node: ZWaveNode, oldStatus: NodeStatus): void {
-		log.controller.logNode(
+		this.controllerLog.logNode(
 			node.id,
 			`The node is ${
 				oldStatus === NodeStatus.Unknown ? "" : "now "
@@ -989,7 +991,7 @@ export class Driver extends EventEmitter {
 
 	/** Is called when a node is marked as dead */
 	private onNodeDead(node: ZWaveNode, oldStatus: NodeStatus): void {
-		log.controller.logNode(
+		this.controllerLog.logNode(
 			node.id,
 			`The node is ${
 				oldStatus === NodeStatus.Unknown ? "" : "now "
@@ -1004,7 +1006,7 @@ export class Driver extends EventEmitter {
 	/** Is called when a node is ready to be used */
 	private onNodeReady(node: ZWaveNode): void {
 		this._nodesReady.add(node.id);
-		log.controller.logNode(node.id, "The node is ready to be used");
+		this.controllerLog.logNode(node.id, "The node is ready to be used");
 
 		this.checkAllNodesReady();
 	}
@@ -1021,7 +1023,7 @@ export class Driver extends EventEmitter {
 			if (!this._nodesReady.has(id)) return;
 		}
 		// All nodes are ready
-		log.controller.print("All nodes are ready to be used");
+		this.controllerLog.print("All nodes are ready to be used");
 		this.emit("all nodes ready");
 		this._nodesReadyEventEmitted = true;
 	}
@@ -1057,7 +1059,7 @@ export class Driver extends EventEmitter {
 
 		// Asynchronously remove the node from all possible associations, ignore potential errors
 		this.controller.removeNodeFromAllAssocations(node.id).catch((err) => {
-			log.driver.print(
+			this.driverLog.print(
 				`Failed to remove node ${node.id} from all associations: ${err.message}`,
 				"error",
 			);
@@ -1081,7 +1083,7 @@ export class Driver extends EventEmitter {
 
 		// Wait at least 5 seconds
 		if (!waitTime) waitTime = 5000;
-		log.controller.logNode(
+		this.controllerLog.logNode(
 			node.id,
 			`Firmware updated, scheduling interview in ${waitTime} ms...`,
 		);
@@ -1227,7 +1229,7 @@ export class Driver extends EventEmitter {
 		// Ensure this is only called once
 		if (this._wasDestroyed) return;
 		this._wasDestroyed = true;
-		log.driver.print("destroying driver instance...");
+		this.driverLog.print("destroying driver instance...");
 
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
 		if (this.sendThread.initialized) this.sendThread.stop();
@@ -1240,7 +1242,7 @@ export class Driver extends EventEmitter {
 			// Attempt to save the network to cache
 			await this.saveNetworkToCacheInternal();
 		} catch (e) {
-			log.driver.print(
+			this.driverLog.print(
 				`Saving the network to cache failed: ${e.message}`,
 				"error",
 			);
@@ -1251,7 +1253,7 @@ export class Driver extends EventEmitter {
 			await this._valueDB?.close();
 			await this._metadataDB?.close();
 		} catch (e) {
-			log.driver.print(
+			this.driverLog.print(
 				`Closing the value DBs failed: ${e.message}`,
 				"error",
 			);
@@ -1339,7 +1341,7 @@ export class Driver extends EventEmitter {
 				}
 			}
 
-			log.driver.logMessage(msg, { direction: "inbound" });
+			this.driverLog.logMessage(msg, { direction: "inbound" });
 			if (process.env.NODE_ENV !== "test") {
 				// Enrich error data in case something goes wrong
 				Sentry.addBreadcrumb({
@@ -1370,7 +1372,7 @@ export class Driver extends EventEmitter {
 				case ZWaveErrorCodes.PacketFormat_Invalid:
 				case ZWaveErrorCodes.PacketFormat_Checksum:
 				case ZWaveErrorCodes.PacketFormat_Truncated:
-					log.driver.print(
+					this.driverLog.print(
 						`Dropping message because it contains invalid data`,
 						"warn",
 					);
@@ -1378,21 +1380,21 @@ export class Driver extends EventEmitter {
 
 				case ZWaveErrorCodes.Deserialization_NotImplemented:
 				case ZWaveErrorCodes.CC_NotImplemented:
-					log.driver.print(
+					this.driverLog.print(
 						`Dropping message because it could not be deserialized: ${e.message}`,
 						"warn",
 					);
 					return MessageHeaders.ACK;
 
 				case ZWaveErrorCodes.Driver_NotReady:
-					log.driver.print(
+					this.driverLog.print(
 						`Dropping message because the driver is not ready to handle it yet.`,
 						"warn",
 					);
 					return MessageHeaders.ACK;
 
 				case ZWaveErrorCodes.PacketFormat_InvalidPayload:
-					log.driver.print(
+					this.driverLog.print(
 						`Message with invalid data received. Dropping it:
 0x${data.toString("hex")}`,
 						"warn",
@@ -1400,7 +1402,7 @@ export class Driver extends EventEmitter {
 					return MessageHeaders.ACK;
 
 				case ZWaveErrorCodes.Driver_NoSecurity:
-					log.driver.print(
+					this.driverLog.print(
 						`Dropping message because network key is not set or the driver is not yet ready to receive secure messages.`,
 						"warn",
 					);
@@ -1409,7 +1411,7 @@ export class Driver extends EventEmitter {
 		} else {
 			if (/database is not open/.test(e.message)) {
 				// The JSONL-DB is not open yet
-				log.driver.print(
+				this.driverLog.print(
 					`Dropping message because the driver is not ready to handle it yet.`,
 					"warn",
 				);
@@ -1452,7 +1454,7 @@ export class Driver extends EventEmitter {
 			// The sender of this transaction doesn't want it to change the status of the node
 			return false;
 		} else if (node.supportsCC(CommandClasses["Wake Up"])) {
-			log.controller.logNode(
+			this.controllerLog.logNode(
 				node.id,
 				`The node did not respond after ${transaction.message.maxSendAttempts} attempts.
 It is probably asleep, moving its messages to the wakeup queue.`,
@@ -1466,7 +1468,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			return true;
 		} else {
 			const errorMsg = `Node ${node.id} did not respond after ${transaction.message.maxSendAttempts} attempts, it is presumed dead`;
-			log.controller.logNode(node.id, errorMsg, "warn");
+			this.controllerLog.logNode(node.id, errorMsg, "warn");
 
 			node.markAsDead();
 			this.rejectAllTransactionsForNode(node.id, errorMsg);
@@ -1505,7 +1507,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					// this is not the final one, store it
 					session.push(command);
 					// and don't handle the command now
-					log.driver.logMessage(msg, {
+					this.driverLog.logMessage(msg, {
 						secondaryTags: ["partial"],
 						direction: "inbound",
 					});
@@ -1520,7 +1522,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 							switch (e.code) {
 								case ZWaveErrorCodes.Deserialization_NotImplemented:
 								case ZWaveErrorCodes.CC_NotImplemented:
-									log.driver.print(
+									this.driverLog.print(
 										`Dropping message because it could not be deserialized: ${e.message}`,
 										"warn",
 									);
@@ -1528,7 +1530,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 									return false;
 
 								case ZWaveErrorCodes.PacketFormat_InvalidPayload:
-									log.driver.print(
+									this.driverLog.print(
 										`Could not assemble partial CCs because the payload is invalid. Dropping them.`,
 										"warn",
 									);
@@ -1536,7 +1538,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 									return false;
 
 								case ZWaveErrorCodes.Driver_NotReady:
-									log.driver.print(
+									this.driverLog.print(
 										`Could not assemble partial CCs because the driver is not ready yet. Dropping them`,
 										"warn",
 									);
@@ -1576,7 +1578,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 					e instanceof ZWaveError &&
 					e.code === ZWaveErrorCodes.Driver_NotReady
 				) {
-					log.driver.print(
+					this.driverLog.print(
 						`Cannot handle message because the driver is not ready to handle it yet.`,
 						"warn",
 					);
@@ -1585,8 +1587,8 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 				}
 			}
 		} else {
-			log.driver.transactionResponse(msg, undefined, "unexpected");
-			log.driver.print("unexpected response, discarding...", "warn");
+			this.driverLog.transactionResponse(msg, undefined, "unexpected");
+			this.driverLog.print("unexpected response, discarding...", "warn");
 		}
 	}
 
@@ -1611,7 +1613,7 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			: [];
 		const entry: RequestHandlerEntry<T> = { invoke: handler, oneTime };
 		handlers.push(entry);
-		log.driver.print(
+		this.driverLog.print(
 			`added${oneTime ? " one-time" : ""} request handler for ${
 				FunctionType[fnType]
 			} (${num2hex(fnType)})...
@@ -1639,7 +1641,7 @@ ${handlers.length} registered`,
 				break;
 			}
 		}
-		log.driver.print(
+		this.driverLog.print(
 			`removed request handler for ${FunctionType[fnType]} (${fnType})...
 ${handlers.length} left`,
 		);
@@ -1667,7 +1669,7 @@ ${handlers.length} left`,
 				// Check whether there was a S0 encapsulation
 				if (cc.isEncapsulatedWith(CommandClasses.Security)) return true;
 				// none found, don't accept the CC
-				log.controller.logNode(
+				this.controllerLog.logNode(
 					cc.nodeId as number,
 					`command must be encrypted but was received without Security encapsulation - discarding it...`,
 					"warn",
@@ -1719,13 +1721,13 @@ ${handlers.length} left`,
 			const nodeId = msg.command.nodeId;
 			// cannot handle ApplicationCommandRequests without a controller
 			if (this._controller == undefined) {
-				log.driver.print(
+				this.driverLog.print(
 					`  the controller is not ready yet, discarding...`,
 					"warn",
 				);
 				return;
 			} else if (!this.controller.nodes.has(nodeId)) {
-				log.driver.print(
+				this.driverLog.print(
 					`  the node is unknown or not initialized yet, discarding...`,
 					"warn",
 				);
@@ -1738,7 +1740,7 @@ ${handlers.length} left`,
 				msg.command.ccId === CommandClasses["Device Reset Locally"] &&
 				msg.command instanceof DeviceResetLocallyCCNotification
 			) {
-				log.controller.logNode(msg.command.nodeId, {
+				this.controllerLog.logNode(msg.command.nodeId, {
 					message: `The node was reset locally, removing it`,
 					direction: "inbound",
 				});
@@ -1756,7 +1758,7 @@ ${handlers.length} left`,
 					// ...because we can only remove failed nodes
 					await this.controller.removeFailedNode(msg.command.nodeId);
 				} catch (e) {
-					log.controller.logNode(msg.command.nodeId, {
+					this.controllerLog.logNode(msg.command.nodeId, {
 						message: `removing the node failed: ${e}`,
 						level: "error",
 					});
@@ -1767,7 +1769,7 @@ ${handlers.length} left`,
 				this.supervisionSessions.has(msg.command.sessionId)
 			) {
 				// Supervision commands are handled here
-				log.controller.logNode(msg.command.nodeId, {
+				this.controllerLog.logNode(msg.command.nodeId, {
 					message: `Received update for a Supervision session`,
 					direction: "inbound",
 				});
@@ -1799,7 +1801,7 @@ ${handlers.length} left`,
 			if (msg instanceof ApplicationUpdateRequestNodeInfoReceived) {
 				const node = msg.getNodeUnsafe();
 				if (node) {
-					log.controller.logNode(node.id, {
+					this.controllerLog.logNode(node.id, {
 						message: "Received updated node info",
 						direction: "inbound",
 					});
@@ -1812,7 +1814,7 @@ ${handlers.length} left`,
 			}
 		} else {
 			// TODO: This deserves a nicer formatting
-			log.driver.print(
+			this.driverLog.print(
 				`handling request ${FunctionType[msg.functionType]} (${
 					msg.functionType
 				})`,
@@ -1821,14 +1823,14 @@ ${handlers.length} left`,
 		}
 
 		if (handlers != undefined && handlers.length > 0) {
-			log.driver.print(
+			this.driverLog.print(
 				`  ${handlers.length} handler${
 					handlers.length !== 1 ? "s" : ""
 				} registered!`,
 			);
 			// loop through all handlers and find the first one that returns true to indicate that it handled the message
 			for (let i = 0; i < handlers.length; i++) {
-				log.driver.print(`  invoking handler #${i}`);
+				this.driverLog.print(`  invoking handler #${i}`);
 				// Invoke the handler and remember its result
 				const handler = handlers[i];
 				let handlerResult = handler.invoke(msg);
@@ -1836,9 +1838,9 @@ ${handlers.length} left`,
 					handlerResult = await handlerResult;
 				}
 				if (handlerResult) {
-					log.driver.print(`    the message was handled`);
+					this.driverLog.print(`    the message was handled`);
 					if (handler.oneTime) {
-						log.driver.print(
+						this.driverLog.print(
 							"  one-time handler was successfully called, removing it...",
 						);
 						handlers.splice(i, 1);
@@ -1848,7 +1850,7 @@ ${handlers.length} left`,
 				}
 			}
 		} else {
-			log.driver.print("  no handlers registered!", "warn");
+			this.driverLog.print("  no handlers registered!", "warn");
 		}
 	}
 
@@ -1902,7 +1904,7 @@ ${handlers.length} left`,
 		) {
 			const unwrapped = msg.command.encapsulated;
 			if (isArray(unwrapped)) {
-				log.driver.print(
+				this.driverLog.print(
 					`Received a command that contains multiple CommandClasses. This is not supported yet! Discarding the message...`,
 					"warn",
 				);
@@ -2384,7 +2386,7 @@ ${handlers.length} left`,
 		if (!(await this.options.storage.driver.pathExists(cacheFile))) return;
 
 		try {
-			log.driver.print(
+			this.driverLog.print(
 				`Cache file for homeId ${num2hex(
 					this.controller.homeId,
 				)} found, attempting to restore the network from cache...`,
@@ -2394,7 +2396,7 @@ ${handlers.length} left`,
 				"utf8",
 			);
 			await this.controller.deserialize(JSON.parse(cacheString));
-			log.driver.print(
+			this.driverLog.print(
 				`Restoring the network from cache was successful!`,
 			);
 		} catch (e) {
@@ -2403,7 +2405,7 @@ ${handlers.length} left`,
 				"error",
 				new ZWaveError(message, ZWaveErrorCodes.Driver_InvalidCache),
 			);
-			log.driver.print(message, "error");
+			this.driverLog.print(message, "error");
 		}
 	}
 

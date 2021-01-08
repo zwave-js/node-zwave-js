@@ -1,4 +1,3 @@
-import type { Driver } from "@zwave-js/core";
 import { DeepPartial, flatMap } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Format, TransformableInfo, TransformFunction } from "logform";
@@ -73,6 +72,15 @@ export type ZWaveLogger = Omit<Logger, "log"> & {
 	log: (info: ZWaveLogInfo) => void;
 };
 
+export class LogWrapper {
+	public logger: ZWaveLogger;
+	public loggers: ZwaveLoggers;
+	constructor(driver: Driver, logLabel: string) {
+		this.loggers = driver.loggers;
+		this.logger = this.loggers.getLogger(logLabel);
+	}
+}
+
 export interface LogConfig {
 	enabled: boolean;
 	level: number;
@@ -107,6 +115,17 @@ export class ZwaveLoggers extends winston.Container {
 		if (config !== undefined) {
 			this.updateConfiguration(config);
 		}
+	}
+
+	public getLogger(label: string): ZWaveLogger {
+		if (!this.has(label)) {
+			this.add(label, {
+				transports: this.getConfiguredTransports(),
+				format: this.createLoggerFormat(label),
+			});
+		}
+
+		return (this.get(label) as unknown) as ZWaveLogger;
 	}
 
 	public updateConfiguration(config: DeepPartial<LogConfig>): void {
