@@ -101,6 +101,16 @@
 		"filename": "0x0000/zm5202.json"
 	},
 	{
+		"manufacturerId": "0x0000",
+		"productType": "0x0004",
+		"productId": "0x0004",
+		"firmwareVersion": {
+			"min": "0.0",
+			"max": "255.255"
+		},
+		"filename": "0x0000/zst10-700.json"
+	},
+	{
 		"manufacturerId": "0x0001",
 		"productType": "0x444d",
 		"productId": "0x3330",
