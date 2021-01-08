@@ -75,8 +75,8 @@ export type ZWaveLogger = Omit<Logger, "log"> & {
 export class LogWrapper {
 	public logger: ZWaveLogger;
 	public loggers: ZwaveLoggers;
-	constructor(driver: Driver, logLabel: string) {
-		this.loggers = driver.loggers;
+	constructor(loggers: ZwaveLoggers, logLabel: string) {
+		this.loggers = loggers;
 		this.logger = this.loggers.getLogger(logLabel);
 	}
 }

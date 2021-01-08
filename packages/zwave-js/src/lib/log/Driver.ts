@@ -6,9 +6,9 @@ import {
 	messageRecordToLines,
 	shouldLogNode,
 	tagify,
+	ZwaveLoggers,
 } from "@zwave-js/core";
 import type { SortedList } from "alcalzone-shared/sorted-list";
-import type { Driver } from "../../Driver";
 import type { CommandClass } from "../commandclass/CommandClass";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
@@ -25,8 +25,8 @@ const DRIVER_LOGLEVEL = "verbose";
 const SENDQUEUE_LOGLEVEL = "debug";
 
 export class DriverLogger extends LogWrapper {
-	constructor(driver: Driver, logLabel: string) {
-		super(driver, logLabel);
+	constructor(loggers: ZwaveLoggers, logLabel: string) {
+		super(loggers, logLabel);
 	}
 
 	private _isDriverLogVisible: boolean | undefined;

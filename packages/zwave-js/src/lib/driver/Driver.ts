@@ -469,8 +469,11 @@ export class Driver extends EventEmitter {
 
 		this.loggers = new ZwaveLoggers(this, options?.logConfig);
 
-		this.driverLog = new DriverLogger(this, DRIVER_LABEL);
-		this.controllerLog = new ControllerLogger(this, CONTROLLER_LABEL);
+		this.driverLog = new DriverLogger(this.loggers, DRIVER_LABEL);
+		this.controllerLog = new ControllerLogger(
+			this.loggers,
+			CONTROLLER_LABEL,
+		);
 
 		// merge given options with defaults
 		this.options = applyDefaultOptions(
