@@ -1,9 +1,9 @@
 import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import * as Sentry from "@sentry/node";
 import {
+	ConfigManager,
 	loadDeviceClasses,
 	loadDeviceIndex,
-	loadIndicators,
 	loadManufacturers,
 	loadMeters,
 	loadNamedScales,
@@ -438,8 +438,9 @@ export class Driver extends EventEmitter {
 		return this._metadataDB;
 	}
 
-	public loggers: ZWaveLogContainer;
+	private configManager: ConfigManager;
 
+	public logContainer: ZWaveLogContainer;
 	public driverLog: DriverLogger;
 	public controllerLog: ControllerLogger;
 
@@ -467,10 +468,10 @@ export class Driver extends EventEmitter {
 	) {
 		super();
 
-		this.loggers = new ZWaveLogContainer(options?.logConfig);
+		this.logContainer = new ZWaveLogContainer(options?.logConfig);
 
-		this.driverLog = new DriverLogger(this.loggers);
-		this.controllerLog = new ControllerLogger(this.loggers);
+		this.driverLog = new DriverLogger(this.logContainer);
+		this.controllerLog = new ControllerLogger(this.logContainer);
 
 		// merge given options with defaults
 		this.options = applyDefaultOptions(
@@ -481,6 +482,9 @@ export class Driver extends EventEmitter {
 		checkOptions(this.options);
 
 		this.cacheDir = this.options.storage.cacheDir;
+
+		// Initialize config manager
+		this.configManager = new ConfigManager(this.logContainer);
 
 		// register some cleanup handlers in case the program doesn't get closed cleanly
 		this._cleanupHandler = this._cleanupHandler.bind(this);
@@ -640,11 +644,11 @@ export class Driver extends EventEmitter {
 					host: url.hostname,
 					port: parseInt(url.port),
 				},
-				this.loggers,
+				this.logContainer,
 			);
 		} else {
 			this.driverLog.print(`opening serial port ${this.port}`);
-			this.serial = new ZWaveSerialPort(this.port, this.loggers);
+			this.serial = new ZWaveSerialPort(this.port, this.logContainer);
 		}
 		this.serial
 			.on("data", this.serialport_onData.bind(this))
@@ -698,7 +702,7 @@ export class Driver extends EventEmitter {
 				await loadNamedScales();
 				await loadSensorTypes();
 				await loadMeters();
-				await loadIndicators();
+				await this.configManager.loadIndicators();
 			} catch (e) {
 				const message = `Failed to load the configuration: ${e.message}`;
 				this.driverLog.print(message, "error");
