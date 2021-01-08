@@ -490,7 +490,6 @@ export class Driver extends EventEmitter {
 
 		// And initialize but don't start the send thread machine
 		const sendThreadMachine = createSendThreadMachine(
-			this,
 			{
 				sendData: this.writeSerial.bind(this),
 				createSendDataAbort: () => new SendDataAbort(this),
@@ -554,6 +553,28 @@ export class Driver extends EventEmitter {
 				resolveTransaction: (transaction, result) => {
 					transaction.promise.resolve(result);
 				},
+				logOutgoingMessage: (msg: Message) => {
+					this.driverLog.logMessage(msg, {
+						direction: "outbound",
+					});
+					if (process.env.NODE_ENV !== "test") {
+						// Enrich error data in case something goes wrong
+						Sentry.addBreadcrumb({
+							category: "message",
+							timestamp: Date.now() / 1000,
+							type: "debug",
+							data: {
+								direction: "outbound",
+								msgType: msg.type,
+								functionType: msg.functionType,
+								name: msg.constructor.name,
+								nodeId: msg.getNodeId(),
+								...msg.toLogEntry(),
+							},
+						});
+					}
+				},
+				log: this.driverLog.print.bind(this),
 			},
 			pick(this.options, ["timeouts", "attempts"]),
 		);

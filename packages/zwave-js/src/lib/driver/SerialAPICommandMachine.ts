@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/node";
 import {
 	assign,
 	Interpreter,
@@ -14,7 +13,7 @@ import {
 	isMultiStageCallback,
 	isSuccessIndicator,
 } from "../message/SuccessIndicator";
-import type { Driver, ZWaveOptions } from "./Driver";
+import type { ZWaveOptions } from "./Driver";
 import {
 	respondUnsolicited,
 	ServiceImplementations,
@@ -46,7 +45,6 @@ export type SerialAPICommandError =
 	| "callback NOK";
 
 export interface SerialAPICommandContext {
-	driver: Driver;
 	msg: Message;
 	data: Buffer;
 	attempts: number;
@@ -102,28 +100,6 @@ const forwardMessage = send((_, evt: SerialAPICommandEvent) => {
 	} as SerialAPICommandEvent;
 });
 
-function logOutgoingMessage(ctx: SerialAPICommandContext) {
-	ctx.driver.driverLog.logMessage(ctx.msg, {
-		direction: "outbound",
-	});
-	if (process.env.NODE_ENV !== "test") {
-		// Enrich error data in case something goes wrong
-		Sentry.addBreadcrumb({
-			category: "message",
-			timestamp: Date.now() / 1000,
-			type: "debug",
-			data: {
-				direction: "outbound",
-				msgType: ctx.msg.type,
-				functionType: ctx.msg.functionType,
-				name: ctx.msg.constructor.name,
-				nodeId: ctx.msg.getNodeId(),
-				...ctx.msg.toLogEntry(),
-			},
-		});
-	}
-}
-
 export type SerialAPICommandMachineConfig = MachineConfig<
 	SerialAPICommandContext,
 	SerialAPICommandStateSchema,
@@ -152,16 +128,17 @@ export type SerialAPICommandMachineParams = {
 };
 
 export function getSerialAPICommandMachineConfig(
-	driver: Driver,
 	message: Message,
-	{ timestamp }: Pick<ServiceImplementations, "timestamp">,
+	{
+		timestamp,
+		logOutgoingMessage,
+	}: Pick<ServiceImplementations, "timestamp" | "logOutgoingMessage">,
 	attemptsConfig: SerialAPICommandMachineParams["attempts"],
 ): SerialAPICommandMachineConfig {
 	return {
 		id: "serialAPICommand",
 		initial: "sending",
 		context: {
-			driver: driver,
 			msg: message,
 			data: message.serialize(),
 			attempts: 0,
@@ -190,7 +167,7 @@ export function getSerialAPICommandMachineConfig(
 						attempts: (ctx) => ctx.attempts + 1,
 						txTimestamp: (_) => timestamp(),
 					}),
-					logOutgoingMessage,
+					(ctx) => logOutgoingMessage(ctx.msg),
 				],
 				invoke: {
 					id: "sendMessage",
@@ -393,14 +370,12 @@ export function getSerialAPICommandMachineOptions(
 }
 
 export function createSerialAPICommandMachine(
-	driver: Driver,
 	message: Message,
 	implementations: ServiceImplementations,
 	params: SerialAPICommandMachineParams,
 ): SerialAPICommandMachine {
 	return Machine(
 		getSerialAPICommandMachineConfig(
-			driver,
 			message,
 			implementations,
 			params.attempts,
