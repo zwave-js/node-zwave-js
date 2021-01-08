@@ -18,7 +18,6 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -348,7 +347,7 @@ export class ProtectionCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -359,7 +358,7 @@ export class ProtectionCC extends CommandClass {
 
 		// First find out what the device supports
 		if (complete && this.version >= 2) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: "querying protection capabilities...",
 				direction: "outbound",
 			});
@@ -375,7 +374,7 @@ RF protection states:    ${resp.supportedRFStates
 				.map((local) => getEnumMemberName(RFProtectionState, local))
 				.map((str) => `\n· ${str}`)
 				.join("")}`;
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -389,7 +388,7 @@ RF protection states:    ${resp.supportedRFStates
 		);
 
 		// Query the current state
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: "querying protection status...",
 			direction: "outbound",
 		});
@@ -400,19 +399,19 @@ local: ${getEnumMemberName(LocalProtectionState, protectionResp.local)}`;
 			logMessage += `
 rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 		}
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: logMessage,
 			direction: "inbound",
 		});
 
 		if (supportsTimeout) {
 			// Query the current timeout
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: "querying protection timeout...",
 				direction: "outbound",
 			});
 			const timeout = await api.getTimeout();
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: `received timeout: ${timeout.toString()}`,
 				direction: "inbound",
 			});
@@ -420,12 +419,12 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 
 		if (supportsExclusiveControl) {
 			// Query the current timeout
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: "querying exclusive control node...",
 				direction: "outbound",
 			});
 			const nodeId = await api.getExclusiveControl();
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message:
 					(nodeId !== 0
 						? `Node ${padStart(nodeId.toString(), 3, "0")}`

@@ -6,7 +6,6 @@ import {
 	validatePayload,
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import type { Endpoint } from "../node/Endpoint";
 import {
@@ -174,7 +173,7 @@ export class TimeParametersCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -183,7 +182,7 @@ export class TimeParametersCC extends CommandClass {
 		});
 
 		// Always keep the node's time in sync
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "setting current time...",
 			direction: "outbound",

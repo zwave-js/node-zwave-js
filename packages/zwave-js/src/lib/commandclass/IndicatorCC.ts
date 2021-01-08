@@ -1,4 +1,4 @@
-import { lookupIndicator, lookupProperty } from "@zwave-js/config";
+import type { ConfigManager } from "@zwave-js/config";
 import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -15,7 +15,6 @@ import {
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -97,11 +96,12 @@ export function getIndicatorValueValueID(
  * Looks up the configured metadata for the given indicator and property
  */
 function getIndicatorMetadata(
+	configManager: ConfigManager,
 	indicatorId: number,
 	propertyId: number,
 ): ValueMetadata {
-	const label = lookupIndicator(indicatorId);
-	const prop = lookupProperty(propertyId);
+	const label = configManager.lookupIndicator(indicatorId);
+	const prop = configManager.lookupProperty(propertyId);
 	if (!label && !prop) {
 		return {
 			...ValueMetadata.UInt8,
@@ -149,11 +149,14 @@ function getIndicatorMetadata(
 	}
 }
 
-function getIndicatorName(indicatorId: number | undefined): string {
+function getIndicatorName(
+	configManager: ConfigManager,
+	indicatorId: number | undefined,
+): string {
 	let indicatorName = "0 (default)";
 	if (indicatorId) {
 		indicatorName = `${num2hex(indicatorId)} (${
-			lookupIndicator(indicatorId) ?? `Unknown`
+			configManager.lookupIndicator(indicatorId) ?? `Unknown`
 		})`;
 	}
 	return indicatorName;
@@ -205,8 +208,11 @@ export class IndicatorCCAPI extends CCAPI {
 		) {
 			const indicatorId = property;
 			const propertyId = propertyKey;
-			const expectedType = getIndicatorMetadata(indicatorId, propertyId)
-				.type as "number" | "boolean";
+			const expectedType = getIndicatorMetadata(
+				this.driver.configManager,
+				indicatorId,
+				propertyId,
+			).type as "number" | "boolean";
 
 			// V2+ value
 			if (typeof value !== expectedType) {
@@ -352,7 +358,7 @@ export class IndicatorCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -363,7 +369,7 @@ export class IndicatorCC extends CommandClass {
 		if (this.version === 1) {
 			await ignoreTimeout(
 				async () => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "requesting current indicator value...",
 						direction: "outbound",
@@ -371,7 +377,7 @@ export class IndicatorCC extends CommandClass {
 					await api.get();
 				},
 				() => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Current value query timed out - skipping because it is not critical...",
@@ -382,7 +388,7 @@ export class IndicatorCC extends CommandClass {
 		} else {
 			let supportedIndicatorIds: number[];
 			if (complete) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "scanning supported indicator IDs...",
 					direction: "outbound",
@@ -405,7 +411,7 @@ export class IndicatorCC extends CommandClass {
 				const logMessage = `supported indicator IDs: ${supportedIndicatorIds.join(
 					", ",
 				)}`;
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -420,7 +426,7 @@ export class IndicatorCC extends CommandClass {
 			for (const indicatorId of supportedIndicatorIds) {
 				await ignoreTimeout(
 					async () => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `requesting current indicator value (id = ${num2hex(
 								indicatorId,
@@ -430,7 +436,7 @@ export class IndicatorCC extends CommandClass {
 						await api.get(indicatorId);
 					},
 					() => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Querying indicator value (id = ${num2hex(
 								indicatorId,
@@ -458,7 +464,7 @@ export class IndicatorCC extends CommandClass {
 			typeof propertyKey === "number"
 		) {
 			// The indicator property is our property key
-			const prop = lookupProperty(propertyKey);
+			const prop = this.driver.configManager.lookupProperty(propertyKey);
 			if (prop) return prop.label;
 		}
 		return super.translatePropertyKey(property, propertyKey);
@@ -470,7 +476,7 @@ export class IndicatorCC extends CommandClass {
 	): string {
 		if (typeof property === "number" && typeof propertyKey === "number") {
 			// The indicator corresponds to our property
-			const label = lookupIndicator(property);
+			const label = this.driver.configManager.lookupIndicator(property);
 			if (label) return label;
 		}
 		return super.translateProperty(property, propertyKey);
@@ -642,7 +648,7 @@ export class IndicatorCCReport extends IndicatorCC {
 			} else {
 				if (this.isSinglecast()) {
 					// Don't!
-					log.controller.logNode(this.nodeId, {
+					this.driver.controllerLog.logNode(this.nodeId, {
 						message: `ignoring V1 indicator report because the node supports V2 indicators`,
 						direction: "none",
 						endpoint: this.endpointIndex,
@@ -698,6 +704,7 @@ export class IndicatorCCReport extends IndicatorCC {
 		const valueDB = this.getValueDB();
 
 		const metadata = getIndicatorMetadata(
+			this.driver.configManager,
 			value.indicatorId,
 			value.propertyId,
 		);
@@ -774,7 +781,12 @@ export class IndicatorCCGet extends IndicatorCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { indicator: getIndicatorName(this.indicatorId) },
+			message: {
+				indicator: getIndicatorName(
+					this.driver.configManager,
+					this.indicatorId,
+				),
+			},
 		};
 	}
 }
@@ -827,15 +839,21 @@ export class IndicatorCCSupportedReport extends IndicatorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				indicator: getIndicatorName(this.indicatorId),
+				indicator: getIndicatorName(
+					this.driver.configManager,
+					this.indicatorId,
+				),
 				"supported properties": `${this.supportedProperties
 					.map(
 						(id) =>
-							lookupProperty(id)?.label ??
-							`Unknown (${num2hex(id)})`,
+							this.driver.configManager.lookupProperty(id)
+								?.label ?? `Unknown (${num2hex(id)})`,
 					)
 					.join(", ")}`,
-				"next indicator": getIndicatorName(this.nextIndicatorId),
+				"next indicator": getIndicatorName(
+					this.driver.configManager,
+					this.nextIndicatorId,
+				),
 			},
 		};
 	}
@@ -876,7 +894,12 @@ export class IndicatorCCSupportedGet extends IndicatorCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { indicator: getIndicatorName(this.indicatorId) },
+			message: {
+				indicator: getIndicatorName(
+					this.driver.configManager,
+					this.indicatorId,
+				),
+			},
 		};
 	}
 }

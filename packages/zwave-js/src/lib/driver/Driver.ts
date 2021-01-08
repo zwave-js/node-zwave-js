@@ -1,15 +1,6 @@
 import { JsonlDB, JsonlDBOptions } from "@alcalzone/jsonl-db";
 import * as Sentry from "@sentry/node";
-import {
-	ConfigManager,
-	loadDeviceClasses,
-	loadDeviceIndex,
-	loadManufacturers,
-	loadMeters,
-	loadNamedScales,
-	loadNotifications,
-	loadSensorTypes,
-} from "@zwave-js/config";
+import { ConfigManager } from "@zwave-js/config";
 import {
 	CommandClasses,
 	deserializeCacheValue,
@@ -438,7 +429,7 @@ export class Driver extends EventEmitter {
 		return this._metadataDB;
 	}
 
-	private configManager: ConfigManager;
+	public readonly configManager: ConfigManager;
 
 	public logContainer: ZWaveLogContainer;
 	public driverLog: DriverLogger;
@@ -695,13 +686,13 @@ export class Driver extends EventEmitter {
 			// Load the necessary configuration
 			this.driverLog.print("loading configuration...");
 			try {
-				await loadDeviceClasses();
-				await loadManufacturers();
-				await loadDeviceIndex();
-				await loadNotifications();
-				await loadNamedScales();
-				await loadSensorTypes();
-				await loadMeters();
+				await this.configManager.loadDeviceClasses();
+				await this.configManager.loadManufacturers();
+				await this.configManager.loadDeviceIndex();
+				await this.configManager.loadNotifications();
+				await this.configManager.loadNamedScales();
+				await this.configManager.loadSensorTypes();
+				await this.configManager.loadMeters();
 				await this.configManager.loadIndicators();
 			} catch (e) {
 				const message = `Failed to load the configuration: ${e.message}`;

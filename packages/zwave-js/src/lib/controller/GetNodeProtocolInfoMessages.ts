@@ -112,7 +112,12 @@ export class GetNodeProtocolInfoResponse extends Message {
 		const basic = this.payload[3];
 		const generic = this.payload[4];
 		const specific = this.payload[5];
-		this._deviceClass = new DeviceClass(basic, generic, specific);
+		this._deviceClass = new DeviceClass(
+			this.driver.configManager,
+			basic,
+			generic,
+			specific,
+		);
 	}
 
 	private _isListening: boolean;

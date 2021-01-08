@@ -771,7 +771,7 @@ export function createSendThreadMachine(
 							actions: [
 								resolveCurrentTransactionWithoutMessage,
 								// TODO:
-								// log.controller.logNode(
+								// this.driver.controllerLog.logNode(
 								// 	node.id,
 								// 	`Treating the node info as a successful ping...`,
 								// );

@@ -11,7 +11,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { PhysicalCCAPI } from "./API";
 import {
 	getGroupCountValueId as getAssociationGroupCountValueId,
@@ -406,7 +405,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 		const mcAPI = endpoint.commandClasses["Multi Channel Association"];
 		const assocAPI = endpoint.commandClasses.Association;
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -417,14 +416,14 @@ export class MultiChannelAssociationCC extends CommandClass {
 		let mcGroupCount: number;
 		if (complete) {
 			// First find out how many groups are supported as multi channel
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"querying number of multi channel association groups...",
 				direction: "outbound",
 			});
 			mcGroupCount = await mcAPI.getGroupCount();
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `supports ${mcGroupCount} multi channel association groups`,
 				direction: "inbound",
@@ -442,7 +441,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 
 		// Then query each multi channel association group
 		for (let groupId = 1; groupId <= mcGroupCount; groupId++) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying multi channel association group #${groupId}...`,
 				direction: "outbound",
@@ -460,7 +459,7 @@ currently assigned endpoints: ${group.endpoints
 					}
 				})
 				.join("")}`;
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -469,7 +468,7 @@ currently assigned endpoints: ${group.endpoints
 
 		// Check if there are more non-multi-channel association groups we haven't queried yet
 		if (assocGroupCount > mcGroupCount) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying additional non-multi-channel association groups...`,
 				direction: "outbound",
@@ -479,7 +478,7 @@ currently assigned endpoints: ${group.endpoints
 				groupId <= assocGroupCount;
 				groupId++
 			) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying association group #${groupId}...`,
 					direction: "outbound",
@@ -488,7 +487,7 @@ currently assigned endpoints: ${group.endpoints
 				const logMessage = `received information for association group #${groupId}:
 maximum # of nodes:           ${group.maxNodes}
 currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -536,7 +535,7 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 					!isAssignedAsNodeAssociation
 				) {
 					// Use normal association if this is not a multi channel association group
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Lifeline group #${group} does not support multi channel - assigning controller with Association CC...`,
 						direction: "outbound",
@@ -550,7 +549,7 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 					!isAssignedAsNodeAssociation
 				) {
 					// Use node id associations for V1 and V2 and if a multi channel lifeline is forbidden
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Lifeline group #${group} is configured to use node association - assigning controller...`,
 						direction: "outbound",
@@ -576,7 +575,7 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 					!mustUseNodeAssociation &&
 					!isAssignedAsEndpointAssociation
 				) {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Lifeline group #${group}: assigning controller with multi channel association...`,
 						direction: "outbound",
@@ -603,7 +602,7 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 
 				// Fallback to Association CC if endpoint association didn't work
 				if (!didMCAssignmentWork) {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Lifeline group #${group}: Multi Channel Association assignment failed, falling back to Association CC`,
 						direction: "none",
@@ -617,7 +616,7 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 			// Remember that we have a lifeline association
 			valueDB.setValue(getHasLifelineValueId(), true);
 		} else {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"No information about Lifeline associations, cannot assign ourselves!",

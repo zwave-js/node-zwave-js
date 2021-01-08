@@ -14,7 +14,6 @@ import {
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
@@ -206,7 +205,7 @@ export class VersionCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -219,7 +218,7 @@ export class VersionCC extends CommandClass {
 			// Step 1: Query node versions
 			await ignoreTimeout(
 				async () => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying node versions...",
 						direction: "outbound",
@@ -233,14 +232,14 @@ export class VersionCC extends CommandClass {
 					if (versionGetResponse.hardwareVersion != undefined) {
 						logMessage += `\n  hardware version:  ${versionGetResponse.hardwareVersion}`;
 					}
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
 				},
 				() => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Node version query timed out - skipping because it is not critical...`,
 						level: "warn",
@@ -249,7 +248,7 @@ export class VersionCC extends CommandClass {
 			);
 
 			// Step 2: Query all CC versions
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying CC versions...",
 				direction: "outbound",
@@ -258,7 +257,7 @@ export class VersionCC extends CommandClass {
 				// only query the ones we support a version > 1 for
 				const maxImplemented = getImplementedVersion(cc);
 				if (maxImplemented <= 1) {
-					log.controller.logNode(
+					this.driver.controllerLog.logNode(
 						node.id,
 						`  skipping query for ${CommandClasses[cc]} (${num2hex(
 							cc,
@@ -269,7 +268,7 @@ export class VersionCC extends CommandClass {
 
 				await ignoreTimeout(
 					async () => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `  querying the CC version for ${getCCName(
 								cc,
@@ -292,10 +291,10 @@ export class VersionCC extends CommandClass {
 								CommandClasses[cc]
 							} (${num2hex(cc)})`;
 						}
-						log.controller.logNode(node.id, logMessage);
+						this.driver.controllerLog.logNode(node.id, logMessage);
 					},
 					() => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `CC version query for ${getCCName(
 								cc,
@@ -318,7 +317,7 @@ export class VersionCC extends CommandClass {
 				await ignoreTimeout(
 					async () => {
 						// Step 3a: Support for SoftwareGet
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message:
 								"querying if Z-Wave Software Get is supported...",
@@ -327,7 +326,7 @@ export class VersionCC extends CommandClass {
 						const {
 							supportsZWaveSoftwareGet,
 						} = await api.getCapabilities();
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Z-Wave Software Get is${
 								supportsZWaveSoftwareGet ? "" : " not"
@@ -337,13 +336,13 @@ export class VersionCC extends CommandClass {
 
 						if (supportsZWaveSoftwareGet) {
 							// Step 3b: Query Z-Wave Software versions
-							log.controller.logNode(node.id, {
+							this.driver.controllerLog.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message: "querying Z-Wave software versions...",
 								direction: "outbound",
 							});
 							await api.getZWaveSoftware();
-							log.controller.logNode(node.id, {
+							this.driver.controllerLog.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message: "received Z-Wave software versions",
 								direction: "inbound",
@@ -351,7 +350,7 @@ export class VersionCC extends CommandClass {
 						}
 					},
 					() => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Version capability or software version query timed out - skipping because this is not critical...`,
 							level: "warn",

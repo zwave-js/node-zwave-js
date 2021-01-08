@@ -1,4 +1,4 @@
-import { lookupMeter, lookupMeterScale, MeterScale } from "@zwave-js/config";
+import type { ConfigManager, MeterScale } from "@zwave-js/config";
 import type {
 	MessageOrCCLogEntry,
 	MessageRecord,
@@ -18,7 +18,6 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	ignoreTimeout,
@@ -90,8 +89,10 @@ export type MeterMetadata = ValueMetadata & {
 	};
 };
 
-function getMeterTypeName(type: number): string {
-	return lookupMeter(type)?.name ?? `UNKNOWN (${num2hex(type)})`;
+function getMeterTypeName(configManager: ConfigManager, type: number): string {
+	return (
+		configManager.lookupMeter(type)?.name ?? `UNKNOWN (${num2hex(type)})`
+	);
 }
 
 export function getTypeValueId(endpoint: number): ValueID {
@@ -291,7 +292,7 @@ export class MeterCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -312,7 +313,7 @@ export class MeterCC extends CommandClass {
 			if (complete || storedType == undefined) {
 				if (
 					!(await ignoreTimeout(async () => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: "querying meter support...",
 							direction: "outbound",
@@ -325,9 +326,15 @@ export class MeterCC extends CommandClass {
 							supportedRateTypes,
 						} = await api.getSupported());
 						const logMessage = `received meter support:
-type:                 ${getMeterTypeName(type)}
+type:                 ${getMeterTypeName(this.driver.configManager, type)}
 supported scales:     ${supportedScales
-							.map((s) => lookupMeterScale(type, s).label)
+							.map(
+								(s) =>
+									this.driver.configManager.lookupMeterScale(
+										type,
+										s,
+									).label,
+							)
 							.map((label) => `\n· ${label}`)
 							.join("")}
 supported rate types: ${supportedRateTypes
@@ -335,14 +342,14 @@ supported rate types: ${supportedRateTypes
 							.map((label) => `\n· ${label}`)
 							.join("")}
 supports reset:       ${supportsReset}`;
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: logMessage,
 							direction: "inbound",
 						});
 					}))
 				) {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Querying meter support timed out, skipping interview...",
@@ -370,7 +377,7 @@ supports reset:       ${supportsReset}`;
 				supportedRateTypes == undefined ||
 				supportedScales == undefined
 			) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Cannot continue meter interview - the information is incomplete!",
@@ -386,12 +393,16 @@ supports reset:       ${supportsReset}`;
 				for (const scale of supportedScales) {
 					await ignoreTimeout(
 						async () => {
-							log.controller.logNode(node.id, {
+							this.driver.controllerLog.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message: `querying meter value (type = ${getMeterTypeName(
+									this.driver.configManager,
 									type,
 								)}, scale = ${
-									lookupMeterScale(type, scale).label
+									this.driver.configManager.lookupMeterScale(
+										type,
+										scale,
+									).label
 								}${
 									rateType != undefined
 										? `, rate type = ${getEnumMemberName(
@@ -408,7 +419,7 @@ supports reset:       ${supportsReset}`;
 							});
 						},
 						() => {
-							log.controller.logNode(node.id, {
+							this.driver.controllerLog.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message:
 									"Meter query timed out - skipping because it is not critical...",
@@ -419,7 +430,7 @@ supports reset:       ${supportsReset}`;
 				}
 			}
 		} else {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying default meter value...`,
 				direction: "outbound",
@@ -429,7 +440,7 @@ supports reset:       ${supportsReset}`;
 					await api.get();
 				},
 				() => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Default meter query timed out - skipping because it is not critical...",
@@ -458,7 +469,10 @@ supports reset:       ${supportsReset}`;
 			);
 			let ret: string;
 			if (meterType !== 0) {
-				ret = lookupMeterScale(meterType, scale).label;
+				ret = this.driver.configManager.lookupMeterScale(
+					meterType,
+					scale,
+				).label;
 			} else {
 				ret = "default";
 			}
@@ -467,7 +481,7 @@ supports reset:       ${supportsReset}`;
 			}
 			return ret;
 		} else if (property === "reset" && typeof propertyKey === "number") {
-			return getMeterTypeName(propertyKey);
+			return getMeterTypeName(this.driver.configManager, propertyKey);
 		}
 		return super.translatePropertyKey(property, propertyKey);
 	}
@@ -529,7 +543,10 @@ export class MeterCCReport extends MeterCC {
 			this._deltaTime = 0;
 		}
 		const scale = scale1 === 7 ? scale1 + scale2 : scale1;
-		this._scale = lookupMeterScale(this._type, scale);
+		this._scale = this.driver.configManager.lookupMeterScale(
+			this._type,
+			scale,
+		);
 
 		this.persistValues();
 	}
@@ -562,7 +579,10 @@ export class MeterCCReport extends MeterCC {
 		if (!valueDB.hasMetadata(valueValueId)) {
 			valueDB.setMetadata(valueValueId, {
 				...ValueMetadata.ReadOnlyNumber,
-				label: `Value (${getMeterTypeName(this._type)}${
+				label: `Value (${getMeterTypeName(
+					this.driver.configManager,
+					this._type,
+				)}${
 					this._rateType
 						? `, ${getEnumMemberName(RateType, this._rateType)}`
 						: ""
@@ -574,7 +594,10 @@ export class MeterCCReport extends MeterCC {
 		if (this.version >= 2 && !valueDB.hasMetadata(previousValueValueID)) {
 			valueDB.setMetadata(previousValueValueID, {
 				...ValueMetadata.ReadOnlyNumber,
-				label: `Previous value (${getMeterTypeName(this._type)}${
+				label: `Previous value (${getMeterTypeName(
+					this.driver.configManager,
+					this._type,
+				)}${
 					this._rateType
 						? `, ${getEnumMemberName(RateType, this._rateType)}`
 						: ""
@@ -640,7 +663,7 @@ export class MeterCCReport extends MeterCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			type:
-				lookupMeter(this.type)?.name ??
+				this.driver.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this._type)})`,
 			scale: this._scale.label,
 			"rate type": getEnumMemberName(RateType, this._rateType),
@@ -743,7 +766,10 @@ export class MeterCCGet extends MeterCC {
 				getTypeValueId(this.endpointIndex),
 			);
 			if (type != undefined) {
-				message.duration = lookupMeterScale(type, this.scale).label;
+				message.duration = this.driver.configManager.lookupMeterScale(
+					type,
+					this.scale,
+				).label;
 			}
 		}
 		return {
@@ -842,7 +868,10 @@ export class MeterCCSupportedReport extends MeterCC {
 			if (!valueDb.hasMetadata(resetSingle)) {
 				this.getValueDB().setMetadata(resetSingle, {
 					...ValueMetadata.WriteOnlyBoolean,
-					label: `Reset (${getMeterTypeName(this._type)})`,
+					label: `Reset (${getMeterTypeName(
+						this.driver.configManager,
+						this._type,
+					)})`,
 					ccSpecific: {
 						meterType: this._type,
 					},
@@ -855,14 +884,14 @@ export class MeterCCSupportedReport extends MeterCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		const message: MessageRecord = {
 			type: `${
-				lookupMeter(this.type)?.name ??
+				this.driver.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`,
 			"supports reset": this._supportsReset,
 			"supported scales": `${this._supportedScales
 				.map(
 					(scale) => `
-· ${lookupMeterScale(this.type, scale).label}`,
+· ${this.driver.configManager.lookupMeterScale(this.type, scale).label}`,
 				)
 				.join("")}`,
 			"supported rate types": this._supportedRateTypes
@@ -943,7 +972,7 @@ export class MeterCCReset extends MeterCC {
 		const message: MessageRecord = {};
 		if (this.type != undefined) {
 			message.type = `${
-				lookupMeter(this.type)?.name ??
+				this.driver.configManager.lookupMeter(this.type)?.name ??
 				`Unknown (${num2hex(this.type)})`
 			}`;
 		}

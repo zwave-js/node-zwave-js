@@ -8,7 +8,6 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import {
@@ -112,14 +111,14 @@ export class ClockCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
 			direction: "none",
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: "requesting current clock setting...",
 			direction: "outbound",
 		});
@@ -131,7 +130,7 @@ export class ClockCC extends CommandClass {
 		}${response.hour < 10 ? "0" : ""}${response.hour}:${
 			response.minute < 10 ? "0" : ""
 		}${response.minute}`;
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: logMessage,
 			direction: "inbound",
 		});
