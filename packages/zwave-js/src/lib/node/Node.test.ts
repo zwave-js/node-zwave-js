@@ -1,7 +1,7 @@
-import { loadDeviceClasses } from "@zwave-js/config";
 import {
 	assertZWaveError,
 	CommandClasses,
+	CommandClassInfo,
 	NodeUpdatePayload,
 	unknownBoolean,
 	ValueDB,
@@ -14,7 +14,6 @@ import {
 	BinarySwitchCCReport,
 	BinarySwitchCommand,
 } from "../commandclass/BinarySwitchCC";
-import type { CommandClassInfo } from "../commandclass/CommandClass";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
 import {
@@ -48,7 +47,7 @@ class TestNode extends ZWaveNode {
 		return super.ping();
 	}
 	public async queryNodeInfo(): Promise<void> {
-		return super.queryNodeInfo();
+		return super["queryNodeInfo"]();
 	}
 	public async interviewCCs(): Promise<boolean> {
 		return super.interviewCCs();
@@ -69,7 +68,7 @@ class TestNode extends ZWaveNode {
 	// 	return super.requestStaticValues();
 	// }
 	public async queryNeighbors(): Promise<void> {
-		return super.queryNeighbors();
+		return super["queryNeighbors"]();
 	}
 	public get implementedCommandClasses(): Map<
 		CommandClasses,
@@ -85,13 +84,15 @@ describe("lib/node/Node", () => {
 		await import("../commandclass/BatteryCC");
 		await import("../commandclass/ThermostatSetpointCC");
 		await import("../commandclass/VersionCC");
-
-		// And load the device classes config - we need it for the node tests
-		await loadDeviceClasses();
 	});
 
 	describe("constructor", () => {
 		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+
+		beforeAll(async () => {
+			await fakeDriver.configManager.loadDeviceClasses();
+		});
+
 		it("stores the given Node ID", () => {
 			const node1 = new ZWaveNode(1, fakeDriver);
 			expect(node1.id).toBe(1);
@@ -110,7 +111,12 @@ describe("lib/node/Node", () => {
 			const nodeUndef = makeNode(undefined as any);
 			expect(nodeUndef.deviceClass).toBeUndefined();
 
-			const devCls = new DeviceClass(0x02, 0x01, 0x03);
+			const devCls = new DeviceClass(
+				fakeDriver.configManager,
+				0x02,
+				0x01,
+				0x03,
+			);
 			const nodeWithClass = makeNode(devCls);
 			expect(nodeWithClass.deviceClass).toBe(devCls);
 
@@ -163,7 +169,12 @@ describe("lib/node/Node", () => {
 
 		it("marks the mandatory CCs as supported/controlled", () => {
 			// Portable Scene Controller
-			const deviceClass = new DeviceClass(0x01, 0x01, 0x02);
+			const deviceClass = new DeviceClass(
+				fakeDriver.configManager,
+				0x01,
+				0x01,
+				0x02,
+			);
 			const node = new ZWaveNode(1, fakeDriver, deviceClass);
 			expect(node.supportsCC(CommandClasses.Association)).toBeTrue();
 			expect(
@@ -180,13 +191,14 @@ describe("lib/node/Node", () => {
 	});
 
 	describe("interview()", () => {
-		let fakeDriver: Driver;
+		let fakeDriver: ReturnType<typeof createEmptyMockDriver>;
 		let node: ZWaveNode;
 
-		beforeAll(() => {
-			fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+		beforeAll(async () => {
+			fakeDriver = createEmptyMockDriver();
 			node = new ZWaveNode(2, fakeDriver as any);
 			(fakeDriver.controller.nodes as any).set(node.id, node);
+			await fakeDriver.configManager.loadDeviceClasses();
 		});
 
 		afterAll(() => {
@@ -210,14 +222,19 @@ describe("lib/node/Node", () => {
 					isSecure: false,
 					version: 3,
 					isBeaming: false,
-					deviceClass: new DeviceClass(0x01, 0x03, 0x02),
+					deviceClass: new DeviceClass(
+						fakeDriver.configManager,
+						0x01,
+						0x03,
+						0x02,
+					),
 				} as GetNodeProtocolInfoResponse;
 
 				fakeDriver.sendMessage.mockResolvedValue(expected);
 			});
 
 			it("should send a GetNodeProtocolInfoRequest", async () => {
-				await node.queryProtocolInfo();
+				await node["queryProtocolInfo"]();
 
 				expect(fakeDriver.sendMessage).toBeCalled();
 				const request: GetNodeProtocolInfoRequest =
@@ -278,7 +295,7 @@ describe("lib/node/Node", () => {
 						isListening,
 						isFrequentListening,
 					});
-					await node.queryProtocolInfo();
+					await node["queryProtocolInfo"]();
 
 					expect(node.isAwake()).toBeTrue();
 					expect(node.supportsCC(CommandClasses["Wake Up"])).toBe(
@@ -333,20 +350,20 @@ describe("lib/node/Node", () => {
 			beforeEach(() => fakeDriver.sendMessage.mockClear());
 
 			it(`should set the interview stage to "NodeInfo"`, async () => {
-				await node.queryNodeInfo();
+				await node["queryNodeInfo"]();
 				expect(node.interviewStage).toBe(InterviewStage.NodeInfo);
 			});
 
 			it("should not send anything if the node is the controller", async () => {
 				// Temporarily make this node the controller node
 				fakeDriver.controller.ownNodeId = node.id;
-				await node.queryNodeInfo();
+				await node["queryNodeInfo"]();
 				expect(fakeDriver.sendMessage).not.toBeCalled();
 				fakeDriver.controller.ownNodeId = 1;
 			});
 
 			it("should send a RequestNodeInfoRequest with the node's ID", async () => {
-				await node.queryNodeInfo();
+				await node["queryNodeInfo"]();
 				expect(fakeDriver.sendMessage).toBeCalled();
 				const request: RequestNodeInfoRequest =
 					fakeDriver.sendMessage.mock.calls[0][0];
@@ -375,7 +392,7 @@ describe("lib/node/Node", () => {
 				(expected as any)._nodeInformation = nodeUpdate;
 				fakeDriver.sendMessage.mockResolvedValue(expected);
 
-				await node.queryNodeInfo();
+				await node["queryNodeInfo"]();
 				for (const cc of nodeUpdate.supportedCCs) {
 					expect(node.supportsCC(cc)).toBeTrue();
 				}
@@ -400,13 +417,13 @@ describe("lib/node/Node", () => {
 			// it("should not send anything if the node is the controller", async () => {
 			// 	// Temporarily make this node the controller node
 			// 	fakeDriver.controller.ownNodeId = node.id;
-			// 	await node.queryNodeInfo();
+			// 	await node["queryNodeInfo"]();
 			// 	expect(fakeDriver.sendMessage).not.toBeCalled();
 			// 	fakeDriver.controller.ownNodeId = 1;
 			// });
 
 			// it("should send a RequestNodeInfoRequest with the node's ID", async () => {
-			// 	await node.queryNodeInfo();
+			// 	await node["queryNodeInfo"]();
 			// 	expect(fakeDriver.sendMessage).toBeCalled();
 			// 	const request: RequestNodeInfoRequest =
 			// 		fakeDriver.sendMessage.mock.calls[0][0];
@@ -477,7 +494,7 @@ describe("lib/node/Node", () => {
 			});
 
 			it("should send a GetRoutingInfoRequest", async () => {
-				await node.queryNeighbors();
+				await node["queryNeighbors"]();
 
 				expect(fakeDriver.sendMessage).toBeCalled();
 				const request: GetRoutingInfoRequest =
@@ -487,7 +504,7 @@ describe("lib/node/Node", () => {
 			});
 
 			it("should remember the neighbor list", async () => {
-				await node.queryNeighbors();
+				await node["queryNeighbors"]();
 				expect(node.neighbors).toContainAllValues(expected.nodeIds);
 			});
 
@@ -510,10 +527,10 @@ describe("lib/node/Node", () => {
 					interviewCCs: true,
 				};
 				originalMethods = {
-					queryProtocolInfo: node.queryProtocolInfo.bind(node),
-					queryNodeInfo: node.queryNodeInfo.bind(node),
-					interviewCCs: node.interviewCCs.bind(node),
-					queryNeighbors: node.queryNeighbors.bind(node),
+					queryProtocolInfo: node["queryProtocolInfo"].bind(node),
+					queryNodeInfo: node["queryNodeInfo"].bind(node),
+					interviewCCs: node["interviewCCs"].bind(node),
+					queryNeighbors: node["queryNeighbors"].bind(node),
 				};
 				for (const method of Object.keys(
 					originalMethods,
@@ -902,6 +919,10 @@ describe("lib/node/Node", () => {
 
 	describe("serialize() / deserialize()", () => {
 		const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
+
+		beforeAll(async () => {
+			await fakeDriver.configManager.loadDeviceClasses();
+		});
 
 		const serializedTestNode = {
 			id: 1,

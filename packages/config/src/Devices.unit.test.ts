@@ -1,6 +1,7 @@
+import { ZWaveLogContainer } from "@zwave-js/core";
 import fsExtra from "fs-extra";
 import path from "path";
-import { loadDeviceIndex, lookupDevice } from "./Devices";
+import { ConfigManager } from "./ConfigManager";
 import { configDir } from "./utils";
 
 jest.mock("fs-extra");
@@ -9,21 +10,31 @@ const pathExistsMock = fsExtra.pathExists as jest.Mock;
 
 describe("lib/config/Devices", () => {
 	describe("lookupDevice (with missing index)", () => {
+		let configManager: ConfigManager;
+
 		beforeAll(async () => {
 			pathExistsMock.mockClear();
 			readFileMock.mockClear();
 			pathExistsMock.mockResolvedValue(false);
 			readFileMock.mockRejectedValue(new Error("File does not exist"));
-			await loadDeviceIndex();
+
+			configManager = new ConfigManager(new ZWaveLogContainer());
+			await configManager.loadDeviceIndex();
 		});
 
 		it("returns undefined instead of throwing", async () => {
-			await expect(lookupDevice(1, 2, 3)).resolves.toBeUndefined();
-			await expect(lookupDevice(1, 2, 5)).resolves.toBeUndefined();
+			await expect(
+				configManager.lookupDevice(1, 2, 3),
+			).resolves.toBeUndefined();
+			await expect(
+				configManager.lookupDevice(1, 2, 5),
+			).resolves.toBeUndefined();
 		});
 	});
 
 	describe("lookupDevice (with missing file)", () => {
+		let configManager: ConfigManager;
+
 		beforeAll(async () => {
 			pathExistsMock.mockClear();
 			readFileMock.mockClear();
@@ -45,17 +56,21 @@ describe("lib/config/Devices", () => {
 					]),
 				)
 				.mockRejectedValue(new Error("File does not exist"));
-			await loadDeviceIndex();
+
+			configManager = new ConfigManager(new ZWaveLogContainer());
+			await configManager.loadDeviceIndex();
 		});
 
 		it("returns undefined instead of throwing", async () => {
 			await expect(
-				lookupDevice(0x0abc, 0x0001, 0x0023),
+				configManager.lookupDevice(0x0abc, 0x0001, 0x0023),
 			).resolves.toBeUndefined();
 		});
 	});
 
 	describe("lookupManufacturer (with invalid file)", () => {
+		let configManager: ConfigManager;
+
 		beforeAll(async () => {
 			pathExistsMock.mockClear();
 			readFileMock.mockClear();
@@ -77,17 +92,21 @@ describe("lib/config/Devices", () => {
 					]),
 				)
 				.mockResolvedValueOnce(`{`);
-			await loadDeviceIndex();
+
+			configManager = new ConfigManager(new ZWaveLogContainer());
+			await configManager.loadDeviceIndex();
 		});
 
 		it("returns undefined instead of throwing", async () => {
 			await expect(
-				lookupDevice(0x0abc, 0x0001, 0x0023),
+				configManager.lookupDevice(0x0abc, 0x0001, 0x0023),
 			).resolves.toBeUndefined();
 		});
 	});
 
 	describe("lookupDevice()", () => {
+		let configManager: ConfigManager;
+
 		beforeAll(async () => {
 			readFileMock.mockReset();
 			readFileMock.mockResolvedValueOnce(
@@ -127,7 +146,9 @@ describe("lib/config/Devices", () => {
 			);
 			pathExistsMock.mockReset();
 			pathExistsMock.mockResolvedValueOnce(true);
-			await loadDeviceIndex();
+
+			configManager = new ConfigManager(new ZWaveLogContainer());
+			await configManager.loadDeviceIndex();
 		});
 
 		beforeEach(() => {
@@ -137,7 +158,7 @@ describe("lib/config/Devices", () => {
 
 		it("tests if the corresponding file exists", async () => {
 			pathExistsMock.mockResolvedValue(false);
-			await lookupDevice(0x0abc, 0x0001, 0x0023);
+			await configManager.lookupDevice(0x0abc, 0x0001, 0x0023);
 			expect(pathExistsMock).toBeCalledTimes(1);
 			const expectedPath = path.join(
 				configDir,
@@ -148,7 +169,7 @@ describe("lib/config/Devices", () => {
 
 		it("looks up the file with the correct firmware version", async () => {
 			pathExistsMock.mockResolvedValue(true);
-			await lookupDevice(0x0abc, 0x0001, 0x0034, "2.1");
+			await configManager.lookupDevice(0x0abc, 0x0001, 0x0034, "2.1");
 			expect(pathExistsMock).toBeCalledTimes(1);
 			const expectedPath = path.join(
 				configDir,
@@ -181,7 +202,12 @@ describe("lib/config/Devices", () => {
 }`,
 			);
 
-			const result = await lookupDevice(0x0abc, 0x0001, 0x0034, "2.1");
+			const result = await configManager.lookupDevice(
+				0x0abc,
+				0x0001,
+				0x0034,
+				"2.1",
+			);
 			expect(result).toBeDefined();
 			expect(result!.manufacturer).toBe("Test manufacturer");
 		});
@@ -194,7 +220,7 @@ describe("lib/config/Devices", () => {
 
 			// return undefined instead of throwing
 			await expect(
-				lookupDevice(0x0abc, 0x0001, 0x0034, "2.1"),
+				configManager.lookupDevice(0x0abc, 0x0001, 0x0034, "2.1"),
 			).resolves.toBeUndefined();
 		});
 	});

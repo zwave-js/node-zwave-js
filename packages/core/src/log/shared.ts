@@ -110,7 +110,7 @@ export class ZWaveLogContainer extends winston.Container {
 		forceConsole: false,
 	};
 
-	constructor(config: DeepPartial<LogConfig> | undefined) {
+	constructor(config?: DeepPartial<LogConfig>) {
 		super();
 		if (config !== undefined) {
 			this.updateConfiguration(config);
@@ -130,7 +130,9 @@ export class ZWaveLogContainer extends winston.Container {
 
 	public updateConfiguration(config: DeepPartial<LogConfig>): void {
 		this.logConfig = Object.assign(this.logConfig, config);
-		this.logConfig.transports = this.createLogTransports();
+		if (!this.logConfig.transports?.length) {
+			this.logConfig.transports = this.createLogTransports();
+		}
 
 		for (const transport of this.logConfig.transports) {
 			if (transport === this.consoleTransport) {

@@ -1,4 +1,3 @@
-import { loadDeviceIndex } from "@zwave-js/config";
 import { CommandClasses } from "@zwave-js/core";
 import type { Driver } from "../../driver/Driver";
 import { ZWaveNode } from "../../node/Node";
@@ -22,10 +21,11 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 	let fakeDriver: Driver;
 	let node2: ZWaveNode;
 
-	beforeAll(() => {
+	beforeAll(async () => {
 		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 		node2 = new ZWaveNode(2, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(node2.id, node2);
+		await fakeDriver.configManager.loadDeviceIndex();
 	});
 
 	afterAll(() => {
@@ -40,8 +40,6 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 			isSupported: true,
 			version: 1,
 		});
-
-		await loadDeviceIndex();
 	});
 
 	it("the set tilt command should serialize correctly", () => {

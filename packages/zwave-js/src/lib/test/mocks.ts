@@ -1,4 +1,5 @@
-import type { CommandClasses } from "@zwave-js/core";
+import { ConfigManager } from "@zwave-js/config";
+import { CommandClasses, ZWaveLogContainer } from "@zwave-js/core";
 import { getImplementedVersion } from "../commandclass/CommandClass";
 import { SendDataRequest } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
@@ -96,6 +97,23 @@ export function createEmptyMockDriver() {
 				controller: 3,
 			},
 		},
+		driverLog: new Proxy(
+			{},
+			{
+				get() {
+					return () => {};
+				},
+			},
+		),
+		controllerLog: new Proxy(
+			{},
+			{
+				get() {
+					return () => {};
+				},
+			},
+		),
+		configManager: new ConfigManager(new ZWaveLogContainer()),
 	};
 	ret.sendCommand.mockImplementation(async (command, options) => {
 		const msg = new SendDataRequest((ret as unknown) as Driver, {

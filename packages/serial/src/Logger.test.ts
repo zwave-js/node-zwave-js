@@ -1,30 +1,28 @@
-import { restoreSilence } from "@zwave-js/core";
+import { ZWaveLogContainer } from "@zwave-js/core";
 import { assertMessage, SpyTransport } from "@zwave-js/testing";
 import colors from "ansi-colors";
 import { pseudoRandomBytes } from "crypto";
-import winston from "winston";
-import log from "./Logger";
+import { SerialLogger } from "./Logger";
 
 describe("lib/log/Serial =>", () => {
-	let serialLogger: winston.Logger;
+	let serialLogger: SerialLogger;
 	let spyTransport: SpyTransport;
-	const wasSilenced = true;
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
-		// the loggers are lazily created, so force loading by logging once
-		log.serial.ACK("none");
-		serialLogger = winston.loggers.get("serial");
 		spyTransport = new SpyTransport();
+		serialLogger = new SerialLogger(
+			new ZWaveLogContainer({
+				transports: [spyTransport],
+			}),
+		);
 		// Uncomment this to debug the log outputs manually
 		// wasSilenced = unsilence(serialLogger);
-		serialLogger.add(spyTransport);
 	});
 
 	// Don't spam the console when performing the other tests not related to logging
 	afterAll(() => {
-		serialLogger.remove(spyTransport);
-		restoreSilence(serialLogger, wasSilenced);
+		serialLogger.container.updateConfiguration({ enabled: false });
 	});
 
 	beforeEach(() => {
@@ -33,7 +31,7 @@ describe("lib/log/Serial =>", () => {
 
 	describe("logs single-byte messages correctly", () => {
 		it("inbound ACK", () => {
-			log.serial.ACK("inbound");
+			serialLogger.ACK("inbound");
 			const alignRight = " ".repeat(80 - 14);
 			assertMessage(spyTransport, {
 				message: `« [ACK] ${alignRight}(0x06)`,
@@ -41,7 +39,7 @@ describe("lib/log/Serial =>", () => {
 		});
 
 		it("outbound ACK", () => {
-			log.serial.ACK("outbound");
+			serialLogger.ACK("outbound");
 			const alignRight = " ".repeat(80 - 14);
 			assertMessage(spyTransport, {
 				message: `» [ACK] ${alignRight}(0x06)`,
@@ -49,7 +47,7 @@ describe("lib/log/Serial =>", () => {
 		});
 
 		it("inbound NAK", () => {
-			log.serial.NAK("inbound");
+			serialLogger.NAK("inbound");
 			const alignRight = " ".repeat(80 - 14);
 			assertMessage(spyTransport, {
 				message: `« [NAK] ${alignRight}(0x15)`,
@@ -57,7 +55,7 @@ describe("lib/log/Serial =>", () => {
 		});
 
 		it("outbound NAK", () => {
-			log.serial.NAK("outbound");
+			serialLogger.NAK("outbound");
 			const alignRight = " ".repeat(80 - 14);
 			assertMessage(spyTransport, {
 				message: `» [NAK] ${alignRight}(0x15)`,
@@ -65,7 +63,7 @@ describe("lib/log/Serial =>", () => {
 		});
 
 		it("inbound CAN", () => {
-			log.serial.CAN("inbound");
+			serialLogger.CAN("inbound");
 			const alignRight = " ".repeat(80 - 14);
 			assertMessage(spyTransport, {
 				message: `« [CAN] ${alignRight}(0x18)`,
@@ -73,7 +71,7 @@ describe("lib/log/Serial =>", () => {
 		});
 
 		it("outbound CAN", () => {
-			log.serial.CAN("outbound");
+			serialLogger.CAN("outbound");
 			const alignRight = " ".repeat(80 - 14);
 			assertMessage(spyTransport, {
 				message: `» [CAN] ${alignRight}(0x18)`,
@@ -84,7 +82,7 @@ describe("lib/log/Serial =>", () => {
 	describe("colors single-byte messages like tags", () => {
 		for (const msg of ["ACK", "NAK", "CAN"] as const) {
 			it(msg, () => {
-				log.serial[msg]("inbound");
+				serialLogger[msg]("inbound");
 
 				const expected1 = colors.blue(
 					colors.bgBlue("[") +
@@ -101,7 +99,7 @@ describe("lib/log/Serial =>", () => {
 
 	describe("logs raw data correctly", () => {
 		it("short buffer, inbound", () => {
-			log.serial.data("inbound", Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]));
+			serialLogger.data("inbound", Buffer.from([1, 2, 3, 4, 5, 6, 7, 8]));
 			const alignRight = " ".repeat(80 - 30);
 			assertMessage(spyTransport, {
 				message: `« 0x0102030405060708 ${alignRight}(8 bytes)`,
@@ -109,7 +107,7 @@ describe("lib/log/Serial =>", () => {
 		});
 
 		it("short buffer, outbound", () => {
-			log.serial.data("outbound", Buffer.from([0x55, 4, 3, 2, 1]));
+			serialLogger.data("outbound", Buffer.from([0x55, 4, 3, 2, 1]));
 			const alignRight = " ".repeat(80 - 24);
 			assertMessage(spyTransport, {
 				message: `» 0x5504030201 ${alignRight}(5 bytes)`,
@@ -122,7 +120,7 @@ describe("lib/log/Serial =>", () => {
 			const hexBuffer = `0x${expected.toString("hex")}`;
 			const expectedLine1 = hexBuffer.slice(0, 67);
 			const expectedLine2 = hexBuffer.slice(67);
-			log.serial.data("inbound", expected);
+			serialLogger.data("inbound", expected);
 			assertMessage(spyTransport, {
 				message: `« ${expectedLine1} (39 bytes)
   ${expectedLine2}`,
@@ -137,7 +135,7 @@ describe("lib/log/Serial =>", () => {
 			const expectedLine1 = hexBuffer.slice(0, 67);
 			const expectedLine2 = hexBuffer.slice(67, 67 + 78);
 			const expectedLine3 = hexBuffer.slice(67 + 78);
-			log.serial.data("inbound", expected);
+			serialLogger.data("inbound", expected);
 			assertMessage(spyTransport, {
 				message: `« ${expectedLine1} (72 bytes)
   ${expectedLine2}
@@ -148,7 +146,7 @@ describe("lib/log/Serial =>", () => {
 
 	// 	describe("logs the receive buffer correctly", () => {
 	// 		it("for short buffers", () => {
-	// 			log.serial.receiveBuffer(Buffer.from([0, 8, 0x15]), true);
+	// 			serialLogger.receiveBuffer(Buffer.from([0, 8, 0x15]), true);
 	// 			const alignRight = " ".repeat(80 - 30);
 	// 			assertMessage(spyTransport, {
 	// 				message: `  Buffer := 0x000815 ${alignRight}(3 bytes)`,
@@ -159,7 +157,7 @@ describe("lib/log/Serial =>", () => {
 	// 			// max length without line breaks is 80, excluding prefixes and postfixes
 	// 			// this means we have 27 bytes to display (0x plus 2*27 chars)
 	// 			const expected = pseudoRandomBytes(27);
-	// 			log.serial.receiveBuffer(expected, true);
+	// 			serialLogger.receiveBuffer(expected, true);
 	// 			assertMessage(spyTransport, {
 	// 				message: `  Buffer := 0x${expected.toString(
 	// 					"hex",
@@ -168,7 +166,7 @@ describe("lib/log/Serial =>", () => {
 	// 		});
 
 	// 		it("tags incomplete buffers", () => {
-	// 			log.serial.receiveBuffer(Buffer.from([0, 8, 0x15]), false);
+	// 			serialLogger.receiveBuffer(Buffer.from([0, 8, 0x15]), false);
 	// 			const alignRight = " ".repeat(80 - 43);
 	// 			assertMessage(spyTransport, {
 	// 				message: `  [incomplete] Buffer := 0x000815 ${alignRight}(3 bytes)`,
@@ -181,7 +179,7 @@ describe("lib/log/Serial =>", () => {
 	// 			let expectedLine1 = hexBuffer.slice(0, 57);
 	// 			let expectedLine2 = hexBuffer.slice(57);
 
-	// 			log.serial.receiveBuffer(expected, true);
+	// 			serialLogger.receiveBuffer(expected, true);
 	// 			assertMessage(spyTransport, {
 	// 				message: `  Buffer := ${expectedLine1} (28 bytes)
 	//   ${expectedLine2}`,
@@ -191,7 +189,7 @@ describe("lib/log/Serial =>", () => {
 	// 			hexBuffer = `0x${expected.toString("hex")}`;
 	// 			expectedLine1 = hexBuffer.slice(0, 57);
 	// 			expectedLine2 = hexBuffer.slice(57);
-	// 			log.serial.receiveBuffer(expected, true);
+	// 			serialLogger.receiveBuffer(expected, true);
 	// 			assertMessage(spyTransport, {
 	// 				message: `  Buffer := ${expectedLine1} (38 bytes)
 	//   ${expectedLine2}`,
@@ -202,14 +200,14 @@ describe("lib/log/Serial =>", () => {
 
 	describe("logs simple messages correctly", () => {
 		it("short ones", () => {
-			log.serial.message("Test");
+			serialLogger.message("Test");
 			assertMessage(spyTransport, {
 				message: `  Test`,
 			});
 		});
 
 		it("long ones", () => {
-			log.serial.message(
+			serialLogger.message(
 				"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			);
 			assertMessage(spyTransport, {

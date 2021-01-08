@@ -1,4 +1,5 @@
 import MockBinding from "@serialport/binding-mock";
+import { ZWaveLogContainer } from "@zwave-js/core";
 import { wait } from "alcalzone-shared/async";
 import SerialPort from "serialport";
 import { PassThrough } from "stream";
@@ -18,7 +19,12 @@ async function createAndOpenMockedZWaveSerialPort(
 		record: true,
 		readyData: Buffer.from([]),
 	});
-	const port = new ZWaveSerialPort("/dev/ZWaveTest");
+	const port = new ZWaveSerialPort(
+		"/dev/ZWaveTest",
+		new ZWaveLogContainer({
+			enabled: false,
+		}),
+	);
 	const binding = (port["serial"] as SerialPort).binding as MockBinding;
 	if (open) await port.open();
 	return { port, binding };

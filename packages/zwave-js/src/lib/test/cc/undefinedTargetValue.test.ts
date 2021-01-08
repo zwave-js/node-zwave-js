@@ -14,7 +14,6 @@ import { createAndStartDriver } from "../utils";
 
 describe("regression tests", () => {
 	let driver: Driver;
-	process.env.LOGLEVEL = "debug";
 
 	beforeEach(async () => {
 		({ driver } = await createAndStartDriver());
