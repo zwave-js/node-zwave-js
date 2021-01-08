@@ -25,8 +25,8 @@ const DRIVER_LOGLEVEL = "verbose";
 const SENDQUEUE_LOGLEVEL = "debug";
 
 export class DriverLogger extends LogWrapper {
-	constructor(loggers: ZwaveLoggers, logLabel: string) {
-		super(loggers, logLabel);
+	constructor(loggers: ZwaveLoggers) {
+		super(loggers, DRIVER_LABEL);
 	}
 
 	private _isDriverLogVisible: boolean | undefined;

@@ -85,8 +85,8 @@ import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
-import { ControllerLogger, CONTROLLER_LABEL } from "../log/Controller";
-import { DriverLogger, DRIVER_LABEL } from "../log/Driver";
+import { ControllerLogger } from "../log/Controller";
+import { DriverLogger } from "../log/Driver";
 import {
 	FunctionType,
 	MessagePriority,
@@ -469,11 +469,8 @@ export class Driver extends EventEmitter {
 
 		this.loggers = new ZwaveLoggers(options?.logConfig);
 
-		this.driverLog = new DriverLogger(this.loggers, DRIVER_LABEL);
-		this.controllerLog = new ControllerLogger(
-			this.loggers,
-			CONTROLLER_LABEL,
-		);
+		this.driverLog = new DriverLogger(this.loggers);
+		this.controllerLog = new ControllerLogger(this.loggers);
 
 		// merge given options with defaults
 		this.options = applyDefaultOptions(

@@ -30,8 +30,8 @@ interface LogNodeOptions {
 export type LogValueArgs<T> = T & { nodeId: number; internal?: boolean };
 
 export class ControllerLogger extends LogWrapper {
-	constructor(loggers: ZwaveLoggers, logLabel: string) {
-		super(loggers, logLabel);
+	constructor(loggers: ZwaveLoggers) {
+		super(loggers, CONTROLLER_LABEL);
 	}
 
 	private _isValueLogVisible: boolean | undefined;
