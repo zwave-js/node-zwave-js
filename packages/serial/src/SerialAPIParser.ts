@@ -1,5 +1,6 @@
+import type { ZwaveLoggers } from "@zwave-js/core";
 import { Transform, TransformCallback } from "stream";
-import log from "./Logger";
+import { SerialLogger } from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 
 /**
@@ -16,9 +17,12 @@ function getMessageLength(data: Buffer): number {
 }
 
 export class SerialAPIParser extends Transform {
-	constructor() {
+	public logger: SerialLogger;
+
+	constructor(loggers: ZwaveLoggers) {
 		// We read byte streams but emit messages
 		super({ readableObjectMode: true });
+		this.logger = new SerialLogger(loggers);
 	}
 
 	private receiveBuffer = Buffer.allocUnsafe(0);
@@ -35,17 +39,17 @@ export class SerialAPIParser extends Transform {
 				switch (this.receiveBuffer[0]) {
 					// Emit the single-byte messages directly
 					case MessageHeaders.ACK: {
-						log.serial.ACK("inbound");
+						this.logger.ACK("inbound");
 						this.push(MessageHeaders.ACK);
 						break;
 					}
 					case MessageHeaders.NAK: {
-						log.serial.NAK("inbound");
+						this.logger.NAK("inbound");
 						this.push(MessageHeaders.NAK);
 						break;
 					}
 					case MessageHeaders.CAN: {
-						log.serial.CAN("inbound");
+						this.logger.CAN("inbound");
 						this.push(MessageHeaders.CAN);
 						break;
 					}
@@ -70,7 +74,7 @@ export class SerialAPIParser extends Transform {
 				const msg = this.receiveBuffer.slice(0, msgLength);
 				this.receiveBuffer = skipBytes(this.receiveBuffer, msgLength);
 
-				log.serial.data("inbound", msg);
+				this.logger.data("inbound", msg);
 				this.push(msg);
 			}
 		}

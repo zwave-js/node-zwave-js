@@ -8,14 +8,13 @@ import {
 	StateMachine,
 } from "xstate";
 import { send } from "xstate/lib/actions";
-import log from "../log";
 import { MessageType } from "../message/Constants";
 import type { Message } from "../message/Message";
 import {
 	isMultiStageCallback,
 	isSuccessIndicator,
 } from "../message/SuccessIndicator";
-import type { ZWaveOptions } from "./Driver";
+import type { Driver, ZWaveOptions } from "./Driver";
 import {
 	respondUnsolicited,
 	ServiceImplementations,
@@ -47,6 +46,7 @@ export type SerialAPICommandError =
 	| "callback NOK";
 
 export interface SerialAPICommandContext {
+	driver: Driver;
 	msg: Message;
 	data: Buffer;
 	attempts: number;
@@ -103,7 +103,7 @@ const forwardMessage = send((_, evt: SerialAPICommandEvent) => {
 });
 
 function logOutgoingMessage(ctx: SerialAPICommandContext) {
-	log.driver.logMessage(ctx.msg, {
+	ctx.driver.driverLog.logMessage(ctx.msg, {
 		direction: "outbound",
 	});
 	if (process.env.NODE_ENV !== "test") {
@@ -152,6 +152,7 @@ export type SerialAPICommandMachineParams = {
 };
 
 export function getSerialAPICommandMachineConfig(
+	driver: Driver,
 	message: Message,
 	{ timestamp }: Pick<ServiceImplementations, "timestamp">,
 	attemptsConfig: SerialAPICommandMachineParams["attempts"],
@@ -160,6 +161,7 @@ export function getSerialAPICommandMachineConfig(
 		id: "serialAPICommand",
 		initial: "sending",
 		context: {
+			driver: driver,
 			msg: message,
 			data: message.serialize(),
 			attempts: 0,
@@ -391,12 +393,14 @@ export function getSerialAPICommandMachineOptions(
 }
 
 export function createSerialAPICommandMachine(
+	driver: Driver,
 	message: Message,
 	implementations: ServiceImplementations,
 	params: SerialAPICommandMachineParams,
 ): SerialAPICommandMachine {
 	return Machine(
 		getSerialAPICommandMachineConfig(
+			driver,
 			message,
 			implementations,
 			params.attempts,

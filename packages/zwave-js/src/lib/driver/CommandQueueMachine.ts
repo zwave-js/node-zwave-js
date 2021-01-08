@@ -12,8 +12,8 @@ import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
-import log from "../log";
 import type { Message } from "../message/Message";
+import type { Driver } from "./Driver";
 import {
 	createSerialAPICommandMachine,
 	SerialAPICommandDoneData,
@@ -117,6 +117,7 @@ const notifyError = sendParent<CommandQueueContext, any, CommandQueueEvent>(
 );
 
 export function createCommandQueueMachine(
+	driver: Driver,
 	implementations: ServiceImplementations,
 	params: SerialAPICommandMachineParams,
 ): CommandQueueMachine {
@@ -228,12 +229,13 @@ export function createCommandQueueMachine(
 					// wrap it in a rejected promise, so xstate can handle it
 					try {
 						return createSerialAPICommandMachine(
+							driver,
 							ctx.currentTransaction!.message,
 							implementations,
 							params,
 						);
 					} catch (e) {
-						log.driver.print(
+						driver.driverLog.print(
 							`Unexpected error during SerialAPI command: ${e}`,
 							"error",
 						);
@@ -242,6 +244,7 @@ export function createCommandQueueMachine(
 				},
 				executeSendDataAbort: (_) =>
 					createSerialAPICommandMachine(
+						driver,
 						implementations.createSendDataAbort(),
 						implementations,
 						params,

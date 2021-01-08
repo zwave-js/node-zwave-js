@@ -490,6 +490,7 @@ export class Driver extends EventEmitter {
 
 		// And initialize but don't start the send thread machine
 		const sendThreadMachine = createSendThreadMachine(
+			this,
 			{
 				sendData: this.writeSerial.bind(this),
 				createSendDataAbort: () => new SendDataAbort(this),
@@ -613,13 +614,16 @@ export class Driver extends EventEmitter {
 		if (this.port.startsWith("tcp://")) {
 			const url = new URL(this.port);
 			this.driverLog.print(`opening serial port ${this.port}`);
-			this.serial = new ZWaveSocket({
-				host: url.hostname,
-				port: parseInt(url.port),
-			});
+			this.serial = new ZWaveSocket(
+				{
+					host: url.hostname,
+					port: parseInt(url.port),
+				},
+				this.loggers,
+			);
 		} else {
 			this.driverLog.print(`opening serial port ${this.port}`);
-			this.serial = new ZWaveSerialPort(this.port);
+			this.serial = new ZWaveSerialPort(this.port, this.loggers);
 		}
 		this.serial
 			.on("data", this.serialport_onData.bind(this))

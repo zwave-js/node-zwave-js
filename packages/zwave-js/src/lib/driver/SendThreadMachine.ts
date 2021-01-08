@@ -27,7 +27,7 @@ import {
 	CommandQueueInterpreter,
 	createCommandQueueMachine,
 } from "./CommandQueueMachine";
-import type { ZWaveOptions } from "./Driver";
+import type { Driver, ZWaveOptions } from "./Driver";
 import type {
 	SerialAPICommandDoneData,
 	SerialAPICommandMachineParams,
@@ -406,6 +406,7 @@ function createMessageDroppedUnexpectedError(original: Error): ZWaveError {
 }
 
 export function createSendThreadMachine(
+	driver: Driver,
 	implementations: ServiceImplementations,
 	params: SendThreadMachineParams,
 ): SendThreadMachine {
@@ -728,6 +729,7 @@ export function createSendThreadMachine(
 						commandQueue: () =>
 							spawn(
 								createCommandQueueMachine(
+									driver,
 									implementations,
 									params,
 								),

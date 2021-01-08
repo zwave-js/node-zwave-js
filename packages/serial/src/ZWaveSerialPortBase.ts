@@ -1,7 +1,7 @@
+import type { ZwaveLoggers } from "@zwave-js/core";
 import { Mixin } from "@zwave-js/shared";
 import { EventEmitter } from "events";
 import { Duplex, PassThrough, Readable, Writable } from "stream";
-import log from "./Logger";
 import { MessageHeaders } from "./MessageHeaders";
 import { SerialAPIParser } from "./SerialAPIParser";
 
@@ -76,7 +76,10 @@ export class ZWaveSerialPortBase extends PassThrough {
 	// Allow strongly-typed async iteration
 	public declare [Symbol.asyncIterator]: () => AsyncIterableIterator<ZWaveSerialChunk>;
 
-	constructor(private implementation: ZWaveSerialPortImplementation) {
+	constructor(
+		private implementation: ZWaveSerialPortImplementation,
+		private loggers: ZwaveLoggers,
+	) {
 		super({ readableObjectMode: true });
 
 		// Route the data event handlers to the parser and handle everything else ourselves
@@ -106,7 +109,7 @@ export class ZWaveSerialPortBase extends PassThrough {
 		});
 
 		// Hook up a parser to the serial port
-		this.parser = new SerialAPIParser();
+		this.parser = new SerialAPIParser(loggers);
 		this.serial.pipe(this.parser);
 		// When the wrapper is piped to a stream, pipe the parser instead
 		this.pipe = this.parser.pipe.bind(this.parser);
@@ -151,17 +154,17 @@ export class ZWaveSerialPortBase extends PassThrough {
 		if (data.length === 1) {
 			switch (data[0]) {
 				case MessageHeaders.ACK:
-					log.serial.ACK("outbound");
+					this.parser.logger.ACK("outbound");
 					break;
 				case MessageHeaders.CAN:
-					log.serial.CAN("outbound");
+					this.parser.logger.CAN("outbound");
 					break;
 				case MessageHeaders.NAK:
-					log.serial.NAK("outbound");
+					this.parser.logger.NAK("outbound");
 					break;
 			}
 		} else {
-			log.serial.data("outbound", data);
+			this.parser.logger.data("outbound", data);
 		}
 
 		return new Promise((resolve, reject) => {
