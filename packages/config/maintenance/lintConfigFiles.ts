@@ -5,28 +5,28 @@ import { green, red, white } from "ansi-colors";
 import { readFile } from "fs-extra";
 import * as path from "path";
 import { reportProblem } from "../../../maintenance/tools";
-import { DeviceConfig, loadDeviceIndexInternal } from "../src/Devices";
-import { loadIndicatorsInternal } from "../src/Indicators";
-import { loadManufacturersInternal } from "../src/Manufacturers";
-import { loadNotificationsInternal } from "../src/Notifications";
-import { loadNamedScales, loadNamedScalesInternal } from "../src/Scales";
-import { loadSensorTypesInternal } from "../src/SensorTypes";
+import { ConfigManager } from "../src/ConfigManager";
+import { DeviceConfig } from "../src/Devices";
 import { configDir, getDeviceEntryPredicate } from "../src/utils";
 
 /* wotan-disable no-useless-predicate */
+/* wotan-disable no-restricted-property-access */
+
+const configManager = new ConfigManager();
 
 async function lintNotifications(): Promise<void> {
-	await loadNotificationsInternal();
+	await configManager.loadNotifications();
 	// TODO: Validate that all contents are semantically correct
 }
 
 async function lintManufacturers(): Promise<void> {
-	await loadManufacturersInternal();
+	await configManager.loadManufacturers();
 	// TODO: Validate that the file is semantically correct
 }
 
 async function lintIndicators(): Promise<void> {
-	const { properties } = await loadIndicatorsInternal();
+	await configManager.loadIndicators();
+	const properties = configManager["indicatorProperties"]!;
 
 	if (!(properties.get(1)?.label === "Multilevel")) {
 		throw new Error(
@@ -39,7 +39,8 @@ async function lintIndicators(): Promise<void> {
 }
 
 async function lintDevices(): Promise<void> {
-	const index = (await loadDeviceIndexInternal())!;
+	await configManager.loadDeviceIndex();
+	const index = configManager.getIndex()!;
 	// Device config files are lazy-loaded, so we need to parse them all
 	const uniqueFiles = distinct(index.map((e) => e.filename)).sort();
 
@@ -509,7 +510,8 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 }
 
 async function lintNamedScales(): Promise<void> {
-	const definitions = await loadNamedScalesInternal();
+	await configManager.loadNamedScales();
+	const definitions = configManager["namedScales"]!;
 
 	if (!definitions.has("temperature")) {
 		throw new Error(`Named scale "temperature" is missing!`);
@@ -518,9 +520,9 @@ async function lintNamedScales(): Promise<void> {
 
 async function lintSensorTypes(): Promise<void> {
 	// The named scales must be loaded here so the parsing can work
-	await loadNamedScales();
+	await configManager.loadNamedScales();
 
-	await loadSensorTypesInternal();
+	await configManager.loadSensorTypes();
 	// TODO: Validate that all contents are semantically correct
 }
 

@@ -1,5 +1,4 @@
-import type { ZWaveLogContainer } from "@zwave-js/core";
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import { pathExists, readFile } from "fs-extra";
 import path from "path";
@@ -55,7 +54,11 @@ import {
 import { configDir, formatId, getDeviceEntryPredicate } from "./utils";
 
 export class ConfigManager {
-	public constructor(container: ZWaveLogContainer) {
+	public constructor(container?: ZWaveLogContainer) {
+		// Make it easier to use this in tests and scripts
+		if (!container) {
+			container = new ZWaveLogContainer({ enabled: false });
+		}
 		this.logger = new ConfigLogger(container);
 	}
 

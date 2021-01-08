@@ -237,8 +237,10 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 						const logMessage =
 							"received supported sensor types:\n" +
 							sensorTypes
-								.map(
-									this.driver.configManager.getSensorTypeName,
+								.map((t) =>
+									this.driver.configManager.getSensorTypeName(
+										t,
+									),
 								)
 								.map((name) => `· ${name}`)
 								.join("\n");

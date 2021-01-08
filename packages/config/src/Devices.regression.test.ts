@@ -1,4 +1,3 @@
-import { ZWaveLogContainer } from "@zwave-js/core";
 import { ConfigManager } from "./ConfigManager";
 
 describe("lib/config/Devices", () => {
@@ -6,7 +5,7 @@ describe("lib/config/Devices", () => {
 		let configManager: ConfigManager;
 
 		beforeAll(async () => {
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadDeviceIndex();
 		});
 

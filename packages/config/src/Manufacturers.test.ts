@@ -1,4 +1,3 @@
-import { ZWaveLogContainer } from "@zwave-js/core";
 import fsExtra from "fs-extra";
 import { ConfigManager } from "./ConfigManager";
 
@@ -16,7 +15,7 @@ describe("lib/config/Manufacturers", () => {
 			pathExistsMock.mockResolvedValue(false);
 			readFileMock.mockRejectedValue(new Error("File does not exist"));
 
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadManufacturers();
 		});
 
@@ -39,7 +38,7 @@ describe("lib/config/Manufacturers", () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(`{"0x000e": `);
 
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadManufacturers();
 		});
 
@@ -63,7 +62,7 @@ describe("lib/config/Manufacturers", () => {
 				}),
 			);
 
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadManufacturers();
 		});
 

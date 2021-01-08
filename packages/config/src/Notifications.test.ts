@@ -1,4 +1,3 @@
-import { ZWaveLogContainer } from "@zwave-js/core";
 import fsExtra from "fs-extra";
 import { ConfigManager } from "./ConfigManager";
 import type { Notification } from "./Notifications";
@@ -45,7 +44,7 @@ describe("lib/config/Notifications", () => {
 			pathExistsMock.mockResolvedValue(false);
 			readFileMock.mockRejectedValue(new Error("File does not exist"));
 
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadNotifications();
 		});
 
@@ -68,7 +67,7 @@ describe("lib/config/Notifications", () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(`{"0x01": `);
 
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadNotifications();
 		});
 
@@ -88,7 +87,7 @@ describe("lib/config/Notifications", () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(JSON.stringify(dummyNotifications));
 
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadNotifications();
 		});
 
@@ -117,7 +116,7 @@ describe("lib/config/Notifications", () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(JSON.stringify(dummyNotifications));
 
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadNotifications();
 		});
 

@@ -1,4 +1,3 @@
-import { ZWaveLogContainer } from "@zwave-js/core";
 import fsExtra from "fs-extra";
 import { ConfigManager } from "./ConfigManager";
 
@@ -50,7 +49,7 @@ describe("lib/config/SensorTypes", () => {
 			pathExistsMock.mockResolvedValue(false);
 			readFileMock.mockRejectedValue(new Error("File does not exist"));
 
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadSensorTypes();
 		});
 		it("does not throw", async () => {
@@ -72,7 +71,7 @@ describe("lib/config/SensorTypes", () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(`{"0x01": `);
 
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadSensorTypes();
 		});
 
@@ -97,7 +96,7 @@ describe("lib/config/SensorTypes", () => {
 					return Promise.resolve(JSON.stringify(dummyScales));
 			});
 
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadNamedScales();
 			await configManager.loadSensorTypes();
 		});
@@ -128,7 +127,7 @@ describe("lib/config/SensorTypes", () => {
 					return Promise.resolve(JSON.stringify(dummyScales));
 			});
 
-			configManager = new ConfigManager(new ZWaveLogContainer());
+			configManager = new ConfigManager();
 			await configManager.loadNamedScales();
 			await configManager.loadSensorTypes();
 		});

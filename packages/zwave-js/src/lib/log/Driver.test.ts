@@ -52,7 +52,6 @@ function createTransaction(
 describe("lib/log/Driver =>", () => {
 	let driverLogger: DriverLogger;
 	let spyTransport: SpyTransport;
-	const wasSilenced = true;
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
