@@ -5,6 +5,14 @@ on:
     types: [completed]
 
 jobs:
+  debug:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
   # Offer help to the contributor to fix lint errors
   fix-lint-comment:
     if: |
