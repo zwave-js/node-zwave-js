@@ -35,7 +35,7 @@ What are the node IDs?
 **Last Known Working Configuration**
 - [ ] New device
 - [ ] Previously working device (node-zwave-js)
-    - Which version/docker image?
+    - Which library version/docker image/adapter version?
     - Have you made any recent configuration changes to the device? Describe.
 
 - [ ] Previously working device (other platform)
@@ -43,15 +43,16 @@ What are the node IDs?
     - Have you made any recent configuration changes to the device? Describe.
     
 **Installation information**
-How did you install node-zwave-js?
+How did you install `node-zwave-js`?
 - [ ] Zwavejs2mqtt (latest) docker image
 - [ ] Zwavejs2mqtt (dev) docker image
+- [ ] ioBroker.zwave2 adapter
 - [ ] Pkg
 - [ ] Manual docker build
-    - Against which branch of node-zwave-js?
-    - With which branch of zwavejs2mqtt?
+    - Against which branch of `node-zwave-js`?
+    - With which branch of `zwavejs2mqtt`?
 - [ ] Other (describe)
-- [ ] Manually built (git clone - npm install - npm run build ) 
+- [ ] Manually built (`git clone` - `yarn install` - `yarn run build:full`) 
 
 **To Reproduce**
 Steps to reproduce the behavior:
