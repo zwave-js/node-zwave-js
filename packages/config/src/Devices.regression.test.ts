@@ -7,7 +7,7 @@ describe("lib/config/Devices", () => {
 		beforeAll(async () => {
 			configManager = new ConfigManager();
 			await configManager.loadDeviceIndex();
-		});
+		}, 60000);
 
 		it("Z-TRM3 with commandClasses.add compat should work", async () => {
 			const config = await configManager.lookupDevice(
