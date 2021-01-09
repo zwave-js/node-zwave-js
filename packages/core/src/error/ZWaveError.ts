@@ -126,7 +126,7 @@ export enum ZWaveErrorCodes {
 }
 
 /**
- * Errors thrown in this libary are of this type. The `code` property identifies what went wrong.
+ * Errors thrown in this library are of this type. The `code` property identifies what went wrong.
  */
 export class ZWaveError extends Error {
 	public constructor(

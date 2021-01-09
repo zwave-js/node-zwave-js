@@ -394,7 +394,7 @@ export class VersionCCReport extends VersionCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnly,
-		label: "Libary type",
+		label: "Library type",
 	})
 	public get libraryType(): ZWaveLibraryTypes {
 		return this._libraryType;
