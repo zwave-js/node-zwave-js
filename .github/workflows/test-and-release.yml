@@ -97,7 +97,7 @@ jobs:
           packages/*/*.tsbuildinfo
           packages/*/*.js
         # When dependencies change, we likely have to recompile. TS manages the sources itself
-        key: ts-${{ hashFiles('**/yarn.lock') }}
+        key: ts-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('packages/*/src/**/*.ts') }}
 
     - name: Compile TypeScript code
       run: yarn run build
@@ -153,7 +153,7 @@ jobs:
           packages/*/*.tsbuildinfo
           packages/*/*.js
         # When dependencies change, we likely have to recompile. TS manages the sources itself
-        key: ts-${{ hashFiles('**/yarn.lock') }}
+        key: ts-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('packages/*/src/**/*.ts') }}
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
@@ -257,7 +257,7 @@ jobs:
           packages/*/*.tsbuildinfo
           packages/*/*.js
         # When dependencies change, we likely have to recompile. TS manages the sources itself
-        key: ts-${{ hashFiles('**/yarn.lock') }}
+        key: ts-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('packages/*/src/**/*.ts') }}
 
     # Compilation is necessary, or the tests won't run
     - name: Compile TypeScript code
