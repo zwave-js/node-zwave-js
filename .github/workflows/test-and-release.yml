@@ -138,7 +138,9 @@ jobs:
       run: yarn run build
 
     - name: Run component tests
-      run: yarn run test:ci
+      run: |
+        npx lerna run generateDeviceIndex
+        yarn run test:ci
       env:
         CI: true
 
@@ -231,7 +233,9 @@ jobs:
       run: yarn run build
 
     - name: Generate coverage
-      run: yarn run coverage:ci
+      run: |
+        npx lerna run generateDeviceIndex
+        yarn run coverage:ci
       env:
         CI: true
     - name: Upload to Coveralls

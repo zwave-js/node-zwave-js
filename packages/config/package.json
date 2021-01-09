@@ -45,6 +45,7 @@
     "build": "tsc -b tsconfig.build.json",
     "clean": "yarn run build -- --clean",
     "watch": "yarn run build -- --watch --pretty",
-    "lint:config": "gulp lintConfigFiles"
+    "lint:config": "gulp lintConfigFiles",
+    "generateDeviceIndex": "gulp generateDeviceIndex"
   }
 }
