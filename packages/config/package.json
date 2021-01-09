@@ -45,7 +45,6 @@
     "build": "tsc -b tsconfig.build.json",
     "clean": "yarn run build -- --clean",
     "watch": "yarn run build -- --watch --pretty",
-    "lint:config": "gulp lintConfigFiles",
-    "postinstall": "node build/postinstall.js"
+    "lint:config": "gulp lintConfigFiles"
   }
 }
