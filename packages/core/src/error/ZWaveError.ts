@@ -56,6 +56,7 @@ export enum ZWaveErrorCodes {
 	Argument_Invalid,
 
 	Config_Invalid,
+	Config_NotFound,
 
 	// Here follow message specific errors
 

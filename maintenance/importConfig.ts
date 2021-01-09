@@ -10,7 +10,6 @@ process.on("unhandledRejection", (r) => {
 
 import { composeObject } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { red } from "ansi-colors";
 import { AssertionError, ok } from "assert";
 import axios from "axios";
 import * as child from "child_process";
@@ -21,16 +20,7 @@ import { compare } from "semver";
 import { promisify } from "util";
 import xml2json from "xml2json";
 import yargs from "yargs";
-import {
-	DeviceConfig,
-	DeviceConfigIndexEntry,
-	getIndex,
-	loadDeviceIndex,
-	loadManufacturers,
-	lookupManufacturer,
-	setManufacturer,
-	writeManufacturersToJson,
-} from "../packages/config/src";
+import { ConfigManager, DeviceConfigIndexEntry } from "../packages/config/src";
 import { formatId, padVersion } from "../packages/config/src/utils";
 import { CommandClasses, getIntegerLimits } from "../packages/core/src";
 import { num2hex } from "../packages/shared/src";
@@ -71,12 +61,6 @@ const program = yargs
 		type: "boolean",
 		default: false,
 	})
-	.option("index", {
-		alias: "i",
-		description: "Update devices index.json by reading devices config",
-		type: "boolean",
-		default: false,
-	})
 	.option("devices", {
 		alias: "d",
 		description: "Parse and update devices configurations",
@@ -84,18 +68,17 @@ const program = yargs
 		default: false,
 	})
 	.example(
-		"import -s ozw -Dmid",
+		"import -s ozw -Dmd",
 		"Download and parse OpenZwave db (manufacturers, devices) and update the index",
 	)
 	.example(
-		"import -s oh -Dmid",
+		"import -s oh -Dmd",
 		"Download and parse openhab db (manufacturers, devices) and update the index",
 	)
 	.example(
 		"import -s oh -D --ids 1234 5678",
 		"Download openhab devices with ids `1234` and `5678`",
 	)
-	.example("import -i", "Update devices index")
 	.help()
 	.version(false)
 	.alias("h", "help").argv;
@@ -107,6 +90,8 @@ const processedDir = path.join(
 	"config/devices",
 );
 
+const configManager = new ConfigManager();
+
 const ozwTempDir = path.join(__dirname, "../.tmpozw");
 const ozwTarName = "openzwave.tar.gz";
 const ozwTarUrl =
@@ -115,8 +100,6 @@ const ozwConfigFolder = path.join(ozwTempDir, "./config");
 
 const ohTempDir = path.join(__dirname, "../.tmpoh");
 const importedManufacturersPath = path.join(ohTempDir, "manufacturers.json");
-
-// Regular expressions to parse html pages
 
 // Where all the information can be found
 const ohUrlManufacturers =
@@ -233,22 +216,22 @@ async function parseOZWConfig(): Promise<void> {
 	);
 
 	// Load our existing config files to cross-reference
-	await loadManufacturers();
+	await configManager.loadManufacturers();
 	if (program.devices) {
-		await loadDeviceIndex();
+		await configManager.loadDeviceIndex();
 	}
 
 	for (const man of manufacturerJson.ManufacturerSpecificData.Manufacturer) {
 		// <Manufacturer id="012A" name="ManufacturerName">... products ...</Manufacturer>
 		const manufacturerId = parseInt(man.id, 16);
-		let manufacturerName = lookupManufacturer(manufacturerId);
+		let manufacturerName = configManager.lookupManufacturer(manufacturerId);
 
 		// Add the manufacturer to our manufacturers.json if it is missing
 		if (manufacturerName === undefined && man.name !== undefined) {
 			console.log(`Adding missing manufacturer: ${man.name}`);
 			// let this here, if program.manufacturers is false it will not
 			// write the manufacturers to file
-			setManufacturer(manufacturerId, man.name);
+			configManager.setManufacturer(manufacturerId, man.name);
 		}
 		manufacturerName = man.name;
 
@@ -273,7 +256,7 @@ async function parseOZWConfig(): Promise<void> {
 	}
 
 	if (program.manufacturers) {
-		await writeManufacturersToJson();
+		await configManager.saveManufacturers();
 	}
 }
 
@@ -461,12 +444,14 @@ async function parseOZWProduct(
 	const manufacturerIdHex = formatId(manufacturerId);
 
 	const deviceConfigs =
-		getIndex()?.filter(
-			(f: DeviceConfigIndexEntry) =>
-				f.manufacturerId === manufacturerIdHex &&
-				f.productType === productType &&
-				f.productId === productId,
-		) ?? [];
+		configManager
+			.getIndex()
+			?.filter(
+				(f: DeviceConfigIndexEntry) =>
+					f.manufacturerId === manufacturerIdHex &&
+					f.productType === productType &&
+					f.productId === productId,
+			) ?? [];
 	const latestConfig = getLatestConfigVersion(deviceConfigs);
 
 	// Determine where the config file should be
@@ -1008,58 +993,13 @@ function getLatestConfigVersion(
 	return configs[configs.length - 1];
 }
 
-/** Generates an index for all device config files */
-async function generateDeviceIndex(): Promise<void> {
-	const configFiles = await enumFilesRecursive(
-		processedDir,
-		(file) => file.endsWith(".json") && !file.endsWith("index.json"),
-	);
-
-	const index: DeviceConfigIndexEntry[] = [];
-
-	for (const file of configFiles) {
-		const relativePath = path
-			.relative(processedDir, file)
-			.replace(/\\/g, "/");
-		const fileContents = await fs.readFile(file, "utf8");
-		// Try parsing the file
-		try {
-			const config = new DeviceConfig(relativePath, fileContents);
-			// Add the file to the index
-			index.push(
-				...config.devices.map((dev: any) => ({
-					manufacturerId: formatId(
-						config.manufacturerId.toString(16),
-					),
-					...dev,
-					firmwareVersion: config.firmwareVersion,
-					filename: relativePath,
-				})),
-			);
-		} catch (e) {
-			console.error(`packages/config/config/devices/${relativePath}:`);
-			console.error(
-				red(`[ERROR] invalid device config file: ${e.message}`),
-			);
-		}
-	}
-
-	// Write the index
-	await fs.writeFile(
-		path.join(processedDir, "index.json"),
-		`// This file is auto-generated using "yarn run config import -i"
-${stringify(index, "\t")}`,
-		"utf8",
-	);
-}
-
 /** Changes the manufacturer names in all device config files to match manufacturers.json */
 async function updateManufacturerNames(): Promise<void> {
 	const configFiles = await enumFilesRecursive(
 		processedDir,
 		(file) => file.endsWith(".json") && !file.endsWith("index.json"),
 	);
-	await loadManufacturers();
+	await configManager.loadManufacturers();
 
 	for (const file of configFiles) {
 		let fileContents = await fs.readFile(file, "utf8");
@@ -1067,7 +1007,7 @@ async function updateManufacturerNames(): Promise<void> {
 			fileContents.match(/"manufacturerId"\: "0x([0-9a-fA-F]+)"/)![1],
 			16,
 		);
-		const name = lookupManufacturer(id);
+		const name = configManager.lookupManufacturer(id);
 		const oldName = fileContents.match(/"manufacturer"\: "([^\"]+)"/)![1];
 		if (oldName && name && name !== oldName) {
 			fileContents = fileContents.replace(
@@ -1114,10 +1054,6 @@ void (async () => {
 			if (program.devices) {
 				await importConfigFiles();
 			}
-		}
-
-		if (program.index) {
-			await generateDeviceIndex();
 		}
 	}
 })();

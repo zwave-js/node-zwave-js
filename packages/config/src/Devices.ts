@@ -36,7 +36,8 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 	ParamInformation
 >;
 
-const indexPath = path.join(configDir, "devices/index.json");
+export const devicesDir = path.join(configDir, "devices");
+export const indexPath = path.join(devicesDir, "index.json");
 export type DeviceConfigIndex = DeviceConfigIndexEntry[];
 
 /** @internal */
@@ -44,7 +45,7 @@ export async function loadDeviceIndexInternal(): Promise<DeviceConfigIndex> {
 	if (!(await pathExists(indexPath))) {
 		throw new ZWaveError(
 			"The device config index does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
+			ZWaveErrorCodes.Config_NotFound,
 		);
 	}
 	try {
@@ -59,9 +60,7 @@ export async function loadDeviceIndexInternal(): Promise<DeviceConfigIndex> {
 	}
 }
 
-export async function writeIndexToFile(
-	index: DeviceConfigIndex,
-): Promise<void> {
+export async function saveDeviceIndex(index: DeviceConfigIndex): Promise<void> {
 	await writeFile(indexPath, stringify(index));
 }
 
