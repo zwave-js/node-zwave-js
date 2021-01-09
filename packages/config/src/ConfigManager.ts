@@ -1,6 +1,5 @@
 import { ZWaveError, ZWaveErrorCodes, ZWaveLogContainer } from "@zwave-js/core";
-import { num2hex, stringify } from "@zwave-js/shared";
-import * as fs from "fs-extra";
+import { num2hex } from "@zwave-js/shared";
 import { pathExists, readFile } from "fs-extra";
 import path from "path";
 import {
@@ -17,9 +16,7 @@ import {
 	DeviceConfig,
 	DeviceConfigIndex,
 	DeviceConfigIndexEntry,
-	devicesDir,
 	FirmwareVersionRange,
-	indexPath,
 	loadDeviceIndexInternal,
 } from "./Devices";
 import {
@@ -58,12 +55,7 @@ import {
 	SensorType,
 	SensorTypeMap,
 } from "./SensorTypes";
-import {
-	configDir,
-	enumFilesRecursive,
-	formatId,
-	getDeviceEntryPredicate,
-} from "./utils";
+import { configDir, formatId, getDeviceEntryPredicate } from "./utils";
 
 export class ConfigManager {
 	public constructor(container?: ZWaveLogContainer) {
@@ -416,9 +408,6 @@ export class ConfigManager {
 
 	public async loadDeviceIndex(): Promise<void> {
 		try {
-			if (!(await fs.pathExists(indexPath))) {
-				await this.generateDeviceIndex();
-			}
 			this.index = await loadDeviceIndexInternal();
 		} catch (e: unknown) {
 			// If the index file is missing or invalid, don't try to find it again
@@ -438,45 +427,6 @@ export class ConfigManager {
 				throw e;
 			}
 		}
-	}
-
-	/** Generates an index for all device config files */
-	public async generateDeviceIndex(): Promise<void> {
-		const configFiles = await enumFilesRecursive(
-			devicesDir,
-			(file) => file.endsWith(".json") && !file.endsWith("index.json"),
-		);
-
-		const index: DeviceConfigIndexEntry[] = [];
-
-		for (const file of configFiles) {
-			const relativePath = path
-				.relative(devicesDir, file)
-				.replace(/\\/g, "/");
-			const fileContents = await fs.readFile(file, "utf8");
-			// Try parsing the file
-			const config = new DeviceConfig(relativePath, fileContents);
-			// Add the file to the index
-			index.push(
-				...config.devices.map((dev: any) => ({
-					manufacturerId: formatId(
-						config.manufacturerId.toString(16),
-					),
-					...dev,
-					firmwareVersion: config.firmwareVersion,
-					filename: relativePath,
-				})),
-			);
-		}
-
-		// Write the index
-		await fs.writeFile(
-			path.join(devicesDir, "index.json"),
-			`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
-${stringify(index, "\t")}
-`,
-			"utf8",
-		);
 	}
 
 	/**
