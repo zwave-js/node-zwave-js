@@ -40,7 +40,7 @@
 			"allowManualEntry": true
 		},
 		"24": {
-			"label": "Notifcation on Load Change",
+			"label": "Notification on Load Change",
 			"description": "Smart Plug can send notifications to association device load state changes.",
 			"valueSize": 1,
 			"minValue": 0,

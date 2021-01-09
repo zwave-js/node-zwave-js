@@ -22,7 +22,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Root Device group (Notifcation)",
+			"label": "Root Device group (Notification)",
 			"maxNodes": 5
 		}
 	}
