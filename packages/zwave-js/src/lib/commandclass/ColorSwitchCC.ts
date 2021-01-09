@@ -17,7 +17,6 @@ import { getEnumMemberName, keysOf, pick } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import { entries } from "alcalzone-shared/objects";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -280,7 +279,7 @@ export class ColorSwitchCC extends CommandClass {
 		});
 		const valueDB = this.getValueDB();
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -290,13 +289,13 @@ export class ColorSwitchCC extends CommandClass {
 
 		let supportedColors: readonly ColorComponent[];
 		if (complete) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying Color Switch CC supported colors...",
 				direction: "outbound",
 			});
 			supportedColors = await api.getSupported();
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received supported colors:${supportedColors
 					.map((c) => `\n· ${getEnumMemberName(ColorComponent, c)}`)
@@ -334,7 +333,7 @@ export class ColorSwitchCC extends CommandClass {
 			await ignoreTimeout(
 				async () => {
 					const colorName = getEnumMemberName(ColorComponent, color);
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying current color state (${colorName})`,
 						direction: "outbound",
@@ -342,7 +341,7 @@ export class ColorSwitchCC extends CommandClass {
 					await api.get(color);
 				},
 				() => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Current color query timed out - skipping because it is not critical...`,
 						level: "warn",

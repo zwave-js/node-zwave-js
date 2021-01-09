@@ -11,7 +11,6 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
@@ -152,7 +151,7 @@ export class BinarySensorCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -165,7 +164,7 @@ export class BinarySensorCC extends CommandClass {
 		if (complete && this.version >= 2) {
 			if (
 				!(await ignoreTimeout(async () => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying supported sensor types...",
 						direction: "outbound",
@@ -177,14 +176,14 @@ export class BinarySensorCC extends CommandClass {
 						)
 						.map((name) => `\n· ${name}`)
 						.join("")}`;
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
 				}))
 			) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported sensor types timed out, skipping interview...",
@@ -202,20 +201,20 @@ export class BinarySensorCC extends CommandClass {
 		if (this.version === 1) {
 			await ignoreTimeout(
 				async () => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying current value...",
 						direction: "outbound",
 					});
 					const currentValue = await api.get();
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `received current value: ${currentValue}`,
 						direction: "inbound",
 					});
 				},
 				() => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Current value query timed out - skipping because it is not critical...",
@@ -228,20 +227,20 @@ export class BinarySensorCC extends CommandClass {
 				const sensorName = getEnumMemberName(BinarySensorType, type);
 				await ignoreTimeout(
 					async () => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying current value for ${sensorName}...`,
 							direction: "outbound",
 						});
 						const currentValue = await api.get(type);
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `received current value for ${sensorName}: ${currentValue}`,
 							direction: "inbound",
 						});
 					},
 					() => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Current value query for ${sensorName} timed out - skipping because it is not critical...`,
 							level: "warn",

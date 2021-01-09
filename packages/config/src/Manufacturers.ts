@@ -5,7 +5,6 @@ import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import log from "./Logger";
 import {
 	configDir,
 	formatId,
@@ -14,10 +13,10 @@ import {
 } from "./utils";
 
 const configPath = path.join(configDir, "manufacturers.json");
-let manufacturers: Map<number, string> | undefined;
+export type ManufacturersMap = Map<number, string>;
 
 /** @internal */
-export async function loadManufacturersInternal(): Promise<void> {
+export async function loadManufacturersInternal(): Promise<ManufacturersMap> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The manufacturer config file does not exist!",
@@ -34,7 +33,7 @@ export async function loadManufacturersInternal(): Promise<void> {
 			);
 		}
 
-		const ret = new Map();
+		const manufacturers = new Map();
 		for (const [id, name] of entries(definition)) {
 			if (!hexKeyRegex4Digits.test(id)) {
 				throwInvalidConfig(
@@ -49,9 +48,10 @@ export async function loadManufacturersInternal(): Promise<void> {
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			ret.set(idNum, name);
+			manufacturers.set(idNum, name);
 		}
-		manufacturers = ret;
+
+		return manufacturers;
 	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
@@ -61,75 +61,12 @@ export async function loadManufacturersInternal(): Promise<void> {
 	}
 }
 
-export async function loadManufacturers(): Promise<void> {
-	try {
-		await loadManufacturersInternal();
-	} catch (e: unknown) {
-		// If the config file is missing or invalid, don't try to find it again
-		if (
-			e instanceof ZWaveError &&
-			e.code === ZWaveErrorCodes.Config_Invalid
-		) {
-			if (process.env.NODE_ENV !== "test") {
-				// FIXME: This call breaks when using jest.isolateModule()
-				log.config.print(
-					`Could not load manufacturers config: ${e.message}`,
-					"error",
-				);
-			}
-			manufacturers = new Map();
-		} else {
-			// This is an unexpected error
-			throw e;
-		}
-	}
-}
-
-/**
- * Looks up the name of the manufacturer with the given ID in the configuration DB
- * @param manufacturerId The manufacturer id to look up
- */
-export function lookupManufacturer(manufacturerId: number): string | undefined {
-	if (!manufacturers) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
-	return manufacturers.get(manufacturerId);
-}
-
-/**
- * Add new manufacturers to configuration DB
- * @param manufacturerId The manufacturer id to look up
- * @param manufacturerName The manufacturer name
- */
-export function setManufacturer(
-	manufacturerId: number,
-	manufacturerName: string,
-): void {
-	if (!manufacturers) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
-	manufacturers.set(manufacturerId, manufacturerName);
-}
-
 /**
  * Write current manufacturers map to json
  */
-export async function writeManufacturersToJson(): Promise<void> {
-	if (!manufacturers) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
+export async function writeManufacturersToJson(
+	manufacturers: ManufacturersMap,
+): Promise<void> {
 	const data: Record<string, string> = {};
 
 	const orderedMap = new Map(

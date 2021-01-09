@@ -7,7 +7,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import {
@@ -92,14 +91,14 @@ export class LanguageCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
 			direction: "none",
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: "requesting language setting...",
 			direction: "outbound",
 		});
@@ -107,7 +106,7 @@ export class LanguageCC extends CommandClass {
 		const logMessage = `received current language setting: ${language}${
 			country != undefined ? "-" + country : ""
 		}`;
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: logMessage,
 			direction: "inbound",
 		});

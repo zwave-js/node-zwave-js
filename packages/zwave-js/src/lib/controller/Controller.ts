@@ -33,7 +33,6 @@ import type {
 	MultiChannelAssociationCC,
 } from "../commandclass/MultiChannelAssociationCC";
 import type { Driver, RequestHandler } from "../driver/Driver";
-import log from "../log";
 import { FunctionType } from "../message/Constants";
 import { DeviceClass } from "../node/DeviceClass";
 import { ZWaveNode } from "../node/Node";
@@ -303,10 +302,10 @@ export class ZWaveController extends EventEmitter {
 		initValueDBs: () => Promise<void>,
 		restoreFromCache: () => Promise<void>,
 	): Promise<void> {
-		log.controller.print("beginning interview...");
+		this.driver.controllerLog.print("beginning interview...");
 
 		// get basic controller version info
-		log.controller.print(`querying version info...`);
+		this.driver.controllerLog.print(`querying version info...`);
 		const version = await this.driver.sendMessage<GetControllerVersionResponse>(
 			new GetControllerVersionRequest(this.driver),
 			{
@@ -315,28 +314,28 @@ export class ZWaveController extends EventEmitter {
 		);
 		this._libraryVersion = version.libraryVersion;
 		this._type = version.controllerType;
-		log.controller.print(
+		this.driver.controllerLog.print(
 			`received version info:
   controller type: ${ZWaveLibraryTypes[this._type]}
   library version: ${this._libraryVersion}`,
 		);
 
 		// get the home and node id of the controller
-		log.controller.print(`querying controller IDs...`);
+		this.driver.controllerLog.print(`querying controller IDs...`);
 		const ids = await this.driver.sendMessage<GetControllerIdResponse>(
 			new GetControllerIdRequest(this.driver),
 			{ supportCheck: false },
 		);
 		this._homeId = ids.homeId;
 		this._ownNodeId = ids.ownNodeId;
-		log.controller.print(
+		this.driver.controllerLog.print(
 			`received controller IDs:
   home ID:     ${num2hex(this._homeId)}
   own node ID: ${this._ownNodeId}`,
 		);
 
 		// find out what the controller can do
-		log.controller.print(`querying controller capabilities...`);
+		this.driver.controllerLog.print(`querying controller capabilities...`);
 		const ctrlCaps = await this.driver.sendMessage<GetControllerCapabilitiesResponse>(
 			new GetControllerCapabilitiesRequest(this.driver),
 			{
@@ -349,7 +348,7 @@ export class ZWaveController extends EventEmitter {
 		this._isSISPresent = ctrlCaps.isSISPresent;
 		this._wasRealPrimary = ctrlCaps.wasRealPrimary;
 		this._isStaticUpdateController = ctrlCaps.isStaticUpdateController;
-		log.controller.print(
+		this.driver.controllerLog.print(
 			`received controller capabilities:
   controller role:     ${this._isSecondary ? "secondary" : "primary"}
   is in other network: ${this._isUsingHomeIdFromOtherNetwork}
@@ -359,7 +358,7 @@ export class ZWaveController extends EventEmitter {
 		);
 
 		// find out which part of the API is supported
-		log.controller.print(`querying API capabilities...`);
+		this.driver.controllerLog.print(`querying API capabilities...`);
 		const apiCaps = await this.driver.sendMessage<GetSerialApiCapabilitiesResponse>(
 			new GetSerialApiCapabilitiesRequest(this.driver),
 			{
@@ -371,7 +370,7 @@ export class ZWaveController extends EventEmitter {
 		this._productType = apiCaps.productType;
 		this._productId = apiCaps.productId;
 		this._supportedFunctionTypes = apiCaps.supportedFunctionTypes;
-		log.controller.print(
+		this.driver.controllerLog.print(
 			`received API capabilities:
   serial API version:  ${this._serialApiVersion}
   manufacturer ID:     ${num2hex(this._manufacturerId)}
@@ -385,16 +384,18 @@ export class ZWaveController extends EventEmitter {
 		// now we can check if a function is supported
 
 		// find the SUC
-		log.controller.print(`finding SUC...`);
+		this.driver.controllerLog.print(`finding SUC...`);
 		const suc = await this.driver.sendMessage<GetSUCNodeIdResponse>(
 			new GetSUCNodeIdRequest(this.driver),
 			{ supportCheck: false },
 		);
 		this._sucNodeId = suc.sucNodeId;
 		if (this._sucNodeId === 0) {
-			log.controller.print(`no SUC present`);
+			this.driver.controllerLog.print(`no SUC present`);
 		} else {
-			log.controller.print(`SUC has node ID ${this.sucNodeId}`);
+			this.driver.controllerLog.print(
+				`SUC has node ID ${this.sucNodeId}`,
+			);
 		}
 		// TODO: if configured, enable this controller as SIS if there's no SUC
 		// https://github.com/OpenZWave/open-zwave/blob/a46f3f36271f88eed5aea58899a6cb118ad312a2/cpp/src/Driver.cpp#L2586
@@ -411,7 +412,7 @@ export class ZWaveController extends EventEmitter {
 		await initValueDBs();
 
 		// Request information about all nodes with the GetInitData message
-		log.controller.print(`querying node information...`);
+		this.driver.controllerLog.print(`querying node information...`);
 		const initData = await this.driver.sendMessage<GetSerialApiInitDataResponse>(
 			new GetSerialApiInitDataRequest(this.driver),
 		);
@@ -422,7 +423,7 @@ export class ZWaveController extends EventEmitter {
 		this._isSlave = initData.isSlave;
 		this._supportsTimers = initData.supportsTimers;
 		// ignore the initVersion, no clue what to do with it
-		log.controller.print(
+		this.driver.controllerLog.print(
 			`received node information:
   controller role:            ${this._isSecondary ? "secondary" : "primary"}
   controller is a SUC:        ${this._isStaticUpdateController}
@@ -464,7 +465,7 @@ export class ZWaveController extends EventEmitter {
 			this.isFunctionSupported(FunctionType.SetSerialApiTimeouts)
 		) {
 			const { ack, byte } = this.driver.options.timeouts;
-			log.controller.print(
+			this.driver.controllerLog.print(
 				`setting serial API timeouts: ack = ${ack} ms, byte = ${byte} ms`,
 			);
 			const resp = await this.driver.sendMessage<SetSerialApiTimeoutsResponse>(
@@ -473,7 +474,7 @@ export class ZWaveController extends EventEmitter {
 					byteTimeout: byte,
 				}),
 			);
-			log.controller.print(
+			this.driver.controllerLog.print(
 				`serial API timeouts overwritten. The old values were: ack = ${resp.oldAckTimeout} ms, byte = ${resp.oldByteTimeout} ms`,
 			);
 		}
@@ -490,7 +491,7 @@ export class ZWaveController extends EventEmitter {
 		// 		FunctionType.FUNC_ID_SERIAL_API_APPL_NODE_INFORMATION,
 		// 	)
 		// ) {
-		// 	log.controller.print(`sending application info...`);
+		// 	this.driver.controllerLog.print(`sending application info...`);
 
 		// 	// TODO: Generate this list dynamically
 		// 	// A list of all CCs the controller will respond to
@@ -527,7 +528,7 @@ export class ZWaveController extends EventEmitter {
 		// 	});
 		// }
 
-		log.controller.print("Interview completed");
+		this.driver.controllerLog.print("Interview completed");
 	}
 
 	/**
@@ -536,12 +537,12 @@ export class ZWaveController extends EventEmitter {
 	 * @internal
 	 */
 	public hardReset(): Promise<void> {
-		log.controller.print("performing hard reset...");
+		this.driver.controllerLog.print("performing hard reset...");
 		// wotan-disable-next-line async-function-assignability
 		return new Promise(async (resolve, reject) => {
 			// handle the incoming message
 			const handler: RequestHandler = (_msg) => {
-				log.controller.print(`  hard reset succeeded`);
+				this.driver.controllerLog.print(`  hard reset succeeded`);
 
 				// Clean up
 				this._nodes.forEach((node) => node.removeAllListeners());
@@ -563,7 +564,7 @@ export class ZWaveController extends EventEmitter {
 				);
 			} catch (e) {
 				// in any case unregister the handler
-				log.controller.print(
+				this.driver.controllerLog.print(
 					`  hard reset failed: ${e.message}`,
 					"error",
 				);
@@ -602,7 +603,7 @@ export class ZWaveController extends EventEmitter {
 		this._inclusionActive = true;
 		this._includeNonSecure = includeNonSecure;
 
-		log.controller.print(`starting inclusion process...`);
+		this.driver.controllerLog.print(`starting inclusion process...`);
 
 		// create the promise we're going to return
 		this._beginInclusionPromise = createDeferredPromise();
@@ -625,7 +626,7 @@ export class ZWaveController extends EventEmitter {
 		if (!this._inclusionActive) return;
 		this._inclusionActive = false;
 
-		log.controller.print(`stopping inclusion process...`);
+		this.driver.controllerLog.print(`stopping inclusion process...`);
 
 		// create the promise we're going to return
 		this._stopInclusionPromise = createDeferredPromise();
@@ -641,7 +642,9 @@ export class ZWaveController extends EventEmitter {
 
 		// Don't await the promise or we create a deadlock
 		void this._stopInclusionPromise.then(() => {
-			log.controller.print(`the inclusion process was stopped`);
+			this.driver.controllerLog.print(
+				`the inclusion process was stopped`,
+			);
 			this.emit("inclusion stopped");
 		});
 	}
@@ -669,7 +672,7 @@ export class ZWaveController extends EventEmitter {
 		if (this._inclusionActive || this._exclusionActive) return false;
 		this._exclusionActive = true;
 
-		log.controller.print(`starting exclusion process...`);
+		this.driver.controllerLog.print(`starting exclusion process...`);
 
 		// create the promise we're going to return
 		this._beginInclusionPromise = createDeferredPromise();
@@ -692,7 +695,7 @@ export class ZWaveController extends EventEmitter {
 		if (!this._exclusionActive) return;
 		this._exclusionActive = false;
 
-		log.controller.print(`stopping exclusion process...`);
+		this.driver.controllerLog.print(`stopping exclusion process...`);
 
 		// create the promise we're going to return
 		this._stopInclusionPromise = createDeferredPromise();
@@ -707,7 +710,9 @@ export class ZWaveController extends EventEmitter {
 		);
 
 		void this._stopInclusionPromise.then(() => {
-			log.controller.print(`the exclusion process was stopped`);
+			this.driver.controllerLog.print(
+				`the exclusion process was stopped`,
+			);
 			this.emit("exclusion stopped");
 		});
 	}
@@ -771,7 +776,11 @@ export class ZWaveController extends EventEmitter {
 				) {
 					errorMessage += `: ${e.message}`;
 				}
-				log.controller.logNode(node.id, errorMessage, "warn");
+				this.driver.controllerLog.logNode(
+					node.id,
+					errorMessage,
+					"warn",
+				);
 				// Remember that the node is non-secure
 				node.isSecure = false;
 				node.removeCC(CommandClasses.Security);
@@ -802,20 +811,22 @@ export class ZWaveController extends EventEmitter {
 	private async handleAddNodeRequest(
 		msg: AddNodeToNetworkRequest,
 	): Promise<boolean> {
-		log.controller.print(
+		this.driver.controllerLog.print(
 			`handling add node request (status = ${
 				AddNodeStatus[msg.status!]
 			})`,
 		);
 		if (!this._inclusionActive && msg.status !== AddNodeStatus.Done) {
-			log.controller.print(`  inclusion is NOT active, ignoring it...`);
+			this.driver.controllerLog.print(
+				`  inclusion is NOT active, ignoring it...`,
+			);
 			return true; // Don't invoke any more handlers
 		}
 
 		switch (msg.status) {
 			case AddNodeStatus.Ready:
 				// this is called when inclusion was started successfully
-				log.controller.print(
+				this.driver.controllerLog.print(
 					`  the controller is now ready to add nodes`,
 				);
 				if (this._beginInclusionPromise != null) {
@@ -826,7 +837,7 @@ export class ZWaveController extends EventEmitter {
 			case AddNodeStatus.Failed:
 				// this is called when inclusion could not be started...
 				if (this._beginInclusionPromise != null) {
-					log.controller.print(
+					this.driver.controllerLog.print(
 						`  starting the inclusion failed`,
 						"error",
 					);
@@ -838,7 +849,10 @@ export class ZWaveController extends EventEmitter {
 					);
 				} else {
 					// ...or adding a node failed
-					log.controller.print(`  adding the node failed`, "error");
+					this.driver.controllerLog.print(
+						`  adding the node failed`,
+						"error",
+					);
 					this.emit("inclusion failed");
 				}
 				// in any case, stop the inclusion process so we don't accidentally add another node
@@ -857,6 +871,7 @@ export class ZWaveController extends EventEmitter {
 					msg.statusContext!.nodeId,
 					this.driver,
 					new DeviceClass(
+						this.driver.configManager,
 						msg.statusContext!.basic!,
 						msg.statusContext!.generic!,
 						msg.statusContext!.specific!,
@@ -880,7 +895,7 @@ export class ZWaveController extends EventEmitter {
 			}
 			case AddNodeStatus.Done: {
 				// this is called when the inclusion was completed
-				log.controller.print(
+				this.driver.controllerLog.print(
 					`done called for ${msg.statusContext!.nodeId}`,
 				);
 				// stopping the inclusion was acknowledged by the controller
@@ -899,7 +914,7 @@ export class ZWaveController extends EventEmitter {
 					]
 						.filter(([, info]) => info.isControlled)
 						.map(([cc]) => cc);
-					log.controller.print(
+					this.driver.controllerLog.print(
 						`finished adding node ${newNode.id}:
   basic device class:    ${newNode.deviceClass?.basic.label}
   generic device class:  ${newNode.deviceClass?.generic.label}
@@ -939,7 +954,7 @@ export class ZWaveController extends EventEmitter {
 	private async handleReplaceNodeRequest(
 		msg: ReplaceFailedNodeRequestStatusReport,
 	): Promise<boolean> {
-		log.controller.print(
+		this.driver.controllerLog.print(
 			`handling replace node request (status = ${
 				ReplaceFailedNodeStatus[msg.replaceStatus]
 			})`,
@@ -965,7 +980,7 @@ export class ZWaveController extends EventEmitter {
 			case ReplaceFailedNodeStatus.FailedNodeReplace:
 				// failed node is now ready to be replaced and controller is ready to add a new
 				// node with the nodeID of the failed node
-				log.controller.print(
+				this.driver.controllerLog.print(
 					`The failed node is ready to be replaced, inclusion started...`,
 				);
 				this.emit("inclusion started", !this._includeNonSecure);
@@ -975,7 +990,7 @@ export class ZWaveController extends EventEmitter {
 				// stop here, don't emit inclusion failed
 				return true;
 			case ReplaceFailedNodeStatus.FailedNodeReplaceDone:
-				log.controller.print(`The failed node was replaced`);
+				this.driver.controllerLog.print(`The failed node was replaced`);
 				this.emit("inclusion stopped");
 
 				if (this._nodePendingReplace) {
@@ -1015,20 +1030,22 @@ export class ZWaveController extends EventEmitter {
 	private async handleRemoveNodeRequest(
 		msg: RemoveNodeFromNetworkRequest,
 	): Promise<boolean> {
-		log.controller.print(
+		this.driver.controllerLog.print(
 			`handling remove node request (status = ${
 				RemoveNodeStatus[msg.status!]
 			})`,
 		);
 		if (!this._exclusionActive && msg.status !== RemoveNodeStatus.Done) {
-			log.controller.print(`  exclusion is NOT active, ignoring it...`);
+			this.driver.controllerLog.print(
+				`  exclusion is NOT active, ignoring it...`,
+			);
 			return true; // Don't invoke any more handlers
 		}
 
 		switch (msg.status) {
 			case RemoveNodeStatus.Ready:
 				// this is called when inclusion was started successfully
-				log.controller.print(
+				this.driver.controllerLog.print(
 					`  the controller is now ready to remove nodes`,
 				);
 				if (this._beginInclusionPromise != null) {
@@ -1040,7 +1057,7 @@ export class ZWaveController extends EventEmitter {
 			case RemoveNodeStatus.Failed:
 				// this is called when inclusion could not be started...
 				if (this._beginInclusionPromise != null) {
-					log.controller.print(
+					this.driver.controllerLog.print(
 						`  starting the exclusion failed`,
 						"error",
 					);
@@ -1052,7 +1069,10 @@ export class ZWaveController extends EventEmitter {
 					);
 				} else {
 					// ...or removing a node failed
-					log.controller.print(`  removing the node failed`, "error");
+					this.driver.controllerLog.print(
+						`  removing the node failed`,
+						"error",
+					);
 					this.emit("exclusion failed");
 				}
 				// in any case, stop the exclusion process so we don't accidentally remove another node
@@ -1086,7 +1106,7 @@ export class ZWaveController extends EventEmitter {
 					this._stopInclusionPromise.resolve();
 
 				if (this._nodePendingExclusion != null) {
-					log.controller.print(
+					this.driver.controllerLog.print(
 						`Node ${this._nodePendingExclusion.id} was removed`,
 					);
 
@@ -1116,7 +1136,7 @@ export class ZWaveController extends EventEmitter {
 		if (this._healNetworkActive) return false;
 		this._healNetworkActive = true;
 
-		log.controller.print(`starting network heal...`);
+		this.driver.controllerLog.print(`starting network heal...`);
 
 		// Reset all nodes to "not healed"
 		this._healNetworkProgress.clear();
@@ -1131,7 +1151,7 @@ export class ZWaveController extends EventEmitter {
 					node.interviewStage === InterviewStage.ProtocolInfo)
 			) {
 				// Don't interview dead nodes
-				log.controller.logNode(
+				this.driver.controllerLog.logNode(
 					id,
 					`Skipping heal because the node is not responding.`,
 				);
@@ -1189,7 +1209,7 @@ export class ZWaveController extends EventEmitter {
 		if (!this._healNetworkActive) return false;
 		this._healNetworkActive = false;
 
-		log.controller.print(`stopping network heal...`);
+		this.driver.controllerLog.print(`stopping network heal...`);
 
 		// Cancel all transactions that were created by the healing process
 		this.driver.rejectTransactions(
@@ -1216,7 +1236,7 @@ export class ZWaveController extends EventEmitter {
 			// If the process was stopped in the meantime, cancel
 			if (!this._healNetworkActive) return false;
 
-			log.controller.logNode(nodeId, {
+			this.driver.controllerLog.logNode(nodeId, {
 				message: `refreshing neighbor list (attempt ${attempt})...`,
 				direction: "outbound",
 			});
@@ -1227,7 +1247,7 @@ export class ZWaveController extends EventEmitter {
 					}),
 				);
 				if (resp.updateStatus === NodeNeighborUpdateStatus.UpdateDone) {
-					log.controller.logNode(nodeId, {
+					this.driver.controllerLog.logNode(nodeId, {
 						message: "neighbor list refreshed...",
 						direction: "inbound",
 					});
@@ -1235,21 +1255,21 @@ export class ZWaveController extends EventEmitter {
 					break;
 				} else {
 					// UpdateFailed
-					log.controller.logNode(nodeId, {
+					this.driver.controllerLog.logNode(nodeId, {
 						message: "refreshing neighbor list failed...",
 						direction: "inbound",
 						level: "warn",
 					});
 				}
 			} catch (e) {
-				log.controller.logNode(
+				this.driver.controllerLog.logNode(
 					nodeId,
 					`refreshing neighbor list failed: ${e.message}`,
 					"warn",
 				);
 			}
 			if (attempt === maxAttempts) {
-				log.controller.logNode(nodeId, {
+				this.driver.controllerLog.logNode(nodeId, {
 					message: `failed to update the neighbor list after ${maxAttempts} attempts, healing failed`,
 					level: "warn",
 					direction: "none",
@@ -1263,7 +1283,7 @@ export class ZWaveController extends EventEmitter {
 			// If the process was stopped in the meantime, cancel
 			if (!this._healNetworkActive) return false;
 
-			log.controller.logNode(nodeId, {
+			this.driver.controllerLog.logNode(nodeId, {
 				message: `retrieving updated neighbor list (attempt ${attempt})...`,
 				direction: "outbound",
 			});
@@ -1273,14 +1293,14 @@ export class ZWaveController extends EventEmitter {
 				await this.nodes.get(nodeId)!.queryNeighborsInternal();
 				break;
 			} catch (e) {
-				log.controller.logNode(
+				this.driver.controllerLog.logNode(
 					nodeId,
 					`retrieving the updated neighbor list failed: ${e.message}`,
 					"warn",
 				);
 			}
 			if (attempt === maxAttempts) {
-				log.controller.logNode(nodeId, {
+				this.driver.controllerLog.logNode(nodeId, {
 					message: `failed to retrieve the updated neighbor list after ${maxAttempts} attempts, healing failed`,
 					level: "warn",
 					direction: "none",
@@ -1291,7 +1311,7 @@ export class ZWaveController extends EventEmitter {
 
 		// 3. delete all return routes so we can assign new ones
 		for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-			log.controller.logNode(nodeId, {
+			this.driver.controllerLog.logNode(nodeId, {
 				message: `deleting return routes (attempt ${attempt})...`,
 				direction: "outbound",
 			});
@@ -1303,14 +1323,14 @@ export class ZWaveController extends EventEmitter {
 				// this step was successful, continue with the next
 				break;
 			} catch (e) {
-				log.controller.logNode(
+				this.driver.controllerLog.logNode(
 					nodeId,
 					`deleting return routes failed: ${e.message}`,
 					"warn",
 				);
 			}
 			if (attempt === maxAttempts) {
-				log.controller.logNode(nodeId, {
+				this.driver.controllerLog.logNode(nodeId, {
 					message: `failed to delete return routes after ${maxAttempts} attempts, healing failed`,
 					level: "warn",
 					direction: "none",
@@ -1339,14 +1359,14 @@ export class ZWaveController extends EventEmitter {
 		if (associatedNodes.length > maxReturnRoutes) {
 			associatedNodes = associatedNodes.slice(0, maxReturnRoutes);
 		}
-		log.controller.logNode(nodeId, {
+		this.driver.controllerLog.logNode(nodeId, {
 			message: `assigning return routes to the following nodes:
 ${associatedNodes.join(", ")}`,
 			direction: "outbound",
 		});
 		for (const destinationNodeId of associatedNodes) {
 			for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-				log.controller.logNode(nodeId, {
+				this.driver.controllerLog.logNode(nodeId, {
 					message: `assigning return route to node ${destinationNodeId} (attempt ${attempt})...`,
 					direction: "outbound",
 				});
@@ -1361,14 +1381,14 @@ ${associatedNodes.join(", ")}`,
 					// this step was successful, continue with the next
 					break;
 				} catch (e) {
-					log.controller.logNode(
+					this.driver.controllerLog.logNode(
 						nodeId,
 						`assigning return route failed: ${e.message}`,
 						"warn",
 					);
 				}
 				if (attempt === maxAttempts) {
-					log.controller.logNode(nodeId, {
+					this.driver.controllerLog.logNode(nodeId, {
 						message: `failed to assign return route after ${maxAttempts} attempts, healing failed`,
 						level: "warn",
 						direction: "none",
@@ -1946,7 +1966,9 @@ ${associatedNodes.join(", ")}`,
 		// don't start it twice
 		if (this._inclusionActive || this._exclusionActive) return false;
 
-		log.controller.print(`starting replace failed node process...`);
+		this.driver.controllerLog.print(
+			`starting replace failed node process...`,
+		);
 
 		this._includeNonSecure = includeNonSecure;
 

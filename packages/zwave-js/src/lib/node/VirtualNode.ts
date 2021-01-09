@@ -1,7 +1,6 @@
 import { ValueID, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { CCAPI } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import type { ZWaveNode } from "./Node";
 import { VirtualEndpoint } from "./VirtualEndpoint";
 
@@ -91,7 +90,7 @@ export class VirtualNode extends VirtualEndpoint {
 		// Check if the Multi Channel CC interviews for all nodes are completed,
 		// because we don't have all the information before that
 		if (!this.isMultiChannelInterviewComplete) {
-			log.driver.print(
+			this.driver.driverLog.print(
 				`Virtual node ${
 					this.id ?? "??"
 				}, Endpoint ${index}: Trying to access endpoint instance before the Multi Channel interview of all nodes was completed!`,

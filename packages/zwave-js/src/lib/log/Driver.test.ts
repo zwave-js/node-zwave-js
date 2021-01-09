@@ -1,10 +1,9 @@
-import { getDirectionPrefix, restoreSilence } from "@zwave-js/core";
+import { getDirectionPrefix, ZWaveLogContainer } from "@zwave-js/core";
 import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
 import { createDeferredPromise } from "alcalzone-shared/deferred-promise";
 import { SortedList } from "alcalzone-shared/sorted-list";
 import colors from "ansi-colors";
 import MockDate from "mockdate";
-import winston from "winston";
 import type { Driver } from "../driver/Driver";
 import { Transaction } from "../driver/Transaction";
 import {
@@ -14,7 +13,7 @@ import {
 } from "../message/Constants";
 import { Message } from "../message/Message";
 import { createEmptyMockDriver } from "../test/mocks";
-import log from "./index";
+import { DriverLogger } from "./Driver";
 
 const fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 
@@ -51,27 +50,26 @@ function createTransaction(
 }
 
 describe("lib/log/Driver =>", () => {
-	let driverLogger: winston.Logger;
+	let driverLogger: DriverLogger;
 	let spyTransport: SpyTransport;
-	const wasSilenced = true;
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
-		// the loggers are lazily created, so force loading by logging once
-		log.driver.print("");
-		driverLogger = winston.loggers.get("driver");
 		spyTransport = new SpyTransport();
+		driverLogger = new DriverLogger(
+			new ZWaveLogContainer({
+				transports: [spyTransport],
+			}),
+		);
 		// Uncomment this to debug the log outputs manually
 		// wasSilenced = unsilence(driverLogger);
-		driverLogger.add(spyTransport);
 
 		MockDate.set(new Date().setHours(0, 0, 0, 0));
 	});
 
 	// Don't spam the console when performing the other tests not related to logging
 	afterAll(() => {
-		driverLogger.remove(spyTransport);
-		restoreSilence(driverLogger, wasSilenced);
+		driverLogger.container.updateConfiguration({ enabled: false });
 		MockDate.reset();
 	});
 
@@ -81,14 +79,14 @@ describe("lib/log/Driver =>", () => {
 
 	describe("print()", () => {
 		it("logs short messages correctly", () => {
-			log.driver.print("Test");
+			driverLogger.print("Test");
 			assertMessage(spyTransport, {
 				message: `  Test`,
 			});
 		});
 
 		it("logs long messages correctly", () => {
-			log.driver.print(
+			driverLogger.print(
 				"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			);
 			assertMessage(spyTransport, {
@@ -98,17 +96,17 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("logs with the given loglevel", () => {
-			log.driver.print("Test", "warn");
+			driverLogger.print("Test", "warn");
 			assertLogInfo(spyTransport, { level: "warn" });
 		});
 
 		it("has a default loglevel of verbose", () => {
-			log.driver.print("Test");
+			driverLogger.print("Test");
 			assertLogInfo(spyTransport, { level: "verbose" });
 		});
 
 		it("prefixes the messages with the current timestamp and channel name", () => {
-			log.driver.print("Whatever");
+			driverLogger.print("Whatever");
 			assertMessage(spyTransport, {
 				message: `00:00:00.000 DRIVER   Whatever`,
 				ignoreTimestamp: false,
@@ -117,7 +115,7 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("the timestamp is in a dim color", () => {
-			log.driver.print("Whatever");
+			driverLogger.print("Whatever");
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.startsWith(colors.gray("00:00:00.000")),
 				ignoreTimestamp: false,
@@ -127,7 +125,7 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("the channel name is in inverted gray color", () => {
-			log.driver.print("Whatever");
+			driverLogger.print("Whatever");
 			assertMessage(spyTransport, {
 				predicate: (msg) =>
 					msg.startsWith(colors.gray.inverse("DRIVER")),
@@ -139,21 +137,21 @@ describe("lib/log/Driver =>", () => {
 
 	describe("transaction() (for outbound messages)", () => {
 		it("contains the direction", () => {
-			log.driver.transaction(createTransaction({}));
+			driverLogger.transaction(createTransaction({}));
 			assertMessage(spyTransport, {
 				predicate: (msg) =>
 					msg.startsWith(getDirectionPrefix("outbound")),
 			});
 		});
 		it("contains the message type as a tag", () => {
-			log.driver.transaction(
+			driverLogger.transaction(
 				createTransaction({ type: MessageType.Request }),
 			);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[REQ]"),
 			});
 
-			log.driver.transaction(
+			driverLogger.transaction(
 				createTransaction({ type: MessageType.Response }),
 			);
 			assertMessage(spyTransport, {
@@ -163,7 +161,7 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("contains the function type as a tag", () => {
-			log.driver.transaction(
+			driverLogger.transaction(
 				createTransaction({
 					functionType: FunctionType.GetSerialApiInitData,
 				}),
@@ -174,7 +172,7 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("contains the message priority", () => {
-			log.driver.transaction(
+			driverLogger.transaction(
 				createTransaction({
 					priority: MessagePriority.MultistepController,
 				}),
@@ -189,7 +187,7 @@ describe("lib/log/Driver =>", () => {
 		// 		priority: MessagePriority.MultistepController,
 		// 	});
 		// 	transaction.sendAttempts = 2;
-		// 	log.driver.transaction(transaction);
+		// 	driverLogger.transaction(transaction);
 		// 	assertMessage(spyTransport, {
 		// 		predicate: (msg) => !msg.includes("[P: MultistepController]"),
 		// 	});
@@ -201,7 +199,7 @@ describe("lib/log/Driver =>", () => {
 		// 	});
 		// 	transaction.sendAttempts = 2;
 		// 	transaction.maxSendAttempts = 3;
-		// 	log.driver.transaction(transaction);
+		// 	driverLogger.transaction(transaction);
 		// 	assertMessage(spyTransport, {
 		// 		predicate: (msg) => msg.includes("[attempt 2/3]"),
 		// 	});
@@ -211,7 +209,7 @@ describe("lib/log/Driver =>", () => {
 	describe("transactionResponse() (for inbound messages)", () => {
 		it("contains the direction", () => {
 			const msg = createMessage(fakeDriver, {});
-			log.driver.transactionResponse(msg, undefined, null as any);
+			driverLogger.transactionResponse(msg, undefined, null as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) =>
 					msg.startsWith(getDirectionPrefix("inbound")),
@@ -222,7 +220,7 @@ describe("lib/log/Driver =>", () => {
 			let msg = createMessage(fakeDriver, {
 				type: MessageType.Request,
 			});
-			log.driver.transactionResponse(msg, undefined, null as any);
+			driverLogger.transactionResponse(msg, undefined, null as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[REQ]"),
 			});
@@ -230,7 +228,7 @@ describe("lib/log/Driver =>", () => {
 			msg = createMessage(fakeDriver, {
 				type: MessageType.Response,
 			});
-			log.driver.transactionResponse(msg, undefined, null as any);
+			driverLogger.transactionResponse(msg, undefined, null as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[RES]"),
 				callNumber: 1,
@@ -241,7 +239,7 @@ describe("lib/log/Driver =>", () => {
 			const msg = createMessage(fakeDriver, {
 				functionType: FunctionType.HardReset,
 			});
-			log.driver.transactionResponse(msg, undefined, null as any);
+			driverLogger.transactionResponse(msg, undefined, null as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[HardReset]"),
 			});
@@ -251,7 +249,11 @@ describe("lib/log/Driver =>", () => {
 			const msg = createMessage(fakeDriver, {
 				functionType: FunctionType.HardReset,
 			});
-			log.driver.transactionResponse(msg, undefined, "fatal_controller");
+			driverLogger.transactionResponse(
+				msg,
+				undefined,
+				"fatal_controller",
+			);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[fatal_controller]"),
 			});
@@ -261,7 +263,7 @@ describe("lib/log/Driver =>", () => {
 	describe("sendQueue()", () => {
 		it("prints the send queue length", () => {
 			const queue = new SortedList<Transaction>();
-			log.driver.sendQueue(queue);
+			driverLogger.sendQueue(queue);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("(0 messages)"),
 			});
@@ -269,7 +271,7 @@ describe("lib/log/Driver =>", () => {
 			queue.add(
 				createTransaction({ functionType: FunctionType.GetSUCNodeId }),
 			);
-			log.driver.sendQueue(queue);
+			driverLogger.sendQueue(queue);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("(1 message)"),
 				callNumber: 1,
@@ -278,7 +280,7 @@ describe("lib/log/Driver =>", () => {
 			queue.add(
 				createTransaction({ functionType: FunctionType.GetSUCNodeId }),
 			);
-			log.driver.sendQueue(queue);
+			driverLogger.sendQueue(queue);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("(2 messages)"),
 				callNumber: 2,
@@ -293,7 +295,7 @@ describe("lib/log/Driver =>", () => {
 			queue.add(
 				createTransaction({ functionType: FunctionType.HardReset }),
 			);
-			log.driver.sendQueue(queue);
+			driverLogger.sendQueue(queue);
 
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("GetSUCNodeId"),
@@ -317,7 +319,7 @@ describe("lib/log/Driver =>", () => {
 					type: MessageType.Response,
 				}),
 			);
-			log.driver.sendQueue(queue);
+			driverLogger.sendQueue(queue);
 
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("· [REQ] GetSUCNodeId"),
@@ -334,7 +336,7 @@ describe("lib/log/Driver =>", () => {
 				functionType: FunctionType.HardReset,
 				type: MessageType.Response,
 			});
-			log.driver.transactionResponse(msg, undefined, null as any);
+			driverLogger.transactionResponse(msg, undefined, null as any);
 
 			const expected1 = colors.cyan(
 				colors.bgCyan("[") +
@@ -353,7 +355,7 @@ describe("lib/log/Driver =>", () => {
 		});
 
 		it("inline tags are printed in inverse colors", () => {
-			log.driver.print(`This is a message [with] [inline] tags...`);
+			driverLogger.print(`This is a message [with] [inline] tags...`);
 
 			const expected1 =
 				colors.bgCyan("[") +

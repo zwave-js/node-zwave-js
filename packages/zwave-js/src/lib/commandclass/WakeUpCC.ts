@@ -7,7 +7,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/Types";
@@ -188,7 +187,7 @@ export class WakeUpCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -197,12 +196,12 @@ export class WakeUpCC extends CommandClass {
 		});
 
 		if (node.isControllerNode()) {
-			log.controller.logNode(
+			this.driver.controllerLog.logNode(
 				node.id,
 				`skipping wakeup configuration for the controller`,
 			);
 		} else if (node.isFrequentListening) {
-			log.controller.logNode(
+			this.driver.controllerLog.logNode(
 				node.id,
 				`skipping wakeup configuration for frequent listening device`,
 			);
@@ -213,7 +212,7 @@ export class WakeUpCC extends CommandClass {
 				if (this.version >= 2) {
 					await ignoreTimeout(
 						async () => {
-							log.controller.logNode(node.id, {
+							this.driver.controllerLog.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message:
 									"retrieving wakeup capabilities from the device...",
@@ -225,14 +224,14 @@ default wakeup interval: ${wakeupCaps.defaultWakeUpInterval} seconds
 minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
 wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
-							log.controller.logNode(node.id, {
+							this.driver.controllerLog.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message: logMessage,
 								direction: "inbound",
 							});
 						},
 						() => {
-							log.controller.logNode(node.id, {
+							this.driver.controllerLog.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message:
 									"Wakeup capability query timed out - skipping because it is not critical...",
@@ -246,7 +245,7 @@ wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
 			// We have no intention of changing the interval (maybe some time in the future)
 			// So for now get the current interval and just set the controller ID
 
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "retrieving wakeup interval from the device...",
 				direction: "outbound",
@@ -255,7 +254,7 @@ wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
 			const logMessage = `received wakeup configuration:
 wakeup interval: ${wakeupResp.wakeUpInterval} seconds
 controller node: ${wakeupResp.controllerNodeId}`;
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -264,13 +263,13 @@ controller node: ${wakeupResp.controllerNodeId}`;
 			const ownNodeId = this.driver.controller.ownNodeId!;
 			// Only change the destination if necessary
 			if (wakeupResp.controllerNodeId !== ownNodeId) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "configuring wakeup destination node",
 					direction: "outbound",
 				});
 				await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
-				log.controller.logNode(
+				this.driver.controllerLog.logNode(
 					node.id,
 					"wakeup destination node changed!",
 				);

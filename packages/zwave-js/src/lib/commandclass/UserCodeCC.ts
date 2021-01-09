@@ -30,7 +30,6 @@ import {
 	throwWrongValueType,
 } from "../commandclass/API";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	API,
@@ -680,7 +679,7 @@ export class UserCodeCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -694,7 +693,7 @@ export class UserCodeCC extends CommandClass {
 		let supportedUsers: number;
 		if (complete) {
 			if (this.version >= 2) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					message: "querying capabilities...",
 					direction: "outbound",
 				});
@@ -705,7 +704,7 @@ export class UserCodeCC extends CommandClass {
 				} = await api.getCapabilities());
 			}
 
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: "querying number of user codes...",
 				direction: "outbound",
 			});
@@ -732,14 +731,14 @@ export class UserCodeCC extends CommandClass {
 		// Now check for changed values and codes
 		if (this.version >= 2) {
 			if (supportsMasterCode) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					message: "querying master code...",
 					direction: "outbound",
 				});
 				await api.getMasterCode();
 			}
 			if (supportedKeypadModes.length > 1) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					message: "querying active keypad mode...",
 					direction: "outbound",
 				});
@@ -751,7 +750,7 @@ export class UserCodeCC extends CommandClass {
 				) ?? 0;
 			let currentUserCodeChecksum = 0;
 			if (supportsUserCodeChecksum) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					message: "retrieving current user code checksum...",
 					direction: "outbound",
 				});
@@ -761,7 +760,7 @@ export class UserCodeCC extends CommandClass {
 				!supportsUserCodeChecksum ||
 				currentUserCodeChecksum !== storedUserCodeChecksum
 			) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					message:
 						"checksum changed or is not supported, querying all user codes...",
 					direction: "outbound",
@@ -773,7 +772,7 @@ export class UserCodeCC extends CommandClass {
 			}
 		} else {
 			// V1
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: "querying all user codes...",
 				direction: "outbound",
 			});
@@ -784,7 +783,7 @@ export class UserCodeCC extends CommandClass {
 					}
 				},
 				() => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"User code query timed out - skipping because it is not critical...",

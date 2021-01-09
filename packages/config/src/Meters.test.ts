@@ -1,5 +1,5 @@
 import fsExtra from "fs-extra";
-import { loadMeters, lookupMeter } from "./Meters";
+import { ConfigManager } from "./ConfigManager";
 
 jest.mock("fs-extra");
 const readFileMock = fsExtra.readFile as jest.Mock;
@@ -17,49 +17,58 @@ const dummyMeters = {
 
 describe("lib/config/Meters", () => {
 	describe("lookupMeter (with missing file)", () => {
+		let configManager: ConfigManager;
+
 		beforeAll(async () => {
 			pathExistsMock.mockClear();
 			readFileMock.mockClear();
 			pathExistsMock.mockResolvedValue(false);
 			readFileMock.mockRejectedValue(new Error("File does not exist"));
-			await loadMeters();
+			configManager = new ConfigManager();
+			await configManager.loadMeters();
 		});
 
 		it("does not throw", () => {
-			expect(() => lookupMeter(0)).not.toThrow();
+			expect(() => configManager.lookupMeter(0)).not.toThrow();
 		});
 
 		it("returns undefined", () => {
-			expect(lookupMeter(0x0e)).toBeUndefined();
-			expect(lookupMeter(0xff)).toBeUndefined();
+			expect(configManager.lookupMeter(0x0e)).toBeUndefined();
+			expect(configManager.lookupMeter(0xff)).toBeUndefined();
 		});
 	});
 
 	describe("lookupMeter (with invalid file)", () => {
+		let configManager: ConfigManager;
+
 		beforeAll(async () => {
 			pathExistsMock.mockClear();
 			readFileMock.mockClear();
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(`{"0x01": `);
 
-			await loadMeters();
+			configManager = new ConfigManager();
+			await configManager.loadMeters();
 		});
 
 		it("does not throw", () => {
-			expect(() => lookupMeter(0x0e)).not.toThrow();
+			expect(() => configManager.lookupMeter(0x0e)).not.toThrow();
 		});
 
 		it("returns undefined", () => {
-			expect(lookupMeter(0x0e)).toBeUndefined();
+			expect(configManager.lookupMeter(0x0e)).toBeUndefined();
 		});
 	});
 
 	describe("lookupMeter()", () => {
+		let configManager: ConfigManager;
+
 		beforeAll(async () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(JSON.stringify(dummyMeters));
 
-			await loadMeters();
+			configManager = new ConfigManager();
+			await configManager.loadMeters();
 		});
 
 		beforeEach(() => {
@@ -68,7 +77,7 @@ describe("lib/config/Meters", () => {
 		});
 
 		it("returns the meter definition if it is defined", () => {
-			const test1 = lookupMeter(0x01);
+			const test1 = configManager.lookupMeter(0x01);
 			expect(test1).not.toBeUndefined();
 			expect(test1!.name).toBe("Dummy meter");
 			expect(test1!.scales.get(0x01)).toEqual({
@@ -76,7 +85,7 @@ describe("lib/config/Meters", () => {
 				label: "Scale 2",
 			});
 
-			expect(lookupMeter(0xff)).toBeUndefined();
+			expect(configManager.lookupMeter(0xff)).toBeUndefined();
 		});
 	});
 });

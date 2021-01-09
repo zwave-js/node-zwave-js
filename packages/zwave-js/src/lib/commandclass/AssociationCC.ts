@@ -9,7 +9,6 @@ import {
 } from "@zwave-js/core";
 import { distinct } from "alcalzone-shared/arrays";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
 import { PhysicalCCAPI } from "./API";
@@ -300,7 +299,7 @@ export class AssociationCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -314,13 +313,13 @@ export class AssociationCC extends CommandClass {
 		let groupCount: number;
 		if (complete) {
 			// First find out how many groups are supported
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying number of association groups...",
 				direction: "outbound",
 			});
 			groupCount = await api.getGroupCount();
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `supports ${groupCount} association groups`,
 				direction: "inbound",
@@ -334,7 +333,7 @@ export class AssociationCC extends CommandClass {
 		if (
 			endpoint.commandClasses["Multi Channel Association"].isSupported()
 		) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: skipping remaining interview because Multi Channel Association is supported...`,
 				direction: "none",
@@ -345,7 +344,7 @@ export class AssociationCC extends CommandClass {
 
 		// Then query each association group
 		for (let groupId = 1; groupId <= groupCount; groupId++) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying association group #${groupId}...`,
 				direction: "outbound",
@@ -354,7 +353,7 @@ export class AssociationCC extends CommandClass {
 			const logMessage = `received information for association group #${groupId}:
 maximum # of nodes: ${group.maxNodes}
 currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -373,7 +372,7 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 				const lifelineNodeIds: number[] =
 					valueDB.getValue(lifelineValueId) ?? [];
 				if (!lifelineNodeIds.includes(ownNodeId)) {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Controller missing from lifeline group #${group}, assinging ourselves...`,
 						direction: "outbound",
@@ -389,7 +388,7 @@ currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
 			// Remember that we have a lifeline association
 			valueDB.setValue(getHasLifelineValueId(), true);
 		} else {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message:
 					"No information about Lifeline associations, cannot assign ourselves!",

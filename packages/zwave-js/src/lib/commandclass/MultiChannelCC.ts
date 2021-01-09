@@ -1,9 +1,4 @@
-import {
-	GenericDeviceClass,
-	lookupGenericDeviceClass,
-	lookupSpecificDeviceClass,
-	SpecificDeviceClass,
-} from "@zwave-js/config";
+import type { GenericDeviceClass, SpecificDeviceClass } from "@zwave-js/config";
 import {
 	CommandClasses,
 	encodeBitMask,
@@ -20,7 +15,6 @@ import {
 } from "@zwave-js/core";
 import { num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { CCAPI, ignoreTimeout } from "./API";
 import {
@@ -301,7 +295,7 @@ export class MultiChannelCC extends CommandClass {
 		});
 
 		// Step 1: Retrieve general information about end points
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying device endpoint information...",
 			direction: "outbound",
@@ -315,7 +309,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		if (multiResponse.aggregatedEndpointCount != undefined) {
 			logMessage += `\nendpoint count (aggregated): ${multiResponse.aggregatedEndpointCount}`;
 		}
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",
@@ -337,7 +331,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			// Step 2a: Find all endpoints
 			await ignoreTimeout(
 				async () => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying all endpoints...",
 						direction: "outbound",
@@ -348,14 +342,14 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 					);
 					if (!endpointsToQuery.length) {
 						// Create a sequential list of endpoints
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Endpoint query returned no results, assuming that endpoints are sequential`,
 							direction: "inbound",
 						});
 						addSequentialEndpoints();
 					} else {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `received endpoints: ${endpointsToQuery
 								.map(String)
@@ -365,7 +359,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 					}
 				},
 				() => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `Did not respond to endpoint query, assuming that endpoints are sequential`,
 						level: "warn",
@@ -375,7 +369,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			);
 		} else {
 			// Step 2b: Assume that the endpoints are in sequential order
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `does not support EndPointFind, assuming that endpoints are sequential`,
 				direction: "none",
@@ -391,13 +385,13 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				this.version >= 4
 			) {
 				// Find members of aggregated end point
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying members of aggregated endpoint #${endpoint}...`,
 					direction: "outbound",
 				});
 				const members = await api.getAggregatedMembers(endpoint);
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `aggregated endpoint #${endpoint} has members ${members
 						.map(String)
@@ -409,7 +403,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			// When the device reports identical capabilities for all endpoints,
 			// we don't need to query them all
 			if (multiResponse.identicalCapabilities && hasQueriedCapabilities) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `all endpoints idendical, skipping capability query for endpoint #${endpoint}...`,
 					direction: "none",
@@ -427,7 +421,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			}
 
 			// TODO: When security is implemented, we need to change stuff here
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying capabilities for endpoint #${endpoint}...`,
 				direction: "outbound",
@@ -443,7 +437,7 @@ supported CCs:`;
 				const ccName = CommandClasses[cc];
 				logMessage += `\n  · ${ccName ? ccName : num2hex(cc)}`;
 			}
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -473,7 +467,7 @@ supported CCs:`;
 				);
 			const endpointCounts = new Map<CommandClasses, number>();
 			for (const ccId of supportedCCs) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					message: `Querying endpoint count for CommandClass ${getCCName(
 						ccId,
 					)}...`,
@@ -482,7 +476,7 @@ supported CCs:`;
 				const endpointCount = await api.getEndpointCountV1(ccId);
 				endpointCounts.set(ccId, endpointCount);
 
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					message: `CommandClass ${getCCName(
 						ccId,
 					)} has ${endpointCount} endpoints`,
@@ -605,8 +599,13 @@ export class MultiChannelCCCapabilityReport extends MultiChannelCC {
 		const capability: EndpointCapability = {
 			isDynamic: !!(this.payload[0] & 0b10000000),
 			wasRemoved: false,
-			generic: lookupGenericDeviceClass(NIF.generic),
-			specific: lookupSpecificDeviceClass(NIF.generic, NIF.specific),
+			generic: this.driver.configManager.lookupGenericDeviceClass(
+				NIF.generic,
+			),
+			specific: this.driver.configManager.lookupSpecificDeviceClass(
+				NIF.generic,
+				NIF.specific,
+			),
 			supportedCCs: NIF.supportedCCs,
 			// TODO: does this include controlledCCs aswell?
 		};
@@ -756,10 +755,10 @@ export class MultiChannelCCEndPointFindReport extends MultiChannelCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"generic device class": lookupGenericDeviceClass(
+				"generic device class": this.driver.configManager.lookupGenericDeviceClass(
 					this.genericClass,
 				).label,
-				"specific device class": lookupSpecificDeviceClass(
+				"specific device class": this.driver.configManager.lookupSpecificDeviceClass(
 					this.genericClass,
 					this.specificClass,
 				).label,
@@ -809,10 +808,10 @@ export class MultiChannelCCEndPointFind extends MultiChannelCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"generic device class": lookupGenericDeviceClass(
+				"generic device class": this.driver.configManager.lookupGenericDeviceClass(
 					this.genericClass,
 				).label,
-				"specific device class": lookupSpecificDeviceClass(
+				"specific device class": this.driver.configManager.lookupSpecificDeviceClass(
 					this.genericClass,
 					this.specificClass,
 				).label,

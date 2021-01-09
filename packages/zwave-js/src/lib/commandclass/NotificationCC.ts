@@ -1,6 +1,5 @@
 import {
-	getNotificationName,
-	lookupNotification,
+	ConfigManager,
 	NotificationParameterWithCommandClass,
 	NotificationParameterWithDuration,
 	NotificationParameterWithValue,
@@ -22,7 +21,6 @@ import {
 import { JSONObject, num2hex } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
@@ -213,12 +211,13 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 }
 
 function defineMetadataForNotificationEvents(
+	configManager: ConfigManager,
 	endpoint: number,
 	type: number,
 	events: readonly number[],
 ): ReadonlyMap<string, ValueMetadata> {
 	const ret = new Map<string, ValueMetadataNumeric>();
-	const notificationConfig = lookupNotification(type);
+	const notificationConfig = configManager.lookupNotification(type);
 	if (!notificationConfig) {
 		// This is an unknown notification
 		const property = `UNKNOWN_${num2hex(type)}`;
@@ -331,7 +330,7 @@ export class NotificationCC extends CommandClass {
 			// We might be dealing with an older cache file, fall back to testing
 		}
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `determining whether this node is pull or push...`,
 			direction: "outbound",
@@ -369,7 +368,7 @@ export class NotificationCC extends CommandClass {
 		});
 		const valueDB = this.getValueDB();
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -385,19 +384,21 @@ export class NotificationCC extends CommandClass {
 				readonly number[]
 			>();
 
-			function lookupNotificationNames(): string[] {
+			const lookupNotificationNames: () => string[] = () => {
 				return supportedNotificationTypes
 					.map((n) => {
-						const ret = lookupNotification(n);
+						const ret = this.driver.configManager.lookupNotification(
+							n,
+						);
 						return [n, ret] as const;
 					})
 					.map(([type, ntfcn]) =>
 						ntfcn ? ntfcn.name : `UNKNOWN (${num2hex(type)})`,
 					);
-			}
+			};
 
 			if (complete) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "querying supported notification types...",
 					direction: "outbound",
@@ -409,7 +410,7 @@ export class NotificationCC extends CommandClass {
 				const logMessage = `received supported notification types:${supportedNotificationNames
 					.map((name) => `\n· ${name}`)
 					.join("")}`;
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -425,7 +426,7 @@ export class NotificationCC extends CommandClass {
 						const type = supportedNotificationTypes[i];
 						const name = supportedNotificationNames[i];
 
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying supported notification events for ${name}...`,
 							direction: "outbound",
@@ -434,7 +435,7 @@ export class NotificationCC extends CommandClass {
 							type,
 						);
 						supportedNotificationEvents.set(type, supportedEvents);
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `received supported notification events for ${name}: ${supportedEvents
 								.map(String)
@@ -483,7 +484,7 @@ export class NotificationCC extends CommandClass {
 					await ignoreTimeout(
 						async () => {
 							// Always query each notification for its current status
-							log.controller.logNode(node.id, {
+							this.driver.controllerLog.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message: `querying notification status for ${name}...`,
 								direction: "outbound",
@@ -497,7 +498,7 @@ export class NotificationCC extends CommandClass {
 							await node.handleCommand(response);
 						},
 						() => {
-							log.controller.logNode(node.id, {
+							this.driver.controllerLog.logNode(node.id, {
 								endpoint: this.endpointIndex,
 								message: `querying notification status for ${name} timed out - skipping because it is not critical...`,
 								level: "warn",
@@ -509,11 +510,13 @@ export class NotificationCC extends CommandClass {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
-					const notificationConfig = lookupNotification(type);
+					const notificationConfig = this.driver.configManager.lookupNotification(
+						type,
+					);
 
 					if (complete) {
 						// Enable reports for each notification type
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `enabling notifications for ${name}...`,
 							direction: "outbound",
@@ -612,7 +615,9 @@ export class NotificationCCSet extends NotificationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"notification type": getNotificationName(this.notificationType),
+				"notification type": this.driver.configManager.getNotificationName(
+					this.notificationType,
+				),
 				status: this.notificationStatus,
 			},
 		};
@@ -698,7 +703,7 @@ export class NotificationCCReport extends NotificationCC {
 						supportedNotificationEvents.includes(this.alarmLevel)
 					) {
 						// This alarm frame corresponds to a valid notification event
-						log.controller.logNode(
+						this.driver.controllerLog.logNode(
 							this.nodeId as number,
 							`treating V1 Alarm frame as Notification Report`,
 						);
@@ -752,11 +757,11 @@ export class NotificationCCReport extends NotificationCC {
 				"V1 alarm level": this.alarmLevel,
 			};
 		} else {
-			const valueConfig = lookupNotification(
-				this.notificationType!,
-			)?.lookupValue(this.notificationEvent!);
+			const valueConfig = this.driver.configManager
+				.lookupNotification(this.notificationType!)
+				?.lookupValue(this.notificationEvent!);
 			message = {
-				"notification type": getNotificationName(
+				"notification type": this.driver.configManager.getNotificationName(
 					this.notificationType!,
 				),
 				"notification status": this.notificationStatus,
@@ -785,7 +790,9 @@ export class NotificationCCReport extends NotificationCC {
 			alarmType: this.alarmType,
 			notificationType:
 				this.notificationType != undefined
-					? lookupNotification(this.notificationType)?.name
+					? this.driver.configManager.lookupNotification(
+							this.notificationType,
+					  )?.name
 					: this.notificationType,
 			notificationStatus: this.notificationStatus,
 			notificationEvent: this.notificationEvent,
@@ -805,7 +812,9 @@ export class NotificationCCReport extends NotificationCC {
 			return;
 		}
 		// Look up the received notification and value in the config
-		const notificationConfig = lookupNotification(this.notificationType);
+		const notificationConfig = this.driver.configManager.lookupNotification(
+			this.notificationType,
+		);
 		if (!notificationConfig) return;
 		const valueConfig = notificationConfig.lookupValue(
 			this.notificationEvent,
@@ -975,14 +984,17 @@ export class NotificationCCGet extends NotificationCC {
 			message["V1 alarm type"] = this.alarmType;
 		}
 		if (this.notificationType != undefined) {
-			message["notification type"] = getNotificationName(
+			message[
+				"notification type"
+			] = this.driver.configManager.getNotificationName(
 				this.notificationType,
 			);
 			if (this.notificationEvent != undefined) {
 				message["notification event"] =
-					lookupNotification(this.notificationType)?.events.get(
-						this.notificationEvent,
-					)?.label ?? `Unknown (${num2hex(this.notificationEvent)})`;
+					this.driver.configManager
+						.lookupNotification(this.notificationType)
+						?.events.get(this.notificationEvent)?.label ??
+					`Unknown (${num2hex(this.notificationEvent)})`;
 			}
 		}
 		return {
@@ -1033,7 +1045,12 @@ export class NotificationCCSupportedReport extends NotificationCC {
 			message: {
 				"supports V1 alarm": this.supportsV1Alarm,
 				"supported notification types": this.supportedNotificationTypes
-					.map((t) => `\n· ${getNotificationName(t)}`)
+					.map(
+						(t) =>
+							`\n· ${this.driver.configManager.getNotificationName(
+								t,
+							)}`,
+					)
 					.join(""),
 			},
 		};
@@ -1084,6 +1101,7 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 
 		// For each event, predefine the value metadata
 		const metadataMap = defineMetadataForNotificationEvents(
+			this.driver.configManager,
 			this.endpointIndex,
 			this._notificationType,
 			this._supportedEvents,
@@ -1106,11 +1124,15 @@ export class NotificationCCEventSupportedReport extends NotificationCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const notification = lookupNotification(this.notificationType);
+		const notification = this.driver.configManager.lookupNotification(
+			this.notificationType,
+		);
 		return {
 			...super.toLogEntry(),
 			message: {
-				"notification type": getNotificationName(this.notificationType),
+				"notification type": this.driver.configManager.getNotificationName(
+					this.notificationType,
+				),
 				"supported events": this.supportedEvents
 					.map(
 						(e) =>
@@ -1161,7 +1183,9 @@ export class NotificationCCEventSupportedGet extends NotificationCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"notification type": getNotificationName(this.notificationType),
+				"notification type": this.driver.configManager.getNotificationName(
+					this.notificationType,
+				),
 			},
 		};
 	}

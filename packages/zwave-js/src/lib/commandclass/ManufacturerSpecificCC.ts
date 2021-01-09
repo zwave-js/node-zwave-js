@@ -1,4 +1,3 @@
-import { lookupManufacturer } from "@zwave-js/config";
 import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
@@ -9,7 +8,6 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -158,7 +156,7 @@ export class ManufacturerSpecificCC extends CommandClass {
 			"Manufacturer Specific"
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -169,12 +167,12 @@ export class ManufacturerSpecificCC extends CommandClass {
 		// manufacturer information is static
 		if (complete) {
 			if (node.isControllerNode()) {
-				log.controller.logNode(
+				this.driver.controllerLog.logNode(
 					node.id,
 					"not querying manufacturer information from the controller...",
 				);
 			} else {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "querying manufacturer information...",
 					direction: "outbound",
@@ -182,11 +180,12 @@ export class ManufacturerSpecificCC extends CommandClass {
 				const mfResp = await api.get();
 				const logMessage = `received response for manufacturer information:
   manufacturer: ${
-		lookupManufacturer(mfResp.manufacturerId) || "unknown"
+		this.driver.configManager.lookupManufacturer(mfResp.manufacturerId) ||
+		"unknown"
   } (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",

@@ -6,19 +6,19 @@ import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import log from "./Logger";
 import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
-const configPath = path.join(configDir, "indicators.json");
-let indicators: ReadonlyMap<number, string> | undefined;
-let properties: ReadonlyMap<number, IndicatorProperty> | undefined;
+const indicatorsConfigPath = path.join(configDir, "indicators.json");
+
+export type IndicatorMap = ReadonlyMap<number, string>;
+export type IndicatorPropertiesMap = ReadonlyMap<number, IndicatorProperty>;
 
 /** @internal */
 export async function loadIndicatorsInternal(): Promise<{
-	indicators: Exclude<typeof indicators, undefined>;
-	properties: Exclude<typeof properties, undefined>;
+	indicators: IndicatorMap;
+	properties: IndicatorPropertiesMap;
 }> {
-	if (!(await pathExists(configPath))) {
+	if (!(await pathExists(indicatorsConfigPath))) {
 		throw new ZWaveError(
 			"The config file does not exist!",
 			ZWaveErrorCodes.Config_Invalid,
@@ -26,7 +26,7 @@ export async function loadIndicatorsInternal(): Promise<{
 	}
 
 	try {
-		const fileContents = await readFile(configPath, "utf8");
+		const fileContents = await readFile(indicatorsConfigPath, "utf8");
 		const definition = JSON5.parse(fileContents) as unknown;
 		if (!isObject(definition)) {
 			throwInvalidConfig("indicators", "the database is not an object");
@@ -44,7 +44,7 @@ export async function loadIndicatorsInternal(): Promise<{
 			);
 		}
 
-		const _indicators = new Map<number, string>();
+		const indicators = new Map<number, string>();
 		for (const [id, label] of entries((definition as any).indicators)) {
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
@@ -53,11 +53,10 @@ export async function loadIndicatorsInternal(): Promise<{
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			_indicators.set(idNum, label);
+			indicators.set(idNum, label);
 		}
-		indicators = _indicators;
 
-		const _properties = new Map<number, IndicatorProperty>();
+		const properties = new Map<number, IndicatorProperty>();
 		for (const [id, propDefinition] of entries(
 			(definition as any).properties,
 		)) {
@@ -68,12 +67,8 @@ export async function loadIndicatorsInternal(): Promise<{
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			_properties.set(
-				idNum,
-				new IndicatorProperty(idNum, propDefinition),
-			);
+			properties.set(idNum, new IndicatorProperty(idNum, propDefinition));
 		}
-		properties = _properties;
 
 		return { indicators, properties };
 	} catch (e: unknown) {
@@ -83,61 +78,6 @@ export async function loadIndicatorsInternal(): Promise<{
 			throwInvalidConfig("indicators");
 		}
 	}
-}
-
-export async function loadIndicators(): Promise<void> {
-	try {
-		await loadIndicatorsInternal();
-	} catch (e: unknown) {
-		// If the config file is missing or invalid, don't try to find it again
-		if (
-			e instanceof ZWaveError &&
-			e.code === ZWaveErrorCodes.Config_Invalid
-		) {
-			if (process.env.NODE_ENV !== "test") {
-				// FIXME: This call breaks when using jest.isolateModule()
-				log.config.print(
-					`Could not indicators config: ${e.message}`,
-					"error",
-				);
-			}
-			if (!indicators) indicators = new Map();
-			if (!properties) properties = new Map();
-		} else {
-			// This is an unexpected error
-			throw e;
-		}
-	}
-}
-
-/**
- * Looks up the label for a given indicator id
- */
-export function lookupIndicator(indicatorId: number): string | undefined {
-	if (!indicators) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
-	return indicators.get(indicatorId);
-}
-
-/**
- * Looks up the property definition for a given indicator property id
- */
-export function lookupProperty(
-	propertyId: number,
-): IndicatorProperty | undefined {
-	if (!properties) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
-	return properties.get(propertyId);
 }
 
 export class IndicatorProperty {

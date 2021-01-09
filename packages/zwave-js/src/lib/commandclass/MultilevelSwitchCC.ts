@@ -13,7 +13,6 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -390,7 +389,7 @@ export class MultilevelSwitchCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -401,13 +400,13 @@ export class MultilevelSwitchCC extends CommandClass {
 		if (complete) {
 			if (this.version >= 3) {
 				// Find out which kind of switch this is
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "requesting switch type...",
 					direction: "outbound",
 				});
 				const switchType = await api.getSupported();
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `has switch type ${getEnumMemberName(
 						SwitchType,
@@ -422,7 +421,7 @@ export class MultilevelSwitchCC extends CommandClass {
 			}
 		}
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting current switch state...",
 			direction: "outbound",

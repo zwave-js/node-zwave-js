@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/node";
 import {
 	assign,
 	Interpreter,
@@ -8,7 +7,6 @@ import {
 	StateMachine,
 } from "xstate";
 import { send } from "xstate/lib/actions";
-import log from "../log";
 import { MessageType } from "../message/Constants";
 import type { Message } from "../message/Message";
 import {
@@ -102,28 +100,6 @@ const forwardMessage = send((_, evt: SerialAPICommandEvent) => {
 	} as SerialAPICommandEvent;
 });
 
-function logOutgoingMessage(ctx: SerialAPICommandContext) {
-	log.driver.logMessage(ctx.msg, {
-		direction: "outbound",
-	});
-	if (process.env.NODE_ENV !== "test") {
-		// Enrich error data in case something goes wrong
-		Sentry.addBreadcrumb({
-			category: "message",
-			timestamp: Date.now() / 1000,
-			type: "debug",
-			data: {
-				direction: "outbound",
-				msgType: ctx.msg.type,
-				functionType: ctx.msg.functionType,
-				name: ctx.msg.constructor.name,
-				nodeId: ctx.msg.getNodeId(),
-				...ctx.msg.toLogEntry(),
-			},
-		});
-	}
-}
-
 export type SerialAPICommandMachineConfig = MachineConfig<
 	SerialAPICommandContext,
 	SerialAPICommandStateSchema,
@@ -153,7 +129,10 @@ export type SerialAPICommandMachineParams = {
 
 export function getSerialAPICommandMachineConfig(
 	message: Message,
-	{ timestamp }: Pick<ServiceImplementations, "timestamp">,
+	{
+		timestamp,
+		logOutgoingMessage,
+	}: Pick<ServiceImplementations, "timestamp" | "logOutgoingMessage">,
 	attemptsConfig: SerialAPICommandMachineParams["attempts"],
 ): SerialAPICommandMachineConfig {
 	return {
@@ -188,7 +167,7 @@ export function getSerialAPICommandMachineConfig(
 						attempts: (ctx) => ctx.attempts + 1,
 						txTimestamp: (_) => timestamp(),
 					}),
-					logOutgoingMessage,
+					(ctx) => logOutgoingMessage(ctx.msg),
 				],
 				invoke: {
 					id: "sendMessage",

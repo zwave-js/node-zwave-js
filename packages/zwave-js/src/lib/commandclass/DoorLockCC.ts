@@ -17,7 +17,6 @@ import {
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	ignoreTimeout,
@@ -303,7 +302,7 @@ export class DoorLockCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -312,7 +311,7 @@ export class DoorLockCC extends CommandClass {
 		});
 
 		if (complete && this.version >= 4) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "requesting lock capabilities...",
 				direction: "outbound",
@@ -334,7 +333,7 @@ supports auto-relock:      ${resp.autoRelockSupported}
 supports hold-and-release: ${resp.holdAndReleaseSupported}
 supports twist assist:     ${resp.twistAssistSupported}
 supports block to block:   ${resp.blockToBlockSupported}`;
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -358,7 +357,7 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 			});
 		}
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "requesting lock configuration...",
 			direction: "outbound",
@@ -389,7 +388,7 @@ twist assist                   ${!!config.twistAssist}
 block to block                 ${!!config.blockToBlock}`;
 		}
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",
@@ -397,7 +396,7 @@ block to block                 ${!!config.blockToBlock}`;
 
 		await ignoreTimeout(
 			async () => {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "requesting current lock status...",
 					direction: "outbound",
@@ -418,14 +417,14 @@ lock timeout:       ${status.lockTimeout} seconds`;
 door status:        ${status.doorStatus}
 bolt status:        ${status.boltStatus}
 latch status:       ${status.latchStatus}`;
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			},
 			() => {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Lock status query timed out - skipping because it is not critical...",

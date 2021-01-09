@@ -12,7 +12,6 @@ import {
 import { pick } from "@zwave-js/shared";
 import { clamp } from "alcalzone-shared/math";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -291,7 +290,7 @@ export class SoundSwitchCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
@@ -299,13 +298,13 @@ export class SoundSwitchCC extends CommandClass {
 		});
 
 		if (complete) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: "requesting tone count...",
 				direction: "outbound",
 			});
 			const toneCount = await api.getToneCount();
 			const logMessage = `supports ${toneCount} tones`;
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: logMessage,
 				direction: "inbound",
 			});
@@ -316,7 +315,7 @@ export class SoundSwitchCC extends CommandClass {
 			for (let toneId = 1; toneId <= toneCount; toneId++) {
 				await ignoreTimeout(
 					async () => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							message: `requesting info for tone #${toneId}`,
 							direction: "outbound",
 						});
@@ -324,7 +323,7 @@ export class SoundSwitchCC extends CommandClass {
 						const logMessage = `received info for tone #${toneId}:
 name:     ${info.name}
 duration: ${info.duration} seconds`;
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							message: logMessage,
 							direction: "inbound",
 						});
@@ -333,7 +332,7 @@ duration: ${info.duration} seconds`;
 						] = `${info.name} (${info.duration} sec)`;
 					},
 					() => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Tone info query timed out - skipping because it is not critical...`,
 							level: "warn",
@@ -353,7 +352,7 @@ duration: ${info.duration} seconds`;
 			});
 		}
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: "requesting current sound configuration...",
 			direction: "outbound",
 		});
@@ -361,7 +360,7 @@ duration: ${info.duration} seconds`;
 		const logMessage = `received current sound configuration:
 default tone ID: ${config.defaultToneId}
 default volume: ${config.defaultVolume}`;
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: logMessage,
 			direction: "inbound",
 		});

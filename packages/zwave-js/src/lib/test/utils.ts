@@ -22,6 +22,13 @@ export const PORT_ADDRESS = "/tty/FAKE";
 export async function createAndStartDriver(
 	options: DeepPartial<ZWaveOptions> = {},
 ) {
+	// Usually we don't want logs in these tests
+	if (!options.logConfig) {
+		options.logConfig = {
+			enabled: false,
+		};
+	}
+
 	const driver = new Driver(PORT_ADDRESS, {
 		...options,
 		skipInterview: true,

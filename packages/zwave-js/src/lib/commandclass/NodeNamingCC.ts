@@ -1,7 +1,6 @@
 import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import { CommandClasses, ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
@@ -168,29 +167,29 @@ export class NodeNamingAndLocationCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
 			direction: "none",
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: "retrieving node name...",
 			direction: "outbound",
 		});
 		const name = await api.getName();
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: `is named "${name}"`,
 			direction: "inbound",
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: "retrieving node location...",
 			direction: "outbound",
 		});
 		const location = await api.getLocation();
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: `received location: ${location}`,
 			direction: "inbound",
 		});

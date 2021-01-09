@@ -23,7 +23,6 @@ import {
 	TransmitOptions,
 } from "../controller/SendDataMessages";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -321,7 +320,7 @@ export class SecurityCC extends CommandClass {
 
 		// This only needs to be done once
 		if (complete) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: "querying securely supported commands...",
 				direction: "outbound",
 			});
@@ -338,7 +337,7 @@ export class SecurityCC extends CommandClass {
 			for (const cc of resp.controlledCCs) {
 				logLines.push(`· ${getCCName(cc)}`);
 			}
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: logLines.join("\n"),
 				direction: "inbound",
 			});

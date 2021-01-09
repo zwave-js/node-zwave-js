@@ -22,6 +22,7 @@ import {
 	SendDataRequestTransmitReport,
 	TransmitStatus,
 } from "../controller/SendDataMessages";
+import type { DriverLogger } from "../log/Driver";
 import type { Message } from "../message/Message";
 import type { SendDataErrorData } from "./SendThreadMachine";
 import type {
@@ -45,6 +46,8 @@ export interface ServiceImplementations {
 	notifyUnsolicited: (message: Message) => void;
 	rejectTransaction: (transaction: Transaction, error: ZWaveError) => void;
 	resolveTransaction: (transaction: Transaction, result?: Message) => void;
+	logOutgoingMessage: (message: Message) => void;
+	log: DriverLogger["print"];
 }
 
 export function sendDataErrorToZWaveError(

@@ -11,11 +11,8 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import log from "./Logger";
 import {
 	configDir,
-	formatId,
-	getDeviceEntryPredicate,
 	hexKeyRegex2Digits,
 	hexKeyRegex4Digits,
 	throwInvalidConfig,
@@ -40,10 +37,10 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 >;
 
 const indexPath = path.join(configDir, "devices/index.json");
-let index: DeviceConfigIndexEntry[] | undefined;
+export type DeviceConfigIndex = DeviceConfigIndexEntry[];
 
 /** @internal */
-export async function loadDeviceIndexInternal(): Promise<typeof index> {
+export async function loadDeviceIndexInternal(): Promise<DeviceConfigIndex> {
 	if (!(await pathExists(indexPath))) {
 		throw new ZWaveError(
 			"The device config index does not exist!",
@@ -52,8 +49,7 @@ export async function loadDeviceIndexInternal(): Promise<typeof index> {
 	}
 	try {
 		const fileContents = await readFile(indexPath, "utf8");
-		index = JSON5.parse(fileContents);
-		return index;
+		return JSON5.parse(fileContents);
 	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
@@ -63,148 +59,10 @@ export async function loadDeviceIndexInternal(): Promise<typeof index> {
 	}
 }
 
-export async function loadDeviceIndex(): Promise<void> {
-	try {
-		await loadDeviceIndexInternal();
-	} catch (e: unknown) {
-		// If the index file is missing or invalid, don't try to find it again
-		if (
-			e instanceof ZWaveError &&
-			e.code === ZWaveErrorCodes.Config_Invalid
-		) {
-			if (process.env.NODE_ENV !== "test") {
-				// FIXME: This call breaks when using jest.isolateModule()
-				log.config.print(
-					`Could not load device config index: ${e.message}`,
-					"error",
-				);
-			}
-			index = [];
-		} else {
-			// This is an unexpected error
-			throw e;
-		}
-	}
-}
-
-export async function writeIndexToFile(): Promise<void> {
-	if (!index) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
+export async function writeIndexToFile(
+	index: DeviceConfigIndex,
+): Promise<void> {
 	await writeFile(indexPath, stringify(index));
-}
-
-/**
- * Looks up the definition of a given device in the configuration DB
- * @param manufacturerId The manufacturer id of the device
- * @param productType The product type of the device
- * @param productId The product id of the device
- * @param filename The path to the json configuration of this device
- * @param firmwareVersionMin Min firmware version
- * @param firmwareVersionMax Max firmware version
- *
- */
-export function addDeviceToIndex(
-	manufacturerId: number,
-	productType: number,
-	productId: number,
-	filename: string,
-	firmwareVersion?: FirmwareVersionRange | false,
-): void {
-	if (!index) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-	// Look up the device in the index
-	const indexEntry: DeviceConfigIndexEntry = {
-		manufacturerId: formatId(manufacturerId),
-		productId: formatId(productId),
-		productType: formatId(productType),
-		firmwareVersion:
-			firmwareVersion === false
-				? false
-				: {
-						min: firmwareVersion?.min || "0.0",
-						max: firmwareVersion?.max || "255.255",
-				  },
-		filename: filename,
-	};
-
-	index.push(indexEntry);
-}
-
-export function getIndex(): DeviceConfigIndexEntry[] | undefined {
-	return index;
-}
-
-/**
- * Looks up the definition of a given device in the configuration DB
- * @param manufacturerId The manufacturer id of the device
- * @param productType The product type of the device
- * @param productId The product id of the device
- * @param firmwareVersion If known, configuration for a specific firmware version can be loaded.
- * If this is `undefined` or not given, the first matching file with a defined firmware range will be returned.
- * If this is `false`, **only** the first matching file without a firmware version (`firmwareVersion: false`) will be returned.
- */
-export async function lookupDevice(
-	manufacturerId: number,
-	productType: number,
-	productId: number,
-	firmwareVersion?: string | false,
-): Promise<DeviceConfig | undefined> {
-	if (!index) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
-	// Look up the device in the index
-	let indexEntry: DeviceConfigIndexEntry | undefined;
-	if (firmwareVersion === false) {
-		// A config file with no firmware version is explicitly requested
-		const predicate = getDeviceEntryPredicate(
-			manufacturerId,
-			productType,
-			productId,
-		);
-		indexEntry = index.find(
-			(e) => e.firmwareVersion === false && predicate(e),
-		);
-	} else {
-		indexEntry = index.find(
-			getDeviceEntryPredicate(
-				manufacturerId,
-				productType,
-				productId,
-				firmwareVersion,
-			),
-		);
-	}
-
-	if (indexEntry) {
-		const filePath = path.join(configDir, "devices", indexEntry.filename);
-		if (!(await pathExists(filePath))) return;
-
-		try {
-			const fileContents = await readFile(filePath, "utf8");
-			return new DeviceConfig(indexEntry.filename, fileContents);
-		} catch (e) {
-			if (process.env.NODE_ENV !== "test") {
-				// FIXME: This call breaks when using jest.isolateModule()
-				log.config.print(
-					`Error loading device config ${filePath}`,
-					"error",
-				);
-			}
-		}
-	}
 }
 
 function isHexKeyWith4Digits(val: any): val is string {

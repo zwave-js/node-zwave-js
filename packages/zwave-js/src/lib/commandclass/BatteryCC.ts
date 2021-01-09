@@ -13,7 +13,6 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
@@ -124,7 +123,7 @@ export class BatteryCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -135,7 +134,7 @@ export class BatteryCC extends CommandClass {
 		await ignoreTimeout(
 			async () => {
 				// always query the status
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "querying battery status...",
 					direction: "outbound",
@@ -164,14 +163,14 @@ needs to be replaced or charged: ${
 is low temperature               ${batteryStatus.lowTemperatureStatus}
 is disconnected:                 ${batteryStatus.disconnected}`;
 				}
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 			},
 			() => {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Battery status query timed out - skipping because it is not critical...",
@@ -184,7 +183,7 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 			await ignoreTimeout(
 				async () => {
 					// always query the health
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying battery health...",
 						direction: "outbound",
@@ -195,14 +194,14 @@ is disconnected:                 ${batteryStatus.disconnected}`;
 					const logMessage = `received response for battery health:
 max. capacity: ${batteryHealth.maximumCapacity} %
 temperature:   ${batteryHealth.temperature} °C`;
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
 				},
 				() => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Battery health query timed out - skipping because it is not critical...",

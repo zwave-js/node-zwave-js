@@ -1,9 +1,6 @@
 import fsExtra from "fs-extra";
-import {
-	loadNotifications,
-	lookupNotification,
-	Notification,
-} from "./Notifications";
+import { ConfigManager } from "./ConfigManager";
+import type { Notification } from "./Notifications";
 
 jest.mock("fs-extra");
 const readFileMock = fsExtra.readFile as jest.Mock;
@@ -39,49 +36,59 @@ const dummyNotifications = {
 
 describe("lib/config/Notifications", () => {
 	describe("lookupNotification (with missing file)", () => {
+		let configManager: ConfigManager;
+
 		beforeAll(async () => {
 			pathExistsMock.mockClear();
 			readFileMock.mockClear();
 			pathExistsMock.mockResolvedValue(false);
 			readFileMock.mockRejectedValue(new Error("File does not exist"));
-			await loadNotifications();
+
+			configManager = new ConfigManager();
+			await configManager.loadNotifications();
 		});
 
 		it("does not throw", () => {
-			expect(() => lookupNotification(0)).not.toThrow();
+			expect(() => configManager.lookupNotification(0)).not.toThrow();
 		});
 
 		it("returns undefined", () => {
-			expect(lookupNotification(0x0e)).toBeUndefined();
-			expect(lookupNotification(0xff)).toBeUndefined();
+			expect(configManager.lookupNotification(0x0e)).toBeUndefined();
+			expect(configManager.lookupNotification(0xff)).toBeUndefined();
 		});
 	});
 
 	describe("lookupNotification (with invalid file)", () => {
+		let configManager: ConfigManager;
+
 		beforeAll(async () => {
 			pathExistsMock.mockClear();
 			readFileMock.mockClear();
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(`{"0x01": `);
 
-			await loadNotifications();
+			configManager = new ConfigManager();
+			await configManager.loadNotifications();
 		});
 
 		it("does not throw", () => {
-			expect(() => lookupNotification(0x0e)).not.toThrow();
+			expect(() => configManager.lookupNotification(0x0e)).not.toThrow();
 		});
 
 		it("returns undefined", () => {
-			expect(lookupNotification(0x0e)).toBeUndefined();
+			expect(configManager.lookupNotification(0x0e)).toBeUndefined();
 		});
 	});
 
 	describe("lookupNotification()", () => {
+		let configManager: ConfigManager;
+
 		beforeAll(async () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(JSON.stringify(dummyNotifications));
 
-			await loadNotifications();
+			configManager = new ConfigManager();
+			await configManager.loadNotifications();
 		});
 
 		beforeEach(() => {
@@ -90,16 +97,18 @@ describe("lib/config/Notifications", () => {
 		});
 
 		it("returns the notification definition if it is defined", () => {
-			const test1 = lookupNotification(0x0a);
+			const test1 = configManager.lookupNotification(0x0a);
 			expect(test1).not.toBeUndefined();
 			expect(test1!.name).toBe("Dummy Notification");
 
-			expect(lookupNotification(0xff)).toBeUndefined();
+			expect(configManager.lookupNotification(0xff)).toBeUndefined();
 		});
 	});
 
 	describe("lookupValue()", () => {
 		let notification: Notification;
+
+		let configManager: ConfigManager;
 
 		beforeAll(async () => {
 			pathExistsMock.mockClear();
@@ -107,11 +116,12 @@ describe("lib/config/Notifications", () => {
 			pathExistsMock.mockResolvedValue(true);
 			readFileMock.mockResolvedValue(JSON.stringify(dummyNotifications));
 
-			await loadNotifications();
+			configManager = new ConfigManager();
+			await configManager.loadNotifications();
 		});
 
 		beforeEach(async () => {
-			notification = lookupNotification(0x0a)!;
+			notification = configManager.lookupNotification(0x0a)!;
 			expect(notification).not.toBeUndefined();
 		});
 

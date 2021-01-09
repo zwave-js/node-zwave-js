@@ -1,4 +1,3 @@
-import { loadManufacturers } from "@zwave-js/config";
 import { CommandClasses } from "@zwave-js/core";
 import { ZWaveNode } from "../../lib/node/Node";
 import type { Driver } from "../driver/Driver";
@@ -54,7 +53,7 @@ describe("lib/commandclass/ManufacturerSpecificCC => ", () => {
 		}
 
 		beforeAll(async () => {
-			await loadManufacturers();
+			await fakeDriver.configManager.loadManufacturers();
 			resetSendMessageImplementation();
 			fakeDriver.controller.nodes.set(node.id, node);
 			node.addCC(CommandClasses["Manufacturer Specific"], {

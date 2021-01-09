@@ -5,7 +5,6 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import log from "./Logger";
 import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
 interface NotificationStateDefinition {
@@ -29,10 +28,10 @@ export type NotificationValueDefinition = (
 };
 
 const configPath = path.join(configDir, "notifications.json");
-let notifications: ReadonlyMap<number, Notification> | undefined;
+export type NotificationMap = ReadonlyMap<number, Notification>;
 
 /** @internal */
-export async function loadNotificationsInternal(): Promise<void> {
+export async function loadNotificationsInternal(): Promise<NotificationMap> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The config file does not exist!",
@@ -50,7 +49,7 @@ export async function loadNotificationsInternal(): Promise<void> {
 			);
 		}
 
-		const ret = new Map();
+		const notifications = new Map();
 		for (const [id, ntfcnDefinition] of entries(definition)) {
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
@@ -59,12 +58,12 @@ export async function loadNotificationsInternal(): Promise<void> {
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			ret.set(
+			notifications.set(
 				idNum,
 				new Notification(idNum, ntfcnDefinition as JSONObject),
 			);
 		}
-		notifications = ret;
+		return notifications;
 	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
@@ -72,63 +71,6 @@ export async function loadNotificationsInternal(): Promise<void> {
 			throwInvalidConfig("notifications");
 		}
 	}
-}
-
-export async function loadNotifications(): Promise<void> {
-	try {
-		await loadNotificationsInternal();
-	} catch (e: unknown) {
-		// If the config file is missing or invalid, don't try to find it again
-		if (
-			e instanceof ZWaveError &&
-			e.code === ZWaveErrorCodes.Config_Invalid
-		) {
-			if (process.env.NODE_ENV !== "test") {
-				// FIXME: This call breaks when using jest.isolateModule()
-				log.config.print(
-					`Could not load notifications config: ${e.message}`,
-					"error",
-				);
-			}
-			notifications = new Map();
-		} else {
-			// This is an unexpected error
-			throw e;
-		}
-	}
-}
-
-/**
- * Looks up the notification configuration for a given notification type
- */
-export function lookupNotification(
-	notificationType: number,
-): Notification | undefined {
-	if (!notifications) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
-	return notifications.get(notificationType);
-}
-
-/**
- * Looks up the notification configuration for a given notification type.
- * If the config has not been loaded yet, this returns undefined.
- */
-function lookupNotificationUnsafe(
-	notificationType: number,
-): Notification | undefined {
-	return notifications?.get(notificationType);
-}
-
-export function getNotificationName(notificationType: number): string {
-	return (
-		lookupNotificationUnsafe(notificationType)?.name ??
-		`Unknown (${num2hex(notificationType)})`
-	);
 }
 
 export class Notification {

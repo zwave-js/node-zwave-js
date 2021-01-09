@@ -1,4 +1,3 @@
-import { loadIndicatorsInternal } from "@zwave-js/config";
 import { CommandClasses } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
@@ -34,7 +33,7 @@ describe("lib/commandclass/IndicatorCC => ", () => {
 			isSupported: true,
 			version: 3,
 		});
-		await loadIndicatorsInternal();
+		await fakeDriver.configManager.loadIndicators();
 	});
 
 	afterAll(() => {

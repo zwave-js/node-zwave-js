@@ -26,7 +26,6 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	ignoreTimeout,
@@ -267,7 +266,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 					getMinimumShiftForBitMask(valueBitMask)
 				);
 			}
-			log.controller.logNode(this.endpoint.nodeId, {
+			this.driver.controllerLog.logNode(this.endpoint.nodeId, {
 				message: `Received unexpected ConfigurationReport (param = ${
 					response.parameter
 				}, value = ${response.value.toString()})`,
@@ -431,7 +430,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 		}
 
 		// TODO: Reduce the priority of the messages
-		log.controller.logNode(
+		this.driver.controllerLog.logNode(
 			this.endpoint.nodeId,
 			`Scanning available parameters...`,
 		);
@@ -439,7 +438,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 		for (let param = 1; param <= 255; param++) {
 			// Check if the parameter is readable
 			let originalValue: ConfigValue | undefined;
-			log.controller.logNode(this.endpoint.nodeId, {
+			this.driver.controllerLog.logNode(this.endpoint.nodeId, {
 				message: `  trying param ${param}...`,
 				direction: "outbound",
 			});
@@ -455,7 +454,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
     readable  = true
     valueSize = ${ccInstance.getParamInformation(param).valueSize}
     value     = ${originalValue.toString()}`;
-					log.controller.logNode(this.endpoint.nodeId, {
+					this.driver.controllerLog.logNode(this.endpoint.nodeId, {
 						message: logMessage,
 						direction: "inbound",
 					});
@@ -491,7 +490,7 @@ export class ConfigurationCC extends CommandClass {
 
 		const config = node.deviceConfig?.paramInformation;
 		if (config) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: Loading configuration parameters from device config`,
 				direction: "none",
@@ -519,7 +518,7 @@ export class ConfigurationCC extends CommandClass {
 					alreadyQueried.add(param.parameter);
 
 					// Query the current value
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `querying parameter #${param.parameter} value...`,
 						direction: "outbound",
@@ -527,13 +526,13 @@ export class ConfigurationCC extends CommandClass {
 					// ... at least try to
 					const paramValue = await api.get(param.parameter);
 					if (typeof paramValue === "number") {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `parameter #${param.parameter} has value: ${paramValue}`,
 							direction: "inbound",
 						});
 					} else if (!paramValue) {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `received no value for parameter #${param.parameter}`,
 							direction: "inbound",
@@ -542,7 +541,7 @@ export class ConfigurationCC extends CommandClass {
 					}
 				}
 			} else {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `${this.constructor.name}: skipping interview because CC version is < 3 and there is no config file`,
 					direction: "none",
@@ -550,7 +549,7 @@ export class ConfigurationCC extends CommandClass {
 			}
 		} else {
 			// Version >= 3
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: doing a ${
 					complete ? "complete" : "partial"
@@ -558,7 +557,7 @@ export class ConfigurationCC extends CommandClass {
 				direction: "none",
 			});
 
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "finding first configuration parameter...",
 				direction: "outbound",
@@ -566,7 +565,7 @@ export class ConfigurationCC extends CommandClass {
 			let { nextParameter: param } = await api.getProperties(0);
 
 			while (param > 0) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying parameter #${param} information...`,
 					direction: "outbound",
@@ -604,14 +603,14 @@ is advanced (UI):    ${!!properties.isAdvanced}
 has bulk support:    ${!properties.noBulkSupport}
 alters capabilities: ${!!properties.altersCapabilities}`;
 				}
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
 
 				// Query the current value
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying parameter #${param} value...`,
 					direction: "outbound",

@@ -1,4 +1,3 @@
-import { loadMetersInternal } from "@zwave-js/config";
 import { CommandClasses } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { ZWaveNode } from "../node/Node";
@@ -30,7 +29,7 @@ describe("lib/commandclass/MeterCC => ", () => {
 		fakeDriver = (createEmptyMockDriver() as unknown) as Driver;
 		node1 = new ZWaveNode(1, fakeDriver);
 		(fakeDriver.controller.nodes as any).set(1, node1);
-		await loadMetersInternal();
+		await fakeDriver.configManager.loadMeters();
 	});
 
 	afterAll(() => {

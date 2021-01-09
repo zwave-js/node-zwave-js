@@ -12,7 +12,6 @@ import {
 } from "@zwave-js/core";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
 import {
@@ -145,7 +144,7 @@ export class TimeCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -155,7 +154,7 @@ export class TimeCC extends CommandClass {
 
 		// Always keep the slave's time in sync
 		if (api.version >= 2) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "setting timezone information...",
 				direction: "outbound",
