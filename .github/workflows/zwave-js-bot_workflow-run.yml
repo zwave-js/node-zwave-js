@@ -1,0 +1,31 @@
+name: 'Z-Wave Bot: React to Workflow runs'
+
+on:
+  check_run:
+    types: [completed]
+
+jobs:
+  debug:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+
+  # # Offer help to the contributor to fix lint errors
+  # fix-lint-comment:
+  #   if: |
+  #     contains(github.event.check_run.name, 'lint') &&
+  #     github.event.check_run.conclusion == 'failure' &&
+  #     github.event.check_run.pull_requests.length > 0
+
+  #   runs-on: [ubuntu-latest]
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - uses: actions/github-script@v3
+  #     with:
+  #       github-token: ${{secrets.BOT_TOKEN}}
+  #       script: |
+  #         const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+  #         await bot.fixLintOffer({github, context});

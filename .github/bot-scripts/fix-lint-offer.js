@@ -12,7 +12,8 @@ async function main(param) {
 	);
 
 	// Check if the --fix option can do something
-	if (!log.includes("--fix")) return;
+	if (!log.includes("--fix") && !log.includes("Forgot to run Prettier?"))
+		return;
 	const options = {
 		owner: context.repo.owner,
 		repo: context.repo.repo,
