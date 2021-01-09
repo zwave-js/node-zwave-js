@@ -26,7 +26,11 @@ import {
 	loadIndicatorsInternal,
 } from "./Indicators";
 import { ConfigLogger } from "./Logger";
-import { loadManufacturersInternal, ManufacturersMap } from "./Manufacturers";
+import {
+	loadManufacturersInternal,
+	ManufacturersMap,
+	saveManufacturersInternal,
+} from "./Manufacturers";
 import {
 	getDefaultMeterScale,
 	loadMetersInternal,
@@ -96,6 +100,17 @@ export class ConfigManager {
 				throw e;
 			}
 		}
+	}
+
+	public async saveManufacturers(): Promise<void> {
+		if (!this.manufacturers) {
+			throw new ZWaveError(
+				"The config has not been loaded yet!",
+				ZWaveErrorCodes.Driver_NotReady,
+			);
+		}
+
+		await saveManufacturersInternal(this.manufacturers);
 	}
 
 	/**
@@ -402,7 +417,7 @@ export class ConfigManager {
 			) {
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
-						`Could not load device config index: ${e.message}`,
+						`Could not load or regenerate device config index: ${e.message}`,
 						"error",
 					);
 				}

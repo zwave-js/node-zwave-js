@@ -64,7 +64,7 @@ export async function loadManufacturersInternal(): Promise<ManufacturersMap> {
 /**
  * Write current manufacturers map to json
  */
-export async function writeManufacturersToJson(
+export async function saveManufacturersInternal(
 	manufacturers: ManufacturersMap,
 ): Promise<void> {
 	const data: Record<string, string> = {};

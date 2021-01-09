@@ -1,5 +1,5 @@
 import type { CommandClasses, CommandClassInfo, ValueID } from "@zwave-js/core";
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import { ZWaveError } from "@zwave-js/core";
 import {
 	JSONObject,
 	ObjectKeyMap,
@@ -13,6 +13,8 @@ import JSON5 from "json5";
 import path from "path";
 import {
 	configDir,
+	enumFilesRecursive,
+	formatId,
 	hexKeyRegex2Digits,
 	hexKeyRegex4Digits,
 	throwInvalidConfig,
@@ -36,16 +38,14 @@ export type ParamInfoMap = ReadonlyObjectKeyMap<
 	ParamInformation
 >;
 
-const indexPath = path.join(configDir, "devices/index.json");
+export const devicesDir = path.join(configDir, "devices");
+export const indexPath = path.join(devicesDir, "index.json");
 export type DeviceConfigIndex = DeviceConfigIndexEntry[];
 
 /** @internal */
 export async function loadDeviceIndexInternal(): Promise<DeviceConfigIndex> {
 	if (!(await pathExists(indexPath))) {
-		throw new ZWaveError(
-			"The device config index does not exist!",
-			ZWaveErrorCodes.Config_Invalid,
-		);
+		return generateDeviceIndex();
 	}
 	try {
 		const fileContents = await readFile(indexPath, "utf8");
@@ -59,9 +59,48 @@ export async function loadDeviceIndexInternal(): Promise<DeviceConfigIndex> {
 	}
 }
 
-export async function writeIndexToFile(
-	index: DeviceConfigIndex,
-): Promise<void> {
+/** Generates an index for all device config files */
+async function generateDeviceIndex(): Promise<DeviceConfigIndex> {
+	const configFiles = await enumFilesRecursive(
+		devicesDir,
+		(file) => file.endsWith(".json") && !file.endsWith("index.json"),
+	);
+
+	const index: DeviceConfigIndex = [];
+
+	for (const file of configFiles) {
+		const relativePath = path
+			.relative(devicesDir, file)
+			.replace(/\\/g, "/");
+		const fileContents = await readFile(file, "utf8");
+		// Try parsing the file
+		const config = new DeviceConfig(relativePath, fileContents);
+		// Add the file to the index
+		index.push(
+			...config.devices.map((dev: any) => ({
+				manufacturerId: formatId(config.manufacturerId.toString(16)),
+				...dev,
+				firmwareVersion: config.firmwareVersion,
+				filename: relativePath,
+			})),
+		);
+	}
+
+	if (process.env.NODE_ENV !== "test") {
+		// Write the index (but not during tests)
+		await writeFile(
+			path.join(devicesDir, "index.json"),
+			`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
+	${stringify(index, "\t")}
+	`,
+			"utf8",
+		);
+	}
+
+	return index;
+}
+
+export async function saveDeviceIndex(index: DeviceConfigIndex): Promise<void> {
 	await writeFile(indexPath, stringify(index));
 }
 

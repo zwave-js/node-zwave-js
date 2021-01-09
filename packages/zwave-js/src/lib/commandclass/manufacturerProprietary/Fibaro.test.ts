@@ -26,7 +26,7 @@ describe("lib/commandclass/manufacturerProprietary/Fibaro => ", () => {
 		node2 = new ZWaveNode(2, fakeDriver as any);
 		(fakeDriver.controller.nodes as any).set(node2.id, node2);
 		await fakeDriver.configManager.loadDeviceIndex();
-	});
+	}, 60000);
 
 	afterAll(() => {
 		node2.destroy();
