@@ -34,6 +34,7 @@ To compensate for the change and give the response enough time to reach the cont
 You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull the latest config files. For now, a driver restart is required afterwards.
 
 ### Features
+* Added basic support for 700-series controllers
 * Added a compatibility option to disable the `Basic CC` mapping
 * An option was added to enable logging to the console, even if it is not a TTY
 * An option was added to control the filesystem access throttling
