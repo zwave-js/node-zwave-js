@@ -100,7 +100,7 @@ function getCurrentValueValueID(endpoint: number): ValueID {
 
 function getTargetValueValueId(endpoint?: number): ValueID {
 	return {
-		commandClass: CommandClasses["Binary Switch"],
+		commandClass: CommandClasses["Multilevel Switch"],
 		endpoint,
 		property: "targetValue",
 	};
