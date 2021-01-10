@@ -6,18 +6,17 @@ import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import log from "./Logger";
 import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "deviceClasses.json");
 
-let basicDeviceClasses: ReadonlyMap<number, string> | undefined;
-let genericDeviceClasses: ReadonlyMap<number, GenericDeviceClass> | undefined;
+export type BasicDeviceClassMap = ReadonlyMap<number, string>;
+export type GenericDeviceClassMap = ReadonlyMap<number, GenericDeviceClass>;
 
 /** @internal */
 export async function loadDeviceClassesInternal(): Promise<{
-	basic: Exclude<typeof basicDeviceClasses, undefined>;
-	generic: Exclude<typeof genericDeviceClasses, undefined>;
+	basicDeviceClasses: BasicDeviceClassMap;
+	genericDeviceClasses: GenericDeviceClassMap;
 }> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
@@ -49,7 +48,7 @@ export async function loadDeviceClassesInternal(): Promise<{
 			);
 		}
 
-		const basic = new Map<number, string>();
+		const basicDeviceClasses = new Map<number, string>();
 		for (const [key, basicClass] of entries((definition as any).basic)) {
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
@@ -58,11 +57,10 @@ export async function loadDeviceClassesInternal(): Promise<{
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
-			basic.set(keyNum, basicClass);
+			basicDeviceClasses.set(keyNum, basicClass);
 		}
-		basicDeviceClasses = basic;
 
-		const generic = new Map<number, GenericDeviceClass>();
+		const genericDeviceClasses = new Map<number, GenericDeviceClass>();
 		for (const [key, genericDefinition] of entries(
 			(definition as any).generic,
 		)) {
@@ -73,44 +71,18 @@ export async function loadDeviceClassesInternal(): Promise<{
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
-			generic.set(
+			genericDeviceClasses.set(
 				keyNum,
 				new GenericDeviceClass(keyNum, genericDefinition),
 			);
 		}
-		genericDeviceClasses = generic;
 
-		return { basic, generic };
+		return { basicDeviceClasses, genericDeviceClasses };
 	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
 		} else {
 			throwInvalidConfig("device classes");
-		}
-	}
-}
-
-export async function loadDeviceClasses(): Promise<void> {
-	try {
-		await loadDeviceClassesInternal();
-	} catch (e: unknown) {
-		// If the config file is missing or invalid, don't try to find it again
-		if (
-			e instanceof ZWaveError &&
-			e.code === ZWaveErrorCodes.Config_Invalid
-		) {
-			if (process.env.NODE_ENV !== "test") {
-				// FIXME: This call breaks when using jest.isolateModule()
-				log.config.print(
-					`Could not load scales config: ${e.message}`,
-					"error",
-				);
-			}
-			basicDeviceClasses = new Map();
-			genericDeviceClasses = new Map();
-		} else {
-			// This is an unexpected error
-			throw e;
 		}
 	}
 }
@@ -139,45 +111,6 @@ export function getDefaultSpecificDeviceClass(
 			label: `UNKNOWN (${num2hex(key)})`,
 		},
 		generic,
-	);
-}
-
-export function lookupBasicDeviceClass(basic: number): BasicDeviceClass {
-	if (!basicDeviceClasses) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
-	return {
-		key: basic,
-		label: basicDeviceClasses.get(basic) ?? `UNKNOWN (${num2hex(basic)})`,
-	};
-}
-
-export function lookupGenericDeviceClass(generic: number): GenericDeviceClass {
-	if (!genericDeviceClasses) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
-	return (
-		genericDeviceClasses.get(generic) ??
-		getDefaultGenericDeviceClass(generic)
-	);
-}
-
-export function lookupSpecificDeviceClass(
-	generic: number,
-	specific: number,
-): SpecificDeviceClass {
-	const genericClass = lookupGenericDeviceClass(generic);
-	return (
-		genericClass.specific.get(specific) ??
-		getDefaultSpecificDeviceClass(genericClass, specific)
 	);
 }
 

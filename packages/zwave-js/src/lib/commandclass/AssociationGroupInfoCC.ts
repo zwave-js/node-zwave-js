@@ -12,7 +12,6 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import type { AssociationCC } from "./AssociationCC";
@@ -449,7 +448,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 			"Association Group Information"
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -464,21 +463,21 @@ export class AssociationGroupInfoCC extends CommandClass {
 				await ignoreTimeout(
 					async () => {
 						// First get the group's name
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Association group #${groupId}: Querying name...`,
 							direction: "outbound",
 						});
 						const name = await api.getGroupName(groupId);
 						const logMessage = `Association group #${groupId} has name "${name}"`;
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: logMessage,
 							direction: "inbound",
 						});
 					},
 					() => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Querying name of association group #${groupId} timed out - skipping because it is not critical...`,
 							level: "warn",
@@ -501,7 +500,7 @@ export class AssociationGroupInfoCC extends CommandClass {
 				await ignoreTimeout(
 					async () => {
 						// Then its information
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Association group #${groupId}: Querying info...`,
 							direction: "outbound",
@@ -516,14 +515,14 @@ profile:         ${getEnumMemberName(
 							AssociationGroupInfoProfile,
 							info.profile,
 						)}`;
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: logMessage,
 							direction: "inbound",
 						});
 					},
 					() => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Querying info for association group #${groupId} timed out - skipping because it is not critical...`,
 							level: "warn",
@@ -535,7 +534,7 @@ profile:         ${getEnumMemberName(
 			if (complete) {
 				await ignoreTimeout(
 					async () => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Association group #${groupId}: Querying command list...`,
 							direction: "outbound",
@@ -544,7 +543,7 @@ profile:         ${getEnumMemberName(
 						// Not sure how to log this
 					},
 					() => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Querying command list for association group #${groupId} timed out - skipping because it is not critical...`,
 							level: "warn",

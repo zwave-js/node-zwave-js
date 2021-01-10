@@ -5,14 +5,13 @@ import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import log from "./Logger";
 import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "meters.json");
-let meters: ReadonlyMap<number, Meter> | undefined;
+export type MeterMap = ReadonlyMap<number, Meter>;
 
 /** @internal */
-export async function loadMetersInternal(): Promise<void> {
+export async function loadMetersInternal(): Promise<MeterMap> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The config file does not exist!",
@@ -27,7 +26,7 @@ export async function loadMetersInternal(): Promise<void> {
 			throwInvalidConfig("meters", "the database is not an object");
 		}
 
-		const ret = new Map();
+		const meters = new Map();
 		for (const [id, meterDefinition] of entries(definition)) {
 			if (!hexKeyRegexNDigits.test(id)) {
 				throwInvalidConfig(
@@ -36,9 +35,9 @@ export async function loadMetersInternal(): Promise<void> {
 				);
 			}
 			const idNum = parseInt(id.slice(2), 16);
-			ret.set(idNum, new Meter(idNum, meterDefinition as JSONObject));
+			meters.set(idNum, new Meter(idNum, meterDefinition as JSONObject));
 		}
-		meters = ret;
+		return meters;
 	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
@@ -46,44 +45,6 @@ export async function loadMetersInternal(): Promise<void> {
 			throwInvalidConfig("meters");
 		}
 	}
-}
-
-export async function loadMeters(): Promise<void> {
-	try {
-		await loadMetersInternal();
-	} catch (e: unknown) {
-		// If the config file is missing or invalid, don't try to find it again
-		if (
-			e instanceof ZWaveError &&
-			e.code === ZWaveErrorCodes.Config_Invalid
-		) {
-			if (process.env.NODE_ENV !== "test") {
-				// FIXME: This call breaks when using jest.isolateModule()
-				log.config.print(
-					`Could not meters config: ${e.message}`,
-					"error",
-				);
-			}
-			meters = new Map();
-		} else {
-			// This is an unexpected error
-			throw e;
-		}
-	}
-}
-
-/**
- * Looks up the notification configuration for a given notification type
- */
-export function lookupMeter(meterType: number): Meter | undefined {
-	if (!meters) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
-	return meters.get(meterType);
 }
 
 export class Meter {
@@ -135,12 +96,6 @@ export class MeterScale {
 
 	public readonly key: number;
 	public readonly label: string;
-}
-
-/** Looks up a scale definition for a given meter type */
-export function lookupMeterScale(type: number, scale: number): MeterScale {
-	const meter = lookupMeter(type);
-	return meter?.scales.get(scale) ?? getDefaultMeterScale(scale);
 }
 
 export function getDefaultMeterScale(scale: number): MeterScale {

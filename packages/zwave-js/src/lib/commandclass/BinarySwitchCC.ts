@@ -13,7 +13,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -147,7 +146,7 @@ export class BinarySwitchCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -156,7 +155,7 @@ export class BinarySwitchCC extends CommandClass {
 		});
 
 		// always query the current state
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying Binary Switch state...",
 			direction: "outbound",
@@ -173,7 +172,7 @@ remaining duration: ${
 				binarySwitchResponse.duration?.toString() ?? "undefined"
 			}`;
 		}
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: logMessage,
 			direction: "inbound",

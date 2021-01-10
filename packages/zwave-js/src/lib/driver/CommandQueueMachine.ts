@@ -12,7 +12,6 @@ import {
 	SendDataMulticastRequest,
 	SendDataRequest,
 } from "../controller/SendDataMessages";
-import log from "../log";
 import type { Message } from "../message/Message";
 import {
 	createSerialAPICommandMachine,
@@ -233,7 +232,7 @@ export function createCommandQueueMachine(
 							params,
 						);
 					} catch (e) {
-						log.driver.print(
+						implementations.log(
 							`Unexpected error during SerialAPI command: ${e}`,
 							"error",
 						);

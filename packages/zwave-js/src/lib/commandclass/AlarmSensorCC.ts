@@ -12,7 +12,6 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { ignoreTimeout, PhysicalCCAPI } from "./API";
 import {
@@ -163,7 +162,7 @@ export class AlarmSensorCC extends CommandClass {
 
 		// Skip the interview in favor of Notification CC if possible
 		if (endpoint.commandClasses.Notification.isSupported()) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `${this.constructor.name}: skipping interview because Notification CC is supported...`,
 				direction: "none",
@@ -176,7 +175,7 @@ export class AlarmSensorCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -189,7 +188,7 @@ export class AlarmSensorCC extends CommandClass {
 		if (complete) {
 			if (
 				!(await ignoreTimeout(async () => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "querying supported sensor types...",
 						direction: "outbound",
@@ -199,14 +198,14 @@ export class AlarmSensorCC extends CommandClass {
 						.map((type) => getEnumMemberName(AlarmSensorType, type))
 						.map((name) => `\n· ${name}`)
 						.join("")}`;
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
 				}))
 			) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported sensor types timed out, skipping interview...",
@@ -228,7 +227,7 @@ export class AlarmSensorCC extends CommandClass {
 
 				await ignoreTimeout(
 					async () => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying current value for ${sensorName}...`,
 							direction: "outbound",
@@ -244,14 +243,14 @@ severity: ${currentValue.severity}`;
 							message += `
 duration: ${currentValue.duration}`;
 						}
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message,
 							direction: "inbound",
 						});
 					},
 					() => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message:
 								"Current value query timed out - skipping because it is not critical...",

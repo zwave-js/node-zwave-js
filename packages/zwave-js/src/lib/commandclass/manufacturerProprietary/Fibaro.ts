@@ -10,7 +10,6 @@ import {
 } from "@zwave-js/core";
 import { staticExtends } from "@zwave-js/shared";
 import type { Driver } from "../../driver/Driver";
-import log from "../../log";
 import {
 	CCCommandOptions,
 	CommandClassDeserializationOptions,
@@ -126,14 +125,14 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
 			direction: "none",
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: "Requesting venetian blind position and tilt...",
 			direction: "outbound",
 		});
@@ -149,7 +148,7 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 		const logMessage = `received venetian blind state:
 position: ${position}
 tilt:     ${tilt}`;
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: logMessage,
 			direction: "inbound",
 		});

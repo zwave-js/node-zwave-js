@@ -16,7 +16,6 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -191,7 +190,7 @@ export class CentralSceneCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -231,7 +230,7 @@ export class CentralSceneCC extends CommandClass {
 								a.nodeId === this.driver.controller.ownNodeId,
 						)
 					) {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message:
 								"Configuring associations to receive Central Scene notifications...",
@@ -258,7 +257,7 @@ export class CentralSceneCC extends CommandClass {
 				| undefined;
 			if (
 				!(await ignoreTimeout(async () => {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: "Querying supported scenes...",
 						direction: "outbound",
@@ -267,14 +266,14 @@ export class CentralSceneCC extends CommandClass {
 					const logMessage = `received supported scenes:
 # of scenes:           ${ccSupported.sceneCount}
 supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
 				}))
 			) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"Querying supported scenes timed out, skipping interview...",
@@ -285,7 +284,7 @@ supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
 
 			// The slow refresh capability should be enabled whenever possible
 			if (this.version >= 3 && ccSupported?.supportsSlowRefresh) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "Enabling slow refresh capability...",
 					direction: "outbound",

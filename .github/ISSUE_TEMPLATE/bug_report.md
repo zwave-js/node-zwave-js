@@ -24,7 +24,35 @@ assignees: AlCalzone
 
 
 **Describe the bug**
-A clear and concise description of what the bug is.
+
+A clear and concise description of what the bug is. Describe what causes the bug, what you observe, and what happens as a result.
+
+**Device information**
+
+Which device(s) is/are affected (make/model)?  
+What are the node IDs?
+
+**Last Known Working Configuration**
+- [ ] New device
+- [ ] Previously working device (node-zwave-js)
+    - Which library version/docker image/adapter version?
+    - Have you made any recent configuration changes to the device? Describe.
+
+- [ ] Previously working device (other platform)
+    - Which platform?
+    - Have you made any recent configuration changes to the device? Describe.
+    
+**Installation information**
+How did you install `node-zwave-js`?
+- [ ] Zwavejs2mqtt (latest) docker image
+- [ ] Zwavejs2mqtt (dev) docker image
+- [ ] ioBroker.zwave2 adapter
+- [ ] Pkg
+- [ ] Manual docker build
+    - Against which branch of `node-zwave-js`?
+    - With which branch of `zwavejs2mqtt`?
+- [ ] Other (describe)
+- [ ] Manually built (`git clone` - `yarn install` - `yarn run build:full`) 
 
 **To Reproduce**
 Steps to reproduce the behavior:
@@ -33,8 +61,7 @@ Steps to reproduce the behavior:
 3. Scroll down to '....'
 4. See error
 
-**Device information**
-Which device(s) is/are affected?  
-What are the node IDs?
+**Additional context**
+Add any other context about the problem here.
 
 **Logfile:** <!-- attach `zwave-js` logfile with DEBUG or VERBOSE loglevel here -->

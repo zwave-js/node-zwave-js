@@ -7,7 +7,6 @@ import {
 import { staticExtends } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import {
 	CCAPI,
 	SetValueImplementation,
@@ -217,7 +216,7 @@ export class ManufacturerProprietaryCC extends CommandClass {
 				endpoint: this.endpointIndex,
 			}).interview(complete);
 		} else {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				message: `${this.constructor.name}: skipping interview because none of the implemented proprietary CCs are supported...`,
 				direction: "none",
 			});

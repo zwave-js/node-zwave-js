@@ -5,16 +5,15 @@ import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import log from "./Logger";
 import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "scales.json");
-let namedScales: ReadonlyMap<string, ReadonlyMap<number, Scale>> | undefined;
+
+export type ScaleGroup = ReadonlyMap<number, Scale>;
+export type NamedScalesGroupMap = ReadonlyMap<string, ScaleGroup>;
 
 /** @internal */
-export async function loadNamedScalesInternal(): Promise<
-	Exclude<typeof namedScales, undefined>
-> {
+export async function loadNamedScalesInternal(): Promise<NamedScalesGroupMap> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The named scales config file does not exist!",
@@ -32,7 +31,7 @@ export async function loadNamedScalesInternal(): Promise<
 			);
 		}
 
-		const ret = new Map();
+		const namedScales = new Map();
 		for (const [name, scales] of entries(definition)) {
 			if (!/[\w\d]+/.test(name)) {
 				throwInvalidConfig(
@@ -53,10 +52,9 @@ export async function loadNamedScalesInternal(): Promise<
 				const keyNum = parseInt(key.slice(2), 16);
 				named.set(keyNum, new Scale(keyNum, scaleDefinition));
 			}
-			ret.set(name, named);
+			namedScales.set(name, named);
 		}
-		namedScales = ret;
-		return ret;
+		return namedScales;
 	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
@@ -66,57 +64,11 @@ export async function loadNamedScalesInternal(): Promise<
 	}
 }
 
-export async function loadNamedScales(): Promise<void> {
-	try {
-		await loadNamedScalesInternal();
-	} catch (e: unknown) {
-		// If the config file is missing or invalid, don't try to find it again
-		if (
-			e instanceof ZWaveError &&
-			e.code === ZWaveErrorCodes.Config_Invalid
-		) {
-			if (process.env.NODE_ENV !== "test") {
-				// FIXME: This call breaks when using jest.isolateModule()
-				log.config.print(
-					`Could not load scales config: ${e.message}`,
-					"error",
-				);
-			}
-			namedScales = new Map();
-		} else {
-			// This is an unexpected error
-			throw e;
-		}
-	}
-}
-
-/**
- * Looks up all scales defined under a given name
- */
-export function lookupNamedScaleGroup(
-	name: string,
-): ReadonlyMap<number, Scale> | undefined {
-	if (!namedScales) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
-	return namedScales.get(name);
-}
-
 export function getDefaultScale(scale: number): Scale {
 	return new Scale(scale, {
 		unit: undefined,
 		label: "Unknown",
 	});
-}
-
-/** Looks up a scale definition for a given sensor type */
-export function lookupNamedScale(name: string, scale: number): Scale {
-	const group = lookupNamedScaleGroup(name);
-	return group?.get(scale) ?? getDefaultScale(scale);
 }
 
 export class Scale {

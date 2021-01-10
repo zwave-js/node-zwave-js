@@ -1,3 +1,4 @@
+export * from "./ConfigManager";
 export * from "./DeviceClasses";
 export * from "./Devices";
 export * from "./Indicators";

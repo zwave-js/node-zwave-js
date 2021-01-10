@@ -1,8 +1,4 @@
-import {
-	DeviceConfig,
-	lookupDevice,
-	lookupNotification,
-} from "@zwave-js/config";
+import type { DeviceConfig } from "@zwave-js/config";
 import {
 	actuatorCCs,
 	applicationCCs,
@@ -111,7 +107,6 @@ import {
 } from "../controller/GetRoutingInfoMessages";
 import type { Driver } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
-import log from "../log";
 import type { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
@@ -208,7 +203,7 @@ export class ZWaveNode extends Endpoint {
 				this,
 				{
 					notifyAwakeTimeoutElapsed: () => {
-						log.driver.print(
+						this.driver.driverLog.print(
 							`The awake timeout for node ${this.id} has elapsed. Assuming it is asleep.`,
 							"verbose",
 						);
@@ -319,9 +314,12 @@ export class ZWaveNode extends Endpoint {
 			internal: isInternalValue,
 		};
 		if (changeTarget === "value") {
-			log.controller.value(changeType as any, logArgument as any);
+			this.driver.controllerLog.value(
+				changeType as any,
+				logArgument as any,
+			);
 		} else if (changeTarget === "metadata") {
-			log.controller.metadataUpdated(logArgument);
+			this.driver.controllerLog.metadataUpdated(logArgument);
 		}
 		//Don't expose value events for internal value IDs...
 		if (isInternalValue) return;
@@ -788,7 +786,7 @@ export class ZWaveNode extends Endpoint {
 		// Check if the Multi Channel CC interview for this node is completed,
 		// because we don't have all the information before that
 		if (!this.isMultiChannelInterviewComplete) {
-			log.driver.print(
+			this.driver.driverLog.print(
 				`Node ${this.nodeId}, Endpoint ${index}: Trying to access endpoint instance before Multi Channel interview`,
 				"error",
 			);
@@ -888,13 +886,13 @@ export class ZWaveNode extends Endpoint {
 	 */
 	public async interview(): Promise<boolean> {
 		if (this.interviewStage === InterviewStage.Complete) {
-			log.controller.logNode(
+			this.driver.controllerLog.logNode(
 				this.id,
 				`skipping interview because it is already completed`,
 			);
 			return true;
 		} else {
-			log.controller.interviewStart(this);
+			this.driver.controllerLog.interviewStart(this);
 		}
 
 		// Remember that we tried to interview this node
@@ -928,7 +926,7 @@ export class ZWaveNode extends Endpoint {
 
 		if (this.interviewStage === InterviewStage.None) {
 			// do a full interview starting with the protocol info
-			log.controller.logNode(
+			this.driver.controllerLog.logNode(
 				this.id,
 				`new node, doing a full interview...`,
 			);
@@ -1005,12 +1003,12 @@ export class ZWaveNode extends Endpoint {
 			case InterviewStage.Complete:
 				await this.driver.saveNetworkToCache();
 		}
-		log.controller.interviewStage(this);
+		this.driver.controllerLog.interviewStage(this);
 	}
 
 	/** Step #1 of the node interview */
 	protected async queryProtocolInfo(): Promise<void> {
-		log.controller.logNode(this.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: "querying protocol info...",
 			direction: "outbound",
 		});
@@ -1068,7 +1066,7 @@ is a secure device:    ${this.isSecure}
 is a beaming device:   ${this.isBeaming}
 maximum baud rate:     ${this.maxBaudRate} kbps
 version:               ${this.version}`;
-		log.controller.logNode(this.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: logMessage,
 			direction: "inbound",
 		});
@@ -1090,21 +1088,27 @@ version:               ${this.version}`;
 	/** Node interview: pings the node to see if it responds */
 	public async ping(): Promise<boolean> {
 		if (this.isControllerNode()) {
-			log.controller.logNode(this.id, "not pinging the controller");
+			this.driver.controllerLog.logNode(
+				this.id,
+				"not pinging the controller",
+			);
 		} else {
-			log.controller.logNode(this.id, {
+			this.driver.controllerLog.logNode(this.id, {
 				message: "pinging the node...",
 				direction: "outbound",
 			});
 
 			try {
 				await this.commandClasses["No Operation"].send();
-				log.controller.logNode(this.id, {
+				this.driver.controllerLog.logNode(this.id, {
 					message: "ping successful",
 					direction: "inbound",
 				});
 			} catch (e) {
-				log.controller.logNode(this.id, `ping failed: ${e.message}`);
+				this.driver.controllerLog.logNode(
+					this.id,
+					`ping failed: ${e.message}`,
+				);
 				return false;
 			}
 		}
@@ -1117,12 +1121,12 @@ version:               ${this.version}`;
 	 */
 	protected async queryNodeInfo(): Promise<void> {
 		if (this.isControllerNode()) {
-			log.controller.logNode(
+			this.driver.controllerLog.logNode(
 				this.id,
 				"not querying node info from the controller",
 			);
 		} else {
-			log.controller.logNode(this.id, {
+			this.driver.controllerLog.logNode(this.id, {
 				message: "querying node info...",
 				direction: "outbound",
 			});
@@ -1133,7 +1137,7 @@ version:               ${this.version}`;
 				(resp instanceof RequestNodeInfoResponse && !resp.wasSent) ||
 				resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
 			) {
-				log.controller.logNode(
+				this.driver.controllerLog.logNode(
 					this.id,
 					`querying the node info failed`,
 					"error",
@@ -1154,7 +1158,7 @@ version:               ${this.version}`;
 					const ccName = CommandClasses[cc];
 					logLines.push(`· ${ccName ? ccName : num2hex(cc)}`);
 				}
-				log.controller.logNode(this.id, {
+				this.driver.controllerLog.logNode(this.id, {
 					message: logLines.join("\n"),
 					direction: "inbound",
 				});
@@ -1178,17 +1182,23 @@ version:               ${this.version}`;
 			this.productId != undefined
 		) {
 			// Try to load the config file
-			log.controller.logNode(this.id, "trying to load device config");
-			this._deviceConfig = await lookupDevice(
+			this.driver.controllerLog.logNode(
+				this.id,
+				"trying to load device config",
+			);
+			this._deviceConfig = await this.driver.configManager.lookupDevice(
 				this.manufacturerId,
 				this.productType,
 				this.productId,
 				withFirmwareVersion ? this.firmwareVersion : false,
 			);
 			if (this._deviceConfig) {
-				log.controller.logNode(this.id, "device config loaded");
+				this.driver.controllerLog.logNode(
+					this.id,
+					"device config loaded",
+				);
 			} else {
-				log.controller.logNode(
+				this.driver.controllerLog.logNode(
 					this.id,
 					"no device config loaded",
 					"warn",
@@ -1221,7 +1231,7 @@ version:               ${this.version}`;
 			if (endpoint.isCCSecure(cc) && !this.driver.securityManager) {
 				// The CC is only supported securely, but the network key is not set up
 				// Skip the CC
-				log.controller.logNode(
+				this.driver.controllerLog.logNode(
 					this.id,
 					`Skipping interview for secure CC ${getCCName(
 						cc,
@@ -1275,7 +1285,7 @@ version:               ${this.version}`;
 				}
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
-				log.controller.print(
+				this.driver.controllerLog.print(
 					`${getCCName(cc)}: Error after interview:\n${e.message}`,
 					"error",
 				);
@@ -1295,7 +1305,11 @@ version:               ${this.version}`;
 				if (!this._hasEmittedNoNetworkKeyError) {
 					// Cannot interview a secure device securely without a network key
 					const errorMessage = `supports Security, but no network key was configured. Continuing interview non-securely.`;
-					log.controller.logNode(this.nodeId, errorMessage, "error");
+					this.driver.controllerLog.logNode(
+						this.nodeId,
+						errorMessage,
+						"error",
+					);
 					this.driver.emit(
 						"error",
 						new ZWaveError(
@@ -1319,7 +1333,7 @@ version:               ${this.version}`;
 					return false;
 				} else if (action === false || action === "continue") {
 					// Assume that the node is not actually included securely
-					log.controller.logNode(
+					this.driver.controllerLog.logNode(
 						this.nodeId,
 						`The node is not included securely. Continuing interview non-securely.`,
 					);
@@ -1327,7 +1341,7 @@ version:               ${this.version}`;
 				} else {
 					// We got a response, so we know the node is included securely
 					if (this._isSecure !== true) {
-						log.controller.logNode(
+						this.driver.controllerLog.logNode(
 							this.nodeId,
 							`The node is included securely.`,
 						);
@@ -1472,7 +1486,7 @@ version:               ${this.version}`;
 		// This is not the handler for wakeup notifications, but some legacy devices send this
 		// message whenever there's an update
 		if (this.requiresManualValueRefresh()) {
-			log.controller.logNode(this.nodeId, {
+			this.driver.controllerLog.logNode(this.nodeId, {
 				message: `Node does not send unsolicited updates, refreshing actuator and sensor values...`,
 			});
 			void this.refreshValues();
@@ -1563,7 +1577,7 @@ version:               ${this.version}`;
 				try {
 					await instance.interview(false);
 				} catch (e) {
-					log.controller.logNode(
+					this.driver.controllerLog.logNode(
 						this.id,
 						`failed to refresh values for ${getCCName(
 							cc,
@@ -1593,7 +1607,7 @@ version:               ${this.version}`;
 				try {
 					await cc.interview(false);
 				} catch (e) {
-					log.controller.logNode(
+					this.driver.controllerLog.logNode(
 						this.id,
 						`failed to refresh values for ${getCCName(
 							cc.ccId,
@@ -1630,7 +1644,7 @@ version:               ${this.version}`;
 
 	/** @internal */
 	public async queryNeighborsInternal(): Promise<void> {
-		log.controller.logNode(this.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: "requesting node neighbors...",
 			direction: "outbound",
 		});
@@ -1665,14 +1679,14 @@ version:               ${this.version}`;
 				);
 			}
 			this._neighbors = resp.nodeIds;
-			log.controller.logNode(this.id, {
+			this.driver.controllerLog.logNode(this.id, {
 				message: `  node neighbors received: ${this._neighbors.join(
 					", ",
 				)}`,
 				direction: "inbound",
 			});
 		} catch (e) {
-			log.controller.logNode(
+			this.driver.controllerLog.logNode(
 				this.id,
 				`  requesting the node neighbors failed: ${e.message}`,
 				"error",
@@ -1743,7 +1757,7 @@ version:               ${this.version}`;
 			return;
 		}
 
-		log.controller.logNode(this.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: `TODO: no handler for application command`,
 			direction: "inbound",
 		});
@@ -1760,7 +1774,7 @@ version:               ${this.version}`;
 		if (!this.driver.securityManager) {
 			if (!this.hasLoggedNoNetworkKey) {
 				this.hasLoggedNoNetworkKey = true;
-				log.controller.logNode(this.id, {
+				this.driver.controllerLog.logNode(this.id, {
 					message: `cannot reply to NonceGet because no network key was configured!`,
 					direction: "inbound",
 					level: "warn",
@@ -1799,7 +1813,7 @@ version:               ${this.version}`;
 		try {
 			await this.commandClasses.Security.sendNonce();
 		} catch (e) {
-			log.controller.logNode(this.id, {
+			this.driver.controllerLog.logNode(this.id, {
 				message: `failed to send nonce: ${e}`,
 				direction: "inbound",
 			});
@@ -1929,7 +1943,7 @@ version:               ${this.version}`;
 		}
 
 		setSceneValue(command.sceneNumber, command.keyAttribute);
-		log.controller.logNode(this.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: `received CentralScene notification ${stringify(command)}`,
 			direction: "inbound",
 		});
@@ -1940,7 +1954,7 @@ version:               ${this.version}`;
 
 	/** Handles the receipt of a Wake Up notification */
 	private handleWakeUpNotification(): void {
-		log.controller.logNode(this.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: `received wakeup notification`,
 			direction: "inbound",
 		});
@@ -1985,14 +1999,14 @@ version:               ${this.version}`;
 
 	private async compatDoWakeupQueries(): Promise<void> {
 		if (!this._deviceConfig?.compat?.queryOnWakeup) return;
-		log.controller.logNode(this.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: `expects some queries after wake up, so it shall receive`,
 			direction: "none",
 		});
 
 		for (const [ccName, apiMethod, ...args] of this._deviceConfig.compat
 			.queryOnWakeup) {
-			log.controller.logNode(this.id, {
+			this.driver.controllerLog.logNode(this.id, {
 				message: `compat query "${ccName}"::${apiMethod}(${args
 					.map((arg) => JSON.stringify(arg))
 					.join(", ")})`,
@@ -2009,7 +2023,7 @@ version:               ${this.version}`;
 					tag: "compat",
 				});
 			} catch {
-				log.controller.logNode(this.id, {
+				this.driver.controllerLog.logNode(this.id, {
 					message: `could not access API, skipping query`,
 					direction: "none",
 					level: "warn",
@@ -2017,14 +2031,14 @@ version:               ${this.version}`;
 				continue;
 			}
 			if (!API.isSupported()) {
-				log.controller.logNode(this.id, {
+				this.driver.controllerLog.logNode(this.id, {
 					message: `API not supported, skipping query`,
 					direction: "none",
 					level: "warn",
 				});
 				continue;
 			} else if (!(API as any)[apiMethod]) {
-				log.controller.logNode(this.id, {
+				this.driver.controllerLog.logNode(this.id, {
 					message: `method ${apiMethod} not found on API, skipping query`,
 					direction: "none",
 					level: "warn",
@@ -2050,12 +2064,12 @@ version:               ${this.version}`;
 			// Do the API call and ignore/log any errors
 			try {
 				await method(...methodArgs);
-				log.controller.logNode(this.id, {
+				this.driver.controllerLog.logNode(this.id, {
 					message: `API call successful`,
 					direction: "none",
 				});
 			} catch (e) {
-				log.controller.logNode(this.id, {
+				this.driver.controllerLog.logNode(this.id, {
 					message: `error during API call: ${e}`,
 					direction: "none",
 					level: "warn",
@@ -2122,7 +2136,7 @@ version:               ${this.version}`;
 		} else if (command instanceof BasicCCSet) {
 			// Some devices send their current state using `BasicCCSet`s to their associations
 			// instead of using reports. We still interpret them like reports
-			log.controller.logNode(this.id, {
+			this.driver.controllerLog.logNode(this.id, {
 				message: "treating BasicCC Set as a report",
 			});
 
@@ -2185,7 +2199,7 @@ version:               ${this.version}`;
 	 */
 	private handleNotificationReport(command: NotificationCCReport): void {
 		if (command.notificationType == undefined) {
-			log.controller.logNode(this.id, {
+			this.driver.controllerLog.logNode(this.id, {
 				message: `received unsupported notification ${stringify(
 					command,
 				)}`,
@@ -2195,7 +2209,9 @@ version:               ${this.version}`;
 		}
 
 		// Look up the received notification in the config
-		const notificationConfig = lookupNotification(command.notificationType);
+		const notificationConfig = this.driver.configManager.lookupNotification(
+			command.notificationType,
+		);
 
 		if (notificationConfig) {
 			// This is a known notification (status or event)
@@ -2353,7 +2369,7 @@ version:               ${this.version}`;
 			const endpoint = command.getEndpoint();
 			if (!endpoint) return;
 
-			log.controller.logNode(
+			this.driver.controllerLog.logNode(
 				this.nodeId,
 				`detected a deviation of the node's clock, updating it...`,
 			);
@@ -2450,7 +2466,7 @@ version:               ${this.version}`;
 			data.length / this._firmwareUpdateStatus.fragmentSize,
 		);
 
-		log.controller.logNode(this.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: `Starting firmware update...`,
 			direction: "outbound",
 		});
@@ -2531,7 +2547,7 @@ version:               ${this.version}`;
 			);
 		}
 
-		log.controller.logNode(this.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: `Aborting firmware update...`,
 			direction: "outbound",
 		});
@@ -2546,7 +2562,7 @@ version:               ${this.version}`;
 					cc.status === FirmwareUpdateStatus.Error_TransmissionFailed,
 				5000,
 			);
-			log.controller.logNode(this.id, {
+			this.driver.controllerLog.logNode(this.id, {
 				message: `Firmware update aborted`,
 				direction: "inbound",
 			});
@@ -2600,7 +2616,7 @@ version:               ${this.version}`;
 		command: FirmwareUpdateMetaDataCCGet,
 	): void {
 		if (this._firmwareUpdateStatus == undefined) {
-			log.controller.logNode(this.id, {
+			this.driver.controllerLog.logNode(this.id, {
 				message: `Received Firmware Update Get, but no firmware update is in progress. Forcing the node to abort...`,
 				direction: "inbound",
 			});
@@ -2613,7 +2629,7 @@ version:               ${this.version}`;
 		} else if (
 			command.reportNumber > this._firmwareUpdateStatus.numFragments
 		) {
-			log.controller.logNode(this.id, {
+			this.driver.controllerLog.logNode(this.id, {
 				message: `Received Firmware Update Get for an out-of-bounds fragment. Forcing the node to abort...`,
 				direction: "inbound",
 			});
@@ -2666,7 +2682,7 @@ version:               ${this.version}`;
 					await this.sendCorruptedFirmwareUpdateReport(num, fragment);
 					return;
 				} else {
-					log.controller.logNode(this.id, {
+					this.driver.controllerLog.logNode(this.id, {
 						message: `Sending firmware fragment ${num} / ${numFragments}`,
 						direction: "outbound",
 					});
@@ -2702,7 +2718,7 @@ version:               ${this.version}`;
 				}
 			}
 		})().catch((e) => {
-			log.controller.logNode(
+			this.driver.controllerLog.logNode(
 				this.nodeId,
 				`Error while sending firmware fragment: ${e.message}`,
 				"error",
@@ -2714,7 +2730,7 @@ version:               ${this.version}`;
 		// In some cases it can happen that the device stops requesting update frames
 		// We need to timeout the update in this case so it can be restarted
 
-		log.controller.logNode(this.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: `Firmware update timed out`,
 			direction: "none",
 			level: "warn",
@@ -2744,7 +2760,7 @@ version:               ${this.version}`;
 		// delayed activation in the RequestGet command
 		const success = status >= FirmwareUpdateStatus.OK_WaitingForActivation;
 
-		log.controller.logNode(this.id, {
+		this.driver.controllerLog.logNode(this.id, {
 			message: `Firmware update ${
 				success ? "completed" : "failed"
 			} with status ${getEnumMemberName(FirmwareUpdateStatus, status)}`,
@@ -2781,7 +2797,7 @@ version:               ${this.version}`;
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Controller_NodeTimeout
 			) {
-				log.controller.logNode(
+				this.driver.controllerLog.logNode(
 					this.id,
 					`The node did not acknowledge the completed update`,
 					"warn",
@@ -2868,7 +2884,12 @@ version:               ${this.version}`;
 				typeof generic === "number" &&
 				typeof specific === "number"
 			) {
-				this._deviceClass = new DeviceClass(basic, generic, specific);
+				this._deviceClass = new DeviceClass(
+					this.driver.configManager,
+					basic,
+					generic,
+					specific,
+				);
 			}
 		}
 
@@ -2993,7 +3014,7 @@ version:               ${this.version}`;
 								metadata as CacheMetadata[],
 							);
 						} catch (e) {
-							log.controller.logNode(this.id, {
+							this.driver.controllerLog.logNode(this.id, {
 								message: `Error during deserialization of CC value metadata from cache:\n${e}`,
 								level: "error",
 							});
@@ -3016,7 +3037,7 @@ version:               ${this.version}`;
 								values as CacheValue[],
 							);
 						} catch (e) {
-							log.controller.logNode(this.id, {
+							this.driver.controllerLog.logNode(this.id, {
 								message: `Error during deserialization of CC values from cache:\n${e}`,
 								level: "error",
 							});
@@ -3067,7 +3088,7 @@ version:               ${this.version}`;
 
 		let msgSent = false;
 		if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
-			log.controller.logNode(this.id, {
+			this.driver.controllerLog.logNode(this.id, {
 				message: "Sending node back to sleep...",
 				direction: "outbound",
 			});

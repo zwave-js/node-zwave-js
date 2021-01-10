@@ -1,6 +1,5 @@
 // TODO: auto-generate this
 
-export { lookupSensorScale, lookupSensorType } from "@zwave-js/config";
 export type { Scale, SensorType } from "@zwave-js/config";
 export { ValueMetadata } from "@zwave-js/core";
 export type {

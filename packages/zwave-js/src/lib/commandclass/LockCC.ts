@@ -7,7 +7,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
@@ -106,20 +105,20 @@ export class LockCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
 			} interview...`,
 			direction: "none",
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: "requesting current lock state...",
 			direction: "outbound",
 		});
 		const locked = await api.get();
 		const logMessage = `the lock is ${locked ? "locked" : "unlocked"}`;
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			message: logMessage,
 			direction: "inbound",
 		});

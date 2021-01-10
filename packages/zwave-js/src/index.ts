@@ -14,7 +14,7 @@ import "source-map-support/register";
 
 /** The version of zwave-js, exported for your convenience */
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const libVersion: string = require("./package.json").version;
+const libVersion: string = require("zwave-js/package.json").version;
 const libraryRootDir = path.join(__dirname, "..");
 
 /** Checks if a filename is part of this library. Paths outside will be excluded from Sentry error reporting */

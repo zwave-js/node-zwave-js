@@ -1,4 +1,4 @@
-import { lookupNamedScale, Scale } from "@zwave-js/config";
+import type { ConfigManager, Scale } from "@zwave-js/config";
 import type { MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
@@ -13,7 +13,6 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -71,11 +70,11 @@ export enum ThermostatSetpointType {
 const thermostatSetpointTypeMap = [0x00, 0x01, 0x02, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f];
 
 const thermostatSetpointScaleName = "temperature";
-function getScale(scale: number): Scale {
-	return lookupNamedScale(thermostatSetpointScaleName, scale);
+function getScale(configManager: ConfigManager, scale: number): Scale {
+	return configManager.lookupNamedScale(thermostatSetpointScaleName, scale);
 }
-function getSetpointUnit(scale: number): string {
-	return getScale(scale).unit ?? "";
+function getSetpointUnit(configManager: ConfigManager, scale: number): string {
+	return getScale(configManager, scale).unit ?? "";
 }
 
 export interface ThermostatSetpointValue {
@@ -316,7 +315,7 @@ export class ThermostatSetpointCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -336,7 +335,7 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			// If we haven't yet, query the supported setpoint types
 			if (complete) {
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "retrieving supported setpoint types...",
 					direction: "outbound",
@@ -366,7 +365,7 @@ export class ThermostatSetpointCC extends CommandClass {
 
 			if (!interpretation) {
 				if ([3, 4, 5, 6].some((type) => setpointTypes.includes(type))) {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"uses Thermostat Setpoint bitmap interpretation A",
@@ -374,7 +373,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					});
 					switchToInterpretationA();
 				} else {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
 							"Thermostat Setpoint bitmap interpretation is unknown, assuming B for now",
@@ -396,7 +395,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					type,
 				);
 				// Every time, query the current value
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying current value of setpoint ${setpointName}...`,
 					direction: "outbound",
@@ -422,7 +421,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					} ${setpoint.scale.unit ?? ""}`;
 				} else if (!interpretation) {
 					// The setpoint type is not supported, switch to interpretation A
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `the setpoint type ${type} is unsupported, switching to interpretation A`,
 						direction: "none",
@@ -435,7 +434,7 @@ export class ThermostatSetpointCC extends CommandClass {
 					// We're sure about the interpretation - this should not happen
 					logMessage = `Setpoint ${setpointName} is not supported`;
 				}
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
@@ -474,7 +473,7 @@ export class ThermostatSetpointCC extends CommandClass {
 			if (complete) {
 				if (
 					!(await ignoreTimeout(async () => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: "retrieving supported setpoint types...",
 							direction: "outbound",
@@ -493,14 +492,14 @@ export class ThermostatSetpointCC extends CommandClass {
 								)
 								.map((name) => `· ${name}`)
 								.join("\n");
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: logMessage,
 							direction: "inbound",
 						});
 					}))
 				) {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `supported setpoint type query timed out - skipping interview...`,
 						level: "warn",
@@ -523,22 +522,24 @@ export class ThermostatSetpointCC extends CommandClass {
 				);
 				// If we haven't yet, find out the capabilities of this setpoint
 				if (complete) {
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: `retrieving capabilities for setpoint ${setpointName}...`,
 						direction: "outbound",
 					});
 					const setpointCaps = await api.getCapabilities(type);
 					const minValueUnit = getSetpointUnit(
+						this.driver.configManager,
 						setpointCaps.minValueScale,
 					);
 					const maxValueUnit = getSetpointUnit(
+						this.driver.configManager,
 						setpointCaps.maxValueScale,
 					);
 					const logMessage = `received capabilities for setpoint ${setpointName}:
 minimum value: ${setpointCaps.minValue} ${minValueUnit}
 maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
-					log.controller.logNode(node.id, {
+					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
@@ -547,7 +548,7 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 				// Every time, query the current value
 				await ignoreTimeout(
 					async () => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `querying current value of setpoint ${setpointName}...`,
 							direction: "outbound",
@@ -563,14 +564,14 @@ maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
 							// But better be sure we don't crash
 							logMessage = `Setpoint ${setpointName} is not supported`;
 						}
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: logMessage,
 							direction: "inbound",
 						});
 					},
 					() => {
-						log.controller.logNode(node.id, {
+						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message: `Setpoint ${setpointName} query timed out - skipping because it is not critical...`,
 							level: "warn",
@@ -626,7 +627,7 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const scale = getScale(this.scale);
+		const scale = getScale(this.driver.configManager, this.scale);
 		return {
 			...super.toLogEntry(),
 			message: {
@@ -653,14 +654,14 @@ export class ThermostatSetpointCCReport extends ThermostatSetpointCC {
 		if (this._type === 0) {
 			// Not supported
 			this._value = 0;
-			this._scale = getScale(0);
+			this._scale = getScale(this.driver.configManager, 0);
 			return;
 		}
 
 		// parseFloatWithScale does its own validation
 		const { value, scale } = parseFloatWithScale(this.payload.slice(1));
 		this._value = value;
-		this._scale = getScale(scale);
+		this._scale = getScale(this.driver.configManager, scale);
 
 		this.persistValues();
 	}
@@ -804,8 +805,11 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 			min: this._minValue,
 			max: this._maxValue,
 			unit:
-				getSetpointUnit(this._minValueScale) ||
-				getSetpointUnit(this._maxValueScale),
+				getSetpointUnit(
+					this.driver.configManager,
+					this._minValueScale,
+				) ||
+				getSetpointUnit(this.driver.configManager, this._maxValueScale),
 			ccSpecific: {
 				setpointType: this._type,
 			},
@@ -840,8 +844,14 @@ export class ThermostatSetpointCCCapabilitiesReport extends ThermostatSetpointCC
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
-		const minValueScale = getScale(this.minValueScale);
-		const maxValueScale = getScale(this.maxValueScale);
+		const minValueScale = getScale(
+			this.driver.configManager,
+			this.minValueScale,
+		);
+		const maxValueScale = getScale(
+			this.driver.configManager,
+			this.maxValueScale,
+		);
 		return {
 			...super.toLogEntry(),
 			message: {

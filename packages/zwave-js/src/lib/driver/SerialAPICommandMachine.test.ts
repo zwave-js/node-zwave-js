@@ -380,11 +380,15 @@ describe("lib/driver/SerialAPICommandMachine", () => {
 					});
 					const notifyRetry = jest.fn();
 					const timestamp = () => 0;
+					const log = () => {};
+					const logOutgoingMessage = () => {};
 
 					const implementations = {
 						sendData,
 						notifyRetry,
 						timestamp,
+						log,
+						logOutgoingMessage,
 					};
 
 					// parse message from test description

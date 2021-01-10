@@ -1,19 +1,25 @@
-import {
+import type {
 	BasicDeviceClass,
+	ConfigManager,
 	GenericDeviceClass,
-	lookupBasicDeviceClass,
-	lookupGenericDeviceClass,
-	lookupSpecificDeviceClass,
 	SpecificDeviceClass,
 } from "@zwave-js/config";
 import { CommandClasses } from "@zwave-js/core";
 import type { JSONObject } from "@zwave-js/shared";
 
 export class DeviceClass {
-	public constructor(basic: number, generic: number, specific: number) {
-		this.basic = lookupBasicDeviceClass(basic);
-		this.generic = lookupGenericDeviceClass(generic);
-		this.specific = lookupSpecificDeviceClass(generic, specific);
+	public constructor(
+		configManager: ConfigManager,
+		basic: number,
+		generic: number,
+		specific: number,
+	) {
+		this.basic = configManager.lookupBasicDeviceClass(basic);
+		this.generic = configManager.lookupGenericDeviceClass(generic);
+		this.specific = configManager.lookupSpecificDeviceClass(
+			generic,
+			specific,
+		);
 
 		// The specific class' CCs include the generic class' CCs
 		this._mandatorySupportedCCs = this.specific.supportedCCs;

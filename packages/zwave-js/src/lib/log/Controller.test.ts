@@ -1,29 +1,27 @@
-import { CommandClasses, restoreSilence } from "@zwave-js/core";
+import { CommandClasses, ZWaveLogContainer } from "@zwave-js/core";
 import { assertLogInfo, assertMessage, SpyTransport } from "@zwave-js/testing";
-import winston from "winston";
 import { InterviewStage } from "../node/Types";
-import log from "./index";
+import { ControllerLogger } from "./Controller";
 
 describe("lib/log/Controller =>", () => {
-	let controllerLogger: winston.Logger;
+	let controllerLogger: ControllerLogger;
 	let spyTransport: SpyTransport;
-	const wasSilenced = true;
 
 	// Replace all defined transports with a spy transport
 	beforeAll(() => {
-		// the loggers are lazily created, so force loading by logging once
-		log.controller.print("");
-		controllerLogger = winston.loggers.get("controller");
 		spyTransport = new SpyTransport();
+		controllerLogger = new ControllerLogger(
+			new ZWaveLogContainer({
+				transports: [spyTransport],
+			}),
+		);
 		// Uncomment this to debug the log outputs manually
 		// wasSilenced = unsilence(controllerLogger);
-		controllerLogger.add(spyTransport);
 	});
 
 	// Don't spam the console when performing the other tests not related to logging
 	afterAll(() => {
-		controllerLogger.remove(spyTransport);
-		restoreSilence(controllerLogger, wasSilenced);
+		controllerLogger.container.updateConfiguration({ enabled: false });
 	});
 
 	beforeEach(() => {
@@ -38,12 +36,12 @@ describe("lib/log/Controller =>", () => {
 				property: "foo",
 			};
 
-			log.controller.value("added", { ...baseArgs, newValue: 1 });
+			controllerLogger.value("added", { ...baseArgs, newValue: 1 });
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[+]"),
 			});
 
-			log.controller.value("updated", {
+			controllerLogger.value("updated", {
 				...baseArgs,
 				prevValue: 7,
 				newValue: 1,
@@ -53,7 +51,7 @@ describe("lib/log/Controller =>", () => {
 				callNumber: 1,
 			});
 
-			log.controller.value("removed", { ...baseArgs, prevValue: 7 });
+			controllerLogger.value("removed", { ...baseArgs, prevValue: 7 });
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[-]"),
 				callNumber: 2,
@@ -67,7 +65,7 @@ describe("lib/log/Controller =>", () => {
 				property: "foo",
 			};
 
-			log.controller.value("added", { ...baseArgs, newValue: 1 });
+			controllerLogger.value("added", { ...baseArgs, newValue: 1 });
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[Basic]"),
 			});
@@ -80,7 +78,7 @@ describe("lib/log/Controller =>", () => {
 				property: "foo",
 			};
 
-			log.controller.value("added", {
+			controllerLogger.value("added", {
 				...baseArgs,
 				nodeId: 5,
 				newValue: 1,
@@ -97,12 +95,12 @@ describe("lib/log/Controller =>", () => {
 				property: "foo",
 			};
 
-			log.controller.value("added", { ...baseArgs, newValue: 1 });
+			controllerLogger.value("added", { ...baseArgs, newValue: 1 });
 			assertMessage(spyTransport, {
 				predicate: (msg) => !msg.includes("[Endpoint"),
 			});
 
-			log.controller.value("added", {
+			controllerLogger.value("added", {
 				...baseArgs,
 				newValue: 1,
 				endpoint: 5,
@@ -120,7 +118,7 @@ describe("lib/log/Controller =>", () => {
 				property: "interviewComplete",
 			};
 
-			log.controller.value("added", {
+			controllerLogger.value("added", {
 				...baseArgs,
 				newValue: true,
 				internal: true,
@@ -129,7 +127,7 @@ describe("lib/log/Controller =>", () => {
 				predicate: (msg) => msg.includes("[internal]"),
 			});
 
-			log.controller.value("added", {
+			controllerLogger.value("added", {
 				...baseArgs,
 				newValue: true,
 			});
@@ -146,13 +144,13 @@ describe("lib/log/Controller =>", () => {
 				property: "foo",
 			};
 
-			log.controller.value("added", { ...baseArgs, newValue: 1 });
-			log.controller.value("updated", {
+			controllerLogger.value("added", { ...baseArgs, newValue: 1 });
+			controllerLogger.value("updated", {
 				...baseArgs,
 				prevValue: 7,
 				newValue: 1,
 			});
-			log.controller.value("removed", { ...baseArgs, prevValue: 7 });
+			controllerLogger.value("removed", { ...baseArgs, prevValue: 7 });
 			for (let callNumber = 0; callNumber < 3; callNumber++) {
 				assertMessage(spyTransport, {
 					predicate: (msg) => msg.includes("foo"),
@@ -169,13 +167,13 @@ describe("lib/log/Controller =>", () => {
 				propertyKey: "baz",
 			};
 
-			log.controller.value("added", { ...baseArgs, newValue: 1 });
-			log.controller.value("updated", {
+			controllerLogger.value("added", { ...baseArgs, newValue: 1 });
+			controllerLogger.value("updated", {
 				...baseArgs,
 				prevValue: 7,
 				newValue: 1,
 			});
-			log.controller.value("removed", { ...baseArgs, prevValue: 7 });
+			controllerLogger.value("removed", { ...baseArgs, prevValue: 7 });
 			for (let callNumber = 0; callNumber < 3; callNumber++) {
 				assertMessage(spyTransport, {
 					predicate: (msg) => msg.includes("bar[baz]"),
@@ -191,12 +189,12 @@ describe("lib/log/Controller =>", () => {
 				property: "foo",
 			};
 
-			log.controller.value("added", { ...baseArgs, newValue: 1 });
+			controllerLogger.value("added", { ...baseArgs, newValue: 1 });
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes(": 1"),
 			});
 
-			log.controller.value("updated", {
+			controllerLogger.value("updated", {
 				...baseArgs,
 				prevValue: false,
 				newValue: "asdf",
@@ -206,7 +204,7 @@ describe("lib/log/Controller =>", () => {
 				callNumber: 1,
 			});
 
-			log.controller.value("removed", {
+			controllerLogger.value("removed", {
 				...baseArgs,
 				prevValue: 5,
 			});
@@ -225,7 +223,7 @@ describe("lib/log/Controller =>", () => {
 				property: "foo",
 			};
 
-			log.controller.metadataUpdated(baseArgs);
+			controllerLogger.metadataUpdated(baseArgs);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[Basic]"),
 			});
@@ -238,7 +236,7 @@ describe("lib/log/Controller =>", () => {
 				property: "foo",
 			};
 
-			log.controller.metadataUpdated({
+			controllerLogger.metadataUpdated({
 				...baseArgs,
 				nodeId: 5,
 			});
@@ -254,12 +252,12 @@ describe("lib/log/Controller =>", () => {
 				property: "foo",
 			};
 
-			log.controller.metadataUpdated(baseArgs);
+			controllerLogger.metadataUpdated(baseArgs);
 			assertMessage(spyTransport, {
 				predicate: (msg) => !msg.includes("[Endpoint"),
 			});
 
-			log.controller.metadataUpdated({
+			controllerLogger.metadataUpdated({
 				...baseArgs,
 				endpoint: 5,
 			});
@@ -276,7 +274,7 @@ describe("lib/log/Controller =>", () => {
 				property: "interviewComplete",
 			};
 
-			log.controller.metadataUpdated({
+			controllerLogger.metadataUpdated({
 				...baseArgs,
 				internal: true,
 			});
@@ -284,7 +282,7 @@ describe("lib/log/Controller =>", () => {
 				predicate: (msg) => msg.includes("[internal]"),
 			});
 
-			log.controller.metadataUpdated(baseArgs);
+			controllerLogger.metadataUpdated(baseArgs);
 			assertMessage(spyTransport, {
 				predicate: (msg) => !msg.includes("[internal]"),
 				callNumber: 1,
@@ -298,7 +296,7 @@ describe("lib/log/Controller =>", () => {
 				property: "foo",
 			};
 
-			log.controller.metadataUpdated(baseArgs);
+			controllerLogger.metadataUpdated(baseArgs);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("foo"),
 			});
@@ -311,7 +309,7 @@ describe("lib/log/Controller =>", () => {
 				property: "foo",
 			};
 
-			log.controller.metadataUpdated(baseArgs);
+			controllerLogger.metadataUpdated(baseArgs);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.endsWith(": metadata updated"),
 			});
@@ -320,14 +318,14 @@ describe("lib/log/Controller =>", () => {
 
 	describe("interviewStage()", () => {
 		it("includes a tag for the node ID", () => {
-			log.controller.interviewStage({ id: 7 } as any);
+			controllerLogger.interviewStage({ id: 7 } as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[Node 007]"),
 			});
 		});
 
 		it("logs the name of the interview stage", () => {
-			log.controller.interviewStage({
+			controllerLogger.interviewStage({
 				id: 1,
 				interviewStage: InterviewStage.CommandClasses,
 			} as any);
@@ -338,7 +336,7 @@ describe("lib/log/Controller =>", () => {
 		});
 
 		it("prints a custom message when the interview is complete", () => {
-			log.controller.interviewStage({
+			controllerLogger.interviewStage({
 				id: 5,
 				interviewStage: InterviewStage.Complete,
 			} as any);
@@ -350,14 +348,14 @@ describe("lib/log/Controller =>", () => {
 
 	describe("interviewStart()", () => {
 		it("includes a tag for the node ID", () => {
-			log.controller.interviewStart({ id: 7 } as any);
+			controllerLogger.interviewStart({ id: 7 } as any);
 			assertMessage(spyTransport, {
 				predicate: (msg) => msg.includes("[Node 007]"),
 			});
 		});
 
 		it("logs the name of the last interview stage", () => {
-			log.controller.interviewStart({
+			controllerLogger.interviewStart({
 				id: 5,
 				interviewStage: InterviewStage.CommandClasses,
 			} as any);
@@ -370,12 +368,12 @@ describe("lib/log/Controller =>", () => {
 
 	describe("logNode()", () => {
 		it("logs short messages correctly", () => {
-			log.controller.logNode(3, "Test");
+			controllerLogger.logNode(3, "Test");
 			assertMessage(spyTransport, {
 				message: `  [Node 003] Test`,
 			});
 
-			log.controller.logNode(3, { message: "Test2" });
+			controllerLogger.logNode(3, { message: "Test2" });
 			assertMessage(spyTransport, {
 				message: `  [Node 003] Test2`,
 				callNumber: 1,
@@ -383,7 +381,7 @@ describe("lib/log/Controller =>", () => {
 		});
 
 		it("logs long messages correctly", () => {
-			log.controller.logNode(
+			controllerLogger.logNode(
 				3,
 				"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			);
@@ -392,7 +390,7 @@ describe("lib/log/Controller =>", () => {
   es maybe sometimes...`,
 			});
 
-			log.controller.logNode(5, {
+			controllerLogger.logNode(5, {
 				message:
 					"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			});
@@ -404,10 +402,10 @@ describe("lib/log/Controller =>", () => {
 		});
 
 		it("logs with the given loglevel", () => {
-			log.controller.logNode(1, "Test", "warn");
+			controllerLogger.logNode(1, "Test", "warn");
 			assertLogInfo(spyTransport, { level: "warn" });
 
-			log.controller.logNode(1, {
+			controllerLogger.logNode(1, {
 				message: "Test",
 				level: "warn",
 			});
@@ -415,22 +413,22 @@ describe("lib/log/Controller =>", () => {
 		});
 
 		it("has a default loglevel of info", () => {
-			log.controller.logNode(3, "Test");
+			controllerLogger.logNode(3, "Test");
 			assertLogInfo(spyTransport, { level: "info" });
 
-			log.controller.logNode(3, { message: "Test" });
+			controllerLogger.logNode(3, { message: "Test" });
 			assertLogInfo(spyTransport, { level: "info", callNumber: 1 });
 		});
 
 		it("logs the direction prefix", () => {
-			log.controller.logNode(3, {
+			controllerLogger.logNode(3, {
 				message: "Test",
 				direction: "inbound",
 			});
 			assertMessage(spyTransport, {
 				message: "« [Node 003] Test",
 			});
-			log.controller.logNode(5, {
+			controllerLogger.logNode(5, {
 				message: "Test",
 				direction: "outbound",
 			});
@@ -443,14 +441,14 @@ describe("lib/log/Controller =>", () => {
 
 	describe("print()", () => {
 		it("logs short messages correctly", () => {
-			log.controller.print("Test");
+			controllerLogger.print("Test");
 			assertMessage(spyTransport, {
 				message: `  Test`,
 			});
 		});
 
 		it("logs long messages correctly", () => {
-			log.controller.print(
+			controllerLogger.print(
 				"This is a very long message that should be broken into multiple lines maybe sometimes...",
 			);
 			assertMessage(spyTransport, {
@@ -460,12 +458,12 @@ describe("lib/log/Controller =>", () => {
 		});
 
 		it("logs with the given loglevel", () => {
-			log.controller.print("Test", "warn");
+			controllerLogger.print("Test", "warn");
 			assertLogInfo(spyTransport, { level: "warn" });
 		});
 
 		it("has a default loglevel of info", () => {
-			log.controller.print("Test");
+			controllerLogger.print("Test");
 			assertLogInfo(spyTransport, { level: "info" });
 		});
 	});

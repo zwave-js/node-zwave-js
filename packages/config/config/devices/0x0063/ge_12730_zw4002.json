@@ -1,9 +1,9 @@
-// Jasco Products GE 12340 (ZW4002)
+// Jasco Products GE 12730 (ZW4002)
 // In-Wall Smart Fan Control
 {
 	"manufacturer": "Jasco Products",
 	"manufacturerId": "0x0063",
-	"label": "GE 12340 (ZW4002)",
+	"label": "GE 12730 (ZW4002)",
 	"description": "In-Wall Smart Fan Control",
 	"devices": [
 		{

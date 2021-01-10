@@ -5,15 +5,18 @@ import { isObject } from "alcalzone-shared/typeguards";
 import { pathExists, readFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
-import log from "./Logger";
-import { getDefaultScale, lookupNamedScaleGroup, Scale } from "./Scales";
+import type { ConfigManager } from "./ConfigManager";
+import { Scale } from "./Scales";
 import { configDir, hexKeyRegexNDigits, throwInvalidConfig } from "./utils";
 
 const configPath = path.join(configDir, "sensorTypes.json");
-let sensorTypes: ReadonlyMap<number, SensorType> | undefined;
+
+export type SensorTypeMap = ReadonlyMap<number, SensorType>;
 
 /** @internal */
-export async function loadSensorTypesInternal(): Promise<void> {
+export async function loadSensorTypesInternal(
+	manager: ConfigManager,
+): Promise<SensorTypeMap> {
 	if (!(await pathExists(configPath))) {
 		throw new ZWaveError(
 			"The sensor types config file does not exist!",
@@ -31,7 +34,7 @@ export async function loadSensorTypesInternal(): Promise<void> {
 			);
 		}
 
-		const ret = new Map();
+		const sensorTypes = new Map();
 		for (const [key, sensorDefinition] of entries(definition)) {
 			if (!hexKeyRegexNDigits.test(key)) {
 				throwInvalidConfig(
@@ -40,12 +43,12 @@ export async function loadSensorTypesInternal(): Promise<void> {
 				);
 			}
 			const keyNum = parseInt(key.slice(2), 16);
-			ret.set(
+			sensorTypes.set(
 				keyNum,
-				new SensorType(keyNum, sensorDefinition as JSONObject),
+				new SensorType(manager, keyNum, sensorDefinition as JSONObject),
 			);
 		}
-		sensorTypes = ret;
+		return sensorTypes;
 	} catch (e: unknown) {
 		if (e instanceof ZWaveError) {
 			throw e;
@@ -55,60 +58,14 @@ export async function loadSensorTypesInternal(): Promise<void> {
 	}
 }
 
-export async function loadSensorTypes(): Promise<void> {
-	try {
-		await loadSensorTypesInternal();
-	} catch (e: unknown) {
-		// If the config file is missing or invalid, don't try to find it again
-		if (
-			e instanceof ZWaveError &&
-			e.code === ZWaveErrorCodes.Config_Invalid
-		) {
-			if (process.env.NODE_ENV !== "test") {
-				// FIXME: This call breaks when using jest.isolateModule()
-				log.config.print(
-					`Could not load sensor types config: ${e.message}`,
-					"error",
-				);
-			}
-			sensorTypes = new Map();
-		} else {
-			// This is an unexpected error
-			throw e;
-		}
-	}
-}
-
-/**
- * Looks up the configuration for a given sensor type
- */
-export function lookupSensorType(sensorType: number): SensorType | undefined {
-	if (!sensorTypes) {
-		throw new ZWaveError(
-			"The config has not been loaded yet!",
-			ZWaveErrorCodes.Driver_NotReady,
-		);
-	}
-
-	return sensorTypes.get(sensorType);
-}
-
-/** Looks up a scale definition for a given sensor type */
-export function lookupSensorScale(sensorType: number, scale: number): Scale {
-	const sensor = lookupSensorType(sensorType);
-	return sensor?.scales.get(scale) ?? getDefaultScale(scale);
-}
-
-export function getSensorTypeName(sensorType: number): string {
-	const sensor = lookupSensorType(sensorType);
-	if (sensor) return sensor.label;
-	return `UNKNOWN (${num2hex(sensorType)})`;
-}
-
 const namedScalesMarker = "$SCALES:";
 
 export class SensorType {
-	public constructor(key: number, definition: JSONObject) {
+	public constructor(
+		manager: ConfigManager,
+		key: number,
+		definition: JSONObject,
+	) {
 		this.key = key;
 		if (typeof definition.label !== "string")
 			throwInvalidConfig(
@@ -125,7 +82,7 @@ export class SensorType {
 			const scaleName = definition.scales.substr(
 				namedScalesMarker.length,
 			);
-			const scales = lookupNamedScaleGroup(scaleName);
+			const scales = manager.lookupNamedScaleGroup(scaleName);
 			if (!scales) {
 				throw new ZWaveError(
 					`Sensor type ${num2hex(

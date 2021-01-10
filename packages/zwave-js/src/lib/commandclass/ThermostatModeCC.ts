@@ -15,7 +15,6 @@ import {
 } from "@zwave-js/core";
 import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
@@ -181,7 +180,7 @@ export class ThermostatModeCC extends CommandClass {
 			priority: MessagePriority.NodeQuery,
 		});
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -191,7 +190,7 @@ export class ThermostatModeCC extends CommandClass {
 
 		if (complete) {
 			// First query the possible modes to set the metadata
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying supported thermostat modes...",
 				direction: "outbound",
@@ -202,7 +201,7 @@ export class ThermostatModeCC extends CommandClass {
 			const logMessage = `received supported thermostat modes:${supportedModes
 				.map((mode) => `\n· ${getEnumMemberName(ThermostatMode, mode)}`)
 				.join("")}`;
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: logMessage,
 				direction: "inbound",
@@ -212,13 +211,13 @@ export class ThermostatModeCC extends CommandClass {
 		if (
 			!(await ignoreTimeout(async () => {
 				// Always query the actual status
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: "querying current thermostat mode...",
 					direction: "outbound",
 				});
 				const currentStatus = await api.get();
-				log.controller.logNode(node.id, {
+				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
 						"received current thermostat mode: " +
@@ -227,7 +226,7 @@ export class ThermostatModeCC extends CommandClass {
 				});
 			}))
 		) {
-			log.controller.logNode(node.id, {
+			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `Thermostat mode query timed out - skipping interview...`,
 				level: "warn",

@@ -7,7 +7,6 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
-import log from "../log";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -95,7 +94,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 			"Thermostat Operating State"
 		].withOptions({ priority: MessagePriority.NodeQuery });
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `${this.constructor.name}: doing a ${
 				complete ? "complete" : "partial"
@@ -104,7 +103,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 		});
 
 		// Always query the current state
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: "querying thermostat operating state...",
 			direction: "outbound",
@@ -112,7 +111,7 @@ export class ThermostatOperatingStateCC extends CommandClass {
 
 		const state = await api.get();
 
-		log.controller.logNode(node.id, {
+		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
 			message: `received current thermostat operating state: ${getEnumMemberName(
 				ThermostatOperatingState,
