@@ -586,9 +586,14 @@ export class ConfigurationCC extends CommandClass {
 					await ignoreTimeout(async () => {
 						name = await api.getName(param);
 					});
-					await ignoreTimeout(async () => {
-						await api.getInfo(param);
-					});
+					// Skip the info query for bugged devices
+					if (
+						!node.deviceConfig?.compat?.skipConfigurationInfoQuery
+					) {
+						await ignoreTimeout(async () => {
+							await api.getInfo(param);
+						});
+					}
 
 					logMessage = `received information for parameter #${param}:
 parameter name:      ${name}
