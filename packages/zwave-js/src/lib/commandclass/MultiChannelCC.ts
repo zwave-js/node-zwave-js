@@ -405,7 +405,7 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 			if (multiResponse.identicalCapabilities && hasQueriedCapabilities) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `all endpoints idendical, skipping capability query for endpoint #${endpoint}...`,
+					message: `all endpoints identical, skipping capability query for endpoint #${endpoint}...`,
 					direction: "none",
 				});
 
