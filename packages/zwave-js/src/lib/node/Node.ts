@@ -53,6 +53,7 @@ import {
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
 } from "../commandclass/FirmwareUpdateMetaDataCC";
+import { HailCC } from "../commandclass/HailCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
 	getManufacturerIdValueId,
@@ -1740,6 +1741,8 @@ version:               ${this.version}`;
 			return this.handleSecurityNonceGet();
 		} else if (command instanceof SecurityCCNonceReport) {
 			return this.handleSecurityNonceReport(command);
+		} else if (command instanceof HailCC) {
+			return this.handleHail(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
 			return this.handleFirmwareUpdateGet(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCStatusReport) {
@@ -1836,6 +1839,16 @@ version:               ${this.version}`;
 			},
 			{ free: true },
 		);
+	}
+
+	private handleHail(_command: HailCC): void {
+		// treat this as a sign that the node is awake
+		this.markAsAwake();
+
+		this.driver.controllerLog.logNode(this.nodeId, {
+			message: `Hail received from node, refreshing actuator and sensor values...`,
+		});
+		void this.refreshValues();
 	}
 
 	/** Stores information about a currently held down key */
