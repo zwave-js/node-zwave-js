@@ -1,0 +1,86 @@
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39348-ZW4008",
+	"description": "39348 / ZW4008 In-Wall Smart Switch",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3135"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic - Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Basic - Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Indication Configuration",
+			"description": "Sets when the LED on the switch is lit.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when light off",
+					"value": 0
+				},
+				{
+					"label": "LED on when light on",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				},
+				{
+					"label": "LED always on",
+					"value": 3
+				}
+			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "0 (default) - Press any button on the device \n1 - Press 2 times ON button and then 2 times OFF button, LED will flash 5 times if done successful",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Any button",
+					"value": 0
+				},
+				{
+					"label": "2x ON button, 2x OFF button",
+					"value": 1
+				}
+			]
+		}
+	}
+}
