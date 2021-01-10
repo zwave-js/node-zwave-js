@@ -1,0 +1,272 @@
+{
+	"manufacturer": "FIBARO System",
+	"manufacturerId": "0x010f",
+	"label": "FGS214",
+	"description": "Smart Module",
+	"devices": [
+		{
+			"productType": "0x0404",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "On/Off S1",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "On/Off S2",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Remember relays state",
+			"description": "This parameter determines the state of relays power supply failure (e.g. power outage). auto OFF and flashing modes the parameter not relevant and the relay will always remain off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Relays remain switched off after restoring power",
+					"value": 0
+				},
+				{
+					"label": "Restore remembered state of relays after restoring power",
+					"value": 1
+				},
+				{
+					"label": "Restore remembered state of relays after restoring power, but for toggle switches (parameter 20/21 set to 1) set the same state as the current state of the switches",
+					"value": 2
+				}
+			]
+		},
+		"20": {
+			"label": "S1 input – switch type",
+			"description": "S1 - Inputs type configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (contact closed - On, contact opened - OFF)",
+					"value": 1
+				},
+				{
+					"label": "Toggle switch (device changes status when switch changes status)",
+					"value": 2
+				}
+			]
+		},
+		"21": {
+			"label": "S2 input – switch type",
+			"description": "S2 - Inputs type configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (contact closed - On, contact opened - OFF)",
+					"value": 1
+				},
+				{
+					"label": "Toggle switch (device changes status when switch changes status)",
+					"value": 2
+				}
+			]
+		},
+		"24": {
+			"label": "Inputs orientation",
+			"description": "This parameter allows reversing operation of S1 and S2 inputs changing the wiring. Use in case of incorrect wiring.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "default (S1 - 1st channel, S2 - 2nd channel)",
+					"value": 0
+				},
+				{
+					"label": "reversed (S1 - 2nd channel, S2 - 1st channel)",
+					"value": 1
+				}
+			]
+		},
+		"150": {
+			"label": "First channel - operating mode",
+			"description": "This parameter allows to choose operating for channel controlled with Q/Q1 output. timed modes (value 1, 2 or 3), time is set parameter 154 and reaction to input is set with parameter 152.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Standard operation",
+					"value": 0
+				},
+				{
+					"label": "Delay Off",
+					"value": 1
+				},
+				{
+					"label": "Auto Off",
+					"value": 2
+				},
+				{
+					"label": "Flashing",
+					"value": 3
+				}
+			]
+		},
+		"152": {
+			"label": "First channel - reaction to input change in delayed/auto OFF modes",
+			"description": "This parameter determines how the device when changing state of S1 input in timed for first channel.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Cancel mode and set default state",
+					"value": 0
+				},
+				{
+					"label": "No reaction, mode runs until it ends",
+					"value": 1
+				},
+				{
+					"label": "Reset timer, start counting time from the beginning",
+					"value": 2
+				}
+			]
+		},
+		"154": {
+			"label": "First channel – time parameter for delayed/auto OFF and flashing modes",
+			"description": "This parameter allows to set time parameter used in timed modes. (s)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"unit": "s",
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"156": {
+			"label": "S1 Switch ON value sent to 2nd association group",
+			"description": "This parameter determines value sent with Switch On command to devices associated in 2nd association group.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"157": {
+			"label": "S1 Switch OFF value sent to 2nd association group",
+			"description": "This parameter determines value sent with Switch Off command to devices associated in 2nd association group.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"158": {
+			"label": "S1 Switch Double Click value sent to 2nd association groups",
+			"description": "This parameter determines value sent with Double Click command to devices associated in 2nd  association group.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"160": {
+			"label": "S2 Switch OFF value sent to 3rd association group",
+			"description": "This parameter determines value sent with Switch Off command to devices associated in 3rd association group.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"162": {
+			"label": "Q/Q1 output type",
+			"description": "This parameter determines type of Q/Q1 output.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normally Open (relay contacts opened turned off, closed when turned on)",
+					"value": 0
+				},
+				{
+					"label": "Normally Closed (relay contacts closed turned off, opened when turned on)",
+					"value": 1
+				}
+			]
+		}
+	}
+}
