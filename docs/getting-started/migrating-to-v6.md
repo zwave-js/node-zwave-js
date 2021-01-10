@@ -30,3 +30,7 @@ If you need to restore the old behavior, you can set the [`attempts.retryAfterTr
 ## `ValueMetadataBase` and `ValueMetadataAny` types
 
 These types were merged and renamed to `ValueMetadataBase`. What to do with that depends on your application.
+
+## Changed `@zwave-js/config` exports
+
+The `lookupXYZ` methods which could be used to access names of meters, notifications, etc. are no longer exposed by `@zwave-js/config`. Use the `configManager` property of your driver instance instead, which now exposes methods to do that.

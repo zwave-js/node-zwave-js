@@ -13,8 +13,12 @@ To compensate for the change and give the response enough time to reach the cont
 * The driver now distinguishes between stateful and event values. The latter are now exclusively exposed through the `"value notification"` event.
 * The deprecated `nodeInterviewAttempts` option was removed
 * The options `fs` and `cacheDir` have been renamed to `storage.driver` and `storage.cacheDir`.
+* Loggers are now managed on a per-driver basis. This means you can use zwave-js to talk to different controllers and have separate logs for each.
+* The `lookupXYZ` methods are no longer exposed by `@zwave-js/config`. Use the `configManager` property of your driver instance instead.
 
 ### Config file changes
+* The index file was removed from the repo and is now generated on demand
+* Several improvements for GE dimmers and switches
 * Added missing config parameters to IDLock 150
 * Added Innovelli LZW36 and First Alert ZCOMBO-G
 * Added Technisat Dimmer and series switch
@@ -24,6 +28,8 @@ To compensate for the change and give the response enough time to reach the cont
 * Added Aeotec ZW187 Recessed Door Sensor 7
 * Added checks for partial parameters
 * Added Aeotec ZWA009 aerQ Temperature and Humidity Sensor
+* Added Honeywell 39348/ZW4008
+* Added Zooz zst10-700 z-wave usb stick
 * New versions of `@zwave-js/config` are now automatically released every night if **only** config files were changed since the last release.  
 You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull the latest config files. For now, a driver restart is required afterwards.
 
@@ -35,6 +41,7 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * Unimplemented CCs may now be sent
 * The version of `zwave-js` is now exported as `libVersion` from the main entry point
 * Implemented `Battery CC V3`
+* Added support for `Hail CC`
 
 ### Bugfixes
 * Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask.  
@@ -42,6 +49,7 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * Expire nonces for `keepS0NonceUntilNext` devices until **after** the next nonce was received by the device
 * The interview is no longer aborted when a device does not respond to the Wakeup Capability query
 * Fixed a crash that could happen when compressing the value DB with an existing backup file.
+* Fixed a wrong value ID for `Multilevel Switch CC` `targetValue`
 
 ### Changes under the hood
 * Test releases for PRs can now be created with a command
