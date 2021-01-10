@@ -68,6 +68,7 @@ import {
 	ApplicationUpdateRequest,
 	ApplicationUpdateRequestNodeInfoReceived,
 } from "../controller/ApplicationUpdateRequest";
+import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
 	isTransmitReport,
@@ -1736,7 +1737,10 @@ ${handlers.length} left`,
 			if (!this.mayHandleUnsolicitedCommand(msg.command)) return;
 		}
 
-		if (msg instanceof ApplicationCommandRequest) {
+		if (
+			msg instanceof ApplicationCommandRequest ||
+			msg instanceof BridgeApplicationCommandRequest
+		) {
 			// we handle ApplicationCommandRequests differently because they are handled by the nodes directly
 			const nodeId = msg.command.nodeId;
 			// cannot handle ApplicationCommandRequests without a controller

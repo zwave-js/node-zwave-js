@@ -16,6 +16,7 @@ import type { CommandClass } from "../commandclass/CommandClass";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import { messageIsPing } from "../commandclass/NoOperationCC";
 import { ApplicationCommandRequest } from "../controller/ApplicationCommandRequest";
+import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import {
 	SendDataMulticastRequest,
 	SendDataRequest,
@@ -85,11 +86,11 @@ export type SendThreadEvent =
 	| { type: "trigger" }
 	| {
 			type: "nodeUpdate";
-			result: ApplicationCommandRequest;
+			result: ApplicationCommandRequest | BridgeApplicationCommandRequest;
 	  }
 	| {
 			type: "handshakeResponse";
-			result: ApplicationCommandRequest;
+			result: ApplicationCommandRequest | BridgeApplicationCommandRequest;
 	  }
 	| { type: "unsolicited"; message: Message }
 	| { type: "sortQueue" }
@@ -320,7 +321,8 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		const sentMsg = ctx.currentTransaction!.message as SendDataRequest;
 		const receivedMsg = (evt as any).message;
 		return (
-			receivedMsg instanceof ApplicationCommandRequest &&
+			(receivedMsg instanceof ApplicationCommandRequest ||
+				receivedMsg instanceof BridgeApplicationCommandRequest) &&
 			sentMsg.command.isExpectedCCResponse(receivedMsg.command)
 		);
 	},
@@ -364,7 +366,8 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 		const receivedMsg = (evt as any).message;
 		if (!isCommandClassContainer(receivedMsg)) return false;
 		return (
-			receivedMsg instanceof ApplicationCommandRequest &&
+			(receivedMsg instanceof ApplicationCommandRequest ||
+				receivedMsg instanceof BridgeApplicationCommandRequest) &&
 			sentMsg.command.isExpectedCCResponse(receivedMsg.command)
 		);
 	},
