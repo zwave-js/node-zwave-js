@@ -117,6 +117,12 @@ jobs:
             core.setFailed(`Request failed with error ${err}`)
           }
 
+    - name: Save our CI scripts
+      if: steps.check.outputs.result == 'true'
+      run: |
+        mkdir -p /tmp/.github
+        cp -r .github/* /tmp/.github
+
     - name: Checkout pull request
       if: steps.check.outputs.result == 'true'
       uses: actions/checkout@v2
@@ -124,14 +130,12 @@ jobs:
         token: ${{secrets.BOT_TOKEN}}
         repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
         ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
-        path: other
 
-
-    - name: Copy all files except CI scripts
+    - name: Restore our CI scripts
       if: steps.check.outputs.result == 'true'
       run: |
-        rm -rf other/.github
-        cp -r other/* .
+        rm -rf .github
+        cp -r /tmp/.github .
 
     # These steps only run if the check was successful
     - name: Use Node.js ${{ matrix.node-version }}
@@ -173,6 +177,7 @@ jobs:
           git config user.email "bot@zwave.js"
           git config user.name "Z-Wave JS Bot"
           git add -A
+          git reset -- .github
           git commit -m "style: fix lint"
           git push
         else
