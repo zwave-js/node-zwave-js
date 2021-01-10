@@ -162,6 +162,10 @@ jobs:
       if: steps.check.outputs.result == 'true'
       run: yarn install --prefer-offline --frozen-lockfile
 
+    - name: Compile TypeScript code
+      # We need this or the linter will complain about other stuff than the checks
+      run: yarn run build
+
     - name: Do the lint fix
       if: steps.check.outputs.result == 'true'
       id: fix
