@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/config",
-  "version": "6.0.0-alpha.3",
+  "version": "6.0.0-beta.0",
   "description": "zwave-js: configuration files",
   "publishConfig": {
     "access": "public"
@@ -32,8 +32,8 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@zwave-js/core": "^6.0.0-alpha.3",
-    "@zwave-js/shared": "^6.0.0-alpha.1",
+    "@zwave-js/core": "^6.0.0-beta.0",
+    "@zwave-js/shared": "^6.0.0-beta.0",
     "alcalzone-shared": "^3.0.1",
     "ansi-colors": "^4.1.1",
     "fs-extra": "^9.0.1",
