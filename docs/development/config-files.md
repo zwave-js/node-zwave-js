@@ -201,7 +201,9 @@ In order to get your configuration file included in this library, two things mus
 If your device is already present in the [OpenZWave devices DB](https://github.com/OpenZWave/open-zwave/tree/master/config), you can import it by using its device id (which you can find in the zwavejs2mqtt control panel) with this command: 
 
 ```bash
-npm run config -- import -s ozw -Dmid --ids 0x0086-0x0075-0x0004
+npm run config -- import -s ozw -Dmd --ids 0x0086-0x0075-0x0004
+# with yarn:
+yarn run config import -s ozw -Dd --ids 0x0086-0x0075-0x0004
 ```
 
 You can specify multiple device ids too:
