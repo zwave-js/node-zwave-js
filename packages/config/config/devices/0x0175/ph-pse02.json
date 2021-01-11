@@ -22,7 +22,7 @@
 			"description": "NotificationReport/BinaryReport",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 65535,
+			"maxValue": 255,
 			"defaultValue": 8,
 			"readOnly": false,
 			"writeOnly": false,
