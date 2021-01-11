@@ -66,7 +66,6 @@ interface BarrierOperatorCCSetOptions extends CCCommandOptions {
 	targetValue: boolean;
 }
 
-// To be reviewed as CC should only accept 0x00 or 0xFF, if more work needed
 @CCCommand(BarrierOperatorCommand.Set)
 export class BarrierOperatorCCSet extends BarrierOperatorCC {
 	public constructor(
@@ -77,9 +76,10 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length >= 1);
-			this.targetValue =
-				this.payload[0] === BarrierState.Open ? true : false;
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
 		} else {
 			this.targetValue = options.targetValue;
 		}
