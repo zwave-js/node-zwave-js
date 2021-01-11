@@ -186,6 +186,10 @@ In order to communicate with these devices, nonces must be preserved until the r
 
 The Z-Wave+ specs mandate that the root endpoint must **mirror** the application functionality of endpoint 1 (and potentially others). For this reason, `zwave-js` hides these superfluous values. However, some legacy devices offer additional functionality through the root endpoint, which should not be hidden. To achive this, set `preserveRootApplicationCCValueIDs` to `true`.
 
+### `skipConfigurationInfoQuery`
+
+Some devices spam the network with hundreds of invalid `ConfigurationCC::InfoReport`s when one is requested. Set this flag to `true` to skip this query for affected devices.
+
 ## Contributing configuration files
 
 In order to get your configuration file included in this library, two things must be done:

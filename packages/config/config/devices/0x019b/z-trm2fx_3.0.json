@@ -344,5 +344,9 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		// Stop this device from flooding the network with hundreds of invalid reports
+		"skipConfigurationInfoQuery": true
 	}
 }
