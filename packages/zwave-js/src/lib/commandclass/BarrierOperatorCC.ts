@@ -1,18 +1,26 @@
+import type { MessageOrCCLogEntry } from "@zwave-js/core";
+import {
+	CommandClasses,
+	enumValuesToMetadataStates,
+	parseBitMask,
+	validatePayload,
+	ValueMetadata,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
+import type { Driver } from "../driver/Driver";
+import { expectedResponse } from "../message/Message";
 import {
 	CCCommand,
 	CCCommandOptions,
+	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
-	expectedCCResponse,
-	implementedVersion,
 	CommandClassDeserializationOptions,
 	gotDeserializationOptions,
-	ccValue,
+	implementedVersion,
 } from "./CommandClass";
-import { CommandClasses, parseBitMask, validatePayload } from "@zwave-js/core";
-import type { Driver } from "../driver/Driver";
-import { expectedResponse } from "../message/Message";
-
 // All the supported commands
 export enum BarrierOperatorCommand {
 	Set = 0x01,
@@ -20,43 +28,42 @@ export enum BarrierOperatorCommand {
 	Report = 0x03,
 	CapabilitiesGet = 0x04,
 	CapabilitiesReport = 0x05,
-	EventSignalSet = 0x06,
-	EventSignalGet = 0x07,
-	EventSignalReport = 0x08,
-}
-
-
-// All possible positions for Report
-export enum BarrierReportState {
-	Closed = 0x00,
-	Closing = 0xFC,
-	Stopped = 0xFD,
-	Openning = 0xFE,
-	Open = 0xFF
+	EventSet = 0x06,
+	EventGet = 0x07,
+	EventReport = 0x08,
 }
 
 /**
  * @publicAPI
  */
-export enum BarrierPosition {
+export enum BarrierState {
 	Closed = 0x00,
-	Closing = 0xFC,
-	Stopped = 0xFD
-	Openning = 0xFE,
-	Open = 0xFF,
+	Closing = 0xfc,
+	Stopped = 0xfd,
+	Opening = 0xfe,
+	Open = 0xff,
 }
 
 // @publicAPI
 export enum SignalType {
-	"Not Supported" = 0x00,
 	Audible = 0x01,
 	Visual = 0x02,
 }
 
-@commandClass(CommandClasses.BarrierOperator)
+// @publicAPI
+export enum SignalState {
+	OFF = 0x00,
+	ON = 0xff,
+}
+
+@commandClass(CommandClasses["Barrier Operator"])
 @implementedVersion(1)
 export class BarrierOperatorCC extends CommandClass {
 	declare ccCommand: BarrierOperatorCommand;
+}
+
+interface BarrierOperatorCCSetOptions extends CCCommandOptions {
+	targetValue: number;
 }
 
 // To be reviewed as CC should only accept 0x00 or 0xFF, if more work needed
@@ -64,7 +71,9 @@ export class BarrierOperatorCC extends CommandClass {
 export class BarrierOperatorCCSet extends BarrierOperatorCC {
 	public constructor(
 		driver: Driver,
-		options: CommandClassDeserializationOptions | BarrierOperatorCCSetOptions,
+		options:
+			| CommandClassDeserializationOptions
+			| BarrierOperatorCCSetOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -90,15 +99,6 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 	}
 }
 
-/** Returns the State  */
-interface BarrierOperatorCCGetOptions extends CCCommandOptions {
-	someProperty: number;
-}
-
-@CCCommand(BarrierOperatorCommand.Get)
-@expectedCCResponse(BarrierOperatorCCReport)
-export class BarrierOperatorCCGet extends BarrierOperatorCC {}
-
 @CCCommand(BarrierOperatorCommand.Report)
 export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	public constructor(
@@ -108,28 +108,57 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 1);
-		
-		// return raw value if cannot decode
-		this._barrierPosition = this.payload[0];
+
+		/* 
+		  return values state and position value
+		  if state is 0 - 99 or FF (100%) return the appropriate values.
+		  if state is different just use the table and 
+		  return undefined position
+		*/
+		const payloadValue = this.payload[0];
+		if ((payloadValue >= 0 && payloadValue <= 99) || payloadValue == 255) {
+			// convert position % to 100, in case of position is Open
+			const payloadPosition = payloadValue === 255 ? 100 : payloadValue;
+			this._barrierPosition = payloadPosition;
+			if (payloadValue > 0 && payloadValue <= 99) {
+				this._barrierState = undefined;
+			} else {
+				this._barrierState = payloadValue;
+			}
+		} else {
+			this._barrierPosition = undefined;
+			this._barrierState = payloadValue;
+		}
+
 		this.persistValues();
 	}
 
-	private _barrierPosition: BarrierPosition | undefined;
+	private _barrierState: BarrierState | undefined;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
-		label: "Barrier Operator State",
-		states: enumValuesToMetadataStates(BarrierPosition)
+		label: "Barrier State",
+		states: enumValuesToMetadataStates(BarrierState),
 	})
+	public get barrierState(): BarrierState | undefined {
+		return this._barrierState;
+	}
 
-	public get barrierPosition(): BarrierPosition | undefined {
+	private _barrierPosition: number | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUint8,
+		label: "Barrier Position",
+		unit: "%",
+	})
+	public get barrierPosition(): number | undefined {
 		return this._barrierPosition;
 	}
 }
 
-@CCCommand(BarrierOperatorCommand.CapabilitiesGet)
-@expectedResponse(BarrierOperatorCCCapabilitiesReport)
-export class BarrierOperatorCCCapabilitiesGet extends BarrierOperatorCC {}
+@CCCommand(BarrierOperatorCommand.Get)
+@expectedResponse(BarrierOperatorCCReport)
+export class BarrierOperatorCCGet extends BarrierOperatorCC {}
 
 @CCCommand(BarrierOperatorCommand.CapabilitiesReport)
 export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
@@ -138,20 +167,97 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		
-		validatePayload(this.payload.length >=1);
+
+		validatePayload(this.payload.length >= 1);
 		const bitMaskLength = this.payload.length;
 		validatePayload(this.payload.length >= bitMaskLength);
 		this._supportedSignalTypes = parseBitMask(
-			this.payload.slice(0, bitMaskLength),
-			SignalType['Not Supported'],
+			this.payload,
+			SignalType.Audible,
 		);
 
-		this this.persistValues();
+		this.persistValues();
 	}
 
 	private _supportedSignalTypes: SignalType[];
-	@@ccValue({ internal: true})
+	@ccValue({ internal: true })
 	public get supportedSignalTypes(): readonly SignalType[] {
 		return this._supportedSignalTypes;
 	}
+}
+
+@CCCommand(BarrierOperatorCommand.CapabilitiesGet)
+@expectedResponse(BarrierOperatorCCCapabilities)
+export class BarrierOperatorCCCapabilitiesGet extends BarrierOperatorCC {}
+
+/* NEED: Help on this
+   Place holders
+*/
+interface BarrierOperatorCCEventSetOptions extends CCCommandOptions {
+	signalType: SignalType;
+	signalState: SignalState;
+}
+
+@CCCommand(BarrierOperatorCommand.EventSet)
+@expectedCCResponse(BarrierOperatorCCReport)
+export class BarrierOperatorCCEventSet extends BarrierOperatorCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| BarrierOperatorCCEventSetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			// TODO: Populate properties from options object
+			throw new Error("not implemented");
+		}
+	}
+
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			/* TODO: serialize */
+		]);
+		return super.serialize();
+	}
+}
+
+interface BarrierOperatorCCEventGetOptions extends CCCommandOptions {
+	signalType: SignalType;
+}
+
+@CCCommand(BarrierOperatorCommand.EventGet)
+@expectedCCResponse(BarrierOperatorCCReport)
+export class BarrierOperatorCCEventGet extends BarrierOperatorCC {
+	public constructor(
+		driver: Driver,
+		options:
+			| CommandClassDeserializationOptions
+			| BarrierOperatorCCEventGetOptions,
+	) {
+		super(driver, options);
+		if (gotDeserializationOptions(options)) {
+			// TODO: Deserialize payload
+			throw new ZWaveError(
+				`${this.constructor.name}: deserialization not implemented`,
+				ZWaveErrorCodes.Deserialization_NotImplemented,
+			);
+		} else {
+			this.signalType = options.signalType;
+		}
+	}
+
+	public signalType: SignalType;
+	public serialize(): Buffer {
+		this.payload = Buffer.from([
+			/* TODO: serialize */
+		]);
+		return super.serialize();
+	}
+}
