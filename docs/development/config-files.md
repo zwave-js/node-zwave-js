@@ -207,7 +207,9 @@ npm run config -- import -s ozw -Dmid --ids 0x0086-0x0075-0x0004
 You can specify multiple device ids too:
 
 ```bash
-npm run config -- import -s ozw -Dmid --ids 0x0258-0x1027-0x0200 0x041a-0x0008-0x0200
+npm run config -- import -s ozw -Dmd --ids 0x0258-0x1027-0x0200 0x041a-0x0008-0x0200
+# with yarn:
+yarn run config import -s ozw -Dd --ids 0x0258-0x1027-0x0200 0x041a-0x0008-0x0200
 ```
 
 > [!NOTE]
