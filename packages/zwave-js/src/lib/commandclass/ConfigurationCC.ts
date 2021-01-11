@@ -563,6 +563,14 @@ export class ConfigurationCC extends CommandClass {
 				direction: "outbound",
 			});
 			let { nextParameter: param } = await api.getProperties(0);
+			if (param === 0) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `didn't report any config params, trying #1 just to be sure...`,
+					direction: "inbound",
+				});
+				param = 1;
+			}
 
 			while (param > 0) {
 				this.driver.controllerLog.logNode(node.id, {
@@ -1625,8 +1633,7 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		// GH#1309 Some devices don't tell us the first parameter if we query #0
 		// Instead, they contain 0x000000
 		if (this._valueSize === 0 && this.payload.length < 5) {
-			// We should try Parameter #1 next in this case
-			this._nextParameter = 1;
+			this._nextParameter = 0;
 			return;
 		}
 
