@@ -147,9 +147,10 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	private _barrierPosition: number | undefined;
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUint8,
+		...ValueMetadata.ReadOnlyUInt8,
 		label: "Barrier Position",
 		unit: "%",
+		max: 100,
 	})
 	public get barrierPosition(): number | undefined {
 		return this._barrierPosition;
