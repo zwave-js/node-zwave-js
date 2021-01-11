@@ -197,3 +197,18 @@ In order to get your configuration file included in this library, two things mus
 1. Update the index file using `yarn run config import -i`.
 1. Check your new or changed files for potential problems using `lerna run lint:config`. Warnings in your file may be tolerated if there is a good reason for them. Errors must be fixed.
 1. Create a PR.
+
+If your device is already present in [OZW devices DB](https://github.com/OpenZWave/open-zwave/tree/master/config), you can import it by using its device id (you can find it in zwavejs2mqtt control panel) with this command: 
+
+```bash
+npm run config -- import -s ozw -Dmid --ids 0x0086-0x0075-0x0004
+```
+
+You can specify multiple device ids too:
+
+```bash
+npm run config -- import -s ozw -Dmid --ids 0x0258-0x1027-0x0200 0x041a-0x0008-0x0200
+```
+
+> [!NOTE]
+> Most times the imported configs are not 100% good so please review it before submitting a PR
