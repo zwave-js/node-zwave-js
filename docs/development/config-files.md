@@ -195,8 +195,8 @@ Some devices spam the network with hundreds of invalid `ConfigurationCC::InfoRep
 In order to get your configuration file included in this library, two things must be done:
 
 1. Update the index file using `yarn run config import -i`.
-1. Check your new or changed files for potential problems using `lerna run lint:config`. Warnings in your file may be tolerated if there is a good reason for them. Errors must be fixed.
-1. Create a PR.
+2. Check your new or changed files for potential problems using `lerna run lint:config`. Warnings in your file may be tolerated if there is a good reason for them. Errors must be fixed.
+3. Create a PR.
 
 If your device is already present in the [OpenZWave devices DB](https://github.com/OpenZWave/open-zwave/tree/master/config), you can import it by using its device id (which you can find in the zwavejs2mqtt control panel). Device config files also contain the device id but the format is different: `0x0086-0x0075-0x0004` is `0086:0075:0004`.
 
