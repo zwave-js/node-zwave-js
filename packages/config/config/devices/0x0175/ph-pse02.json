@@ -26,7 +26,8 @@
 			"defaultValue": 8,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"unsigned":true
 		},
 		"29": {
 			"label": "Disable Alarm",
