@@ -63,7 +63,7 @@ export class BarrierOperatorCC extends CommandClass {
 }
 
 interface BarrierOperatorCCSetOptions extends CCCommandOptions {
-	targetValue: number;
+	targetValue: boolean;
 }
 
 // To be reviewed as CC should only accept 0x00 or 0xFF, if more work needed
@@ -79,18 +79,17 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
 			this.targetValue =
-				this.payload[0] === 255
-					? BarrierState.Open
-					: BarrierState.Closed;
+				this.payload[0] === BarrierState.Open ? true : false;
 		} else {
 			this.targetValue = options.targetValue;
 		}
 	}
 
-	public targetValue: number;
+	public targetValue: boolean;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.targetValue]);
+		const payload: number[] = [this.targetValue ? 0xff : 0x00];
+		this.payload = Buffer.from(payload);
 		return super.serialize();
 	}
 
