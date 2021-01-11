@@ -9,7 +9,6 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
-import { expectedResponse } from "../message/Message";
 import {
 	CCCommand,
 	CCCommandOptions,
@@ -18,6 +17,7 @@ import {
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
+	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
@@ -78,7 +78,10 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
 			validatePayload(this.payload.length >= 1);
-			this.targetValue = this.payload[0];
+			this.targetValue =
+				this.payload[0] === 255
+					? BarrierState.Open
+					: BarrierState.Closed;
 		} else {
 			this.targetValue = options.targetValue;
 		}
@@ -158,7 +161,7 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 }
 
 @CCCommand(BarrierOperatorCommand.Get)
-@expectedResponse(BarrierOperatorCCReport)
+@expectedCCResponse(BarrierOperatorCCReport)
 export class BarrierOperatorCCGet extends BarrierOperatorCC {}
 
 @CCCommand(BarrierOperatorCommand.CapabilitiesReport)
@@ -188,7 +191,7 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 }
 
 @CCCommand(BarrierOperatorCommand.CapabilitiesGet)
-@expectedResponse(BarrierOperatorCCCapabilities)
+@expectedCCResponse(BarrierOperatorCCCapabilities)
 export class BarrierOperatorCCCapabilitiesGet extends BarrierOperatorCC {}
 
 /* NEED: Help on this
@@ -255,6 +258,7 @@ export class BarrierOperatorCCEventGet extends BarrierOperatorCC {
 	}
 
 	public signalType: SignalType;
+
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
 			/* TODO: serialize */
