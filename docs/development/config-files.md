@@ -241,7 +241,7 @@ yarn run config import -s oh -Dd --ids 1234
 To specify multiple device IDs, just append them to the command:
 
 ```bash
-# if you're using npm 
+# if you're using npm
 npm run config -- import -s oh -Dd --ids 1234 1235
 # if you're using yarn
 yarn run config import -s oh -Dd --ids 1234 1235
