@@ -17,21 +17,52 @@
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
-		"7": {
-			"label": "Costumer  Function",
-			"description": "NotificationReport/BinaryReport",
-			"valueSize": 4,
+		"7[0x08]": {
+			"label": "Disable Sound",
+			"description": "Prevents audio from the siren - leaving only the strobe function.",
+			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 65535,
-			"defaultValue": 4,
+			"maxValue": 1,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Enables Sound",
+					"value": 0
+				},
+				{
+					"label": "Disables Sound",
+					"value": 1
+				}
+			]
+		},
+		"7[0x10]": {
+			"label": "Notification Type",
+			"description": "Notification event type to use for trigger events",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Notification Report",
+					"value": 0
+				},
+				{
+					"label": "Sensor Binary Report",
+					"value": 1
+				}
+			]
 		},
 		"29": {
 			"label": "Disable Alarm",
-			"description": "Disable the alarm  function.",
-			"valueSize": 4,
+			"description": "Disables the alarm function entierly, including any tamper detection.",
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
@@ -42,7 +73,7 @@
 		"31": {
 			"label": "Alarm Duration",
 			"description": "Play alarm sound duration.",
-			"valueSize": 4,
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 6,
