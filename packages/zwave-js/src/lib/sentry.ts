@@ -77,39 +77,71 @@ export async function initSentry(
 
 			// Filter out specific errors that shouldn't create a report on sentry
 			// because they should be handled by the library user
-			if (!ignore && hint && isZWaveError(hint?.originalException)) {
-				switch (hint.originalException.code) {
-					// we don't care about timeouts
-					case ZWaveErrorCodes.Controller_MessageDropped:
-					// We don't care about failed node removal
-					case ZWaveErrorCodes.RemoveFailedNode_Failed:
-					case ZWaveErrorCodes.RemoveFailedNode_NodeOK:
-					// Or failed inclusion processes:
-					case ZWaveErrorCodes.Controller_InclusionFailed:
-					case ZWaveErrorCodes.Controller_ExclusionFailed:
-					// Or users that don't read the changelog:
-					case ZWaveErrorCodes.Driver_NoErrorHandler:
-						ignore = true;
-						break;
-					// Or users that try to manage associations on nodes that don't support it
-					case ZWaveErrorCodes.CC_NotSupported:
-						if (
-							/does not support.+associations/.test(
-								hint.originalException.message,
-							)
-						) {
+			if (!ignore && hint) {
+				if (isZWaveError(hint.originalException)) {
+					switch (hint.originalException.code) {
+						// we don't care about timeouts
+						case ZWaveErrorCodes.Controller_MessageDropped:
+						// We don't care about failed node removal
+						case ZWaveErrorCodes.RemoveFailedNode_Failed:
+						case ZWaveErrorCodes.RemoveFailedNode_NodeOK:
+						// Or failed inclusion processes:
+						case ZWaveErrorCodes.Controller_InclusionFailed:
+						case ZWaveErrorCodes.Controller_ExclusionFailed:
+						// Or users that don't read the changelog:
+						case ZWaveErrorCodes.Driver_NoErrorHandler:
 							ignore = true;
-						}
-						break;
-				}
+							break;
+						// Or users that try to manage associations on nodes that don't support it
+						case ZWaveErrorCodes.CC_NotSupported:
+							if (
+								/does not support.+associations/.test(
+									hint.originalException.message,
+								)
+							) {
+								ignore = true;
+							}
+							break;
+					}
 
-				// Try to attach transaction context this way
-				if (!ignore && hint.originalException.transactionSource) {
-					event.contexts = {
-						transaction: {
-							stack: hint.originalException.transactionSource,
-						},
-					};
+					// Try to attach transaction context this way
+					if (!ignore && hint.originalException.transactionSource) {
+						event.contexts = {
+							transaction: {
+								stack: hint.originalException.transactionSource,
+							},
+						};
+					}
+				} else if (hint.originalException instanceof Error) {
+					const msg = hint.originalException.message;
+					if (
+						/(no such file|permission denied|cannot open|file not found)/i.test(
+							msg,
+						) &&
+						/(\/dev\/|\/mqtt\/|COM\d+|Select Port)/i.test(msg)
+					) {
+						// No such file or directory, cannot open /dev/ttyACM0
+						// no such file or directory, rename '/usr/src/app/store/mqtt/incoming~'
+						// Opening COM18: File not found
+						// No such file or directory, cannot open Select Port
+						ignore = true;
+					} else if (
+						/(EROFS|ENODEV|ENOSPC)/i.test(msg) &&
+						/(read-only file system|no such device|no space left)/i.test(
+							msg,
+						)
+					) {
+						// EROFS: read-only file system, write
+						// ENODEV: no such device, write
+						// ENOSPC: no space left on device, write
+						ignore = true;
+					} else if (/unknown system error/i.test(msg)) {
+						// Unknown system error -116: Unknown system error -116, write
+						ignore = true;
+					} else if (/custom baud rate/i.test(msg)) {
+						// Input/output error setting custom baud rate of 115200
+						ignore = true;
+					}
 				}
 			}
 
