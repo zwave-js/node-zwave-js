@@ -450,7 +450,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.Any,
+		...ValueMetadata.Duration,
 		label: "Transition duration",
 	})
 	public readonly duration: Duration | undefined;

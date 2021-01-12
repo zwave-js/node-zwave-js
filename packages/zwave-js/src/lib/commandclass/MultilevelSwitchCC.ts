@@ -567,7 +567,7 @@ export class MultilevelSwitchCCReport extends MultilevelSwitchCC {
 	private _duration: Duration | undefined;
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.Any,
+		...ValueMetadata.Duration,
 		label: "Transition duration",
 	})
 	public get duration(): Duration | undefined {

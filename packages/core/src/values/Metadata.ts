@@ -1,4 +1,5 @@
 import { getEnumMemberName } from "@zwave-js/shared";
+import type { Duration } from "./Duration";
 import { IntegerLimits } from "./Primitive";
 
 const isIntegerRegex = /^\d+$/;
@@ -32,6 +33,7 @@ export type ValueType =
 	| "number[]"
 	| "boolean[]"
 	| "string[]"
+	| "duration"
 	| "any";
 
 export interface ValueMetadataAny {
@@ -81,6 +83,11 @@ export interface ValueMetadataString extends ValueMetadataAny {
 	maxLength?: number;
 	/** The default value */
 	default?: string;
+}
+
+export interface ValueMetadataDuration extends ValueMetadataAny {
+	type: "duration";
+	default?: Duration;
 }
 
 export type ValueMetadata =
@@ -349,6 +356,24 @@ const WriteOnlyLevel: ValueMetadataNumeric = {
 	..._writeonly,
 };
 
+/** A duration value */
+const _Duration: ValueMetadataDuration = {
+	..._default,
+	type: "duration",
+};
+
+/** A duration value (readonly) */
+const ReadOnlyDuration: ValueMetadataDuration = {
+	..._Duration,
+	..._readonly,
+};
+
+/** A duration value (writeonly) */
+const WriteOnlyDuration: ValueMetadataDuration = {
+	..._Duration,
+	..._writeonly,
+};
+
 /** A collection of predefined CC value metadata */
 export const ValueMetadata = {
 	/** The default value for metadata: readable and writeable */
@@ -436,4 +461,11 @@ export const ValueMetadata = {
 	ReadOnlyString: Object.freeze(ReadOnlyString),
 	/** A string (writeonly) */
 	WriteOnlyString: Object.freeze(WriteOnlyString),
+
+	/** A duration value */
+	Duration: Object.freeze(_Duration),
+	/** A duration value (readonly) */
+	ReadOnlyDuration: Object.freeze(ReadOnlyDuration),
+	/** A duration value (writeonly) */
+	WriteOnlyDuration: Object.freeze(WriteOnlyDuration),
 };
