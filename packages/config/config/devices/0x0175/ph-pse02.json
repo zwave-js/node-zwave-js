@@ -17,7 +17,7 @@
     },
     "supportsZWavePlus": true,
     "paramInformation": {
-        "7[0x04]": {
+        "7[0x08]": {
             "label": "Disable Sound",
             "description": "Prevents audio from the siren - leaving only the strobe function.",
             "valueSize": 1,
@@ -38,7 +38,7 @@
                 }
             ]
         },
-        "7[0x08]": {
+        "7[0x10]": {
             "label": "Notification Type",
             "description": "Notification event type to use for trigger events",
             "valueSize": 1,
