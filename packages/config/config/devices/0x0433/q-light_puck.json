@@ -196,7 +196,7 @@
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "S1 Scene ID set",
+			"label": "S2 Scene ID set",
 			"description": "When you press S1 five times,the light is dimmed to the brightness set in Scene ID 5. S2 Scene ID is set by this configuration. Note: The actual action of each SCENE ID are set by SCE-NE_ACTUATOR_CONF(0x26) command.",
 			"valueSize": 1,
 			"minValue": 1,
