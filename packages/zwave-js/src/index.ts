@@ -15,7 +15,9 @@ const libName: string = packageJson.name;
 const libVersion: string = packageJson.version;
 
 // Init sentry
-void initSentry(libraryRootDir, libName, libVersion).catch();
+if (process.env.NODE_ENV !== "test") {
+	void initSentry(libraryRootDir, libName, libVersion).catch();
+}
 
 // Export some frequently-used things and types - this also loads all CC files including metadata
 export * from "./CommandClass";
