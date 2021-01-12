@@ -1,55 +1,85 @@
 // Devolo ph-pse02
 // Multisound indoor siren
 {
-	"manufacturer": "Devolo",
-	"manufacturerId": "0x0175",
-	"label": "ph-pse02",
-	"description": "Multisound indoor siren",
-	"devices": [
-		{
-			"productType": "0x0004",
-			"productId": "0x000a"
-		}
-	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
-	"supportsZWavePlus": true,
-	"paramInformation": {
-		"7": {
-			"label": "Costumer  Function",
-			"description": "NotificationReport/BinaryReport",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 8,
-			"readOnly": false,
-			"writeOnly": false,
+    "manufacturer": "Devolo",
+    "manufacturerId": "0x0175",
+    "label": "ph-pse02",
+    "description": "Multisound indoor siren",
+    "devices": [
+        {
+            "productType": "0x0004",
+            "productId": "0x000a"
+        }
+    ],
+    "firmwareVersion": {
+        "min": "0.0",
+        "max": "255.255"
+    },
+    "supportsZWavePlus": true,
+    "paramInformation": {
+        "7[0x04]": {
+            "label": "Disable Sound",
+            "description": "Prevents audio from the siren - leaving only the strobe function.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 1,
+            "readOnly": false,
+            "writeOnly": false,
 			"allowManualEntry": true,
-			"unsigned": true
-		},
-		"29": {
-			"label": "Disable Alarm",
-			"description": "Disable the alarm  function.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"31": {
-			"label": "Alarm Duration",
-			"description": "Play alarm sound duration.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 6,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		}
-	}
+            "options": [
+                {
+                    "label": "Enables Sound",
+                    "value": 0
+                },
+                {
+                    "label": "Disables Sound",
+                    "value": 1
+                }
+            ]
+        },
+        "7[0x08]": {
+            "label": "Notification Type",
+            "description": "Notification event type to use for trigger events",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+			"allowManualEntry": true,
+            "options": [
+                {
+                    "label": "Notification Report",
+                    "value": 0
+                },
+                {
+                    "label": "Sensor Binary Report",
+                    "value": 1
+                }
+            ]
+        },
+        "29": {
+            "label": "Disable Alarm",
+            "description": "Disables the alarm function entierly, including any tamper detection.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 1,
+            "defaultValue": 0,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        },
+        "31": {
+            "label": "Alarm Duration",
+            "description": "Play alarm sound duration.",
+            "valueSize": 1,
+            "minValue": 0,
+            "maxValue": 127,
+            "defaultValue": 6,
+            "readOnly": false,
+            "writeOnly": false,
+            "allowManualEntry": true
+        }
+    }
 }
