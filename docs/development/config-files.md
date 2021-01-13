@@ -190,6 +190,13 @@ The Z-Wave+ specs mandate that the root endpoint must **mirror** the application
 
 Some devices spam the network with hundreds of invalid `ConfigurationCC::InfoReport`s when one is requested. Set this flag to `true` to skip this query for affected devices.
 
+### `treatBasicSetAsEvent`
+
+By default, `Basic CC::Set` commands are interpreted as status updates. This flag causes the driver to emit a `value event` for the `"value"` property instead. Note that this property is exclusively used in this case in order to avoid conflicts with regular value IDs.
+
+> [!NOTE]
+> If this option is `true`, it has precedence over `disableBasicMapping`.
+
 ## Contributing configuration files
 
 In order to get your configuration file included in this library, this is the way:
