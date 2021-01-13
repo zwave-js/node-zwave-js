@@ -274,20 +274,32 @@ export class ZWaveLogContainer extends winston.Container {
 		return this.loglevelVisibleCache.get(loglevel)!;
 	}
 
+	public destroy(): void {
+		for (const key in this.loggers) {
+			this.close(key);
+		}
+
+		this.fileTransport = undefined;
+		this.consoleTransport = undefined;
+		this.logConfig.transports = [];
+	}
+
 	private createLogTransports(): Transport[] {
 		const ret: Transport[] = [];
-		if (this.logConfig.logToFile && this.logConfig.enabled) {
-			if (!this.fileTransport) {
-				console.log(`Logging to file:
+		if (this.logConfig.enabled) {
+			if (this.logConfig.logToFile) {
+				if (!this.fileTransport) {
+					console.log(`Logging to file:
 	${this.logConfig.filename}`);
-				this.fileTransport = this.createFileTransport();
+					this.fileTransport = this.createFileTransport();
+				}
+				ret.push(this.fileTransport);
+			} else {
+				if (!this.consoleTransport) {
+					this.consoleTransport = this.createConsoleTransport();
+				}
+				ret.push(this.consoleTransport);
 			}
-			ret.push(this.fileTransport);
-		} else {
-			if (!this.consoleTransport) {
-				this.consoleTransport = this.createConsoleTransport();
-			}
-			ret.push(this.consoleTransport);
 		}
 		return ret;
 	}
