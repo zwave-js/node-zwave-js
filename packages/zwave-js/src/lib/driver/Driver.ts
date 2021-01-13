@@ -1295,6 +1295,9 @@ export class Driver extends EventEmitter {
 		process.removeListener("exit", this._cleanupHandler);
 		process.removeListener("SIGINT", this._cleanupHandler);
 		process.removeListener("uncaughtException", this._cleanupHandler);
+
+		// destroy loggers as the very last thing
+		this.logContainer.destroy();
 	}
 
 	private serialport_onError(err: Error): void {

@@ -274,9 +274,19 @@ export class ZWaveLogContainer extends winston.Container {
 		return this.loglevelVisibleCache.get(loglevel)!;
 	}
 
+	public destroy(): void {
+		for (const key in this.loggers) {
+			this.close(key);
+		}
+
+		this.fileTransport = undefined;
+		this.consoleTransport = undefined;
+		this.logConfig.transports = [];
+	}
+
 	private createLogTransports(): Transport[] {
 		const ret: Transport[] = [];
-		if (this.logConfig.logToFile && this.logConfig.enabled) {
+		if (this.logConfig.enabled && this.logConfig.logToFile) {
 			if (!this.fileTransport) {
 				console.log(`Logging to file:
 	${this.logConfig.filename}`);
@@ -289,6 +299,7 @@ export class ZWaveLogContainer extends winston.Container {
 			}
 			ret.push(this.consoleTransport);
 		}
+
 		return ret;
 	}
 
