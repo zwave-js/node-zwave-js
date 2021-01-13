@@ -365,10 +365,10 @@ jobs:
       id: fix
       run: |
         # Try to reword the commit
+        git config user.email "bot@zwave.js"
+        git config user.name "Z-Wave JS Bot"
         if git commit --amend -m "${{ fromJSON(steps.get-pr.outputs.result).title }}" ; then
           # Amending the commit worked
-          git config user.email "bot@zwave.js"
-          git config user.name "Z-Wave JS Bot"
           git push -f
           echo "::set-output name=result::success"
         else
