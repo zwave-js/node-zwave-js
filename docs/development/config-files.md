@@ -73,7 +73,7 @@ For devices that don't support the Z-Wave+ standard, the associations must be de
 }
 ```
 
-The `isLifeline` key is used to determine which group sends the controller device status updates. It may only be defined for one group, which also must have a `maxNodes` of 1.
+The `isLifeline` key is used to determine which group sends the controller device status updates.
 
 ### `paramInformation`
 
