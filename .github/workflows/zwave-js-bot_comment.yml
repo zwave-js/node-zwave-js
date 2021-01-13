@@ -302,7 +302,7 @@ jobs:
 
   # #########################################################################
   # Fix lint errors when an authorized person posts "@zwave-js-bot rename commit"
-  rebase:
+  rename-commit:
     if: |
       contains(github.event.issue.html_url, '/pull/') &&
       contains(github.event.comment.body, '@zwave-js-bot rename commit') &&
