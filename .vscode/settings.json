@@ -104,5 +104,6 @@
 	"jest.runAllTestsFirst": false,
 	"[jsonc]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	}
+	},
+	"standard.enable": false
 }

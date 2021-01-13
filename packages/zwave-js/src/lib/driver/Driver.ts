@@ -1252,9 +1252,6 @@ export class Driver extends EventEmitter {
 		this._wasDestroyed = true;
 		this.driverLog.print("destroying driver instance...");
 
-		// destroy loggers
-		this.logContainer.destroy();
-
 		// First stop the send thread machine and close the serial port, so nothing happens anymore
 		if (this.sendThread.initialized) this.sendThread.stop();
 		if (this.serial != undefined) {
@@ -1298,6 +1295,9 @@ export class Driver extends EventEmitter {
 		process.removeListener("exit", this._cleanupHandler);
 		process.removeListener("SIGINT", this._cleanupHandler);
 		process.removeListener("uncaughtException", this._cleanupHandler);
+
+		// destroy loggers as the very last thing
+		this.logContainer.destroy();
 	}
 
 	private serialport_onError(err: Error): void {
