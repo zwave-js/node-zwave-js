@@ -1,0 +1,18 @@
+// Wintop Digital Home Systems
+// In Wall Switch
+{
+	"manufacturer": "Wintop",
+	"manufacturerId": "0x0097",
+	"label": "Digital Home Systems",
+	"description": "In Wall Switch",
+	"devices": [
+		{
+			"productType": "0x1121",
+			"productId": "0x5501"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

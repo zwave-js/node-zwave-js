@@ -1,0 +1,187 @@
+// Eaton RF9536-N
+// 1000W Dimmer Light Switch
+{
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RF9536-N",
+	"description": "1000W Dimmer Light Switch",
+	"devices": [
+		{
+			"productType": "0x4449",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5
+		},
+		"255": {
+			"label": "Group 255",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Delayed OFF time",
+			"description": "time in seconds to delay OFF",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Panic ON time",
+			"description": "Time in seconds for panic mode ON",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Panic OFF time",
+			"description": "time in seconds for OFF in panic mode",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Basic Set Value",
+			"description": "Send value to  association group on trigger",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Power Up State",
+			"description": "Power Up State of the switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				},
+				{
+					"label": "Last State",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Panic mode enable",
+			"description": "Enables this switch to participate in panic mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Dimmer Ramp Time",
+			"description": "Time in seconds to reach desired level",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Kickstart / Rapid Start",
+			"description": "Turn on or off rapid start feature",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "OFF",
+					"value": 1
+				},
+				{
+					"label": "ON",
+					"value": 2
+				}
+			]
+		},
+		"11": {
+			"label": "Minimum Dimmer Level",
+			"description": "The minimum dim level the switch will allow",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 99,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Maximum Dimmer Level",
+			"description": "The maximum dim level the switch will allow",
+			"valueSize": 1,
+			"minValue": 4,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

@@ -1,0 +1,23 @@
+// Aeotec Ltd. ZWA189
+// Range Extender 7
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZW189",
+	"description": "Range Extender 7",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x00bd"
+		},
+		{
+			"productType": "0x0104",
+			"productId": "0x00bd"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
+}

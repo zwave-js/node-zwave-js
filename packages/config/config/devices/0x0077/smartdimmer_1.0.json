@@ -1,0 +1,194 @@
+// INNOVUS SmartDimmer
+// RAone SmartDimmer
+{
+	"manufacturer": "INNOVUS",
+	"manufacturerId": "0x0077",
+	"label": "SmartDimmer",
+	"description": "RAone SmartDimmer",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0011",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Dimmer",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"0": {
+			"label": "Maximum dim level",
+			"description": "Maximum dim level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1": {
+			"label": "Report node",
+			"description": "Report Node, reports changes in level to this node id. Disabled if 0.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "B&O IR support",
+			"description": "B&O IR support is disabled if 0 otherwise enabled.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disabled",
+					"value": 0
+				},
+				{
+					"label": "enabled",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Dimming type",
+			"description": "Dimming Type, trailing edge enabled if 0 otherwise leading edge enabled.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Trailing edge",
+					"value": 0
+				},
+				{
+					"label": "Leading edge",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Dimming level duration",
+			"description": "Dimming level duration",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 8,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Set level duration",
+			"description": "Default Set Level Duration, how long time it takes to set one level in 0.01s.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Long dim duration",
+			"description": "Long dim duration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 158,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Touch press time",
+			"description": "Touch press time",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Touch Multiple Press Time",
+			"description": "No specific usage in this product",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 100,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Touch Hold Time",
+			"description": "Touch Hold Time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 40,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Network Update Interval",
+			"description": "Network Update Interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 168,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Rediscover Interval",
+			"description": "Rediscover Interval, time between rediscoveries in 256 seconds. Disabled if 0.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 2362,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

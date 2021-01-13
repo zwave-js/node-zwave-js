@@ -1,0 +1,18 @@
+// Reitz-Group.de DUW_RPT
+// Düwi Repeater
+{
+	"manufacturer": "Reitz-Group.de",
+	"manufacturerId": "0x0064",
+	"label": "DUW_RPT",
+	"description": "Düwi Repeater",
+	"devices": [
+		{
+			"productType": "0x5003",
+			"productId": "0x0000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

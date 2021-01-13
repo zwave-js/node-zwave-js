@@ -1,0 +1,58 @@
+// Willis Electric Co., Ltd. NZW30T
+// Inovelli In-Wall Switch (On/Off) Scene Enabled
+{
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "NZW30T",
+	"description": "Inovelli In-Wall Switch (On/Off) Scene Enabled",
+	"devices": [
+		{
+			"productType": "0x1e00",
+			"productId": "0x1e00"
+		},
+		{
+			"productType": "0x1e02",
+			"productId": "0x1e02"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"4": {
+			"label": "Invert",
+			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Inverted",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Countdown",
+			"description": "Countdown to shutoff",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

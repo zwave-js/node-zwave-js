@@ -1,0 +1,66 @@
+// Samsung SDS hmdm100
+// Doorlock Control Module for Samsung Locks
+{
+	"manufacturer": "Samsung SDS",
+	"manufacturerId": "0x022e",
+	"label": "hmdm100",
+	"description": "Doorlock Control Module for Samsung Locks",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Security Function",
+			"description": "0=Disable 1=Enable 2=SystemDisable 3=SystemEnable 4=RequestForEnable 5=Fail",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Privacy Mode",
+			"description": "0=Disable 1=Enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Registered User ID",
+			"description": "The number of registered user codes.2",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 130,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Platform",
+			"description": "0=Common 1=Samsung SDS",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

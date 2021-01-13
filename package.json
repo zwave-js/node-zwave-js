@@ -1,0 +1,132 @@
+{
+  "name": "@zwave-js/repo",
+  "private": true,
+  "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
+  "keywords": [],
+  "author": {
+    "name": "AlCalzone",
+    "email": "d.griesel@gmx.net"
+  },
+  "contributors": [
+    "Daniel Lando (https://github.com/robertsLando)",
+    "RoboPhred (https://github.com/RoboPhred)"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/AlCalzone/node-zwave-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlCalzone/node-zwave-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/AlCalzone/node-zwave-js/issues"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/AlCalzone/"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@actions/core": "^1.2.6",
+    "@actions/exec": "^1.0.4",
+    "@actions/github": "^4.0.0",
+    "@alcalzone/release-script": "^1.8.1",
+    "@babel/core": "^7.11.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/plugin-proposal-decorators": "^7.10.5",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
+    "@babel/plugin-proposal-numeric-separator": "^7.10.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "@babel/preset-env": "^7.11.5",
+    "@babel/preset-typescript": "^7.10.4",
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
+    "@fimbul/mithotyn": "^0.21.0",
+    "@fimbul/wotan": "^0.22.0",
+    "@types/fs-extra": "^9.0.1",
+    "@types/gulp": "^4.0.7",
+    "@types/gulp-sourcemaps": "0.0.32",
+    "@types/jest": "^26.0.14",
+    "@types/json5": "0.0.30",
+    "@types/mockdate": "^2.0.0",
+    "@types/node": "^14.11.2",
+    "@types/prettier": "^2.1.1",
+    "@types/semver": "^7.3.4",
+    "@types/serialport": "^8.0.1",
+    "@types/triple-beam": "^1.3.2",
+    "@types/xml2json": "^0.11.3",
+    "@types/yargs": "^15.0.7",
+    "@typescript-eslint/eslint-plugin": "^4.3.0",
+    "@typescript-eslint/parser": "^4.3.0",
+    "@xstate/test": "^0.4.1",
+    "ansi-colors": "^4.1.1",
+    "axios": "^0.21.1",
+    "clipboardy": "^2.3.0",
+    "commitizen": "^4.1.5",
+    "coveralls": "^3.1.0",
+    "cz-conventional-changelog": "^3.2.0",
+    "eslint": "^7.10.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "gulp": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-typescript": "^6.0.0-alpha.1",
+    "husky": "^4.3.0",
+    "jest": "^26.4.2",
+    "jest-circus": "^26.4.2",
+    "jest-extended": "^0.11.5",
+    "lerna": "^3.22.1",
+    "mockdate": "^3.0.2",
+    "prettier": "^2.1.2",
+    "prettier-plugin-organize-imports": "^1.1.1",
+    "semver": "^7.3.2",
+    "supports-color": "^7.2.0",
+    "ts-morph": "^9.1.0",
+    "ts-node": "^9.0.0",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.1.3",
+    "xml2json": "^0.12.0",
+    "yargs": "^16.0.3"
+  },
+  "scripts": {
+    "build": "lerna run build --scope=zwave-js",
+    "build:full": "lerna run build --scope=@zwave-js/* && lerna run build:full",
+    "watch": "lerna run watch --parallel",
+    "test:reset": "jest --clear-cache",
+    "test:ts": "jest",
+    "test:ci": "yarn run test:ts -- --runInBand",
+    "test:watch": "yarn run test:ts -- --watch",
+    "test": "yarn run test:watch",
+    "coverage": "yarn run test:ts -- --collect-coverage",
+    "coverage:ci": "yarn run test:ci -- --collect-coverage",
+    "show-coverage": "yarn run coverage && start ./coverage/index.html",
+    "lint:ts": "eslint --ext .ts \"packages/*/src/**/*.ts\"",
+    "lint:wotan": "wotan",
+    "lint:configjson": "prettier -c \"packages/config/config/**/*.json\"",
+    "lint": "yarn run lint:wotan && yarn run lint:ts && yarn run lint:configjson",
+    "implemented_ccs": "ts-node maintenance/implemented_ccs.ts",
+    "gh-cc-table": "yarn run implemented_ccs -- --flavor=github --only-incomplete",
+    "toLogEntryOverview": "ts-node packages/zwave-js/maintenance/checkCCToLogEntry.ts",
+    "usbdebug": "cmd.exe /c \"test\\usbdebug.bat\"",
+    "commit": "git-cz",
+    "release": "yarn run build && lerna version --no-commit-hooks",
+    "preversion": "release-script --lerna-check",
+    "version": "yarn install && release-script --lerna",
+    "postversion": "git push && git push --tags",
+    "config": "ts-node maintenance/importConfig.ts",
+    "docs": "docsify serve docs",
+    "docs:generate": "ts-node -P maintenance/tsconfig.json maintenance/generateTypedDocs.ts"
+  },
+  "readme": "README.md",
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}

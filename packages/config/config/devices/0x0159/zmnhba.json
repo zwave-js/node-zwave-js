@@ -1,0 +1,203 @@
+// Qubino ZMNHBA
+// Flush 2 relays
+{
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHBA",
+	"description": "Flush 2 relays",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Basic on/off Q1",
+			"maxNodes": 4
+		},
+		"2": {
+			"label": "Basic on/off Q2",
+			"maxNodes": 4
+		},
+		"3": {
+			"label": "Default Reporting Group",
+			"maxNodes": 4,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Input 1 switch type",
+			"description": "Input 1 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Input 2 switch type",
+			"description": "Input 2 switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "mono-stable switch type (push button)",
+					"value": 0
+				},
+				{
+					"label": "bi-stable switch type",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Activate / deactivate functions ALL ON/ALL OFF",
+			"description": "Activate / deactivate functions ALL ON/ALL OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON is not active ALL OFF is not active",
+					"value": 0
+				},
+				{
+					"label": "ALL ON is not active ALL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON active ALL OFF is not active",
+					"value": 2
+				},
+				{
+					"label": "ALL ON active, ALL OFF active",
+					"value": 255
+				}
+			]
+		},
+		"11": {
+			"label": "Automatic turning off relay Q1 after set time",
+			"description": "Automatic turning off relay Q1 after set time",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Automatic turning off relay Q2 after set time",
+			"description": "Automatic turning off relay Q2 after set time",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"label": "Saving Q1 and Q2 after a power failure",
+			"description": "Saving the state of the relays Q1 and Q2 after a power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Saves state before power failure",
+					"value": 0
+				},
+				{
+					"label": "Do not save state after a power failure",
+					"value": 1
+				}
+			]
+		},
+		"40": {
+			"label": "Power reporting in Watts on power change for Q1",
+			"description": "Power reporting in Watts on power change for Q1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41": {
+			"label": "Power reporting in Watts on power change for Q2",
+			"description": "Power reporting in Watts on power change for Q2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Power reporting in Watts by time interval for Q1",
+			"description": "Power reporting in Watts by time interval for Q1",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"43": {
+			"label": "Power reporting in Watts by time interval for Q2",
+			"description": "Power reporting in Watts by time interval for Q2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

@@ -1,0 +1,226 @@
+// BeNext builtInDimmer
+// Built-in Dimmer
+{
+	"manufacturer": "BeNext",
+	"manufacturerId": "0x008a",
+	"label": "builtInDimmer",
+	"description": "Built-in Dimmer",
+	"devices": [
+		{
+			"productType": "0x000d",
+			"productId": "0x0100"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"description": "All nodes in this group will receive a BASIC_SET frame",
+			"maxNodes": 8
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 1
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Reset to factory settings",
+			"description": "Set all configuration values to default values (factory settings).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "The way how the button reacts when press/released",
+			"description": "The way how the button reacts when press/released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Toggle light when button is pressed only",
+					"value": 0
+				},
+				{
+					"label": "Toggle light on release, dimming on press",
+					"value": 1
+				},
+				{
+					"label": "Toggle  on press & Dim with quick press & release",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Control Type",
+			"description": "The way the Built-in Dimmer reacts when light is turned on/off with button",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Switch own light on and send message to all nodes",
+					"value": 0
+				},
+				{
+					"label": "Don't switch own light. only send to extern node",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Enable dimming",
+			"description": "Enable dimming",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Maximum load",
+			"description": "Maximum load",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 200,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Dimming speed",
+			"description": "Dimming speed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Fading up speed",
+			"description": "Fading up speed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Toggle time",
+			"description": "Toggle time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Auto meter report: percentage",
+			"description": "Auto meter report: percentage",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Auto meter report: watt",
+			"description": "Auto meter report: watt",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Auto meter report: time",
+			"description": "Auto meter report: time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Last known status",
+			"description": "Last known status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Fading down speed",
+			"description": "Fading down speed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

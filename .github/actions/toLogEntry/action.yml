@@ -1,0 +1,10 @@
+name: 'toLogEntry implementation overview'
+description: 'Keep toLogEntry implementation status in #54 up to date'
+author: 'AlCalzone'
+inputs:
+  githubToken:
+    description: 'The github token to use for authentication'
+    required: true
+runs:
+  using: 'node12'
+  main: 'main.js'

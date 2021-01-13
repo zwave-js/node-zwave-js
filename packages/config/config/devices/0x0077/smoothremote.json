@@ -1,0 +1,410 @@
+// INNOVUS SmoothRemote
+// SmoothRemote
+{
+	"manufacturer": "INNOVUS",
+	"manufacturerId": "0x0077",
+	"label": "SmoothRemote",
+	"description": "SmoothRemote",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Click I",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"2": {
+			"label": "Click II",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"3": {
+			"label": "Click III",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"4": {
+			"label": "Click IV",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"5": {
+			"label": "Click V",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"6": {
+			"label": "Click VI",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"7": {
+			"label": "Click VII",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"8": {
+			"label": "Click VIII",
+			"description": "SWITCH ALL ON",
+			"maxNodes": 30
+		},
+		"9": {
+			"label": "Click Shift",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"10": {
+			"label": "Double Click I",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"11": {
+			"label": "Double Click II",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"12": {
+			"label": "Double Click III",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"13": {
+			"label": "Double Click IV",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"14": {
+			"label": "Double Click V",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"15": {
+			"label": "Double Click VI",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"16": {
+			"label": "Double Click VII",
+			"description": "BASIC SET",
+			"maxNodes": 30
+		},
+		"17": {
+			"label": "Double Click VIII",
+			"description": "SWITCH ALL OFF",
+			"maxNodes": 30
+		},
+		"18": {
+			"label": "Double Click Shift",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"19": {
+			"label": "Hold I",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"20": {
+			"label": "Hold II",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"21": {
+			"label": "Hold III",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"22": {
+			"label": "Hold IV",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"23": {
+			"label": "Hold V",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"24": {
+			"label": "Hold VI",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"25": {
+			"label": "Hold VII",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"26": {
+			"label": "Hold VIII",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"27": {
+			"label": "Hold Shift",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"28": {
+			"label": "Click followed by Hold I",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"29": {
+			"label": "Click followed by Hold II",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"30": {
+			"label": "Click followed by Hold III",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"31": {
+			"label": "Click followed by Hold IV",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"32": {
+			"label": "Click followed by Hold V",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"33": {
+			"label": "Click followed by Hold VI",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"34": {
+			"label": "Click followed by Hold VII",
+			"description": "SWITCH MULTILEVEL START LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"35": {
+			"label": "Click followed by Hold VIII",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"36": {
+			"label": "Click followed by Hold Shift",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"37": {
+			"label": "Release I",
+			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"38": {
+			"label": "Release II",
+			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"39": {
+			"label": "Release III",
+			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"40": {
+			"label": "Release IV",
+			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"41": {
+			"label": "Release V",
+			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"42": {
+			"label": "Release VI",
+			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"43": {
+			"label": "Release VII",
+			"description": "SWITCH MULTILEVEL STOP LEVEL CHANGE",
+			"maxNodes": 30
+		},
+		"44": {
+			"label": "Release VIII",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"45": {
+			"label": "Release Shift",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"46": {
+			"label": "Click (Shift) followed by Click I",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"47": {
+			"label": "Click (Shift) followed by Click II",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"48": {
+			"label": "Click (Shift) followed by Click III",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"49": {
+			"label": "Click (Shift) followed by Click IV",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"50": {
+			"label": "Click (Shift) followed by Click V",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"51": {
+			"label": "Click (Shift) followed by Click VI",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"52": {
+			"label": "Click (Shift) followed by Click VII",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"53": {
+			"label": "Click (Shift) followed by Click VIII",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"54": {
+			"label": "Double Click (Shift) followed by Click I",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"55": {
+			"label": "Double Click (Shift) followed by Click II",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"56": {
+			"label": "Double Click (Shift) followed by Click III",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"57": {
+			"label": "Double Click (Shift) followed by Click IV",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"58": {
+			"label": "Double Click (Shift) followed by Click V",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"59": {
+			"label": "Double Click (Shift) followed by Click VI",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"60": {
+			"label": "Double Click (Shift) followed by Click VII",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"61": {
+			"label": "Double Click (Shift) followed by Click VIII",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"62": {
+			"label": "Triple Click VIII",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"63": {
+			"label": "Triple Click Shift",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"64": {
+			"label": "4x Click VIII",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"65": {
+			"label": "4x Click Shift",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"66": {
+			"label": "Double Click followed by Hold (Shift)",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"67": {
+			"label": "Triple Click followed by Hold (Shift)",
+			"description": "HAIL",
+			"maxNodes": 30
+		},
+		"68": {
+			"label": "Triple Click (Shift) followed by Triple Click VIII",
+			"description": "HAIL",
+			"maxNodes": 30
+		}
+	},
+	"paramInformation": {
+		"0": {
+			"label": "Button Press Time",
+			"description": "Button Press Time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1": {
+			"label": "Button Multiple Press Time",
+			"description": "Button Multiple Press Time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 100,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Button Hold Time",
+			"description": "Button Hold Time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 40,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Network Update Interval",
+			"description": "Network Update Interval",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 168,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

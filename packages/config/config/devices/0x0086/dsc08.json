@@ -1,0 +1,280 @@
+// AEON Labs DSC08
+// Smart Energy Illuminator
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSC08",
+	"description": "Smart Energy Illuminator",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0008"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Status Reports",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Multilevel Sensor Report Content",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power",
+					"value": 0
+				},
+				{
+					"label": "Voltage",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Make SES blink",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"80": {
+			"label": "Automatic Notifications",
+			"description": "Enables automatic notifications to associated devices",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Nothing",
+					"value": 0
+				},
+				{
+					"label": "Hail",
+					"value": 1
+				},
+				{
+					"label": "Basic CC Report",
+					"value": 2
+				}
+			]
+		},
+		"90": {
+			"label": "Enable Parameter 91",
+			"description": "Enables/disables parameter 91 and 92 below",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"91": {
+			"label": "Minimum change in wattage",
+			"description": "Minimum change in wattage for a REPORT to be sent.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"92": {
+			"label": "Minimum change in wattage %",
+			"description": "Minimum percent change in wattage for a REPORT to be sent.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"100": {
+			"label": "Set 100 to 103 to default",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101": {
+			"label": "Group 1 report",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Multisensor Report",
+					"value": 2
+				},
+				{
+					"label": "Meter Report (Watts)",
+					"value": 4
+				},
+				{
+					"label": "Meter Report (kWh)",
+					"value": 8
+				}
+			]
+		},
+		"102": {
+			"label": "Group 2 report",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Multisensor Report",
+					"value": 2
+				},
+				{
+					"label": "Meter Report (Watts)",
+					"value": 4
+				},
+				{
+					"label": "Meter Report (kWh)",
+					"value": 8
+				}
+			]
+		},
+		"103": {
+			"label": "Group 3 report",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Multisensor Report",
+					"value": 2
+				},
+				{
+					"label": "Meter Report (Watts)",
+					"value": 4
+				},
+				{
+					"label": "Meter Report (kWh)",
+					"value": 8
+				}
+			]
+		},
+		"110": {
+			"label": "Set 111 to 113 to default",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"111": {
+			"label": "Interval group 1",
+			"description": "The time interval of sending Report group 1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"112": {
+			"label": "Interval group 2",
+			"description": "The time interval of sending Report group 2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"113": {
+			"label": "Interval group 3",
+			"description": "The time interval of sending Report group 3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"254": {
+			"label": "Device Tag",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Device Reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		}
+	}
+}

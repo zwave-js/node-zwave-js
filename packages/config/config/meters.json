@@ -1,0 +1,47 @@
+// Z-Wave Meter CC Types and Scales
+// up to CC version 6
+{
+	"0x01": {
+		"name": "Electric",
+		"scales": {
+			"0x00": "kWh",
+			"0x01": "kVAh",
+			"0x02": "W",
+			"0x03": "Pulse count",
+			"0x04": "V",
+			"0x05": "A",
+			"0x06": "Power Factor",
+			"0x07": "kVar",
+			"0x08": "kVarh"
+		}
+	},
+	"0x02": {
+		"name": "Gas",
+		"scales": {
+			"0x00": "Cubic meters",
+			"0x01": "Cubic feet",
+			"0x03": "Pulse count"
+		}
+	},
+	"0x03": {
+		"name": "Water",
+		"scales": {
+			"0x00": "Cubic meters",
+			"0x01": "Cubic feet",
+			"0x02": "US gallons",
+			"0x03": "Pulse count"
+		}
+	},
+	"0x04": {
+		"name": "Heating",
+		"scales": {
+			"0x00": "kWh"
+		}
+	},
+	"0x05": {
+		"name": "Cooling",
+		"scales": {
+			"0x00": "kWh"
+		}
+	}
+}

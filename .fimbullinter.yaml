@@ -1,0 +1,5 @@
+config: .wotanrc.yaml
+exclude:
+    #- "**/*.d.ts"
+    - "**/*.test.ts"
+project: tsconfig.eslint.json

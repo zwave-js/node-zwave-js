@@ -1,0 +1,5 @@
+# blank_issues_enabled: false
+contact_links:
+  - name: ❓ Ask a Question
+    url: https://github.com/zwave-js/node-zwave-js/discussions/new
+    about: If you have any questions about how to do something in zwave-js, ask it here.

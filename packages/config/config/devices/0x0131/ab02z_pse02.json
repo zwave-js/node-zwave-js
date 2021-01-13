@@ -1,0 +1,100 @@
+// Zipato AB02Z_PSE02
+// Indoor Siren
+{
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "AB02Z_PSE02",
+	"description": "Indoor Siren",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x1083"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Siren status",
+			"description": "is assigned to the siren status - ON/OFF. Allows for sending a controlled command to the associated device whenever the Indoor siren is turned ON (or OFF).",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Alarm volume",
+			"description": "configure alarm volume",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "alarm duration time",
+			"description": "alarm duration time: 1=30sec., 2=1 min, 3=5min",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Configuring doorbell music duration time",
+			"description": "Configuring doorbell music duration time",
+			"unit": "sec",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Configure doorbell music volume",
+			"description": "Low, Middle, High",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Configure alarm sound index",
+			"description": "sound type",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Configure doorbell music index",
+			"description": "Sound Types",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

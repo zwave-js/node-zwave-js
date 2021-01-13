@@ -1,0 +1,310 @@
+// Fibargroup FGWREU-111
+// Fibaro Walli Roller Shutter
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGWREU-111",
+	"description": "Fibaro Walli Roller Shutter",
+	"devices": [
+		{
+			"productType": "0x1d01",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"11": {
+			"label": "LED frame colour when moving",
+			"description": "This parameter defines the LED colour when the motor is running.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "LED frame – colour when not moving",
+			"description": "This parameter defines the LED colour when the device motor is not running.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "LED frame – brightness",
+			"description": "This parameter allows to adjust the LED frame brightness.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Buttons orientation",
+			"description": "This parameter allows reversing the operation of the buttons.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"25": {
+			"label": "Outputs orientation",
+			"description": "reversing the operation of Q1 and Q2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35": {
+			"label": "Alarm configuration – duration",
+			"description": "duration of alarm sequence",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "First button – scenes sent",
+			"description": "which actions result in sending scene IDs",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41": {
+			"label": "Second button – scenes sent",
+			"description": "which actions result in sending scene IDs",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"60": {
+			"label": "Power reports – include self-consumption",
+			"description": "power measurements include device itself",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"61": {
+			"label": "Power reports – on change",
+			"description": "minimal change in measured power to report",
+			"unit": "Percent",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"62": {
+			"label": "Power reports – periodic",
+			"description": "reporting interval for measured power",
+			"unit": "Seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"65": {
+			"label": "Energy reports – on change",
+			"description": "minimal change in measured energy to report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"66": {
+			"label": "Energy reports – periodic",
+			"description": "This reporting interval for measured energy",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"150": {
+			"label": "Force calibration",
+			"description": "Set 2 to force device into calibration mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"151": {
+			"label": "Operating mode",
+			"description": "This parameter allows adjusting operation ac-cording to the connected device.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"152": {
+			"label": "Venetian blind – time of full turn of the slats",
+			"description": "time of full turn cycle of the slats",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 150,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"153": {
+			"label": "Set slats back to previous position",
+			"description": "slats positioning in various situations",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"154": {
+			"label": "Delay motor stop after reaching end switch",
+			"description": "time after which the motor will be stopped after contacts closed",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"155": {
+			"label": "Motor operation detection",
+			"description": "Power threshold interpreted as reaching a limit switch.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"156": {
+			"label": "Time of up movement",
+			"description": "time needed for roller blinds to reach the top",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 6000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"157": {
+			"label": "Time of down movement",
+			"description": "time needed for roller blinds to reach the bottom",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 6000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"label": "Alarm configuration - 1st slot",
+			"description": "Which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "Alarm configuration - 2nd slot",
+			"description": "which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Alarm configuration - 3rd slot",
+			"description": "which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33": {
+			"label": "Alarm configuration - 4th slot",
+			"description": "which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "Alarm configuration - 5th slot",
+			"description": "which alarm frames and how the device should react",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

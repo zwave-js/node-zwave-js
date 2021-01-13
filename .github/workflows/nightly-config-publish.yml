@@ -1,0 +1,110 @@
+name: Publish nightly configuration updates
+
+on:
+  schedule:
+    - cron: 0 2 * * * # Every day at 02:00
+
+jobs:
+  publish-config:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # Fetch the history, or this action won't work
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Detect changes (git)
+      run: |
+        # ===============================
+        # Detect changes using git
+        # ===============================
+
+        LAST_TAG=$(git describe --abbrev=0)
+        echo "Checking for changes since last tag $LAST_TAG"
+
+        # Check if there were any config file changes
+        if [[ $(git diff "$LAST_TAG" --name-only | grep -E "packages\/config\/config\/(.*\/)?.+\.json") != 0 ]]; then
+          echo "🔸 No config file changes since latest version, aborting..."
+          exit 0
+        fi
+
+        # Check if there were changes except config files and .gitignore
+        if [[ $(git diff "$LAST_TAG" --name-only | grep -E -v "packages\/config\/config\/(.*\/)?.+\.json" | grep -v ".gitignore") = 0 ]]; then
+          echo "❌ Found non-config changes, aborting..."
+          exit 0
+        else
+          echo "✔ Changes are limited to config files"
+        fi
+
+        # ===============================
+        # Install dependencies
+        # ===============================
+
+        npm i -g yarn
+        yarn install --frozen-lockfile
+
+        # ===============================
+        # Double-check changes with lerna
+        # ===============================
+
+        # Verify that only @zwave-js/config and zwave-js are changed
+        LERNA_CHANGED=$(npx lerna changed)
+        if [[ $(echo -e "@zwave-js/config\nzwave-js") != "$LERNA_CHANGED" ]]; then
+          echo "❌ Lerna detected unexpected package changes, aborting..."
+          echo "These packages are changed:"
+          echo "$LERNA_CHANGED"
+          exit 0
+        fi
+
+        # ===============================
+        # Perform last checks
+        # ===============================
+
+        # Create a clean build
+        npx lerna run build --scope=@zwave-js/config
+
+        # Lint config files
+        npx lerna run lint:config
+
+        # ===============================
+        # Bump the version and publish
+        # ===============================
+
+        cd packages/config
+        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+        npm whoami
+
+        # Figure out next version
+        cat > ./script.js << 'EOF'
+        const semver = require("semver");
+        let v = require("../config/package.json").version;
+        const now = new Date();
+        const today = new Date(now.getTime() - now.getTimezoneOffset()*60000);
+        const dateStr = today.toISOString().split("T")[0].replace(/-/g, "");
+
+        // Figure out the version increase with the least priority
+        // 1.0.0 < 1.0.1-20210101 < 1.0.1-alpha.0 < 1.0.1-alpha.0.20200101 < 1.0.1-alpha.1
+        if (semver.parse(v).prerelease.length) {
+          // This is a prerelease, append the config identifier
+          v += "." + dateStr;
+        } else {
+          // This is not a prerelease, patch-bump and then append the config (pre)identifier
+          v = semver.inc(v, "patch") + "-" + datestr;
+        }
+        console.log(v);
+        EOF
+
+        VERSION=$(node script.js)
+        echo "Next version is $VERSION"
+        npm version "$VERSION" --ignore-scripts --no-git-tag-version
+        npm publish

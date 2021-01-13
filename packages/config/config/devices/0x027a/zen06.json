@@ -1,0 +1,187 @@
+// Zooz ZEN06
+// Smart Plug with 2 USB ports
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN06",
+	"description": "Smart Plug with 2 USB ports",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x000a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"20": {
+			"label": "Overload Protection",
+			"description": "turns relay off once voltage exceeds 16.5A for over 5 secs if enabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"21": {
+			"label": "On/Off Status Recovery After Power Failure",
+			"description": "Recovery state for power failure",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Previous setting",
+					"value": 0
+				},
+				{
+					"label": "ON",
+					"value": 1
+				},
+				{
+					"label": "OFF",
+					"value": 2
+				}
+			]
+		},
+		"24": {
+			"label": "On/Off Status Change Notifications",
+			"description": "Send notifications to associated devices",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Send any change",
+					"value": 1
+				},
+				{
+					"label": "Send manual changes",
+					"value": 2
+				}
+			]
+		},
+		"27": {
+			"label": "LED Indicator Control",
+			"description": "LED Indicator Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Display power consumption always",
+					"value": 0
+				},
+				{
+					"label": "Display power consumption at state change",
+					"value": 1
+				}
+			]
+		},
+		"151": {
+			"label": "Power Report Value Threshold",
+			"description": "Minimum change in watts to report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"152": {
+			"label": "Power Report Percentage Threshold",
+			"description": "Minimum percentage change to report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"171": {
+			"label": "Power Report Frequency",
+			"description": "How often to report power consumption (W) in secs",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"172": {
+			"label": "Energy Report Frequency",
+			"description": "How often to report energy usage (KWH) in secs",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"173": {
+			"label": "Voltage Report Frequency",
+			"description": "How often to report voltage (V) in secs",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"174": {
+			"label": "Electricity Report Frequency",
+			"description": "How often to report electrical current (A) in secs",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2678400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

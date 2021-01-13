@@ -1,0 +1,680 @@
+// AEON Labs ZW098
+// LED Bulb
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW098",
+	"description": "LED Bulb",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0062"
+		},
+		{
+			"productType": "0x0103",
+			"productId": "0x0062"
+		},
+		{
+			"productType": "0x0203",
+			"productId": "0x0062"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"32": {
+			"label": "Toggle send report on color change",
+			"description": "Toggle send report on color change",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disable color updates",
+					"value": 0
+				},
+				{
+					"label": "send HAIL CC",
+					"value": 1
+				}
+			]
+		},
+		"34": {
+			"label": "Allow external switch to toggle bulb",
+			"description": "Allow external switch to toggle bulb",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disabled",
+					"value": 0
+				},
+				{
+					"label": "enabled",
+					"value": 1
+				}
+			]
+		},
+		"35": {
+			"label": "Allow external switch to change color",
+			"description": "Allow external switch to change color",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disabled",
+					"value": 0
+				},
+				{
+					"label": "enabled",
+					"value": 1
+				}
+			]
+		},
+		"36": {
+			"label": "Control color mode",
+			"description": "Reboot/save/exit Colorful mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "reboot normal mode",
+					"value": 0
+				},
+				{
+					"label": "boot into color programming",
+					"value": 1
+				},
+				{
+					"label": "exit color programming",
+					"value": 2
+				},
+				{
+					"label": "save and exit color programming",
+					"value": 3
+				}
+			]
+		},
+		"80": {
+			"label": "Enable notifications",
+			"description": "set send notifications type for Group 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Hail",
+					"value": 1
+				},
+				{
+					"label": "Basic",
+					"value": 2
+				}
+			]
+		},
+		"252": {
+			"label": "Lock configuration",
+			"description": "Enable/disable the ability to configure the device.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disabled",
+					"value": 0
+				},
+				{
+					"label": "enabled",
+					"value": 1
+				}
+			]
+		},
+		"37[0xff]": {
+			"label": "Colour Residence Time",
+			"description": "Colour Residence Time",
+			"unit": "1/10th sec",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 255
+				}
+			]
+		},
+		"37[0xff00]": {
+			"label": "Colour Change Speed",
+			"description": "Colour Change Speed",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 255
+				}
+			]
+		},
+		"37[0xff0000]": {
+			"label": "Cycle count",
+			"description": "Cycle count",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Unlimited",
+					"value": 0
+				},
+				{
+					"label": "Inactive",
+					"value": 255
+				}
+			]
+		},
+		"37[0x0f000000]": {
+			"label": "Color Display Cycle",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Single Color Mode",
+					"value": 0
+				},
+				{
+					"label": "Rainbow Mode",
+					"value": 1
+				},
+				{
+					"label": "Multi Color Mode",
+					"value": 2
+				},
+				{
+					"label": "Random Mode",
+					"value": 3
+				},
+				{
+					"label": "Inactive",
+					"value": 15
+				}
+			]
+		},
+		"37[0xc0000000]": {
+			"label": "Color Transition Style",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Smooth Color Transition",
+					"value": 0
+				},
+				{
+					"label": "Fast/Direct Color Transition",
+					"value": 1
+				},
+				{
+					"label": "Pulsating Dimming",
+					"value": 2
+				},
+				{
+					"label": "Inactive",
+					"value": 3
+				}
+			]
+		},
+		"38[0x0f]": {
+			"label": "Multi Mode: Color index 1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Off"
+				},
+				{
+					"value": 1,
+					"label": "Red"
+				},
+				{
+					"value": 2,
+					"label": "Orange"
+				},
+				{
+					"value": 3,
+					"label": "Yellow"
+				},
+				{
+					"value": 4,
+					"label": "Green"
+				},
+				{
+					"value": 5,
+					"label": "Cyan"
+				},
+				{
+					"value": 6,
+					"label": "Blue"
+				},
+				{
+					"value": 7,
+					"label": "Violet"
+				},
+				{
+					"value": 8,
+					"label": "Pinkish"
+				}
+			]
+		},
+		"38[0xf0]": {
+			"label": "Multi Mode: Color index 2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Off"
+				},
+				{
+					"value": 1,
+					"label": "Red"
+				},
+				{
+					"value": 2,
+					"label": "Orange"
+				},
+				{
+					"value": 3,
+					"label": "Yellow"
+				},
+				{
+					"value": 4,
+					"label": "Green"
+				},
+				{
+					"value": 5,
+					"label": "Cyan"
+				},
+				{
+					"value": 6,
+					"label": "Blue"
+				},
+				{
+					"value": 7,
+					"label": "Violet"
+				},
+				{
+					"value": 8,
+					"label": "Pinkish"
+				}
+			]
+		},
+		"38[0x0f00]": {
+			"label": "Multi Mode: Color index 3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Off"
+				},
+				{
+					"value": 1,
+					"label": "Red"
+				},
+				{
+					"value": 2,
+					"label": "Orange"
+				},
+				{
+					"value": 3,
+					"label": "Yellow"
+				},
+				{
+					"value": 4,
+					"label": "Green"
+				},
+				{
+					"value": 5,
+					"label": "Cyan"
+				},
+				{
+					"value": 6,
+					"label": "Blue"
+				},
+				{
+					"value": 7,
+					"label": "Violet"
+				},
+				{
+					"value": 8,
+					"label": "Pinkish"
+				}
+			]
+		},
+		"38[0xf000]": {
+			"label": "Multi Mode: Color index 4",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Off"
+				},
+				{
+					"value": 1,
+					"label": "Red"
+				},
+				{
+					"value": 2,
+					"label": "Orange"
+				},
+				{
+					"value": 3,
+					"label": "Yellow"
+				},
+				{
+					"value": 4,
+					"label": "Green"
+				},
+				{
+					"value": 5,
+					"label": "Cyan"
+				},
+				{
+					"value": 6,
+					"label": "Blue"
+				},
+				{
+					"value": 7,
+					"label": "Violet"
+				},
+				{
+					"value": 8,
+					"label": "Pinkish"
+				}
+			]
+		},
+		"38[0x0f0000]": {
+			"label": "Multi Mode: Color index 5",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Off"
+				},
+				{
+					"value": 1,
+					"label": "Red"
+				},
+				{
+					"value": 2,
+					"label": "Orange"
+				},
+				{
+					"value": 3,
+					"label": "Yellow"
+				},
+				{
+					"value": 4,
+					"label": "Green"
+				},
+				{
+					"value": 5,
+					"label": "Cyan"
+				},
+				{
+					"value": 6,
+					"label": "Blue"
+				},
+				{
+					"value": 7,
+					"label": "Violet"
+				},
+				{
+					"value": 8,
+					"label": "Pinkish"
+				}
+			]
+		},
+		"38[0xf00000]": {
+			"label": "Multi Mode: Color index 6",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Off"
+				},
+				{
+					"value": 1,
+					"label": "Red"
+				},
+				{
+					"value": 2,
+					"label": "Orange"
+				},
+				{
+					"value": 3,
+					"label": "Yellow"
+				},
+				{
+					"value": 4,
+					"label": "Green"
+				},
+				{
+					"value": 5,
+					"label": "Cyan"
+				},
+				{
+					"value": 6,
+					"label": "Blue"
+				},
+				{
+					"value": 7,
+					"label": "Violet"
+				},
+				{
+					"value": 8,
+					"label": "Pinkish"
+				}
+			]
+		},
+		"38[0x0f000000]": {
+			"label": "Multi Mode: Color index 7",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Off"
+				},
+				{
+					"value": 1,
+					"label": "Red"
+				},
+				{
+					"value": 2,
+					"label": "Orange"
+				},
+				{
+					"value": 3,
+					"label": "Yellow"
+				},
+				{
+					"value": 4,
+					"label": "Green"
+				},
+				{
+					"value": 5,
+					"label": "Cyan"
+				},
+				{
+					"value": 6,
+					"label": "Blue"
+				},
+				{
+					"value": 7,
+					"label": "Violet"
+				},
+				{
+					"value": 8,
+					"label": "Pinkish"
+				}
+			]
+		},
+		"38[0xf0000000]": {
+			"label": "Multi Mode: Color index 8",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 8,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"value": 0,
+					"label": "Off"
+				},
+				{
+					"value": 1,
+					"label": "Red"
+				},
+				{
+					"value": 2,
+					"label": "Orange"
+				},
+				{
+					"value": 3,
+					"label": "Yellow"
+				},
+				{
+					"value": 4,
+					"label": "Green"
+				},
+				{
+					"value": 5,
+					"label": "Cyan"
+				},
+				{
+					"value": 6,
+					"label": "Blue"
+				},
+				{
+					"value": 7,
+					"label": "Violet"
+				},
+				{
+					"value": 8,
+					"label": "Pinkish"
+				}
+			]
+		}
+	}
+}

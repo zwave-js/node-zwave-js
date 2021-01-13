@@ -1,0 +1,22 @@
+// Z-Wave.me RaZberry Controller 2016 ZWave+
+// Z-Wave.Me Razberry daughtercard
+{
+	"manufacturer": "Z-Wave.me",
+	"manufacturerId": "0x0147",
+	"label": "RaZberry Controller 2016 ZWave+",
+	"description": "Z-Wave.Me Razberry daughtercard",
+	"devices": [
+		{
+			"productType": "0x0400",
+			"productId": "0x0001"
+		},
+		{
+			"productType": "0x0400",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.1",
+		"max": "255.255"
+	}
+}

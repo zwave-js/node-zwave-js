@@ -1,0 +1,457 @@
+// Fibargroup FGWP101
+// Metered Wall Plug Switch
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGWP101",
+	"description": "Metered Wall Plug Switch",
+	"devices": [
+		{
+			"productType": "0x0600",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1 (on/off controlled devices)",
+			"maxNodes": 10
+		},
+		"2": {
+			"label": "Group 2 (measured load controlled devices)",
+			"maxNodes": 10
+		},
+		"3": {
+			"label": "Controller Updates",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Always on function",
+			"description": "Once activated, Wall Plug will keep a connected device ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Activated",
+					"value": 0
+				},
+				{
+					"label": "Inactive",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Remember device status after power failure",
+			"description": "Define how will the Plug react after the power supply is back on.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Do not remember state",
+					"value": 0
+				},
+				{
+					"label": "Remember state before power failure",
+					"value": 1
+				}
+			]
+		},
+		"34": {
+			"label": "Reaction to alarms",
+			"description": "Define Z-Wave network alarms to which the Wall Plug will respond.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 63,
+			"defaultValue": 63,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35": {
+			"label": "Response to alarms",
+			"description": "Parameter defines how the Wall Plug will respond to alarms ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No reaction",
+					"value": 0
+				},
+				{
+					"label": "Turn ON",
+					"value": 1
+				},
+				{
+					"label": "Turn OFF",
+					"value": 2
+				},
+				{
+					"label": "Cycle ON/OFF",
+					"value": 3
+				}
+			]
+		},
+		"39": {
+			"label": "Alarm duration",
+			"description": "Wall Plug's alarm mode duration. If a device sending an ...",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Immediate power report",
+			"description": "Parameter defines by how much power load must change ...",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 80,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Standard power load report",
+			"description": "Parameter defines by how much power load must change ..",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"43": {
+			"label": "Power reporting frequency",
+			"description": "This parameter defines how frequently standard power ...",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"45": {
+			"label": "Changes in energy consumed by controlled devices",
+			"description": "Reporting changes in energy consumed by controlled devices",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"47": {
+			"label": "Time between reports on power/energy consumption",
+			"description": "Time Period between reports on power and energy ...",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65534,
+			"defaultValue": 3600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"49": {
+			"label": "Metering energy consumed by the Wall Plug itself.",
+			"description": "This parameter determines whether energy metering ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 0
+				},
+				{
+					"label": "Activated",
+					"value": 1
+				}
+			]
+		},
+		"50": {
+			"label": "DOWN value",
+			"description": "Lower power threshold, used in parameter 52.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 300,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "UP value",
+			"description": "Upper power threshold, used in parameter 52.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 500,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "Action in case defined power values exceeded",
+			"description": "Parameter defines the way 2nd association group devices ...",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 6,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Function inactive",
+					"value": 0
+				},
+				{
+					"label": "Turn devices ON when power below DOWN",
+					"value": 1
+				},
+				{
+					"label": "Turn devices OFF when power below DOWN",
+					"value": 2
+				},
+				{
+					"label": "Turn devices ON when power above UP",
+					"value": 3
+				},
+				{
+					"label": "Turn devices OFF when power above UP",
+					"value": 4
+				},
+				{
+					"label": "Turn devices ON when power below DOWN and off ...",
+					"value": 5
+				},
+				{
+					"label": "Turn devices OFF when power below DOWN ...",
+					"value": 6
+				}
+			]
+		},
+		"60": {
+			"label": "Power load to make red ring flash violet",
+			"description": "Function is active only when parameter 61 is set to 0 or 1.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 25000,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"61": {
+			"label": "LED color when device is on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED will use predefined steps depending on power",
+					"value": 0
+				},
+				{
+					"label": "LED will use continuous color depending on power",
+					"value": 1
+				},
+				{
+					"label": "White illumination",
+					"value": 2
+				},
+				{
+					"label": "Red illumination",
+					"value": 3
+				},
+				{
+					"label": "Green illumination",
+					"value": 4
+				},
+				{
+					"label": "Blue illumination",
+					"value": 5
+				},
+				{
+					"label": "Yellow illumination",
+					"value": 6
+				},
+				{
+					"label": "Cyan illumination",
+					"value": 7
+				},
+				{
+					"label": "Magenta illumination",
+					"value": 8
+				},
+				{
+					"label": "NO illumination",
+					"value": 9
+				}
+			]
+		},
+		"62": {
+			"label": "LED color when device is off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 8,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ring illuminated with color before turned off",
+					"value": 0
+				},
+				{
+					"label": "White illumination",
+					"value": 1
+				},
+				{
+					"label": "Red illumination",
+					"value": 2
+				},
+				{
+					"label": "Green illumination",
+					"value": 3
+				},
+				{
+					"label": "Blue illumination",
+					"value": 4
+				},
+				{
+					"label": "Yellow illumination",
+					"value": 5
+				},
+				{
+					"label": "Cyan illumination",
+					"value": 6
+				},
+				{
+					"label": "Magenta illumination",
+					"value": 7
+				},
+				{
+					"label": "NO illumination",
+					"value": 8
+				}
+			]
+		},
+		"63": {
+			"label": "LED color when Z Wave alarm",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No change in color",
+					"value": 0
+				},
+				{
+					"label": "LED flashes RED BLUE WHITE",
+					"value": 1
+				},
+				{
+					"label": "White illumination",
+					"value": 2
+				},
+				{
+					"label": "Red illumination",
+					"value": 3
+				},
+				{
+					"label": "Green illumination",
+					"value": 4
+				},
+				{
+					"label": "Blue illumination",
+					"value": 5
+				},
+				{
+					"label": "Yellow illumination",
+					"value": 6
+				},
+				{
+					"label": "Cyan illumination",
+					"value": 7
+				},
+				{
+					"label": "Magenta illumination",
+					"value": 8
+				},
+				{
+					"label": "NO illumination",
+					"value": 9
+				}
+			]
+		},
+		"70": {
+			"label": "Overload safety switch",
+			"description": "This function allows for turning off the controlled device...",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 65535,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

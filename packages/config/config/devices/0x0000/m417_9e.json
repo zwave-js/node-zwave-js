@@ -1,0 +1,19 @@
+// Sigma Designs (Former Zensys) M417_9E
+// Smart Temperature & Humidity Sensor
+{
+	"manufacturer": "Sigma Designs (Former Zensys)",
+	"manufacturerId": "0x0000",
+	"label": "M417_9E",
+	"description": "Smart Temperature & Humidity Sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0008"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
+}

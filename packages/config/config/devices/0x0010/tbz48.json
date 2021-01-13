@@ -1,0 +1,33 @@
+// Residential Control Systems, Inc. (RCS) TBZ48
+// Thermostat
+{
+	"manufacturer": "Residential Control Systems, Inc. (RCS)",
+	"manufacturerId": "0x0010",
+	"label": "TBZ48",
+	"description": "Thermostat",
+	"devices": [
+		{
+			"productType": "0x5442",
+			"productId": "0x5432"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 5
+		}
+	}
+}

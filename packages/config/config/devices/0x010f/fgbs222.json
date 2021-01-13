@@ -1,0 +1,427 @@
+// Fibargroup FGBS222
+// Smart Implant
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGBS222",
+	"description": "Smart Implant",
+	"devices": [
+		{
+			"productType": "0x0502",
+			"productId": "0x1000"
+		},
+		{
+			"productType": "0x0502",
+			"productId": "0x2000"
+		},
+		{
+			"productType": "0x0502",
+			"productId": "0x3000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"20": {
+			"label": "Input 1 - operating mode",
+			"description": "mode of 1st input",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normally closed alarm input",
+					"value": 0
+				},
+				{
+					"label": "Normally open alarm input",
+					"value": 1
+				},
+				{
+					"label": "Monostable button",
+					"value": 2
+				},
+				{
+					"label": "Bistable button",
+					"value": 3
+				},
+				{
+					"label": "Analog input without internal pull-up",
+					"value": 4
+				},
+				{
+					"label": "Analog input with internal pull-up",
+					"value": 5
+				}
+			]
+		},
+		"21": {
+			"label": "Input 2 - operating mode",
+			"description": "mode of 2nd input",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normally closed alarm input",
+					"value": 0
+				},
+				{
+					"label": "Normally open alarm input",
+					"value": 1
+				},
+				{
+					"label": "Monostable button",
+					"value": 2
+				},
+				{
+					"label": "Bistable button",
+					"value": 3
+				},
+				{
+					"label": "Analog input without internal pull-up",
+					"value": 4
+				},
+				{
+					"label": "Analog input with internal pull-up",
+					"value": 5
+				}
+			]
+		},
+		"24": {
+			"label": "Inputs orientation",
+			"description": "reversing operation of IN1 and IN2 inputs",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "default",
+					"value": 0
+				},
+				{
+					"label": "reversed",
+					"value": 1
+				}
+			]
+		},
+		"25": {
+			"label": "Outputs orientation",
+			"description": "reversing operation of OUT1 and OUT2 outputs",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "default",
+					"value": 0
+				},
+				{
+					"label": "reversed",
+					"value": 1
+				}
+			]
+		},
+		"47": {
+			"label": "Input 1 - 2nd group, activated",
+			"description": "value sent to 2nd association group when activated",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"49": {
+			"label": "Input 1 - 2nd group, deactivated",
+			"description": "value sent to 2nd association group when deactivated",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"52": {
+			"label": "Input 2 - 3rd group, activated",
+			"description": "value sent to 3rd association group when activated",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"54": {
+			"label": "Input 2 - 3rd group, deactivated",
+			"description": "value sent to 3rd association group when deactivated",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"63": {
+			"label": "Analog inputs - minimal change to report",
+			"description": "minimal change",
+			"unit": "deciVolts",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"64": {
+			"label": "Analog inputs - periodical reports",
+			"description": "reporting period of analog inputs value",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"65": {
+			"label": "Temperature sensor threshold",
+			"description": "Internal temperature sensor - minimal change to report",
+			"unit": "deciGrades",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"66": {
+			"label": "Temperatur sensor period",
+			"description": "Internal temperature sensor - periodical reports",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"67": {
+			"label": "External sensors threshold",
+			"description": "External sensors - minimal change to report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"68": {
+			"label": "External sensors - periodical reports",
+			"description": "reporting period of analog inputs value",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"150": {
+			"label": "Input 1 - sensitivity",
+			"description": "inertia time of IN1 input in alarm modes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"151": {
+			"label": "Input 2 - sensitivity",
+			"description": "inertia time of IN2 input in alarm modes",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"152": {
+			"label": "Input 1 - delay of alarm cancellation",
+			"description": "additional delay of cancelling the alarm on IN1 input",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"153": {
+			"label": "Input 2 - delay of alarm cancellation",
+			"description": "additional delay of cancelling the alarm on IN2 input",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3600,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"154": {
+			"label": "Output 1 - logic of operation",
+			"description": "logic of OUT1 output operation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "normally open",
+					"value": 0
+				},
+				{
+					"label": "normally closed",
+					"value": 1
+				}
+			]
+		},
+		"155": {
+			"label": "Output 2 - logic of operation",
+			"description": "OUT2 output operation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "normally open",
+					"value": 0
+				},
+				{
+					"label": "normally closed",
+					"value": 1
+				}
+			]
+		},
+		"156": {
+			"label": "Output 1 - auto off",
+			"description": "OUT1 automatically deactivated",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 27000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"157": {
+			"label": "Output 2 - auto off",
+			"description": "OUT2 automatically deactivated",
+			"unit": "deciseconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 27000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Input 1 - sent scenes",
+			"description": "sending scene ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Key pressed 1 time",
+					"value": 1
+				},
+				{
+					"label": "Key pressed 2 times",
+					"value": 2
+				},
+				{
+					"label": "Key pressed 3 times",
+					"value": 4
+				},
+				{
+					"label": "Key hold down and key released",
+					"value": 8
+				}
+			]
+		},
+		"41": {
+			"label": "Input 2 - sent scenes",
+			"description": "sending scene ID",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Key pressed 1 time",
+					"value": 1
+				},
+				{
+					"label": "Key pressed 2 times",
+					"value": 2
+				},
+				{
+					"label": "Key pressed 3 times",
+					"value": 4
+				},
+				{
+					"label": "Key hold down and key released",
+					"value": 8
+				}
+			]
+		}
+	}
+}

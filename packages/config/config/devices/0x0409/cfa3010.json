@@ -1,0 +1,253 @@
+// ABUS CFA3010
+// Z-Wave Door Lock
+{
+	"manufacturer": "ABUS",
+	"manufacturerId": "0x0409",
+	"label": "CFA3010",
+	"description": "Z-Wave Door Lock",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Latch Hold Time",
+			"description": "Defines how long the latch is kept open.",
+			"unit": "s",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 20,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Latch Torque",
+			"description": "Defines the torque of the latch.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "High",
+					"value": 1
+				},
+				{
+					"label": "Medium",
+					"value": 2
+				},
+				{
+					"label": "Low",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Acoustic Feedback",
+			"description": "Defines Acoustic Feedback signals. Button-, Low-Battery-, Error- and Alarm-Signals can not be adjusted.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 5,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Inactive",
+					"value": 1
+				},
+				{
+					"label": "Only at the beginning of the lock travel",
+					"value": 2
+				},
+				{
+					"label": "When reaching the position of the event",
+					"value": 3
+				},
+				{
+					"label": "When reaching the position LOCKED",
+					"value": 4
+				},
+				{
+					"label": "When reaching each end position",
+					"value": 5
+				}
+			]
+		},
+		"4": {
+			"label": "Travel Time",
+			"description": "This parameter defines the travel path of the Lock.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Automatic/Normal",
+					"value": 1
+				},
+				{
+					"label": "Multiple turns for one Open/Close action",
+					"value": 2
+				},
+				{
+					"label": "Travel from window-tilted position is turned on (ABUS FCA3000)",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "Touch Panel Settings",
+			"description": "This parameter defines Touch Panel settings.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Touch Panel is active",
+					"value": 1
+				},
+				{
+					"label": "Only Touch Panel Control Buttons are active",
+					"value": 2
+				},
+				{
+					"label": "Touch Panel is inactive",
+					"value": 3
+				},
+				{
+					"label": "Touch Panel Trap is inactive",
+					"value": 4
+				}
+			]
+		},
+		"6": {
+			"label": "Motor Force",
+			"description": "This parameter defines the motor force, when turning the lock.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Automatic/Normal",
+					"value": 1
+				},
+				{
+					"label": "Maximum force",
+					"value": 2
+				}
+			]
+		},
+		"250": {
+			"label": "Lock status",
+			"description": "Lock status",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"unsigned": true,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "unknown",
+					"value": 0
+				},
+				{
+					"label": "open",
+					"value": 1
+				},
+				{
+					"label": "unlocked",
+					"value": 2
+				},
+				{
+					"label": "1x locked",
+					"value": 3
+				},
+				{
+					"label": "2x locked",
+					"value": 4
+				},
+				{
+					"label": "locked (end stop)",
+					"value": 5
+				},
+				{
+					"label": "multiple interlocked",
+					"value": 6
+				}
+			]
+		},
+		"251": {
+			"label": "Drive cycles Trap",
+			"description": "Counter, how often the trap was activated.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 16700000,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"252": {
+			"label": "Driving cycles unlocked",
+			"description": "Counter, how often it has been unlocked.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 16700000,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"253": {
+			"label": "Driving cycles interlocked",
+			"description": "Counter, how often it has been interlocked.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 16700000,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false
+		},
+		"254": {
+			"label": "ABUS Firmware Version",
+			"description": "Version of the ABUS Firmware, e.g. 1.05",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"unsigned": true,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false
+		}
+	}
+}

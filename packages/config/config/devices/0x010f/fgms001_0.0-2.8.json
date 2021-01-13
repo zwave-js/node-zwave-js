@@ -1,0 +1,567 @@
+// Fibargroup FGMS001
+// Motion Sensor
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGMS001",
+	"description": "Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0800",
+			"productId": "0x1001"
+		},
+		{
+			"productType": "0x0800",
+			"productId": "0x2001"
+		},
+		{
+			"productType": "0x0800",
+			"productId": "0x3001"
+		},
+		{
+			"productType": "0x0800",
+			"productId": "0x4001"
+		},
+		{
+			"productType": "0x0800",
+			"productId": "0x6001"
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x1001"
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x1002"
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x2001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "2.8"
+	},
+	"associations": {
+		"1": {
+			"label": "Motion Sensor Status",
+			"maxNodes": 16,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Tamper Alarm",
+			"maxNodes": 16,
+			"isLifeline": true
+		},
+		"3": {
+			"label": "Controller Updates",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Motion Sensor's Sensitivity",
+			"description": "The lower the value, the more sensitive the PIR sensor.",
+			"valueSize": 1,
+			"minValue": 8,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Motion Sensor's Blind Time (Insensitive)",
+			"description": "Period of time through which the PIR sensor is “blind”.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "PIR Sensor’s “PULSE COUNTER”",
+			"description": "Sets the number of moves required for the PIR sensor to report motion.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "PIR Sensor’s “WINDOW TIME”",
+			"description": "The higher the value, the more sensitive the PIR sensor.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Motion Alarm Cancellation Delay",
+			"description": "Period of time after wich Motion alarm will be cancelled.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "PIR Sensor Operating Mode",
+			"description": "The parameter determines the part of day in which the PIR sensor will be active.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "PIR sensor always active",
+					"value": 0
+				},
+				{
+					"label": "PIR sensor active during the day only",
+					"value": 1
+				},
+				{
+					"label": "PIR sensor active during the night only",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Night / Day",
+			"description": "The parameter defines the difference between night and day.",
+			"unit": "lux",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 200,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "BASIC command class configuration",
+			"description": "Determines the command frames sent in 1st association group.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "BASIC ON and BASIC OFF",
+					"value": 0
+				},
+				{
+					"label": "Only the BASIC ON",
+					"value": 1
+				},
+				{
+					"label": "Only the BASIC OFF",
+					"value": 2
+				}
+			]
+		},
+		"14": {
+			"label": "BASIC ON command frame value",
+			"description": "The value of 255 allows to turn ON a device.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "BASIC OFF command frame value",
+			"description": "The value of 0 allows to turn OFF a device.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"20": {
+			"label": "Tamper Sensitivity",
+			"description": "The parameter determines the changes in forces.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 122,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Tamper - alarm cancellation delay",
+			"description": "Time period after which a tamper alarm will be cancelled.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Tamper Operating Modes",
+			"description": "The parameter determines the behaviour of tamper and how it reports.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Tamper Report/No Cancellation Report",
+					"value": 0
+				},
+				{
+					"label": "Tamper and Cancellation Report",
+					"value": 1
+				},
+				{
+					"label": "Tamper/No cancellation plus Orientation in space",
+					"value": 2
+				},
+				{
+					"label": "Tamper/Cancellation plus Orientation in space",
+					"value": 3
+				},
+				{
+					"label": "Max level of vibrations recorded (Earthquake)",
+					"value": 4
+				}
+			]
+		},
+		"26": {
+			"label": "Tamper Alarm Broadcast Mode",
+			"description": "Alarm frame will or will not be sent in broadcast mode.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Tamper alarm is not sent in broadcast mode.",
+					"value": 0
+				},
+				{
+					"label": "Tamper alarm sent in broadcast mode.",
+					"value": 1
+				}
+			]
+		},
+		"40": {
+			"label": "Illumination Report Threshold",
+			"description": "Change in level of light intensity resulting in illumination report.",
+			"unit": "lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 200,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Illumination Reports Interval",
+			"description": "Time interval between consecutive illumination reports.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"60": {
+			"label": "Temperature Report Threshold",
+			"description": "Change in level of temperature resulting in temperature report.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"62": {
+			"label": "Interval of Temperature Measuring",
+			"description": "The parameter determines how often the temperature will be measured.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 900,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"64": {
+			"label": "Temperature Reports Interval",
+			"description": "How often temperature reports will be sent to the main controller.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"66": {
+			"label": "Temperature Offset",
+			"description": "The value to be added to the actual measured temperature.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"80": {
+			"label": "LED Signalling Mode",
+			"description": "Way in which LED diode behaves after motion has been detected.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED inactive.",
+					"value": 0
+				},
+				{
+					"label": "LED colour depends on the temperature.",
+					"value": 1
+				},
+				{
+					"label": "Flashlight mode - LED glows white 10 seconds",
+					"value": 2
+				},
+				{
+					"label": "White.",
+					"value": 3
+				},
+				{
+					"label": "Red.",
+					"value": 4
+				},
+				{
+					"label": "Green.",
+					"value": 5
+				},
+				{
+					"label": "Blue.",
+					"value": 6
+				},
+				{
+					"label": "Yellow.",
+					"value": 7
+				},
+				{
+					"label": "Cyan.",
+					"value": 8
+				},
+				{
+					"label": "Magenta.",
+					"value": 9
+				},
+				{
+					"label": "LED colour depends on the temperature",
+					"value": 10
+				},
+				{
+					"label": "Flashlight mode",
+					"value": 11
+				},
+				{
+					"label": "White",
+					"value": 12
+				},
+				{
+					"label": "Red",
+					"value": 13
+				},
+				{
+					"label": "Green",
+					"value": 14
+				},
+				{
+					"label": "Blue",
+					"value": 15
+				},
+				{
+					"label": "Yellow",
+					"value": 16
+				},
+				{
+					"label": "Cyan",
+					"value": 17
+				},
+				{
+					"label": "Magenta",
+					"value": 18
+				},
+				{
+					"label": "LED colour depends on the temperature",
+					"value": 19
+				},
+				{
+					"label": "White",
+					"value": 20
+				},
+				{
+					"label": "Red",
+					"value": 21
+				},
+				{
+					"label": "Green",
+					"value": 22
+				},
+				{
+					"label": "Blue",
+					"value": 23
+				},
+				{
+					"label": "Yellow",
+					"value": 24
+				},
+				{
+					"label": "Cyan",
+					"value": 25
+				},
+				{
+					"label": "Magenta",
+					"value": 26
+				}
+			]
+		},
+		"81": {
+			"label": "LED Brightness",
+			"description": "The parameter determines the brightness of LED when indicating motion.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"82": {
+			"label": "Lower Ambient Illumination Level",
+			"description": "Below which LED brightness is set to 1%",
+			"unit": "lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 100,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"83": {
+			"label": "Upper Ambient Illumination Level",
+			"description": "Above which LED brightness is set to 100%",
+			"unit": "lux",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 1000,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"86": {
+			"label": "Min Temperature Resulting in Blue LED Illumination",
+			"description": "This parameter is relevant only when parameter 80 has been properly configured.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 18,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"87": {
+			"label": "Max Temperature Resulting in Red LED Illumination",
+			"description": "This parameter is relevant only when parameter 80 has been properly configured.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 28,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"89": {
+			"label": "LED indicating Tamper Alarm",
+			"description": "Indicating mode resembles a police car (white, red and blue).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED does not indicate tamper alarm.",
+					"value": 0
+				},
+				{
+					"label": "LED indicates tamper alarm.",
+					"value": 1
+				}
+			]
+		}
+	}
+}

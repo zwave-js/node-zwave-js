@@ -1,0 +1,19 @@
+// Springs Window Fashions CSZ1
+// Cellular Shade Radio Z-Wave
+{
+	"manufacturer": "Springs Window Fashions",
+	"manufacturerId": "0x026e",
+	"label": "CSZ1",
+	"description": "Cellular Shade Radio Z-Wave",
+	"devices": [
+		{
+			"productType": "0x4353",
+			"productId": "0x5a31"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
+}

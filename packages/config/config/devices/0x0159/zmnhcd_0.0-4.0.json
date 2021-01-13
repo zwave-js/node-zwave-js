@@ -1,0 +1,236 @@
+// Qubino ZMNHCD
+// Flush Shutter
+{
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHCD",
+	"description": "Flush Shutter",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0052"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "4.0"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"10": {
+			"label": "ALL ON/ALL OFF",
+			"description": "Responds to commands ALL ON / ALL OFF from Main Controller",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ALL ON is not active ALL OFF is not active",
+					"value": 0
+				},
+				{
+					"label": "ALL ON is not active ALL OFF active",
+					"value": 1
+				},
+				{
+					"label": "ALL ON is not active ALL OFF is not active",
+					"value": 2
+				},
+				{
+					"label": "ALL ON active, ALL OFF active",
+					"value": 255
+				}
+			]
+		},
+		"40": {
+			"label": "Power reporting in watts on power change",
+			"description": "Power consumption change threshold for sending updates",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Power reporting in Watts by time interval",
+			"description": "Power reporting in Watts by time interval for Q1 or Q2",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 300,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"71": {
+			"label": "Operating modes",
+			"description": "Operation Mode (Shutter or Venetian)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Shutter mode",
+					"value": 0
+				},
+				{
+					"label": "Venetian mode (up/down and slate rotation)",
+					"value": 1
+				}
+			]
+		},
+		"72": {
+			"label": "Slats tilting full turn time",
+			"description": "Slat full turn time in tenths of a second.",
+			"unit": "tenths of a second",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 150,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"73": {
+			"label": "Slats position",
+			"description": "Slats position after up/down movement.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "ret. to previous position for Z-wave control only",
+					"value": 0
+				},
+				{
+					"label": "return to previous position in all cases",
+					"value": 1
+				}
+			]
+		},
+		"74": {
+			"label": "Motor moving up/down time",
+			"description": "Shutter motor moving time of complete opening or complete closing",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"76": {
+			"label": "Motor operation detection",
+			"description": "Power threshold to be interpreted when motor reach the limit switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"78": {
+			"label": "Forced Shutter calibration",
+			"description": "Enters calibration mode if set to 1",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Start Calibration Process",
+					"value": 1
+				}
+			]
+		},
+		"80": {
+			"label": "Reporting to Controller",
+			"description": "Defines if reporting regarding power level, etc is reported to controller.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Reporting to Controller Disabled",
+					"value": 0
+				},
+				{
+					"label": "Reporting to Controller Enabled",
+					"value": 1
+				}
+			]
+		},
+		"85": {
+			"label": "Power consumption max delay time",
+			"description": "Time delay for detecting motor errors",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"90": {
+			"label": "Relay delay time",
+			"description": "Defines the minimum time delay between next motor movement",
+			"unit": "milliseconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 30,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"110": {
+			"label": "Temperature sensor offset settings",
+			"description": "Adds or removes an offset from the measured temperature.",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 32536,
+			"defaultValue": 32536,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"120": {
+			"label": "Digital temperature sensor reporting",
+			"description": "Threshold for sending temperature change reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

@@ -1,0 +1,507 @@
+// AEON Labs ZW122
+// Water Sensor 6
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "ZW122",
+	"description": "Water Sensor 6",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x007a"
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x007a"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x007a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "Enable/Disable Power On Wake Period",
+			"description": "Enables or disables a wake period of 10 minutes after power up.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"8": {
+			"label": "WakeUp Time Out",
+			"description": "The number of seconds for the device to stay awake after the WakeUp is sent out.",
+			"unit": "Seconds",
+			"valueSize": 1,
+			"minValue": 15,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Current power mode (read only)",
+			"description": "Get the current power mode",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"39": {
+			"label": "Low Battery Threshold",
+			"description": "Set the low battery value. (Range: 10% to 50%)",
+			"unit": "Percent",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"48": {
+			"label": "Enable/Disable Sensor report",
+			"description": "Enable/Disable Sensor report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable Sensor report",
+					"value": 0
+				},
+				{
+					"label": "Enable Sensor report",
+					"value": 1
+				}
+			]
+		},
+		"64": {
+			"label": "Default Temperature Unit",
+			"description": "Sets the default temperature unit.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		"84": {
+			"label": "State of tilt sensor",
+			"description": "State of tilt sensor, read only",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"86": {
+			"label": "Enable/Disable the buzzer",
+			"description": "Enables or disables the buzzer",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"87": {
+			"label": "Buzzer Trigger(s)",
+			"description": "Sets which of the alarms should trigger the buzzer.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 55,
+			"defaultValue": 55,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"88": {
+			"label": "Basic Set sent to association group 3",
+			"description": "Basic Set sent to association group 3",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send nothing",
+					"value": 0
+				},
+				{
+					"label": "Water present 0xFF, no water present 0x00",
+					"value": 1
+				},
+				{
+					"label": "Water present 0x00, no water present 0xFF",
+					"value": 2
+				}
+			]
+		},
+		"89": {
+			"label": "Basic Set sent to association group 4",
+			"description": "Basic Set sent to association group 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send nothing",
+					"value": 0
+				},
+				{
+					"label": "Water present 0xFF, no water present 0x00",
+					"value": 1
+				},
+				{
+					"label": "Water present 0x00, no water present 0xFF",
+					"value": 2
+				}
+			]
+		},
+		"94": {
+			"label": "Power source level reported",
+			"description": "0=report USB, 1=report Battery",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Report USB power level",
+					"value": 0
+				},
+				{
+					"label": "Report Battery power level",
+					"value": 1
+				}
+			]
+		},
+		"111": {
+			"label": "Lifeline Report Interval",
+			"description": "Set the interval time for sending the unsolicited report.",
+			"unit": "Seconds (USB Only)",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"135": {
+			"label": "Sensor reports for non multichannel devices",
+			"description": "Sensor reports for non multichannel devices",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"136": {
+			"label": "Sensor probe status",
+			"description": "Sensor probe status (read only)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"252": {
+			"label": "Lock configuration",
+			"description": "Enable/Disable lock configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable configuration locked",
+					"value": 0
+				},
+				{
+					"label": "Enable configuration locked",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset device to factory default",
+			"description": "Reset device to factory default",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 1431655765,
+			"defaultValue": 1,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "do nothing",
+					"value": 1
+				},
+				{
+					"label": "Reset device to factory defaults",
+					"value": 1431655765
+				}
+			]
+		},
+		"10[0xff]": {
+			"label": "Repeat cyle",
+			"description": "Repeat cylce of buzzer alarm",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10[0xff00]": {
+			"label": "Time of buzzer keeping ON state",
+			"description": "Time of buzzer keeping ON state",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10[0x7fff0000]": {
+			"label": "Time of buzzer keeping OFF state",
+			"description": "Time of buzzer keeping OFF state",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"49[0xff00]": {
+			"label": "Temperature Unit",
+			"description": "Celsius or Fahrenheit",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		"49[0x7fff0000]": {
+			"label": "Temperature value",
+			"description": "Temperature value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"50[0xff00]": {
+			"label": "Temperature underheat unit",
+			"description": "Celsius or Fahrenheit",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		"50[0x7fff0000]": {
+			"label": "Temperature limit value",
+			"description": "Temperature limit value",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"57[0x0f]": {
+			"label": "Temperature recover limit (Unit)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 1
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 2
+				}
+			]
+		},
+		"57[0xff00]": {
+			"label": "Temperature recover limit (Value)",
+			"unit": "1/10",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101": {
+			"label": "Lifeline Report Type",
+			"description": "To set what unsolicited report would be sent to the Lifeline group.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send Nothing",
+					"value": 0
+				},
+				{
+					"label": "Battery Report",
+					"value": 1
+				},
+				{
+					"label": "Temperature",
+					"value": 2
+				},
+				{
+					"label": "Battery and Temperature",
+					"value": 3
+				}
+			]
+		},
+		"201[0x0f]": {
+			"label": "Temperature unit",
+			"description": "Temperature unit",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		"201[0xff00]": {
+			"label": "Calibration value",
+			"description": "Calibration value",
+			"valueSize": 2,
+			"minValue": -128,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

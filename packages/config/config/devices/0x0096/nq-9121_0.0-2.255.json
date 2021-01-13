@@ -1,0 +1,163 @@
+// NorthQ NQ-9121
+// NorthQ Gas Meter
+{
+	"manufacturer": "NorthQ",
+	"manufacturerId": "0x0096",
+	"label": "NQ-9121",
+	"description": "NorthQ Gas Meter",
+	"devices": [
+		{
+			"productType": "0x0010",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "2.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Pulse factor",
+			"description": "How many pulses * 10 per kWh",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 10000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Sensor type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "magnetic contact",
+					"value": 1
+				},
+				{
+					"label": "silver spot meter",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "IR Listen period",
+			"description": "Additional time for feedback measurement. Should always be 0.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "IR Pulse Width",
+			"description": "Adjusts transmit signal so received signal will in average be equal to this values.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Poll / Wake up frequency",
+			"description": "Wake device up this many times per second. This value also controls number of measurements per second on mechanical meters",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Pulse Threshold Low",
+			"description": "Low detection threshold for wheel meters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Pulse Threshold High",
+			"description": "High detection threshold for wheel meters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Wakeup Interval",
+			"description": "like WAKEUP command class",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Pulse count",
+			"description": "Current pulse count in device (pulse count / pulse factor = kWh)",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 50,
+			"defaultValue": 20,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Keep alive period",
+			"description": "How many ticks before going back to sleep in normal wakeup mode.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 60,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Real-time mode",
+			"description": "Set this to enter real-time mode from remote. Contains seconds * poll frequency before going back to sleep. If you press the button once this value will be set.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Off",
+			"description": "LED blinks at pulse counting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

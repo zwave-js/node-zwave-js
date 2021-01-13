@@ -1,0 +1,83 @@
+// McoHome Technology Co., Ltd. MH-S311H
+// Touch Panel Switch (Single) High inrush current
+{
+	"manufacturer": "McoHome Technology Co., Ltd.",
+	"manufacturerId": "0x015f",
+	"label": "MH-S311H",
+	"description": "Touch Panel Switch (Single) High inrush current",
+	"devices": [
+		{
+			"productType": "0x3111",
+			"productId": "0x1302"
+		},
+		{
+			"productType": "0x3111",
+			"productId": "0x5102"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"2": {
+			"label": "Switch state saved or not when power failure",
+			"description": "0=Saved 1=not saved",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "ALL ON/ALL OFF",
+			"description": "0,1,2,255",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "LED Backlit brightness level",
+			"description": "0x00 LED disabled 0x01~0x0A Min level-Max level >0x0A same level as 0x0A",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Key Mode",
+			"description": "0-4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Key On duration",
+			"description": "0=infinite 1~65535=unit \"sec\"",
+			"unit": "2",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

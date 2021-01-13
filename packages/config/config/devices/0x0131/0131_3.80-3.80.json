@@ -1,0 +1,18 @@
+// Zipato 0131
+// Door/Window Sensor
+{
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "0131",
+	"description": "Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x1082"
+		}
+	],
+	"firmwareVersion": {
+		"min": "3.80",
+		"max": "3.80"
+	}
+}

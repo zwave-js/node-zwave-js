@@ -1,0 +1,212 @@
+// STEINEL GmbH IS140-2
+// PIR sensor with relay
+{
+	"manufacturer": "STEINEL GmbH",
+	"manufacturerId": "0x0271",
+	"label": "IS140-2",
+	"description": "PIR sensor with relay",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x1a72"
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x6770"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Time",
+			"description": "Duration of light after motion detection",
+			"unit": "s",
+			"valueSize": 2,
+			"minValue": 5,
+			"maxValue": 900,
+			"defaultValue": 180,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Light",
+			"description": "Light threshold",
+			"unit": "lx",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 2000,
+			"defaultValue": 2000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Sensitivity",
+			"description": "Motion Radar Sensitivity",
+			"unit": "Percent",
+			"valueSize": 1,
+			"minValue": 2,
+			"maxValue": 100,
+			"defaultValue": 100,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Global_Light",
+			"description": "External ambient light value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "(OFF_BEHAVIOUR)",
+			"description": "Off behaviour (timeout)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "ON_BEHAVIOUR",
+			"description": "On behaviour (timeout)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "ON_TIME_OVER",
+			"description": "On behaviour time over (timeout)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 204,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "ON_OFF_ BEHAVIOUR",
+			"description": "Sequence On-Off behaviour (timeout)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 204,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "OFF_ON_ BEHAVIOUR",
+			"description": "Sequence Off-On behaviour (timeout)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 204,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "SEQUENCE_ TIME",
+			"description": "Sequence timing",
+			"valueSize": 1,
+			"minValue": 10,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "MOTION_ DISABLE",
+			"description": "Motion Off behaviour (timeout)",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9[0x01]": {
+			"label": "Bit 0: Slave Mode",
+			"description": "0=Disable, 1=Enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"9[0x02]": {
+			"label": "Bit 1: Central Unit checking",
+			"description": "0=Disable, 1=Enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"9[0x04]": {
+			"label": "Bit 2: Stupid Mode",
+			"description": "0=Disable, 1=Enable",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		}
+	}
+}

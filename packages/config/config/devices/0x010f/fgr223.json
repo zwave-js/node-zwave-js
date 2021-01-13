@@ -1,0 +1,711 @@
+// Fibargroup FGR223
+// Roller Shutter 3
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "FGR223",
+	"description": "Roller Shutter 3",
+	"devices": [
+		{
+			"productType": "0x0303",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"proprietary": {
+		"fibaroCCs": [38 /* 0x26 (Venetian Blinds) */]
+	},
+	"paramInformation": {
+		"20": {
+			"label": "Switch type",
+			"description": "Switch type",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary switches",
+					"value": 0
+				},
+				{
+					"label": "Toggle switches",
+					"value": 1
+				},
+				{
+					"label": "Single momentary switch (S1)",
+					"value": 2
+				}
+			]
+		},
+		"24": {
+			"label": "Inputs orientation",
+			"description": "Inputs orientation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "default",
+					"value": 0
+				},
+				{
+					"label": "reversed",
+					"value": 1
+				}
+			]
+		},
+		"25": {
+			"label": "Outputs orientation",
+			"description": "Outputs orientation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "default",
+					"value": 0
+				},
+				{
+					"label": "reversed",
+					"value": 1
+				}
+			]
+		},
+		"40[0x01]": {
+			"label": "S1 scenes: Pressed 1 time",
+			"description": "Send a Central Scene notification when S1 is pressed 1 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40[0x02]": {
+			"label": "S1 scenes: Pressed 2 times",
+			"description": "Send a Central Scene notification when S1 is pressed 2 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40[0x04]": {
+			"label": "S1 scenes: Pressed 3 time",
+			"description": "Send a Central Scene notification when S1 is pressed 3 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40[0x08]": {
+			"label": "S1 scenes: Hold down / Release",
+			"description": "Send a Central Scene notification when S1 is held down or released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x01]": {
+			"label": "S2 scenes: Pressed 1 time",
+			"description": "Send a Central Scene notification when S2 is pressed 1 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x02]": {
+			"label": "S2 scenes: Pressed 2 times",
+			"description": "Send a Central Scene notification when S2 is pressed 2 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x04]": {
+			"label": "S2 scenes: Pressed 3 time",
+			"description": "Send a Central Scene notification when S2 is pressed 3 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x08]": {
+			"label": "S2 scenes: Hold down / Release",
+			"description": "Send a Central Scene notification when S2 is held down or released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"60": {
+			"label": "Measuring power consumed by the device itself",
+			"description": "Measuring power consumed by the device itself",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Function inactive",
+					"value": 0
+				},
+				{
+					"label": "Function active",
+					"value": 1
+				}
+			]
+		},
+		"61": {
+			"label": "Power reports - on change",
+			"description": "Power reports - on change",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 15,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"62": {
+			"label": "Power reports - periodic",
+			"description": "Power reports - periodic",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"65": {
+			"label": "Energy reports - on change",
+			"description": "Energy reports - on change",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"66": {
+			"label": "Energy reports - periodic",
+			"description": "Energy reports - periodic",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"150": {
+			"label": "Force calibration",
+			"description": "Force calibration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "device is not calibrated",
+					"value": 0
+				},
+				{
+					"label": "device is calibrated",
+					"value": 1
+				},
+				{
+					"label": "force device calibration",
+					"value": 2
+				}
+			]
+		},
+		"151": {
+			"label": "Operating mode",
+			"description": "Operating mode",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "roller blind",
+					"value": 1
+				},
+				{
+					"label": "Venetian blind",
+					"value": 2
+				},
+				{
+					"label": "gate w/o positioning",
+					"value": 3
+				},
+				{
+					"label": "gate with positioning",
+					"value": 4
+				},
+				{
+					"label": "roller blind with built-in driver",
+					"value": 5
+				},
+				{
+					"label": "roller blind with built-in driver (impulse)",
+					"value": 6
+				}
+			]
+		},
+		"152": {
+			"label": "Venetian blind - time of full turn of the slats",
+			"description": "Venetian blind - time of full turn of the slats",
+			"unit": "1/100 sec",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 150,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"153": {
+			"label": "Set slats back to previous position",
+			"description": "Set slats back to previous position",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Main controller operation",
+					"value": 0
+				},
+				{
+					"label": "Controller, Momentary Switch, Limit Switch",
+					"value": 1
+				},
+				{
+					"label": "Controller, both Switches, Multilevel Stop",
+					"value": 2
+				}
+			]
+		},
+		"154": {
+			"label": "Delay motor stop",
+			"description": "Delay motor stop after reaching end switch",
+			"unit": "1/10 sec",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"155": {
+			"label": "Motor operation detection",
+			"description": "Power threshold to be interpreted as reaching a limit switch",
+			"unit": "1/10 sec",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"156": {
+			"label": "Time of up movement",
+			"description": "Time of up movement",
+			"unit": "1/100 sec",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 6000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"157": {
+			"label": "Time of down movement",
+			"description": "Time of down movement",
+			"unit": "1/100 sec",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 6000,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0xff]": {
+			"label": "Alarm #1: Action",
+			"description": "Which action to perform when Alarm #1 is triggered",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No action",
+					"value": 0
+				},
+				{
+					"label": "Open blinds",
+					"value": 1
+				},
+				{
+					"label": "Close blinds",
+					"value": 2
+				}
+			]
+		},
+		"30[0xff00]": {
+			"label": "Alarm #1: Event/State Parameters",
+			"description": "Which event parameters Alarm #1 should be limited to",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0xff0000]": {
+			"label": "Alarm #1: Notification Status",
+			"description": "Which notification status Alarm #1 should be limited to",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Any",
+					"value": 255
+				}
+			]
+		},
+		"30[0xff000000]": {
+			"label": "Alarm #1: Notification Type",
+			"description": "Which notification type should raise Alarm #1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31[0xff]": {
+			"label": "Alarm #2: Action",
+			"description": "Which action to perform when Alarm #2 is triggered",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No action",
+					"value": 0
+				},
+				{
+					"label": "Open blinds",
+					"value": 1
+				},
+				{
+					"label": "Close blinds",
+					"value": 2
+				}
+			]
+		},
+		"31[0xff00]": {
+			"label": "Alarm #2: Event/State Parameters",
+			"description": "Which event parameters Alarm #2 should be limited to",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31[0xff0000]": {
+			"label": "Alarm #2: Notification Status",
+			"description": "Which notification status Alarm #2 should be limited to",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Any",
+					"value": 255
+				}
+			]
+		},
+		"31[0xff000000]": {
+			"label": "Alarm #2: Notification Type",
+			"description": "Which notification type should raise Alarm #2",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 5, // Water
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32[0xff]": {
+			"label": "Alarm #3: Action",
+			"description": "Which action to perform when Alarm #3 is triggered",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No action",
+					"value": 0
+				},
+				{
+					"label": "Open blinds",
+					"value": 1
+				},
+				{
+					"label": "Close blinds",
+					"value": 2
+				}
+			]
+		},
+		"32[0xff00]": {
+			"label": "Alarm #3: Event/State Parameters",
+			"description": "Which event parameters Alarm #3 should be limited to",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32[0xff0000]": {
+			"label": "Alarm #3: Notification Status",
+			"description": "Which notification status Alarm #3 should be limited to",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Any",
+					"value": 255
+				}
+			]
+		},
+		"32[0xff000000]": {
+			"label": "Alarm #3: Notification Type",
+			"description": "Which notification type should raise Alarm #3",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1, // Smoke
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33[0xff]": {
+			"label": "Alarm #4: Action",
+			"description": "Which action to perform when Alarm #4 is triggered",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No action",
+					"value": 0
+				},
+				{
+					"label": "Open blinds",
+					"value": 1
+				},
+				{
+					"label": "Close blinds",
+					"value": 2
+				}
+			]
+		},
+		"33[0xff00]": {
+			"label": "Alarm #4: Event/State Parameters",
+			"description": "Which event parameters Alarm #4 should be limited to",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"33[0xff0000]": {
+			"label": "Alarm #4: Notification Status",
+			"description": "Which notification status Alarm #4 should be limited to",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Any",
+					"value": 255
+				}
+			]
+		},
+		"33[0xff000000]": {
+			"label": "Alarm #4: Notification Type",
+			"description": "Which notification type should raise Alarm #4",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2, // CO
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34[0xff]": {
+			"label": "Alarm #5: Action",
+			"description": "Which action to perform when Alarm #5 is triggered",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No action",
+					"value": 0
+				},
+				{
+					"label": "Open blinds",
+					"value": 1
+				},
+				{
+					"label": "Close blinds",
+					"value": 2
+				}
+			]
+		},
+		"34[0xff00]": {
+			"label": "Alarm #5: Event/State Parameters",
+			"description": "Which event parameters Alarm #5 should be limited to",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34[0xff0000]": {
+			"label": "Alarm #5: Notification Status",
+			"description": "Which notification status Alarm #5 should be limited to",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Any",
+					"value": 255
+				}
+			]
+		},
+		"34[0xff000000]": {
+			"label": "Alarm #5: Notification Type",
+			"description": "Which notification type should raise Alarm #5",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 4, // Heat
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

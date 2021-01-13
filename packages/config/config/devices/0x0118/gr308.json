@@ -1,0 +1,18 @@
+// TKB Home GR308
+// Lifting Controller (Blinds Controller)
+{
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "GR308",
+	"description": "Lifting Controller (Blinds Controller)",
+	"devices": [
+		{
+			"productType": "0x0b00",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

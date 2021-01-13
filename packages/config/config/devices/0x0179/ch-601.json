@@ -1,0 +1,63 @@
+// ConnectHome CH-601
+// CH-601 THE ELECTRIC CRANE
+{
+	"manufacturer": "ConnectHome",
+	"manufacturerId": "0x0179",
+	"label": "CH-601",
+	"description": "CH-601 THE ELECTRIC CRANE",
+	"devices": [
+		{
+			"productType": "0x0021",
+			"productId": "0x0011"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Device Status",
+			"maxNodes": 3
+		},
+		"2": {
+			"label": "Status of valve movement",
+			"maxNodes": 10
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Operating Mode",
+			"description": "Selecting the operating mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal mode",
+					"value": 0
+				},
+				{
+					"label": "Reverse mode",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Auto Disabling With Delay",
+			"description": "After opening, the tap will automatically close after a certain time.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65000,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

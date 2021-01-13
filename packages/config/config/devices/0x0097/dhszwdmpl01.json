@@ -1,0 +1,18 @@
+// Wintop DHSZWDMPL01
+// DHS Z-Wave Plug-In Dimmer
+{
+	"manufacturer": "Wintop",
+	"manufacturerId": "0x0097",
+	"label": "DHSZWDMPL01",
+	"description": "DHS Z-Wave Plug-In Dimmer",
+	"devices": [
+		{
+			"productType": "0x6942",
+			"productId": "0x5503"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

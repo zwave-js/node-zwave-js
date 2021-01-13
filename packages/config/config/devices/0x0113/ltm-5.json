@@ -1,0 +1,175 @@
+// Evolve LTM-5
+// Wall Mount Accessory Switch
+{
+	"manufacturer": "Evolve",
+	"manufacturerId": "0x0113",
+	"label": "LTM-5",
+	"description": "Wall Mount Accessory Switch",
+	"devices": [
+		{
+			"productType": "0x5457",
+			"productId": "0x3033"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Ignore Start Level (Transmitting)",
+			"description": "Dimmers controlled by this switch will start dimming from their current level.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Night Light",
+			"description": "In night-light mode the LED on the switch will turn ON when the switch is turned OFF.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Ignore Start-Level (Receiving)",
+			"description": "The dimmer will start dimming from its current level.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "Transmission Indication",
+			"description": "Flicker LED while transmitting.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Flicker",
+					"value": 0
+				},
+				{
+					"label": "Flicker Whole Transmission",
+					"value": 1
+				},
+				{
+					"label": "Flicker 1 Second",
+					"value": 2
+				}
+			]
+		},
+		"20": {
+			"label": "Polling Interval",
+			"description": "How often, in minutes, to poll to keep synchronized with group.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Poll First Node",
+			"description": "Poll only the first node in Group 1.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		}
+	}
+}

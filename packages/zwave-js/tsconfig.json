@@ -1,0 +1,31 @@
+// tsconfig for IntelliSense - active in all files in the current package
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {},
+	"references": [
+		{
+			"path": "../config/tsconfig.build.json"
+		},
+		{
+			"path": "../core/tsconfig.build.json"
+		},
+		{
+			"path": "../serial/tsconfig.build.json"
+		},
+		{
+			"path": "../shared/tsconfig.build.json"
+		},
+		{
+			"path": "../testing/tsconfig.build.json"
+		},
+	],
+	"include": [
+		"gulpfile.ts",
+		"maintenance/**/*.ts",
+		"src/**/*.ts"
+	],
+	"exclude": [
+		"build/**",
+		"node_modules/**"
+	]
+}

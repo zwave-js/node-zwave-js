@@ -1,0 +1,38 @@
+// Danfoss MT02650
+// Devolo Thermostat (09356)
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "MT02650",
+	"description": "Devolo Thermostat (09356)",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0175"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Target for Wakeup and Override Notifications",
+			"maxNodes": 10,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Temperature sensor",
+			"maxNodes": 1
+		}
+	},
+	"compat": {
+		// If we don't query specific things on wake up, this device will
+		// think it is not connected and show error E5
+		"queryOnWakeup": [
+			// ["CommandClass", "API method", ...arguments]
+			["Battery", "get"],
+			["Thermostat Setpoint", "get", 1]
+		]
+	}
+}

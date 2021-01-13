@@ -1,0 +1,384 @@
+// Qubino ZMNHTD
+// Smart Meter
+{
+	"manufacturer": "Qubino",
+	"manufacturerId": "0x0159",
+	"label": "ZMNHTD",
+	"description": "Smart Meter",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x0052"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"7": {
+			"label": "Input 1 switch function selection",
+			"description": "IR external relay or External Relay control mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "disabled",
+					"value": 0
+				},
+				{
+					"label": "IR external control – mono stable push button",
+					"value": 2
+				},
+				{
+					"label": "IR external relay control - bi stable switch",
+					"value": 3
+				},
+				{
+					"label": "External relay control – mono stable push button",
+					"value": 4
+				},
+				{
+					"label": "External relay control – bi stable switch",
+					"value": 5
+				}
+			]
+		},
+		"11": {
+			"label": "Timer turning off IR external relay",
+			"description": "Automatic turning off IR external relay output after set time",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"12": {
+			"label": "Timer turning on IR external relay output",
+			"description": "Automatic turning on IR external relay output after set time",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Timer turning off External relay output",
+			"description": "Automatic turning off External relay output after set time",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Timer turning on External relay after output",
+			"description": "Automatic turning on External relay after output set time",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Power reporting (Watts) on power change",
+			"description": "Power reporting in Watts on power change",
+			"unit": "%",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42": {
+			"label": "Power reporting (Watts) by time interval",
+			"description": "Power reporting in Watts by time interval",
+			"unit": "%",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"45": {
+			"label": "Reset Power counters",
+			"description": "Reset Power counters",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 15,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No function",
+					"value": 0
+				},
+				{
+					"label": "reset counter 1 – KWh",
+					"value": 1
+				},
+				{
+					"label": "reset counter 2 – kVARh",
+					"value": 2
+				},
+				{
+					"label": "reset counter 3 – kVAh",
+					"value": 4
+				},
+				{
+					"label": "reset ALL counters",
+					"value": 15
+				}
+			]
+		},
+		"100": {
+			"label": "Enable / Disable endpoints relays",
+			"description": "Enable / Disable endpoints IR external relay and External relay",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "EP IR external relay and External relay disabled",
+					"value": 0
+				},
+				{
+					"label": "EP IR external relay dsbld, External relay enbld",
+					"value": 1
+				},
+				{
+					"label": "EP IR external relay enbld, External relay dsbld",
+					"value": 2
+				},
+				{
+					"label": "EP IR external relay and External relay enabled",
+					"value": 3
+				}
+			]
+		},
+		"110": {
+			"label": "Maximum Power auto off",
+			"description": "Maximum Power auto off",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 15000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "No function",
+					"value": 0
+				},
+				{
+					"label": "Maximum Power Consumption",
+					"value": 15000
+				}
+			]
+		},
+		"111": {
+			"label": "Delay overpower off",
+			"description": "Delay overpower off",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32525,
+			"defaultValue": 30,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"112": {
+			"label": "Relay to power off",
+			"description": "Relay to power off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "switch between the 2 relays",
+					"value": 0
+				},
+				{
+					"label": "always power off relay 1 (IR external relay)",
+					"value": 1
+				},
+				{
+					"label": "always power off relay 2 (External relay)",
+					"value": 2
+				},
+				{
+					"label": "always power off both relays (relay 1 and relay 2)",
+					"value": 3
+				}
+			]
+		}
+		// These parameters have an invalid value size
+		// "130": {
+		//     "label": "Serial Number",
+		//     "valueSize": 32,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// },
+		// "131": {
+		//     "label": "Meter Software reference",
+		//     "valueSize": 16,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// },
+		// "132": {
+		//     "label": "Meter Hardware reference",
+		//     "valueSize": 16,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// },
+		// "140": {
+		//     "label": "Voltage U1",
+		//     "unit": "V",
+		//     "valueSize": 24,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// },
+		// "141": {
+		//     "label": "Current I1",
+		//     "unit": "A",
+		//     "valueSize": 24,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// },
+		// "142": {
+		//     "label": "Active Power Total (Pt)",
+		//     "unit": "W",
+		//     "valueSize": 24,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// },
+		// "143": {
+		//     "label": "Reactive Power Total (Qt)",
+		//     "unit": "kVAr",
+		//     "valueSize": 24,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// },
+		// "144": {
+		//     "label": "Power Factor Total (PFt)",
+		//     "valueSize": 16,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// },
+		// "145": {
+		//     "label": "Active power accumulated (import)",
+		//     "unit": "kWh",
+		//     "valueSize": 32,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// },
+		// "146": {
+		//     "label": "Reactive power accumulated",
+		//     "unit": "kVArh",
+		//     "valueSize": 32,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// },
+		// "147": {
+		//     "label": "Apparent power accumulated",
+		//     "unit": "kVAh",
+		//     "valueSize": 32,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// },
+		// "148": {
+		//     "label": "Active power accumulated (export)",
+		//     "unit": "kWh",
+		//     "valueSize": 32,
+		//     "minValue": 0,
+		//     "maxValue": 0,
+		//     "defaultValue": 0,
+		//     "readOnly": true,
+		//     "writeOnly": false,
+		//     "allowManualEntry": true
+		// }
+	}
+}

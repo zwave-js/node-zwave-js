@@ -1,0 +1,63 @@
+{
+	"manufacturer": "First Alert (BRK Brands Inc)",
+	"manufacturerId": "0x0138",
+	"label": "ZCOMBO-G",
+	"description": "ZCombo-G Smoke/CO Alarm",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "SuperVision report timeout",
+			"description": "ZCOMBO will send the message over SuperVision Command Class and it will wait for the SuperVision report from the Controller for the SuperVision report timeout time.",
+			"unit": "s",
+			"valueSize": 2,
+			"minValue": 500,
+			"maxValue": 5000,
+			"defaultValue": 1500,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "SuperVision retry count",
+			"description": "If the SuperVision report is not received within the SuperVision report timeout time, the ZCOMBO will retry sending the message again. Upon exceeding the max retry, the ZCOMBO device will send the next message available in the queue.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "SuperVision wait time",
+			"description": "Before retrying the message, ZCOMBO will wait for the SuperVision wait time. Actual wait time is calculated using the formula: Wait Time = SuperVision wait time base-value + random-value + (attempt-count x 5 seconds). The random value will be between 100 and 1100 milliseconds.",
+			"unit": "s",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 5,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

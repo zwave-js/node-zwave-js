@@ -1,0 +1,19 @@
+// iControl Piper NV
+// Piper NV Security camera / sensor
+{
+	"manufacturer": "iControl",
+	"manufacturerId": "0x0106",
+	"label": "Piper NV",
+	"description": "Piper NV Security camera / sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true
+}

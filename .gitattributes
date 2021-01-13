@@ -1,0 +1,5 @@
+# Help GitHub understand that this is not a C(++)-repo
+specs/** linguist-vendored
+
+# Use JSONC for syntax highlighting in config files
+packages/config/config/**/*.json linguist-language=jsonc

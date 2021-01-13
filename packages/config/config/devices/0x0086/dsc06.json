@@ -1,0 +1,317 @@
+// AEON Labs DSC06
+// Smart Energy Switch
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSC06",
+	"description": "Smart Energy Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0006"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Status Reports",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Multilevel Sensor Report Content",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Power",
+					"value": 0
+				},
+				{
+					"label": "Voltage",
+					"value": 1
+				}
+			]
+		},
+		"80": {
+			"label": "Automatic Notifications",
+			"description": "Enable or disable automatic notifications",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Nothing",
+					"value": 0
+				},
+				{
+					"label": "Hail",
+					"value": 1
+				},
+				{
+					"label": "Basic CC Report",
+					"value": 2
+				}
+			]
+		},
+		"90": {
+			"label": "Enable/disable Parameter 91 and 92",
+			"description": "Enables/disables parameter 91 and 92 below",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"91": {
+			"label": "Minimum change in wattage",
+			"description": "Minimum change in wattage to trigger event",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"92": {
+			"label": "Minimum change in wattage %",
+			"description": "Minimum change in wattage % to trigger event",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"100": {
+			"label": "Set 101 to 103 to default values",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No change",
+					"value": 0
+				},
+				{
+					"label": "Reset",
+					"value": 1
+				}
+			]
+		},
+		"101": {
+			"label": "Group 1 report",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Multisensor Report",
+					"value": 2
+				},
+				{
+					"label": "Meter Report (Watts)",
+					"value": 4
+				},
+				{
+					"label": "Meter Report (kWh)",
+					"value": 8
+				},
+				{
+					"label": "Meter Report Watts and kWh",
+					"value": 12
+				}
+			]
+		},
+		"102": {
+			"label": "Group 2 report",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Multisensor Report",
+					"value": 2
+				},
+				{
+					"label": "Meter Report (Watts)",
+					"value": 4
+				},
+				{
+					"label": "Meter Report (kWh)",
+					"value": 8
+				},
+				{
+					"label": "Meter Report Watts and kWh",
+					"value": 12
+				}
+			]
+		},
+		"103": {
+			"label": "Group 3 report",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "None",
+					"value": 0
+				},
+				{
+					"label": "Multisensor Report",
+					"value": 2
+				},
+				{
+					"label": "Meter Report (Watts)",
+					"value": 4
+				},
+				{
+					"label": "Meter Report (kWh)",
+					"value": 8
+				},
+				{
+					"label": "Meter Report Watts and kWh",
+					"value": 12
+				}
+			]
+		},
+		"110": {
+			"label": "Set 111 to 113 to default values",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No change",
+					"value": 0
+				},
+				{
+					"label": "Reset",
+					"value": 1
+				}
+			]
+		},
+		"111": {
+			"label": "Interval Group 1",
+			"description": "The time interval (in seconds) for sending report to Group 1",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"112": {
+			"label": "Interval Group 2",
+			"description": "The time interval (in seconds) for sending report to Group 2",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"113": {
+			"label": "Interval Group 3",
+			"description": "The time interval (in seconds) for sending report to Group 3",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"254": {
+			"label": "Device Tag",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"255": {
+			"label": "Device Reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No change",
+					"value": 0
+				},
+				{
+					"label": "Reset",
+					"value": 1
+				}
+			]
+		}
+	}
+}

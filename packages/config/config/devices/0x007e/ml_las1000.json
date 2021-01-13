@@ -1,0 +1,18 @@
+// Monster Cable ML LAS1000
+// Plugin Appliance Module
+{
+	"manufacturer": "Monster Cable",
+	"manufacturerId": "0x007e",
+	"label": "ML LAS1000",
+	"description": "Plugin Appliance Module",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0206"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

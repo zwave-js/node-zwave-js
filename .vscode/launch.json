@@ -1,0 +1,91 @@
+{
+	// Verwendet IntelliSense zum Ermitteln möglicher Attribute.
+	// Zeigen Sie auf vorhandene Attribute, um die zugehörigen Beschreibungen anzuzeigen.
+	// Weitere Informationen finden Sie unter https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "node",
+			"name": "vscode-jest-tests",
+			"request": "launch",
+			"program": "${workspaceFolder}/node_modules/jest/bin/jest",
+			"args": ["--runInBand"],
+			"cwd": "${workspaceFolder}",
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			"disableOptimisticBPs": true
+		},
+		{
+			"type": "node",
+			"request": "attach",
+			"name": "Attach (RasPi)",
+			"address": "heizung.fritz.box",
+			"port": 9229,
+			"localRoot": "${workspaceFolder}",
+			"remoteRoot": "/opt/iobroker/node_modules/zwave-js",
+			"skipFiles": ["<node_internals>/**"]
+		},
+		{
+			"type": "node",
+			"request": "attach",
+			"name": "Attach (localhost)",
+			"port": 9229,
+			"skipFiles": ["<node_internals>/**", "**/typescript.js"],
+			"sourceMaps": true
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug locally",
+			"port": 9229,
+			"runtimeArgs": [
+				"--async-stack-traces",
+				"--inspect-brk=9229",
+				"-r",
+				"ts-node/register/transpile-only",
+				"-r",
+				"tsconfig-paths/register",
+				"${workspaceFolder}/test/run.ts"
+			],
+			"env": {
+				"NO_CACHE": "true"
+				// "LOGLEVEL": "verbose"
+			},
+			"console": "integratedTerminal",
+			"skipFiles": ["<node_internals>/**"],
+			"sourceMaps": true
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Generate typed docs",
+			"port": 9229,
+			"runtimeArgs": [
+				"--async-stack-traces",
+				"--inspect-brk=9229",
+				"-r",
+				"ts-node/register/transpile-only",
+				"-r",
+				"tsconfig-paths/register",
+				"${workspaceFolder}/maintenance/generateTypedDocs.ts"
+			],
+			"console": "integratedTerminal",
+			"skipFiles": ["<node_internals>/**"],
+			"sourceMaps": true
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Decode message",
+			"port": 9229,
+			"runtimeArgs": [
+				"--async-stack-traces",
+				"--inspect-brk=9229",
+				"${workspaceFolder}/test/debug.js"
+			],
+			"console": "integratedTerminal",
+			"skipFiles": ["<node_internals>/**"],
+			"sourceMaps": true
+		}
+	]
+}

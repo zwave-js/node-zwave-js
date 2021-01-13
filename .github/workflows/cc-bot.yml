@@ -1,0 +1,52 @@
+name: Update CC implementation status
+
+# Only run this on changes to the master branch
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  gh-cc-table:
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    - name: Compile TypeScript code
+      run: yarn run build
+
+    # The script will check if there are changes before updating the issue
+    - name: Update CC table
+      uses: ./.github/actions/gh-cc-table
+      with:
+        githubToken: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        CI: true

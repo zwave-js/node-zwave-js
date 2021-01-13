@@ -1,0 +1,333 @@
+name: Test and Release
+
+# Run this job on all pushes and pull requests
+# as well as tags with a semantic version
+on:
+  push:
+    branches:
+      - "*"
+    tags:
+      # normal versions
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      # pre-releases
+      - "v[0-9]+.[0-9]+.[0-9]+-**"
+  pull_request: {}
+
+jobs:
+  lint:
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    - name: Compile TypeScript code
+      run: yarn run build
+
+    - name: Lint TypeScript code
+      run: yarn run lint
+
+  # ===================
+
+  lint-zwave:
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    - name: Compile TypeScript code
+      run: yarn run build
+
+    - name: Lint config files
+      run: npx lerna run lint:config --no-prefix
+
+    - name: Lint Z-Wave specifics
+      run: npx lerna run lint:zwave --no-prefix
+
+  # ===================
+  # Runs unit tests on all supported node versions and OSes
+  unit-tests:
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x]
+        os: [ubuntu-latest]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    # Compilation is necessary, or the tests won't run
+    - name: Compile TypeScript code
+      run: yarn run build
+
+    - name: Run component tests
+      run: |
+        npx lerna run generateDeviceIndex
+        yarn run test:ci
+      env:
+        CI: true
+
+  # ===================
+
+  # Test that the generated packages are ok
+  test-package:
+    if: contains(github.event.head_commit.message, '[skip ci]') == false
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    # Do a full build so the package files are regenerated
+    - name: Compile TypeScript code
+      run: yarn run build:full
+
+    - name: Import main entry point
+      run: node -e 'require("./packages/zwave-js")'
+
+  # ===================
+
+  # Generate coverage reports when the unit tests have succeeded
+  coverage:
+    # Trigger this step only on pushes, because the job often fails for pull requests
+    if: |
+      contains(github.event.head_commit.message, '[skip ci]') == false &&
+      github.event_name == 'push'
+
+    needs: [unit-tests]
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    # Compilation is necessary, or the tests won't run
+    - name: Compile TypeScript code
+      run: yarn run build
+
+    - name: Generate coverage
+      run: |
+        npx lerna run generateDeviceIndex
+        yarn run coverage:ci
+      env:
+        CI: true
+    - name: Upload to Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+
+  # ===================
+
+  # Deploys the final package to NPM
+  deploy:
+    # Trigger this step only when a commit on any branch is tagged with a version number
+    if: |
+      github.actor == 'AlCalzone' &&
+      contains(github.event.head_commit.message, '[skip ci]') == false &&
+      github.event_name == 'push' &&
+      startsWith(github.ref, 'refs/tags/v')
+
+    needs: [lint, lint-zwave, unit-tests, test-package]
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Extract the version and commit body from the tag
+      id: extract_release
+      # The body may be multiline, therefore we need to escape some characters
+      run: |
+        VERSION="${{ github.ref }}"
+        VERSION=${VERSION##*/v}
+        echo "::set-output name=VERSION::$VERSION"
+        BODY=$(git show -s --format=%b)
+        BODY="${BODY//'%'/'%25'}"
+        BODY="${BODY//$'\n'/'%0A'}"
+        BODY="${BODY//$'\r'/'%0D'}"
+        echo "::set-output name=BODY::$BODY"
+
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    - name: Create a clean build
+      run: yarn run build:full
+
+    - name: Publish package to npm
+      run: |
+        npm config set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
+        npm whoami
+        npx lerna publish from-package --yes
+
+    - name: Create Github Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release v${{ steps.extract_release.outputs.VERSION }}
+        draft: false
+        # Prerelease versions create prereleases on Github
+        prerelease: ${{ contains(steps.extract_release.outputs.VERSION, '-') }}
+        body: ${{ steps.extract_release.outputs.BODY }}
+
+    - name: Notify Sentry.io about the release
+      run: |
+        npm i -g @sentry/cli
+        export SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}
+        export SENTRY_ORG=alcalzone
+        export SENTRY_PROJECT=iobroker_zwave
+        export SENTRY_VERSION=zwave-js@${{ steps.extract_release.outputs.VERSION }}
+        sentry-cli releases new $SENTRY_VERSION
+        sentry-cli releases set-commits $SENTRY_VERSION --auto
+        sentry-cli releases files $SENTRY_VERSION upload-sourcemaps ./packages/*/build
+        sentry-cli releases finalize $SENTRY_VERSION

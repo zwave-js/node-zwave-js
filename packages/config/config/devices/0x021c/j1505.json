@@ -1,0 +1,25 @@
+// Shenzhen iSurpass Technology Co. , Ltd. J1505
+// Motion Sensor
+{
+	"manufacturer": "Shenzhen iSurpass Technology Co. , Ltd.",
+	"manufacturerId": "0x021c",
+	"label": "J1505",
+	"description": "Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x8011",
+			"productId": "0x1000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Motion Update",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	}
+}

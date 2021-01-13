@@ -1,0 +1,347 @@
+// AEON Labs DSC11
+// Smart Strip
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "DSC11",
+	"description": "Smart Strip",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x000b"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Voltage to calculate power",
+			"description": "Line voltage used for device calculations of wattage",
+			"unit": "v",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32000,
+			"defaultValue": 120,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Selective Reporting",
+			"description": "Enable selective reporting only when power changes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 16,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Wattage Threshold - Whole strip",
+			"description": "Threshold change in wattage to induce a automatic report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 25,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Wattage Threshold - Socket 1",
+			"description": "Threshold change in wattage to induce a automatic report",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 25,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Wattage Threshold - Socket 2",
+			"description": "Threshold change in wattage to induce a automatic report",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 25,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Wattage Threshold - Socket 3",
+			"description": "Threshold change in wattage to induce a automatic report",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 25,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Wattage Threshold - Socket 4",
+			"description": "Threshold change in wattage to induce a automatic report",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 25,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Wattage Threshold - Socket 5",
+			"description": "Threshold change in wattage to induce a automatic report",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 25,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Wattage Threshold - Socket 6",
+			"description": "Threshold change in wattage to induce a automatic report",
+			"unit": "W",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 60000,
+			"defaultValue": 25,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Percent Change - Whole Strip",
+			"description": "Percentage change in wattage to induce a automatic report",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "Percent Change - Socket 1",
+			"description": "Percentage change in wattage to induce a automatic report",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"14": {
+			"label": "Percent Change - Socket 2",
+			"description": "Percentage change in wattage to induce a automatic report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"15": {
+			"label": "Percent Change - Socket 3",
+			"description": "Percentage change in wattage to induce a automatic report",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Percent Change - Socket 4",
+			"description": "Percentage change in wattage to induce a automatic report",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "Percent Change - Socket 5",
+			"description": "Percentage change in wattage to induce a automatic report",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Percent Change - Socket 6",
+			"description": "Percentage change in wattage to induce a automatic report",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 5,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"80": {
+			"label": "Status of load changed report",
+			"description": "Status of load changed,send group 1",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Not sent",
+					"value": 0
+				},
+				{
+					"label": "Send Hail",
+					"value": 1
+				},
+				{
+					"label": "Send Basic",
+					"value": 2
+				}
+			]
+		},
+		"90": {
+			"label": "Get Temperature",
+			"description": "Get temperature of Smart Strip",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"100": {
+			"label": "Reset 0x65~0x67 to default value",
+			"description": "Reset 0x65~0x67 to default value",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"111": {
+			"label": "Interval to send out reports of Group 1",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"112": {
+			"label": "Interval to send out reports of Group 2",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"113": {
+			"label": "Interval to send out reports of Group 3",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 2678400,
+			"defaultValue": 600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101[0xff]": {
+			"label": "select channels to report consumtion as item 1",
+			"description": "A binary field for reporting consumption (kWh) of channels",
+			"unit": "kWh",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101[0xff00]": {
+			"label": "Select channels to report power as item 1",
+			"description": "A binary field to choose channels to report power",
+			"unit": "W",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"102[0xff]": {
+			"label": "Item 2 (kWh)",
+			"description": "Channel(s) to auto-report kWh",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"102[0xff00]": {
+			"label": "Item 2 (power)",
+			"description": "Channel(s) to auto-report wattage",
+			"unit": "W",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

@@ -1,0 +1,53 @@
+{
+	"compilerOptions": {
+		"plugins": [
+			{
+				"name": "@fimbul/mithotyn",
+				"displayErrorsAsWarnings": true
+			}
+		],
+		"composite": true,
+		"declaration": true,
+		"declarationMap": true,
+		// To enable Babel support
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noEmitOnError": true,
+		"noImplicitAny": true,
+		"noImplicitThis": true,
+		"removeComments": false,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": false,
+		"importsNotUsedAsValues": "error",
+		"sourceMap": true,
+		"inlineSourceMap": false,
+		"stripInternal": true,
+		"target": "es2018",
+		"skipLibCheck": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"strictBindCallApply": true,
+		"strictFunctionTypes": true,
+		"watch": false, // true breaks CI scripts
+		"pretty": true,
+		"types": [
+			"node",
+			"jest-extended"
+		],
+		"noErrorTruncation": true
+	},
+	"include": [
+		"packages/**/src/**/*.ts",
+		"packages/**/maintenance/**/*.ts",
+		"packages/*/gulpfile.ts",
+		"maintenance/**/*.ts",
+		"test/**/*.ts"
+	],
+	"exclude": [
+		"**/build/**",
+		"node_modules/**",
+		"packages/**/node_modules"
+	]
+}

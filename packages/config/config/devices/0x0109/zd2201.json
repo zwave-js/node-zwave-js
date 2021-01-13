@@ -1,0 +1,82 @@
+// Vision Security ZD2201
+// Multisensor 4in1
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZD2201",
+	"description": "Multisensor 4in1",
+	"devices": [
+		{
+			"productType": "0x201f",
+			"productId": "0x1f10"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Temperature unit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Celsius (default)",
+					"value": 0
+				},
+				{
+					"label": "Fahrenheit",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Temperature Reporting Threshold",
+			"description": "Set up from 0.1C to 5C",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 50,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Humidity Reporting Threshold",
+			"description": "Set up from 1%-50%",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Luminance Reporting Threshold",
+			"description": "Set up from 5%-50%",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}
