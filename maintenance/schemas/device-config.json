@@ -97,7 +97,8 @@
 							"description": "Whether node id associations must be used for this group, even if the device supports endpoint associations"
 						}
 					},
-					"required": ["label", "maxNodes"]
+					"required": ["label", "maxNodes"],
+					"additionalProperties": false
 				}
 			},
 			"additionalProperties": false
