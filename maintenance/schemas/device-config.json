@@ -1,0 +1,292 @@
+{
+	"$schema": "http://json-schema.org/schema#",
+	"type": "object",
+	"properties": {
+		"manufacturer": {
+			"type": "string",
+			"description": "The full name of the manufacturer"
+		},
+		"manufacturerId": {
+			"type": "string",
+			"description": "The manufacturer ID as assigned by the Z-Wave Alliance",
+			"pattern": "^0x[0-9a-f]{4}$"
+		},
+		"label": {
+			"type": "string",
+			"description": "The device label that will be displayed by applications. Should usually be short."
+		},
+		"description": {
+			"type": "string",
+			"description": "A slightly more detailed description of this device, explaining what kind of device this is"
+		},
+		"devices": {
+			"type": "array",
+			"description": "An array of product type and product ID combinations",
+			"minItems": 1,
+			"items": {
+				"type": "object",
+				"properties": {
+					"productType": {
+						"type": "string",
+						"description": "The product type of this device as a 4-digit hex string",
+						"pattern": "^0x[0-9a-f]{4}$"
+					},
+					"productId": {
+						"type": "string",
+						"description": "The product ID of this device as a 4-digit hex string",
+						"pattern": "^0x[0-9a-f]{4}$"
+					}
+				},
+				"required": ["productType", "productId"],
+				"additionalProperties": false
+			}
+		},
+		"firmwareVersion": {
+			"oneOf": [
+				{
+					"const": false
+				},
+				{
+					"type": "object",
+					"properties": {
+						"min": {
+							"type": "string",
+							"description": "The minimum firmware version this config file targets",
+							"pattern": "^[0-9]|[1-9][0-9]|[1-2][0-9][0-9]\\.[0-9]|[1-9][0-9]|[1-2][0-9][0-9]$"
+						},
+						"max": {
+							"type": "string",
+							"description": "The maximum firmware version this config file targets",
+							"pattern": "^[0-9]|[1-9][0-9]|[1-2][0-9][0-9]\\.[0-9]|[1-9][0-9]|[1-2][0-9][0-9]$"
+						}
+					},
+					"required": ["min", "max"],
+					"additionalProperties": false
+				}
+			]
+		},
+		"supportsZWavePlus": {
+			"const": true
+		},
+		"associations": {
+			"type": "object",
+			"description": "Define association groups for devices that don't support Z-Wave+ or modify the reported associations for devices that do.",
+			"patternProperties": {
+				"^\\d+$": {
+					"type": "object",
+					"properties": {
+						"label": {
+							"type": "string",
+							"description": "How this association group is called"
+						},
+						"description": {
+							"type": "string",
+							"description": "What this association group does"
+						},
+						"maxNodes": {
+							"type": "number",
+							"description": "How many nodes may be assigned to this group",
+							"minimum": 1
+						},
+						"isLifeline": {
+							"const": true,
+							"description": "Whether this is a Lifeline group. SHOULD exist exactly once, some nodes require more groups to report everything."
+						},
+						"noEndpoint": {
+							"const": true,
+							"description": "Whether node id associations must be used for this group, even if the device supports endpoint associations"
+						}
+					},
+					"required": ["label", "maxNodes"],
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		},
+		"paramInformation": {
+			"type": "object",
+			"description": "Defines all the existing configuration parameters",
+			"patternProperties": {
+				"^\\d+(\\[0x[0-9a-f]{1,8}\\])?$": {
+					"type": "object",
+					"properties": {
+						"label": {
+							"type": "string",
+							"description": "A short name for the parameter"
+						},
+						"description": {
+							"type": "string",
+							"description": "A longer description what the parameter does"
+						},
+						"valueSize": {
+							"type": "number",
+							"minimum": 1,
+							"maximum": 4,
+							"description": "How many bytes the device uses for this value"
+						},
+						"minValue": {
+							"type": "number",
+							"description": "The minimum allowed value for this parameter"
+						},
+						"maxValue": {
+							"type": "number",
+							"description": "The maximum allowed value for this parameter"
+						},
+						"unsigned": {
+							"type": "boolean",
+							"description": "Whether this parameter is interpreted as an unsigned value by the device (default: false). This simplifies usage for the end user."
+						},
+						"defaultValue": {
+							"type": "number",
+							"description": "The factory default value of this parameter."
+						},
+						"readOnly": {
+							"type": "boolean",
+							"description": "Whether this parameter can only be read"
+						},
+						"writeOnly": {
+							"type": "boolean",
+							"description": "Whether this parameter can only be written"
+						},
+						"allowManualEntry": {
+							"type": "boolean",
+							"description": "Whether this parameter accepts any value between minValue and maxValue. If false, options must be used to specify the allowed values."
+						},
+						"options": {
+							"type": "array",
+							"minItems": 1,
+							"items": {
+								"type": "object",
+								"properties": {
+									"label": {
+										"type": "string",
+										"description": "The option label to display"
+									},
+									"value": {
+										"type": "number",
+										"description": "Which value this option represents"
+									}
+								},
+								"required": ["label", "value"],
+								"additionalProperties": false
+							}
+						}
+					},
+					"required": [
+						"label",
+						"valueSize",
+						"minValue",
+						"maxValue",
+						"defaultValue",
+						"allowManualEntry"
+					]
+				}
+			},
+			"additionalProperties": false
+		},
+		"compat": {
+			"type": "object",
+			"properties": {
+				"commandClasses": {
+					"type": "object",
+					"properties": {
+						"add": {
+							"type": "object",
+							"patternProperties": {
+								"^(0x)?[0-9a-f]+$": {
+									"$ref": "#/definitions/ccInfoAndEndpoints"
+								}
+							},
+							"additionalProperties": false
+						}
+					},
+					"additionalProperties": false
+				},
+				"disableBasicMapping": {
+					"const": true
+				},
+				"keepS0NonceUntilNext": {
+					"const": true
+				},
+				"preserveRootApplicationCCValueIDs": {
+					"const": true
+				},
+				"queryOnWakeup": {
+					"type": "array",
+					"minItems": 1,
+					"items": {
+						"type": "array",
+						"items": [{ "type": "string" }, { "type": "string" }],
+						"additionalItems": {
+							"anyOf": [
+								{ "type": "string" },
+								{ "type": "number" },
+								{ "type": "boolean" }
+							]
+						}
+					}
+				},
+				"skipConfigurationInfoQuery": {
+					"const": true
+				}
+			},
+			"additionalProperties": false
+		}
+	},
+	"required": [
+		"manufacturer",
+		"manufacturerId",
+		"label",
+		"description",
+		"devices",
+		"firmwareVersion"
+	],
+	"additionalProperties": false,
+	"definitions": {
+		"ccInfo": {
+			"type": "object",
+			"properties": {
+				"isSupported": {
+					"type": "boolean"
+				},
+				"isControlled": {
+					"type": "boolean"
+				},
+				"secure": {
+					"type": "boolean"
+				},
+				"version": {
+					"type": "number"
+				}
+			},
+			"additionalProperties": false
+		},
+		"ccInfoAndEndpoints": {
+			"type": "object",
+			"properties": {
+				"isSupported": {
+					"type": "boolean"
+				},
+				"isControlled": {
+					"type": "boolean"
+				},
+				"secure": {
+					"type": "boolean"
+				},
+				"version": {
+					"type": "number"
+				},
+				"endpoints": {
+					"type": "object",
+					"patternProperties": {
+						"^\\d+$": {
+							"$ref": "#/definitions/ccInfo"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"additionalProperties": false
+		}
+	}
+}
