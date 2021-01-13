@@ -89,18 +89,18 @@ jobs:
       uses: actions/checkout@v2
  
     - name: Check user's permissions to do this
-      id: check
+      id: check-permissions
       uses: actions/github-script@v3
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          return await bot.checkAuthorized({github, context});
+          return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
     - name: Retrieve PR information
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/github-script@v3
       id: get-pr
       with:
@@ -119,13 +119,13 @@ jobs:
           }
 
     - name: Save our CI scripts
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       run: |
         mkdir -p /tmp/.github
         cp -r .github/* /tmp/.github
 
     - name: Checkout pull request
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/checkout@v2
       with:
         token: ${{secrets.BOT_TOKEN}}
@@ -133,13 +133,13 @@ jobs:
         ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
 
     - name: Restore our CI scripts
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       run: |
         rm -rf .github
         cp -r /tmp/.github .
 
     - name: Use Node.js ${{ matrix.node-version }}
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
@@ -149,7 +149,7 @@ jobs:
       run: echo "::set-output name=dir::$(yarn cache dir)"
 
     - name: Use Yarn cache
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/cache@v2
       id: yarn-cache
       with:
@@ -159,7 +159,7 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       run: yarn install --prefer-offline --frozen-lockfile
 
     - name: Compile TypeScript code
@@ -167,7 +167,7 @@ jobs:
       run: yarn run build
 
     - name: Do the lint fix
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       id: fix
       run: |
         # Run all lint commands and remember if one fails
@@ -203,7 +203,7 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          return await bot.fixLintFeedback({github, context});
+          return bot.fixLintFeedback({github, context});
 
 
 
@@ -225,18 +225,18 @@ jobs:
       uses: actions/checkout@v2
  
     - name: Check user's permissions to do this
-      id: check
+      id: check-permissions
       uses: actions/github-script@v3
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          return await bot.checkAuthorized({github, context});
+          return bot.checkAuthorized({github, context});
 
     # These steps only run if the check was successful
     - name: Retrieve PR information
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/github-script@v3
       id: get-pr
       with:
@@ -255,13 +255,13 @@ jobs:
           }
 
     - name: Save our CI scripts
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       run: |
         mkdir -p /tmp/.github
         cp -r .github/* /tmp/.github
 
     - name: Checkout pull request
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/checkout@v2
       with:
         token: ${{secrets.BOT_TOKEN}}
@@ -269,13 +269,13 @@ jobs:
         ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
 
     - name: Restore our CI scripts
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       run: |
         rm -rf .github
         cp -r /tmp/.github .
 
     - name: Rebase the branch
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       id: fix
       run: |
         # Try to rebase
@@ -296,4 +296,91 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          return await bot.rebaseFeedback({github, context});
+          return bot.rebaseFeedback({github, context});
+
+
+
+  # #########################################################################
+  # Fix lint errors when an authorized person posts "@zwave-js-bot rename commit"
+  rebase:
+    if: |
+      contains(github.event.issue.html_url, '/pull/') &&
+      contains(github.event.comment.body, '@zwave-js-bot rename commit') &&
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout master branch
+      uses: actions/checkout@v2
+ 
+    - name: Check permissions and necessity
+      id: check-permissions
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return (
+            (await bot.checkAuthorized({github, context})) &&
+            (await bot.renameCommitCheck({github, context})) &&
+          );
+
+    # These steps only run if the check was successful
+    - name: Retrieve PR information
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/github-script@v3
+      id: get-pr
+      with:
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.renameCommitGetPRInfo({github, context});
+
+    - name: Save our CI scripts
+      if: steps.check-permissions.outputs.result == 'true'
+      run: |
+        mkdir -p /tmp/.github
+        cp -r .github/* /tmp/.github
+
+    - name: Checkout pull request
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/checkout@v2
+      with:
+        token: ${{secrets.BOT_TOKEN}}
+        repository: ${{ fromJSON(steps.get-pr.outputs.result).repo }}
+        ref: ${{ fromJSON(steps.get-pr.outputs.result).ref }}
+
+    - name: Restore our CI scripts
+      if: steps.check-permissions.outputs.result == 'true'
+      run: |
+        rm -rf .github
+        cp -r /tmp/.github .
+
+    - name: Rebase the branch
+      if: steps.check-permissions.outputs.result == 'true'
+      id: fix
+      run: |
+        # Try to reword the commit
+        if git commit --amend -m "${{ fromJSON(steps.get-pr.outputs.result).title }}" ; then
+          # Amending the commit worked
+          git config user.email "bot@zwave.js"
+          git config user.name "Z-Wave JS Bot"
+          git push -f
+          echo "::set-output name=result::success"
+        else
+          echo "::set-output name=result::error"
+        fi
+
+    - name: Give feedback
+      uses: actions/github-script@v3
+      env:
+        FEEDBACK: ${{ steps.fix.outputs.result }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.renameCommitFeedback({github, context});
