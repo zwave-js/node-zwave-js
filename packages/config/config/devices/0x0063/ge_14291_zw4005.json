@@ -88,6 +88,6 @@
 		}
 	},
 	"compat": {
-		"disableBasicMapping": true
+		"treatBasicSetAsEvent": true
 	}
 }
