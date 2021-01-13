@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## 6.0.0-beta.0 (2021-01-10)
+## __WORK IN PROGRESS__
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)
 * Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
 * The second (string) parameter of the `"interview failed"` event handler was removed
@@ -30,6 +30,11 @@ To compensate for the change and give the response enough time to reach the cont
 * Added Aeotec ZWA009 aerQ Temperature and Humidity Sensor
 * Added Honeywell 39348/ZW4008
 * Added Zooz zst10-700 z-wave usb stick
+* Added Fibaro Smart Switch FGS-214 and FGS-224
+* Added Fortrezz fts05p
+* Added an additional product type to Aeotec Range Extender 7
+* Added a compat option `skipConfigurationInfoQuery` to work around a firmware issue in `Heat-It Z-TRM2fx`
+* Renamed config param #11 in Q-Light Puck
 * New versions of `@zwave-js/config` are now automatically released every night if **only** config files were changed since the last release.  
 You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull the latest config files. For now, a driver restart is required afterwards.
 
@@ -43,6 +48,8 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * The version of `zwave-js` is now exported as `libVersion` from the main entry point
 * Implemented `Battery CC V3`
 * Added support for `Hail CC`
+* ValueIDs that use a `Duration` instance as the value now have the metadata type `"duration"`
+* Added a workaround for devices that return an invalid response when finding the first configuration param
 
 ### Bugfixes
 * Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask.  
@@ -51,11 +58,13 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * The interview is no longer aborted when a device does not respond to the Wakeup Capability query
 * Fixed a crash that could happen when compressing the value DB with an existing backup file.
 * Fixed a wrong value ID for `Multilevel Switch CC` `targetValue`
+* The driver no longer assumes that a sleeping node falls asleep after a certain time
 
 ### Changes under the hood
 * Test releases for PRs can now be created with a command
 * PRs titles are now enforced to comply with conventional commits
 * Config json files are now automatically formatted in VSCode and linted
+* While editing device config files, supporting IDEs can now use a JSON schema to help you
 * We've added @zwave-js-bot to help us manage the repo and to help you contribute
 
 ## 5.7.0 (2020-12-23)
