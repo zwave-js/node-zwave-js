@@ -3,11 +3,15 @@
 {
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
-	"label": "ZWA189",
+	"label": "ZW189",
 	"description": "Range Extender 7",
 	"devices": [
 		{
 			"productType": "0x0004",
+			"productId": "0x00bd"
+		},
+		{
+			"productType": "0x0104",
 			"productId": "0x00bd"
 		}
 	],
