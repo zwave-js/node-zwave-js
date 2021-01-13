@@ -36,7 +36,7 @@ export enum BarrierOperatorCommand {
 /**
  * @publicAPI
  */
-export enum BarrierState {
+export enum State {
 	Closed = 0x00,
 	Closing = 0xfc,
 	Stopped = 0xfd,
@@ -63,7 +63,7 @@ export class BarrierOperatorCC extends CommandClass {
 }
 
 interface BarrierOperatorCCSetOptions extends CCCommandOptions {
-	targetValue: boolean;
+	state: State.Open | State.Closed;
 }
 
 @CCCommand(BarrierOperatorCommand.Set)
@@ -81,14 +81,14 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.targetValue = options.targetValue;
+			this.state = options.state;
 		}
 	}
 
-	public targetValue: boolean;
+	public state: State.Open | State.Closed;
 
 	public serialize(): Buffer {
-		const payload: number[] = [this.targetValue ? 0xff : 0x00];
+		const payload: number[] = [this.state ? 0xff : 0x00];
 		this.payload = Buffer.from(payload);
 		return super.serialize();
 	}
@@ -96,7 +96,7 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "target value": this.targetValue },
+			message: { "state value": this.state },
 		};
 	}
 }
@@ -118,35 +118,33 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 		  return undefined position
 		*/
 		const payloadValue = this.payload[0];
-		if ((payloadValue >= 0 && payloadValue <= 99) || payloadValue == 255) {
-			// convert position % to 100, in case of position is Open
-			const payloadPosition = payloadValue === 255 ? 100 : payloadValue;
-			this._barrierPosition = payloadPosition;
-			if (payloadValue > 0 && payloadValue <= 99) {
-				this._barrierState = undefined;
-			} else {
-				this._barrierState = payloadValue;
+		this._state = payloadValue;
+		this._position = undefined;
+		if (payloadValue <= 99) {
+			this._position = payloadValue;
+			if (payloadValue > 0) {
+				this._state = undefined;
 			}
-		} else {
-			this._barrierPosition = undefined;
-			this._barrierState = payloadValue;
+		} else if (payloadValue === 255) {
+			this._position = 100;
+			this._state = payloadValue;
 		}
 
 		this.persistValues();
 	}
 
-	private _barrierState: BarrierState | undefined;
+	private _state: State | undefined;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Barrier State",
-		states: enumValuesToMetadataStates(BarrierState),
+		states: enumValuesToMetadataStates(State),
 	})
-	public get barrierState(): BarrierState | undefined {
-		return this._barrierState;
+	public get state(): State | undefined {
+		return this._state;
 	}
 
-	private _barrierPosition: number | undefined;
+	private _position: number | undefined;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
@@ -154,8 +152,8 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 		unit: "%",
 		max: 100,
 	})
-	public get barrierPosition(): number | undefined {
-		return this._barrierPosition;
+	public get position(): number | undefined {
+		return this._position;
 	}
 }
 
