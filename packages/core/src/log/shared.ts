@@ -286,21 +286,20 @@ export class ZWaveLogContainer extends winston.Container {
 
 	private createLogTransports(): Transport[] {
 		const ret: Transport[] = [];
-		if (this.logConfig.enabled) {
-			if (this.logConfig.logToFile) {
-				if (!this.fileTransport) {
-					console.log(`Logging to file:
+		if (this.logConfig.enabled && this.logConfig.logToFile) {
+			if (!this.fileTransport) {
+				console.log(`Logging to file:
 	${this.logConfig.filename}`);
-					this.fileTransport = this.createFileTransport();
-				}
-				ret.push(this.fileTransport);
-			} else {
-				if (!this.consoleTransport) {
-					this.consoleTransport = this.createConsoleTransport();
-				}
-				ret.push(this.consoleTransport);
+				this.fileTransport = this.createFileTransport();
 			}
+			ret.push(this.fileTransport);
+		} else {
+			if (!this.consoleTransport) {
+				this.consoleTransport = this.createConsoleTransport();
+			}
+			ret.push(this.consoleTransport);
 		}
+
 		return ret;
 	}
 
