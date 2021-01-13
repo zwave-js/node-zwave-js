@@ -71,7 +71,6 @@ import {
 import { BridgeApplicationCommandRequest } from "../controller/BridgeApplicationCommandRequest";
 import { ZWaveController } from "../controller/Controller";
 import {
-	isTransmitReport,
 	MAX_SEND_ATTEMPTS,
 	SendDataAbort,
 	SendDataMulticastRequest,
@@ -128,8 +127,6 @@ export interface ZWaveOptions {
 		report: number; // [1000...40000], default: 10000 ms
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
-		/** How long a node is assumed to be awake after the last communication with it */
-		nodeAwake: number; // [1000...30000], default: 10000 ms
 	};
 
 	attempts: {
@@ -184,7 +181,6 @@ const defaultOptions: ZWaveOptions = {
 		report: 10000,
 		nonce: 5000,
 		sendDataCallback: 65000, // as defined in INS13954
-		nodeAwake: 10000,
 	},
 	attempts: {
 		controller: 3,
@@ -259,15 +255,6 @@ function checkOptions(options: ZWaveOptions): void {
 	if (options.timeouts.sendDataCallback < 10000) {
 		throw new ZWaveError(
 			`The Send Data Callback timeout must be at least 10000 milliseconds!`,
-			ZWaveErrorCodes.Driver_InvalidOptions,
-		);
-	}
-	if (
-		options.timeouts.nodeAwake < 1000 ||
-		options.timeouts.nodeAwake > 30000
-	) {
-		throw new ZWaveError(
-			`The Node awake timeout must be between 1000 and 30000 milliseconds!`,
 			ZWaveErrorCodes.Driver_InvalidOptions,
 		);
 	}
@@ -1357,12 +1344,6 @@ export class Driver extends EventEmitter {
 
 				// Assemble partial CCs on the driver level. Only forward complete messages to the send thread machine
 				if (!this.assemblePartialCCs(msg)) return;
-			} else if (isTransmitReport(msg) && msg.isOK()) {
-				// The node acknowledged a message so it must be awake - refresh its awake timer (GH#1068)
-				const node = msg.getNodeUnsafe();
-				if (node && node.supportsCC(CommandClasses["Wake Up"])) {
-					node.refreshAwakeTimer();
-				}
 			}
 
 			this.driverLog.logMessage(msg, { direction: "inbound" });
@@ -2062,8 +2043,6 @@ ${handlers.length} left`,
 			if (expirationTimeout) clearTimeout(expirationTimeout);
 			if (node) {
 				if (node.supportsCC(CommandClasses["Wake Up"])) {
-					// The node responded, refresh its awake timer
-					node.refreshAwakeTimer();
 					// If the node is not meant to be kept awake, try to send it back to sleep
 					if (!node.keepAwake) {
 						this.debounceSendNodeToSleep(node);

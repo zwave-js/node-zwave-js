@@ -198,20 +198,7 @@ export class ZWaveNode extends Endpoint {
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
 
 		// Create and hook up the status machine
-		this.statusMachine = interpretEx(
-			createNodeStatusMachine(
-				this,
-				{
-					notifyAwakeTimeoutElapsed: () => {
-						this.driver.driverLog.print(
-							`The awake timeout for node ${this.id} has elapsed. Assuming it is asleep.`,
-							"verbose",
-						);
-					},
-				},
-				driver.options.timeouts,
-			),
-		);
+		this.statusMachine = interpretEx(createNodeStatusMachine(this));
 		this.statusMachine.onTransition((state) => {
 			if (state.changed) {
 				this.onStatusChange(
@@ -417,14 +404,6 @@ export class ZWaveNode extends Endpoint {
 	 */
 	public markAsAwake(): void {
 		this.statusMachine.send("AWAKE");
-	}
-
-	/**
-	 * @internal
-	 * Call this whenever a node responds to an active request to refresh the time it is assumed awake
-	 */
-	public refreshAwakeTimer(): void {
-		this.statusMachine.send("TRANSACTION_COMPLETE");
 	}
 
 	// The node is only ready when the interview has been completed

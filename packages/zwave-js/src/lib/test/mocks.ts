@@ -90,7 +90,6 @@ export function createEmptyMockDriver() {
 				report: 1600,
 				nonce: 5000,
 				sendDataCallback: 65000,
-				nodeAwake: 10000,
 			},
 			attempts: {
 				sendData: 3,

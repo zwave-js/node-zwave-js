@@ -1,6 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
 import { Interpreter, Machine, StateMachine } from "xstate";
-import type { ZWaveOptions } from "../driver/Driver";
 import type { ZWaveNode } from "./Node";
 import { NodeStatus } from "./Types";
 
@@ -35,8 +34,7 @@ export type NodeStatusEvent =
 	| { type: "DEAD" }
 	| { type: "ALIVE" }
 	| { type: "ASLEEP" }
-	| { type: "AWAKE" }
-	| { type: "TRANSACTION_COMPLETE" };
+	| { type: "AWAKE" };
 
 export type NodeStatusMachine = StateMachine<
 	any,
@@ -49,17 +47,7 @@ export type NodeStatusInterpreter = Interpreter<
 	NodeStatusEvent
 >;
 
-export interface NodeStatusServiceImplementations {
-	notifyAwakeTimeoutElapsed: () => void;
-}
-
-export type NodeStatusTimeouts = Pick<ZWaveOptions["timeouts"], "nodeAwake">;
-
-export function createNodeStatusMachine(
-	node: ZWaveNode,
-	implementations: NodeStatusServiceImplementations,
-	timeoutConfig: NodeStatusTimeouts,
-): NodeStatusMachine {
+export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
 	return Machine<any, NodeStatusStateSchema, NodeStatusEvent>(
 		{
 			id: "nodeStatus",
@@ -109,15 +97,6 @@ export function createNodeStatusMachine(
 				awake: {
 					on: {
 						ASLEEP: "asleep",
-						TRANSACTION_COMPLETE: "awake",
-					},
-					after: {
-						AWAKE_TIMEOUT: {
-							target: "asleep",
-							actions: () => {
-								implementations.notifyAwakeTimeoutElapsed();
-							},
-						},
 					},
 				},
 			},
@@ -133,9 +112,7 @@ export function createNodeStatusMachine(
 					!node.supportsCC(CommandClasses["Wake Up"]),
 				// mayRetry: (ctx) => ctx.attempts < ctx.maxAttempts,
 			},
-			delays: {
-				AWAKE_TIMEOUT: timeoutConfig.nodeAwake,
-			},
+			delays: {},
 		},
 	);
 }
