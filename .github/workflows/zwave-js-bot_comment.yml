@@ -385,3 +385,118 @@ jobs:
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
           return bot.renameCommitFeedback({github, context});
+
+  # #########################################################################
+  # Imports a config file when an authorized person posts "@zwave-js-bot import config <device-id> from <source>"
+  import-config:
+    if: |
+      contains(github.event.issue.html_url, '/issues/') &&
+      contains(github.event.comment.body, '@zwave-js-bot import config') &&
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout master branch
+      uses: actions/checkout@v2
+ 
+    - name: Check user's permissions to do this
+      id: check-permissions
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.checkAuthorized({github, context});
+
+    # These steps only run if the check was successful
+    - name: Use Node.js ${{ matrix.node-version }}
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      if: steps.check-permissions.outputs.result == 'true'
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    - name: Compile TypeScript code
+      # We need this or the linter will complain about other stuff than the checks
+      run: yarn run build
+
+    - name: Get config file ID
+      id: config-id
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const body = context.payload.comment.body;
+          const match = /import config (?<ids>[a-z0-9_:, -]{1,}?) from (?<source>\w+)/.exec(body);
+          if (!match) return {skip: true};
+          return {
+            source: match.groups.source,
+            ids: match.groups.ids,
+          }
+
+    - name: Import config files
+      if: |
+        steps.check-permissions.outputs.result == 'true' &&
+        !fromJSON(steps.config-id.outputs.result).skip
+      id: import
+      env:
+        source: ${{ fromJSON(steps.config-id.outputs.result).source }}
+        ids: ${{ fromJSON(steps.config-id.outputs.result).ids }}
+      run: |
+        yarn run config import -s "$source" -Dd --ids "$ids"
+        branchname="import-config-$(date +'%s')"
+        commitmessage="feat(config): import config files from $source"
+
+        # Check if something changed
+        git config user.email "bot@zwave.js"
+        git config user.name "Z-Wave JS Bot"
+        git checkout -b "$branchname"
+        git add -A
+
+        if ! git diff --quiet HEAD -- packages/config/config/devices/ ; then
+          git commit -m "$commitmessage"
+          git push --set-upstream origin "$branchname"
+
+          echo "::set-output name=result::success"
+          echo "::set-output name=branchname::$branchname"
+          echo "::set-output name=commitmessage::$commitmessage"
+        else
+          echo "::set-output name=result::unchanged"
+          exit 0
+        fi
+
+    - name: Create PR
+      uses: actions/github-script@v3
+      env:
+        RESULT: ${{ steps.import.outputs.result }}
+        branchname: ${{ steps.import.outputs.branchname }}
+        commitmessage: ${{ steps.import.outputs.commitmessage }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.importConfigCreatePR({github, context});
+
+

@@ -12,18 +12,26 @@ async function main(param) {
 		owner: context.repo.owner,
 		repo: context.repo.repo,
 	};
-	const { data: pull } = await github.pulls.get({
-		...options,
-		pull_number: context.payload.issue.number,
-	});
 
-	// Only the pull request author and authorized users may execute this command
-	if (
-		![...authorizedUsers, pull.user.login].includes(
-			context.payload.comment.user.login,
-		)
-	) {
-		return false;
+	if (context.payload.issue.html_url.includes("/pulls/")) {
+		// Only the pull request author and authorized users may execute this command
+		const { data: pull } = await github.pulls.get({
+			...options,
+			pull_number: context.payload.issue.number,
+		});
+
+		if (
+			![...authorizedUsers, pull.user.login].includes(
+				context.payload.comment.user.login,
+			)
+		) {
+			return false;
+		}
+	} else {
+		// In issues, only the authorized users may execute any commands
+		if (!authorizedUsers.includes(context.payload.comment.user.login)) {
+			return false;
+		}
 	}
 
 	// Let the user know we're working on it
