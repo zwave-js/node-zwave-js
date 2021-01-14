@@ -37,6 +37,7 @@ import {
 	commandClass,
 	CommandClass,
 	CommandClassDeserializationOptions,
+	CommandClassOptions,
 	expectedCCResponse,
 	gotDeserializationOptions,
 	implementedVersion,
@@ -81,6 +82,8 @@ const ColorComponentMap = {
 	index: ColorComponent.Index,
 };
 type ColorKey = keyof typeof ColorComponentMap;
+
+const hexColorRegex = /^#?(?<red>[0-9a-f]{2})(?<green>[0-9a-f]{2})(?<blue>[0-9a-f]{2})$/i;
 
 // Accept both the kebabCase names and numeric components as table keys
 /**
@@ -138,6 +141,22 @@ function getTargetColorValueID(
 		property: "targetColor",
 		endpoint: endpointIndex,
 		propertyKey: component,
+	};
+}
+
+function getSupportsHexColorValueID(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Color Switch"],
+		property: "supportsHexColor",
+		endpoint: endpointIndex,
+	};
+}
+
+function getHexColorValueID(endpointIndex: number): ValueID {
+	return {
+		commandClass: CommandClasses["Color Switch"],
+		property: "hexColor",
+		endpoint: endpointIndex,
 	};
 }
 
@@ -243,25 +262,50 @@ export class ColorSwitchCCAPI extends CCAPI {
 		{ property, propertyKey },
 		value,
 	) => {
-		if (property !== "targetColor") {
+		if (property === "targetColor") {
+			if (propertyKey == undefined) {
+				throwMissingPropertyKey(this.ccId, property);
+			} else if (typeof propertyKey !== "number") {
+				throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+			}
+
+			// Single color component, only accepts numbers
+			if (typeof value !== "number") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"number",
+					typeof value,
+				);
+			}
+
+			await this.set({ [propertyKey]: value });
+
+			if (this.isSinglecast()) {
+				// Refresh the current value
+				await this.get(propertyKey);
+			}
+		} else if (property === "hexColor") {
+			// No property key, this is the hex color #rrggbb
+			if (typeof value !== "string") {
+				throwWrongValueType(
+					this.ccId,
+					property,
+					"string",
+					typeof value,
+				);
+			}
+
+			await this.set({ hexColor: value });
+
+			if (this.isSinglecast()) {
+				// Refresh the current values
+				await this.get(ColorComponent.Red);
+				await this.get(ColorComponent.Green);
+				await this.get(ColorComponent.Blue);
+			}
+		} else {
 			throwUnsupportedProperty(this.ccId, property);
-		}
-		if (typeof value !== "number") {
-			throwWrongValueType(this.ccId, property, "number", typeof value);
-		}
-
-		if (propertyKey == undefined) {
-			// Might want to treat keyless value as hex "#wwccrrggbb"
-			throwMissingPropertyKey(this.ccId, property);
-		} else if (typeof propertyKey !== "number") {
-			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		}
-
-		await this.set({ [propertyKey]: value });
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get(propertyKey);
 		}
 	};
 }
@@ -270,6 +314,11 @@ export class ColorSwitchCCAPI extends CCAPI {
 @implementedVersion(3)
 export class ColorSwitchCC extends CommandClass {
 	declare ccCommand: ColorSwitchCommand;
+
+	public constructor(driver: Driver, options: CommandClassOptions) {
+		super(driver, options);
+		this.registerValue(getSupportsHexColorValueID(0).property, true);
+	}
 
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
@@ -322,6 +371,24 @@ export class ColorSwitchCC extends CommandClass {
 						description: `The target value of the ${colorName} color.`,
 					},
 				);
+			}
+			// Create the collective HEX color values
+			const supportsHex = [
+				ColorComponent.Red,
+				ColorComponent.Green,
+				ColorComponent.Blue,
+			].every((c) => supportedColors.includes(c));
+			valueDB.setValue(
+				getSupportsHexColorValueID(this.endpointIndex),
+				supportsHex,
+			);
+			if (supportsHex) {
+				valueDB.setMetadata(getHexColorValueID(this.endpointIndex), {
+					...ValueMetadata.Color,
+					minLength: 6,
+					maxLength: 7, // to allow #rrggbb
+					label: `RGB Color`,
+				});
 			}
 		} else {
 			supportedColors = valueDB.getValue<ColorComponent[]>(
@@ -432,12 +499,37 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 		);
 		valueDB.setValue(valueId, this.currentValue);
 
+		// Update target value if required
 		if (this.targetValue != undefined) {
 			const targetValueId = getTargetColorValueID(
 				this.endpointIndex,
 				this.colorComponent,
 			);
 			valueDB.setValue(targetValueId, this.targetValue);
+		}
+
+		// Update collective hex value if required
+		const supportsHex = valueDB.getValue<boolean>(
+			getSupportsHexColorValueID(this.endpointIndex),
+		);
+		if (
+			supportsHex &&
+			(this.colorComponent === ColorComponent.Red ||
+				this.colorComponent === ColorComponent.Green ||
+				this.colorComponent === ColorComponent.Blue)
+		) {
+			const hexValueId = getHexColorValueID(this.endpointIndex);
+			const hexValue = valueDB.getValue<string>(hexValueId) ?? "000000";
+			const byteOffset = ColorComponent.Blue - this.colorComponent;
+			const byteMask = 0xff << (byteOffset * 8);
+			let hexValueNumeric = parseInt(hexValue, 16);
+			hexValueNumeric =
+				(hexValueNumeric & ~byteMask) |
+				(this.currentValue << (byteOffset * 8));
+			valueDB.setValue(
+				hexValueId,
+				hexValueNumeric.toString(16).padStart(6, "0"),
+			);
 		}
 
 		// For duration, which is stored globally instead of per component
@@ -451,7 +543,7 @@ export class ColorSwitchCCReport extends ColorSwitchCC {
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.Duration,
-		label: "Transition duration",
+		label: "Remaining duration",
 	})
 	public readonly duration: Duration | undefined;
 
@@ -538,7 +630,7 @@ export class ColorSwitchCCGet extends ColorSwitchCC {
 	}
 }
 
-export type ColorSwitchCCSetOptions = ColorTable & {
+export type ColorSwitchCCSetOptions = (ColorTable | { hexColor: string }) & {
 	duration?: Duration;
 };
 
@@ -559,7 +651,22 @@ export class ColorSwitchCCSet extends ColorSwitchCC {
 			);
 		} else {
 			// Populate properties from options object
-			this.colorTable = pick(options, colorTableKeys as any[]);
+			if ("hexColor" in options) {
+				const match = hexColorRegex.exec(options.hexColor);
+				if (!match) {
+					throw new ZWaveError(
+						`${options.hexColor} is not a valid HEX color string`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+				this.colorTable = {
+					red: parseInt(match.groups!.red, 16),
+					green: parseInt(match.groups!.green, 16),
+					blue: parseInt(match.groups!.blue, 16),
+				};
+			} else {
+				this.colorTable = pick(options, colorTableKeys as any[]);
+			}
 			this.duration = options.duration;
 		}
 	}
