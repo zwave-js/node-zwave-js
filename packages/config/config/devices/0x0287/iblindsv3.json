@@ -57,7 +57,7 @@
 		},
 		"4": {
 			"label": "Default ON Value",
-			"description": "Value that iblinds will open to by Default\n      Default: 50",
+			"description": "Value that iblinds will open to by Default",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
