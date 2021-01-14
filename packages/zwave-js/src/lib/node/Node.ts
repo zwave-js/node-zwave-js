@@ -2118,15 +2118,20 @@ version:               ${this.version}`;
 				this.driver.controllerLog.logNode(this.id, {
 					message: "treating BasicCC Set as a value event",
 				});
-				this._valueDB.setValue(
-					{
-						commandClass: CommandClasses.Basic,
-						endpoint: command.endpointIndex,
-						property: "value",
-					},
-					command.targetValue,
-					{ stateful: false },
-				);
+				const valueId: ValueID = {
+					commandClass: CommandClasses.Basic,
+					endpoint: command.endpointIndex,
+					property: "value",
+				};
+				if (!this._valueDB.hasMetadata(valueId)) {
+					this._valueDB.setMetadata(valueId, {
+						...ValueMetadata.ReadOnlyUInt8,
+						label: "Event value",
+					});
+				}
+				this._valueDB.setValue(valueId, command.targetValue, {
+					stateful: false,
+				});
 				return;
 			}
 
