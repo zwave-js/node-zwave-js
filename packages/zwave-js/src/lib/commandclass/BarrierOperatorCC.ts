@@ -36,7 +36,7 @@ export enum BarrierOperatorCommand {
 /**
  * @publicAPI
  */
-export enum State {
+export enum BarrierState {
 	Closed = 0x00,
 	Closing = 0xfc,
 	Stopped = 0xfd,
@@ -63,7 +63,7 @@ export class BarrierOperatorCC extends CommandClass {
 }
 
 interface BarrierOperatorCCSetOptions extends CCCommandOptions {
-	state: State.Open | State.Closed;
+	state: BarrierState.Open | BarrierState.Closed;
 }
 
 @CCCommand(BarrierOperatorCommand.Set)
@@ -85,18 +85,17 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 		}
 	}
 
-	public state: State.Open | State.Closed;
+	public state: BarrierState.Open | BarrierState.Closed;
 
 	public serialize(): Buffer {
-		const payload: number[] = [this.state ? 0xff : 0x00];
-		this.payload = Buffer.from(payload);
+		this.payload = Buffer.from([this.state]);
 		return super.serialize();
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
-			message: { "state value": this.state },
+			message: { "target state": this.state },
 		};
 	}
 }
@@ -133,14 +132,14 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 		this.persistValues();
 	}
 
-	private _state: State | undefined;
+	private _state: BarrierState | undefined;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Barrier State",
-		states: enumValuesToMetadataStates(State),
+		states: enumValuesToMetadataStates(BarrierState),
 	})
-	public get state(): State | undefined {
+	public get state(): BarrierState | undefined {
 		return this._state;
 	}
 
@@ -188,19 +187,15 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 }
 
 @CCCommand(BarrierOperatorCommand.CapabilitiesGet)
-@expectedCCResponse(BarrierOperatorCCCapabilities)
+@expectedCCResponse(BarrierOperatorCCCapabilitiesReport)
 export class BarrierOperatorCCCapabilitiesGet extends BarrierOperatorCC {}
 
-/* NEED: Help on this
-   Place holders
-*/
 interface BarrierOperatorCCEventSetOptions extends CCCommandOptions {
 	signalType: SignalType;
 	signalState: SignalState;
 }
 
 @CCCommand(BarrierOperatorCommand.EventSet)
-@expectedCCResponse(BarrierOperatorCCReport)
 export class BarrierOperatorCCEventSet extends BarrierOperatorCC {
 	public constructor(
 		driver: Driver,
@@ -216,16 +211,57 @@ export class BarrierOperatorCCEventSet extends BarrierOperatorCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			// TODO: Populate properties from options object
-			throw new Error("not implemented");
+			this.type = options.signalType;
+			this.state = options.signalState;
 		}
 	}
+	public type: SignalType;
+	public state: SignalState;
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			/* TODO: serialize */
+			(this.payload[0] = this.type),
+			(this.payload[1] = this.state),
 		]);
 		return super.serialize();
+	}
+}
+
+@CCCommand(BarrierOperatorCommand.Report)
+export class BarrierOperatorCCEventReport extends BarrierOperatorCC {
+	public constructor(
+		driver: Driver,
+		options: CommandClassDeserializationOptions,
+	) {
+		super(driver, options);
+
+		validatePayload(this.payload.length >= 2);
+		this._type = this.payload[0];
+		this._state = this.payload[1];
+
+		this.persistValues();
+	}
+
+	private _type: SignalType | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		label: "Event Signal Type",
+		states: enumValuesToMetadataStates(SignalType),
+	})
+	public get type(): SignalType | undefined {
+		return this._type;
+	}
+
+	private _state: SignalState | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		label: "Event Signal State",
+		states: enumValuesToMetadataStates(SignalState),
+	})
+	public get state(): SignalState | undefined {
+		return this._state;
 	}
 }
 
@@ -234,7 +270,7 @@ interface BarrierOperatorCCEventGetOptions extends CCCommandOptions {
 }
 
 @CCCommand(BarrierOperatorCommand.EventGet)
-@expectedCCResponse(BarrierOperatorCCReport)
+@expectedCCResponse(BarrierOperatorCCEventReport)
 export class BarrierOperatorCCEventGet extends BarrierOperatorCC {
 	public constructor(
 		driver: Driver,
