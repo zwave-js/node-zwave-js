@@ -1,7 +1,7 @@
-// Jasco Products 46201
+// GE/Jasco 46201
 // GE Quick-fit Smart In-Wall Paddle Switch
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "46201",
 	"description": "GE Quick-fit Smart In-Wall Paddle Switch",

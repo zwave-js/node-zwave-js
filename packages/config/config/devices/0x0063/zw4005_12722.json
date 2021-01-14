@@ -1,7 +1,7 @@
-// Jasco Products ZW4005, 12722
+// GE/Jasco ZW4005, 12722
 // On/Off Relay Switch
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "ZW4005, 12722",
 	"description": "On/Off Relay Switch",

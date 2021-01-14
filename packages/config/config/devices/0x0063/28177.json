@@ -1,7 +1,7 @@
-// Jasco Products 28177
+// GE/Jasco 28177
 // GE Z-Wave Plus Wireless Smart Lighting Control Appliance Module
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "28177",
 	"description": "GE Z-Wave Plus Wireless Smart Lighting Control Appliance Module",

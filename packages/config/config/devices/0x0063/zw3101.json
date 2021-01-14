@@ -1,7 +1,7 @@
-// Jasco Products ZW3101
+// GE/Jasco ZW3101
 // Lamp Module
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "ZW3101",
 	"description": "Lamp Module",

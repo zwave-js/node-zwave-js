@@ -1,7 +1,7 @@
-// Jasco Products 46203
+// GE/Jasco 46203
 // GE Enbrighten Z-Wave Plus Smart Dimmer
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "46203",
 	"description": "GE Enbrighten Z-Wave Plus Smart Dimmer",

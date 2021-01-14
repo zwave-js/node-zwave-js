@@ -1,7 +1,7 @@
-// Jasco Products GE/Jasco 14299
+// GE/Jasco/Jasco 14299
 // GE/Jasco In-Wall 1000W Incandescent Smart Dimmer
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "GE/Jasco 14299",
 	"description": "GE/Jasco In-Wall 1000W Incandescent Smart Dimmer",

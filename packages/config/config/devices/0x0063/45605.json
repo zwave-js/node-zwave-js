@@ -1,7 +1,7 @@
-// Jasco Products 45605
+// GE/Jasco 45605
 // Duplex receptacle
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "45605",
 	"description": "Duplex receptacle",

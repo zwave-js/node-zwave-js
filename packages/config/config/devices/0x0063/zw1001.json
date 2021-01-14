@@ -1,7 +1,7 @@
-// Jasco Products ZW1001
+// GE/Jasco ZW1001
 // Smart Outlet
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "ZW1001",
 	"description": "Smart Outlet",

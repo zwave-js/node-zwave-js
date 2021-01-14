@@ -1,9 +1,9 @@
-// Jasco Products GE 14292
+// GE/Jasco 14292
 // In-Wall Toggle Switch
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "GE 14292",
+	"label": "14292",
 	"description": "In-Wall Toggle Switch",
 	"devices": [
 		{

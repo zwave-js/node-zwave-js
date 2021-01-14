@@ -1,7 +1,7 @@
-// Jasco Products Jasco 14318
+// GE/Jasco Jasco 14318
 // Jasco 3-way Light Switch
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "Jasco 14318",
 	"description": "Jasco 3-way Light Switch",

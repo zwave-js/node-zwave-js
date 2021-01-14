@@ -1,9 +1,9 @@
-// Jasco Products GE 28175 (ZW3106)
+// GE/Jasco 28175 (ZW3106)
 // Plug-In Dual Smart Dimmer
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "GE 28175 (ZW3106)",
+	"label": "28175 (ZW3106)",
 	"description": "Plug-In Dual Smart Dimmer",
 	"devices": [
 		{

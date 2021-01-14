@@ -1,9 +1,9 @@
-// Jasco Products GE ZW4004
+// GE/Jasco ZW4004
 // GE Z-Wave Wireless Smart Lighting and Appliance Control - 40 Amp
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "GE ZW4004",
+	"label": "ZW4004",
 	"description": "GE Z-Wave Wireless Smart Lighting and Appliance Control - 40 Amp",
 	"devices": [
 		{
