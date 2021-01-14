@@ -1073,6 +1073,19 @@ export class Driver extends EventEmitter {
 			);
 		});
 
+		// Remove the node id from all cached neighbor lists and asynchronously make the affected nodes update their neighbor lists
+		for (const otherNode of this.controller.nodes.values()) {
+			if (otherNode !== node && otherNode.neighbors.includes(node.id)) {
+				otherNode.removeNodeFromCachedNeighbors(node.id);
+				otherNode.queryNeighborsInternal().catch((err) => {
+					this.driverLog.print(
+						`Failed to update neighbors for node ${otherNode.id}: ${err.message}`,
+						"warn",
+					);
+				});
+			}
+		}
+
 		// And clean up all remaining resources used by the node
 		node.destroy();
 
