@@ -825,6 +825,10 @@ export class ZWaveNode extends Endpoint {
 	 * Otherwise the node information may become inconsistent.
 	 */
 	public async refreshInfo(): Promise<void> {
+		// preserve the node name and location, since they might not be stored on the node
+		const name = this.name;
+		const location = this.location;
+
 		this._interviewAttempts = 0;
 		this.interviewStage = InterviewStage.None;
 		this._nodeInfoReceived = false;
@@ -847,6 +851,10 @@ export class ZWaveNode extends Endpoint {
 		// Restart all state machines
 		this.readyMachine.restart();
 		this.statusMachine.restart();
+
+		// Restore the previously saved name/location
+		if (name != undefined) this.name = name;
+		if (location != undefined) this.location = location;
 
 		// Also remove the information from the cache
 		await this.driver.saveNetworkToCache();
