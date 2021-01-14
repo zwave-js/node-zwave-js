@@ -331,6 +331,11 @@ export class ConfigManager {
 		return this.meters.get(meterType);
 	}
 
+	public getMeterName(meterType: number): string {
+		const meter = this.lookupMeter(meterType);
+		return meter?.name ?? `UNKNOWN (${num2hex(meterType)})`;
+	}
+
 	/** Looks up a scale definition for a given meter type */
 	public lookupMeterScale(type: number, scale: number): MeterScale {
 		const meter = this.lookupMeter(type);

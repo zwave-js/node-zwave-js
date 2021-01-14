@@ -216,6 +216,18 @@ describe("lib/commandclass/MeterCC => ", () => {
 		expect(cc.scale.key).toBe(9);
 	});
 
+	it("the value IDs should be translated correctly", () => {
+		expect(
+			node1["translateValueID"]({
+				commandClass: CommandClasses.Meter,
+				property: "value",
+				propertyKey: 329986,
+			}),
+		).toMatchObject({
+			propertyKeyName: "Cooling_Unknown (0x09)_Produced",
+		});
+	});
+
 	it("the SupportedReport command (V2/V3) should be deserialized correctly", () => {
 		const ccData = buildCCBuffer(
 			Buffer.from([
@@ -256,6 +268,28 @@ describe("lib/commandclass/MeterCC => ", () => {
 		expect(cc.supportedRateTypes).toEqual([RateType.Produced]);
 		expect(cc.supportedScales).toEqual([0, 7, 15]);
 	});
+
+	// it("the SupportedReport command (V4/V5) should be deserialized correctly", () => {
+	// 	const ccData = buildCCBuffer(
+	// 		Buffer.from([
+	// 			MeterCommand.SupportedReport, // CC Command
+	// 			0b1_10_10101, // supports reset, rate types,type
+	// 			0b1_0000001, // more scale types, supported scales
+	// 			2, // scales to follow
+	// 			1,
+	// 			1,
+	// 		]),
+	// 	);
+	// 	const cc = new MeterCCSupportedReport(fakeDriver, {
+	// 		nodeId: 1,
+	// 		data: ccData,
+	// 	});
+
+	// 	expect(cc.type).toBe(21);
+	// 	expect(cc.supportsReset).toBeTrue();
+	// 	expect(cc.supportedRateTypes).toEqual([RateType.Produced]);
+	// 	expect(cc.supportedScales).toEqual([0, 7, 15]);
+	// });
 
 	it("deserializing an unsupported command should return an unspecified version of MeterCC", () => {
 		const serializedCC = buildCCBuffer(
