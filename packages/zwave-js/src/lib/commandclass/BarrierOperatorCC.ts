@@ -237,8 +237,8 @@ export class BarrierOperatorCCEventSet extends BarrierOperatorCC {
 
 	public serialize(): Buffer {
 		this.payload = Buffer.from([
-			(this.payload[0] = this.type),
-			(this.payload[1] = this.state),
+			this.type,
+			this.state,
 		]);
 		return super.serialize();
 	}
