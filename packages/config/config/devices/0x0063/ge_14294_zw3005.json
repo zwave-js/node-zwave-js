@@ -80,27 +80,6 @@
 				}
 			]
 		},
-		"5": {
-			"label": "Ignore Start-Level (Receiving)",
-			"description": "This dimmer will start dimming from its current level.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
-		},
 		"7": {
 			"label": "On/Off Command Dim Step",
 			"description": "Indicates how many levels the dimmer will change per step.",
