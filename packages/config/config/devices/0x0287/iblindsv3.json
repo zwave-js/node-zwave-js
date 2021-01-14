@@ -91,7 +91,7 @@
 		},
 		"6": {
 			"label": "Speed",
-			"description": "How fast iblinds will close in seconds\n      Default:0",
+			"description": "How fast iblinds will close in seconds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
