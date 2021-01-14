@@ -2,7 +2,7 @@
 	"manufacturer": "HAB Home Intelligence LLC",
 	"manufacturerId": "0x0287",
 	"label": "iblinds V3",
-	"description": "Roller Shutter",
+	"description": "Window Blind Controller",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -51,6 +51,28 @@
 				},
 				{
 					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"3": {
+			"label": "Send Reports",
+			"description": "Used to disable Z-Wave Report. This is useful for systems that poll iblinds immediately after sending a position command. Disable if this an immediate report is causing iblinds motor to function improperly.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
 					"value": 1
 				}
 			]
