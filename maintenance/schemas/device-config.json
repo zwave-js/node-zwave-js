@@ -228,6 +228,9 @@
 				},
 				"skipConfigurationInfoQuery": {
 					"const": true
+				},
+				"treatBasicSetAsEvent": {
+					"const": true
 				}
 			},
 			"additionalProperties": false

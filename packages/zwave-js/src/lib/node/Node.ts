@@ -2121,6 +2121,28 @@ version:               ${this.version}`;
 				}
 			}
 		} else if (command instanceof BasicCCSet) {
+			// Treat BasicCCSet as value events if desired
+			if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: "treating BasicCC Set as a value event",
+				});
+				const valueId: ValueID = {
+					commandClass: CommandClasses.Basic,
+					endpoint: command.endpointIndex,
+					property: "value",
+				};
+				if (!this._valueDB.hasMetadata(valueId)) {
+					this._valueDB.setMetadata(valueId, {
+						...ValueMetadata.ReadOnlyUInt8,
+						label: "Event value",
+					});
+				}
+				this._valueDB.setValue(valueId, command.targetValue, {
+					stateful: false,
+				});
+				return;
+			}
+
 			// Some devices send their current state using `BasicCCSet`s to their associations
 			// instead of using reports. We still interpret them like reports
 			this.driver.controllerLog.logNode(this.id, {

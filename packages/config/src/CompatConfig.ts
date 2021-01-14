@@ -103,6 +103,18 @@ error in compat option skipConfigurationInfoQuery`,
 				definition.skipConfigurationInfoQuery;
 		}
 
+		if (definition.treatBasicSetAsEvent != undefined) {
+			if (definition.treatBasicSetAsEvent !== true) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option treatBasicSetAsEvent`,
+				);
+			}
+
+			this.treatBasicSetAsEvent = definition.treatBasicSetAsEvent;
+		}
+
 		if (definition.commandClasses != undefined) {
 			if (!isObject(definition.commandClasses)) {
 				throwInvalidConfig(
@@ -160,6 +172,7 @@ All values in compat option commandClasses.add must be objects`,
 	public readonly keepS0NonceUntilNext?: boolean;
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
 	public readonly skipConfigurationInfoQuery?: boolean;
+	public readonly treatBasicSetAsEvent?: boolean;
 	public readonly queryOnWakeup?: readonly [
 		string,
 		string,
