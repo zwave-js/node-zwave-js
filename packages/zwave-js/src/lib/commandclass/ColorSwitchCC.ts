@@ -384,10 +384,10 @@ export class ColorSwitchCC extends CommandClass {
 			);
 			if (supportsHex) {
 				valueDB.setMetadata(getHexColorValueID(this.endpointIndex), {
-					...ValueMetadata.String,
+					...ValueMetadata.Color,
 					minLength: 6,
 					maxLength: 7, // to allow #rrggbb
-					label: `RGB Hex color`,
+					label: `RGB Color`,
 				});
 			}
 		} else {

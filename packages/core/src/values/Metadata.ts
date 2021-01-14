@@ -34,6 +34,7 @@ export type ValueType =
 	| "boolean[]"
 	| "string[]"
 	| "duration"
+	| "color"
 	| "any";
 
 export interface ValueMetadataAny {
@@ -76,7 +77,7 @@ export interface ValueMetadataBoolean extends ValueMetadataAny {
 }
 
 export interface ValueMetadataString extends ValueMetadataAny {
-	type: "string";
+	type: "string" | "color";
 	/** The minimum length this string must have (optional) */
 	minLength?: number;
 	/** The maximum length this string may have (optional) */
@@ -324,15 +325,33 @@ const String: ValueMetadataString = {
 	type: "string",
 };
 
-/** Unsigned string (readonly) */
+/** Any string (readonly) */
 const ReadOnlyString: ValueMetadataString = {
 	...String,
 	..._readonly,
 };
 
-/** Unsigned string (writeonly) */
+/** Any string (writeonly) */
 const WriteOnlyString: ValueMetadataString = {
 	...String,
+	..._writeonly,
+};
+
+/** A (hex) string that represents a color */
+const Color: ValueMetadataString = {
+	...String,
+	type: "color",
+};
+
+/** A (hex) string that represents a color (readonly) */
+const ReadOnlyColor: ValueMetadataString = {
+	...Color,
+	..._readonly,
+};
+
+/** A (hex) string that represents a color (writeonly) */
+const WriteOnlyColor: ValueMetadataString = {
+	...Color,
 	..._writeonly,
 };
 
@@ -461,6 +480,13 @@ export const ValueMetadata = {
 	ReadOnlyString: Object.freeze(ReadOnlyString),
 	/** A string (writeonly) */
 	WriteOnlyString: Object.freeze(WriteOnlyString),
+
+	/** A (hex) string that represents a color */
+	Color: Object.freeze(Color),
+	/** A (hex) string that represents a color (readonly) */
+	ReadOnlyColor: Object.freeze(ReadOnlyColor),
+	/** A (hex) string that represents a color (writeonly) */
+	WriteOnlyColor: Object.freeze(WriteOnlyColor),
 
 	/** A duration value */
 	Duration: Object.freeze(_Duration),
