@@ -390,7 +390,7 @@ jobs:
   # Imports a config file when an authorized person posts "@zwave-js-bot import config <device-id> from <source>"
   import-config:
     if: |
-      contains(github.event.issue.html_url, '/pull/') &&
+      contains(github.event.issue.html_url, '/issues/') &&
       contains(github.event.comment.body, '@zwave-js-bot import config') &&
       (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
 
@@ -462,20 +462,22 @@ jobs:
         !fromJSON(steps.config-id.outputs.result).skip
       id: import
       env:
-        source: "${{ fromJSON(steps.config-id.outputs.result) }}.source"
-        ids: "${{ fromJSON(steps.config-id.outputs.result) }}.ids"
+        source: ${{ fromJSON(steps.config-id.outputs.result).source }}
+        ids: ${{ fromJSON(steps.config-id.outputs.result).ids }}
       run: |
-        yarn run config import -s "$source" --ids "$ids"
+        yarn run config import -s "$source" -Dd --ids "$ids"
         branchname="import-config-$(date +'%s')"
         commitmessage="feat(config): import config files from $source"
 
         # Check if something changed
-        if ! git diff --quiet -- packages/config/config/devices/ ; then
-          git config user.email "bot@zwave.js"
-          git config user.name "Z-Wave JS Bot"
-          git checkout -b "$branchname"
-          git add -A
-          git commit -m "feat(config): import config files from $source"
+        git config user.email "bot@zwave.js"
+        git config user.name "Z-Wave JS Bot"
+        git checkout -b "$branchname"
+        git add -A
+
+        if ! git diff --quiet HEAD -- packages/config/config/devices/ ; then
+          git commit -m "$commitmessage"
+          git push --set-upstream origin "$branchname"
 
           echo "::set-output name=result::success"
           echo "::set-output name=branchname::$branchname"

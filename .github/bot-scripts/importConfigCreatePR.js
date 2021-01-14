@@ -49,7 +49,7 @@ async function main(param) {
 	await github.issues.createComment({
 		...options,
 		issue_number: context.payload.issue.number,
-		body: `🔨 I created a PR at #${prNumber}!`,
+		body: `🔨 I created a PR at #${prNumber} - check it out!`,
 	});
 }
 module.exports = main;
