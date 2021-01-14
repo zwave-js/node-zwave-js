@@ -1,8 +1,8 @@
 {
 	"manufacturer": "HAB Home Intelligence LLC",
 	"manufacturerId": "0x0287",
-	"label": "IBLINDSV3",
-	"description": "iblinds V3",
+	"label": "iblinds V3",
+	"description": "Roller Shutter",
 	"devices": [
 		{
 			"productType": "0x0004",
@@ -23,7 +23,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Close Interval",
-			"description": "Auto Calibration Tightness. Lower value = tighter, Higher value = looser (MUST BE RECALIBRATED). Range:16-32",
+			"description": "Auto Calibration Tightness. Lower value = tighter, Higher value = looser (MUST BE RECALIBRATED). Range: 16-32",
 			"valueSize": 1,
 			"minValue": 16,
 			"maxValue": 32,
@@ -46,18 +46,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "false",
+					"label": "No",
 					"value": 0
 				},
 				{
-					"label": "true",
+					"label": "Yes",
 					"value": 1
 				}
 			]
 		},
 		"4": {
 			"label": "Default ON Value",
-			"description": "Value that iblinds will open to by Default",
+			"description": "Value that iblinds will open to by default",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -80,11 +80,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "false",
+					"label": "No",
 					"value": 0
 				},
 				{
-					"label": "true",
+					"label": "Yes",
 					"value": 1
 				}
 			]
