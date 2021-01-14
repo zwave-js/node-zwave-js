@@ -2129,7 +2129,7 @@ version:               ${this.version}`;
 				const valueId: ValueID = {
 					commandClass: CommandClasses.Basic,
 					endpoint: command.endpointIndex,
-					property: "value",
+					property: "event",
 				};
 				if (!this._valueDB.hasMetadata(valueId)) {
 					this._valueDB.setMetadata(valueId, {
