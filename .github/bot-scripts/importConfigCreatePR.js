@@ -29,7 +29,10 @@ async function main(param) {
 		head: process.env.branchname,
 		base: "master",
 		title: process.env.commitmessage,
-		body: `fixes: #${context.payload.issue.number}`,
+		body: `fixes: #${context.payload.issue.number}
+
+**TODO:**
+- [ ]	Change PR title to be more specific`,
 		maintainer_can_modify: true,
 	});
 	const prNumber = pr.data.number;
