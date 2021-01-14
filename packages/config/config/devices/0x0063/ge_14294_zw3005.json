@@ -1,9 +1,9 @@
-// Jasco Products GE 14294 (ZW3005)
+// GE/Jasco 14294 (ZW3005)
 // In-Wall Dimmer Switch
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "GE 14294 (ZW3005)",
+	"label": "14294 (ZW3005)",
 	"description": "In-Wall Dimmer Switch",
 	"devices": [
 		{

@@ -1,7 +1,7 @@
-// Jasco Products ZW3102
+// GE/Jasco ZW3102
 // Jasco Energy Monitoring Lamp Dimmer
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "ZW3102",
 	"description": "Jasco Energy Monitoring Lamp Dimmer",

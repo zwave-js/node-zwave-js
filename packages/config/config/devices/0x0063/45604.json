@@ -1,7 +1,7 @@
-// Jasco Products 45604
+// GE/Jasco 45604
 // Outdoor Lighting Control Module
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "45604",
 	"description": "Outdoor Lighting Control Module",

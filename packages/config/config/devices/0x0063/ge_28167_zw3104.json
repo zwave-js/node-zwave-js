@@ -1,9 +1,9 @@
-// Jasco Products GE 28167 (ZW3104)
+// GE/Jasco 28167 (ZW3104)
 // Plug-In Smart Dimmer
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "GE 28167 (ZW3104)",
+	"label": "28167 (ZW3104)",
 	"description": "Plug-In Smart Dimmer",
 	"devices": [
 		{

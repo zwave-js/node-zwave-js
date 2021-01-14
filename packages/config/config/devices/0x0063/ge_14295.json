@@ -1,9 +1,9 @@
-// Jasco Products GE 14295
+// GE/Jasco 14295
 // In-Wall Dimmer Switch
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "GE 14295",
+	"label": "14295",
 	"description": "In-Wall Dimmer Switch",
 	"devices": [
 		{

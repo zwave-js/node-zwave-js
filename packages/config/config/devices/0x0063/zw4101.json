@@ -1,7 +1,7 @@
-// Jasco Products ZW4101
+// GE/Jasco ZW4101
 // Fluorescent Light & Appliance Module
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "ZW4101",
 	"description": "Fluorescent Light & Appliance Module",

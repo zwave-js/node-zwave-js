@@ -1,9 +1,9 @@
-// Jasco Products GE 46202
+// GE/Jasco 46202
 // GE Enbrighten Z-Wave Plus Smart Switch
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "GE 46202",
+	"label": "46202",
 	"description": "GE Enbrighten Z-Wave Plus Smart Switch",
 	"devices": [
 		{

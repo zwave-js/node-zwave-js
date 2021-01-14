@@ -1,7 +1,7 @@
-// Jasco Products GE/Jasco 14321
+// GE/Jasco/Jasco 14321
 // In-Wall Dimmer
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "GE/Jasco 14321",
 	"description": "In-Wall Dimmer",
