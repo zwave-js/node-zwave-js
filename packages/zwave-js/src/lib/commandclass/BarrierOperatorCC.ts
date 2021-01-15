@@ -1,4 +1,4 @@
-import type { MessageOrCCLogEntry } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -9,7 +9,9 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
+import { CCAPI } from "./API";
 import {
+	API,
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
@@ -66,10 +68,30 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			case BarrierOperatorCommand.EventGet:
 			case BarrierOperatorCommand.EventSet:
 				return true; // This is mandatory
-			// case BarrierOperatorCommand.SomeV2Command:
-			// 	return this.version >= 2;
 		}
 		return super.supportsCommand(cmd);
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async get() {
+		this.assertSupportsCommand(
+			BarrierOperatorCommand,
+			BarrierOperatorCommand.Get,
+		);
+
+		const cc = new BarrierOperatorCCGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<BarrierOperatorCCReport>(
+			cc,
+			this.commandOptions,
+		))!;
+		return {
+			// interpret unknown values as false
+			currentValue: response.currentValue || false,
+			targetValue: response.targetValue,
+		};
 	}
 }
 
@@ -119,6 +141,7 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 
 @CCCommand(BarrierOperatorCommand.Report)
 export class BarrierOperatorCCReport extends BarrierOperatorCC {
+	currentValue: boolean | undefined;
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -236,10 +259,7 @@ export class BarrierOperatorCCEventSet extends BarrierOperatorCC {
 	public state: SignalState;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			this.type,
-			this.state,
-		]);
+		this.payload = Buffer.from([this.type, this.state]);
 		return super.serialize();
 	}
 }
