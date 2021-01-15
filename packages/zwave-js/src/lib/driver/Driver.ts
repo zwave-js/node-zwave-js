@@ -557,7 +557,7 @@ export class Driver extends EventEmitter {
 						});
 					}
 				},
-				log: this.driverLog.print.bind(this),
+				log: this.driverLog.print.bind(this.driverLog),
 			},
 			pick(this.options, ["timeouts", "attempts"]),
 		);
