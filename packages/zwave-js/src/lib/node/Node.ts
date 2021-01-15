@@ -107,6 +107,7 @@ import {
 } from "../controller/GetRoutingInfoMessages";
 import type { Driver } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
+import type { Transaction } from "../driver/Transaction";
 import type { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
@@ -1787,13 +1788,17 @@ version:               ${this.version}`;
 		});
 
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
+		const { queue, currentTransaction } = this.driver[
+			"sendThread"
+		].state.context;
+		const isNonceReport = (t: Transaction | undefined) =>
+			!!t &&
+			t.message.getNodeId() === this.nodeId &&
+			isCommandClassContainer(t.message) &&
+			t.message.command instanceof SecurityCCNonceReport;
 		if (
-			this.driver["sendThread"].state.context.queue.find(
-				(t) =>
-					t.message.getNodeId() === this.nodeId &&
-					isCommandClassContainer(t.message) &&
-					t.message.command instanceof SecurityCCNonceReport,
-			)
+			isNonceReport(currentTransaction) ||
+			queue.find((t) => isNonceReport(t))
 		) {
 			this.driver.controllerLog.logNode(this.id, {
 				message:
