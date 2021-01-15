@@ -89,8 +89,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		))!;
 		return {
 			// interpret unknown values as false
-			currentValue: response.currentValue || false,
-			targetValue: response.targetValue,
+			currentValue: response.currentValue,
 		};
 	}
 }
