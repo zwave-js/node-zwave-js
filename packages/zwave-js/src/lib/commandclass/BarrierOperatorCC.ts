@@ -56,6 +56,23 @@ export enum SignalState {
 	ON = 0xff,
 }
 
+@API(CommandClasses["Barrier Operator"])
+export class BarrierOperatorCCAPI extends CCAPI {
+	public supportsCommand(cmd: BarrierOperatorCommand): Maybe<boolean> {
+		switch (cmd) {
+			case BarrierOperatorCommand.Get:
+			case BarrierOperatorCommand.Set:
+			case BarrierOperatorCommand.CapabilitiesGet:
+			case BarrierOperatorCommand.EventGet:
+			case BarrierOperatorCommand.EventSet:
+				return true; // This is mandatory
+			// case BarrierOperatorCommand.SomeV2Command:
+			// 	return this.version >= 2;
+		}
+		return super.supportsCommand(cmd);
+	}
+}
+
 @commandClass(CommandClasses["Barrier Operator"])
 @implementedVersion(1)
 export class BarrierOperatorCC extends CommandClass {
@@ -242,25 +259,25 @@ export class BarrierOperatorCCEventReport extends BarrierOperatorCC {
 		this.persistValues();
 	}
 
-	private _type: SignalType | undefined;
+	private _type: SignalType;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Event Signal Type",
 		states: enumValuesToMetadataStates(SignalType),
 	})
-	public get type(): SignalType | undefined {
+	public get type(): SignalType {
 		return this._type;
 	}
 
-	private _state: SignalState | undefined;
+	private _state: SignalState;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Event Signal State",
 		states: enumValuesToMetadataStates(SignalState),
 	})
-	public get state(): SignalState | undefined {
+	public get state(): SignalState {
 		return this._state;
 	}
 }
