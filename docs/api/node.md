@@ -68,6 +68,17 @@ This method automatically figures out which commands to send to the node, so you
 
 <!-- TODO: Check what happens if the CC is not supported by the node -->
 
+### `refreshValues`
+
+```ts
+refreshValues(): Promise<void>
+```
+
+Refreshes all non-static sensor and actuator values from this node. Although this method returns a `Promise`, it should generally **not** be `await`ed, since the update may take a long time.
+
+> [!WARNING]  
+> **DO NOT** use this method too frequently. Depending on the devices, this may generate a lot of traffic.
+
 ### `getEndpoint`
 
 ```ts
