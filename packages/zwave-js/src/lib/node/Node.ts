@@ -1787,16 +1787,23 @@ version:               ${this.version}`;
 		});
 
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
-		this.driver.rejectTransactions(
-			(t) =>
-				t.message.getNodeId() === this.nodeId &&
-				isCommandClassContainer(t.message) &&
-				t.message.command instanceof SecurityCCNonceReport,
-			`Duplicate NonceReport was dropped`,
-			ZWaveErrorCodes.Controller_MessageDropped,
-		);
+		if (
+			this.driver["sendThread"].state.context.queue.find(
+				(t) =>
+					t.message.getNodeId() === this.nodeId &&
+					isCommandClassContainer(t.message) &&
+					t.message.command instanceof SecurityCCNonceReport,
+			)
+		) {
+			this.driver.controllerLog.logNode(this.id, {
+				message:
+					"in the process of replying to a NonceGet, won't send another NonceReport",
+				level: "warn",
+			});
+			return;
+		}
 
-		// And also delete all previous nonces we sent the node since they
+		// Delete all previous nonces we sent the node since they
 		// should no longer be used - except if a config flag forbids it
 		// Devices using this flag may only delete the old nonce after the new one was acknowledged
 		const keepUntilNext = !!this.deviceConfig?.compat?.keepS0NonceUntilNext;
