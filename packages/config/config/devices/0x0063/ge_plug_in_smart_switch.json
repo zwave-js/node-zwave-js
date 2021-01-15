@@ -1,9 +1,9 @@
-// Jasco Products GE Plug in Smart Switch
+// GE/Jasco Plug in Smart Switch
 // GE Plug in Smart Switch Zwave Plus
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "GE Plug in Smart Switch",
+	"label": "Plug in Smart Switch",
 	"description": "GE Plug in Smart Switch Zwave Plus",
 	"devices": [
 		{

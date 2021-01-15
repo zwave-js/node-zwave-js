@@ -1,7 +1,7 @@
-// Jasco Products In-Wall Smart Motion Dimmer
+// GE/Jasco In-Wall Smart Motion Dimmer
 // 26932/26933/ZW3008 In-Wall Smart Motion Dimmer
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "In-Wall Smart Motion Dimmer",
 	"description": "26932/26933/ZW3008 In-Wall Smart Motion Dimmer",

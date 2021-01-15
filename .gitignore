@@ -23,6 +23,7 @@ zwave-js-*.tgz
 # Temporary (import) config files
 .tmp
 .tmpoh/
+.tmpozw/
 
 # Compiled source files
 **/build

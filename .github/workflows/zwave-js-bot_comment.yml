@@ -77,7 +77,7 @@ jobs:
     if: |
       contains(github.event.issue.html_url, '/pull/') &&
       contains(github.event.comment.body, '@zwave-js-bot fix lint') &&
-      (github.event.comment.user.login != 'zwave-js-bot')
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
 
     runs-on: [ubuntu-latest]
     strategy:
@@ -89,17 +89,18 @@ jobs:
       uses: actions/checkout@v2
  
     - name: Check user's permissions to do this
-      id: check
+      id: check-permissions
       uses: actions/github-script@v3
       with:
         github-token: ${{secrets.BOT_TOKEN}}
         result-encoding: string
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          return await bot.fixLintCheck({github, context});
+          return bot.checkAuthorized({github, context});
 
+    # These steps only run if the check was successful
     - name: Retrieve PR information
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/github-script@v3
       id: get-pr
       with:
@@ -118,13 +119,13 @@ jobs:
           }
 
     - name: Save our CI scripts
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       run: |
         mkdir -p /tmp/.github
         cp -r .github/* /tmp/.github
 
     - name: Checkout pull request
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/checkout@v2
       with:
         token: ${{secrets.BOT_TOKEN}}
@@ -132,14 +133,13 @@ jobs:
         ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
 
     - name: Restore our CI scripts
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       run: |
         rm -rf .github
         cp -r /tmp/.github .
 
-    # These steps only run if the check was successful
     - name: Use Node.js ${{ matrix.node-version }}
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
@@ -149,7 +149,7 @@ jobs:
       run: echo "::set-output name=dir::$(yarn cache dir)"
 
     - name: Use Yarn cache
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/cache@v2
       id: yarn-cache
       with:
@@ -159,7 +159,7 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       run: yarn install --prefer-offline --frozen-lockfile
 
     - name: Compile TypeScript code
@@ -167,7 +167,7 @@ jobs:
       run: yarn run build
 
     - name: Do the lint fix
-      if: steps.check.outputs.result == 'true'
+      if: steps.check-permissions.outputs.result == 'true'
       id: fix
       run: |
         # Run all lint commands and remember if one fails
@@ -203,4 +203,300 @@ jobs:
         github-token: ${{secrets.BOT_TOKEN}}
         script: |
           const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
-          return await bot.fixLintFeedback({github, context});
+          return bot.fixLintFeedback({github, context});
+
+
+
+  # #########################################################################
+  # Fix lint errors when an authorized person posts "@zwave-js-bot rebase"
+  rebase:
+    if: |
+      contains(github.event.issue.html_url, '/pull/') &&
+      contains(github.event.comment.body, '@zwave-js-bot rebase') &&
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout master branch
+      uses: actions/checkout@v2
+ 
+    - name: Check user's permissions to do this
+      id: check-permissions
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.checkAuthorized({github, context});
+
+    # These steps only run if the check was successful
+    - name: Retrieve PR information
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/github-script@v3
+      id: get-pr
+      with:
+        script: |
+          const request = {
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.issue.number
+          }
+          core.info(`Getting PR #${request.pull_number} from ${request.owner}/${request.repo}`)
+          try {
+            const result = await github.pulls.get(request)
+            return result.data
+          } catch (err) {
+            core.setFailed(`Request failed with error ${err}`)
+          }
+
+    - name: Save our CI scripts
+      if: steps.check-permissions.outputs.result == 'true'
+      run: |
+        mkdir -p /tmp/.github
+        cp -r .github/* /tmp/.github
+
+    - name: Checkout pull request
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/checkout@v2
+      with:
+        token: ${{secrets.BOT_TOKEN}}
+        repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
+        ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
+
+    - name: Restore our CI scripts
+      if: steps.check-permissions.outputs.result == 'true'
+      run: |
+        rm -rf .github
+        cp -r /tmp/.github .
+
+    - name: Rebase the branch
+      if: steps.check-permissions.outputs.result == 'true'
+      id: fix
+      run: |
+        # Try to rebase
+        if git rebase "${{ fromJSON(steps.get-pr.outputs.result).base.ref }}"" ; then
+          # The rebase worked
+          git config user.email "bot@zwave.js"
+          git config user.name "Z-Wave JS Bot"
+          git push -f
+        else
+          echo "::set-output name=result::error"
+        fi
+
+    - name: Give feedback
+      uses: actions/github-script@v3
+      env:
+        FEEDBACK: ${{ steps.fix.outputs.result }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.rebaseFeedback({github, context});
+
+
+
+  # #########################################################################
+  # Fix lint errors when an authorized person posts "@zwave-js-bot rename commit"
+  rename-commit:
+    if: |
+      contains(github.event.issue.html_url, '/pull/') &&
+      contains(github.event.comment.body, '@zwave-js-bot rename commit') &&
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout master branch
+      uses: actions/checkout@v2
+ 
+    - name: Check permissions and necessity
+      id: check-permissions
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return (
+            (await bot.checkAuthorized({github, context})) &&
+            (await bot.renameCommitCheck({github, context}))
+          );
+
+    # These steps only run if the check was successful
+    - name: Retrieve PR information
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/github-script@v3
+      id: get-pr
+      with:
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.renameCommitGetPRInfo({github, context});
+
+    - name: Save our CI scripts
+      if: steps.check-permissions.outputs.result == 'true'
+      run: |
+        mkdir -p /tmp/.github
+        cp -r .github/* /tmp/.github
+
+    - name: Checkout pull request
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # Fetch the history, or this action will break everything!
+        token: ${{secrets.BOT_TOKEN}}
+        repository: ${{ fromJSON(steps.get-pr.outputs.result).repo }}
+        ref: ${{ fromJSON(steps.get-pr.outputs.result).ref }}
+
+    - name: Restore our CI scripts
+      if: steps.check-permissions.outputs.result == 'true'
+      run: |
+        rm -rf .github
+        cp -r /tmp/.github .
+
+    - name: Rebase the branch
+      if: steps.check-permissions.outputs.result == 'true'
+      id: fix
+      run: |
+        # Try to reword the commit
+        git config user.email "bot@zwave.js"
+        git config user.name "Z-Wave JS Bot"
+        if git commit --amend -m "${{ fromJSON(steps.get-pr.outputs.result).title }}" ; then
+          # Amending the commit worked
+          git push -f
+          echo "::set-output name=result::success"
+        else
+          echo "::set-output name=result::error"
+        fi
+
+    - name: Give feedback
+      uses: actions/github-script@v3
+      env:
+        FEEDBACK: ${{ steps.fix.outputs.result }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.renameCommitFeedback({github, context});
+
+  # #########################################################################
+  # Imports a config file when an authorized person posts "@zwave-js-bot import config <device-id> from <source>"
+  import-config:
+    if: |
+      contains(github.event.issue.html_url, '/issues/') &&
+      contains(github.event.comment.body, '@zwave-js-bot import config') &&
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
+
+    runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+    - name: Checkout master branch
+      uses: actions/checkout@v2
+ 
+    - name: Check user's permissions to do this
+      id: check-permissions
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        result-encoding: string
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.checkAuthorized({github, context});
+
+    # These steps only run if the check was successful
+    - name: Use Node.js ${{ matrix.node-version }}
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Get Yarn cache directory
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - name: Use Yarn cache
+      if: steps.check-permissions.outputs.result == 'true'
+      uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ matrix.node-version }}-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies
+      if: steps.check-permissions.outputs.result == 'true'
+      run: yarn install --prefer-offline --frozen-lockfile
+
+    - name: Compile TypeScript code
+      # We need this or the linter will complain about other stuff than the checks
+      run: yarn run build
+
+    - name: Get config file ID
+      id: config-id
+      uses: actions/github-script@v3
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const body = context.payload.comment.body;
+          const match = /import config (?<ids>[a-z0-9_:, -]{1,}?) from (?<source>\w+)/.exec(body);
+          if (!match) return {skip: true};
+          return {
+            source: match.groups.source,
+            ids: match.groups.ids,
+          }
+
+    - name: Import config files
+      if: |
+        steps.check-permissions.outputs.result == 'true' &&
+        !fromJSON(steps.config-id.outputs.result).skip
+      id: import
+      env:
+        source: ${{ fromJSON(steps.config-id.outputs.result).source }}
+        ids: ${{ fromJSON(steps.config-id.outputs.result).ids }}
+      run: |
+        yarn run config import -s "$source" -Dd --ids "$ids"
+        branchname="import-config-$(date +'%s')"
+        commitmessage="feat(config): import config files from $source"
+
+        # Check if something changed
+        git config user.email "bot@zwave.js"
+        git config user.name "Z-Wave JS Bot"
+        git checkout -b "$branchname"
+        git add -A
+
+        if ! git diff --quiet HEAD -- packages/config/config/devices/ ; then
+          git commit -m "$commitmessage"
+          git push --set-upstream origin "$branchname"
+
+          echo "::set-output name=result::success"
+          echo "::set-output name=branchname::$branchname"
+          echo "::set-output name=commitmessage::$commitmessage"
+        else
+          echo "::set-output name=result::unchanged"
+          exit 0
+        fi
+
+    - name: Create PR
+      uses: actions/github-script@v3
+      env:
+        RESULT: ${{ steps.import.outputs.result }}
+        branchname: ${{ steps.import.outputs.branchname }}
+        commitmessage: ${{ steps.import.outputs.commitmessage }}
+      with:
+        github-token: ${{secrets.BOT_TOKEN}}
+        script: |
+          const bot = require(`${process.env.GITHUB_WORKSPACE}/.github/bot-scripts/index.js`);
+          return bot.importConfigCreatePR({github, context});
+
+

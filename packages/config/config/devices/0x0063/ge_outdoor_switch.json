@@ -1,9 +1,9 @@
-// Jasco Products GE Outdoor Switch
+// GE/Jasco Outdoor Switch
 // Weather Resistant Outdoor Switch
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "GE Outdoor Switch",
+	"label": "Outdoor Switch",
 	"description": "Weather Resistant Outdoor Switch",
 	"devices": [
 		{

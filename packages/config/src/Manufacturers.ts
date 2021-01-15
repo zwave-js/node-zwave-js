@@ -77,5 +77,5 @@ export async function saveManufacturersInternal(
 		data[formatId(id)] = name;
 	}
 
-	await writeFile(configPath, stringify(data));
+	await writeFile(configPath, stringify(data, "\t") + "\n");
 }

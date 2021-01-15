@@ -93,16 +93,19 @@
 	"files.associations": {
 		"**/config/**/*.json": "jsonc"
 	},
-	"editor.rulers": [
-		72,
-		80,
-		120
-	],
+	"editor.rulers": [72, 80, 120],
 	"files.participants.timeout": 10000,
 	"typescript.preferences.importModuleSpecifier": "project-relative",
 	"jest.autoEnable": false,
 	"jest.runAllTestsFirst": false,
 	"[jsonc]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	}
+	},
+	"standard.enable": false,
+	"json.schemas": [
+		{
+			"fileMatch": ["/packages/config/config/devices/*/*.json"],
+			"url": "/maintenance/schemas/device-config.json"
+		}
+	]
 }

@@ -1,7 +1,7 @@
-// Jasco Products 12729
+// GE/Jasco 12729
 // In-Wall Smart Dimmer
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "12729",
 	"description": "In-Wall Smart Dimmer",

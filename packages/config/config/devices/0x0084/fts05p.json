@@ -1,0 +1,107 @@
+{
+	"manufacturer": "FortrezZ",
+	"manufacturerId": "0x0084",
+	"label": "FTS05P",
+	"description": "FTS05P Flood and Temperature Sensor",
+	"devices": [
+		{
+			"productType": "0x00a3",
+			"productId": "0x020a"
+		},
+		{
+			"productType": "0x00a3",
+			"productId": "0x020e"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "LifeLine",
+			"maxNodes": 2,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Water Alarm",
+			"maxNodes": 2
+		},
+		"3": {
+			"label": "High Temperature Alarm",
+			"maxNodes": 2
+		},
+		"4": {
+			"label": "Low Temperature Alarm",
+			"maxNodes": 2
+		},
+		"5": {
+			"label": "Temperature Report When Changed",
+			"maxNodes": 2
+		},
+		"6": {
+			"label": "Temperature Report Every 5 minutes",
+			"maxNodes": 2
+		},
+		"7": {
+			"label": "Temperature Report Every 20 minutes",
+			"maxNodes": 2
+		},
+		"8": {
+			"label": "Temperature Report Every 60 minutes",
+			"maxNodes": 2
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Temperature Low Threshold",
+			"description": "Use this to change the low temperature alarm threshold. Set the range between -10 and 69 deg C.\n\t\t\tNote: The user configuration value is a positive decimal integer 0 through 255, but the device\n                        interprets the value as 8-bit Two's complement.  Examples:\n                           -10 in Two's complement is 246 decimal (0xF6).\n                           -2 in Two's complement is 254 decimal (xFE)\n                           -1 in Two's complement is 255 decimal (xFF)\n                           0 in Two's complement is 0 decimal (0x00).\n                           69 in Two's complement is 69 decimal (0x45).\n                        Thus the valid range the user may enter is 0-69 and 246-255.",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 4,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Temperature High Threshold",
+			"description": "Use this to change the high temperature alarm threshold. Set the range between -9 and 70 deg C.\n\t\t\tNote: The user configuration value is a positive decimal integer 0 through 255, but the device\n                        interprets the value as 8-bit Two's complement.  Examples:\n                           -9 in Two's complement is 247 decimal (0xF7).\n                           -2 in Two's complement is 254 decimal (xFE)\n                           -1 in Two's complement is 255 decimal (xFF)\n                           0 in Two's complement is 0 decimal (0x00).\n                           70 in Two's complement is 70 decimal (0x46).\n                        Thus the valid range the user may enter is 0-70 and 247-255.",
+			"valueSize": 1,
+			"unit": "°C",
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 70,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Normally Wet vs Normally Dry",
+			"description": "Default is set as a Normally DRY sensor. Use this to switch to Normally WET sensor.\n\t\t\tThe device only accepts one of two possible values:\n                          0   (0x00) - Normally Dry (default).\n                          240 (0xF0) - Normally Wet.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Water Alarm Association Mode",
+			"description": "Use this to send basic set ON or Basic Set OFF when an alarm is detected. \n\t\t\tThe device only accepts one of two possible values:\n                          0   (0x00) - For sending basic set OFF when alarm detected.\n                          240 (0xF0) - For sending basic Set ON (default) when alarm detected.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 240,
+			"defaultValue": 240,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

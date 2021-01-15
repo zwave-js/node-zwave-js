@@ -1,7 +1,7 @@
-// Jasco Products 14288
+// GE/Jasco 14288
 // In-Wall Outlet
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "14288",
 	"description": "In-Wall Outlet",

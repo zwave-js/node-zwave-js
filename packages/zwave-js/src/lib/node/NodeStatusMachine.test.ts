@@ -1,6 +1,5 @@
 import { CommandClasses } from "@zwave-js/core";
 import { interpret, Interpreter } from "xstate";
-import { SimulatedClock } from "xstate/lib/SimulatedClock";
 // import { SimulatedClock } from "xstate/lib/SimulatedClock";
 import {
 	createNodeStatusMachine,
@@ -22,12 +21,6 @@ const testNodeWakeup = {
 	},
 } as any;
 
-const defaultImplementations = {
-	notifyAwakeTimeoutElapsed() {},
-};
-
-const timeoutConfig = { nodeAwake: 10000 };
-
 describe("lib/driver/NodeStatusMachine", () => {
 	let service:
 		| undefined
@@ -39,11 +32,7 @@ describe("lib/driver/NodeStatusMachine", () => {
 
 	describe("default status changes", () => {
 		it(`The node should start in the unknown state`, () => {
-			const testMachine = createNodeStatusMachine(
-				undefined as any,
-				defaultImplementations,
-				timeoutConfig,
-			);
+			const testMachine = createNodeStatusMachine(undefined as any);
 
 			service = interpret(testMachine).start();
 			expect(service.state.value).toBe("unknown");
@@ -190,11 +179,7 @@ describe("lib/driver/NodeStatusMachine", () => {
 						? testNodeWakeup
 						: testNodeNoWakeup;
 
-				const testMachine = createNodeStatusMachine(
-					testNode,
-					defaultImplementations,
-					timeoutConfig,
-				);
+				const testMachine = createNodeStatusMachine(testNode);
 				testMachine.initial = test.start;
 
 				service = interpret(testMachine).start();
@@ -203,49 +188,9 @@ describe("lib/driver/NodeStatusMachine", () => {
 			});
 		}
 	});
-
-	describe("Asleep timeouts", () => {
-		it(`The node should go into the asleep state when the awake timer elapses`, () => {
-			const testMachine = createNodeStatusMachine(
-				testNodeWakeup,
-				defaultImplementations,
-				timeoutConfig,
-			);
-			const clock = new SimulatedClock();
-			service = interpret(testMachine, { clock }).start();
-
-			service.send("AWAKE");
-			clock.increment(10000);
-			expect(service.state.value).toBe("asleep");
-		});
-
-		it(`The awake timer should be refreshed when a transaction is completed`, () => {
-			const testMachine = createNodeStatusMachine(
-				testNodeWakeup,
-				defaultImplementations,
-				timeoutConfig,
-			);
-			const clock = new SimulatedClock();
-			service = interpret(testMachine, { clock }).start();
-
-			service.send("AWAKE");
-			clock.increment(9999);
-			expect(service.state.value).toBe("awake");
-			service.send("TRANSACTION_COMPLETE");
-			clock.increment(1);
-			expect(service.state.value).toBe("awake");
-			clock.increment(9999);
-			expect(service.state.value).toBe("asleep");
-		});
-	});
-
 	describe("WakeUp CC support", () => {
 		it("A transition from unknown to awake should not happen if the node does not support the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(
-				testNodeNoWakeup,
-				defaultImplementations,
-				timeoutConfig,
-			);
+			const testMachine = createNodeStatusMachine(testNodeNoWakeup);
 
 			service = interpret(testMachine).start();
 			service.send("AWAKE");
@@ -253,11 +198,7 @@ describe("lib/driver/NodeStatusMachine", () => {
 		});
 
 		it("A transition from unknown to asleep should not happen if the node does not support the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(
-				testNodeNoWakeup,
-				defaultImplementations,
-				timeoutConfig,
-			);
+			const testMachine = createNodeStatusMachine(testNodeNoWakeup);
 
 			service = interpret(testMachine).start();
 			service.send("ASLEEP");
@@ -265,11 +206,7 @@ describe("lib/driver/NodeStatusMachine", () => {
 		});
 
 		it("A transition from unknown to alive should not happen if the node supports the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(
-				testNodeWakeup,
-				defaultImplementations,
-				timeoutConfig,
-			);
+			const testMachine = createNodeStatusMachine(testNodeWakeup);
 
 			service = interpret(testMachine).start();
 			service.send("ALIVE");
@@ -277,11 +214,7 @@ describe("lib/driver/NodeStatusMachine", () => {
 		});
 
 		it("A transition from unknown to dead should not happen if the node supports the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(
-				testNodeWakeup,
-				defaultImplementations,
-				timeoutConfig,
-			);
+			const testMachine = createNodeStatusMachine(testNodeWakeup);
 
 			service = interpret(testMachine).start();
 			service.send("DEAD");

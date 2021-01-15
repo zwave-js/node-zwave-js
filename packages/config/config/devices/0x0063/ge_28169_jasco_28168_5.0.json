@@ -1,7 +1,7 @@
-// Jasco Products GE 28169 / Jasco 28168
+// GE/Jasco 28169 / Jasco 28168
 // Plug in Smart Switch
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "GE 28169 / Jasco 28168",
 	"description": "Plug in Smart Switch",

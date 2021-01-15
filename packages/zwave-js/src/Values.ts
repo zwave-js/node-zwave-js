@@ -16,6 +16,7 @@ export type {
 	TranslatedValueID,
 	ZWaveNodeMetadataUpdatedArgs,
 	ZWaveNodeValueAddedArgs,
+	ZWaveNodeValueNotificationArgs,
 	ZWaveNodeValueRemovedArgs,
 	ZWaveNodeValueUpdatedArgs,
 } from "./lib/node/Types";

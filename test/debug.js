@@ -7,13 +7,13 @@ const { generateAuthKey, generateEncryptionKey } = require("@zwave-js/core");
 const {
 	isCommandClassContainer,
 } = require("../packages/zwave-js/build/lib/commandclass/ICommandClassContainer");
-const { loadNotifications } = require("@zwave-js/config");
+// const { loadNotifications } = require("@zwave-js/config");
 
 (async () => {
-	await loadNotifications();
+	// await loadNotifications();
 
 	// The data to decode
-	const data = Buffer.from("0112000400300a710500ff00ff06050101ae000a", "hex");
+	const data = Buffer.from("010d0004000207430a012a232a5fc7", "hex");
 	// The nonce needed to decode it
 	const nonce = Buffer.from("478d7aa05d83f3ea", "hex");
 	// The network key needed to decode it

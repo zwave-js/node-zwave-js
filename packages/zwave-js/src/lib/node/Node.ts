@@ -53,6 +53,7 @@ import {
 	FirmwareUpdateRequestStatus,
 	FirmwareUpdateStatus,
 } from "../commandclass/FirmwareUpdateMetaDataCC";
+import { HailCC } from "../commandclass/HailCC";
 import { isCommandClassContainer } from "../commandclass/ICommandClassContainer";
 import {
 	getManufacturerIdValueId,
@@ -197,20 +198,7 @@ export class ZWaveNode extends Endpoint {
 		for (const cc of controlledCCs) this.addCC(cc, { isControlled: true });
 
 		// Create and hook up the status machine
-		this.statusMachine = interpretEx(
-			createNodeStatusMachine(
-				this,
-				{
-					notifyAwakeTimeoutElapsed: () => {
-						this.driver.driverLog.print(
-							`The awake timeout for node ${this.id} has elapsed. Assuming it is asleep.`,
-							"verbose",
-						);
-					},
-				},
-				driver.options.timeouts,
-			),
-		);
+		this.statusMachine = interpretEx(createNodeStatusMachine(this));
 		this.statusMachine.onTransition((state) => {
 			if (state.changed) {
 				this.onStatusChange(
@@ -416,14 +404,6 @@ export class ZWaveNode extends Endpoint {
 	 */
 	public markAsAwake(): void {
 		this.statusMachine.send("AWAKE");
-	}
-
-	/**
-	 * @internal
-	 * Call this whenever a node responds to an active request to refresh the time it is assumed awake
-	 */
-	public refreshAwakeTimer(): void {
-		this.statusMachine.send("TRANSACTION_COMPLETE");
 	}
 
 	// The node is only ready when the interview has been completed
@@ -845,6 +825,10 @@ export class ZWaveNode extends Endpoint {
 	 * Otherwise the node information may become inconsistent.
 	 */
 	public async refreshInfo(): Promise<void> {
+		// preserve the node name and location, since they might not be stored on the node
+		const name = this.name;
+		const location = this.location;
+
 		this._interviewAttempts = 0;
 		this.interviewStage = InterviewStage.None;
 		this._nodeInfoReceived = false;
@@ -867,6 +851,10 @@ export class ZWaveNode extends Endpoint {
 		// Restart all state machines
 		this.readyMachine.restart();
 		this.statusMachine.restart();
+
+		// Restore the previously saved name/location
+		if (name != undefined) this.name = name;
+		if (location != undefined) this.location = location;
 
 		// Also remove the information from the cache
 		await this.driver.saveNetworkToCache();
@@ -1740,6 +1728,8 @@ version:               ${this.version}`;
 			return this.handleSecurityNonceGet();
 		} else if (command instanceof SecurityCCNonceReport) {
 			return this.handleSecurityNonceReport(command);
+		} else if (command instanceof HailCC) {
+			return this.handleHail(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCGet) {
 			return this.handleFirmwareUpdateGet(command);
 		} else if (command instanceof FirmwareUpdateMetaDataCCStatusReport) {
@@ -1836,6 +1826,16 @@ version:               ${this.version}`;
 			},
 			{ free: true },
 		);
+	}
+
+	private handleHail(_command: HailCC): void {
+		// treat this as a sign that the node is awake
+		this.markAsAwake();
+
+		this.driver.controllerLog.logNode(this.nodeId, {
+			message: `Hail received from node, refreshing actuator and sensor values...`,
+		});
+		void this.refreshValues();
 	}
 
 	/** Stores information about a currently held down key */
@@ -2121,6 +2121,28 @@ version:               ${this.version}`;
 				}
 			}
 		} else if (command instanceof BasicCCSet) {
+			// Treat BasicCCSet as value events if desired
+			if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
+				this.driver.controllerLog.logNode(this.id, {
+					message: "treating BasicCC Set as a value event",
+				});
+				const valueId: ValueID = {
+					commandClass: CommandClasses.Basic,
+					endpoint: command.endpointIndex,
+					property: "event",
+				};
+				if (!this._valueDB.hasMetadata(valueId)) {
+					this._valueDB.setMetadata(valueId, {
+						...ValueMetadata.ReadOnlyUInt8,
+						label: "Event value",
+					});
+				}
+				this._valueDB.setValue(valueId, command.targetValue, {
+					stateful: false,
+				});
+				return;
+			}
+
 			// Some devices send their current state using `BasicCCSet`s to their associations
 			// instead of using reports. We still interpret them like reports
 			this.driver.controllerLog.logNode(this.id, {

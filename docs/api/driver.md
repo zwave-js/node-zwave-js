@@ -395,8 +395,6 @@ interface ZWaveOptions {
 		report: number; // [1000...40000], default: 10000 ms
 		/** How long generated nonces are valid */
 		nonce: number; // [3000...20000], default: 5000 ms
-		/** How long a node is assumed to be awake after the last communication with it */
-		nodeAwake: number; // [1000...30000], default: 10000 ms
 	};
 
 	attempts: {

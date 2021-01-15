@@ -1,4 +1,5 @@
 import { getEnumMemberName } from "@zwave-js/shared";
+import type { Duration } from "./Duration";
 import { IntegerLimits } from "./Primitive";
 
 const isIntegerRegex = /^\d+$/;
@@ -32,6 +33,8 @@ export type ValueType =
 	| "number[]"
 	| "boolean[]"
 	| "string[]"
+	| "duration"
+	| "color"
 	| "any";
 
 export interface ValueMetadataAny {
@@ -74,13 +77,18 @@ export interface ValueMetadataBoolean extends ValueMetadataAny {
 }
 
 export interface ValueMetadataString extends ValueMetadataAny {
-	type: "string";
+	type: "string" | "color";
 	/** The minimum length this string must have (optional) */
 	minLength?: number;
 	/** The maximum length this string may have (optional) */
 	maxLength?: number;
 	/** The default value */
 	default?: string;
+}
+
+export interface ValueMetadataDuration extends ValueMetadataAny {
+	type: "duration";
+	default?: Duration;
 }
 
 export type ValueMetadata =
@@ -317,15 +325,33 @@ const String: ValueMetadataString = {
 	type: "string",
 };
 
-/** Unsigned string (readonly) */
+/** Any string (readonly) */
 const ReadOnlyString: ValueMetadataString = {
 	...String,
 	..._readonly,
 };
 
-/** Unsigned string (writeonly) */
+/** Any string (writeonly) */
 const WriteOnlyString: ValueMetadataString = {
 	...String,
+	..._writeonly,
+};
+
+/** A (hex) string that represents a color */
+const Color: ValueMetadataString = {
+	...String,
+	type: "color",
+};
+
+/** A (hex) string that represents a color (readonly) */
+const ReadOnlyColor: ValueMetadataString = {
+	...Color,
+	..._readonly,
+};
+
+/** A (hex) string that represents a color (writeonly) */
+const WriteOnlyColor: ValueMetadataString = {
+	...Color,
 	..._writeonly,
 };
 
@@ -346,6 +372,24 @@ const ReadOnlyLevel: ValueMetadataNumeric = {
 /** The level of a Switch (writeonly) */
 const WriteOnlyLevel: ValueMetadataNumeric = {
 	...Level,
+	..._writeonly,
+};
+
+/** A duration value */
+const _Duration: ValueMetadataDuration = {
+	..._default,
+	type: "duration",
+};
+
+/** A duration value (readonly) */
+const ReadOnlyDuration: ValueMetadataDuration = {
+	..._Duration,
+	..._readonly,
+};
+
+/** A duration value (writeonly) */
+const WriteOnlyDuration: ValueMetadataDuration = {
+	..._Duration,
 	..._writeonly,
 };
 
@@ -436,4 +480,18 @@ export const ValueMetadata = {
 	ReadOnlyString: Object.freeze(ReadOnlyString),
 	/** A string (writeonly) */
 	WriteOnlyString: Object.freeze(WriteOnlyString),
+
+	/** A (hex) string that represents a color */
+	Color: Object.freeze(Color),
+	/** A (hex) string that represents a color (readonly) */
+	ReadOnlyColor: Object.freeze(ReadOnlyColor),
+	/** A (hex) string that represents a color (writeonly) */
+	WriteOnlyColor: Object.freeze(WriteOnlyColor),
+
+	/** A duration value */
+	Duration: Object.freeze(_Duration),
+	/** A duration value (readonly) */
+	ReadOnlyDuration: Object.freeze(ReadOnlyDuration),
+	/** A duration value (writeonly) */
+	WriteOnlyDuration: Object.freeze(WriteOnlyDuration),
 };

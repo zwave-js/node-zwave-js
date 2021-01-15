@@ -1,7 +1,7 @@
-// Jasco Products 32563
+// GE/Jasco 32563
 // Smart Door Sensor
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "32563",
 	"description": "Smart Door Sensor",

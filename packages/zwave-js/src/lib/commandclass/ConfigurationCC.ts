@@ -563,22 +563,20 @@ export class ConfigurationCC extends CommandClass {
 				direction: "outbound",
 			});
 			let { nextParameter: param } = await api.getProperties(0);
+			if (param === 0) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `didn't report any config params, trying #1 just to be sure...`,
+					direction: "inbound",
+				});
+				param = 1;
+			}
 
 			while (param > 0) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: `querying parameter #${param} information...`,
 					direction: "outbound",
-				});
-
-				// Query name and info
-				let name = "(unknown)";
-				// let info = "(unknown)";
-				await ignoreTimeout(async () => {
-					name = await api.getName(param);
-				});
-				await ignoreTimeout(async () => {
-					await api.getInfo(param);
 				});
 
 				// Query properties and the next param
@@ -591,6 +589,20 @@ export class ConfigurationCC extends CommandClass {
 				if (properties.valueSize === 0) {
 					logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
 				} else {
+					// Query name and info only if the parameter is supported
+					let name = "(unknown)";
+					await ignoreTimeout(async () => {
+						name = await api.getName(param);
+					});
+					// Skip the info query for bugged devices
+					if (
+						!node.deviceConfig?.compat?.skipConfigurationInfoQuery
+					) {
+						await ignoreTimeout(async () => {
+							await api.getInfo(param);
+						});
+					}
+
 					logMessage = `received information for parameter #${param}:
 parameter name:      ${name}
 value format:        ${getEnumMemberName(ValueFormat, properties.valueFormat)}
@@ -609,13 +621,15 @@ alters capabilities: ${!!properties.altersCapabilities}`;
 					direction: "inbound",
 				});
 
-				// Query the current value
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `querying parameter #${param} value...`,
-					direction: "outbound",
-				});
-				await api.get(param);
+				// Query the current value if the parameter is supported
+				if (properties.valueSize !== 0) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `querying parameter #${param} value...`,
+						direction: "outbound",
+					});
+					await api.get(param);
+				}
 
 				param = nextParameter;
 			}
@@ -1615,6 +1629,13 @@ export class ConfigurationCCPropertiesReport extends ConfigurationCC {
 		this._parameter = this.payload.readUInt16BE(0);
 		this._valueFormat = (this.payload[2] & 0b111000) >>> 3;
 		this._valueSize = this.payload[2] & 0b111;
+
+		// GH#1309 Some devices don't tell us the first parameter if we query #0
+		// Instead, they contain 0x000000
+		if (this._valueSize === 0 && this.payload.length < 5) {
+			this._nextParameter = 0;
+			return;
+		}
 
 		// Ensure the payload contains the two bytes for next parameter
 		const nextParameterOffset = 3 + 3 * this._valueSize;

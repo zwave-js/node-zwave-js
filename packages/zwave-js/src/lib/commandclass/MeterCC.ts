@@ -469,10 +469,10 @@ supports reset:       ${supportsReset}`;
 			);
 			let ret: string;
 			if (meterType !== 0) {
-				ret = this.driver.configManager.lookupMeterScale(
-					meterType,
-					scale,
-				).label;
+				ret = `${this.driver.configManager.getMeterName(meterType)}_${
+					this.driver.configManager.lookupMeterScale(meterType, scale)
+						.label
+				}`;
 			} else {
 				ret = "default";
 			}

@@ -109,7 +109,7 @@ interface ValueMetadataBoolean extends ValueMetadataAny {
 
 ```ts
 interface ValueMetadataString extends ValueMetadataAny {
-	type: "string";
+	type: "string" | "color";
 	minLength?: number;
 	maxLength?: number;
 	default?: string;

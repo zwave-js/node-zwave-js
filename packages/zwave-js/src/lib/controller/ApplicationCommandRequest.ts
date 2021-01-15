@@ -16,7 +16,7 @@ import {
 	priority,
 } from "../message/Message";
 
-enum StatusFlags {
+export enum ApplicationCommandStatusFlags {
 	RoutedBusy = 0b1, // A response route is locked by the application
 	LowPower = 0b10, // Received at low output power level
 
@@ -53,12 +53,14 @@ export class ApplicationCommandRequest
 		if (gotDeserializationOptions(options)) {
 			// first byte is a status flag
 			const status = this.payload[0];
-			this.routedBusy = !!(status & StatusFlags.RoutedBusy);
-			switch (status & StatusFlags.TypeMask) {
-				case StatusFlags.TypeMulti:
+			this.routedBusy = !!(
+				status & ApplicationCommandStatusFlags.RoutedBusy
+			);
+			switch (status & ApplicationCommandStatusFlags.TypeMask) {
+				case ApplicationCommandStatusFlags.TypeMulti:
 					this.frameType = "multicast";
 					break;
-				case StatusFlags.TypeBroad:
+				case ApplicationCommandStatusFlags.TypeBroad:
 					this.frameType = "broadcast";
 					break;
 				default:
@@ -66,9 +68,13 @@ export class ApplicationCommandRequest
 			}
 			this.isExploreFrame =
 				this.frameType === "broadcast" &&
-				!!(status & StatusFlags.Explore);
-			this.isForeignFrame = !!(status & StatusFlags.ForeignFrame);
-			this.fromForeignHomeId = !!(status & StatusFlags.ForeignHomeId);
+				!!(status & ApplicationCommandStatusFlags.Explore);
+			this.isForeignFrame = !!(
+				status & ApplicationCommandStatusFlags.ForeignFrame
+			);
+			this.fromForeignHomeId = !!(
+				status & ApplicationCommandStatusFlags.ForeignHomeId
+			);
 
 			// followed by a node ID
 			const nodeId = this.payload[1];
@@ -108,10 +114,11 @@ export class ApplicationCommandRequest
 	public serialize(): Buffer {
 		const statusByte =
 			(this.frameType === "broadcast"
-				? StatusFlags.TypeBroad
+				? ApplicationCommandStatusFlags.TypeBroad
 				: this.frameType === "multicast"
-				? StatusFlags.TypeMulti
-				: 0) | (this.routedBusy ? StatusFlags.RoutedBusy : 0);
+				? ApplicationCommandStatusFlags.TypeMulti
+				: 0) |
+			(this.routedBusy ? ApplicationCommandStatusFlags.RoutedBusy : 0);
 
 		const serializedCC = this.command.serialize();
 		this.payload = Buffer.concat([

@@ -1,7 +1,7 @@
-// Jasco Products 45607
+// GE/Jasco 45607
 // 2-Way Dimmer Switch
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "45607",
 	"description": "2-Way Dimmer Switch",

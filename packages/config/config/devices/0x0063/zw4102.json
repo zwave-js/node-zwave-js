@@ -1,7 +1,7 @@
-// Jasco Products ZW4102
+// GE/Jasco ZW4102
 // Energy Monitoring Appliance Module
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "ZW4102",
 	"description": "Energy Monitoring Appliance Module",

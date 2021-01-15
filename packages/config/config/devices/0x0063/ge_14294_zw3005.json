@@ -1,9 +1,9 @@
-// Jasco Products GE 14294 (ZW3005)
+// GE/Jasco 14294 (ZW3005)
 // In-Wall Dimmer Switch
 {
-	"manufacturer": "Jasco Products",
+	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "GE 14294 (ZW3005)",
+	"label": "14294 (ZW3005)",
 	"description": "In-Wall Dimmer Switch",
 	"devices": [
 		{
@@ -62,27 +62,6 @@
 		"4": {
 			"label": "Invert Switch",
 			"description": "Invert the ON/OFF Switch State.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
-		},
-		"5": {
-			"label": "Ignore Start-Level (Receiving)",
-			"description": "This dimmer will start dimming from its current level.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -169,6 +148,6 @@
 		}
 	},
 	"compat": {
-		"disableBasicMapping": true
+		"treatBasicSetAsEvent": true
 	}
 }
