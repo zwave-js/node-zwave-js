@@ -1345,8 +1345,9 @@ version:               ${this.version}`;
 		}
 
 		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
-		// to map the Basic CC to other CCs
-		if (!this._deviceConfig?.compat?.disableBasicMapping) {
+		// to map the Basic CC to other CCs or expose Basic Set as an event
+		const compat = this._deviceConfig?.compat;
+		if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
 			this.hideBasicCCInFavorOfActuatorCCs();
 		}
 
@@ -1414,8 +1415,11 @@ version:               ${this.version}`;
 				if (typeof action === "boolean") return action;
 			}
 
-			// Don't offer or interview the Basic CC if any actuator CC is supported
-			endpoint.hideBasicCCInFavorOfActuatorCCs();
+			// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
+			// to map the Basic CC to other CCs or expose Basic Set as an event
+			if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
+				endpoint.hideBasicCCInFavorOfActuatorCCs();
+			}
 
 			const endpointInterviewGraph = endpoint.buildCCInterviewGraph();
 			let endpointInterviewOrder: CommandClasses[];
