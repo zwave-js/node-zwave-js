@@ -339,6 +339,17 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"8": {
+			"label": "LED Strip Effect",
+			"description": "LED Strip Effect",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 83823359,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
 		"8[0xff]": {
 			"label": "LED Strip Effect (Color)",
 			"description": "LED Strip Effect (Color)",
