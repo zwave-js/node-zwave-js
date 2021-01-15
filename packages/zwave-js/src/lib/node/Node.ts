@@ -38,7 +38,13 @@ import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
 import { CCAPI, ignoreTimeout } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
-import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
+import {
+	BasicCC,
+	BasicCCReport,
+	BasicCCSet,
+	getCompatEventValueId as getBasicCCCompatEventValueId,
+	getCurrentValueValueId as getBasicCCCurrentValueValueId,
+} from "../commandclass/BasicCC";
 import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
@@ -2130,20 +2136,13 @@ version:               ${this.version}`;
 				this.driver.controllerLog.logNode(this.id, {
 					message: "treating BasicCC Set as a value event",
 				});
-				const valueId: ValueID = {
-					commandClass: CommandClasses.Basic,
-					endpoint: command.endpointIndex,
-					property: "event",
-				};
-				if (!this._valueDB.hasMetadata(valueId)) {
-					this._valueDB.setMetadata(valueId, {
-						...ValueMetadata.ReadOnlyUInt8,
-						label: "Event value",
-					});
-				}
-				this._valueDB.setValue(valueId, command.targetValue, {
-					stateful: false,
-				});
+				this._valueDB.setValue(
+					getBasicCCCompatEventValueId(command.endpointIndex),
+					command.targetValue,
+					{
+						stateful: false,
+					},
+				);
 				return;
 			}
 
@@ -2162,11 +2161,7 @@ version:               ${this.version}`;
 			if (!didSetMappedValue) {
 				// Sets cannot store their value automatically, so store the values manually
 				this._valueDB.setValue(
-					{
-						commandClass: CommandClasses.Basic,
-						endpoint: command.endpointIndex,
-						property: "currentValue",
-					},
+					getBasicCCCurrentValueValueId(command.endpointIndex),
 					command.targetValue,
 				);
 				// Since the node sent us a Basic command, we are sure that it is at least controlled
