@@ -725,6 +725,12 @@ export class Driver extends EventEmitter {
 	private _controllerInterviewed: boolean = false;
 	private _nodesReady = new Set<number>();
 	private _nodesReadyEventEmitted: boolean = false;
+
+	/** Indicates whether all nodes are ready, i.e. the "all nodes ready" event has been emitted */
+	public get allNodesReady(): boolean {
+		return this._nodesReadyEventEmitted;
+	}
+
 	/**
 	 * Initializes the variables for controller and nodes,
 	 * adds event handlers and starts the interview process.
@@ -1245,6 +1251,16 @@ export class Driver extends EventEmitter {
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
+	}
+
+	/** Indicates whether the driver is ready, i.e. the "driver ready" event was emitted */
+	public get ready(): boolean {
+		return (
+			this._wasStarted &&
+			this._isOpen &&
+			!this._wasDestroyed &&
+			this._controllerInterviewed
+		);
 	}
 
 	private _cleanupHandler = (): void => {
