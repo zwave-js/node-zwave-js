@@ -9,7 +9,15 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	SetValueImplementation,
+	SET_VALUE,
+	throwMissingPropertyKey,
+	throwUnsupportedProperty,
+	throwUnsupportedPropertyKey,
+	throwWrongValueType,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -24,11 +32,11 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 
-function getTargetValueValueId(endpoint?: number): ValueID {
+function getStateValueId(endpoint?: number): ValueID {
 	return {
 		commandClass: CommandClasses["Barrier Operator"],
 		endpoint,
-		property: "targetValue",
+		property: "state",
 	};
 }
 
@@ -120,7 +128,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			this.endpoint
 				.getNodeUnsafe()
 				?.valueDB.setValue(
-					getTargetValueValueId(this.endpoint.index),
+					getStateValueId(this.endpoint.index),
 					state,
 					{ noEvent: true },
 				);
@@ -132,6 +140,26 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			await this.get();
 		}
 	}
+
+	protected [SET_VALUE]: SetValueImplementation = async (
+		{ property, propertyKey },
+		value,
+	) => {
+		if (property !== "state") {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+		if (typeof value !== "number") {
+			throwWrongValueType(this.ccId, property, "number", typeof value);
+		}
+
+		if (propertyKey == undefined) {
+			throwMissingPropertyKey(this.ccId, property);
+		} else if (typeof propertyKey !== "number") {
+			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		}
+
+		await this.set(value);
+	};
 }
 
 @commandClass(CommandClasses["Barrier Operator"])
