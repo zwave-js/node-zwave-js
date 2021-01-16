@@ -7,10 +7,15 @@ const { generateAuthKey, generateEncryptionKey } = require("@zwave-js/core");
 const {
 	isCommandClassContainer,
 } = require("../packages/zwave-js/build/lib/commandclass/ICommandClassContainer");
-// const { loadNotifications } = require("@zwave-js/config");
+const { ConfigManager } = require("@zwave-js/config");
 
 (async () => {
-	// await loadNotifications();
+	const configManager = new ConfigManager();
+	await configManager.loadDeviceIndex();
+	await configManager.loadNotifications();
+
+	debugger;
+	const device = configManager.lookupDevice(0x0371, 0x0102, 0xbb);
 
 	// The data to decode
 	const data = Buffer.from("010d0004000207430a012a232a5fc7", "hex");
@@ -23,6 +28,7 @@ const {
 	const msg = Message.from(
 		/** @type {any} */ ({
 			getSafeCCVersionForNode: () => 1,
+			configManager,
 			controller: {
 				ownNodeId: 1,
 				nodes: {
