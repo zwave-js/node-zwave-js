@@ -33,7 +33,7 @@
   "dependencies": {
     "@alcalzone/jsonl-db": "^1.2.3",
     "@zwave-js/shared": "^6.0.0-beta.0",
-    "alcalzone-shared": "^3.0.1",
+    "alcalzone-shared": "^3.0.2",
     "ansi-colors": "^4.1.1",
     "moment": "^2.29.0",
     "moment-timezone": "^0.5.31",
