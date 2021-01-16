@@ -1682,6 +1682,14 @@ version:               ${this.version}`;
 		}
 	}
 
+	/**
+	 * @internal
+	 * Temporarily updates the node's neighbor list by removing a node from it
+	 */
+	public removeNodeFromCachedNeighbors(nodeId: number): void {
+		this._neighbors = this._neighbors.filter((id) => id !== nodeId);
+	}
+
 	/** Queries a node for its neighbor nodes during the node interview */
 	protected async queryNeighbors(): Promise<void> {
 		await this.queryNeighborsInternal();
