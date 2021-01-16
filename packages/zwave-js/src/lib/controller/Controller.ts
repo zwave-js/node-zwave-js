@@ -900,7 +900,7 @@ export class ZWaveController extends EventEmitter {
 				);
 				// stopping the inclusion was acknowledged by the controller
 				if (this._stopInclusionPromise != null)
-					this._stopInclusionPromise.resolve();
+					this._stopInclusionPromise.resolve(true);
 
 				if (this._nodePendingInclusion != null) {
 					const newNode = this._nodePendingInclusion;
@@ -1103,7 +1103,7 @@ export class ZWaveController extends EventEmitter {
 
 				// stopping the inclusion was acknowledged by the controller
 				if (this._stopInclusionPromise != null)
-					this._stopInclusionPromise.resolve();
+					this._stopInclusionPromise.resolve(true);
 
 				if (this._nodePendingExclusion != null) {
 					this.driver.controllerLog.print(

@@ -209,6 +209,22 @@ Once the `"driver ready"` event was emitted, this property provides access to th
 > [!WARNING]
 > Don't use it before the driver is ready!
 
+### `ready`
+
+```ts
+readonly ready: boolean
+```
+
+Returns `true` after the `"driver ready"` event has been emitted. This is useful for client-server setups where listeners might not be set up while the driver is initializing.
+
+### `allNodesReady`
+
+```ts
+readonly allNodesReady: boolean
+```
+
+Returns `true` after the `"all nodes ready"` event has been emitted. This is useful for client-server setups where listeners might not be set up while the driver is initializing.
+
 ## Driver events
 
 The `Driver` class inherits from the Node.js [EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter) and thus also supports its methods like `on`, `removeListener`, etc. The following events are implemented:

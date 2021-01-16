@@ -557,7 +557,7 @@ export class Driver extends EventEmitter {
 						});
 					}
 				},
-				log: this.driverLog.print.bind(this),
+				log: this.driverLog.print.bind(this.driverLog),
 			},
 			pick(this.options, ["timeouts", "attempts"]),
 		);
@@ -725,6 +725,12 @@ export class Driver extends EventEmitter {
 	private _controllerInterviewed: boolean = false;
 	private _nodesReady = new Set<number>();
 	private _nodesReadyEventEmitted: boolean = false;
+
+	/** Indicates whether all nodes are ready, i.e. the "all nodes ready" event has been emitted */
+	public get allNodesReady(): boolean {
+		return this._nodesReadyEventEmitted;
+	}
+
 	/**
 	 * Initializes the variables for controller and nodes,
 	 * adds event handlers and starts the interview process.
@@ -840,6 +846,15 @@ export class Driver extends EventEmitter {
 			clearTimeout(this.retryNodeInterviewTimeouts.get(node.id)!);
 			this.retryNodeInterviewTimeouts.delete(node.id);
 		}
+
+		// Drop all pending messages that come from a previous interview attempt
+		this.rejectTransactions(
+			(t) =>
+				t.priority === MessagePriority.NodeQuery &&
+				t.message.getNodeId() === node.id,
+			"The interview was restarted",
+			ZWaveErrorCodes.Controller_MessageDropped,
+		);
 
 		const maxInterviewAttempts = this.options.attempts.nodeInterview;
 
@@ -1073,6 +1088,19 @@ export class Driver extends EventEmitter {
 			);
 		});
 
+		// Remove the node id from all cached neighbor lists and asynchronously make the affected nodes update their neighbor lists
+		for (const otherNode of this.controller.nodes.values()) {
+			if (otherNode !== node && otherNode.neighbors.includes(node.id)) {
+				otherNode.removeNodeFromCachedNeighbors(node.id);
+				otherNode.queryNeighborsInternal().catch((err) => {
+					this.driverLog.print(
+						`Failed to update neighbors for node ${otherNode.id}: ${err.message}`,
+						"warn",
+					);
+				});
+			}
+		}
+
 		// And clean up all remaining resources used by the node
 		node.destroy();
 
@@ -1223,6 +1251,16 @@ export class Driver extends EventEmitter {
 				ZWaveErrorCodes.Driver_NotReady,
 			);
 		}
+	}
+
+	/** Indicates whether the driver is ready, i.e. the "driver ready" event was emitted */
+	public get ready(): boolean {
+		return (
+			this._wasStarted &&
+			this._isOpen &&
+			!this._wasDestroyed &&
+			this._controllerInterviewed
+		);
 	}
 
 	private _cleanupHandler = (): void => {
@@ -1937,12 +1975,9 @@ ${handlers.length} left`,
 		let node: ZWaveNode | undefined;
 
 		// Don't send messages to dead nodes
-		if (
-			isNodeQuery(msg) ||
-			(isCommandClassContainer(msg) && !messageIsPing(msg))
-		) {
+		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			node = msg.getNodeUnsafe();
-			if (node?.status === NodeStatus.Dead) {
+			if (!messageIsPing(msg) && node?.status === NodeStatus.Dead) {
 				// Instead of throwing immediately, try to ping the node first - if it responds, continue
 				if (!(await node.ping())) {
 					throw new ZWaveError(
@@ -2047,6 +2082,8 @@ ${handlers.length} left`,
 					if (!node.keepAwake) {
 						this.debounceSendNodeToSleep(node);
 					}
+					// The node must be awake because it answered
+					node.markAsAwake();
 				} else if (node.status !== NodeStatus.Alive) {
 					// The node status was unknown or dead - in either case it must be alive because it answered
 					node.markAsAlive();

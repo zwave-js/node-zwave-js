@@ -1580,7 +1580,7 @@ version:               ${this.version}`;
 	 * Refreshes all non-static values from this node.
 	 * WARNING: It is not recommended to await this method!
 	 */
-	private async refreshValues(): Promise<void> {
+	public async refreshValues(): Promise<void> {
 		for (const endpoint of this.getAllEndpoints()) {
 			for (const cc of endpoint.getSupportedCCInstances()) {
 				// Only query actuator and sensor CCs
@@ -1680,6 +1680,14 @@ version:               ${this.version}`;
 			);
 			throw e;
 		}
+	}
+
+	/**
+	 * @internal
+	 * Temporarily updates the node's neighbor list by removing a node from it
+	 */
+	public removeNodeFromCachedNeighbors(nodeId: number): void {
+		this._neighbors = this._neighbors.filter((id) => id !== nodeId);
 	}
 
 	/** Queries a node for its neighbor nodes during the node interview */

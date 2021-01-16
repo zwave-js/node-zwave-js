@@ -163,6 +163,7 @@ jobs:
       run: yarn install --prefer-offline --frozen-lockfile
 
     - name: Compile TypeScript code
+      if: steps.check-permissions.outputs.result == 'true'
       # We need this or the linter will complain about other stuff than the checks
       run: yarn run build
 
@@ -196,6 +197,7 @@ jobs:
         fi
 
     - name: Give feedback
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/github-script@v3
       env:
         FEEDBACK: ${{ steps.fix.outputs.result }}
@@ -289,6 +291,7 @@ jobs:
         fi
 
     - name: Give feedback
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/github-script@v3
       env:
         FEEDBACK: ${{ steps.fix.outputs.result }}
@@ -301,7 +304,7 @@ jobs:
 
 
   # #########################################################################
-  # Fix lint errors when an authorized person posts "@zwave-js-bot rename commit"
+  # Rename the single commit of a PR to the title when an authorized person posts "@zwave-js-bot rename commit"
   rename-commit:
     if: |
       contains(github.event.issue.html_url, '/pull/') &&
@@ -377,6 +380,7 @@ jobs:
         fi
 
     - name: Give feedback
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/github-script@v3
       env:
         FEEDBACK: ${{ steps.fix.outputs.result }}
@@ -421,6 +425,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Get Yarn cache directory
+      if: steps.check-permissions.outputs.result == 'true'
       id: yarn-cache-dir-path
       run: echo "::set-output name=dir::$(yarn cache dir)"
 
@@ -439,10 +444,12 @@ jobs:
       run: yarn install --prefer-offline --frozen-lockfile
 
     - name: Compile TypeScript code
+      if: steps.check-permissions.outputs.result == 'true'
       # We need this or the linter will complain about other stuff than the checks
       run: yarn run build
 
     - name: Get config file ID
+      if: steps.check-permissions.outputs.result == 'true'
       id: config-id
       uses: actions/github-script@v3
       with:
@@ -488,6 +495,7 @@ jobs:
         fi
 
     - name: Create PR
+      if: steps.check-permissions.outputs.result == 'true'
       uses: actions/github-script@v3
       env:
         RESULT: ${{ steps.import.outputs.result }}
