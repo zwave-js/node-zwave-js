@@ -841,6 +841,15 @@ export class Driver extends EventEmitter {
 			this.retryNodeInterviewTimeouts.delete(node.id);
 		}
 
+		// Drop all pending messages that come from a previous interview attempt
+		this.rejectTransactions(
+			(t) =>
+				t.priority === MessagePriority.NodeQuery &&
+				t.message.getNodeId() === node.id,
+			"The interview was restarted",
+			ZWaveErrorCodes.Controller_MessageDropped,
+		);
+
 		const maxInterviewAttempts = this.options.attempts.nodeInterview;
 
 		try {
