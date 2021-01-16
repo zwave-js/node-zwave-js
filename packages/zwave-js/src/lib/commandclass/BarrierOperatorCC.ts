@@ -1,4 +1,4 @@
-import type { Maybe, MessageOrCCLogEntry } from "@zwave-js/core";
+import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import {
 	CommandClasses,
 	enumValuesToMetadataStates,
@@ -23,6 +23,15 @@ import {
 	gotDeserializationOptions,
 	implementedVersion,
 } from "./CommandClass";
+
+function getTargetValueValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses["Barrier Operator"],
+		endpoint,
+		property: "targetValue",
+	};
+}
+
 // All the supported commands
 export enum BarrierOperatorCommand {
 	Set = 0x01,
@@ -91,6 +100,37 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			// interpret unknown values as false
 			currentValue: response.currentValue,
 		};
+	}
+
+	public async set(
+		state: BarrierState.Open | BarrierState.Closed,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			BarrierOperatorCommand,
+			BarrierOperatorCommand.Set,
+		);
+
+		const cc = new BarrierOperatorCCSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			state,
+		});
+		if (this.isSinglecast()) {
+			// remember the value in case the device does not respond with a target value
+			this.endpoint
+				.getNodeUnsafe()
+				?.valueDB.setValue(
+					getTargetValueValueId(this.endpoint.index),
+					state,
+					{ noEvent: true },
+				);
+		}
+		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get();
+		}
 	}
 }
 
