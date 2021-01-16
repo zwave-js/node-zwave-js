@@ -1959,12 +1959,9 @@ ${handlers.length} left`,
 		let node: ZWaveNode | undefined;
 
 		// Don't send messages to dead nodes
-		if (
-			isNodeQuery(msg) ||
-			(isCommandClassContainer(msg) && !messageIsPing(msg))
-		) {
+		if (isNodeQuery(msg) || isCommandClassContainer(msg)) {
 			node = msg.getNodeUnsafe();
-			if (node?.status === NodeStatus.Dead) {
+			if (!messageIsPing(msg) && node?.status === NodeStatus.Dead) {
 				// Instead of throwing immediately, try to ping the node first - if it responds, continue
 				if (!(await node.ping())) {
 					throw new ZWaveError(
@@ -2069,6 +2066,8 @@ ${handlers.length} left`,
 					if (!node.keepAwake) {
 						this.debounceSendNodeToSleep(node);
 					}
+					// The node must be awake because it answered
+					node.markAsAwake();
 				} else if (node.status !== NodeStatus.Alive) {
 					// The node status was unknown or dead - in either case it must be alive because it answered
 					node.markAsAlive();
