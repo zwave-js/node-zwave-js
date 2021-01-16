@@ -40,6 +40,13 @@ function getStateValueId(endpoint?: number): ValueID {
 	};
 }
 
+function getTypeValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses["Barrier Operator"],
+		endpoint,
+		property: "type",
+	};
+}
 // All the supported commands
 export enum BarrierOperatorCommand {
 	Set = 0x01,
@@ -105,8 +112,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			this.commandOptions,
 		))!;
 		return {
-			// interpret unknown values as false
-			currentValue: response.currentValue,
+			state: response.state,
 		};
 	}
 
@@ -132,6 +138,72 @@ export class BarrierOperatorCCAPI extends CCAPI {
 					state,
 					{ noEvent: true },
 				);
+		}
+		await this.driver.sendCommand(cc, this.commandOptions);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.get();
+		}
+	}
+
+	public async getCapabilities(): Promise<readonly SignalType[]> {
+		this.assertSupportsCommand(
+			BarrierOperatorCommand,
+			BarrierOperatorCommand.CapabilitiesGet,
+		);
+
+		const cc = new BarrierOperatorCCCapabilitiesGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+		});
+		const response = (await this.driver.sendCommand<BarrierOperatorCCCapabilitiesReport>(
+			cc,
+			this.commandOptions,
+		))!;
+		return response.supportedSignalTypes;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+	public async getEvent(signalType: SignalType) {
+		this.assertSupportsCommand(
+			BarrierOperatorCommand,
+			BarrierOperatorCommand.EventGet,
+		);
+
+		const cc = new BarrierOperatorCCEventGet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			signalType,
+		});
+		const response = (await this.driver.sendCommand<BarrierOperatorCCEventReport>(
+			cc,
+			this.commandOptions,
+		))!;
+		return {
+			signalType: response.type,
+			signalState: response.state,
+		};
+	}
+
+	public async setEvent(
+		signalType: SignalType,
+		signalState: SignalState,
+	): Promise<void> {
+		this.assertSupportsCommand(
+			BarrierOperatorCommand,
+			BarrierOperatorCommand.EventSet,
+		);
+
+		const cc = new BarrierOperatorCCEventSet(this.driver, {
+			nodeId: this.endpoint.nodeId,
+			endpoint: this.endpoint.index,
+			signalType,
+			signalState,
+		});
+		if (this.isSinglecast()) {
+			// remember the value in case the device does not respond with a target value
+			await this.getEvent(signalType);
 		}
 		await this.driver.sendCommand(cc, this.commandOptions);
 
@@ -208,7 +280,6 @@ export class BarrierOperatorCCSet extends BarrierOperatorCC {
 
 @CCCommand(BarrierOperatorCommand.Report)
 export class BarrierOperatorCCReport extends BarrierOperatorCC {
-	currentValue: boolean | undefined;
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -261,6 +332,16 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 	public get position(): number | undefined {
 		return this._position;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"barrier position": this.position,
+				"barrier state": this.state, // I think i need to enumerate this
+			},
+		};
+	}
 }
 
 @CCCommand(BarrierOperatorCommand.Get)
@@ -290,6 +371,15 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 	@ccValue({ internal: true })
 	public get supportedSignalTypes(): readonly SignalType[] {
 		return this._supportedSignalTypes;
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"supported types": this.supportedSignalTypes,
+			},
+		};
 	}
 }
 
@@ -329,6 +419,16 @@ export class BarrierOperatorCCEventSet extends BarrierOperatorCC {
 		this.payload = Buffer.from([this.type, this.state]);
 		return super.serialize();
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"signal type": this.type,
+				"signal state": this.state,
+			},
+		};
+	}
 }
 
 @CCCommand(BarrierOperatorCommand.Report)
@@ -367,6 +467,16 @@ export class BarrierOperatorCCEventReport extends BarrierOperatorCC {
 	public get state(): SignalState {
 		return this._state;
 	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"signal type": this.type,
+				"signal state": this.state,
+			},
+		};
+	}
 }
 
 interface BarrierOperatorCCEventGetOptions extends CCCommandOptions {
@@ -401,5 +511,14 @@ export class BarrierOperatorCCEventGet extends BarrierOperatorCC {
 			/* TODO: serialize */
 		]);
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		return {
+			...super.toLogEntry(),
+			message: {
+				"signal type": this.signalType,
+			},
+		};
 	}
 }
