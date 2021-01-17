@@ -85,7 +85,7 @@ async function generateDeviceIndex(): Promise<DeviceConfigIndex> {
 		);
 	}
 
-	if (process.env.NODE_ENV !== "test") {
+	if (!!process.env.CI || process.env.NODE_ENV !== "test") {
 		// Write the index (but not during tests)
 		await writeFile(
 			path.join(devicesDir, "index.json"),
