@@ -15,7 +15,7 @@ const { ConfigManager } = require("@zwave-js/config");
 	await configManager.loadNotifications();
 
 	// The data to decode
-	const data = Buffer.from("010d0004000207430a012a232a5fc7", "hex");
+	const data = Buffer.from("010b0004001e05700d002000b6", "hex");
 	// The nonce needed to decode it
 	const nonce = Buffer.from("478d7aa05d83f3ea", "hex");
 	// The network key needed to decode it
