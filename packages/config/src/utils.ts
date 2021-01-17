@@ -12,9 +12,8 @@ export const hexKeyRegex2Digits = /^0x[a-fA-F0-9]{2}$/;
 
 export function throwInvalidConfig(which: string, reason?: string): never {
 	throw new ZWaveError(
-		`The ${which ? which + " " : ""}config file is malformed!${reason}`
-			? `\n${reason}`
-			: "",
+		`The ${which ? which + " " : ""}config file is malformed!` +
+			(reason ? `\n${reason}` : ""),
 		ZWaveErrorCodes.Config_Invalid,
 	);
 }

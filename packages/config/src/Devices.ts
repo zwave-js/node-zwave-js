@@ -125,7 +125,7 @@ export class DeviceConfig {
 		if (!isHexKeyWith4Digits(definition.manufacturerId)) {
 			throwInvalidConfig(
 				`device`,
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 manufacturer id must be a hexadecimal number with 4 digits`,
 			);
 		}
@@ -135,7 +135,7 @@ manufacturer id must be a hexadecimal number with 4 digits`,
 			if (typeof definition[prop] !== "string") {
 				throwInvalidConfig(
 					`device`,
-					`config/devices/${filename}:
+					`packages/config/config/devices/${filename}:
 ${prop} is not a string`,
 				);
 			}
@@ -153,7 +153,7 @@ ${prop} is not a string`,
 		) {
 			throwInvalidConfig(
 				`device`,
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 devices is malformed (not an object or type/id that is not a 4-digit hex key)`,
 			);
 		}
@@ -170,7 +170,7 @@ devices is malformed (not an object or type/id that is not a 4-digit hex key)`,
 		) {
 			throwInvalidConfig(
 				`device`,
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 firmwareVersion is malformed or invalid`,
 			);
 		} else {
@@ -183,7 +183,7 @@ firmwareVersion is malformed or invalid`,
 			if (!isObject(definition.associations)) {
 				throwInvalidConfig(
 					`device`,
-					`config/devices/${filename}:
+					`packages/config/config/devices/${filename}:
 associations is not an object`,
 				);
 			}
@@ -193,7 +193,7 @@ associations is not an object`,
 				if (!/^[1-9][0-9]*$/.test(key))
 					throwInvalidConfig(
 						`device`,
-						`config/devices/${filename}:
+						`packages/config/config/devices/${filename}:
 found non-numeric group id "${key}" in associations`,
 					);
 				const keyNum = parseInt(key, 10);
@@ -213,7 +213,7 @@ found non-numeric group id "${key}" in associations`,
 			if (!isObject(definition.paramInformation)) {
 				throwInvalidConfig(
 					`device`,
-					`config/devices/${filename}:
+					`packages/config/config/devices/${filename}:
 paramInformation is not an object`,
 				);
 			}
@@ -224,7 +224,7 @@ paramInformation is not an object`,
 				if (!match) {
 					throwInvalidConfig(
 						`device`,
-						`config/devices/${filename}: 
+						`packages/config/config/devices/${filename}: 
 found invalid param number "${key}" in paramInformation`,
 					);
 				}
@@ -248,7 +248,7 @@ found invalid param number "${key}" in paramInformation`,
 			if (!isObject(definition.proprietary)) {
 				throwInvalidConfig(
 					`device`,
-					`config/devices/${filename}:
+					`packages/config/config/devices/${filename}:
 proprietary is not an object`,
 				);
 			}
@@ -259,7 +259,7 @@ proprietary is not an object`,
 			if (!isObject(definition.compat)) {
 				throwInvalidConfig(
 					`device`,
-					`config/devices/${filename}:
+					`packages/config/config/devices/${filename}:
 compat is not an object`,
 				);
 			}
@@ -297,7 +297,7 @@ export class AssociationConfig {
 		if (typeof definition.label !== "string") {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Association ${groupId} has a non-string label`,
 			);
 		}
@@ -309,7 +309,7 @@ Association ${groupId} has a non-string label`,
 		) {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Association ${groupId} has a non-string description`,
 			);
 		}
@@ -318,7 +318,7 @@ Association ${groupId} has a non-string description`,
 		if (typeof definition.maxNodes !== "number") {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 maxNodes for association ${groupId} is not a number`,
 			);
 		}
@@ -330,7 +330,7 @@ maxNodes for association ${groupId} is not a number`,
 		) {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 isLifeline in association ${groupId} must be either true or left out`,
 			);
 		}
@@ -342,7 +342,7 @@ isLifeline in association ${groupId} must be either true or left out`,
 		) {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 noEndpoint in association ${groupId} must be either true or left out`,
 			);
 		}
@@ -375,7 +375,7 @@ export class ParamInformation {
 		if (typeof definition.label !== "string") {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Parameter #${parameterNumber} has a non-string label`,
 			);
 		}
@@ -387,7 +387,7 @@ Parameter #${parameterNumber} has a non-string label`,
 		) {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Parameter #${parameterNumber} has a non-string description`,
 			);
 		}
@@ -399,7 +399,7 @@ Parameter #${parameterNumber} has a non-string description`,
 		) {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Parameter #${parameterNumber} has an invalid value size`,
 			);
 		}
@@ -408,7 +408,7 @@ Parameter #${parameterNumber} has an invalid value size`,
 		if (typeof definition.minValue !== "number") {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Parameter #${parameterNumber} has a non-numeric property minValue`,
 			);
 		}
@@ -417,7 +417,7 @@ Parameter #${parameterNumber} has a non-numeric property minValue`,
 		if (typeof definition.maxValue !== "number") {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Parameter #${parameterNumber} has a non-numeric property maxValue`,
 			);
 		}
@@ -426,7 +426,7 @@ Parameter #${parameterNumber} has a non-numeric property maxValue`,
 		if (typeof definition.defaultValue !== "number") {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Parameter #${parameterNumber} has a non-numeric property defaultValue`,
 			);
 		}
@@ -438,7 +438,7 @@ Parameter #${parameterNumber} has a non-numeric property defaultValue`,
 		) {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Parameter #${parameterNumber} has a non-boolean property unsigned`,
 			);
 		}
@@ -447,7 +447,7 @@ Parameter #${parameterNumber} has a non-boolean property unsigned`,
 		if (typeof definition.readOnly !== "boolean") {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Parameter #${parameterNumber}: readOnly must be a boolean!`,
 			);
 		}
@@ -456,7 +456,7 @@ Parameter #${parameterNumber}: readOnly must be a boolean!`,
 		if (typeof definition.writeOnly !== "boolean") {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Parameter #${parameterNumber}: writeOnly must be a boolean!`,
 			);
 		}
@@ -465,7 +465,7 @@ Parameter #${parameterNumber}: writeOnly must be a boolean!`,
 		if (typeof definition.allowManualEntry !== "boolean") {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
 			);
 		}
@@ -482,7 +482,7 @@ Parameter #${parameterNumber}: allowManualEntry must be a boolean!`,
 		) {
 			throwInvalidConfig(
 				"devices",
-				`config/devices/${filename}:
+				`packages/config/config/devices/${filename}:
 Parameter #${parameterNumber}: options is malformed!`,
 			);
 		}
