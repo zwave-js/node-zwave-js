@@ -14,9 +14,7 @@ import {
 	CCAPI,
 	SetValueImplementation,
 	SET_VALUE,
-	throwMissingPropertyKey,
 	throwUnsupportedProperty,
-	throwUnsupportedPropertyKey,
 	throwWrongValueType,
 } from "./API";
 import {
@@ -204,23 +202,22 @@ export class BarrierOperatorCCAPI extends CCAPI {
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
-		{ property, propertyKey },
+		{ property },
 		value,
-	) => {
-		if (property !== "state") {
-			throwUnsupportedProperty(this.ccId, property);
-		}
+	): Promise<void> => {
 		if (typeof value !== "number") {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
+		} else {
+			switch (property) {
+				case "state":
+				case "signalType":
+				case "signalState":
+					await this.set(value);
+					break;
+				default:
+					throwUnsupportedProperty(this.ccId, property);
+			}
 		}
-
-		if (propertyKey == undefined) {
-			throwMissingPropertyKey(this.ccId, property);
-		} else if (typeof propertyKey !== "number") {
-			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
-		}
-
-		await this.set(value);
 	};
 }
 
