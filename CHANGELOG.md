@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## __WORK IN PROGRESS__ · "This is the way"
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)
 * Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
 * The second (string) parameter of the `"interview failed"` event handler was removed
@@ -34,9 +34,12 @@ To compensate for the change and give the response enough time to reach the cont
 * Added Fortrezz fts05p
 * Added an additional product type to Aeotec Range Extender 7
 * Added iblinds V3
+* Added Zooz ZEN31 RGBW Dimmer
 * Change manufacturer Jasco Products to GE/Jasco
+* Changed ZDB5100 config to expand on parameter 1
 * Renamed config param #11 in Q-Light Puck
 * Removed an unsupported parameter from GE 14294
+* Root endpoint values are no longer hidden for Philip PAN06, Aeotec ZW095 energy meter
 * New versions of `@zwave-js/config` are now automatically released every night if **only** config files were changed since the last release.  
 You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull the latest config files. For now, a driver restart is required afterwards.
 
@@ -55,6 +58,9 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * ValueIDs that use a `Duration` instance as the value now have the metadata type `"duration"`
 * Added a workaround for devices that return an invalid response when finding the first configuration param
 * Added a `hexColor` property to the `Color Switch CC`
+* Added the properties `ready` and `allNodesReady` to the driver to read the status after the corresponding events were emitted
+* The node neighbor lists now get updated when a node is removed
+* The `refreshValues` method is now exposed on node instances, which allows polling all actuator and sensor values of a node. **Note:** Please read the warnings in the [documentation](https://zwave-js.github.io/node-zwave-js/#/api/node?id=refreshvalues)!
 
 ### Bugfixes
 * Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask.  
@@ -66,6 +72,10 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * The driver no longer assumes that a sleeping node falls asleep after a certain time
 * The name and location of a node is no longer deleted when the node gets re-interviewed and **does not** support `Node Naming And Location CC`
 * The `propertyKeyName` of `Meter CC` values now contains the Meter type name
+* `Configuration CC`: empty Name and Info are now accepted as valid commands
+* `stopInclusion`/`stopExclusion` now always return a `boolean`
+* Successful pings now correctly change the node status
+* Messages from previous interview attempts are now dropped when an interview is restarted
 
 ### Changes under the hood
 * Test releases for PRs can now be created with a command
