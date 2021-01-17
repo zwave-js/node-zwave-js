@@ -1434,10 +1434,14 @@ export class ConfigurationCCNameReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		// All fields must be present
-		validatePayload(this.payload.length >= 4);
+		// Parameter and # of reports must be present
+		validatePayload(this.payload.length >= 3);
 		this._parameter = this.payload.readUInt16BE(0);
 		this._reportsToFollow = this.payload[2];
+		if (this._reportsToFollow > 0) {
+			// If more reports follow, the info must at least be one byte
+			validatePayload(this.payload.length >= 4);
+		}
 		this._name = this.payload.slice(3).toString("utf8");
 	}
 
@@ -1529,10 +1533,14 @@ export class ConfigurationCCInfoReport extends ConfigurationCC {
 		options: CommandClassDeserializationOptions,
 	) {
 		super(driver, options);
-		// All fields must be present
-		validatePayload(this.payload.length >= 4);
+		// Parameter and # of reports must be present
+		validatePayload(this.payload.length >= 3);
 		this._parameter = this.payload.readUInt16BE(0);
 		this._reportsToFollow = this.payload[2];
+		if (this._reportsToFollow > 0) {
+			// If more reports follow, the info must at least be one byte
+			validatePayload(this.payload.length >= 4);
+		}
 		this._info = this.payload.slice(3).toString("utf8");
 	}
 
