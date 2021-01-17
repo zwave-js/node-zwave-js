@@ -290,5 +290,8 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"preserveRootApplicationCCValueIDs": true
 	}
 }
