@@ -221,8 +221,8 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				throw e;
 			}
 		} finally {
-			// The nonce was either received or could not be sent.
-			// Either the device will now use the new nonce or we'll ignore the messages
+			// We transmitted a new nonce - whether it was received by the target node
+			// or not, the old ones should not be used anymore
 			this.driver.securityManager.deleteAllNoncesForReceiver(
 				cc.nodeId,
 				nonceId,

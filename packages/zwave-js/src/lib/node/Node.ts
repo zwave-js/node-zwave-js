@@ -1808,11 +1808,11 @@ version:               ${this.version}`;
 			return;
 		}
 
-		// Delete all previous nonces we sent the node since they
+		// Delete all previous nonces we sent the node, since they
 		// should no longer be used - except if a config flag forbids it
 		// Devices using this flag may only delete the old nonce after the new one was acknowledged
 		const keepUntilNext = !!this.deviceConfig?.compat?.keepS0NonceUntilNext;
-		if (keepUntilNext) {
+		if (!keepUntilNext) {
 			this.driver.securityManager.deleteAllNoncesForReceiver(this.id);
 		}
 
