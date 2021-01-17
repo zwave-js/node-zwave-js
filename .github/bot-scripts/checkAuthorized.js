@@ -14,7 +14,7 @@ async function main(param) {
 	};
 
 	if (context.payload.issue.html_url.includes("/pulls/")) {
-		github.log.info("Comment appears in a PR, retrieving PR info...");
+		console.log("Comment appears in a PR, retrieving PR info...");
 		// Only the pull request author and authorized users may execute this command
 		const { data: pull } = await github.pulls.get({
 			...options,
@@ -23,21 +23,21 @@ async function main(param) {
 
 		const allowed = [...authorizedUsers, pull.user.login];
 		const commenting = context.payload.comment.user.login;
-		github.log.info(`Authorized users: ${allowed.join(", ")}`);
-		github.log.info(`Commenting user: ${commenting}`);
+		console.log(`Authorized users: ${allowed.join(", ")}`);
+		console.log(`Commenting user: ${commenting}`);
 		const isAuthorized = allowed.includes(commenting);
-		github.log.info(`Is authorized: ${isAuthorized}`);
+		console.log(`Is authorized: ${isAuthorized}`);
 
 		if (!isAuthorized) return false;
 	} else {
 		// In issues, only the authorized users may execute any commands
-		github.log.info("Comment appears in an issue");
+		console.log("Comment appears in an issue");
 
 		const commenting = context.payload.comment.user.login;
-		github.log.info(`Authorized users: ${authorizedUsers.join(", ")}`);
-		github.log.info(`Commenting user: ${commenting}`);
+		console.log(`Authorized users: ${authorizedUsers.join(", ")}`);
+		console.log(`Commenting user: ${commenting}`);
 		const isAuthorized = authorizedUsers.includes(commenting);
-		github.log.info(`Is authorized: ${isAuthorized}`);
+		console.log(`Is authorized: ${isAuthorized}`);
 
 		if (!isAuthorized) return false;
 	}
