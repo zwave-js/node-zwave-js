@@ -1,6 +1,6 @@
 export type {
+	ControllerEvents,
 	HealNodeStatus,
 	ZWaveController,
-	ControllerEvents,
 } from "./lib/controller/Controller";
 export type { ZWaveLibraryTypes } from "./lib/controller/ZWaveLibraryTypes";
