@@ -87,5 +87,8 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"preserveRootApplicationCCValueIDs": true
 	}
 }
