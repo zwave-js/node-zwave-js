@@ -92,7 +92,9 @@ jobs:
       run: yarn run build
 
     - name: Lint config files
-      run: npx lerna run lint:config --no-prefix
+      run: |
+        npx lerna run generateDeviceIndex
+        npx lerna run lint:config --no-prefix
 
     - name: Lint Z-Wave specifics
       run: npx lerna run lint:zwave --no-prefix
