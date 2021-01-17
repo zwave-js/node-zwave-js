@@ -239,6 +239,10 @@
 					"label": "Multilevel Power Switch",
 					"supportedCCs": ["All Switch"]
 				},
+				"0x02": {
+					"label": "Tunable Color Light"
+					// TODO: don't know which CCs have to be supported
+				},
 				"0x03": {
 					"label": "Multiposition Motor",
 					"supportedCCs": ["Manufacturer Specific", "Version"]
@@ -278,6 +282,10 @@
 						"Manufacturer Specific",
 						"Version"
 					]
+				},
+				"0x08": {
+					"label": "Fan Switch"
+					// TODO: don't know which CCs have to be supported
 				}
 			}
 		},
