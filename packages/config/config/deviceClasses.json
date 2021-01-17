@@ -3,9 +3,9 @@
 {
 	"basic": {
 		"0x01": "Controller",
-		"0x02": "Routing Slave",
+		"0x02": "Static Controller",
 		"0x03": "Slave",
-		"0x04": "Static Controller"
+		"0x04": "Routing Slave"
 	},
 	"generic": {
 		"0x01": {
