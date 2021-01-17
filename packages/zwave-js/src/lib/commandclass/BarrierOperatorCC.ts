@@ -41,13 +41,6 @@ function getStateValueId(endpoint?: number): ValueID {
 	};
 }
 
-function getTypeValueId(endpoint?: number): ValueID {
-	return {
-		commandClass: CommandClasses["Barrier Operator"],
-		endpoint,
-		property: "type",
-	};
-}
 // All the supported commands
 export enum BarrierOperatorCommand {
 	Set = 0x01,
@@ -335,7 +328,10 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 			...super.toLogEntry(),
 			message: {
 				"barrier position": this.position,
-				"barrier state": getEnumMemberName(BarrierState, this.state),
+				"barrier state":
+					this.state != undefined
+						? getEnumMemberName(BarrierState, this.state)
+						: "unknown",
 			},
 		};
 	}
