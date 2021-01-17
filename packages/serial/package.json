@@ -1,6 +1,6 @@
 {
   "name": "@zwave-js/serial",
-  "version": "6.0.0-beta.1",
+  "version": "6.0.0-beta.2",
   "description": "zwave-js: Serialport driver",
   "publishConfig": {
     "access": "public"
@@ -31,7 +31,7 @@
     "node": ">=10.0.0"
   },
   "dependencies": {
-    "@zwave-js/core": "^6.0.0-beta.1",
+    "@zwave-js/core": "^6.0.0-beta.2",
     "alcalzone-shared": "^3.0.2",
     "serialport": "^9.0.1",
     "winston": "^3.3.3"
