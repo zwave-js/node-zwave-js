@@ -8,6 +8,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
 	CCAPI,
@@ -113,6 +114,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		))!;
 		return {
 			state: response.state,
+			position: response.position,
 		};
 	}
 
@@ -181,8 +183,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			this.commandOptions,
 		))!;
 		return {
-			signalType: response.type,
-			signalState: response.state,
+			signalState: getEnumMemberName(SignalState, response.state),
 		};
 	}
 
@@ -201,15 +202,11 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			signalType,
 			signalState,
 		});
-		if (this.isSinglecast()) {
-			// remember the value in case the device does not respond with a target value
-			await this.getEvent(signalType);
-		}
+
 		await this.driver.sendCommand(cc, this.commandOptions);
 
 		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get();
+			await this.getEvent(signalType);
 		}
 	}
 
@@ -338,7 +335,7 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 			...super.toLogEntry(),
 			message: {
 				"barrier position": this.position,
-				"barrier state": this.state, // I think i need to enumerate this
+				"barrier state": getEnumMemberName(BarrierState, this.state),
 			},
 		};
 	}
@@ -377,7 +374,9 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"supported types": this.supportedSignalTypes,
+				"supported types": this.supportedSignalTypes
+					.map((t) => `\n· ${getEnumMemberName(SignalType, t)}`)
+					.join(""),
 			},
 		};
 	}
@@ -424,8 +423,8 @@ export class BarrierOperatorCCEventSet extends BarrierOperatorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"signal type": this.type,
-				"signal state": this.state,
+				"signal type": getEnumMemberName(SignalType, this.type),
+				"signal state": getEnumMemberName(SignalState, this.state),
 			},
 		};
 	}
@@ -472,8 +471,8 @@ export class BarrierOperatorCCEventReport extends BarrierOperatorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"signal type": this.type,
-				"signal state": this.state,
+				"signal type": getEnumMemberName(SignalType, this.type),
+				"signal state": getEnumMemberName(SignalState, this.state),
 			},
 		};
 	}
@@ -507,9 +506,7 @@ export class BarrierOperatorCCEventGet extends BarrierOperatorCC {
 	public signalType: SignalType;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([
-			/* TODO: serialize */
-		]);
+		this.payload = Buffer.from([this.signalType]);
 		return super.serialize();
 	}
 
@@ -517,7 +514,7 @@ export class BarrierOperatorCCEventGet extends BarrierOperatorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"signal type": this.signalType,
+				"signal type": getEnumMemberName(SignalType, this.signalType),
 			},
 		};
 	}
