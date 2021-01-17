@@ -292,6 +292,7 @@
 		}
 	},
 	"compat": {
+		// This device reports cumulative values to the root endpoint
 		"preserveRootApplicationCCValueIDs": true
 	}
 }
