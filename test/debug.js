@@ -14,9 +14,6 @@ const { ConfigManager } = require("@zwave-js/config");
 	await configManager.loadDeviceIndex();
 	await configManager.loadNotifications();
 
-	debugger;
-	const device = configManager.lookupDevice(0x0371, 0x0102, 0xbb);
-
 	// The data to decode
 	const data = Buffer.from("010d0004000207430a012a232a5fc7", "hex");
 	// The nonce needed to decode it
@@ -37,6 +34,7 @@ const { ConfigManager } = require("@zwave-js/config");
 							valueDB: {
 								hasMetadata: () => false,
 								setMetadata() {},
+								getMetadata() {},
 								setValue() {},
 								getValue() {},
 							},
