@@ -18,8 +18,8 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1[0x01]": {
-			"label": "Pusbutton 1 controls the dimmer",
-			"description": "Enabling this parameter, lets pushbutton 1 control the built-in dimmer.",
+			"label": "Pushbutton 1 controls the dimmer",
+			"description": "Enabling this parameter lets pushbutton 1 control the built-in dimmer.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -29,8 +29,8 @@
 			"allowManualEntry": true
 		},
 		"1[0x02]": {
-			"label": "Pusbutton 2 controls the dimmer",
-			"description": "Enabling this parameter, lets pushbutton 2 control the built-in dimmer.",
+			"label": "Pushbutton 2 controls the dimmer",
+			"description": "Enabling this parameter lets pushbutton 2 control the built-in dimmer.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,8 +40,8 @@
 			"allowManualEntry": true
 		},
 		"1[0x04]": {
-			"label": "Pusbutton 3 controls the dimmer",
-			"description": "Enabling this parameter, lets pushbutton 3 control the built-in dimmer.",
+			"label": "Pushbutton 3 controls the dimmer",
+			"description": "Enabling this parameter lets pushbutton 3 control the built-in dimmer.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -51,8 +51,8 @@
 			"allowManualEntry": true
 		},
 		"1[0x08]": {
-			"label": "Pusbutton 4 controls the dimmer",
-			"description": "Enabling this parameter, lets pushbutton 4 control the built-in dimmer.",
+			"label": "Pushbutton 4 controls the dimmer",
+			"description": "Enabling this parameter lets pushbutton 4 control the built-in dimmer.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
