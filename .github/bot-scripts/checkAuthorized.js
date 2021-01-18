@@ -13,6 +13,9 @@ async function main(param) {
 		repo: context.repo.repo,
 	};
 
+	console.log(`context.payload.issue:`);
+	console.dir(context.payload.issue);
+
 	if (context.payload.issue.html_url.includes("/pulls/")) {
 		console.log("Comment appears in a PR, retrieving PR info...");
 		// Only the pull request author and authorized users may execute this command
