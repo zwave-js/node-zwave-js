@@ -119,8 +119,5 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"compat": {
-		"keepS0NonceUntilNext": true
 	}
 }
