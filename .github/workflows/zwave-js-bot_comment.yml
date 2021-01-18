@@ -180,7 +180,7 @@ jobs:
 
         # Check if something changed
         if ! git diff --quiet ; then
-          git config user.email "bot@zwave.js"
+          git config user.email "bot@zwave-js.io"
           git config user.name "Z-Wave JS Bot"
           git add -A
           git reset -- .github
@@ -284,7 +284,7 @@ jobs:
         # Try to rebase
         if git rebase "${{ fromJSON(steps.get-pr.outputs.result).base.ref }}" ; then
           # The rebase worked
-          git config user.email "bot@zwave.js"
+          git config user.email "bot@zwave-js.io"
           git config user.name "Z-Wave JS Bot"
           git push -f
         else
@@ -370,7 +370,7 @@ jobs:
       id: fix
       run: |
         # Try to reword the commit
-        git config user.email "bot@zwave.js"
+        git config user.email "bot@zwave-js.io"
         git config user.name "Z-Wave JS Bot"
         if git commit --amend -m "${{ fromJSON(steps.get-pr.outputs.result).title }}" ; then
           # Amending the commit worked
@@ -478,7 +478,7 @@ jobs:
         commitmessage="feat(config): import config files from $source"
 
         # Check if something changed
-        git config user.email "bot@zwave.js"
+        git config user.email "bot@zwave-js.io"
         git config user.name "Z-Wave JS Bot"
         git checkout -b "$branchname"
         git add -A
