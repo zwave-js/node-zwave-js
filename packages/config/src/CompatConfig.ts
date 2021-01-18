@@ -115,6 +115,76 @@ error in compat option treatBasicSetAsEvent`,
 			this.treatBasicSetAsEvent = definition.treatBasicSetAsEvent;
 		}
 
+		if (definition.overrideFloatEncoding != undefined) {
+			if (!isObject(definition.overrideFloatEncoding)) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option overrideFloatEncoding`,
+				);
+			}
+
+			this.overrideFloatEncoding = {};
+			if ("precision" in definition.overrideFloatEncoding) {
+				if (
+					typeof definition.overrideFloatEncoding.precision !=
+					"number"
+				) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+compat option overrideFloatEncoding.precision must be a number!`,
+					);
+				}
+
+				if (
+					definition.overrideFloatEncoding.precision % 1 !== 0 ||
+					definition.overrideFloatEncoding.precision < 0
+				) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+compat option overrideFloatEncoding.precision must be a positive integer!`,
+					);
+				}
+
+				this.overrideFloatEncoding.precision =
+					definition.overrideFloatEncoding.precision;
+			}
+			if ("size" in definition.overrideFloatEncoding) {
+				if (typeof definition.overrideFloatEncoding.size != "number") {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+compat option overrideFloatEncoding.size must be a number!`,
+					);
+				}
+
+				if (
+					definition.overrideFloatEncoding.size % 1 !== 0 ||
+					definition.overrideFloatEncoding.size < 1 ||
+					definition.overrideFloatEncoding.size > 4
+				) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+compat option overrideFloatEncoding.size must be an integer between 1 and 4!`,
+					);
+				}
+
+				this.overrideFloatEncoding.size =
+					definition.overrideFloatEncoding.size;
+			}
+
+			if (Object.keys(this.overrideFloatEncoding).length === 0) {
+				throwInvalidConfig(
+					"devices",
+					`config/devices/${filename}:
+error in compat option overrideFloatEncoding: size and/or precision must be specified!`,
+				);
+			}
+		}
+
 		if (definition.commandClasses != undefined) {
 			if (!isObject(definition.commandClasses)) {
 				throwInvalidConfig(
@@ -169,6 +239,10 @@ All values in compat option commandClasses.add must be objects`,
 
 	public readonly addCCs?: ReadonlyMap<CommandClasses, CompatAddCC>;
 	public readonly disableBasicMapping?: boolean;
+	public readonly overrideFloatEncoding?: {
+		size?: number;
+		precision?: number;
+	};
 	public readonly keepS0NonceUntilNext?: boolean;
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
 	public readonly skipConfigurationInfoQuery?: boolean;
