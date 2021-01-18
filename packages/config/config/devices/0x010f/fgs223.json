@@ -1,5 +1,5 @@
 {
-	"manufacturer": "FIBARO System",
+	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGS223",
 	"description": "Double Switch 2",
@@ -37,30 +37,30 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "On/Off S1",
+			"label": "On/Off (S1)",
 			"description": "On/Off (S1) is assigned to switch connected to the S1 terminal (uses Basic command class)",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Dimmer S1",
-			"description": "“Dimmer (S1)” is assigned to switch connected to the S1 terminal (uses Switch Multilevel command class)",
+			"label": "Dimmer (S1)",
+			"description": "Dimmer (S1) is assigned to switch connected to the S1 terminal (uses Switch Multilevel command class)",
 			"maxNodes": 5
 		},
 		"4": {
-			"label": "On/Off S2",
+			"label": "On/Off (S2)",
 			"description": "On/Off (S2) is assigned to switch connected to the S2 terminal (uses Basic command class)",
 			"maxNodes": 5
 		},
 		"5": {
-			"label": "Dimmer S2",
+			"label": "Dimmer (S2)",
 			"description": "Dimmer (S2) is assigned to switch connected to the S2 terminal (uses Switch Multilevel command class)",
 			"maxNodes": 5
 		}
 	},
 	"paramInformation": {
 		"9": {
-			"label": "Saving state before power failure",
-			"description": "Saving state before power failure",
+			"label": "Restore state after power failure",
+			"description": "Restore state after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -97,19 +97,19 @@
 					"value": 0
 				},
 				{
-					"label": "Delay On",
+					"label": "Delay ON",
 					"value": 1
 				},
 				{
-					"label": "Delay Off",
+					"label": "Delay OFF",
 					"value": 2
 				},
 				{
-					"label": "Auto On",
+					"label": "Auto ON",
 					"value": 3
 				},
 				{
-					"label": "Auto Off",
+					"label": "Auto OFF",
 					"value": 4
 				},
 				{
@@ -146,7 +146,7 @@
 		},
 		"12": {
 			"label": "First channel - time parameter for delay/auto ON/OFF modes",
-			"description": "This parameter allows to set time parameter used in timed modes. (s)",
+			"description": "This parameter allows to set time parameter used in timed modes.",
 			"valueSize": 2,
 			"unit": "seconds",
 			"minValue": 1,
@@ -159,9 +159,9 @@
 		},
 		"13": {
 			"label": "First channel - pulse time for flashing mode",
-			"description": "This parameter allows to set time of switching to opposite state in flashing mode.\n                1-32000 (0.1-3200.0s, 0.1s step)",
+			"description": "This parameter allows to set time of switching to opposite state in flashing mode.",
 			"valueSize": 2,
-			"unit": "seconds",
+			"unit": "0.1 seconds",
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 5,
@@ -187,19 +187,19 @@
 					"value": 0
 				},
 				{
-					"label": "Delay On",
+					"label": "Delay ON",
 					"value": 1
 				},
 				{
-					"label": "Delay Off",
+					"label": "Delay OFF",
 					"value": 2
 				},
 				{
-					"label": "Auto On",
+					"label": "Auto ON",
 					"value": 3
 				},
 				{
-					"label": "Auto Off",
+					"label": "Auto OFF",
 					"value": 4
 				},
 				{
@@ -212,6 +212,7 @@
 			"label": "Second channel - reaction to switch for delay/auto ON/OFF modes",
 			"description": "This parameter determines how the device in timed mode reacts to pushing the switch connected to the S2 terminal.",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
@@ -236,8 +237,9 @@
 		},
 		"17": {
 			"label": "Second channel - time parameter for delay/auto ON/OFF modes",
-			"description": "This parameter allows to set time parameter used in timed modes. (s)",
+			"description": "This parameter allows to set time parameter used in timed modes.",
 			"valueSize": 2,
+			"unit": "0.1 seconds",
 			"minValue": 1,
 			"maxValue": 32000,
 			"defaultValue": 50,
@@ -248,7 +250,7 @@
 		},
 		"18": {
 			"label": "Second channel - pulse time for flashing mode",
-			"description": "This parameter allows to set time of switching to opposite state in flashing mode.\n                1-32000 (0.1-3200.0s, 0.1s step)",
+			"description": "This parameter allows to set time of switching to opposite state in flashing mode.",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32000,
@@ -275,7 +277,7 @@
 					"value": 0
 				},
 				{
-					"label": "Toggle switch (contact closed - On, contact opened - OFF)",
+					"label": "Toggle switch (contact closed - ON, contact opened - OFF)",
 					"value": 1
 				},
 				{
@@ -306,153 +308,185 @@
 				}
 			]
 		},
-		"27": {
-			"label": "Associations in Z-Wave network security mode",
-			"description": "This parameter defines how commands are sent to specified association groups: as secure or non-secure.\n                Parameter is active only in Z-Wave network security mode.\n                This parameter does not apply to 1st lifeline group.\n                1 - 2nd group sent as secure.\n                2 - 3rd group sent as secure.\n                4 - 4th group sent as secure.\n                8 - 5th group sent as secure.\n                Default setting: 15 (all)",
+		"27[0x01]": {
+			"label": "Associations: Send secure commands to 2nd group",
+			"description": "This is only active when the node is included securely",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 15,
+			"maxValue": 1,
+			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "no group sent as secure",
-					"value": 0
-				},
-				{
-					"label": "2nd group sent as secure",
-					"value": 1
-				},
-				{
-					"label": "3rd group sent as secure",
-					"value": 2
-				},
-				{
-					"label": "4th group sent as secure",
-					"value": 4
-				},
-				{
-					"label": "5th group sent as secure",
-					"value": 8
-				},
-				{
-					"label": "all groups sent as secure",
-					"value": 15
-				}
-			]
+			"allowManualEntry": true
 		},
-		"28": {
-			"label": "S1 switch - scenes sent",
-			"description": "This parameter determines which actions result in sending scene IDs assigned to them.\n                1 - Key pressed 1 time.\n                2 - Key pressed 2 times.\n                4 - Key pressed 3 times.\n                8 - Key Hold Down and Key Released.\n                Default setting: 0 (none)",
+		"27[0x02]": {
+			"label": "Associations: Send secure commands to 3rd group",
+			"description": "This is only active when the node is included securely",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 15,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"27[0x04]": {
+			"label": "Associations: Send secure commands to 4th group",
+			"description": "This is only active when the node is included securely",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"27[0x08]": {
+			"label": "Associations: Send secure commands to 5th group",
+			"description": "This is only active when the node is included securely",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"28[0x01]": {
+			"label": "S1 switch - Send Scenes: Key pressed 1 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "no scenes sent",
-					"value": 0
-				},
-				{
-					"label": "Key pressed 1 time",
-					"value": 1
-				},
-				{
-					"label": "Key pressed 2 times",
-					"value": 2
-				},
-				{
-					"label": "Key pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key Hold Down and Key Released",
-					"value": 8
-				},
-				{
-					"label": "In all cases a scene ID will be sent",
-					"value": 15
-				}
-			]
+			"allowManualEntry": true
 		},
-		"29": {
-			"label": "S2 switch - scenes sent",
-			"description": "This parameter determines which actions result in sending scene IDs assigned to them.\n                1 - Key pressed 1 time.\n                2 - Key pressed 2 times.\n                4 - Key pressed 3 times.\n                8 - Key Hold Down and Key Released.\n                Default setting: 0 (none)",
+		"28[0x02]": {
+			"label": "S1 switch - Send Scenes: Key pressed 2 times",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 15,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "no scenes sent",
-					"value": 0
-				},
-				{
-					"label": "Key pressed 1 time",
-					"value": 1
-				},
-				{
-					"label": "Key pressed 2 times",
-					"value": 2
-				},
-				{
-					"label": "Key pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key Hold Down and Key Released",
-					"value": 8
-				},
-				{
-					"label": "In all cases a scene ID will be sent",
-					"value": 15
-				}
-			]
+			"allowManualEntry": true
 		},
-		"30": {
-			"label": "S1 associations sent to 2nd and 3rd association groups",
-			"description": "This parameter determines which actions are ignored when sending commands to devices associated in 2nd and 3rd association group.\n                All actions are active by default.\n                1 - ignore turning On with 1 click of the switch.\n                2 - ignore turning OFF with 1 click of the switch.\n                4 - ignore holding and releasing the switch.\n                8 - ignore double click of the switch.\n                Default setting: 0",
+		"28[0x04]": {
+			"label": "S1 switch - Send Scenes: Key pressed 3 times",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 8,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "All actions are active by default",
-					"value": 0
-				},
-				{
-					"label": "ignore turning ON with 1 click of the switch",
-					"value": 1
-				},
-				{
-					"label": "ignore turning OFF with 1 click of the switch",
-					"value": 2
-				},
-				{
-					"label": "ignore holding and releasing the switch",
-					"value": 4
-				},
-				{
-					"label": "ignore double click of the switch",
-					"value": 8
-				}
-			]
+			"allowManualEntry": true
+		},
+		"28[0x08]": {
+			"label": "S1 switch - Send Scenes: Key held down and Key released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"29[0x01]": {
+			"label": "S2 switch - Send Scenes: Key pressed 1 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"29[0x02]": {
+			"label": "S2 switch - Send Scenes: Key pressed 2 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"29[0x04]": {
+			"label": "S2 switch - Send Scenes: Key pressed 3 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"29[0x08]": {
+			"label": "S2 switch - Send Scenes: Key held down and Key released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x01]": {
+			"label": "S1 switch associations - Ignore turning ON with 1 click",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x02]": {
+			"label": "S1 switch associations - Ignore turning OFF with 1 click",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x04]": {
+			"label": "S1 switch associations - Ignore holding and releasing",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x08]": {
+			"label": "S1 switch associations - Ignore double click",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
 		},
 		"31": {
 			"label": "S1 Switch ON value sent to 2nd and 3rd association groups",
@@ -490,39 +524,49 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"35": {
-			"label": "S2 associations sent to 4th and 5th association groups",
-			"description": "This parameter determines which actions are ignored when sending commands to devices associated in 4th and 5th association group.\n                All actions are active by default.\n                1 - ignore turning On with 1 click of the switch.\n                2 - ignore turning OFF with 1 click of the switch.\n                4 - ignore holding and releasing the switch.\n                8 - ignore double click of the switch.\n                Default setting: 0",
+		"35[0x01]": {
+			"label": "S2 switch associations - Ignore turning ON with 1 click",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 8,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "All actions are active by default",
-					"value": 0
-				},
-				{
-					"label": "ignore turning on with 1 click of the switch",
-					"value": 1
-				},
-				{
-					"label": "ignore turning off with 1 click of the switch",
-					"value": 2
-				},
-				{
-					"label": "ignore holding and releasing the switch",
-					"value": 4
-				},
-				{
-					"label": "ignore double click of the switch",
-					"value": 8
-				}
-			]
+			"allowManualEntry": true
+		},
+		"35[0x02]": {
+			"label": "S2 switch associations - Ignore turning OFF with 1 click",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35[0x04]": {
+			"label": "S2 switch associations - Ignore holding and releasing",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"35[0x08]": {
+			"label": "S2 switch associations - Ignore double click",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
 		},
 		"36": {
 			"label": "S2 Switch ON value sent to 4th and 5th association groups",
