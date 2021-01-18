@@ -282,7 +282,7 @@ jobs:
       id: fix
       run: |
         # Try to rebase
-        if git rebase "${{ fromJSON(steps.get-pr.outputs.result).base.ref }}"" ; then
+        if git rebase "${{ fromJSON(steps.get-pr.outputs.result).base.ref }}" ; then
           # The rebase worked
           git config user.email "bot@zwave.js"
           git config user.name "Z-Wave JS Bot"
