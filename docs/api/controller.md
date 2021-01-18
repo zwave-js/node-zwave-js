@@ -85,6 +85,15 @@ isFailedNode(nodeId: number): Promise<boolean>
 
 Checks if a node was marked as failed in the controller. If it is, it can be removed from the network with [`removeFailedNode`](#removeFailedNode).
 
+### `markNodeAsFailed`
+
+```ts
+markNodeAsFailed(nodeId: number): Promise<boolean>
+```
+
+Sometimes failed nodes are not detected by the controller hardware, so [`removeFailedNode`](#removeFailedNode) and [`replaceFailedNode`](#replaceFailedNode) won't work. This method can be used to ping a node a couple of times, which should reliably mark the node as failed.
+It returns `true` when the node was successfully detected as failed.
+
 ### `removeFailedNode`
 
 ```ts

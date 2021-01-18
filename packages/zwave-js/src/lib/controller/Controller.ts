@@ -1870,6 +1870,46 @@ ${associatedNodes.join(", ")}`,
 	}
 
 	/**
+	 * Mark a node as failed in the controller's memory, so it can be removed with @see removeFailedNode.
+	 * The return value indicates whether marking the node as failed succeeded.
+	 * @param nodeId The id of the node in question
+	 */
+	public async markNodeAsFailed(nodeId: number): Promise<boolean> {
+		const node = this.nodes.get(nodeId);
+		if (!node) {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		if (await this.isFailedNode(nodeId)) return true;
+
+		const attempts = 5;
+		for (let i = 1; i <= attempts; i++) {
+			this.driver.controllerLog.logNode(
+				nodeId,
+				`Trying to mark node as failed, attempt ${i}/${attempts}...`,
+			);
+			if (await node.ping()) {
+				this.driver.controllerLog.logNode(
+					nodeId,
+					`responded, it is not a failed node.`,
+				);
+				return false;
+			} else if (await this.isFailedNode(nodeId)) {
+				this.driver.controllerLog.logNode(
+					nodeId,
+					`was marked as failed.`,
+				);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Tests if a node is marked as failed in the controller's memory
 	 * @param nodeId The id of the node in question
 	 */
