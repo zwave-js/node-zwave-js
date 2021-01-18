@@ -55,10 +55,10 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
-			"options": {
+			"options": [
 				"label": "Humidity reporting on change is disabled",
 				"value": 0
-			}
+			]
 		},
 		"4": {
 			"label": "Temperature sensor offset settings",
