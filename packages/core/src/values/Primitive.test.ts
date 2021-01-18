@@ -185,6 +185,51 @@ describe("lib/values/Primitive", () => {
 			}
 		});
 
+		it("should use the specified override options", () => {
+			const tests = [
+				{
+					scale: 0b00,
+					value: 0,
+					override: { size: 2 }, // Force 2 bytes for the value
+					expected: Buffer.from([0b000_00_010, 0, 0]),
+				},
+				{
+					scale: 0b01,
+					value: 100,
+					override: { precision: 2 }, // Force 2 decimal digits
+					// resulting in 2 bytes size
+					expected: Buffer.from([0b010_01_010, 0x27, 0x10]),
+				},
+				{
+					scale: 0b10,
+					value: 100,
+					override: { precision: 1, size: 3 },
+					expected: Buffer.from([0b001_10_011, 0, 0x03, 0xe8]),
+				},
+			];
+			for (const { scale, value, override, expected } of tests) {
+				expect(encodeFloatWithScale(value, scale, override)).toEqual(
+					expected,
+				);
+			}
+		});
+
+		it("should fall back to sane options when the override is invalid", () => {
+			const tests = [
+				{
+					scale: 0b10,
+					value: 100,
+					override: { precision: 1, size: 1 }, // invalid, this requires a size of at least 2
+					expected: Buffer.from([0b001_10_010, 0x03, 0xe8]),
+				},
+			];
+			for (const { scale, value, override, expected } of tests) {
+				expect(encodeFloatWithScale(value, scale, override)).toEqual(
+					expected,
+				);
+			}
+		});
+
 		it("should throw when the value cannot be represented in 4 bytes", () => {
 			assertZWaveError(() => encodeFloatWithScale(0xffffffff, 0), {
 				errorCode: ZWaveErrorCodes.Arithmetic,
