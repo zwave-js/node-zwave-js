@@ -205,14 +205,6 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				...this.commandOptions,
 				priority: MessagePriority.Handshake,
 			});
-			if (keepUntilNext) {
-				// The nonce was received. If we are talking to a device with the keepS0NonceUntilNext compat option,
-				// we now may expire all other nonces
-				this.driver.securityManager.deleteAllNoncesForReceiver(
-					cc.nodeId,
-					nonceId,
-				);
-			}
 		} catch (e) {
 			if (
 				e instanceof ZWaveError &&
@@ -228,6 +220,13 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				// Pass other errors through
 				throw e;
 			}
+		} finally {
+			// We transmitted a new nonce - whether it was received by the target node
+			// or not, the old ones should not be used anymore
+			this.driver.securityManager.deleteAllNoncesForReceiver(
+				cc.nodeId,
+				nonceId,
+			);
 		}
 		return true;
 	}

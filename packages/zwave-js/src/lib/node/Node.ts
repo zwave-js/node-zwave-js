@@ -107,6 +107,7 @@ import {
 } from "../controller/GetRoutingInfoMessages";
 import type { Driver } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
+import type { Transaction } from "../driver/Transaction";
 import type { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
@@ -1802,20 +1803,31 @@ version:               ${this.version}`;
 		});
 
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
-		this.driver.rejectTransactions(
-			(t) =>
-				t.message.getNodeId() === this.nodeId &&
-				isCommandClassContainer(t.message) &&
-				t.message.command instanceof SecurityCCNonceReport,
-			`Duplicate NonceReport was dropped`,
-			ZWaveErrorCodes.Controller_MessageDropped,
-		);
+		const { queue, currentTransaction } = this.driver[
+			"sendThread"
+		].state.context;
+		const isNonceReport = (t: Transaction | undefined) =>
+			!!t &&
+			t.message.getNodeId() === this.nodeId &&
+			isCommandClassContainer(t.message) &&
+			t.message.command instanceof SecurityCCNonceReport;
+		if (
+			isNonceReport(currentTransaction) ||
+			queue.find((t) => isNonceReport(t))
+		) {
+			this.driver.controllerLog.logNode(this.id, {
+				message:
+					"in the process of replying to a NonceGet, won't send another NonceReport",
+				level: "warn",
+			});
+			return;
+		}
 
-		// And also delete all previous nonces we sent the node since they
+		// Delete all previous nonces we sent the node, since they
 		// should no longer be used - except if a config flag forbids it
 		// Devices using this flag may only delete the old nonce after the new one was acknowledged
 		const keepUntilNext = !!this.deviceConfig?.compat?.keepS0NonceUntilNext;
-		if (keepUntilNext) {
+		if (!keepUntilNext) {
 			this.driver.securityManager.deleteAllNoncesForReceiver(this.id);
 		}
 
