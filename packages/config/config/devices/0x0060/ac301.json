@@ -160,5 +160,12 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		// This device only accepts Thermostat Setpoint Set commands with a specific float encoding
+		"overrideFloatEncoding": {
+			"precision": 1,
+			"size": 2
+		}
 	}
 }
