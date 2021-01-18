@@ -223,13 +223,10 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 		} finally {
 			// We transmitted a new nonce - whether it was received by the target node
 			// or not, the old ones should not be used anymore
-			const expireDelay = keepUntilNext ? 500 : 0; // avoid timing issues with those bugged devices
-			setTimeout(() => {
-				this.driver.securityManager!.deleteAllNoncesForReceiver(
-					cc.nodeId,
-					nonceId,
-				);
-			}, expireDelay);
+			this.driver.securityManager.deleteAllNoncesForReceiver(
+				cc.nodeId,
+				nonceId,
+			);
 		}
 		return true;
 	}
