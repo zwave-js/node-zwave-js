@@ -145,6 +145,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Get Yarn cache directory
+      if: steps.check-permissions.outputs.result == 'true'
       id: yarn-cache-dir-path
       run: echo "::set-output name=dir::$(yarn cache dir)"
 

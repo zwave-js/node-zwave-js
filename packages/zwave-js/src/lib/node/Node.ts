@@ -1120,14 +1120,29 @@ version:               ${this.version}`;
 			const resp = await this.driver.sendMessage<
 				RequestNodeInfoResponse | ApplicationUpdateRequest
 			>(new RequestNodeInfoRequest(this.driver, { nodeId: this.id }));
-			if (
-				(resp instanceof RequestNodeInfoResponse && !resp.wasSent) ||
-				resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
-			) {
+			if (resp instanceof RequestNodeInfoResponse && !resp.wasSent) {
+				// TODO: handle this in SendThreadMachine
 				this.driver.controllerLog.logNode(
 					this.id,
-					`querying the node info failed`,
+					`Querying the node info failed`,
 					"error",
+				);
+				throw new ZWaveError(
+					`Querying the node info failed`,
+					ZWaveErrorCodes.Controller_ResponseNOK,
+				);
+			} else if (
+				resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
+			) {
+				// TODO: handle this in SendThreadMachine
+				this.driver.controllerLog.logNode(
+					this.id,
+					`Querying the node info failed`,
+					"error",
+				);
+				throw new ZWaveError(
+					`Querying the node info failed`,
+					ZWaveErrorCodes.Controller_CallbackNOK,
 				);
 			} else if (
 				resp instanceof ApplicationUpdateRequestNodeInfoReceived

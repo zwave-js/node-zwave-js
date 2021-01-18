@@ -13,7 +13,10 @@ async function main(param) {
 		repo: context.repo.repo,
 	};
 
-	if (context.payload.issue.html_url.includes("/pulls/")) {
+	// console.log(`context.payload.issue:`);
+	// console.dir(context.payload.issue);
+
+	if (context.payload.issue.html_url.includes("/pull/")) {
 		console.log("Comment appears in a PR, retrieving PR info...");
 		// Only the pull request author and authorized users may execute this command
 		const { data: pull } = await github.pulls.get({

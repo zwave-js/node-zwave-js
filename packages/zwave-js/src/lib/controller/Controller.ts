@@ -123,7 +123,7 @@ interface ControllerEventCallbacks {
 	"heal network done": (result: ReadonlyMap<number, HealNodeStatus>) => void;
 }
 
-type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
+export type ControllerEvents = Extract<keyof ControllerEventCallbacks, string>;
 
 export interface ZWaveController {
 	on<TEvent extends ControllerEvents>(
