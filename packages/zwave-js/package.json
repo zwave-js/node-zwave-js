@@ -1,6 +1,6 @@
 {
   "name": "zwave-js",
-  "version": "6.0.0-beta.2",
+  "version": "6.0.0-beta.3",
   "description": "Z-Wave driver written entirely in JavaScript/TypeScript",
   "keywords": [],
   "main": "index.js",
@@ -63,7 +63,7 @@
     "@alcalzone/jsonl-db": "^1.2.3",
     "@sentry/integrations": "^5.24.2",
     "@sentry/node": "^5.24.2",
-    "@zwave-js/config": "^6.0.0-beta.2",
+    "@zwave-js/config": "^6.0.0-beta.3",
     "@zwave-js/core": "^6.0.0-beta.2",
     "@zwave-js/serial": "^6.0.0-beta.2",
     "@zwave-js/shared": "^6.0.0-beta.2",
