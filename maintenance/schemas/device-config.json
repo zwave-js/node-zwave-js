@@ -205,6 +205,22 @@
 				"disableBasicMapping": {
 					"const": true
 				},
+				"overrideFloatEncoding": {
+					"type": "object",
+					"properties": {
+						"size": {
+							"type": "integer",
+							"minimum": 1,
+							"maximum": 4
+						},
+						"precision": {
+							"type": "integer",
+							"minimum": 0
+						}
+					},
+					"minProperties": 1,
+					"additionalProperties": false
+				},
 				"keepS0NonceUntilNext": {
 					"const": true
 				},
