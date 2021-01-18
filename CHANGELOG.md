@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## 6.0.0-beta.2 (2021-01-17) · "This is the way"
+## __WORK IN PROGRESS__ · "This is the way"
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)
 * Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
 * The second (string) parameter of the `"interview failed"` event handler was removed
@@ -35,8 +35,10 @@ To compensate for the change and give the response enough time to reach the cont
 * Added an additional product type to Aeotec Range Extender 7
 * Added iblinds V3
 * Added Zooz ZEN31 RGBW Dimmer
+* Added ThermoFloor Z-Temp2 thermostat
 * Change manufacturer Jasco Products to GE/Jasco
 * Changed ZDB5100 config to expand on parameter 1
+* Changed several ZW175 config parameters to use partial parameters
 * Renamed config param #11 in Q-Light Puck
 * Removed an unsupported parameter from GE 14294
 * Root endpoint values are no longer hidden for Philip PAN06, Aeotec ZW095 energy meter
@@ -61,6 +63,7 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * Added the properties `ready` and `allNodesReady` to the driver to read the status after the corresponding events were emitted
 * The node neighbor lists now get updated when a node is removed
 * The `refreshValues` method is now exposed on node instances, which allows polling all actuator and sensor values of a node. **Note:** Please read the warnings in the [documentation](https://zwave-js.github.io/node-zwave-js/#/api/node?id=refreshvalues)!
+* The controller event callback types are now exported
 
 ### Bugfixes
 * Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask.  
@@ -76,6 +79,9 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * `stopInclusion`/`stopExclusion` now always return a `boolean`
 * Successful pings now correctly change the node status
 * Messages from previous interview attempts are now dropped when an interview is restarted
+* When requesting node info fails, the interview is now aborted and restarted later instead of skipping all CC interviews
+* Added two missing "specific device types"
+* Switched the basic device type for Routing Slave and Static Controller
 
 ### Changes under the hood
 * Test releases for PRs can now be created with a command
