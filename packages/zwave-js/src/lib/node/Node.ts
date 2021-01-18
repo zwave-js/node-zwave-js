@@ -1275,6 +1275,10 @@ version:               ${this.version}`;
 				) {
 					// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
 					await this.loadDeviceConfig();
+					if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
+						// To create the compat event value, we need to force a Basic CC interview
+						this.addCC(CommandClasses.Basic, { isSupported: true });
+					}
 				}
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
