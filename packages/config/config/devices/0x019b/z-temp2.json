@@ -39,8 +39,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true,
 			"options": [
-				"label": "Temperature reporting on change is disabled",
-				"value": 0
+				{
+					"label": "Temperature reporting on change is disabled",
+					"value": 0
+				}
 			]
 		},
 		"3": {
@@ -56,8 +58,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true,
 			"options": [
-				"label": "Humidity reporting on change is disabled",
-				"value": 0
+				{
+					"label": "Humidity reporting on change is disabled",
+					"value": 0
+				}
 			]
 		},
 		"4": {
