@@ -208,10 +208,14 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			if (this.isSinglecast()) {
 				// Refresh the current value after a delay
 				if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-				setTimeout(() => {
+				setTimeout(async () => {
 					this.refreshTimeout = undefined;
-					void this.get().catch();
-				}, duration?.toMilliseconds() ?? this.driver.options.timeouts.refreshValue);
+					try {
+						await this.get();
+					} catch {
+						/* ignore */
+					}
+				}, duration?.toMilliseconds() ?? this.driver.options.timeouts.refreshValue).unref();
 			}
 		}
 	}

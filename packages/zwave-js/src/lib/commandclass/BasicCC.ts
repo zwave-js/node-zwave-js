@@ -118,10 +118,14 @@ export class BasicCCAPI extends CCAPI {
 		if (this.isSinglecast()) {
 			// Refresh the current value after a delay
 			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-			setTimeout(() => {
+			setTimeout(async () => {
 				this.refreshTimeout = undefined;
-				void this.get().catch();
-			}, this.driver.options.timeouts.refreshValue);
+				try {
+					await this.get();
+				} catch {
+					/* ignore */
+				}
+			}, this.driver.options.timeouts.refreshValue).unref();
 		}
 	}
 }
