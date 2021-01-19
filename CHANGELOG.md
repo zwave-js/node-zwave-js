@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__ · _This is the way_
+## 6.0.0 (2021-01-19) · _This is the way_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)
 * Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
 * The second (string) parameter of the `"interview failed"` event handler was removed
