@@ -126,7 +126,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 				} catch {
 					/* ignore */
 				}
-			}, duration?.toMilliseconds() ?? this.driver.options.timeouts.refreshValue).unref();
+			}, duration?.toMilliseconds() ?? 1000).unref();
 		}
 	}
 
