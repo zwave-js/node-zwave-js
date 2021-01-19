@@ -60,6 +60,7 @@ export class BasicCCAPI extends CCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
 	protected [SET_VALUE]: SetValueImplementation = async (
 		{ property },
 		value,
@@ -92,6 +93,8 @@ export class BasicCCAPI extends CCAPI {
 		};
 	}
 
+	private refreshTimeout: NodeJS.Timeout | undefined;
+
 	public async set(targetValue: number): Promise<void> {
 		this.assertSupportsCommand(BasicCommand, BasicCommand.Set);
 
@@ -113,8 +116,12 @@ export class BasicCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 
 		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get();
+			// Refresh the current value after a delay
+			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+			setTimeout(() => {
+				this.refreshTimeout = undefined;
+				void this.get().catch();
+			}, this.driver.options.timeouts.refreshValue);
 		}
 	}
 }

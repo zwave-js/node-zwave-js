@@ -198,6 +198,8 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		]);
 	}
 
+	private refreshTimeout: NodeJS.Timeout | undefined;
+
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
 		this.assertSupportsCommand(
@@ -239,8 +241,12 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
 
-		// Refresh the current value
-		await this.get();
+		// Refresh the current value after a delay
+		if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+		setTimeout(() => {
+			this.refreshTimeout = undefined;
+			void this.get().catch();
+		}, this.driver.options.timeouts.refreshValue);
 	}
 
 	public async setConfiguration(
