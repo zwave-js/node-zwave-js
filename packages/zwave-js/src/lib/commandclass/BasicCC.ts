@@ -41,11 +41,27 @@ export enum BasicCommand {
 	Report = 0x03,
 }
 
-function getTargetValueValueId(endpoint?: number): ValueID {
+export function getTargetValueValueId(endpoint?: number): ValueID {
 	return {
 		commandClass: CommandClasses.Basic,
 		endpoint,
 		property: "targetValue",
+	};
+}
+
+export function getCurrentValueValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses.Basic,
+		endpoint,
+		property: "currentValue",
+	};
+}
+
+export function getCompatEventValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses.Basic,
+		endpoint,
+		property: "event",
 	};
 }
 
@@ -174,6 +190,17 @@ remaining duration: ${basicResponse.duration?.toString() ?? "undefined"}`;
 				endpoint.removeCC(CommandClasses.Basic);
 			},
 		);
+
+		// create compat event value if necessary
+		if (node.deviceConfig?.compat?.treatBasicSetAsEvent) {
+			const valueId = getCompatEventValueId(this.endpointIndex);
+			if (!node.valueDB.hasMetadata(valueId)) {
+				node.valueDB.setMetadata(valueId, {
+					...ValueMetadata.ReadOnlyUInt8,
+					label: "Event value",
+				});
+			}
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;

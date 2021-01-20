@@ -38,7 +38,13 @@ import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
 import { CCAPI, ignoreTimeout } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
-import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
+import {
+	BasicCC,
+	BasicCCReport,
+	BasicCCSet,
+	getCompatEventValueId as getBasicCCCompatEventValueId,
+	getCurrentValueValueId as getBasicCCCurrentValueValueId,
+} from "../commandclass/BasicCC";
 import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
@@ -1285,6 +1291,13 @@ version:               ${this.version}`;
 				) {
 					// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
 					await this.loadDeviceConfig();
+					if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
+						// To create the compat event value, we need to force a Basic CC interview
+						this.addCC(CommandClasses.Basic, {
+							isSupported: true,
+							version: 1,
+						});
+					}
 				}
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
@@ -1361,8 +1374,9 @@ version:               ${this.version}`;
 		}
 
 		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
-		// to map the Basic CC to other CCs
-		if (!this._deviceConfig?.compat?.disableBasicMapping) {
+		// to map the Basic CC to other CCs or expose Basic Set as an event
+		const compat = this._deviceConfig?.compat;
+		if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
 			this.hideBasicCCInFavorOfActuatorCCs();
 		}
 
@@ -1430,8 +1444,11 @@ version:               ${this.version}`;
 				if (typeof action === "boolean") return action;
 			}
 
-			// Don't offer or interview the Basic CC if any actuator CC is supported
-			endpoint.hideBasicCCInFavorOfActuatorCCs();
+			// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
+			// to map the Basic CC to other CCs or expose Basic Set as an event
+			if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
+				endpoint.hideBasicCCInFavorOfActuatorCCs();
+			}
 
 			const endpointInterviewGraph = endpoint.buildCCInterviewGraph();
 			let endpointInterviewOrder: CommandClasses[];
@@ -2161,20 +2178,13 @@ version:               ${this.version}`;
 				this.driver.controllerLog.logNode(this.id, {
 					message: "treating BasicCC Set as a value event",
 				});
-				const valueId: ValueID = {
-					commandClass: CommandClasses.Basic,
-					endpoint: command.endpointIndex,
-					property: "event",
-				};
-				if (!this._valueDB.hasMetadata(valueId)) {
-					this._valueDB.setMetadata(valueId, {
-						...ValueMetadata.ReadOnlyUInt8,
-						label: "Event value",
-					});
-				}
-				this._valueDB.setValue(valueId, command.targetValue, {
-					stateful: false,
-				});
+				this._valueDB.setValue(
+					getBasicCCCompatEventValueId(command.endpointIndex),
+					command.targetValue,
+					{
+						stateful: false,
+					},
+				);
 				return;
 			}
 
@@ -2193,11 +2203,7 @@ version:               ${this.version}`;
 			if (!didSetMappedValue) {
 				// Sets cannot store their value automatically, so store the values manually
 				this._valueDB.setValue(
-					{
-						commandClass: CommandClasses.Basic,
-						endpoint: command.endpointIndex,
-						property: "currentValue",
-					},
+					getBasicCCCurrentValueValueId(command.endpointIndex),
 					command.targetValue,
 				);
 				// Since the node sent us a Basic command, we are sure that it is at least controlled
