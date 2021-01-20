@@ -1431,13 +1431,7 @@ ${associatedNodes.join(", ")}`,
 	public getAssociationGroups(
 		nodeId: number,
 	): ReadonlyMap<number, AssociationGroup> {
-		const node = this.nodes.get(nodeId);
-		if (!node) {
-			throw new ZWaveError(
-				`Node ${nodeId} was not found!`,
-				ZWaveErrorCodes.Controller_NodeNotFound,
-			);
-		}
+		const node = this.nodes.getOrThrow(nodeId);
 
 		// Check whether we have multi channel support or not
 		let assocInstance: AssociationCC;
@@ -1513,13 +1507,7 @@ ${associatedNodes.join(", ")}`,
 	public getAssociations(
 		nodeId: number,
 	): ReadonlyMap<number, readonly Association[]> {
-		const node = this.nodes.get(nodeId);
-		if (!node) {
-			throw new ZWaveError(
-				`Node ${nodeId} was not found!`,
-				ZWaveErrorCodes.Controller_NodeNotFound,
-			);
-		}
+		const node = this.nodes.getOrThrow(nodeId);
 
 		const ret = new Map<number, readonly Association[]>();
 
@@ -1574,21 +1562,8 @@ ${associatedNodes.join(", ")}`,
 		group: number,
 		association: Association,
 	): boolean {
-		const node = this.nodes.get(nodeId);
-		if (!node) {
-			throw new ZWaveError(
-				`Node ${nodeId} was not found!`,
-				ZWaveErrorCodes.Controller_NodeNotFound,
-			);
-		}
-
-		const targetNode = this.nodes.get(association.nodeId);
-		if (!targetNode) {
-			throw new ZWaveError(
-				`Node ${association.nodeId} was not found!`,
-				ZWaveErrorCodes.Controller_NodeNotFound,
-			);
-		}
+		const node = this.nodes.getOrThrow(nodeId);
+		const targetNode = this.nodes.getOrThrow(association.nodeId);
 
 		const targetEndpoint = targetNode.getEndpoint(
 			association.endpoint ?? 0,
@@ -1655,13 +1630,7 @@ ${associatedNodes.join(", ")}`,
 		group: number,
 		associations: Association[],
 	): Promise<void> {
-		const node = this.nodes.get(nodeId);
-		if (!node) {
-			throw new ZWaveError(
-				`Node ${nodeId} was not found!`,
-				ZWaveErrorCodes.Controller_NodeNotFound,
-			);
-		}
+		const node = this.nodes.getOrThrow(nodeId);
 
 		// Check whether we have multi channel support or not
 		let assocInstance: AssociationCC;
@@ -1776,13 +1745,7 @@ ${associatedNodes.join(", ")}`,
 		group: number,
 		associations: Association[],
 	): Promise<void> {
-		const node = this.nodes.get(nodeId);
-		if (!node) {
-			throw new ZWaveError(
-				`Node ${nodeId} was not found!`,
-				ZWaveErrorCodes.Controller_NodeNotFound,
-			);
-		}
+		const node = this.nodes.getOrThrow(nodeId);
 
 		let groupExistsAsMultiChannel = false;
 		// Split associations into conventional and endpoint associations
@@ -1908,14 +1871,7 @@ ${associatedNodes.join(", ")}`,
 	 * @param nodeId The id of the node to remove
 	 */
 	public async removeFailedNode(nodeId: number): Promise<void> {
-		const node = this.nodes.get(nodeId);
-		if (!node) {
-			throw new ZWaveError(
-				`Node ${nodeId} was not found!`,
-				ZWaveErrorCodes.Controller_NodeNotFound,
-			);
-		}
-
+		const node = this.nodes.getOrThrow(nodeId);
 		if (await node.ping()) {
 			throw new ZWaveError(
 				`The node removal process could not be started because the node responded to a ping.`,
@@ -2008,14 +1964,7 @@ ${associatedNodes.join(", ")}`,
 			`starting replace failed node process...`,
 		);
 
-		const node = this.nodes.get(nodeId);
-		if (!node) {
-			throw new ZWaveError(
-				`Node ${nodeId} was not found!`,
-				ZWaveErrorCodes.Controller_NodeNotFound,
-			);
-		}
-
+		const node = this.nodes.getOrThrow(nodeId);
 		if (await node.ping()) {
 			throw new ZWaveError(
 				`The node replace process could not be started because the node responded to a ping.`,
