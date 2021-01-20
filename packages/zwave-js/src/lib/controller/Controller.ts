@@ -1663,14 +1663,24 @@ ${associatedNodes.join(", ")}`,
 			);
 		}
 
-		// Check whether we have multi channel support or not
-		let assocInstance: AssociationCC;
+		// Check whether we should add any associations the device does not have support for
+		let assocInstance: AssociationCC | undefined;
 		let mcInstance: MultiChannelAssociationCC | undefined;
+		// Split associations into conventional and endpoint associations
+		const nodeAssociations = distinct(
+			associations
+				.filter((a) => a.endpoint == undefined)
+				.map((a) => a.nodeId),
+		);
+		const endpointAssociations = associations.filter(
+			(a) => a.endpoint != undefined,
+		) as EndpointAddress[];
+
 		if (node.supportsCC(CommandClasses.Association)) {
 			assocInstance = node.createCCInstanceUnsafe<AssociationCC>(
 				CommandClasses.Association,
 			)!;
-		} else {
+		} else if (nodeAssociations.length > 0) {
 			throw new ZWaveError(
 				`Node ${nodeId} does not support associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
@@ -1680,9 +1690,14 @@ ${associatedNodes.join(", ")}`,
 			mcInstance = node.createCCInstanceUnsafe<MultiChannelAssociationCC>(
 				CommandClasses["Multi Channel Association"],
 			)!;
+		} else if (endpointAssociations.length > 0) {
+			throw new ZWaveError(
+				`Node ${nodeId} does not support multi channel associations!`,
+				ZWaveErrorCodes.CC_NotSupported,
+			);
 		}
 
-		const assocGroupCount = assocInstance.getGroupCountCached() ?? 0;
+		const assocGroupCount = assocInstance?.getGroupCountCached() ?? 0;
 		const mcGroupCount = mcInstance?.getGroupCountCached() ?? 0;
 		const groupCount = Math.max(assocGroupCount, mcGroupCount);
 		if (group > groupCount) {
@@ -1718,13 +1733,6 @@ ${associatedNodes.join(", ")}`,
 				);
 			}
 
-			// Split associations into conventional and endpoint associations
-			const nodeAssociations = associations
-				.filter((a) => a.endpoint == undefined)
-				.map((a) => a.nodeId);
-			const endpointAssociations = associations.filter(
-				(a) => a.endpoint != undefined,
-			) as EndpointAddress[];
 			// And add them
 			await node.commandClasses[
 				"Multi Channel Association"
@@ -1738,7 +1746,7 @@ ${associatedNodes.join(", ")}`,
 				group,
 			);
 		} else {
-			// The group only supports "normal" associations
+			// Although the node supports multi channel associations, this group only supports "normal" associations
 			if (associations.some((a) => a.endpoint != undefined)) {
 				throw new ZWaveError(
 					`Node ${nodeId}, group ${group} does not support multi channel associations!`,
@@ -1824,17 +1832,14 @@ ${associatedNodes.join(", ")}`,
 			await node.commandClasses["Multi Channel Association"].getGroup(
 				group,
 			);
-		} else if (associations.some((a) => a.endpoint != undefined)) {
+		} else if (endpointAssociations.length > 0) {
 			throw new ZWaveError(
 				`Node ${nodeId} does not support multi channel associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
 			);
 		}
 
-		if (
-			nodeAssociations.length > 0 &&
-			node.supportsCC(CommandClasses.Association)
-		) {
+		if (node.supportsCC(CommandClasses.Association)) {
 			// Use normal associations as a fallback
 			const cc = node.createCCInstanceUnsafe<AssociationCC>(
 				CommandClasses.Association,
@@ -1854,7 +1859,7 @@ ${associatedNodes.join(", ")}`,
 			});
 			// Refresh the association list
 			await node.commandClasses.Association.getGroup(group);
-		} else {
+		} else if (nodeAssociations.length > 0) {
 			throw new ZWaveError(
 				`Node ${nodeId} does not support associations!`,
 				ZWaveErrorCodes.CC_NotSupported,
