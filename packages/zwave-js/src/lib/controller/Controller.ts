@@ -107,6 +107,11 @@ import { ZWaveLibraryTypes } from "./ZWaveLibraryTypes";
 
 export type HealNodeStatus = "pending" | "done" | "failed" | "skipped";
 
+export type ThrowingMap<K, V> = Map<K, V> & { getOrThrow(key: K): V };
+export type ReadonlyThrowingMap<K, V> = ReadonlyMap<K, V> & {
+	getOrThrow(key: K): V;
+};
+
 // Strongly type the event emitter events
 interface ControllerEventCallbacks {
 	"inclusion failed": () => void;
@@ -154,6 +159,24 @@ export class ZWaveController extends EventEmitter {
 	/** @internal */
 	public constructor(private readonly driver: Driver) {
 		super();
+
+		this._nodes = new Map<number, ZWaveNode>() as ThrowingMap<
+			number,
+			ZWaveNode
+		>;
+		this._nodes.getOrThrow = function (
+			this: Map<number, ZWaveNode>,
+			nodeId: number,
+		) {
+			const node = this.get(nodeId);
+			if (!node) {
+				throw new ZWaveError(
+					`Node ${nodeId} was not found!`,
+					ZWaveErrorCodes.Controller_NodeNotFound,
+				);
+			}
+			return node;
+		}.bind(this._nodes);
 
 		// register message handlers
 		driver.registerRequestHandler(
@@ -268,9 +291,9 @@ export class ZWaveController extends EventEmitter {
 		return this._supportsTimers;
 	}
 
-	private _nodes = new Map<number, ZWaveNode>();
+	private _nodes: ThrowingMap<number, ZWaveNode>;
 	/** A dictionary of the nodes connected to this controller */
-	public get nodes(): ReadonlyMap<number, ZWaveNode> {
+	public get nodes(): ReadonlyThrowingMap<number, ZWaveNode> {
 		return this._nodes;
 	}
 
