@@ -222,6 +222,53 @@ export class ColorSwitchCCAPI extends CCAPI {
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
+
+		// Assume it worked and update currentColor
+		if (this.isSinglecast()) {
+			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+			if (valueDB) {
+				// each color component separately
+				let updatedRGB = false;
+				for (const [key, value] of entries(cc.colorTable)) {
+					const component = colorTableKeyToComponent(key);
+					if (
+						component === ColorComponent.Red ||
+						component === ColorComponent.Green ||
+						component === ColorComponent.Blue
+					) {
+						updatedRGB = true;
+					}
+
+					valueDB.setValue(
+						getCurrentColorValueID(this.endpoint.index, component),
+						value,
+						{ noEvent: true },
+					);
+				}
+				// and hex color if necessary
+				const supportsHex = valueDB.getValue<boolean>(
+					getSupportsHexColorValueID(this.endpoint.index),
+				);
+				if (supportsHex && updatedRGB) {
+					const hexValueId = getHexColorValueID(this.endpoint.index);
+					const [r, g, b] = [
+						ColorComponent.Red,
+						ColorComponent.Green,
+						ColorComponent.Blue,
+					].map(
+						(c) =>
+							valueDB.getValue<number>(
+								getCurrentColorValueID(this.endpoint.index, c),
+							) ?? 0,
+					);
+					const hexValue = (r << 16) | (g << 8) | b;
+					valueDB.setValue(
+						hexValueId,
+						hexValue.toString(16).padStart(6, "0"),
+					);
+				}
+			}
+		}
 	}
 
 	public async startLevelChange(
@@ -297,13 +344,6 @@ export class ColorSwitchCCAPI extends CCAPI {
 			}
 
 			await this.set({ hexColor: value });
-
-			if (this.isSinglecast()) {
-				// Refresh the current values
-				await this.get(ColorComponent.Red);
-				await this.get(ColorComponent.Green);
-				await this.get(ColorComponent.Blue);
-			}
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
