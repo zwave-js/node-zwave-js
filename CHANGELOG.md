@@ -3,6 +3,16 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The `stateId` property of `Scene Activation CC` is now stateless
+* The controller methods to replace or remove a failed node now ping the node beforehand, to ensure the node is in the failed nodes list
+* Fixed a logging issue for Multi Channel Associations
+* `removeAssociations` no longer throws an error when trying to remove only multi channel associations
+* When a security-encapsulated message is dropped, the log now contains a reason
+* Fixed two sources of unhandled Promise rejections
+* When the compat flag `treatBasicSetAsEvent` is enabled, the Basic CC values are no longer hidden
+
 ## 6.0.0 (2021-01-19) · _This is the way_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)
 * Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
