@@ -1908,6 +1908,21 @@ ${associatedNodes.join(", ")}`,
 	 * @param nodeId The id of the node to remove
 	 */
 	public async removeFailedNode(nodeId: number): Promise<void> {
+		const node = this.nodes.get(nodeId);
+		if (!node) {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		if (await node.ping()) {
+			throw new ZWaveError(
+				`The node removal process could not be started because the node responded to a ping.`,
+				ZWaveErrorCodes.ReplaceFailedNode_Failed,
+			);
+		}
+
 		const result = await this.driver.sendMessage<
 			RemoveFailedNodeRequestStatusReport | RemoveFailedNodeResponse
 		>(new RemoveFailedNodeRequest(this.driver, { failedNodeId: nodeId }));
@@ -1992,6 +2007,21 @@ ${associatedNodes.join(", ")}`,
 		this.driver.controllerLog.print(
 			`starting replace failed node process...`,
 		);
+
+		const node = this.nodes.get(nodeId);
+		if (!node) {
+			throw new ZWaveError(
+				`Node ${nodeId} was not found!`,
+				ZWaveErrorCodes.Controller_NodeNotFound,
+			);
+		}
+
+		if (await node.ping()) {
+			throw new ZWaveError(
+				`The node replace process could not be started because the node responded to a ping.`,
+				ZWaveErrorCodes.ReplaceFailedNode_Failed,
+			);
+		}
 
 		this._includeNonSecure = includeNonSecure;
 
