@@ -15,7 +15,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { buffer2hex, pick } from "@zwave-js/shared";
+import { buffer2hex, num2hex, pick } from "@zwave-js/shared";
 import { randomBytes } from "crypto";
 import type { ZWaveController } from "../controller/Controller";
 import {
@@ -401,7 +401,9 @@ export class SecurityCCNonceReport extends SecurityCC {
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
-			validatePayload(this.payload.length === HALF_NONCE_SIZE);
+			validatePayload.withReason("Invalid nonce length")(
+				this.payload.length === HALF_NONCE_SIZE,
+			);
 			this.nonce = this.payload;
 		} else {
 			if (options.nonce.length !== HALF_NONCE_SIZE) {
@@ -486,7 +488,11 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			// Retrieve the used nonce from the nonce store
 			const nonce = this.driver.securityManager.getNonce(nonceId);
 			// Only accept the message if the nonce hasn't expired
-			validatePayload(!!nonce);
+			validatePayload.withReason(
+				`Nonce ${num2hex(
+					nonceId,
+				)} expired, cannot decode security encapsulated command.`,
+			)(!!nonce);
 			// and mark the nonce as used - except if a config flag forbids it
 			if (!this.getNode()?.deviceConfig?.compat?.keepS0NonceUntilNext) {
 				this.driver.securityManager.deleteNonce(nonceId);
@@ -506,7 +512,9 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 			);
 			const expectedAuthCode = computeMAC(authData, this.authKey);
 			// Only accept messages with a correct auth code
-			validatePayload(authCode.equals(expectedAuthCode));
+			validatePayload.withReason(
+				"Invalid auth code, won't accept security encapsulated command.",
+			)(authCode.equals(expectedAuthCode));
 
 			// Decrypt the encapsulated CC
 			const frameControlAndDecryptedCC = decryptAES128OFB(

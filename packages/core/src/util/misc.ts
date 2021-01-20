@@ -19,14 +19,35 @@ export function stripUndefined<T>(obj: Record<string, T>): Record<string, T> {
  * Validates the payload about to be parsed. This can be used to avoid crashes caused by malformed packets
  * @param assertions An array of assertions to check if we have a valid payload
  */
-export function validatePayload(...assertions: unknown[]): void {
+type PayloadValidationFunction = (...assertions: unknown[]) => void;
+
+interface ValidatePayload extends PayloadValidationFunction {
+	/**
+	 * @param reason The optional reason for a rejection
+	 */
+	withReason(reason: string): PayloadValidationFunction;
+}
+
+function validatePayloadInternal(
+	reason: string | undefined,
+	...assertions: unknown[]
+): void {
 	if (!assertions.every(Boolean)) {
 		throw new ZWaveError(
 			"The message payload is invalid!",
 			ZWaveErrorCodes.PacketFormat_InvalidPayload,
+			reason,
 		);
 	}
 }
+
+// Export and augment the validatePayload method with a reason
+export const validatePayload = validatePayloadInternal.bind(
+	undefined,
+	undefined,
+) as ValidatePayload;
+validatePayload.withReason = (reason: string) =>
+	validatePayloadInternal.bind(undefined, reason);
 
 /**
  * Determines how many bits a value must be shifted to be right-aligned with a given bit mask
