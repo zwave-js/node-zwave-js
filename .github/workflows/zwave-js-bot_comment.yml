@@ -267,7 +267,6 @@ jobs:
       if: steps.check-permissions.outputs.result == 'true'
       uses: actions/checkout@v2
       with:
-        fetch-depth: 0 # Fetch the history, or we can't rebase onto master
         token: ${{secrets.BOT_TOKEN}}
         repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
         ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
@@ -283,7 +282,8 @@ jobs:
       id: fix
       run: |
         # Try to rebase
-        if git rebase "${{ fromJSON(steps.get-pr.outputs.result).base.ref }}" ; then
+        git fetch origin
+        if git rebase "origin/${{ fromJSON(steps.get-pr.outputs.result).base.ref }}" ; then
           # The rebase worked
           git config user.email "bot@zwave-js.io"
           git config user.name "Z-Wave JS Bot"
