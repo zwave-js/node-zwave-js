@@ -13,6 +13,7 @@ import {
 	ZWaveLogContainer,
 	ZWaveLoggerBase,
 } from "@zwave-js/core";
+import { isObject } from "alcalzone-shared/typeguards";
 import type { ZWaveNode } from "../node/Node";
 import { InterviewStage } from "../node/Types";
 
@@ -120,8 +121,9 @@ export class ControllerLogger extends ZWaveLoggerBase {
 		notification: "!",
 	});
 
-	private formatValue(value: any): string {
-		if (typeof value !== "string") return `${value}`;
+	private formatValue(value: unknown): string {
+		if (isObject(value)) return JSON.stringify(value);
+		if (typeof value !== "string") return String(value);
 		return `"${value}"`;
 	}
 
