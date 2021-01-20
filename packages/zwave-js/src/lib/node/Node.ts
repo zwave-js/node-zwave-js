@@ -1277,7 +1277,10 @@ version:               ${this.version}`;
 					await this.loadDeviceConfig();
 					if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
 						// To create the compat event value, we need to force a Basic CC interview
-						this.addCC(CommandClasses.Basic, { isSupported: true, version: 1 });
+						this.addCC(CommandClasses.Basic, {
+							isSupported: true,
+							version: 1,
+						});
 					}
 				}
 				await this.driver.saveNetworkToCache();
