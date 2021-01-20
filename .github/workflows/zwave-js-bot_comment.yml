@@ -267,6 +267,7 @@ jobs:
       if: steps.check-permissions.outputs.result == 'true'
       uses: actions/checkout@v2
       with:
+        fetch-depth: 0 # Fetch the history, or we can't rebase onto master
         token: ${{secrets.BOT_TOKEN}}
         repository: ${{ fromJSON(steps.get-pr.outputs.result).head.repo.full_name }}
         ref: ${{ fromJSON(steps.get-pr.outputs.result).head.ref }}
