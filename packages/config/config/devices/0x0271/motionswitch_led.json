@@ -22,7 +22,7 @@
 			"description": "Duration of light after motion detection [s]",
 			"unit": "s",
 			"valueSize": 2,
-			"minValue": 5,
+			"minValue": 0,
 			"maxValue": 900,
 			"defaultValue": 180,
 			"readOnly": false,

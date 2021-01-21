@@ -78,7 +78,7 @@
 			"description": "Query power which source is in use",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": true,
 			"writeOnly": false,

@@ -35,7 +35,7 @@
 			"label": "Operation mode",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 8,
+			"maxValue": 11,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,

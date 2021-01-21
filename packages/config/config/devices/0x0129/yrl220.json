@@ -148,7 +148,7 @@
 			"description": "Sets if the unit operates normal, or disables keypad and Z-Wave lock/unlock",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 3,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,

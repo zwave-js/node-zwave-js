@@ -270,7 +270,7 @@
 			"description": "Reset all settings to factory defaults",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 1431655765,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": true,

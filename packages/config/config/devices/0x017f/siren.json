@@ -21,7 +21,7 @@
 			"label": "Primary Notification Volume Level",
 			"description": "Set the volume level",
 			"valueSize": 1,
-			"minValue": -1,
+			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 2,
 			"readOnly": false,
@@ -47,22 +47,23 @@
 			"description": "Set the Notification Length",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 3,
+			"maxValue": 255,
 			"defaultValue": 2,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Plays until battery dies",
-					"value": -1
+					"value": 255
 				},
 				{
 					"label": "30 Sec",
 					"value": 1
 				},
 				{
-					"label": "I min",
+					"label": "1 min",
 					"value": 2
 				},
 				{
@@ -75,16 +76,17 @@
 			"label": "Secondary Notification Length",
 			"description": "Secondary Notification Length",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Chime Will Not Play",
-					"value": -1
+					"value": 255
 				},
 				{
 					"label": "Does Not Stop",

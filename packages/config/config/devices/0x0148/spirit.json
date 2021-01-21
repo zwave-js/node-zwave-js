@@ -47,7 +47,7 @@
 			"description": "LCD Timeout",
 			"unit": "s",
 			"valueSize": 1,
-			"minValue": 5,
+			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
 			"readOnly": false,
@@ -160,7 +160,7 @@
 			"description": "Measured Temperature offset",
 			"unit": "1/10 °C",
 			"valueSize": 1,
-			"minValue": -50,
+			"minValue": -128,
 			"maxValue": 50,
 			"defaultValue": 0,
 			"readOnly": false,
@@ -169,7 +169,7 @@
 			"options": [
 				{
 					"label": "Ext temp sensor be used for regul",
-					"value": 128
+					"value": -128
 				}
 			]
 		}

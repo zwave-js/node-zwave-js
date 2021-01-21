@@ -119,8 +119,9 @@
 			"description": "forbid/allow  ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -131,7 +132,7 @@
 				},
 				{
 					"label": "forbid ALL ON, allow ALL OFF",
-					"value": 0
+					"value": 1
 				},
 				{
 					"label": "allow ALL ON, forbid ALL OFF",

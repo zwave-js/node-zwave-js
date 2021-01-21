@@ -101,7 +101,7 @@
 			"description": "OFF_BEHAVIOUR",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 209,
+			"maxValue": 255,
 			"defaultValue": 10,
 			"readOnly": false,
 			"writeOnly": false,

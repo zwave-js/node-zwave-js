@@ -101,7 +101,7 @@
 			"label": "Humidity Upper Watermark",
 			"description": "Humidity Upper Watermark value",
 			"valueSize": 1,
-			"minValue": 10,
+			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
 			"readOnly": false,

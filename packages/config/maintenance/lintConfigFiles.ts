@@ -218,6 +218,25 @@ Consider converting this parameter to unsigned using ${white(
 				}
 			}
 
+			// Check if there are parameters with predefined options that are not compatible with min/maxValue
+			for (const [
+				{ parameter },
+				value,
+			] of config.paramInformation.entries()) {
+				if (!value.options.length) continue;
+				for (const option of value.options) {
+					if (
+						option.value < value.minValue ||
+						option.value > value.maxValue
+					) {
+						addError(
+							file,
+							`Parameter #${parameter} is invalid: The option value ${option.value} must be in the range ${value.minValue}...${value.maxValue}!`,
+						);
+					}
+				}
+			}
+
 			// Check if there are parameters with identical labels
 			const labelCounts = new Map<
 				string,
@@ -505,8 +524,25 @@ The first occurence of this device is in file config/devices/${index[firstIndex]
 			}
 			console.error();
 		}
-		process.exit(1);
 	}
+
+	const numErrors = [...errors.values()]
+		.map((e) => e.length)
+		.reduce((cur, acc) => cur + acc, 0);
+	const numWarnings = [...warnings.values()]
+		.map((e) => e.length)
+		.reduce((cur, acc) => cur + acc, 0);
+
+	if (numErrors || numWarnings) {
+		console.error(
+			`Found ${numErrors} error${
+				numErrors !== 1 ? "s" : ""
+			} and ${numWarnings} warning${numWarnings !== 1 ? "s" : ""}!`,
+		);
+		console.error();
+	}
+
+	if (errors.size) process.exit(1);
 }
 
 async function lintNamedScales(): Promise<void> {
