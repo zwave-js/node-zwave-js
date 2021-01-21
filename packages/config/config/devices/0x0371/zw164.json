@@ -714,7 +714,7 @@
 			"description": "Intercepting duration of a tone Endpoint 3(Doorbell 1)",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,

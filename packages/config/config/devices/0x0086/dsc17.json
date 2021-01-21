@@ -346,7 +346,7 @@
 			"label": "Reset to the default Configuration.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,

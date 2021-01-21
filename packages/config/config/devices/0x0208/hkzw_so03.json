@@ -44,7 +44,7 @@
 			"description": "On/Off Status Recovery After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,

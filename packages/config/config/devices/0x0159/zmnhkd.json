@@ -271,21 +271,7 @@
 			"defaultValue": 1002,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Input I3 changes the mode between Heat and Cool",
-					"value": 1
-				},
-				{
-					"label": "Input I3 influences the heating/cooling valves",
-					"value": 2
-				},
-				{
-					"label": "Input I3 doesnt influence on the Heat/Cool process",
-					"value": 32767
-				}
-			]
+			"allowManualEntry": true
 		},
 		"47": {
 			"label": "Antifreeze",

@@ -22,7 +22,7 @@
 			"description": "Defines value for Basic Set command",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 99,
+			"maxValue": 255,
 			"defaultValue": 255,
 			"readOnly": false,
 			"writeOnly": false,
