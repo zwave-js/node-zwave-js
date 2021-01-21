@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.0.1 (2021-01-21)
 ### Bugfixes
 * The `stateId` property of `Scene Activation CC` is now stateless
 * The controller methods to replace or remove a failed node now ping the node beforehand, to ensure the node is in the failed nodes list
