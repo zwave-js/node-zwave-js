@@ -11,7 +11,7 @@
 * `removeAssociations` no longer throws an error when trying to remove only multi channel associations
 * When a security-encapsulated message is dropped, the log now contains a reason
 * Fixed two sources of unhandled Promise rejections
-* When the compat flag `treatBasicSetAsEvent` is enabled, the Basic CC value events are no longer hidden
+* When the compat flag `treatBasicSetAsEvent` is enabled, the Basic CC values are no longer hidden
 * Root device value events for devices with the `preserveRootApplicationCCValueIDs` are no longer filtered out
 
 ### Config file changes
