@@ -1,0 +1,275 @@
+// Zooz ZEN76
+// Z-Wave Plus 700 Series S2 ON/OFF Switch
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN76",
+	"description": "Z-Wave Plus 700 Series S2 ON/OFF Switch",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0xa006"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		}
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Paddle Orientation",
+			"description": "Choose paddle orientation.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Top on, Bottom off",
+					"value": 0
+				},
+				{
+					"label": "Top off, Bottom on",
+					"value": 1
+				},
+				{
+					"label": "Toggle",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "LED Indicator Control",
+			"description": "Choose behavior of the LED indicator.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when switch is off",
+					"value": 0
+				},
+				{
+					"label": "LED on when switch is on",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				},
+				{
+					"label": "LED always on",
+					"value": 3
+				}
+			]
+		},
+		"14": {
+			"label": "LED Indicator Color",
+			"description": "Choose LED indicator color.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "White",
+					"value": 0
+				},
+				{
+					"label": "Blue",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Red",
+					"value": 3
+				}
+			]
+		},
+		"15": {
+			"label": "LED Indicator Brightness",
+			"description": "Choose LED indicator brightness.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "100%",
+					"value": 0
+				},
+				{
+					"label": "60%",
+					"value": 1
+				},
+				{
+					"label": "30%",
+					"value": 2
+				}
+			]
+		},
+		"3": {
+			"label": "Auto Turn-Off Timer",
+			"description": "Number of minutes to automatically turn off switch once it has been turned on (0 to disable).",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Auto Turn-On Timer",
+			"description": "Number of minutes to automatically turn on switch once it has been turned off (0 to disable).",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "On Off Status After Power Failure",
+			"description": "Set the power state for the switch after a power failure.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 1
+				},
+				{
+					"label": "Last State",
+					"value": 2
+				}
+			]
+		},
+		"10": {
+			"label": "Scene Control",
+			"description": "Enable or disable scene control functionality for quick double tap triggers.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"12": {
+			"label": "Smart Bulb Mode",
+			"description": "Enable or disable local on/off control. If enabled, you’ll only be able to control the connected light via Z-Wave. Scenes and other functionality will still be available through paddles.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Physical paddle control disabled, Z-Wave control enabled",
+					"value": 0
+				},
+				{
+					"label": "Physical paddle and Z-Wave control enabled",
+					"value": 1
+				},
+				{
+					"label": "Physical paddle and Z-Wave control disabled",
+					"value": 2
+				}
+			]
+		},
+		"13": {
+			"label": "Reporting Behavior for Disabled Physical Control",
+			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enabled",
+					"value": 0
+				},
+				{
+					"label": "Disabled",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Association Reports",
+			"description": "Report type for paddle control.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Basic report",
+					"value": 0
+				},
+				{
+					"label": "Binary switch report",
+					"value": 1
+				}
+			]
+		}
+	}
+}
