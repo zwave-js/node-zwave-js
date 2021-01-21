@@ -12,6 +12,12 @@
 * When a security-encapsulated message is dropped, the log now contains a reason
 * Fixed two sources of unhandled Promise rejections
 * When the compat flag `treatBasicSetAsEvent` is enabled, the Basic CC values are no longer hidden
+* Root device value events for devices with the `preserveRootApplicationCCValueIDs` are no longer filtered out
+
+### Config file changes
+* Added support for `Aeotec aerQ ZWA009-A` US/Canada/Mexico version
+* Fixed invalid parameter options in many config files
+* Parameter options with incompatible values are now detected as an error
 
 ## 6.0.0 (2021-01-19) · _This is the way_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)
