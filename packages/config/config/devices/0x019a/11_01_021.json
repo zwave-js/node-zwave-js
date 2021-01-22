@@ -105,7 +105,7 @@
 		"18": {
 			"label": "Failed Event Retry Interval",
 			"description": "Only used if parameter 22 is set to 1 (High security). The minimum number of seconds between retries. Min = 1 second, Max = 60 seconds",
-			"unit": "retries",
+			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 60,
