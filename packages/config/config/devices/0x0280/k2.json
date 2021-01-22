@@ -1,5 +1,5 @@
 // Chuango Security Technology Corporation K2
-// smanos Smart Hub 
+// smanos Smart Hub
 {
 	"manufacturer": "Chuango Security Technology Corporation",
 	"manufacturerId": "0x0280",
@@ -9,11 +9,7 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0001",
-			"zwaveAllianceId": [
-				2865,
-				2963,
-				2986
-			]
+			"zwaveAllianceId": [2865, 2963, 2986]
 		}
 	],
 	"firmwareVersion": {

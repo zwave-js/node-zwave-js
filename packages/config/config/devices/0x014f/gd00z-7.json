@@ -1,5 +1,5 @@
 // Nortek Security & Control LLC GD00Z-7
-//  Z-Wave Garage Door Controller 
+//  Z-Wave Garage Door Controller
 {
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
@@ -9,12 +9,7 @@
 		{
 			"productType": "0x4744",
 			"productId": "0x3531",
-			"zwaveAllianceId": [
-				2635,
-				2904,
-				3685,
-				3710
-			]
+			"zwaveAllianceId": [2635, 2904, 3685, 3710]
 		}
 	],
 	"firmwareVersion": {

@@ -1,5 +1,5 @@
 // Climax Technology, Ltd. IR-16ZW
-// Z-Wave Motion Sensor 
+// Z-Wave Motion Sensor
 {
 	"manufacturer": "Climax Technology, Ltd.",
 	"manufacturerId": "0x018e",
@@ -9,10 +9,7 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0002",
-			"zwaveAllianceId": [
-				1313,
-				2076
-			]
+			"zwaveAllianceId": [1313, 2076]
 		}
 	],
 	"firmwareVersion": {
