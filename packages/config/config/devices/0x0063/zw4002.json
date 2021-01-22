@@ -83,7 +83,7 @@
 			]
 		}
 	},
- 	"compat": {
- 		"disableBasicMapping": true
+	"compat": {
+		"disableBasicMapping": true
 	}
 }
