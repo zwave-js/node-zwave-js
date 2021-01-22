@@ -1,0 +1,19 @@
+// Universe Future ZWG2000AG
+// Universe Future Gateway
+{
+	"manufacturer": "Universe Future",
+	"manufacturerId": "0x0183",
+	"label": "ZWG2000AG",
+	"description": "Universe Future Gateway",
+	"devices": [
+		{
+			"productType": "0x0201",
+			"productId": "0x0701",
+			"zwaveAllianceId": 1259
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

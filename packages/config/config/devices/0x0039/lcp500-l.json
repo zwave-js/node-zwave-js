@@ -1,0 +1,19 @@
+// Honeywell LCP500-L
+// Honeywell  Lyric Touch Panel
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "LCP500-L",
+	"description": "Honeywell  Lyric Touch Panel",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0006",
+			"zwaveAllianceId": 1539
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

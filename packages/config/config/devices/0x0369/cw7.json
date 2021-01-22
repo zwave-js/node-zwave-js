@@ -1,0 +1,22 @@
+// 2KLIC CW7
+// Controller
+{
+	"manufacturer": "2KLIC",
+	"manufacturerId": "0x0369",
+	"label": "CW7",
+	"description": "Controller",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2972
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Z-Wave Factory reset procedure\r\nThe 2KLIC controller has an option to factory reset which allows the system to return back to its default settings, the steps are given below:\r\n\r\nFrom the home page, click on the property\r\nClick the System status icon in the left menu\r\nClick the Smart controller card, which is the first card visible, to edit the smart controller settings\r\nGo to the Manage Z-Wave tab \r\nOpen the Advanced options\r\nFind the Reset card\r\nClick on the Reset button to start\r\nClick on the text input and type 'Confirm' in the box below\r\nThen click on the Confirm button\r\nYou will see \"\"The controller is resetting. Please wait. It could take up to 1 minute.\"\" message\r\nAnd then you will see \"\"The controller has been reset\"\", as soon as it is done resetting\r\nNow you have to start adding new devices to your controller and take all the necessary steps to get your system up and running.\r\n\r\nResetting this controller will leave your Z-Wave devices orphaned in the network. Please remove all Z-Wave devices before performing this reset procedure. If this controller is a part of another Z-Wave network, please use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

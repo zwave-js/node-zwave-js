@@ -1,0 +1,19 @@
+// Danfoss DFBH10Z1 / 088N7110
+// HC-10
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "DFBH10Z1 / 088N7110",
+	"description": "HC-10",
+	"devices": [
+		{
+			"productType": "0x0248",
+			"productId": "0xa030",
+			"zwaveAllianceId": 1648
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

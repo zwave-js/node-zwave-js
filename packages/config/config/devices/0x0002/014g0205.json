@@ -1,0 +1,18 @@
+// Danfoss 014G0205
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "014G0205",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x4005",
+			"zwaveAllianceId": 2595
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

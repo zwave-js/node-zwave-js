@@ -1,0 +1,22 @@
+// Springs Window Fashions MCZ1
+// Multi-Channel Remote Control
+{
+	"manufacturer": "Springs Window Fashions",
+	"manufacturerId": "0x026e",
+	"label": "MCZ1",
+	"description": "Multi-Channel Remote Control",
+	"devices": [
+		{
+			"productType": "0x4d43",
+			"productId": "0x5a31",
+			"zwaveAllianceId": 2819
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Restores the remote back to a factory\r\nstate by removing all memory of shade\r\nand remote pairings from the remote.\r\n1. On the remote, press and hold the\r\nMENU/RIGHT button to enter the menu.\r\n2. Select ZWAVE > RESET.\r\n3. With LIKE NEW? selected, press and\r\nhold the MENU/RIGHT button until the\r\nscreen no longer tells you to wait.\r\n\r\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

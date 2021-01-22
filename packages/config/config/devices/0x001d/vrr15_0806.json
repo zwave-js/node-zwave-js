@@ -1,0 +1,19 @@
+// Leviton VRR15_0806
+// Leviton VRR15
+{
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRR15_0806",
+	"description": "Leviton VRR15",
+	"devices": [
+		{
+			"productType": "0x2201",
+			"productId": "0x0209",
+			"zwaveAllianceId": 249
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

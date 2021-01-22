@@ -1,0 +1,19 @@
+// Electronic Solutions ABMHZ
+// AC Motor Controller - Window Coverings
+{
+	"manufacturer": "Electronic Solutions",
+	"manufacturerId": "0x0033",
+	"label": "ABMHZ",
+	"description": "AC Motor Controller - Window Coverings",
+	"devices": [
+		{
+			"productType": "0x5250",
+			"productId": "0x3031",
+			"zwaveAllianceId": 304
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

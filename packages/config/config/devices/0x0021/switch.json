@@ -1,0 +1,19 @@
+// Zykronix SWITCH
+// Aoya Switch
+{
+	"manufacturer": "Zykronix",
+	"manufacturerId": "0x0021",
+	"label": "SWITCH",
+	"description": "Aoya Switch",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0101",
+			"zwaveAllianceId": 1274
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

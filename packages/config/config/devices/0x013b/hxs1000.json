@@ -1,0 +1,19 @@
+// AstraLink HXS1000
+// Astralink Android Home Station
+{
+	"manufacturer": "AstraLink",
+	"manufacturerId": "0x013b",
+	"label": "HXS1000",
+	"description": "Astralink Android Home Station",
+	"devices": [
+		{
+			"productType": "0x1000",
+			"productId": "0x1828",
+			"zwaveAllianceId": 753
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

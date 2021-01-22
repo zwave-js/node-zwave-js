@@ -1,0 +1,18 @@
+// Evolve Recessed Door Sensor
+{
+	"manufacturer": "Evolve",
+	"manufacturerId": "0x0113",
+	"label": "Recessed Door Sensor",
+	"description": "Recessed Door Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0036",
+			"zwaveAllianceId": 2117
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

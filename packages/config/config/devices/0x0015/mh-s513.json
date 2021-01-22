@@ -1,0 +1,19 @@
+// Lexel MH-S513
+// MCO Home -US
+{
+	"manufacturer": "Lexel",
+	"manufacturerId": "0x0015",
+	"label": "MH-S513",
+	"description": "MCO Home -US",
+	"devices": [
+		{
+			"productType": "0x5102",
+			"productId": "0x0103",
+			"zwaveAllianceId": 1115
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

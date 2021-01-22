@@ -1,0 +1,19 @@
+// ZyXEL SHD2210
+// Dimmer Module
+{
+	"manufacturer": "ZyXEL",
+	"manufacturerId": "0x0135",
+	"label": "SHD2210",
+	"description": "Dimmer Module",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": 905
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

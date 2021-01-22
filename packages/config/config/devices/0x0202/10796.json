@@ -1,0 +1,19 @@
+// Monoprice 10796
+// Monoprice, P/N , PIR Motion Sensor
+{
+	"manufacturer": "Monoprice",
+	"manufacturerId": "0x0202",
+	"label": "10796",
+	"description": "Monoprice, P/N , PIR Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x2002",
+			"productId": "0x0202",
+			"zwaveAllianceId": 1119
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

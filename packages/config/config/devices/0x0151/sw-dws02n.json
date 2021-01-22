@@ -1,0 +1,27 @@
+// Sercomm Corp SW-DWS02N
+// DoorWindow Sensor
+{
+	"manufacturer": "Sercomm Corp",
+	"manufacturerId": "0x0151",
+	"label": "SW-DWS02N",
+	"description": "DoorWindow Sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003",
+			"zwaveAllianceId": [
+				1724,
+				3166
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "First install\r\n1.\tPull the exposed plastic tab from the sensor.\r\n2.     Power on\r\n3.\tThe Green LED indicator will be lit for one second to indicate a successful booting.\r\n4.\tIt will blink one time every second while scanning the network.\r\n5.\tIf network is not found after 30 seconds, the sensor will go into sleep mode. To wake the sensor again, you need to use magnet or tamper to trigger a Add (Inclusion)  process, and then sensor will repeat steps from 3 to 4.\r\n \r\n\r\n",
+		"exclusion": "1.\tRemove device rear cover and pressing the tamper button three times within 2 seconds, green LED indicator should go “On” 0.5 second and enter exclusion mode.\r\n2.\tIf remove (exclusion) successful, go auto Adding procedure.\r\n3.\tNode ID has been remove.\r\n",
+		"reset": "1.\tPressing the tamper button four times within 2 seconds (Figure 4) and do not release the tamper button in the 4th pressed, and the LED will turn ON.\r\n2.\tAfter over 3 seconds the Green LED indicator will turn OFF, then go auto Adding procedure.\r\n3.\tIDs are excluded and all settings will reset to factory default.\r\n4.\tDevice begin auto Adding (Inclusion) mode.\r\nNote: Use this procedure only in the event that the primary controller is lost.\r\n\r\n"
+	}
+}

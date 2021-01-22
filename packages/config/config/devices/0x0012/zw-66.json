@@ -1,0 +1,19 @@
+// Tell It Online ZW-66
+// Sanjose USB Dongle
+{
+	"manufacturer": "Tell It Online",
+	"manufacturerId": "0x0012",
+	"label": "ZW-66",
+	"description": "Sanjose USB Dongle",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 938
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

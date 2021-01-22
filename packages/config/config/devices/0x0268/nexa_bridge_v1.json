@@ -1,0 +1,22 @@
+// Nexa Trading AB NEXA BRIDGE V1
+// Nexa Bridge
+{
+	"manufacturer": "Nexa Trading AB",
+	"manufacturerId": "0x0268",
+	"label": "NEXA BRIDGE V1",
+	"description": "Nexa Bridge",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1823
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Power up device, wait 7 minutes, press and hold reset button 10 seconds on the backside of the device."
+	}
+}

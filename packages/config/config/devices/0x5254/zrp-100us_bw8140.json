@@ -1,0 +1,19 @@
+// Remotec ZRP-100US / BW8140
+// US Z-Wave Repeater
+{
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZRP-100US / BW8140",
+	"description": "US Z-Wave Repeater",
+	"devices": [
+		{
+			"productType": "0x1000",
+			"productId": "0x8140",
+			"zwaveAllianceId": 1095
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

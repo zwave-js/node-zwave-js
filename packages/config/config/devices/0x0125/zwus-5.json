@@ -1,0 +1,19 @@
+// Motion Control Systems ZWUS-5
+// Z-Wave Native Tubular Motor
+{
+	"manufacturer": "Motion Control Systems",
+	"manufacturerId": "0x0125",
+	"label": "ZWUS-5",
+	"description": "Z-Wave Native Tubular Motor",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 853
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

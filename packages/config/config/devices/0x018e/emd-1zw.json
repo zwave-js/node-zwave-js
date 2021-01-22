@@ -1,0 +1,24 @@
+// Climax Technology, Ltd. EMD-1ZW
+// Energy Meter
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "EMD-1ZW",
+	"description": "Energy Meter",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x000c",
+			"zwaveAllianceId": 2251
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufactures and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.\r\n   -Insert batteries to power on the E-meter.\r\n   -Put the Z-Wave control panel into Inclusion mode (please refer to \r\n     the Z-Wave control panel manual).\r\n   -Within 1.5 seconds, press the Function Button 3 times.\r\n   -Refer to operation manual of the Z-Wave Gateway or Control Panel \r\n     to complete the adding process.\r\nIf the device has already been added (included) into another Z-Wave Gateway/Control Panel, or if the device is unable to be added into the current Z-Wave Gateway/Control Panel, try removing it first (see Removing Device).\r\n",
+		"exclusion": "The device must be removed from existing Z-Wave network before being added into another.\r\nExclusion Mode\r\n   -Put the Z-Wave Gateway or Control Panel into Exclusion mode \r\n     (please refer to the Z-Wave or control panel manual).\r\n   -Within 1.5 seconds, press the Function Button 3 times and the \r\n     device will be removed from the Z-Wave network.\r\n",
+		"reset": "Factory resetting the device will restore it to factory default settings (i.e. not included into any Z-Wave network). Please only use this procedure if the Z-Wave Gateway or Control Panel is lost or otherwise inoperable.\r\n   -Press and hold the Function Button of the device for 10 seconds to \r\n    factory reset.\r\n"
+	}
+}

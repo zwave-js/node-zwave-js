@@ -1,0 +1,19 @@
+// ACT - Advanced Control Technologies RF9575
+// Aspire  Anyplace Switch
+{
+	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturerId": "0x0001",
+	"label": "RF9575",
+	"description": "Aspire  Anyplace Switch",
+	"devices": [
+		{
+			"productType": "0x4243",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1237
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

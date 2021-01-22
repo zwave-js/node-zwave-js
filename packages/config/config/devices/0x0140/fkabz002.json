@@ -1,0 +1,24 @@
+// Computime FKABZ002
+// Window Sensor Fensterkontakt Z-Wave
+{
+	"manufacturer": "Computime",
+	"manufacturerId": "0x0140",
+	"label": "FKABZ002",
+	"description": "Window Sensor Fensterkontakt Z-Wave",
+	"devices": [
+		{
+			"productType": "0x0801",
+			"productId": "0x1001",
+			"zwaveAllianceId": 3022
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To add the product to the system, please follow the following steps. \r\n1. Start the COQON App \r\n2. Select \"\"Device\"\" then \"\"Settings\"\" and tap on \"\"+\"\" to add your Window Sensor \r\n3. Select COQON \r\n4. Follow the steps in the App ",
+		"exclusion": "To remove your device from the system, please start the exclusion process to exclude the device from the COQON App. The device will be reset. ",
+		"reset": "Factory reset: \r\n\r\n1. Remove battery \r\n2. Hold the Tamper\r\n3. Insert Battery \r\n4. Release Tamper within 5 sec. \r\n\r\nNote: Please use this procedure only when the primary controller is missing or inoperable! \r\n"
+	}
+}

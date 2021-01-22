@@ -1,4 +1,4 @@
-// Danfoss HRVCCM
+// Danfoss H
 // Air CCM
 {
 	"manufacturer": "Danfoss",
@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x8007",
-			"productId": "0x0200"
+			"productId": "0x0200",
+			"zwaveAllianceId": [173, 179]
 		},
 		{
 			"productType": "0x8007",

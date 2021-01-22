@@ -1,0 +1,24 @@
+// JR Automation Technology JR-4C01
+// 4 CHANNEL RELAY
+{
+	"manufacturer": "JR Automation Technology",
+	"manufacturerId": "0x0426",
+	"label": "JR-4C01",
+	"description": "4 CHANNEL RELAY",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3397
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To add the device to the Z-Wave network:\r\n1.      Keep the device in Z-Wave range.\r\n2.      Power the device.\r\n3.      Set the main controller in (Security/non-Security Mode) add mode\r\n          (see the controller’s manual).\r\n4.      Quickly, three times press the Config Button, LED color will change \r\n          from Red to Blue.\r\n5.      Wait for the adding process to end.\r\n6.      Successful adding will be confirmed by the Z-Wave controller’s\r\n          Message and LED Colour will change to Green.",
+		"exclusion": "To remove the device from the Z-Wave network:\r\n1.      Power the device.\r\n2.      Set the main controller into remove mode (see the controller’s\r\n         manual).\r\n3.      Quickly, three times click the Config button LED color will change to \r\n          Blue.\r\n4.      Wait for the removing process to end.\r\n5.      Successful removing will be confirmed by the Z-Wave controller’s message and Red LED color.",
+		"reset": "Reset procedure allows restoring the device back to its factory settings, which means all information about the Z-Wave controller will be deleted.\r\n\r\n1.      Press and Hold Config Button for 10 sec until White LED Indication \r\n          to start blinking.\r\n2.      Release Config button. Now you have 5sec to Reset Device \r\n          otherwise it back to Normal Mode.\r\n3.      Single Click Config Button.\r\n4.      After a few seconds, the device will be restarted, which is signaled\r\n          with the red LED indicator color.\r\n\r\nNOTE:- Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

@@ -1,0 +1,19 @@
+// Cyberhouse WS15Z
+// Linear -1
+{
+	"manufacturer": "Cyberhouse",
+	"manufacturerId": "0x0014",
+	"label": "WS15Z",
+	"description": "Linear -1",
+	"devices": [
+		{
+			"productType": "0x5257",
+			"productId": "0x3033",
+			"zwaveAllianceId": 1029
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

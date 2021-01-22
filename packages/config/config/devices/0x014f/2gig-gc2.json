@@ -1,0 +1,22 @@
+// Nortek Security & Control LLC 2GIG-GC2
+// 2GIG GC2e Wireless Security & Automation System
+{
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "2GIG-GC2",
+	"description": "2GIG GC2e Wireless Security & Automation System",
+	"devices": [
+		{
+			"productType": "0x1000",
+			"productId": "0x1001",
+			"zwaveAllianceId": 3687
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "using UI, \"Reset Controller\" under Z-Wave toolbox (Advanced)"
+	}
+}

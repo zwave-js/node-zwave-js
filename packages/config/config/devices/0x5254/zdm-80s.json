@@ -1,0 +1,19 @@
+// Remotec ZDM-80S
+// Remotec Dimming Module
+{
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZDM-80S",
+	"description": "Remotec Dimming Module",
+	"devices": [
+		{
+			"productType": "0x8201",
+			"productId": "0x0200",
+			"zwaveAllianceId": 16
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

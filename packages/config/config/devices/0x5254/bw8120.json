@@ -1,0 +1,19 @@
+// Remotec BW8120
+// Dual Mode Switch-Dimmer
+{
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "BW8120",
+	"description": "Dual Mode Switch-Dimmer",
+	"devices": [
+		{
+			"productType": "0x8201",
+			"productId": "0x8120",
+			"zwaveAllianceId": 801
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

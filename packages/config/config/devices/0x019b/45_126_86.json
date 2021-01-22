@@ -1,0 +1,24 @@
+// ThermoFloor 45 126 86
+// Heatit Z-Repeater
+{
+	"manufacturer": "ThermoFloor",
+	"manufacturerId": "0x019b",
+	"label": "45 126 86",
+	"description": "Heatit Z-Repeater",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x3600",
+			"zwaveAllianceId": 3818
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Connect the Router into the power socket to power on. \r\n2. Put the Z-Wave Gateway or Control Panel into Inclusion mode (please refer to the Z-Wave Gateway or Control Panel manual).\r\n3. Within 1.5 seconds, press the Function Button 3 times.\r\n4. Refer to the operation manual of the Z-Wave Gateway or Control Panel to complete the adding process.\r\n5. If the sensor has already been added (included) into another Z-Wave Gateway/Control Panel, or if the sensor is unable to be added into the current Z-Wave Gateway/Control Panel, please exclude it first (see Removing Device) before attempting to include it into the current Z-Wave Gateway/Control Panel.\r\n",
+		"exclusion": "1. Put the Z-Wave Gateway or Control Panel into Exclusion mode (please refer to the Z-Wave Gateway or Control Panel manual).\r\n2. Within 1.5 seconds, press the Function Button 3 times and the Router will be removed from the Z-Wave network.\r\n",
+		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable).\r\n*. Press and hold the Function Button for 10 seconds to factory reset.\r\n"
+	}
+}

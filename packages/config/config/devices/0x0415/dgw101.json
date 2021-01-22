@@ -1,0 +1,34 @@
+// Dwelo Inc. DGW101
+// Dwelo Hub 3
+{
+	"manufacturer": "Dwelo Inc.",
+	"manufacturerId": "0x0415",
+	"label": "DGW101",
+	"description": "Dwelo Hub 3",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003",
+			"zwaveAllianceId": 3940
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3294
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 3585
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Please refer to the move in flyer or contact support from the Dwelo app",
+		"exclusion": "Please refer to the move in flyer or contact support from the Dwelo app",
+		"reset": "Please refer to the move in flyer or contact support from the Dwelo app"
+	}
+}

@@ -7,6 +7,11 @@
 	"description": "Scene Capable Push On/Off",
 	"devices": [
 		{
+			"productType": "0x0001",
+			"productId": "0x0304",
+			"zwaveAllianceId": 1022
+		},
+		{
 			"productType": "0x1b03",
 			"productId": "0x0334"
 		}

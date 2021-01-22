@@ -1,0 +1,24 @@
+// Gigaset S30851-S2563-R101
+// ONE X5100
+{
+	"manufacturer": "Gigaset",
+	"manufacturerId": "0x0432",
+	"label": "S30851-S2563-R101",
+	"description": "ONE X5100",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3596
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "- Enter the Z-Wave Portal\r\n- From the menu choose DEVICES and then + ADD DEVICE\r\n- Now start the inclusion procedure of your Z-Wave device according to its manual\r\n",
+		"exclusion": "- Enter the Z-Wave Portal\r\n- Choose MORE, then MAINTANACE and then REMOVE DEVICE\r\n- Now start the removing procedure of your Z-Wave device according to its manual\r\n",
+		"reset": "- Enter the Z-Wave Portal\r\n- Tab on MORE, then MAINTANACE and then RESET\r\n- Confirm Reset by choosing CONFIRM and after couple of seconds the Reset is finished\r\n"
+	}
+}

@@ -1,0 +1,19 @@
+// Cyberhouse GD00Z
+// Linear -2
+{
+	"manufacturer": "Cyberhouse",
+	"manufacturerId": "0x0014",
+	"label": "GD00Z",
+	"description": "Linear -2",
+	"devices": [
+		{
+			"productType": "0x4744",
+			"productId": "0x3032",
+			"zwaveAllianceId": 1059
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

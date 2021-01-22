@@ -1,0 +1,18 @@
+// ASSA ABLOY YDM3168
+{
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "YDM3168",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0040",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1683
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

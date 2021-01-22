@@ -7,8 +7,14 @@
 	"description": "Remote Control",
 	"devices": [
 		{
+			"productType": "0x0000",
+			"productId": "0x8380",
+			"zwaveAllianceId": 640
+		},
+		{
 			"productType": "0x0001",
-			"productId": "0x8380"
+			"productId": "0x8380",
+			"zwaveAllianceId": 1639
 		},
 		{
 			"productType": "0x0002",

@@ -1,0 +1,19 @@
+// Danfoss DFBH5Z01 / 088N7105
+// HC-5
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "DFBH5Z01 / 088N7105",
+	"description": "HC-5",
+	"devices": [
+		{
+			"productType": "0x0248",
+			"productId": "0xa040",
+			"zwaveAllianceId": 1649
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,24 @@
+// Fibargroup HCL
+// FIBARO Home Center Lite
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "HCL",
+	"description": "FIBARO Home Center Lite",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x1000",
+			"zwaveAllianceId": 1415
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x1001",
+			"zwaveAllianceId": 1398
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

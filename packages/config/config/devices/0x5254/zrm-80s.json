@@ -1,0 +1,19 @@
+// Remotec ZRM-80S
+// Remotec Switch Module
+{
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZRM-80S",
+	"description": "Remotec Switch Module",
+	"devices": [
+		{
+			"productType": "0x8001",
+			"productId": "0x0000",
+			"zwaveAllianceId": 17
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

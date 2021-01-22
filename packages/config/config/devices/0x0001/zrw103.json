@@ -1,0 +1,18 @@
+// ACT - Advanced Control Technologies ZRW103
+{
+	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturerId": "0x0001",
+	"label": "ZRW103",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x5257",
+			"productId": "0x3033",
+			"zwaveAllianceId": 413
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,19 @@
+// Cyberhouse WADWAZ
+// Linear Door/Window Sensor
+{
+	"manufacturer": "Cyberhouse",
+	"manufacturerId": "0x0014",
+	"label": "WADWAZ",
+	"description": "Linear Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x2001",
+			"productId": "0x0102",
+			"zwaveAllianceId": 1033
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

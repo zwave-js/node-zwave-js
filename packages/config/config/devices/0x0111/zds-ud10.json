@@ -1,14 +1,15 @@
-// Tronico Technology Co. Ltd. ZDS-UD10
+// Tronico Technology Co. Ltd. NDS/ZDS-UD10
 // Dimming Switch Module
 {
 	"manufacturer": "Tronico Technology Co. Ltd.",
 	"manufacturerId": "0x0111",
-	"label": "ZDS-UD10",
+	"label": "NDS/ZDS-UD10",
 	"description": "Dimming Switch Module",
 	"devices": [
 		{
 			"productType": "0x8200",
-			"productId": "0x0200"
+			"productId": "0x0200",
+			"zwaveAllianceId": 106
 		}
 	],
 	"firmwareVersion": {

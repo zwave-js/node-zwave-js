@@ -1,0 +1,19 @@
+// Monoprice 11994
+// Monoprice, P/N , Plug-In Dimmer
+{
+	"manufacturer": "Monoprice",
+	"manufacturerId": "0x0202",
+	"label": "11994",
+	"description": "Monoprice, P/N , Plug-In Dimmer",
+	"devices": [
+		{
+			"productType": "0x2008",
+			"productId": "0x0803",
+			"zwaveAllianceId": 1120
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

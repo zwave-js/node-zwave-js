@@ -1,0 +1,19 @@
+// Wireless Maingate AB 300115
+// Gemalto Multi Access Gateway
+{
+	"manufacturer": "Wireless Maingate AB",
+	"manufacturerId": "0x0199",
+	"label": "300115",
+	"description": "Gemalto Multi Access Gateway",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1256
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

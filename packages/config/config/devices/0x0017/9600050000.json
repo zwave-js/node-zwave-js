@@ -1,0 +1,19 @@
+// HiTech Automation 9600050000
+// EbV HeatApp Sensor
+{
+	"manufacturer": "HiTech Automation",
+	"manufacturerId": "0x0017",
+	"label": "9600050000",
+	"description": "EbV HeatApp Sensor",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 1232
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,22 @@
+// Aeotec Ltd. ZWA020
+// AutoPilot
+{
+	"manufacturer": "Aeotec Ltd.",
+	"manufacturerId": "0x0371",
+	"label": "ZWA020",
+	"description": "AutoPilot",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0014",
+			"zwaveAllianceId": 3691
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "This menu under   Menu >   Management >   Factory Default offers you two different ways to\r\nreset your AutoPilotTM:\r\n• Controller Factory Default\r\nThis turns just the controller back into factory reset. All connections to added devices, their configurations and all Z-Wave specific settings are lost. This function must be handled with extreme care. An additional dialog requires to explicitly confirm the function. All other settings which are not depending on the Controller or its Z-Wave configuration are not influenced.\r\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re- include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.\r\n• Reset to Factory Default\r\nThis function resets the AutoPilotTM back to its factory state, which means:\r\no Controllerwillberesettoitsfactorydefault→Allconnectionstoaddeddevices, their configurations and all Z-Wave specific settings are lost.\r\no Alluploadedimages/iconswillbedeleted\r\no Allcustominstalledappsandallotherappconfigurationswillberemoved o Allothersettingswillbesetbacktodefault\r\nNote:\r\nAfter the controller of the AutoPilotTM was reset in both cases the Z-Wave devices which were added to this controller before will NOT be removed automatically. They still try to communicate with the known controller. To make them ready for a new network insertion just remove them before the add process first or do a manually factory reset of the device (please refer to its manual).\r\ninfluenced.\r\n• Reset to Factory Default\r\nThis function resets the AutoPilot™ back to its factory state, which means:\r\no Controller will be reset to its factory default → All connections to added devices,\r\ntheir configurations and all Z-Wave specific settings are lost.\r\no All uploaded images/icons will be deleted\r\no All custom installed apps and all other app configurations will be removed\r\no All other settings will be set back to default"
+	}
+}

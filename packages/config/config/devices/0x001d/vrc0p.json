@@ -1,0 +1,18 @@
+// Leviton VRC0P
+{
+	"manufacturer": "Leviton",
+	"manufacturerId": "0x001d",
+	"label": "VRC0P",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0b02",
+			"productId": "0x032a",
+			"zwaveAllianceId": 2063
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

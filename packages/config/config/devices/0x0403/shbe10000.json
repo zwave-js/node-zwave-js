@@ -1,0 +1,24 @@
+// ABUS Security-Center GmbH & Co. KG SHBE10000
+// Z-Wave Button
+{
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
+	"manufacturerId": "0x0403",
+	"label": "SHBE10000",
+	"description": "Z-Wave Button",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0005",
+			"zwaveAllianceId": 3647
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Activate the inclusion mode (teach-in mode) on the gateway. (for further details please refer to the gateways manual)\r\nPress the \"+\" key (Add / Inclusion) in your Z-Wave app and follow the instructions to set the gateway to Inclusion mode.\r\n\r\nKeep the device within range of the gateway.\r\nRemove the fuse strip from the battery compartment.\r\nThe device supports automatic inclusion, i.e. it automatically goes into inclusion mode when it is powered and not yet connected to a gateway.\r\nAlternative Inclusion:\r\nIf the security strip has already been removed, instead press the Link button 3 times quickly (within 1.5 seconds) to start the inclusion on the device.",
+		"exclusion": "Activate the exclusion mode (learn-out mode) at the gateway. (for further details please refer to the gateways manual)\r\nPress the \"-\" key (Remove / Exclusion) in your Z-Wave app and follow the instructions to set the gateway to exclusion mode.\r\n\r\nPress the Link button 3 times quickly (within 1.5 seconds) to start the exclusion on the device.\r\n\r\nThe successful exclusion is displayed in the app or at the gateway.",
+		"reset": "Press the Link button 3 times quickly (within 1.5 seconds).\r\nPress quickly (within 1 second)\r\na fourth time and press and hold the Link button for at least 5 seconds.\r\nThe button is now reset to factory settings.\r\n\r\nHint:\r\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.\r\nIf the device is set to factory default, the status is set to \"not included\" and the association settings and possible configurations are reset to default."
+	}
+}

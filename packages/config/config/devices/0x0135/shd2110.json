@@ -1,0 +1,19 @@
+// ZyXEL SHD2110
+// Plug-in On/Off Module
+{
+	"manufacturer": "ZyXEL",
+	"manufacturerId": "0x0135",
+	"label": "SHD2110",
+	"description": "Plug-in On/Off Module",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001",
+			"zwaveAllianceId": 904
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

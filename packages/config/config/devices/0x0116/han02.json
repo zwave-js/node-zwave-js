@@ -1,0 +1,19 @@
+// Chromagic Technologies Corporation HAN02
+// -1 - Z-Wave In Wall Switch
+{
+	"manufacturer": "Chromagic Technologies Corporation",
+	"manufacturerId": "0x0116",
+	"label": "HAN02",
+	"description": "-1 - Z-Wave In Wall Switch",
+	"devices": [
+		{
+			"productType": "0x0011",
+			"productId": "0x0002",
+			"zwaveAllianceId": 15
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,19 @@
+// Residential Control Systems, Inc. (RCS) 800Z
+// ThereGate Static Controller
+{
+	"manufacturer": "Residential Control Systems, Inc. (RCS)",
+	"manufacturerId": "0x0010",
+	"label": "800Z",
+	"description": "ThereGate Static Controller",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1018
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

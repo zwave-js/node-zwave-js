@@ -1,0 +1,19 @@
+// ACT - Advanced Control Technologies ZRR150
+//  Relay Receptacle
+{
+	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturerId": "0x0001",
+	"label": "ZRR150",
+	"description": "Relay Receptacle",
+	"devices": [
+		{
+			"productType": "0x5252",
+			"productId": "0x3530",
+			"zwaveAllianceId": 193
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

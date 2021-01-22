@@ -1,0 +1,27 @@
+// Remotec ZRP-110
+// Z-Wave Repeater
+{
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZRP-110",
+	"description": "Z-Wave Repeater",
+	"devices": [
+		{
+			"productType": "0x1000",
+			"productId": "0x8141",
+			"zwaveAllianceId": [
+				2495,
+				3621
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Include or Exclude the ZRP-120 from the existing Z-Wave Home Control Network with your primary controller.\r\n-\tRefer to your primary controller instructions to process the inclusion / exclusion setup procedure.\r\n-\tWhen prompted by your primary controller, triple click the PROG button within 1 second.\r\n-\tThe primary controller should indicate that the action was successful. If the controller indicates the action was unsuccessful, please repeat the procedure.\r\n",
+		"exclusion": "Include or Exclude the ZRP-120 from the existing Z-Wave Home Control Network with your primary controller.\r\n-\tRefer to your primary controller instructions to process the inclusion / exclusion setup procedure.\r\n-\tWhen prompted by your primary controller, triple click the PROG button within 1 second.\r\n-\tThe primary controller should indicate that the action was successful. If the controller indicates the action was unsuccessful, please repeat the procedure.\r\n",
+		"reset": "All Configuration Parameter values and Association information will be restored to factory default settings and excluded from the network.\r\nStep\tSetup Key\tLED Indication Status on ZRP-100\r\n1\tPress and keep holding the PROG button for not less than 10 seconds.\t-\tLED state will toggle for first 5 seconds of being pressed.\r\n-\tLED state will toggle again after the remaining 5 seconds.\r\n2\tRelease the PROG button then triple click the PROG button within 2 seconds of step 1.\t-\tLED will stay in previous ON or OFF stage.\r\nRemark: All the setting and data will be permanently deleted. Please use this procedure only when the network primary controller is missing or otherwise inoperable.\r\n"
+	}
+}

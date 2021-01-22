@@ -1,0 +1,19 @@
+// KOOL KONCEPTS WP-US-2/U2/1
+// Wall plug smart switch
+{
+	"manufacturer": "KOOL KONCEPTS",
+	"manufacturerId": "0x0261",
+	"label": "WP-US-2/U2/1",
+	"description": "Wall plug smart switch",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0201",
+			"zwaveAllianceId": 1813
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,19 @@
+// Securifi Ltd. ALMP-BLK
+// Securifi Almond+
+{
+	"manufacturer": "Securifi Ltd.",
+	"manufacturerId": "0x0182",
+	"label": "ALMP-BLK",
+	"description": "Securifi Almond+",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1081
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

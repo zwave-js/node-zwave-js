@@ -1,0 +1,24 @@
+// Dragon Tech Industrial, Ltd. HS-DTA19+
+// HomeSeer  Smart Bulb
+{
+	"manufacturer": "Dragon Tech Industrial, Ltd.",
+	"manufacturerId": "0x0184",
+	"label": "HS-DTA19+",
+	"description": "HomeSeer  Smart Bulb",
+	"devices": [
+		{
+			"productType": "0x4754",
+			"productId": "0x3038",
+			"zwaveAllianceId": 1682
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Turn Off power to the light bulb socket\r\n2. Screw in the light bulb\r\n3. Place your network controller into inclusion mode by following the controller manufacturer's instructions\r\n4. Turn On power to the light bulb.  If successful, the LED light bulb will flash twice to indicate successful inclusion.\r\n5. If the controller/gateway shows it was a fail, repeat the procedure.\r\n\r\nNote: If Inclusion still fails after the 2nd attempt, you need to first RESET the Smart Bulb before repeating the above steps. \r\n",
+		"exclusion": "1. Turn off power to the light bulb socket\r\n2. Follow the network controller instruction to place your network controller into exclusion mode to remove the light bulb from the network.\r\n3. After being prompted by the network controller, turn On power to the light bulb.  If successful, the LED light bulb will flash twice to indicate successful inclusion.\r\n\r\n",
+		"reset": "You may manually reset the light bulb as follows:\r\n1.  Flick the wall switch “OFF-ON” 4 times within 4 seconds. \r\n2. The Smart Bulb will flash twice after Reset is successful.  \r\n\r\nUse this procedure only in the event that the network primary controller is lost or otherwise inoperable."
+	}
+}

@@ -1,0 +1,19 @@
+// ZyXEL SHD 1111
+// Door-Window Sensor
+{
+	"manufacturer": "ZyXEL",
+	"manufacturerId": "0x0135",
+	"label": "SHD 1111",
+	"description": "Door-Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 933
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

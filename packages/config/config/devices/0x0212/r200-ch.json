@@ -1,0 +1,23 @@
+// iRevo R200-CH
+{
+	"manufacturer": "iRevo",
+	"manufacturerId": "0x0212",
+	"label": "R200-CH",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0xc601",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2564
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To include:\r\n1. Touch keypad with palm\r\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\r\n3. Press 'R' button [Registration] from the inside of battery cover.\r\n4. Press 9,#,1,# on the keypad (by sequence)\r\n5. Wait until 'Ding dong dang' melody play than press 'R' button ",
+		"exclusion": "To exclude:\r\n1. Touch keypad with palm\r\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\r\n3. Press 'R' button [Registration] from the inside of battery cover.\r\n4. Press 9,#,3,# on the keypad (by sequence)\r\n5. Wait until 'Ding dong dang' melody play than press 'R' button ",
+		"reset": "To reset to factory defaults:\r\n ※ Use this procedure only in the event that the network primary controller is missing or otherwise inoperable. (User code or master code remains the same. Only network settings reset to factory defaults.) \r\n1. Touch keypad with palm\r\n2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)\r\n3. Press 'R' button [Registration] from the inside of battery cover.\r\n4. Press 9,#,9,# on the keypad (by sequence)\r\n5. Wait until 'Ding dong dang' melody play than press 'R' button "
+	}
+}

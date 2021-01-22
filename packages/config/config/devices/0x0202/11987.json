@@ -1,0 +1,19 @@
+// Monoprice 11987
+// Monoprice, P/N , Garage Detector
+{
+	"manufacturer": "Monoprice",
+	"manufacturerId": "0x0202",
+	"label": "11987",
+	"description": "Monoprice, P/N , Garage Detector",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1122
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

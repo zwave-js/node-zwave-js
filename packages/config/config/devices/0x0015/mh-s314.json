@@ -1,0 +1,19 @@
+// Lexel MH-S314
+// MCO Home -EU
+{
+	"manufacturer": "Lexel",
+	"manufacturerId": "0x0015",
+	"label": "MH-S314",
+	"description": "MCO Home -EU",
+	"devices": [
+		{
+			"productType": "0x3102",
+			"productId": "0x0204",
+			"zwaveAllianceId": 1114
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

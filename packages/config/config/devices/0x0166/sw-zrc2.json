@@ -1,0 +1,19 @@
+// CBCC Domotique SAS SW-ZRC2
+// ZURC Remote Control
+{
+	"manufacturer": "CBCC Domotique SAS",
+	"manufacturerId": "0x0166",
+	"label": "SW-ZRC2",
+	"description": "ZURC Remote Control",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0004",
+			"zwaveAllianceId": 1882
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

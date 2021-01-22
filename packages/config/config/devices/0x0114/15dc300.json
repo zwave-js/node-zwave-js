@@ -1,0 +1,18 @@
+// Kichler LVPS Switch
+{
+	"manufacturer": "Kichler",
+	"manufacturerId": "0x0114",
+	"label": "LVPS Switch",
+	"description": "Kichler - LVPS Switch",
+	"devices": [
+		{
+			"productType": "0xb005",
+			"productId": "0x3bc4",
+			"zwaveAllianceId": 1499
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

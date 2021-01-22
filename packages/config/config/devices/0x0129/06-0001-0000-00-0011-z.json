@@ -1,0 +1,18 @@
+// ASSA ABLOY 06-0001-0000-00-0011-Z
+{
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "06-0001-0000-00-0011-Z",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0008",
+			"productId": "0x0000",
+			"zwaveAllianceId": 2596
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

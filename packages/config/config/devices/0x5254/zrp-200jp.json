@@ -1,0 +1,24 @@
+// Remotec ZRP-200JP
+// Z-Wave Slim Repeater
+{
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZRP-200JP",
+	"description": "Z-Wave Slim Repeater",
+	"devices": [
+		{
+			"productType": "0x1009",
+			"productId": "0x8180",
+			"zwaveAllianceId": 2841
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1\tRefer to your primary controller to enter into the Inclusion Mode or Exclusion Mode\t\r\n2\tWhen it is prompted to enter it, please triple click the “PROG” button within 1 second.\tBlue Indicator flashes TWICE then stay off\r\n",
+		"exclusion": "1\tRefer to your primary controller to enter into the Inclusion Mode or Exclusion Mode\t\r\n2\tWhen it is prompted to enter it, please triple click the “PROG” button within 1 second.\tBlue Indicator flashes TWICE then stay off\r\n",
+		"reset": "Press and Hold “PROG” button for 3 seconds on Z-Wave Slim Repeater, the indicator will light up Purple Color. DO NOT Release the “PROG” Button until indicator change back to Blue color and flashes TWICE.\r\n\r\nRemark : All the Setting and Data will be permanently deleted.\r\n       \r\n*Please use this procedure only when the network primary controller is missing or otherwise inoperable.\r\n\r\n"
+	}
+}

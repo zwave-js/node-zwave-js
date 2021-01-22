@@ -1,0 +1,19 @@
+// Quby QB2
+// Quby  Energy Display
+{
+	"manufacturer": "Quby",
+	"manufacturerId": "0x0130",
+	"label": "QB2",
+	"description": "Quby  Energy Display",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 683
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

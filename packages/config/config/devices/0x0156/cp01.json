@@ -1,0 +1,19 @@
+// Vivint CP01
+// Vivint Master Control Panel ()
+{
+	"manufacturer": "Vivint",
+	"manufacturerId": "0x0156",
+	"label": "CP01",
+	"description": "Vivint Master Control Panel ()",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1078
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

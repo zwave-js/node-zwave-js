@@ -1,0 +1,29 @@
+// Axis Communications Ab M5065
+{
+	"manufacturer": "Axis Communications Ab",
+	"manufacturerId": "0x0364",
+	"label": "M5065",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": [
+				2600,
+				2615,
+				3040,
+				3041,
+				3151
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "How to add a Z-Wave device\r\n\r\nYou can only add a maximum of six Z-Wave devices to the product at any given time. If the maximum number is reached, you need\r\nto remove a Z-Wave device before you can add a new one. See How to remove a Z-Wave device on page 39.\r\n\r\n1. Go to Setup > Wireless I/O.\r\n2. Select Enable Z-Wave and click Save. You may need to wait for a few minutes for Z-Wave to become active.\r\n3. Click Add. The product starts looking for Z-Wave devices in the Z-Wave network.\r\n4. Set the Z-Wave device to be added into learning (inclusion/exclusion) mode as described in its User Manual.\r\n5. If requested, enter the PIN delivered with the Z-Wave device, and click Enter.\r\n6. Wait until the adding process is finalized as indicated by Status: Done on the web page. The device’s status information\r\nwindow opens.\r\n7. Click Refresh to update the Z-Wave device info, e.g. battery status, and add a name for the device. Click Save.",
+		"exclusion": "How to remove a Z-Wave device\r\n\r\nNote\r\nThis is the recommended removal procedure.\r\n1. Go to Setup > Wireless I/O.\r\n2. Click Remove. The product starts looking for Z-Wave devices in the Z-Wave network.\r\n3. Set the Z-Wave device to be added into learning (inclusion/exclusion) mode as described in its User Manual.\r\n4. Wait until the removal process is finalized as indicated by Status: Done on the web page.\r\nThe Z-wave device is now removed from the Z-Wave Device List.\r\nNote\r\nAll product-related information in the removed Z-Wave device is erased.",
+		"reset": "How to reset to factory default settings\r\n\r\nImportant\r\n\r\nReset to factory default should be used with caution. A reset to factory default resets all settings, including the IP address, to\r\nthe factory default values.\r\n\r\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable\r\n\r\nTo reset the product to the factory default settings:\r\n1. Disconnect power from the product.\r\n2. Press and hold the control button and reconnect power.\r\n3. Keep the control button pressed for 15–30 seconds until the status LED indicator flashes amber.\r\n4. Release the control button. The process is complete when the status LED indicator turns green. The product has been reset\r\nto the factory default settings. If no DHCP server is available on the network, the default IP address is 192.168.0.90\r\n5. Using the installation and management software tools, assign an IP address, set the password, and access the video stream.\r\nThe installation and management software tools are available from the support pages at axis.com/support\r\nIt is also possible to reset parameters to factory default via the web interface. Go to Setup > System Options > Maintenance and\r\nclick Default."
+	}
+}

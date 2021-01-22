@@ -1,0 +1,19 @@
+// Tronico Technology Co. Ltd. DA065
+//  Binary Switch
+{
+	"manufacturer": "Tronico Technology Co. Ltd.",
+	"manufacturerId": "0x0111",
+	"label": "Binary Switch",
+	"description": "Binary Switch",
+	"devices": [
+		{
+			"productType": "0x8800",
+			"productId": "0x0101",
+			"zwaveAllianceId": 691
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

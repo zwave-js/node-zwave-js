@@ -1,0 +1,19 @@
+// Cyberhouse WAPIRZ
+// Linear PIR Sensor
+{
+	"manufacturer": "Cyberhouse",
+	"manufacturerId": "0x0014",
+	"label": "WAPIRZ",
+	"description": "Linear PIR Sensor",
+	"devices": [
+		{
+			"productType": "0x2002",
+			"productId": "0x0203",
+			"zwaveAllianceId": 1034
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,19 @@
+// Allegion BR100
+//  Nexia Bridge
+{
+	"manufacturer": "Allegion",
+	"manufacturerId": "0x003b",
+	"label": "BR100",
+	"description": "Nexia Bridge",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0004",
+			"zwaveAllianceId": 850
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

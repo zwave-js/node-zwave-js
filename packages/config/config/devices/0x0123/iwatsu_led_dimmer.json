@@ -1,0 +1,19 @@
+// IWATSU LED Dimmer
+// Iwatsu LED Dimmer
+{
+	"manufacturer": "IWATSU",
+	"manufacturerId": "0x0123",
+	"label": "LED Dimmer",
+	"description": "Iwatsu LED Dimmer",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0063",
+			"zwaveAllianceId": [690, 719, 788]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

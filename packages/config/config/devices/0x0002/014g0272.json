@@ -1,0 +1,19 @@
+// Danfoss 014G0272
+// Danfoss Link™ Boiler Relay
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "014G0272",
+	"description": "Danfoss Link™ Boiler Relay",
+	"devices": [
+		{
+			"productType": "0x8005",
+			"productId": "0x2001",
+			"zwaveAllianceId": 26
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}
