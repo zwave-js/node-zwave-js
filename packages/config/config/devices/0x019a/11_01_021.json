@@ -55,7 +55,7 @@
 			"description": "Activate Supervision command for only important alarm events or all events. Supervised commands require a confirmation from the gateway when a notification is received.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
