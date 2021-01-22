@@ -1,7 +1,5 @@
-import { ConfigManager } from "../src/ConfigManager";
-
-const configManager = new ConfigManager();
+import { loadDeviceIndexInternal } from "../src/Devices";
 
 export async function generateDeviceIndex(): Promise<void> {
-	await configManager.loadDeviceIndex();
+	await loadDeviceIndexInternal();
 }

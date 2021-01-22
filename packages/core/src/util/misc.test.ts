@@ -89,6 +89,13 @@ describe("lib/util/misc", () => {
 				});
 			}
 		});
+
+		it("The error message should contain the rejection reason", () => {
+			assertZWaveError(() => validatePayload.withReason("NOPE")(false), {
+				errorCode: ZWaveErrorCodes.PacketFormat_InvalidPayload,
+				context: "NOPE",
+			});
+		});
 	});
 
 	describe("getMinimumShiftForBitMask", () => {

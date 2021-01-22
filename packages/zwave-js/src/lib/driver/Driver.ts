@@ -1438,7 +1438,11 @@ export class Driver extends EventEmitter {
 
 				case ZWaveErrorCodes.PacketFormat_InvalidPayload:
 					this.driverLog.print(
-						`Message with invalid data received. Dropping it:
+						`Dropping message with invalid data${
+							typeof e.context === "string"
+								? ` (Reason: ${e.context})`
+								: ""
+						}:
 0x${data.toString("hex")}`,
 						"warn",
 					);

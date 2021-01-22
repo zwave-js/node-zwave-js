@@ -295,7 +295,7 @@
 			"options": [
 				{
 					"label": "Switch all on and off",
-					"value": -1
+					"value": 255
 				},
 				{
 					"label": "Switch off only",

@@ -112,7 +112,7 @@
 			"label": "Report on change of power consumption",
 			"description": "Send report on change of power consumption (W)",
 			"valueSize": 2,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 2500,
 			"defaultValue": 50,
 			"readOnly": false,

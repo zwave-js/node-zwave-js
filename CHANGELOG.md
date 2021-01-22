@@ -3,7 +3,23 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.0.1 (2021-01-21)
+### Bugfixes
+* The `stateId` property of `Scene Activation CC` is now stateless
+* The controller methods to replace or remove a failed node now ping the node beforehand, to ensure the node is in the failed nodes list
+* Fixed a logging issue for Multi Channel Associations
+* `removeAssociations` no longer throws an error when trying to remove only multi channel associations
+* When a security-encapsulated message is dropped, the log now contains a reason
+* Fixed two sources of unhandled Promise rejections
+* When the compat flag `treatBasicSetAsEvent` is enabled, the Basic CC values are no longer hidden
+* Root device value events for devices with the `preserveRootApplicationCCValueIDs` are no longer filtered out
+
+### Config file changes
+* Added support for `Aeotec aerQ ZWA009-A` US/Canada/Mexico version
+* Fixed invalid parameter options in many config files
+* Parameter options with incompatible values are now detected as an error
+
+## 6.0.0 (2021-01-19) · _This is the way_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)
 * Logging can now be configured through driver options. However, the environment variables for logging are no longer evaluated lazily, so they now need to be set before requiring `zwave-js`.
 * The second (string) parameter of the `"interview failed"` event handler was removed
@@ -34,9 +50,15 @@ To compensate for the change and give the response enough time to reach the cont
 * Added Fortrezz fts05p
 * Added an additional product type to Aeotec Range Extender 7
 * Added iblinds V3
+* Added Zooz ZEN31 RGBW Dimmer
+* Added ThermoFloor Z-Temp2 thermostat
 * Change manufacturer Jasco Products to GE/Jasco
+* Changed ZDB5100 config to expand on parameter 1
+* Changed several ZW175 config parameters to use partial parameters
+* Improved configuration file for Fibaro FGS223
 * Renamed config param #11 in Q-Light Puck
 * Removed an unsupported parameter from GE 14294
+* Root endpoint values are no longer hidden for Philip PAN06, Aeotec ZW095 energy meter
 * New versions of `@zwave-js/config` are now automatically released every night if **only** config files were changed since the last release.  
 You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull the latest config files. For now, a driver restart is required afterwards.
 
@@ -45,6 +67,7 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * Added a compatibility option to disable the `Basic CC` mapping
 * Added a compatibility option to treat `Basic CC::Set` commands as events instead of `Report`s
 * Added a compatibility option `skipConfigurationInfoQuery` to work around a firmware issue in `Heat-It Z-TRM2fx`
+* Added the compatibility option `overrideFloatEncoding` for devices that only understand a specific float encoding (Z-TRM3 and AC301)
 * A driver option was added to enable logging to the console, even if it is not a TTY
 * A driver option was added to control the filesystem access throttling
 * Improved the `label` for `Level low` property in `BatteryCC`
@@ -55,6 +78,10 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * ValueIDs that use a `Duration` instance as the value now have the metadata type `"duration"`
 * Added a workaround for devices that return an invalid response when finding the first configuration param
 * Added a `hexColor` property to the `Color Switch CC`
+* Added the properties `ready` and `allNodesReady` to the driver to read the status after the corresponding events were emitted
+* The node neighbor lists now get updated when a node is removed
+* The `refreshValues` method is now exposed on node instances, which allows polling all actuator and sensor values of a node. **Note:** Please read the warnings in the [documentation](https://zwave-js.github.io/node-zwave-js/#/api/node?id=refreshvalues)!
+* The controller event callback types are now exported
 
 ### Bugfixes
 * Fixed an off-by-one error in the `Binary Sensor Supported Report` bitmask.  
@@ -66,6 +93,14 @@ You can run `npm update @zwave-js/config` in the `zwave-js` install dir to pull 
 * The driver no longer assumes that a sleeping node falls asleep after a certain time
 * The name and location of a node is no longer deleted when the node gets re-interviewed and **does not** support `Node Naming And Location CC`
 * The `propertyKeyName` of `Meter CC` values now contains the Meter type name
+* `Configuration CC`: empty Name and Info are now accepted as valid commands
+* `stopInclusion`/`stopExclusion` now always return a `boolean`
+* Successful pings now correctly change the node status
+* Messages from previous interview attempts are now dropped when an interview is restarted
+* When requesting node info fails, the interview is now aborted and restarted later instead of skipping all CC interviews
+* Added two missing "specific device types"
+* Switched the basic device type for Routing Slave and Static Controller
+* If a device sends multiple `NonceGet` requests in a row, the duplicate requests are now ignored instead of aborting the previous transaction
 
 ### Changes under the hood
 * Test releases for PRs can now be created with a command

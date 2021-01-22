@@ -213,6 +213,22 @@ describe("lib/log/Controller =>", () => {
 				callNumber: 2,
 			});
 		});
+
+		it("stringifies objects", () => {
+			const baseArgs = {
+				nodeId: 1,
+				commandClass: CommandClasses.Basic,
+				property: "foo",
+			};
+
+			controllerLogger.value("added", {
+				...baseArgs,
+				newValue: { foo: "bar" },
+			});
+			assertMessage(spyTransport, {
+				predicate: (msg) => msg.includes(`{"foo":"bar"}`),
+			});
+		});
 	});
 
 	describe("metadata()", () => {

@@ -6,4 +6,5 @@ export {
 	InterviewStage,
 	NodeInterviewFailedEventArgs,
 	NodeStatus,
+	ZWaveNodeEvents,
 } from "./lib/node/Types";

@@ -350,6 +350,10 @@
 					}
 				}
 			}
+		},
+		// This device only accepts Thermostat Setpoint Set commands with a size of 2
+		"overrideFloatEncoding": {
+			"size": 2
 		}
 	}
 }

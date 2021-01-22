@@ -42,7 +42,7 @@
 			"description": "LCD Timeout in seconds",
 			"unit": "s",
 			"valueSize": 1,
-			"minValue": 5,
+			"minValue": 0,
 			"maxValue": 30,
 			"defaultValue": 0,
 			"readOnly": false,

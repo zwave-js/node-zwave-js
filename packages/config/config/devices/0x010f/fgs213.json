@@ -184,7 +184,7 @@
 			"label": "Associations in Z-Wave network security mode",
 			"description": "Associations in Z-Wave network security mode",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 15,
 			"defaultValue": 15,
 			"readOnly": false,
@@ -441,7 +441,7 @@
 				},
 				{
 					"label": "Flash",
-					"value": 40
+					"value": 3
 				}
 			]
 		},

@@ -619,9 +619,12 @@ export class ThermostatSetpointCCSet extends ThermostatSetpointCC {
 	public scale: number;
 
 	public serialize(): Buffer {
+		// If a config file overwrites how the float should be encoded, use that information
+		const override = this.getNodeUnsafe()?.deviceConfig?.compat
+			?.overrideFloatEncoding;
 		this.payload = Buffer.concat([
 			Buffer.from([this.setpointType & 0b1111]),
-			encodeFloatWithScale(this.value, this.scale),
+			encodeFloatWithScale(this.value, this.scale, override),
 		]);
 		return super.serialize();
 	}

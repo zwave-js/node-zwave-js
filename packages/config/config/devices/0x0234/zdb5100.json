@@ -17,13 +17,46 @@
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
-		"1": {
-			"label": "Operating pushbutton(s) for dimmer",
-			"description": "This parameter specifies which pushbutton(s) that controls the built-in dimmer.",
+		"1[0x01]": {
+			"label": "Pushbutton 1 controls the dimmer",
+			"description": "Enabling this parameter lets pushbutton 1 control the built-in dimmer.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 15,
+			"maxValue": 1,
 			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1[0x02]": {
+			"label": "Pushbutton 2 controls the dimmer",
+			"description": "Enabling this parameter lets pushbutton 2 control the built-in dimmer.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1[0x04]": {
+			"label": "Pushbutton 3 controls the dimmer",
+			"description": "Enabling this parameter lets pushbutton 3 control the built-in dimmer.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1[0x08]": {
+			"label": "Pushbutton 4 controls the dimmer",
+			"description": "Enabling this parameter lets pushbutton 4 control the built-in dimmer.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true

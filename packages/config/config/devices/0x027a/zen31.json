@@ -1,0 +1,528 @@
+// Zooz ZEN31
+// RGBW Dimmer
+{
+	"revision": {
+		"ozw": 2
+	},
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN31",
+	"description": "RGBW Dimmer",
+	"devices": [
+		{
+			"productType": "0x0902",
+			"productId": "0x2000"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Zooz RGBW Dimmers only",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "IN1 on/off sync",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "IN1 Brightness sync",
+			"maxNodes": 5
+		},
+		"5": {
+			"label": "IN2 on/off sync",
+			"maxNodes": 5
+		},
+		"6": {
+			"label": "IN2 Brightness sync",
+			"maxNodes": 5
+		},
+		"7": {
+			"label": "IN3 on/off sync",
+			"maxNodes": 5
+		},
+		"8": {
+			"label": "IN3 Brightness sync",
+			"maxNodes": 5
+		},
+		"9": {
+			"label": "IN4 on/off sync",
+			"maxNodes": 5
+		},
+		"10": {
+			"label": "IN4 Brightness sync",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "On Off Status After Power Failure",
+			"description": "On Off Status After Power Failure. Default: forced to OFF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "forced to OFF",
+					"value": 0
+				},
+				{
+					"label": "restore to previous state",
+					"value": 1
+				},
+				{
+					"label": "forced to on",
+					"value": 2
+				}
+			]
+		},
+		"20": {
+			"label": "Switch / Input Type for IN1",
+			"description": "Switch / Input Type for IN1. Choose the input/switch type you want to connect to the IN1 terminal. Default: momentary switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "analog sensor w/no pullup",
+					"value": 0
+				},
+				{
+					"label": "analog sensor with pull-up",
+					"value": 1
+				},
+				{
+					"label": "momentary switch",
+					"value": 2
+				},
+				{
+					"label": "toggle switch (on when swithc is on)",
+					"value": 3
+				},
+				{
+					"label": "toggle switch (toggles with switch toggle)",
+					"value": 4
+				}
+			]
+		},
+		"21": {
+			"label": "Switch / Input Type for IN2",
+			"description": "Switch / Input Type for IN2. Choose the input/switch type you want to connect to the IN2 terminal. Default: momentary switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "analog sensor w/no pullup",
+					"value": 0
+				},
+				{
+					"label": "analog sensor with pull-up",
+					"value": 1
+				},
+				{
+					"label": "momentary switch",
+					"value": 2
+				},
+				{
+					"label": "toggle switch (on when swithc is on)",
+					"value": 3
+				},
+				{
+					"label": "toggle switch (toggles with switch toggle)",
+					"value": 4
+				}
+			]
+		},
+		"22": {
+			"label": "Switch / Input Type for IN3",
+			"description": "Switch / Input Type for IN3. Choose the input/switch type you want to connect to the IN3 terminal. Default: momentary switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "analog sensor w/no pullup",
+					"value": 0
+				},
+				{
+					"label": "analog sensor with pull-up",
+					"value": 1
+				},
+				{
+					"label": "momentary switch",
+					"value": 2
+				},
+				{
+					"label": "toggle switch (on when swithc is on)",
+					"value": 3
+				},
+				{
+					"label": "toggle switch (toggles with switch toggle)",
+					"value": 4
+				}
+			]
+		},
+		"23": {
+			"label": "Switch / Input Type for IN4",
+			"description": "Switch / Input Type for IN4. Choose the input/switch type you want to connect to the IN4 terminal. Default: momentary switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "analog sensor w/no pullup",
+					"value": 0
+				},
+				{
+					"label": "analog sensor with pull-up",
+					"value": 1
+				},
+				{
+					"label": "momentary switch",
+					"value": 2
+				},
+				{
+					"label": "toggle switch (on when swithc is on)",
+					"value": 3
+				},
+				{
+					"label": "toggle switch (toggles with switch toggle)",
+					"value": 4
+				}
+			]
+		},
+		"62": {
+			"label": "Power Report Frequency",
+			"description": "Power Report Frequency. Choose how often you want your RGBW Dimmer to report power consumption (W) to your controller. NOTE: must be 0, or an increment of 30. Default: 3600",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"65": {
+			"label": "Energy Report Threshold",
+			"description": "Energy Report Threshold. Choose how you want your RGBW Dimmer to report energy use (kWh) to your hub. The number entered as value corresponds to decimal values in energy useage change. So if 10 is entered by default, the RGBW Dimmer will report any change in energy use over 0.1 kWh. Energy reports are sent in t least 30-second intervals.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 500,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"66": {
+			"label": "Energy Report Frequency",
+			"description": "Energy Report Frequency. Choose how often you want your RGBW Dimmer to report energy (kWh) to your controller. NOTE: must be 0, or an increment of 30. Default: 3600",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 32400,
+			"defaultValue": 3600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"150": {
+			"label": "RGBW/HSB Wall Switch Mode",
+			"description": "RGBW/HSB Wall Switch Mode. Choose how switches connected to the input terminals control your LED strip. In the default RGBW mode, each switch connected to each input terminal controls the RGBW chnnels separately (so IN1 for red, IN2 for green, etc.) with a single click for ON/OFF, double click to full brightness, and press-and-hold to dim (momentary switches only). In the HSB, IN1 controls hue, IN2 - saturation, IN3 - brightness, IN4 - white with single click for last set value or value 0, double click to max value, and press-and-hold to set custom value. Default: RGBW mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "RGBW mode",
+					"value": 0
+				},
+				{
+					"label": "HSB mode",
+					"value": 1
+				}
+			]
+		},
+		"151": {
+			"label": "Ramp Rate (switch)",
+			"description": "Ramp Rate (switch). Adjust the ramp rate for your RGBW dimmer (fade-in/fade-out effect for on/off operation). Values correspond to the number of seconds it takes for the dimmer to reach full brightness or turn off when operated from the connected wall switch. Note that 0 is instant on/off. Default : 3 seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"152": {
+			"label": "Ramp Rate (Z-Wave)",
+			"description": "Ramp Rate (Z-Wave). Adjust the ramp rate for your RGBW dimmer (fade-in/fade-out effect for on/off operation). Values correspond to the number of seconds it takes for the dimmer to reach full brightness or turn off when operated remotely from the Z-Wave hub Note that 0 is instant on/off. Default : 3 seconds",
+			"valueSize": 2,
+			"unit": "seconds",
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"157": {
+			"label": "Preset Programs",
+			"description": "Enable one of the preset animated color programs to set the mood with a click. Default: preset programs disabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "preset programs disabled",
+					"value": 0
+				},
+				{
+					"label": "fireplace",
+					"value": 6
+				},
+				{
+					"label": "storm",
+					"value": 7
+				},
+				{
+					"label": "rainbow",
+					"value": 8
+				},
+				{
+					"label": "polar lights",
+					"value": 9
+				},
+				{
+					"label": "police",
+					"value": 10
+				}
+			]
+		},
+		"40[0x01]": {
+			"label": "Scene Control for IN1. click/toggle 1 time to trigger",
+			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40[0x02]": {
+			"label": "Scene Control for IN1. click/toggle 2 times to trigger",
+			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40[0x04]": {
+			"label": "Scene Control for IN1. click/toggle 3 times to trigger",
+			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40[0x08]": {
+			"label": "Scene Control for IN1. click/toggle 4 times to trigger",
+			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x01]": {
+			"label": "Scene Control for IN2. click/toggle 1 time to trigger",
+			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x02]": {
+			"label": "Scene Control for IN2. click/toggle 2 times to trigger",
+			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x04]": {
+			"label": "Scene Control for IN2. click/toggle 3 times to trigger",
+			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"41[0x08]": {
+			"label": "Scene Control for IN2. click/toggle 4 times to trigger",
+			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42[0x01]": {
+			"label": "Scene Control for IN3. click/toggle 1 time to trigger",
+			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42[0x02]": {
+			"label": "Scene Control for IN3. click/toggle 2 times to trigger",
+			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42[0x04]": {
+			"label": "Scene Control for IN3. click/toggle 3 times to trigger",
+			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"42[0x08]": {
+			"label": "Scene Control for IN3. click/toggle 4 times to trigger",
+			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"43[0x01]": {
+			"label": "Scene Control for IN4. click/toggle 1 time to trigger",
+			"description": "Click/toggle the connected switch 1 time to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"43[0x02]": {
+			"label": "Scene Control for IN4. click/toggle 2 times to trigger",
+			"description": "Click/toggle the connected switch 2 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"43[0x04]": {
+			"label": "Scene Control for IN4. click/toggle 3 times to trigger",
+			"description": "Click/toggle the connected switch 3 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"43[0x08]": {
+			"label": "Scene Control for IN4. click/toggle 4 times to trigger",
+			"description": "Click/toggle the connected switch 4 times to trigger a scene.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}

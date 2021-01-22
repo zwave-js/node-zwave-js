@@ -31,16 +31,17 @@
 			"label": "All On/All Off",
 			"description": "All On/All Off",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 2,
-			"defaultValue": -1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "All On active, All Off active",
-					"value": -1
+					"value": 255
 				},
 				{
 					"label": "All On is not active, All Off is not active",
@@ -61,7 +62,7 @@
 			"description": "Switch state after power failure",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,

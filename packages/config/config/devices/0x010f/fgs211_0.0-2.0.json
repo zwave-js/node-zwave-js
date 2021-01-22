@@ -81,7 +81,7 @@
 			"options": [
 				{
 					"label": "ALL ON active / ALL OFF active",
-					"value": -1
+					"value": 255
 				},
 				{
 					"label": "ALL ON disabled / ALL OFF disabled",

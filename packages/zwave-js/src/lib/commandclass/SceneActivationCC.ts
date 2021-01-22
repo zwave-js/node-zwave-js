@@ -131,7 +131,7 @@ export class SceneActivationCCSet extends SceneActivationCC {
 		}
 	}
 
-	@ccValue()
+	@ccValue({ stateful: false })
 	@ccValueMetadata({
 		...ValueMetadata.UInt8,
 		min: 1,

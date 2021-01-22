@@ -33,7 +33,7 @@ async function publishPr() {
 		await exec.exec("yarn", ["run", "build:full"]);
 
 		// Configure git
-		await exec.exec("git", ["config", "user.email", "bot@zwave.js"]);
+		await exec.exec("git", ["config", "user.email", "bot@zwave-js.io"]);
 		await exec.exec("git", ["config", "user.name", "Z-Wave JS Bot"]);
 
 		// Configure npm

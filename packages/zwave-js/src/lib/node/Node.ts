@@ -38,7 +38,13 @@ import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
 import { CCAPI, ignoreTimeout } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
-import { BasicCC, BasicCCReport, BasicCCSet } from "../commandclass/BasicCC";
+import {
+	BasicCC,
+	BasicCCReport,
+	BasicCCSet,
+	getCompatEventValueId as getBasicCCCompatEventValueId,
+	getCurrentValueValueId as getBasicCCCurrentValueValueId,
+} from "../commandclass/BasicCC";
 import {
 	CentralSceneCCNotification,
 	CentralSceneKeys,
@@ -107,6 +113,7 @@ import {
 } from "../controller/GetRoutingInfoMessages";
 import type { Driver } from "../driver/Driver";
 import { Extended, interpretEx } from "../driver/StateMachineShared";
+import type { Transaction } from "../driver/Transaction";
 import type { Message } from "../message/Message";
 import { DeviceClass } from "./DeviceClass";
 import { Endpoint } from "./Endpoint";
@@ -315,7 +322,9 @@ export class ZWaveNode extends Endpoint {
 			// Only root endpoint values need to be filtered
 			!arg.endpoint &&
 			// Only application CCs need to be filtered
-			applicationCCs.includes(arg.commandClass)
+			applicationCCs.includes(arg.commandClass) &&
+			// and only if a config file does not force us to expose the root endpoint
+			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs
 		) {
 			// Iterate through all possible non-root endpoints of this node and
 			// check if there is a value ID that mirrors root endpoint functionality
@@ -1120,14 +1129,29 @@ version:               ${this.version}`;
 			const resp = await this.driver.sendMessage<
 				RequestNodeInfoResponse | ApplicationUpdateRequest
 			>(new RequestNodeInfoRequest(this.driver, { nodeId: this.id }));
-			if (
-				(resp instanceof RequestNodeInfoResponse && !resp.wasSent) ||
-				resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
-			) {
+			if (resp instanceof RequestNodeInfoResponse && !resp.wasSent) {
+				// TODO: handle this in SendThreadMachine
 				this.driver.controllerLog.logNode(
 					this.id,
-					`querying the node info failed`,
+					`Querying the node info failed`,
 					"error",
+				);
+				throw new ZWaveError(
+					`Querying the node info failed`,
+					ZWaveErrorCodes.Controller_ResponseNOK,
+				);
+			} else if (
+				resp instanceof ApplicationUpdateRequestNodeInfoRequestFailed
+			) {
+				// TODO: handle this in SendThreadMachine
+				this.driver.controllerLog.logNode(
+					this.id,
+					`Querying the node info failed`,
+					"error",
+				);
+				throw new ZWaveError(
+					`Querying the node info failed`,
+					ZWaveErrorCodes.Controller_CallbackNOK,
 				);
 			} else if (
 				resp instanceof ApplicationUpdateRequestNodeInfoReceived
@@ -1269,6 +1293,13 @@ version:               ${this.version}`;
 				) {
 					// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
 					await this.loadDeviceConfig();
+					if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
+						// To create the compat event value, we need to force a Basic CC interview
+						this.addCC(CommandClasses.Basic, {
+							isSupported: true,
+							version: 1,
+						});
+					}
 				}
 				await this.driver.saveNetworkToCache();
 			} catch (e) {
@@ -1345,8 +1376,9 @@ version:               ${this.version}`;
 		}
 
 		// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
-		// to map the Basic CC to other CCs
-		if (!this._deviceConfig?.compat?.disableBasicMapping) {
+		// to map the Basic CC to other CCs or expose Basic Set as an event
+		const compat = this._deviceConfig?.compat;
+		if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
 			this.hideBasicCCInFavorOfActuatorCCs();
 		}
 
@@ -1414,8 +1446,11 @@ version:               ${this.version}`;
 				if (typeof action === "boolean") return action;
 			}
 
-			// Don't offer or interview the Basic CC if any actuator CC is supported
-			endpoint.hideBasicCCInFavorOfActuatorCCs();
+			// Don't offer or interview the Basic CC if any actuator CC is supported - except if the config files forbid us
+			// to map the Basic CC to other CCs or expose Basic Set as an event
+			if (!compat?.disableBasicMapping && !compat?.treatBasicSetAsEvent) {
+				endpoint.hideBasicCCInFavorOfActuatorCCs();
+			}
 
 			const endpointInterviewGraph = endpoint.buildCCInterviewGraph();
 			let endpointInterviewOrder: CommandClasses[];
@@ -1787,20 +1822,31 @@ version:               ${this.version}`;
 		});
 
 		// Ensure that we're not flooding the queue with unnecessary NonceReports (GH#1059)
-		this.driver.rejectTransactions(
-			(t) =>
-				t.message.getNodeId() === this.nodeId &&
-				isCommandClassContainer(t.message) &&
-				t.message.command instanceof SecurityCCNonceReport,
-			`Duplicate NonceReport was dropped`,
-			ZWaveErrorCodes.Controller_MessageDropped,
-		);
+		const { queue, currentTransaction } = this.driver[
+			"sendThread"
+		].state.context;
+		const isNonceReport = (t: Transaction | undefined) =>
+			!!t &&
+			t.message.getNodeId() === this.nodeId &&
+			isCommandClassContainer(t.message) &&
+			t.message.command instanceof SecurityCCNonceReport;
+		if (
+			isNonceReport(currentTransaction) ||
+			queue.find((t) => isNonceReport(t))
+		) {
+			this.driver.controllerLog.logNode(this.id, {
+				message:
+					"in the process of replying to a NonceGet, won't send another NonceReport",
+				level: "warn",
+			});
+			return;
+		}
 
-		// And also delete all previous nonces we sent the node since they
+		// Delete all previous nonces we sent the node, since they
 		// should no longer be used - except if a config flag forbids it
 		// Devices using this flag may only delete the old nonce after the new one was acknowledged
 		const keepUntilNext = !!this.deviceConfig?.compat?.keepS0NonceUntilNext;
-		if (keepUntilNext) {
+		if (!keepUntilNext) {
 			this.driver.securityManager.deleteAllNoncesForReceiver(this.id);
 		}
 
@@ -2134,20 +2180,13 @@ version:               ${this.version}`;
 				this.driver.controllerLog.logNode(this.id, {
 					message: "treating BasicCC Set as a value event",
 				});
-				const valueId: ValueID = {
-					commandClass: CommandClasses.Basic,
-					endpoint: command.endpointIndex,
-					property: "event",
-				};
-				if (!this._valueDB.hasMetadata(valueId)) {
-					this._valueDB.setMetadata(valueId, {
-						...ValueMetadata.ReadOnlyUInt8,
-						label: "Event value",
-					});
-				}
-				this._valueDB.setValue(valueId, command.targetValue, {
-					stateful: false,
-				});
+				this._valueDB.setValue(
+					getBasicCCCompatEventValueId(command.endpointIndex),
+					command.targetValue,
+					{
+						stateful: false,
+					},
+				);
 				return;
 			}
 
@@ -2166,11 +2205,7 @@ version:               ${this.version}`;
 			if (!didSetMappedValue) {
 				// Sets cannot store their value automatically, so store the values manually
 				this._valueDB.setValue(
-					{
-						commandClass: CommandClasses.Basic,
-						endpoint: command.endpointIndex,
-						property: "currentValue",
-					},
+					getBasicCCCurrentValueValueId(command.endpointIndex),
 					command.targetValue,
 				);
 				// Since the node sent us a Basic command, we are sure that it is at least controlled

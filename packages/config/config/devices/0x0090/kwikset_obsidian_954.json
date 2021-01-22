@@ -97,7 +97,7 @@
 			"description": "Configuration parameter",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 8,
+			"maxValue": 15,
 			"defaultValue": 5,
 			"readOnly": true,
 			"writeOnly": false,

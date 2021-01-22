@@ -58,54 +58,93 @@
 				}
 			]
 		},
-		"9": {
-			"label": "Alarm reaction when received",
-			"description": "Configure what alarms Smart Switch 7 will react to from other Z-Wave devices.",
+		"9[0x01]": {
+			"label": "Alarm reaction to Access Control trigger state",
+			"description": "React to access control triggers from other Z-Wave devices.",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 16384,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Trigger open, disabled closed",
-					"value": 0
-				},
-				{
-					"label": "Trigger closed, disabled open",
-					"value": 1
-				},
-				{
-					"label": "Smoke alarm",
-					"value": 256
-				},
-				{
-					"label": "CO Alarm",
-					"value": 512
-				},
-				{
-					"label": "CO2 Alarm",
-					"value": 1024
-				},
-				{
-					"label": "Heat Alarm",
-					"value": 2048
-				},
-				{
-					"label": "Water Alarm",
-					"value": 4096
-				},
-				{
-					"label": "Access Control",
-					"value": 8192
-				},
-				{
-					"label": "Home Security",
-					"value": 16384
-				}
-			]
+			"allowManualEntry": true
+		},
+		"9[0x0100]": {
+			"label": "Alarm reaction to Smoke Alarms",
+			"description": "React to Smoke Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9[0x0200]": {
+			"label": "Alarm reaction to CO Alarms",
+			"description": "React to CO Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9[0x0400]": {
+			"label": "Alarm reaction to CO2 Alarms",
+			"description": "React to CO2 Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9[0x0800]": {
+			"label": "Alarm reaction to Heart Alarms",
+			"description": "React to Heart Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9[0x1000]": {
+			"label": "Alarm reaction to Water Alarms",
+			"description": "React to Water Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9[0x2000]": {
+			"label": "Alarm reaction to Access Control Alarms",
+			"description": "React to Access Control Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9[0x4000]": {
+			"label": "Alarm reaction to Home Security Alarms",
+			"description": "React to Home Security Alarms from other Z-Wave devices.",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
 		},
 		"10": {
 			"label": "Release/Disable alarm",
@@ -202,12 +241,45 @@
 				}
 			]
 		},
-		"82": {
-			"label": "Night Light Mode",
+		"82[0xFF000000]": {
+			"label": "Night Light enable (hour)",
 			"description": "Enable or disable Night Light Mode during specific times",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 24,
+			"defaultValue": 18,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"82[0xFF0000]": {
+			"label": "Night Light enable (minute)",
+			"description": "Enable or disable Night Light Mode during specific times",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"82[0xFF00]": {
+			"label": "Night Light disable (hour)",
+			"description": "Enable or disable Night Light Mode during specific times",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 24,
+			"defaultValue": 8,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"82[0xFF]": {
+			"label": "Night Light disable (minute)",
+			"description": "Enable or disable Night Light Mode during specific times",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 60,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -246,13 +318,46 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"101": {
-			"label": "Timed report enable/disable",
-			"description": "Configure timed report",
+		"101[0x01]": {
+			"label": "Enable reporting of Power Consumption",
+			"description": "Enable regular reporting on Power Consumption",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101[0x02]": {
+			"label": "Enable reporting of Power",
+			"description": "Enable regular reporting on Power",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101[0x04]": {
+			"label": "Enable reporting of Voltage",
+			"description": "Enable regular reporting on Voltage",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"101[0x08]": {
+			"label": "Enable reporting of Current",
+			"description": "Enable regular reporting on Current",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -261,7 +366,7 @@
 			"label": "Timed report interval",
 			"description": "Reports the sensors set on Parameter 101",
 			"valueSize": 4,
-			"minValue": 30,
+			"minValue": 0,
 			"maxValue": 2592000,
 			"defaultValue": 600,
 			"readOnly": false,
