@@ -152,6 +152,8 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		};
 	}
 
+	private refreshTimeout: NodeJS.Timeout | undefined;
+
 	/**
 	 * Sets the switch to a new value
 	 * @param targetValue The new target value for the switch
@@ -203,12 +205,19 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		// Refresh the current value
 		if (
 			!supervisionResult ||
-			supervisionResult.status === SupervisionStatus.Working ||
 			supervisionResult.status === SupervisionStatus.Success
 		) {
 			if (this.isSinglecast()) {
-				// Refresh the current value
-				await this.get();
+				// Refresh the current value after a delay
+				if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+				setTimeout(async () => {
+					this.refreshTimeout = undefined;
+					try {
+						await this.get();
+					} catch {
+						/* ignore */
+					}
+				}, duration?.toMilliseconds() ?? this.driver.options.timeouts.refreshValue).unref();
 			}
 		}
 	}
