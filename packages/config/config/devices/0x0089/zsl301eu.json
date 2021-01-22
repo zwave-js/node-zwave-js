@@ -87,16 +87,17 @@
 			"label": "Enable All ON/All OFF",
 			"description": "Enable All ON/All OFF",
 			"valueSize": 1,
-			"minValue": -1,
-			"maxValue": 2,
-			"defaultValue": -1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Enable both All ON and All OFF command",
-					"value": -1
+					"value": 255
 				},
 				{
 					"label": "Disable both All ON and All OFF command.",

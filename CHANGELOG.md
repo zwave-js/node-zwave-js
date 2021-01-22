@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.0.1 (2021-01-21)
 ### Bugfixes
 * The `stateId` property of `Scene Activation CC` is now stateless
 * The controller methods to replace or remove a failed node now ping the node beforehand, to ensure the node is in the failed nodes list
@@ -12,6 +12,12 @@
 * When a security-encapsulated message is dropped, the log now contains a reason
 * Fixed two sources of unhandled Promise rejections
 * When the compat flag `treatBasicSetAsEvent` is enabled, the Basic CC values are no longer hidden
+* Root device value events for devices with the `preserveRootApplicationCCValueIDs` are no longer filtered out
+
+### Config file changes
+* Added support for `Aeotec aerQ ZWA009-A` US/Canada/Mexico version
+* Fixed invalid parameter options in many config files
+* Parameter options with incompatible values are now detected as an error
 
 ## 6.0.0 (2021-01-19) · _This is the way_
 ### Breaking changes · [Migration guide](https://zwave-js.github.io/node-zwave-js/#/getting-started/migrating-to-v6)

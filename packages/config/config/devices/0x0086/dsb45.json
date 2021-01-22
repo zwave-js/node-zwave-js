@@ -119,7 +119,7 @@
 			"label": "Parameter 121 Value 3",
 			"description": "See documentation",
 			"valueSize": 4,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 17,
 			"defaultValue": 1,
 			"readOnly": false,

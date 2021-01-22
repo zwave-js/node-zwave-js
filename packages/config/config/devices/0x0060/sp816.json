@@ -32,7 +32,7 @@
 			"label": "Enable/Disable Detecting",
 			"description": "The Detecting function can be Disabled or Enabled.",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,

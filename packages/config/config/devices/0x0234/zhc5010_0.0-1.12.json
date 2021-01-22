@@ -336,7 +336,7 @@
 			"description": "How built-in relay is controlled",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 5,
+			"maxValue": 13,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,

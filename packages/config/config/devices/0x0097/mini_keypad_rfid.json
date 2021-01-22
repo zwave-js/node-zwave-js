@@ -40,16 +40,17 @@
 			"label": "Set to default",
 			"description": "Set all configuration to factory settings",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Reset to default factory",
-					"value": -1
+					"value": 255
 				}
 			]
 		},
@@ -57,16 +58,17 @@
 			"label": "Feedback time",
 			"description": "To configure the time the beep is automatically turned off in seconds.",
 			"valueSize": 1,
-			"minValue": -128,
-			"maxValue": 127,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 15,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Endless",
-					"value": -1
+					"value": 255
 				},
 				{
 					"label": "Disabled",

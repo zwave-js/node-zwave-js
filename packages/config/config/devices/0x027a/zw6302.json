@@ -54,28 +54,14 @@
 			"description": "PIR Timeout Duration in Minutes",
 			"valueSize": 1,
 			"minValue": 1,
-			"maxValue": 60,
+			"maxValue": 255,
+			"unit": "min",
 			"defaultValue": 60,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
 			"options": [
-				{
-					"label": "One Minute",
-					"value": 1
-				},
-				{
-					"label": "Two Minutes",
-					"value": 2
-				},
-				{
-					"label": "Five Minutes",
-					"value": 5
-				},
-				{
-					"label": "Ten Minutes",
-					"value": 10
-				},
 				{
 					"label": "Test Mode [5 seconds]",
 					"value": 255

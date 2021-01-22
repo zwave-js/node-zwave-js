@@ -322,7 +322,9 @@ export class ZWaveNode extends Endpoint {
 			// Only root endpoint values need to be filtered
 			!arg.endpoint &&
 			// Only application CCs need to be filtered
-			applicationCCs.includes(arg.commandClass)
+			applicationCCs.includes(arg.commandClass) &&
+			// and only if a config file does not force us to expose the root endpoint
+			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs
 		) {
 			// Iterate through all possible non-root endpoints of this node and
 			// check if there is a value ID that mirrors root endpoint functionality
