@@ -87,7 +87,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": true
 		},
 		"17": {
 			"label": "Number of failed event retries",
@@ -100,7 +100,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": true
 		},
 		"18": {
 			"label": "Failed Event Retry Interval",
@@ -113,7 +113,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": true
 		},
 		"19": {
 			"label": "Heartbeat interval",
@@ -126,7 +126,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": true
 		},
 		"2": {
 			"label": "LED indication",
