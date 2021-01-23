@@ -1,6 +1,7 @@
-// undefined SVHSZWB1
+// Vesta SVHSZWB1
 // Vesta Shield
 {
+	"manufacturer": "Vesta",
 	"manufacturerId": "0x0367",
 	"label": "SVHSZWB1",
 	"description": "Vesta Shield",
