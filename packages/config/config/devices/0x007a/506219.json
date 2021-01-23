@@ -39,7 +39,7 @@
 	},
 	"paramInformation": {
 		"0": {
-			"label": "Switching/dimming/shutters dual-surface:",
+			"label": "Switching/dimming/shutters dual-surface",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
