@@ -1,0 +1,19 @@
+// Eaton RFAPM
+// ASPIRE RF Appliance Control Plug-in Module
+{
+	"manufacturer": "Eaton",
+	"manufacturerId": "0x001a",
+	"label": "RFAPM",
+	"description": "ASPIRE RF Appliance Control Plug-in Module",
+	"devices": [
+		{
+			"productType": "0x5354",
+			"productId": "0x0003",
+			"zwaveAllianceId": 750
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

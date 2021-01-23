@@ -7,12 +7,17 @@
 	"devices": [
 		{
 			"productType": "0x3002",
-			"productId": "0x0006"
+			"productId": "0x0006",
+			"zwaveAllianceId": 2462
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "1) Ensure the SHDL is powered and the battery is fully charged.2) Set the main controller into the Add device mode (see a main controller’s operating manual).3) Triple click Z-Wave button on the Z-Wave module(inside lock body) within 1.5 seconds, the LED will flicker rapidly while inclusion process implement and light on 2 second after processing complete.",
+		"exclusion": "1) Ensure the SHDL is powered and the battery is fully charged.2) Set the main controller into the Remove device mode (see a main controller’s operating manual).3) Triple click Z-Wave button on the Z-Wave module(inside lock body) within 1.5 seconds, the LED will flicker rapidly while exclusion process implement and light on 2 second after processing complete.",
+		"reset": "Smart Hidden Door Lock restores factory default automatically when the device is excluded.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
 }

@@ -1,0 +1,22 @@
+// Vision Security ZT1141EU-5
+// Wall Remote
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZT1141EU-5",
+	"description": "Wall Remote",
+	"devices": [
+		{
+			"productType": "0x1004",
+			"productId": "0x0402",
+			"zwaveAllianceId": 1709
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Press 4 buttons together for 10 seconds. The LED colors will turn red then turn green. (Green LED flashes 5 times quickly that means reset completely). Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable."
+	}
+}

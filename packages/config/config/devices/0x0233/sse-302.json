@@ -1,0 +1,24 @@
+// eZEX Corporation SSE-302
+// U+ Switch
+{
+	"manufacturer": "eZEX Corporation",
+	"manufacturerId": "0x0233",
+	"label": "SSE-302",
+	"description": "U+ Switch",
+	"devices": [
+		{
+			"productType": "0x004c",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2127
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1) Prepare the controller for enabling inclusion2) Keep touching the lamp low button, then after 5 seconds elapsed, 3 beep sounds can be heard. At that time, withdraw touching the button and then inclusion will be commenced.",
+		"exclusion": "1) Make sure the switch is in inclusion mode.2) Keep touching the lamp low button, then after 5 seconds elapsed, 3 beep sounds can be heard. At that time, withdraw touching the button and then exclusion will be started.",
+		"reset": "(* Use this procedure only when the network primary controller is missing or otherwise inoperable.) 1) Hold the low touch button for 10 seconds - Keep holding the button, then at 5 second, 3 beeps will come out, and keep holding- 10 seconds later, 5 beep sounds can be heard, and then withdraw touching the low button, so that factory reset should be started. 2) After factory reset is done, all the lamps will be turned off and all variables will be initialized to default values."
+	}
+}

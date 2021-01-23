@@ -55,7 +55,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Temperature Low Threshold",
-			"description": "Use this to change the low temperature alarm threshold. Set the range between -10 and 69 deg C.\n\t\t\tNote: The user configuration value is a positive decimal integer 0 through 255, but the device\n                        interprets the value as 8-bit Two's complement.  Examples:\n                           -10 in Two's complement is 246 decimal (0xF6).\n                           -2 in Two's complement is 254 decimal (xFE)\n                           -1 in Two's complement is 255 decimal (xFF)\n                           0 in Two's complement is 0 decimal (0x00).\n                           69 in Two's complement is 69 decimal (0x45).\n                        Thus the valid range the user may enter is 0-69 and 246-255.",
+			"description": "Use this to change the low temperature alarm threshold. Set the range between -10 and 69 deg C.Note: The user configuration value is a positive decimal integer 0 through 255, but the device interprets the value as 8-bit Two's complement.  Examples: -10 in Two's complement is 246 decimal (0xF6). -2 in Two's complement is 254 decimal (xFE) -1 in Two's complement is 255 decimal (xFF) 0 in Two's complement is 0 decimal (0x00). 69 in Two's complement is 69 decimal (0x45). Thus the valid range the user may enter is 0-69 and 246-255.",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 0,
@@ -68,7 +68,7 @@
 		},
 		"2": {
 			"label": "Temperature High Threshold",
-			"description": "Use this to change the high temperature alarm threshold. Set the range between -9 and 70 deg C.\n\t\t\tNote: The user configuration value is a positive decimal integer 0 through 255, but the device\n                        interprets the value as 8-bit Two's complement.  Examples:\n                           -9 in Two's complement is 247 decimal (0xF7).\n                           -2 in Two's complement is 254 decimal (xFE)\n                           -1 in Two's complement is 255 decimal (xFF)\n                           0 in Two's complement is 0 decimal (0x00).\n                           70 in Two's complement is 70 decimal (0x46).\n                        Thus the valid range the user may enter is 0-70 and 247-255.",
+			"description": "Use this to change the high temperature alarm threshold. Set the range between -9 and 70 deg C.Note: The user configuration value is a positive decimal integer 0 through 255, but the device interprets the value as 8-bit Two's complement.  Examples: -9 in Two's complement is 247 decimal (0xF7). -2 in Two's complement is 254 decimal (xFE) -1 in Two's complement is 255 decimal (xFF) 0 in Two's complement is 0 decimal (0x00). 70 in Two's complement is 70 decimal (0x46). Thus the valid range the user may enter is 0-70 and 247-255.",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 0,
@@ -81,7 +81,7 @@
 		},
 		"3": {
 			"label": "Normally Wet vs Normally Dry",
-			"description": "Default is set as a Normally DRY sensor. Use this to switch to Normally WET sensor.\n\t\t\tThe device only accepts one of two possible values:\n                          0   (0x00) - Normally Dry (default).\n                          240 (0xF0) - Normally Wet.",
+			"description": "Default is set as a Normally DRY sensor. Use this to switch to Normally WET sensor. The device only accepts one of two possible values:  0 (0x00) - Normally Dry (default).  240 (0xF0) - Normally Wet.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 240,
@@ -93,7 +93,7 @@
 		},
 		"4": {
 			"label": "Water Alarm Association Mode",
-			"description": "Use this to send basic set ON or Basic Set OFF when an alarm is detected. \n\t\t\tThe device only accepts one of two possible values:\n                          0   (0x00) - For sending basic set OFF when alarm detected.\n                          240 (0xF0) - For sending basic Set ON (default) when alarm detected.",
+			"description": "Use this to send basic set ON or Basic Set OFF when an alarm is detected. The device only accepts one of two possible values:  0 (0x00) - For sending basic set OFF when alarm detected.  240 (0xF0) - For sending basic Set ON (default) when alarm detected.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 240,

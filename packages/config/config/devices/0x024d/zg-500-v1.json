@@ -1,0 +1,22 @@
+// Z-works Inc. ZG-500-V1
+// LiveConnect Center
+{
+	"manufacturer": "Z-works Inc.",
+	"manufacturerId": "0x024d",
+	"label": "ZG-500-V1",
+	"description": "LiveConnect Center",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1667
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "The reset can be done through the hardware button. A long single click (over 10 seconds) will trigger the reset. A button on the GUI is also present to start the reset (\"Resets the Chip\").Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

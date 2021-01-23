@@ -1,0 +1,24 @@
+// Shenzhen Easyhome Technology Co., Ltd. EH-DS-01
+// Door/Window Sensor
+{
+	"manufacturer": "Shenzhen Easyhome Technology Co., Ltd.",
+	"manufacturerId": "0x0286",
+	"label": "EH-DS-01",
+	"description": "Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0186",
+			"productId": "0x0186",
+			"zwaveAllianceId": [2072, 2317]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "For Adding in (Inclusion) a network: Put the Z-Wave Interface Controller into “Add (Inclusion)” mode, and following its instruction to add EH-DS-01 to your controller. This Door/Window sensor needs to be included before installation.1. Pull the exposed plastic tab from the sensor.2. Press the button three times within 2 seconds, The Red LED indicator will be flashing three times to indicate scanning the network.3. If network is not found after 30 seconds, the sensor will go into sleep mode. To Adding again, you need repeat steps 2",
+		"exclusion": "For Removing from (Exclusion) a network: Put the Z-Wave Interface Controller into “Remove (Exclusion)” mode, and following its instruction to delete EH-DS-01 to your Z-Wave controller.1. Remove device front cover and pressing the button three times within 2 seconds, The Red LED indicator will be flashing three times and enter exclusion mode. 2. If remove (exclusion) successful, go auto Adding procedure.3. Node ID has been remove.",
+		"reset": "1. Pressing the button before power on, do not release the button and power on and keep on ten seconds, and the LED will turn ON.2. After over 1 seconds the Red LED indicator will turn OFF, then go auto Adding procedure.3. IDs are excluded and all settings will reset to factory default.4. Device begin auto Adding (Inclusion) mode.Note: Use this procedure only in the event that the primary controller is lost."
+	}
+}

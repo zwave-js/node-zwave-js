@@ -1,0 +1,27 @@
+// Grib GWG-02
+// IoT Hub
+{
+	"manufacturer": "Grib",
+	"manufacturerId": "0x018b",
+	"label": "GWG-02",
+	"description": "IoT Hub",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": [1641, 1915, 2113, 2384]
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0003",
+			"zwaveAllianceId": 1381
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "-Run ‘ZW_SET_DEFAULT’ in Setting, then click YES of UZB PoP UP"
+	}
+}

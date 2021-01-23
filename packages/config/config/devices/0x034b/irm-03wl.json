@@ -1,0 +1,22 @@
+// Glamo Inc. IRM-03WL
+// iRemocon Wi-Fi
+{
+	"manufacturer": "Glamo Inc.",
+	"manufacturerId": "0x034b",
+	"label": "IRM-03WL",
+	"description": "iRemocon Wi-Fi",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2789
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "1.Click “Reset”2.Once the lock device is removed, iRemocon “SYNC-LED” blinks slowly.Note: Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

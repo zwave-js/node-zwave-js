@@ -1,0 +1,24 @@
+// Remotec BW8510CN
+// ZRC-90CN
+{
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "BW8510CN",
+	"description": "ZRC-90CN",
+	"devices": [
+		{
+			"productType": "0x000b",
+			"productId": "0x8510",
+			"zwaveAllianceId": 1585
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Press “L+R” buttons simultaneously until LED light up to add the device into ZRC-90 Z-Wave network.",
+		"exclusion": "Click once on the “R” button to remove the device from ZRC-90 Z-Wave network.",
+		"reset": "Press and keep holding “R” button not less than 10 seconds.Release “R” button then triple click on “R” button within 2 seconds."
+	}
+}

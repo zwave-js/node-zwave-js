@@ -1,0 +1,19 @@
+// Somfy TAHOM
+// Somfy TaHomA Z-Wave Controller
+{
+	"manufacturer": "Somfy",
+	"manufacturerId": "0x0047",
+	"label": "TAHOM",
+	"description": "Somfy TaHomA Z-Wave Controller",
+	"devices": [
+		{
+			"productType": "0x1e54",
+			"productId": "0x4841",
+			"zwaveAllianceId": 650
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

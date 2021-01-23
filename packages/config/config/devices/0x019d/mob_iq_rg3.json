@@ -1,0 +1,22 @@
+// MOBILUS MOTOR Spółka z o.o. MOB.IQ [RG3+]
+// mob.iq [rg3+]
+{
+	"manufacturer": "MOBILUS MOTOR Spółka z o.o.",
+	"manufacturerId": "0x019d",
+	"label": "MOB.IQ [RG3+]",
+	"description": "mob.iq [rg3+]",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2368
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.Restoring controller to factory settings removes from its memory all data about Z-Wave network, which means it will forget all added devices and return to PRIMARY CONTROLLER state. To reset controller to factory settings, proceed as follows:1. Simultaneously press and hold STOP and DOWN button until the LEDs light red.2. Left channel LED flashes green.3. Using right navigation key , select all channel LED .4. Confirm the choice with STOP button.5. All channel LEDs turns on solid and the red LEDs are off.6. A successfully completed operation will be signaled by controller through single blink of green LEDs ."
+	}
+}

@@ -1,19 +1,24 @@
-// UFairy G.R. Tech ZSE02
+// Zooz ZSE02
 // Zooz Z‑Wave Plus Motion Sensor
 {
-	"manufacturer": "UFairy G.R. Tech",
+	"manufacturer": "Zooz",
 	"manufacturerId": "0x0152",
 	"label": "ZSE02",
 	"description": "Zooz Z‑Wave Plus Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0500",
-			"productId": "0x0003"
+			"productId": "0x0003",
+			"zwaveAllianceId": 1722
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "Please press the Z-Wave button in the pir sensor when the Z-Wave controller sends the instructions for inclusion, Press the Button: unlock  and lock-unlock 1 time will send the NIF",
+		"exclusion": "Please press the Z-Wave button in the pir sensor when the Z-Wave controller sends the instructions for exclusion, Times to Press the Button: unlock and lock-unlock 1 time will send the NIF",
+		"reset": "Press the button unlock and lock-unlock 6 times the device will send the reset notification to the list node in the group 1 and erases the device memory.Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+	}
 }

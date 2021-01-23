@@ -1,0 +1,24 @@
+// Nihon Lock Service Co., Ltd. LTA-ML
+// Z-WAVE_BLE_Converter
+{
+	"manufacturer": "Nihon Lock Service Co., Ltd.",
+	"manufacturerId": "0x0412",
+	"label": "LTA-ML",
+	"description": "Z-WAVE_BLE_Converter",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3329
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To add or include the LTA-ML into a Z-Wave network:After installing LTA-ML near the PiACK II, and then connecting to the AC Adapter which is included in the same package:1.Set the controller in inclusion mode.2.Push the “pairing” button once.3.Wait 5 seconds.4.Confirm the “Home Gateway” LED of the front panel is on.",
+		"exclusion": "To remove or exclude the LTA-ML from a Z-Wave network:1.Set the controller in exclusion mode.2.Push the “pairing” button 3 times.3.Confirm the “Home Gateway” LED of the front panel is off.",
+		"reset": "To factory reset the LTA-ML:1.Confirm the LTA-ML has been already included into a Z-Wave network.2.Remove the AC adapter’s plug and turn off the LTA-ML.3.Set the AC adapter’s plug again and wait more than 15 seconds but no longer than 75 seconds.4.Push the “pairing” button for 10 seconds and the “Home Gateway” LED turns off.※Please use this procedure only when the primary controller is missing or otherwise inoperable."
+	}
+}

@@ -1,0 +1,24 @@
+// Climax Technology, Ltd. BX-32ZW
+// Outdoor Siren
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "BX-32ZW",
+	"description": "Outdoor Siren",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x000b",
+			"zwaveAllianceId": 2156
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufactures and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.  - Insert the two 1.5V D-Cell alkaline batteries into the battery  compartment connecting the correct polarity as shown on the battery compartment lid.  - The Bellbox will emit a 2-tone beep. Put the Z-Wave gateway or control panel into Inclusion mode (please refer to the Z-Wave gateway or control panel manual).  - Within 1.5 seconds, press the Function Button 3 times.  - Refer to the operation manual of the Z-Wave Gateway or Control Panel to complete the adding process.  - If the sensor has already been added (included) into another Z-Wave Gateway/Control Panel, or if the sensor is unable to be added into the current Z-Wave Gateway/Control Panel, please exclude it first (see Removing Device) before attempting to include it into the current Z-Wave Gateway/Control Panel.",
+		"exclusion": "The Bellbox must be removed from existing Z-Wave network before being included into another. There are two methods available to exclude a device.Exclusion Mode - Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual). - Within 1.5 seconds, press the Function Button 3 times and the Bellbox will be removed from the Z-Wave network.",
+		"reset": "Factory Reset(Only use factory reset when network Control Panel/Gateway is missing or inoperable). - Press and hold the Function button of the Bellbox for 10 seconds to factory reset with all LED flashes once. <NOTE> Factory resetting the Bellbox will restore it to factory default settings (excluded from the Z-Wave network). The Z-Wave gateway or control panel will still keep its Z-Wave settings. Please refer to the gateway or control panel manual on how to remove the Bellbox’s Z-Wave settings."
+	}
+}

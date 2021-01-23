@@ -1,0 +1,27 @@
+// Samsung Electronics Co., Ltd. SM-V510
+// Samsung Galaxy Home
+{
+	"manufacturer": "Samsung Electronics Co., Ltd.",
+	"manufacturerId": "0x0201",
+	"label": "SM-V510",
+	"description": "Samsung Galaxy Home",
+	"devices": [
+		{
+			"productType": "0x0008",
+			"productId": "0x0026",
+			"zwaveAllianceId": 3084
+		},
+		{
+			"productType": "0x0008",
+			"productId": "0x0027",
+			"zwaveAllianceId": 3088
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "If your speaker is frozen and unresponsive, press and hold the Power key and the Volume Down key simultaneously for more than 7 seconds to restart it. When the initialization has completed, the speaker reboots and displays a welcome message. Do not disconnect the power cable until it has rebooted.If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable"
+	}
+}

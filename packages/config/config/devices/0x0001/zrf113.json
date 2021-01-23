@@ -1,0 +1,19 @@
+// ACT - Advanced Control Technologies ZRF113
+//  - Isolated Contact Fixture Module
+{
+	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturerId": "0x0001",
+	"label": "ZRF113",
+	"description": "Isolated Contact Fixture Module",
+	"devices": [
+		{
+			"productType": "0x5246",
+			"productId": "0x3133",
+			"zwaveAllianceId": 134
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

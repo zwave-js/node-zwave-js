@@ -1,0 +1,24 @@
+// KUMHO ELECTRIC, INC KHEZ-0001
+// LED Light
+{
+	"manufacturer": "KUMHO ELECTRIC, INC",
+	"manufacturerId": "0x023a",
+	"label": "KHEZ-0001",
+	"description": "LED Light",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1576
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "You can add the device by either hardware button.-hardware button : Press the Add/Remove button.(1Second)1. Click an [Add] icon in Z-Wave PC Controller Program2. Press the hardware button in a Kumho light lamp for 1 second3. The device will be added to the Z-Wave network",
+		"exclusion": "You can remove the devicee by either hardware button.-hardware button : Press the Add/Remove button.(1Second)1. Click a [Remove] icon in Z-Wave PC Controller Program2. Press the hardware button in a Kumho light lamp for 1 second3. The device will be removed from the Z-Wave network",
+		"reset": "\"Use this procedure only when the network primary controller is missing or otherwise inoperable.\"1. Press the hardware button in a Kumho light lamp for 10 seconds2. Device Reset Locally notification will be sent"
+	}
+}

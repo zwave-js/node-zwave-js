@@ -1,0 +1,24 @@
+// 2KLIC 7440-MC-FS
+// Connectair Module
+{
+	"manufacturer": "2KLIC",
+	"manufacturerId": "0x0369",
+	"label": "7440-MC-FS",
+	"description": "Connectair Module",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0101",
+			"zwaveAllianceId": 2965
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Start the adding process on the controller sideOnce started, start the adding process on the Connectair module by pressing 3 times the Z-Wave button, located between the plus and the minus button, using the included tool.When added, the LED will turn off",
+		"exclusion": "Start the removing process on the controller sideOnce started, put the device in \"learn mode\" by pressing 3 times on the Z-Wave button, located between the plus and the minus button, using the included tool.When removed, the LED will turn on",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperableHold the Z-Wave button for about ten secondsIf it was included, the LED will turn back on when reset is done"
+	}
+}

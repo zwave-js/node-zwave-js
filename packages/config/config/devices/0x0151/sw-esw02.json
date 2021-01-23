@@ -1,0 +1,19 @@
+// Sercomm Corp SW-ESW02
+// Energy switch
+{
+	"manufacturer": "Sercomm Corp",
+	"manufacturerId": "0x0151",
+	"label": "SW-ESW02",
+	"description": "Energy switch",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 881
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,32 @@
+// Zipato ZB.ZW.G
+// Zipabox
+{
+	"manufacturer": "Zipato",
+	"manufacturerId": "0x0131",
+	"label": "ZB.ZW.G",
+	"description": "Zipabox",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 1408
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1302
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x0003",
+			"zwaveAllianceId": 1409
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "* Navigate to Z-Wave network management tools* Click the “Z-WAVE RESET” button and follow onscreen instructions."
+	}
+}

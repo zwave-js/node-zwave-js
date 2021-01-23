@@ -1,0 +1,22 @@
+// LG Electronics IGC73W
+// SmartThinQ(Standard) Hub 2.0
+{
+	"manufacturer": "LG Electronics",
+	"manufacturerId": "0x015b",
+	"label": "IGC73W",
+	"description": "SmartThinQ(Standard) Hub 2.0",
+	"devices": [
+		{
+			"productType": "0x0bb9",
+			"productId": "0x0bb9",
+			"zwaveAllianceId": 3159
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "If the corresponding LG IoT Hub is registered in only one account, you can initialize the LG IoT Hub by selecting the previously registered LG IoT Hub on the remove screen. Only the LG IoT Hub will be factory reset and the devices will still have information on the controller, so be careful when selecting the items below.When LG IoT Hub is selected, all three LEDs of the LG IoT Hub will blink. When the factory reset is completed, the first and second LEDs will be turned on again. If it not work, then press and hold the gateway ENT button for 10 seconds or more. Note:If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network."
+	}
+}

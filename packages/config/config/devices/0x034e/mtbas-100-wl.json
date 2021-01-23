@@ -1,0 +1,24 @@
+// TEM AG MTBAS-100-WL
+// Radio Base Modul
+{
+	"manufacturer": "TEM AG",
+	"manufacturerId": "0x034e",
+	"label": "MTBAS-100-WL",
+	"description": "Radio Base Modul",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0101",
+			"zwaveAllianceId": 3664
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To add the myTEM Radio Server or myTEM Smart Server into an existing network set the Controller of the existing network into inclusion mode than click on «Learn Mode» in the UI (for more informatino see manual).",
+		"exclusion": "To remove the myTEM Radio Server or myTEM Smart Server from an existing network set the Controller of the existing network into inclusion mode than click on «Learn Mode» in the UI (for more informatino see manual).",
+		"reset": "To reset Radio Server use myTEM ProgTool.1. Create or open a project2. Connect to Radio Server3. Start Z-Wave Manager4. Click <Reset network> buttonIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.For more information see myTEM ProgTool manual."
+	}
+}

@@ -1,0 +1,19 @@
+// Danfoss 087N774500
+// Danfoss RET BZ
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "087N774500",
+	"description": "Danfoss RET BZ",
+	"devices": [
+		{
+			"productType": "0x8004",
+			"productId": "0x0001",
+			"zwaveAllianceId": 731
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

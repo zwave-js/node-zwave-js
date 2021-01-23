@@ -1,0 +1,24 @@
+// Vision Security ZW4111EU-5
+// Curtain Module
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZW4111EU-5",
+	"description": "Curtain Module",
+	"devices": [
+		{
+			"productType": "0x2018",
+			"productId": "0x1805",
+			"zwaveAllianceId": 1582
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "3.\tFor “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into“inclusion” mode, and following its instruction to add the  ZW4111 to your controller. To get in the “inclusion” mode, press the program switch 3 times or outer switch 1 / switch 2 to be included. NOTE: The red LED will flash if ZW4111 has not been included before or the red LED will be OFF.",
+		"exclusion": "For “Exclusion” from (removing from) a network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZW 4101 / ZW4111 from your controller. Press the program switch or outer switch 1 / switch 2 3 times to be excluded.",
+		"reset": "Press Program Switch and power on till 5 seconds, ZW4111 will send the “Device Reset Locally Notification” command and reset to the factory default. (Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable.)"
+	}
+}

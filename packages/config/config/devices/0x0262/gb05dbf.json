@@ -1,0 +1,24 @@
+// Taiwan Fu Hsing Industrial Co., Ltd. GB05DBF
+// Electronic Z-Wave Deadbolt
+{
+	"manufacturer": "Taiwan Fu Hsing Industrial Co., Ltd.",
+	"manufacturerId": "0x0262",
+	"label": "GB05DBF",
+	"description": "Electronic Z-Wave Deadbolt",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2682
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Press [SET] for 1 second 2. Enter 4-8 digits  Programing Code 3. Press the buttons #90#4. Include successfully (beep * 1)",
+		"exclusion": "1. Press [SET] for 1 second 2. Enter 4-8 digits  Programing Code 3. Press the buttons #90#4. Exclude successfully (beep * 1)",
+		"reset": "1. Remove one battery. 2. Press and hold SET button while inserting the battery back. Hold the set button until long beep has finished. 3. Resotring the lock to factory settings will remove its connection to your network and clear all devices from its assocation group. The reset procedure should only be used when the primary controller is missing or inoperable.4. Please re-enter the default Programming Code to set up the lock after restoring to factory settings."
+	}
+}

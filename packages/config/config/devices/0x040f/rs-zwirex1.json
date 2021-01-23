@@ -1,0 +1,24 @@
+// RATOC Systems Inc. RS-ZWIREX1
+// Z-Wave Smart IR Repeater
+{
+	"manufacturer": "RATOC Systems Inc.",
+	"manufacturerId": "0x040f",
+	"label": "RS-ZWIREX1",
+	"description": "Z-Wave Smart IR Repeater",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3465
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To add or include the RS-ZWIREX1 into a Z-Wave network using Z-wave Learn mode button1.Set the controller in inclusion mode2.Push the Learn mode button once3.Wait about 15 seconds",
+		"exclusion": "To remove or exclude the RS-ZWIREX1 into a Z-Wave network 1.Set the controller in exclusion mode 2.Push Z-Wave Learn mode button once3.Wait about 5 seconds.",
+		"reset": "The RS-ZWIREX1 can be set to factory settings by pushing Z-wave Learn mode button for 5 seconds. Please use this procedure only when the primary controller is missing or otherwise inoperable."
+	}
+}

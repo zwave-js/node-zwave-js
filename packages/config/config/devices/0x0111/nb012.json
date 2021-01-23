@@ -1,0 +1,19 @@
+// Tronico Technology Co. Ltd. NB012
+//  Switch-Dimmer
+{
+	"manufacturer": "Tronico Technology Co. Ltd.",
+	"manufacturerId": "0x0111",
+	"label": "NB012",
+	"description": "Switch-Dimmer",
+	"devices": [
+		{
+			"productType": "0x8801",
+			"productId": "0x0201",
+			"zwaveAllianceId": 824
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

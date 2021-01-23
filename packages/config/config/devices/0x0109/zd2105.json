@@ -8,12 +8,22 @@
 	"devices": [
 		{
 			"productType": "0x2022",
-			"productId": "0x2201"
+			"productId": "0x2201",
+			"zwaveAllianceId": 1727
+		},
+		{
+			"productType": "0x2022",
+			"productId": "0x2202",
+			"zwaveAllianceId": 2850
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZD2105 to your controller. To get in the “inclusion” mode, please press the Program Switch of ZD2105 for sending the NIF. After sending NIF, Z-Wave will send the auto inclusion; otherwise, ZD2105 will go to sleep after 20 seconds.",
+		"exclusion": "For “Exclusion” from (removing from) a network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZD2105 from your controller.  Press the Program Switch of ZD2105 for 1 second at least to be excluded.  Note: All user and network settings will be cleared and the device reset to factory setting defaults when the device is excluded.",
+		"reset": "*open the cover to send the Alarm Report and trigger the reed switch (close & open) 10 times in 10 seconds, ZD2105 will send the “Device Reset Locally Notification” command and reset to the factory default.  * Please use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+	}
 }

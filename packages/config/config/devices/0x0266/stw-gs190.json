@@ -1,0 +1,22 @@
+// Siterwell Technology HK Co., Ltd. STW-GS190
+// SiterOne
+{
+	"manufacturer": "Siterwell Technology HK Co., Ltd.",
+	"manufacturerId": "0x0266",
+	"label": "STW-GS190",
+	"description": "SiterOne",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2131
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Reset SiterOne will remove all Z-Wave device and reset the controller status to factory default. If this SiterOne is the primary controller for your network, reset controller will result in all added devices in your network being orphaned and you have to force exclude all devices and then add them again.If this SiterOne is a secondary controller in the network, reset controller will reset this controller only , so the primary controller will no longer see the secondary controller.- Navigate to the setting Menu- Enter the Setting Menu, and tap the Zwave page.- Enter PIN code: default is 1234 - At the Z-Wave setting page, tap Reset Controller- At the Reset Controller Dialog, tap Reset While the controller is being reset, it will show ResetingWhen the controller is reset, it will show Successfully. Tap OK and the reset is done."
+	}
+}

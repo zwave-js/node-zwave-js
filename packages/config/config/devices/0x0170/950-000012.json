@@ -1,0 +1,22 @@
+// Powerhouse Dynamics 950-000012
+// SiteSage
+{
+	"manufacturer": "Powerhouse Dynamics",
+	"manufacturerId": "0x0170",
+	"label": "950-000012",
+	"description": "SiteSage",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1432
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "To reset the  SiteSage Gateway to Factory Default, use a browser, navigate to the IP address of the SiteSage Gateway  and select the Z-Wave tab.  Press the \"Manage\" button to  show the advanced menu. Press the \"Reset to Defaults\" button.  Please note that if you do this, it will remove all nodes from the network, and all devices will need to be re-included."
+	}
+}

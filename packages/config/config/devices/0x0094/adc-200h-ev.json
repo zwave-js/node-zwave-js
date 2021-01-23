@@ -1,0 +1,24 @@
+// Alarm.com ADC-200H-EV
+// Alarm.com Interlogix Simon XT/i Radio Module
+{
+	"manufacturer": "Alarm.com",
+	"manufacturerId": "0x0094",
+	"label": "ADC-200H-EV",
+	"description": "Alarm.com Interlogix Simon XT/i Radio Module",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0101",
+			"zwaveAllianceId": 1686
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1.1 Adding devices to the Alarm.com Module’s Z-Wave Network NOTE: This process leverages Network Wide Inclusion. In addition, any controllers added to the Alarm.com Module will have network information replicated over to them. 1. Using Mobiletech a. Install the MobileTech App (if not already done) and select the customer of interest. b. Move all Z-Wave devices to their final location on the property. c. Navigate to the Equipment List page. d. Select emPower Management. e. Select Add Z-Wave Devices f. Wait for the bolded message: Checking for new devices on the network g. Trigger a device to add it to the network. h. When a device is added successfully, it will show up on this screen following a 30 second delay. i. Continue triggering devices. You may add many devices to the network without reentering Add Mode. 2. Using the Dealer Website a. Navigate to the Equipment page. b. Click the emPower Devices tab. c. Open the Advanced Z-Wave Commands menu below the Equipment List. d. Click Add Z-Wave Devices. e. Wait for the bolded message: Checking for new devices on the network. f. Trigger a device to add it to the network. g. When a device is added successfully, it will show up on this screen following a 30 second delay. h. Continue triggering devices. You may add many devices to the network without reentering Add Mode. 3. Using the Simon XTi Panel a. Enter System Programming. b. Select Interactive Services. c. Select Z-Wave. d. Select Add Device. e. Trigger a device to add it to the network. f. When a device is added successfully, the panel will beep. g. You will need to re-enter Add Mode before triggering the next device.",
+		"exclusion": "List page. d. Select emPower Management. e. Select Delete Z-Wave Devices f. Wait for the bolded message: Checking for deleted devices on the network g. Trigger a device to remove it from the network. h. When a device is deleted successfully and its network information is erased, it will show up on this screen following a 30 second delay. i. Continue triggering devices. You may delete many devices to the network without reentering Delete Mode. 2. Using the Dealer Website a. Move all Z-Wave devices you plan to delete close to the Alarm.com Module. b. Navigate to the Equipment page. c. Click the emPower Devices tab. d. Open the Advanced Z-Wave Commands menu below the Equipment List. e. Click Delete Z-Wave Devices. f. Wait for the bolded message: Checking for deleted devices on the network. g. Trigger a device to remove it from the network. h. When a device is deleted successfully and its network information is erased, it will show up on this screen following a 30 second delay. i. Continue triggering devices. You may delete many devices to the network without reentering Delete Mode. 3. Using the Simon XTi Panel a. Enter System Programming. b. Select Interactive Services. c. Select Z-Wave. d. Select Delete Device. e. Trigger a device to remove it from the network. f. When a device is deleted successfully and its network information is erased, the panel will beep. g. You will need to re-enter Delete Mode before triggering the next device.",
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.  1.3 Reset Alarm.com Module to default state NOTE: This function will forcibly clear the Alarm.com module’s Z-Wave node identification and will also remove all network information from the module. 1. A Z-Wave factory reset must be triggered from the Alarm.com dealer site 2. Navigate to the Equipment page. 3. Click the “emPower Devices” tab. 4. Open the “Advanced Z-Wave Commands” menu by clicking the button below the Equipment List. 5. Towards the bottom next to the “Equipment List Label” text click on the “Reset To Factory Default” button 6. Allow 3 minutes for the associated commands to go through and for the module to act on them"
+	}
+}

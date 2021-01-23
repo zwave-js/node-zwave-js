@@ -8,12 +8,17 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0000"
+			"productId": "0x0000",
+			"zwaveAllianceId": 3053
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "A.) Plug the SHSG10000 into a socketB.) Set the Gateway/Controller into inclusion mode (Click the + (Add) button in your Z-Wave App and follow the further instructions)C.) Press the Network-button 3 times within 1.5 seconds and the Status-LED will flash 3 timesD:) If the Add device process is successful, the Status-LED will turn off.E: Repeat the inclusion process from step B if it was not successful.",
+		"exclusion": "A.)  Set the Gateway/Controller into exclusion mode (Click the - (Remove) button in your Z-Wave App and follow the further instructions)B.) Press the Network-button 3 times within 1.5 seconds and the Status-LED will flash 3 times If the Remove device process is successful, the Status-LED flash 6 times.C.) Repeat the inclusion process from step B if it was not successful.",
+		"reset": "Press the Network-button for 10 seconds to factory reset the deviceNote:1, This procedure should only be used if the primary gateway is not capable of acting.2, If the multi-sensor is set to the factory setting, the status is set to \"not included\", the association settings and possible configurations are reset to default."
+	}
 }

@@ -8,12 +8,17 @@
 	"devices": [
 		{
 			"productType": "0x4353",
-			"productId": "0x5a31"
+			"productId": "0x5a31",
+			"zwaveAllianceId": 1749
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "1. Put Primary Controller into Inclusion Mode2. Press and Hold Shade Programming Button for >2seconds",
+		"exclusion": "1. Put Primary Controller into Exclusion Mode2. Press and Hold Shade Programming Button for >2seconds",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperablePress and hold the button on the shade for approximately 15 seconds (the LED will stop flashing when complete)"
+	}
 }

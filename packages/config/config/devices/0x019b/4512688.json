@@ -1,0 +1,24 @@
+// ThermoFloor 4512688
+// Heatit Z-Smoke Battery
+{
+	"manufacturer": "ThermoFloor",
+	"manufacturerId": "0x019b",
+	"label": "4512688",
+	"description": "Heatit Z-Smoke Battery",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x3602",
+			"zwaveAllianceId": 4064
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Put the Z-Wave gateway or control panel into Inclusion or Learning mode (please refer to the Z-Wave gateway or control panel manual).2. Within 1.5 seconds, press the Function button 3 times. The Smoke Detector will emit a 2-tone beep and the LED will turn on for ~2 seconds. Refer to the operation manual of the Z-Wave gateway or control panel to complete the learn-in process.",
+		"exclusion": "1. Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual).2. Within 1.5 seconds, press the Function button 3 times and the Smoke Detector will be removed from the Z-Wave network.",
+		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable).Press and hold the button of the smoke detector for 20 seconds. Release the button when you hear 3 beeps to perform factory reset."
+	}
+}

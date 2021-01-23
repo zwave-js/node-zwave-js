@@ -1,0 +1,24 @@
+// China Security & Fire IOT Sensing CO., Ltd. HO-09ZW
+// Magnetic Contact
+{
+	"manufacturer": "China Security & Fire IOT Sensing CO., Ltd.",
+	"manufacturerId": "0x0320",
+	"label": "HO-09ZW",
+	"description": "Magnetic Contact",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2350
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "For Inclusion to a network:  Put the Z-Wave Interface Controller into “Inclusion” mode,  and following  its  instruction  to  include  HO-09ZB  to  your controller.  This magnetic contact needs to be included before  installation.1.Pull out the insulating strip, making the device power on. 2.Pressing the anti-tamper switch three times. 3.Red LED will blink three times while inclusion the network successful 4.If inclusion failed,  the sensor will go into sleep mode.  To wake the  sensor again,  you need to use magnet or anti-tamper switch to trigger  an inclusion process,  and then sensor will repeat steps from 3 to 4.",
+		"exclusion": "For Exclusion a network:  Put the Z-Wave Interface Controller into “Exclusion” mode, and  following its instruction to exclude magnetic contact from your Z-Wave  controller.1.Pressing the anti-tamper switch Triple then enter exclusion  mode.  2.Red LED will blink three times when exclusion of the network is successful.",
+		"reset": "Press the anti-tamper switch five times to reset.Note:  Use this procedure only in the event that the primary controller is lost."
+	}
+}

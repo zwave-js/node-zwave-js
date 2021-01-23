@@ -1,0 +1,19 @@
+// ACT - Advanced Control Technologies ZRP100
+//  - Z-Wave Plug-In Appliance Module
+{
+	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturerId": "0x0001",
+	"label": "ZRP100",
+	"description": "Z-Wave Plug-In Appliance Module",
+	"devices": [
+		{
+			"productType": "0x5250",
+			"productId": "0x3030",
+			"zwaveAllianceId": [152, 194, 357]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

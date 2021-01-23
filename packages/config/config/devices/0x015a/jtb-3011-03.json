@@ -1,0 +1,24 @@
+// Jin Tao Bao JTB-3011-03
+// 3CH Touch Wall Switch
+{
+	"manufacturer": "Jin Tao Bao",
+	"manufacturerId": "0x015a",
+	"label": "JTB-3011-03",
+	"description": "3CH Touch Wall Switch",
+	"devices": [
+		{
+			"productType": "0x3011",
+			"productId": "0x0003",
+			"zwaveAllianceId": 2591
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Start master controller add device mode as instruction, press and hold the channel 1 touch icon (located on leftmost) for 2 second, RF icon LED on right bottom flashindicator inclusion processing until included or 60 seconds timeout no detect any master controller.",
+		"exclusion": "Start master controller remove device mode as instruction, press and hold the channel 1 touch icon (located on leftmost) for 2 second, RF icon LED on right bottom flash indicator inclusion processing until included or 15 seconds timeout no detect any master controller.LED flash slowly indicated has no included any controller.",
+		"reset": "The factory default settings are restored when the device is removed from the network.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

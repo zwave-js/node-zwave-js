@@ -1,0 +1,24 @@
+// PARATECH FCP-01
+// FESCO H2
+{
+	"manufacturer": "PARATECH",
+	"manufacturerId": "0x0257",
+	"label": "FCP-01",
+	"description": "FESCO H2",
+	"devices": [
+		{
+			"productType": "0x004d",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1689
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "After doing inclusion action on controller, then hold 5 seconds “STOP SOUND” button till hearing beep once",
+		"exclusion": "After doing exclusion action on controller, then hold 5 seconds “STOP SOUND” button till hearing beep once",
+		"reset": "Hold 10 seconds “STOP SOUND” button till hearing beep once-Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+	}
+}

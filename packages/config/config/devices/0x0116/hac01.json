@@ -1,0 +1,19 @@
+// Chromagic Technologies Corporation HAC01
+// Chromagic Z-Wave Remote Botton (EU)
+{
+	"manufacturer": "Chromagic Technologies Corporation",
+	"manufacturerId": "0x0116",
+	"label": "HAC01",
+	"description": "Chromagic Z-Wave Remote Botton (EU)",
+	"devices": [
+		{
+			"productType": "0x0010",
+			"productId": "0x0001",
+			"zwaveAllianceId": 23
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,22 @@
+// Samsung Electronics Co., Ltd. ET-WV533
+// Samsung Connect Home Pro
+{
+	"manufacturer": "Samsung Electronics Co., Ltd.",
+	"manufacturerId": "0x0201",
+	"label": "ET-WV533",
+	"description": "Samsung Connect Home Pro",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x001d",
+			"zwaveAllianceId": 2555
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "1.Tap the menu2.Tap the gear icon beside the Location with the Hub you wish to reset3.Tap Remove Location4.Confirm deletion by tapping Delete (IMPORTANT: deleting a Location cannot be undone)NOTE: Resetting the Hub will restore factory settings. All device connections, automations, rules and configurations associated with that Hub will be lost in the reset. All devices connected to your Hub will have to be reset or excluded before they can be reconnected. The steps for resetting and reconnecting each smart device differ. After resetting, you can visit our Things category, find the devices you wish to set up, and follow the guides provided. Remember that you will likely need to reset or “exclude” every device before connecting."
+	}
+}

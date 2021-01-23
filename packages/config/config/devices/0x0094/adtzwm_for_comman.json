@@ -1,0 +1,22 @@
+// Alarm.com ADTZWM FOR COMMAN
+// ADTZWM - Wi-Fi® and Z-Wave® Module for Command
+{
+	"manufacturer": "Alarm.com",
+	"manufacturerId": "0x0094",
+	"label": "ADTZWM FOR COMMAN",
+	"description": "ADTZWM - Wi-Fi® and Z-Wave® Module for Command",
+	"devices": [
+		{
+			"productType": "0x000b",
+			"productId": "0x010b",
+			"zwaveAllianceId": [3052, 3214]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.  NOTE: This function will forcibly clear the Alarm.com ADC-SG-100Z’s Z-Wave node identification and will also remove all network information from the ADC-SG-100Z. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.  If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable. 1.\tA Z-Wave factory reset must be triggered from the Alarm.com dealer site 2.\tNavigate to the Equipment page.  3.\tClick the “emPower Devices” tab. 4.\tOpen the “Advanced Z-Wave Commands” menu by clicking the button below the Equipment List.  5.\tTowards the bottom next to the “Equipment List Label” text click on the “Reset To Factory Default” button 6.\tAllow 3 minutes for the associated commands to go through and for the ADC-SG-100Z to act on them"
+	}
+}

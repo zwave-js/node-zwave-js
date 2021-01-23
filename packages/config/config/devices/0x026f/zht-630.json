@@ -1,0 +1,24 @@
+// Sprue Safety Products Ltd. ZHT-630
+//  Thermistek Heat Alarm/Detector
+{
+	"manufacturer": "Sprue Safety Products Ltd.",
+	"manufacturerId": "0x026f",
+	"label": "ZHT-630",
+	"description": "Thermistek Heat Alarm/Detector",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0002",
+			"zwaveAllianceId": 2631
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Read the instructions for your Z-Wave Controller regarding adding new devices. Then initiate the inclusion function from your Z-Wave Controller. 2.Triple-press the add button once the Z-Wave Module is on the device. The LED will show a quick blink once per second while the module is being added. This process may take as long as 30 seconds, but typically is much quicker. If you triple-press too quickly or too slowly, inclusion will not start. In this case wait a few seconds and then try again. 3.Upon successful inclusion, the Z-Wave Module LED will flash 3 times. If inclusion fails, the LED will simply stop its blink pattern. 4.If inclusion does not succeed, restart at step 1. 5.If successful, place the alarm on its base and wait at least 30 seconds. 6.Press the alarm’s test button and verify the Z-Wave Controller receives Notification Reports. 7.After the Z-Wave Module is included, you may define association groups or perform other configuration operations from the Z-Wave Controller.",
+		"exclusion": "‘1. Read the instructions on your Z-Wave Controller regarding removing devices. Note that a device can be removed using any Z-Wave Controller, not just the Controller that was used to add the Module. Initiate the removal process at your Controller. 2.Triple-press the button on the Z-Wave Module. The LED will show a quick double-blink once per second while the module is being removed. This process may take up to 30 seconds. If you triple-press too quickly or too slowly the removing function will not start. In this case you must wait a few seconds and then try again. 3.Upon successful removal, the Z-Wave Module LED will flash 5 times. If removal fails, the LED will simply stop its blink pattern. 4.If the removal operation does not succeed, restart at step 1. 5.After removing, either a) add the Z-Wave Module into a different Z-Wave Controller, or b) remove the battery from the Z-Wave Module. NOTE: The effective range of the wireless module may be reduced by walls and other obstructions in the building. It is recommended not to exceed 40m as the maximum distance between smoke alarms and the Controller.",
+		"reset": "1. Press and hold the button for 10 seconds. The LED will go off. Now release the button. The LED will flash once as the module resets. 2.After resetting, either a) include the module into a different Z-Wave Controller, or b) remove the battery from the module to avoid power draining. * use the reset procedure only when the primary controller is missing or inoperable."
+	}
+}

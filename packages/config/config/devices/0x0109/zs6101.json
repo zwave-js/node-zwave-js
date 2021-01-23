@@ -9,6 +9,11 @@
 		{
 			"productType": "0x2004",
 			"productId": "0x0403"
+		},
+		{
+			"productType": "0x2004",
+			"productId": "0x04a4",
+			"zwaveAllianceId": [1064, 1085]
 		}
 	],
 	"firmwareVersion": {
@@ -21,5 +26,9 @@
 			"maxNodes": 5,
 			"isLifeline": true
 		}
+	},
+	"metadata": {
+		"inclusion": "Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZS6101-5 to your controller. To get in the “inclusion” mode, the distance between detector and controller is suggested to be in one meter. Press the program switch of ZS6101-5 for 1 second at least to be included. After setting, the LED Setting Lighting should go off, if not, please try again. (Please refer to the user manual to understand the program switch location)",
+		"exclusion": "Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZS6101-5 from your controller. Press the program switch of ZS6101-5 for 1 second at least to be excluded.  The red LED setting light will flash continuously in Exclusion condition. (Please refer to the user manual to understand the program switch location)"
 	}
 }

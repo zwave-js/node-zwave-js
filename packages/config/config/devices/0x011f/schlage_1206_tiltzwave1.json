@@ -1,0 +1,19 @@
+// Schlage Tilt Sensor
+// Tilt Sensor
+{
+	"manufacturer": "Schlage",
+	"manufacturerId": "0x011f",
+	"label": "Tilt Sensor",
+	"description": "Tilt Sensor",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003",
+			"zwaveAllianceId": [656, 815]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

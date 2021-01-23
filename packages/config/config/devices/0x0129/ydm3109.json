@@ -1,0 +1,24 @@
+// ASSA ABLOY YDM3109+
+// Digital Door Lock
+{
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "YDM3109+",
+	"description": "Digital Door Lock",
+	"devices": [
+		{
+			"productType": "0xc600",
+			"productId": "0x0300",
+			"zwaveAllianceId": 3227
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To include:1. Touch keypad with palm2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)3. Press 'I' button [Registration] from the inside of battery cover.4. Press 9,#,1,# on the keypad (by sequence)5. Wait until 'Ding dong dang' melody play then press 'I' button",
+		"exclusion": "To exclude:1. Touch keypad with palm2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)3. Press 'I' button [Registration] from the inside of battery cover.4. Press 9,#,3,# on the keypad (by sequence)5. Wait until 'Ding dong dang' melody play then press 'I' button",
+		"reset": "To reset to factory defaults: ※ Use this procedure only in the event that the network primary controller is missing or otherwise inoperable. (User code or master code remains the same. Only network settings reset to factory defaults.) 1. Touch keypad with palm2. Enter User code(Normal Mode only. Enter Master code if operating Master Mode.)3. Press 'I' button [Registration] from the inside of battery cover.4. Press 9,#,9,# on the keypad (by sequence)5. Wait until 'Ding dong dang' melody play then press 'I' button"
+	}
+}

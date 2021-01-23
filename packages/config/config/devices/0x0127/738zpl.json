@@ -1,0 +1,22 @@
+// DMP (Digital Monitoring Products) 738ZPL
+// 738Zplus
+{
+	"manufacturer": "DMP (Digital Monitoring Products)",
+	"manufacturerId": "0x0127",
+	"label": "738ZPL",
+	"description": "738Zplus",
+	"devices": [
+		{
+			"productType": "0x0738",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2636
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "The 738Zplus can perform a Factory Default Reset by initializing defaults in the panel programming menu.  Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

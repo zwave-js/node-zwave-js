@@ -1,0 +1,19 @@
+// Somfy 1870228
+// Somfy Z-Wave to Glydea
+{
+	"manufacturer": "Somfy",
+	"manufacturerId": "0x0047",
+	"label": "1870228",
+	"description": "Somfy Z-Wave to Glydea",
+	"devices": [
+		{
+			"productType": "0x474c",
+			"productId": "0x5901",
+			"zwaveAllianceId": 692
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

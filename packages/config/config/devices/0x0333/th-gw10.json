@@ -1,0 +1,22 @@
+// Toshiba Visual Solution TH-GW10
+// Home IoT
+{
+	"manufacturer": "Toshiba Visual Solution",
+	"manufacturerId": "0x0333",
+	"label": "TH-GW10",
+	"description": "Home IoT",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": [2284, 2566, 2621, 2877]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Described in Product manual “Parts Name”>Reset buttonPress and hold the button using a pen tip or like for 5 seconds or more.Pressing and holding the button makes the all Volume indicators and Microphone mute indicators starts blinking. After blinking stops, release button. After that, the settings have been reverted back to the default.If this controller is the primary controller of Z-Wave for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.If this controller is being used as a secondary controller of Z-Wave in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

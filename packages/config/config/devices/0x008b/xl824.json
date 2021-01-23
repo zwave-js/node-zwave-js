@@ -1,0 +1,29 @@
+// Trane Corporation XL824
+// Ingersoll Rand XL824 Controller
+{
+	"manufacturer": "Trane Corporation",
+	"manufacturerId": "0x008b",
+	"label": "XL824",
+	"description": "Ingersoll Rand XL824 Controller",
+	"devices": [
+		{
+			"productType": "0x5438",
+			"productId": "0x3234",
+			"zwaveAllianceId": 1000
+		},
+		{
+			"productType": "0x5438",
+			"productId": "0x325a",
+			"zwaveAllianceId": 3998
+		},
+		{
+			"productType": "0x5438",
+			"productId": "0x3235",
+			"zwaveAllianceId": 2938
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

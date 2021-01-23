@@ -252,133 +252,133 @@
 			]
 		}
 		// These parameters have an invalid value size
-		// "130": {
-		//     "label": "Serial Number",
-		//     "valueSize": 32,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"130": {
+		//"label": "Serial Number",
+		//"valueSize": 32,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// },
-		// "131": {
-		//     "label": "Meter Software reference",
-		//     "valueSize": 16,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"131": {
+		//"label": "Meter Software reference",
+		//"valueSize": 16,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// },
-		// "132": {
-		//     "label": "Meter Hardware reference",
-		//     "valueSize": 16,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"132": {
+		//"label": "Meter Hardware reference",
+		//"valueSize": 16,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// },
-		// "140": {
-		//     "label": "Voltage U1",
-		//     "unit": "V",
-		//     "valueSize": 24,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"140": {
+		//"label": "Voltage U1",
+		//"unit": "V",
+		//"valueSize": 24,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// },
-		// "141": {
-		//     "label": "Current I1",
-		//     "unit": "A",
-		//     "valueSize": 24,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"141": {
+		//"label": "Current I1",
+		//"unit": "A",
+		//"valueSize": 24,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// },
-		// "142": {
-		//     "label": "Active Power Total (Pt)",
-		//     "unit": "W",
-		//     "valueSize": 24,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"142": {
+		//"label": "Active Power Total (Pt)",
+		//"unit": "W",
+		//"valueSize": 24,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// },
-		// "143": {
-		//     "label": "Reactive Power Total (Qt)",
-		//     "unit": "kVAr",
-		//     "valueSize": 24,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"143": {
+		//"label": "Reactive Power Total (Qt)",
+		//"unit": "kVAr",
+		//"valueSize": 24,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// },
-		// "144": {
-		//     "label": "Power Factor Total (PFt)",
-		//     "valueSize": 16,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"144": {
+		//"label": "Power Factor Total (PFt)",
+		//"valueSize": 16,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// },
-		// "145": {
-		//     "label": "Active power accumulated (import)",
-		//     "unit": "kWh",
-		//     "valueSize": 32,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"145": {
+		//"label": "Active power accumulated (import)",
+		//"unit": "kWh",
+		//"valueSize": 32,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// },
-		// "146": {
-		//     "label": "Reactive power accumulated",
-		//     "unit": "kVArh",
-		//     "valueSize": 32,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"146": {
+		//"label": "Reactive power accumulated",
+		//"unit": "kVArh",
+		//"valueSize": 32,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// },
-		// "147": {
-		//     "label": "Apparent power accumulated",
-		//     "unit": "kVAh",
-		//     "valueSize": 32,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"147": {
+		//"label": "Apparent power accumulated",
+		//"unit": "kVAh",
+		//"valueSize": 32,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// },
-		// "148": {
-		//     "label": "Active power accumulated (export)",
-		//     "unit": "kWh",
-		//     "valueSize": 32,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": true,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"148": {
+		//"label": "Active power accumulated (export)",
+		//"unit": "kWh",
+		//"valueSize": 32,
+		//"minValue": 0,
+		//"maxValue": 0,
+		//"defaultValue": 0,
+		//"readOnly": true,
+		//"writeOnly": false,
+		//"allowManualEntry": true
 		// }
 	}
 }

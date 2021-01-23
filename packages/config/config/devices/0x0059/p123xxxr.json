@@ -1,0 +1,19 @@
+// Secure Meters (UK) Ltd. P123XXXR
+// Generation Meter Series P.
+{
+	"manufacturer": "Secure Meters (UK) Ltd.",
+	"manufacturerId": "0x0059",
+	"label": "P123XXXR",
+	"description": "Generation Meter Series P.",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0005",
+			"zwaveAllianceId": 1135
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

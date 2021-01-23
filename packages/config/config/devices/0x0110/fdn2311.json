@@ -1,0 +1,19 @@
+// Frostdale FDN2311
+// nanogrid™ Wireless Light Switch
+{
+	"manufacturer": "Frostdale",
+	"manufacturerId": "0x0110",
+	"label": "FDN2311",
+	"description": "nanogrid™ Wireless Light Switch",
+	"devices": [
+		{
+			"productType": "0x2411",
+			"productId": "0x0001",
+			"zwaveAllianceId": 599
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

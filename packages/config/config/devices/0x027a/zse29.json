@@ -8,12 +8,17 @@
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0005"
+			"productId": "0x0005",
+			"zwaveAllianceId": 3081
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "AUTO-INCLUSION:1. Initiate inclusion (pairing) in the app (or web interface). Not Sure how? ask@getzooz.com. If you’re using an S2 hub, it may ask you to enter the DSK key printed on the back cover sticker to complete secure inclusion.2. Insert the batteries or the USB adapter board. The LED indicatorwill start blinking and the sensor will join the network Automatically.MANUAL INCLUSION:Put your Z-Wave hub into inclusion mode and click the tamper switch 3 times quickly.",
+		"exclusion": "1. Bring the sensor within direct range of your Z-Wavegateway (hub).2. Put the Z-Wave hub into exclusion mode (not surehow to do that? ask@getzooz.com).3. Press and release the tamper switch 3 times quickly.4. Your hub will confirm exclusion and the sensor willdisappear from your controller's device list.",
+		"reset": "When your network’s primary controller is missing or otherwise inoperable, you may need to reset the device to factory settings manually. In order to complete the process, make sure the sensor is powered, then CLICKCLICK-CLICK-CLICK’N’HOLD the tamper switch for AT LEAST 5 SECONDS. The LED indicator will turn off toindicate successful reset. The sensor will then enter auto-inclusion mode for 4 minutes.NOTE: All previously recorded activity and custom settings will be erased from the device’s memory."
+	}
 }

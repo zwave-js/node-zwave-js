@@ -1,0 +1,19 @@
+// Team Precision PCL ZUS102
+// Zuper Switch Remote Control 2 Gang
+{
+	"manufacturer": "Team Precision PCL",
+	"manufacturerId": "0x0089",
+	"label": "ZUS102",
+	"description": "Zuper Switch Remote Control 2 Gang",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0101",
+			"zwaveAllianceId": 161
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

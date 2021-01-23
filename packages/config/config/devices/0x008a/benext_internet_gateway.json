@@ -1,0 +1,19 @@
+// BeNext BENEXT / INTERNET GATEWAY
+// Internet Gateway
+{
+	"manufacturer": "BeNext",
+	"manufacturerId": "0x008a",
+	"label": "BENEXT / INTERNET GATEWAY",
+	"description": "Internet Gateway",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0100",
+			"zwaveAllianceId": 53
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

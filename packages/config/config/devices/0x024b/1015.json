@@ -1,0 +1,27 @@
+// Huawei Technologies Co., Ltd. 1015
+// EchoLife LS
+{
+	"manufacturer": "Huawei Technologies Co., Ltd.",
+	"manufacturerId": "0x024b",
+	"label": "1015",
+	"description": "EchoLife LS",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0001",
+			"zwaveAllianceId": [1675, 1761, 1877]
+		},
+		{
+			"productType": "0x0100",
+			"productId": "0x0010",
+			"zwaveAllianceId": 1710
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "You can login the WEB of LS1015 to set the product to the factory default state.Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

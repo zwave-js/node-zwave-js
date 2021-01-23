@@ -8,12 +8,15 @@
 	"devices": [
 		{
 			"productType": "0x5643",
-			"productId": "0x5a31"
+			"productId": "0x5a31",
+			"zwaveAllianceId": 1786
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"reset": "Press and hold the button on the control for approximately 15 seconds (the LED will stop flashing when complete.\"Please use this procedure only when the network primary controller is missing or otherwise inoperable.\""
+	}
 }

@@ -29,7 +29,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Upper paddle turns the light on,",
+					"label": "Upper paddle turns the light on",
 					"value": 0
 				},
 				{

@@ -1,0 +1,39 @@
+// Hyundai Telecom HCS-W1001
+// Z-Wave Gateway Controller and hub
+{
+	"manufacturer": "Hyundai Telecom",
+	"manufacturerId": "0x0374",
+	"label": "HCS-W1001",
+	"description": "Z-Wave Gateway Controller and hub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3079
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3172
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3387
+		},
+		{
+			"productType": "0x0005",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3684
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Register the product after entering the registration mode in the mobile app.",
+		"exclusion": "Register the product after entering the registration mode in the mobile app.",
+		"reset": "Register the product after entering the factory reset mode in the mobile app."
+	}
+}

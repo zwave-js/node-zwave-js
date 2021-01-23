@@ -1,0 +1,24 @@
+// Hyundai Telecom HDL-7300SK
+// DIGITAL DOOR LOCK
+{
+	"manufacturer": "Hyundai Telecom",
+	"manufacturerId": "0x0374",
+	"label": "HDL-7300SK",
+	"description": "DIGITAL DOOR LOCK",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0082",
+			"zwaveAllianceId": 3712
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To add or include the HDL-7300SK into a Z-Wave network1. Set the controller in inclusion mode.2. Open the battery cover of the indoor body and press the [REG 1] button.3. Press the [1][4] button after pressing the [*] button.",
+		"exclusion": "To remove or exclude the HDL-7300SK into a Z-Wave network1. Set the controller in exclusion mode.2. Open the battery cover of the indoor body and press the [REG 1] button.3. Press the [3][6] button after pressing the [*] button.",
+		"reset": "To Factory Reset1. Open the battery cover of the indoor body and press the [REG 1] button.2. Press the [8][0] button after pressing the [*] button."
+	}
+}

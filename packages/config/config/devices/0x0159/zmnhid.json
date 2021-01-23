@@ -152,7 +152,7 @@
 			]
 		},
 		"6": {
-			"label": "Parameter   no.   6",
+			"label": "Parameter no. 6",
 			"description": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
@@ -174,7 +174,7 @@
 			]
 		},
 		"10": {
-			"label": "Parameter   no.   10",
+			"label": "Parameter no. 10",
 			"description": "Activate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 2,
 			"minValue": 0,
@@ -215,7 +215,7 @@
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "Parameter   no.   12",
+			"label": "Parameter no. 12",
 			"description": "I2 Functionality selection",
 			"valueSize": 2,
 			"minValue": 0,
@@ -227,7 +227,7 @@
 			"allowManualEntry": true
 		},
 		"13": {
-			"label": "Parameter   no.   13",
+			"label": "Parameter no. 13",
 			"description": "I3 Functionality selection",
 			"valueSize": 2,
 			"minValue": 0,
@@ -239,7 +239,7 @@
 			"allowManualEntry": true
 		},
 		"40": {
-			"label": "Parameter   no.   40",
+			"label": "Parameter no. 40",
 			"description": "Power reporting in Watts on Power change",
 			"valueSize": 1,
 			"minValue": 0,
@@ -251,7 +251,7 @@
 			"allowManualEntry": true
 		},
 		"42": {
-			"label": "Parameter   no.   42",
+			"label": "Parameter no. 42",
 			"description": "Power reporting in Watts by time interval for Q1",
 			"valueSize": 2,
 			"minValue": 0,
@@ -262,7 +262,7 @@
 			"allowManualEntry": true
 		},
 		"43": {
-			"label": "Parameter   no.   43",
+			"label": "Parameter no. 43",
 			"description": "Hysteresis On",
 			"valueSize": 2,
 			"minValue": 0,
@@ -274,7 +274,7 @@
 			"allowManualEntry": true
 		},
 		"44": {
-			"label": "Parameter   no.   44",
+			"label": "Parameter no. 44",
 			"description": "Hysteresis Off",
 			"valueSize": 2,
 			"minValue": 0,
@@ -286,7 +286,7 @@
 			"allowManualEntry": true
 		},
 		"45": {
-			"label": "Parameter   no.   45",
+			"label": "Parameter no. 45",
 			"description": "Antifreeze",
 			"valueSize": 2,
 			"minValue": 0,
@@ -298,7 +298,7 @@
 			"allowManualEntry": true
 		},
 		"59": {
-			"label": "Parameter   no.   59",
+			"label": "Parameter no. 59",
 			"description": "Thermostat Mode",
 			"valueSize": 1,
 			"minValue": 0,
@@ -319,7 +319,7 @@
 			]
 		},
 		"60": {
-			"label": "Parameter   no.   60",
+			"label": "Parameter no. 60",
 			"description": "Too low temperature limit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -331,7 +331,7 @@
 			"allowManualEntry": true
 		},
 		"61": {
-			"label": "Parameter   no.   61",
+			"label": "Parameter no. 61",
 			"description": "Too high temperature limit",
 			"valueSize": 2,
 			"minValue": 0,
@@ -343,7 +343,7 @@
 			"allowManualEntry": true
 		},
 		"63": {
-			"label": "Parameter   no.   63",
+			"label": "Parameter no. 63",
 			"description": "Output Switch selection",
 			"valueSize": 1,
 			"minValue": 0,
@@ -484,8 +484,8 @@
 			"allowManualEntry": true
 		},
 		"120": {
-			"label": "Parameter   no.   120",
-			"description": "Digital   temperature   sensor  reporting",
+			"label": "Parameter no. 120",
+			"description": "Digital temperature sensor  reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -495,8 +495,8 @@
 			"allowManualEntry": true
 		},
 		"121": {
-			"label": "Parameter   no.   121",
-			"description": "Digital   temperature   sensor   /  setpoint selector",
+			"label": "Parameter no. 121",
+			"description": "Digital temperature sensor /  setpoint selector",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -507,8 +507,8 @@
 			"allowManualEntry": true
 		},
 		"122": {
-			"label": "Parameter   no.   122",
-			"description": "Node   ID   of   external   battery  powered room sensor",
+			"label": "Parameter no. 122",
+			"description": "Node ID of external battery  powered room sensor",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 254,

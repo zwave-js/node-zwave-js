@@ -1,0 +1,22 @@
+// Evolvere SpA SENTINEL 2.0
+// Eugenio
+{
+	"manufacturer": "Evolvere SpA",
+	"manufacturerId": "0x036f",
+	"label": "SENTINEL 2.0",
+	"description": "Eugenio",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3226
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "If this controller is the primary controller for your network, the factory reset operation will result in the nodes in your network being orphaned and it will be necessary after the  execution of reset operation to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable. To reset the controller, hold the reset button for 16 seconds. This will reset it to factory default."
+	}
+}

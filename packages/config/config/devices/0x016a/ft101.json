@@ -1,0 +1,37 @@
+// Fantem FT101
+// Cube
+{
+	"manufacturer": "Fantem",
+	"manufacturerId": "0x016a",
+	"label": "FT101",
+	"description": "Cube",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0065",
+			"zwaveAllianceId": 2409
+		},
+		{
+			"productType": "0x0101",
+			"productId": "0x0065",
+			"zwaveAllianceId": [2205, 2677]
+		},
+		{
+			"productType": "0x0201",
+			"productId": "0x0065",
+			"zwaveAllianceId": 2408
+		},
+		{
+			"productType": "0x0301",
+			"productId": "0x0065",
+			"zwaveAllianceId": 2410
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.Following the UI guidelines on Oomi Touch or on-screen instructions on PC host,  click the \"Reset\" button to reset the Cube."
+	}
+}

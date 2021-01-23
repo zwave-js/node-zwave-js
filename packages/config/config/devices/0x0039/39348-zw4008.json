@@ -62,7 +62,7 @@
 		},
 		"19": {
 			"label": "Alternate Exclusion",
-			"description": "0 (default) - Press any button on the device \n1 - Press 2 times ON button and then 2 times OFF button, LED will flash 5 times if done successful",
+			"description": "0 (default) - Press any button on the device 1 - Press 2 times ON button and then 2 times OFF button, LED will flash 5 times if done successful",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

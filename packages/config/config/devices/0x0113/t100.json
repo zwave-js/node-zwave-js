@@ -8,7 +8,13 @@
 	"devices": [
 		{
 			"productType": "0x4556",
-			"productId": "0x5434"
+			"productId": "0x5434",
+			"zwaveAllianceId": 81
+		},
+		{
+			"productType": "0x4556",
+			"productId": "0x5435",
+			"zwaveAllianceId": 62
 		}
 	],
 	"firmwareVersion": {

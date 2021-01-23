@@ -1,0 +1,22 @@
+// MCT CO., Ltd. MPU100ZW
+// Talk-Z
+{
+	"manufacturer": "MCT CO., Ltd.",
+	"manufacturerId": "0x0222",
+	"label": "MPU100ZW",
+	"description": "Talk-Z",
+	"devices": [
+		{
+			"productType": "0x0010",
+			"productId": "0x0010",
+			"zwaveAllianceId": [1318, 2323]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.  If Talk-Z is your primary controller, use of this procedure could result in your Z-Wave devices being orphaned and having no central controller to communicate with; use this procedure with caution.This implies that Z-Wave network back to its factory settings1. From the Talk-Z page, press the Reset button.2. To confirm reset, press the yes button.3. If this process is successful,  All node information disappeared in Talk-Z"
+	}
+}

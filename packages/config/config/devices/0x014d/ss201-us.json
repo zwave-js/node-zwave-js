@@ -1,0 +1,19 @@
+// Enblink Co. Ltd. SS201-US-W_1308
+// USB Dongle
+{
+	"manufacturer": "Enblink Co. Ltd.",
+	"manufacturerId": "0x014d",
+	"label": "SS201-US-W_1308",
+	"description": "USB Dongle",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": [937, 969]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

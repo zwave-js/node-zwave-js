@@ -1,0 +1,19 @@
+// Wr@p BE468
+// Schlage Lock
+{
+	"manufacturer": "Schlage",
+	"manufacturerId": "0x0003",
+	"label": "BE468",
+	"description": "Schlage Lock",
+	"devices": [
+		{
+			"productType": "0x6349",
+			"productId": "0x5044",
+			"zwaveAllianceId": [1024, 1052]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

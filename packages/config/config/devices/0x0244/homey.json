@@ -1,0 +1,22 @@
+// Athom BV HOMEY
+// Homey
+{
+	"manufacturer": "Athom BV",
+	"manufacturerId": "0x0244",
+	"label": "HOMEY",
+	"description": "Homey",
+	"devices": [
+		{
+			"productType": "0xba5e",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1771
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "To Reset Homey to factory defaults, place Homey upside down. After a few seconds, Homey will initiate a countdown (both visually in the LED ring and verbally trough voice) of 15 seconds. After the countdown had ended, browse on a computer, laptop or tablet to setup.athom.com to initiate a new setup. PLEASE USE THE RESET PROCEDURE ONLY IF YOU EXPERIENCE SEVERE DIFFICULTIES WITH HOMEY'S OPERATING SYSTEM OR WHEN ADVISED TO DO SO BY ATHOM SUPPORT."
+	}
+}

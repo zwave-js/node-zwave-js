@@ -1,0 +1,24 @@
+// Willis Electric Co., Ltd. ZW36
+// Smart Plug(1 Channel)
+{
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "ZW36",
+	"description": "Smart Plug(1 Channel)",
+	"devices": [
+		{
+			"productType": "0x0211",
+			"productId": "0x241c",
+			"zwaveAllianceId": 1714
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.2. Once the controller is ready to include your device, quick triple press the button to include it into the network.3. Once your controller has confirmed that the device has been included, refresh the Z-Wave network to optimize performance.4. The device is associated in the same group when it included in setting process. Now you can control your Z-Wave device according to groups, scenes, schedules  and automation programmed.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.2. Once the controller is ready to Exclude your device, quick triple press the button to exclude it from the network.",
+		"reset": "Use controller to remove device from network will reset it to factory default.\"Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\""
+	}
+}

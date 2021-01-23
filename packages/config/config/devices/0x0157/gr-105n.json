@@ -1,19 +1,24 @@
-// EcoNet Controls GR-105N
+// EcoNet Controls EVC200
 // Z-Wave Motor for water/gas ball valves
 {
 	"manufacturer": "EcoNet Controls",
 	"manufacturerId": "0x0157",
-	"label": "GR-105N",
+	"label": "EVC200",
 	"description": "Z-Wave Motor for water/gas ball valves",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": 2179
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "Press Button on the Valve-Control-Box three times rapidly (three times within 1.5 seconds). The red LED light will start blinking immediately (1 blink per second)",
+		"exclusion": "Press Button on the Valve-Control-Box three times rapidly (three times within 1.5 seconds). The red LED light will start blinking immediately (1 blink per second)",
+		"reset": "Press and hold the Button for 10 seconds to perform Local Reset procedure. Please use this procedure only when the network primary controller is missing or otherwise inoperable.”"
+	}
 }

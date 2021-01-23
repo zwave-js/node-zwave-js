@@ -1,0 +1,24 @@
+// TKB Home TZ36
+// TKB Switch D
+{
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "TZ36",
+	"description": "TKB Switch D",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x2036",
+			"zwaveAllianceId": 1410
+		},
+		{
+			"productType": "0x0102",
+			"productId": "0x1036",
+			"zwaveAllianceId": 1411
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

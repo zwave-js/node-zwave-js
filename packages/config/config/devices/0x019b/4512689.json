@@ -1,0 +1,24 @@
+// ThermoFloor 4512689
+// Heatit Z-Smoke Detector 230V
+{
+	"manufacturer": "ThermoFloor",
+	"manufacturerId": "0x019b",
+	"label": "4512689",
+	"description": "Heatit Z-Smoke Detector 230V",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x3601",
+			"zwaveAllianceId": 3933
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Before you start, find the circuit breaker or fuse box.  2. Once you have found it, open the door and turn off the main power switch.  Step 3. Two Wago 221 Splicing Connectors are provided. Take out one connector. Pull the lever up and insert the white wire. 4. Push the lever back down. The transparent housing allows you to check if the wire is connected properly. Make sure  the wire is tightly held in place before you proceed. 5. Repeat Step 3 and Step 4 to insert the black wire. Inserting the two wires to the same side (right), as shown below, of the two connectors provides an easier installation in the following steps. 7. Put the Z-Wave gateway or control panel into Inclusion or Learning mode (please refer to the Z-Wave gateway or  control panel manual). 8. Within 1.5 seconds, press the Function button 3 times. The Smoke Detector will emit a 2-tone beep and the LED will  turn on for ~2 seconds. Refer to the operation manual of the Z-Wave gateway or control panel to complete the learn-in  process. 6. Insert the AC wires to the two connectors respectively, as shown below. Use a pair of tweezers to turn the Battery Switch  to ON position (left side), the rechargeable battery will begin to charge.",
+		"exclusion": "1. Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual). 2. Within 1.5 seconds, press the Function button 3 times and the Smoke Detector will be removed from the Z-Wave network.",
+		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable)1. Remove the batteries of the Smoke Detector first.  2. Press and hold the Function button. While holding the Function button, power on the Smoke Detector by re-inserting the batteries, wait for 20 seconds to factory reset."
+	}
+}

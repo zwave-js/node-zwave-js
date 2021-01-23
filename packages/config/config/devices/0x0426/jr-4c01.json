@@ -1,0 +1,24 @@
+// JR Automation Technology JR-4C01
+// 4 CHANNEL RELAY
+{
+	"manufacturer": "JR Automation Technology",
+	"manufacturerId": "0x0426",
+	"label": "JR-4C01",
+	"description": "4 CHANNEL RELAY",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3397
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To add the device to the Z-Wave network: 1. Keep the device in Z-Wave range. 2. Power the device. 3. Set the main controller in (Security/non-Security Mode) add mode (see the controller’s manual). 4. Quickly, three times press the Config Button, LED color will change from Red to Blue. 5. Wait for the adding process to end. 6. Successful adding will be confirmed by the Z-Wave controller’s Message and LED Colour will change to Green.",
+		"exclusion": "To remove the device from the Z-Wave network: 1. Power the device. 2. Set the main controller into remove mode (see the controller’s manual). 3. Quickly, three times click the Config button LED color will change to Blue. 4. Wait for the removing process to end. 5. Successful removing will be confirmed by the Z-Wave controller’s message and Red LED color.",
+		"reset": "Reset procedure allows restoring the device back to its factory settings, which means all information about the Z-Wave controller will be deleted. 1. Press and Hold Config Button for 10 sec until White LED Indication to start blinking. 2. Release Config button. Now you have 5sec to Reset Device otherwise it back to Normal Mode. 3. Single Click Config Button. 4. After a few seconds, the device will be restarted, which is signaled with the red LED indicator color.NOTE:. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

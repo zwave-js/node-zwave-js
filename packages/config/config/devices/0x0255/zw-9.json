@@ -1,0 +1,22 @@
+// Remote Technologies Incorporated ZW-9
+// Z-Wave Interface Module
+{
+	"manufacturer": "Remote Technologies Incorporated",
+	"manufacturerId": "0x0255",
+	"label": "ZW-9",
+	"description": "Z-Wave Interface Module",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": [1737, 1738, 1917, 1922, 2173, 2193]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "USE THE RESET PROCEDURE ONLY WHEN THE PRIMARY CONTROLLER IS MISSING OR INOPERABLE. Start the Product Reset process by selecting Reset Controller/Start New Installation from the main menu or by selecting the Reset Controller/Start New Installation button on the main toolbar. This is used to set the ZW-9 to Defaults. The ZW-9 will become the primary controller, all Z-Wave devices will be removed from its memory and a new HomeID will be assigned."
+	}
+}

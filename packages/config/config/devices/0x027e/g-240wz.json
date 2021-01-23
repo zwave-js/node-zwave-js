@@ -1,0 +1,27 @@
+// Nokia G-240WZ
+// Nokia Smart Home GPON ONT
+{
+	"manufacturer": "Nokia",
+	"manufacturerId": "0x027e",
+	"label": "G-240WZ",
+	"description": "Nokia Smart Home GPON ONT",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2784
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2435
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Follow below process to reset Nokia G-240WZ-A to factory default:1. Login to Nokia G-240WZ-A WebGUI using credentials & IP address mentioned on the back of the device. 2. After successful login, go to SmartHome>Maintenance page3. Click \" Factory Default\" button, confirming this operation Nokia G-240WZ-A will be reset to factory default condition.RESETTING CONTROLLER: \"If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.\""
+	}
+}

@@ -1,0 +1,24 @@
+// 2gig Technologies Inc. 2GIG-STZ
+// 2GIG Z-Wave Plus 700-series Programmable Thermostat
+{
+	"manufacturer": "2gig Technologies Inc.",
+	"manufacturerId": "0x009b",
+	"label": "2GIG-STZ",
+	"description": "2GIG Z-Wave Plus 700-series Programmable Thermostat",
+	"devices": [
+		{
+			"productType": "0x5354",
+			"productId": "0x5a31",
+			"zwaveAllianceId": [3826, 3884]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "\"1. Set your primary controller to Include, add or Install mode, to add the thermostat as a node on your network (see your controller’s user manual for detailed instructions). 2. Touch any button to take the thermostat out of sleep mode. 3. Touch and hold MODE button for 5 seconds. SETUP will be displayed in the status display line. 4. Scroll to “Z-Wave” using  buttons. Touch FAN (Select). 5. When prompted by your Z-Wave controller, select YES in the Z-Wave Install screen. 6. Touch FAN (Select) to add thermostat to network. 7. The display line should flash WAIT and then SUCCESS if Z-Wave connection is made. 8. If Z-Wave does not connect to controller, WAIT, then FAIL will flash in status display line. 9. If thermostat fails to connect, repeat Steps three (3) through (7) to re-try connecting. Your controller will indicate the thermostat was successfully added to its network (see your controller’s user manual for details). Also, you can check if the thermostat was successfully added to the network by checking the ZHID (Home ID) and ZNID (Node ID) located in the thermostat INFO screen.\"",
+		"exclusion": "Removing from a Z-Wave Network To remove the thermostat from the network, use the following steps. 1. Set your primary controller to exclude or remove mode to remove the thermostat as a node on your network (see your controller’s user manual for detailed instructions). 2. Touch any button to take the thermostat out of sleep mode. 3. Touch and hold the MODE button for 5 seconds. SETUP will be displayed in the status display line. 5. Scroll to “Z-Wave” using  buttons. Touch FAN (Select). 6. When prompted by your Z-Wave controller, select YES in the Z-Wave exclude screen. 7. Touch FAN (Select) to remove thermostat to network. 8. The display line should flash WAIT then SUCCESS if the thermostat is removed from the network. 9. If the removal operation is not successful, WAIT will flash, then FAIL will flash in status display line. Repeat Steps three (3) through (7) to re-try.",
+		"reset": "Factory Reset WARNING: Please use this procedure only when the Z-Wave Primary Controller is missing or otherwise inoperable. To reset the 2GIG-STZ-1's Z-Wave parameters to Factory Settings (both Z-Wave and HVAC settings): 1. Touch and hold MODE button to go to Setup menu. 2. Touch and hold MODE and the down arrow key  to enter Advanced Menu. 3. Navigate to Restore Defaults to perform a factory reset."
+	}
+}

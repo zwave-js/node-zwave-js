@@ -1,19 +1,24 @@
-// EcoNet Controls EBV-105
+// EcoNet Controls EBV105
 // Wireless Water Shutoff Valve
 {
 	"manufacturer": "EcoNet Controls",
 	"manufacturerId": "0x0157",
-	"label": "EBV-105",
+	"label": "EBV105",
 	"description": "Wireless Water Shutoff Valve",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0512"
+			"productId": "0x0512",
+			"zwaveAllianceId": 1560
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.2.Once the controller is ready to include your device, press the red button 3 times to include it in the Z-Wave network.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device to the Z-Wave network.2.Once the controller is ready to exclude your device, press the red button 3 times to exclude it from the Z-Wave network.",
+		"reset": "Press and hold the button 10 seconds and release the button. The device will send the reset notification to the list node in the group1 and erases the device memory , when the light flash it is resetting success.Note: This should only be used in the event your networks primary controller is missing or otherwise inoperable."
+	}
 }

@@ -1,0 +1,22 @@
+// LifeShield, LLC S30
+// LifeShield  Base
+{
+	"manufacturer": "LifeShield, LLC",
+	"manufacturerId": "0x0224",
+	"label": "S30",
+	"description": "LifeShield  Base",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2921
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "RESETTING YOUR Z-WAVE NETWORKIn order to factory reset your Z-Wave network,navigate to the Z-Wave Utilities page under Settings.Select “Z-Wave Reset Controller”After a few seconds, the LifeShield base will beep to indicate that your Z-Wave network has been reset. Any devices which were part of your Z-Wave network will need to be reset before they can be re-added. Use the Z-Wave General Exclusion menu under Z-Wave Utilities to do this.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

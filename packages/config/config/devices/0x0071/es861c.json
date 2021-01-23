@@ -1,0 +1,19 @@
+// LS Control ES861C
+//  Setpoint sensor
+{
+	"manufacturer": "LS Control",
+	"manufacturerId": "0x0071",
+	"label": "ES861C",
+	"description": "Setpoint sensor",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x035d",
+			"zwaveAllianceId": 191
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

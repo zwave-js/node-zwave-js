@@ -1,0 +1,24 @@
+// Shenzhen Heiman Technology Co., Ltd. HS3MS-Z
+// Smart Motion Sensor
+{
+	"manufacturer": "Shenzhen Heiman Technology Co., Ltd.",
+	"manufacturerId": "0x0260",
+	"label": "HS3MS-Z",
+	"description": "Smart Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x8001",
+			"productId": "0x1001",
+			"zwaveAllianceId": 3026
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Click [Add] icon in Z-Wave Controller .  - Press the Func_Button 3 times within 1.5s, Green LED is Blinking 4 times within 1 second.- If Inclusion Process is successful, Green led will turn off.",
+		"exclusion": "Click [Remove] icon in Z-Wave Controller- Press the Func_Button 3 times within 1.5s - If Exclusion Process is successful, Green led is Blinking 6 times, then turn off.",
+		"reset": "Long press Func_Button while installing batteries in the Device -Device Reset Locally notification is Transmitted-Green LED Turns off after 2 seconds.Please use this procedure only when the network primary controller is missing or otherwise  inoperable."
+	}
+}

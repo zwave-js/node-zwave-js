@@ -1,0 +1,19 @@
+// Danfoss 087N777200
+// Danfoss RXZ2C
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "087N777200",
+	"description": "Danfoss RXZ2C",
+	"devices": [
+		{
+			"productType": "0x0804",
+			"productId": "0x2002",
+			"zwaveAllianceId": 1060
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

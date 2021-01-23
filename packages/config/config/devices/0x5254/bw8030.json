@@ -1,0 +1,19 @@
+// Remotec BW8030
+// ZTS-100US Thermostat
+{
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "BW8030",
+	"description": "ZTS-100US Thermostat",
+	"devices": [
+		{
+			"productType": "0x0200",
+			"productId": "0x8030",
+			"zwaveAllianceId": 628
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

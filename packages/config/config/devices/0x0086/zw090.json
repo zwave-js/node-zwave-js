@@ -85,17 +85,17 @@
 			]
 		},
 		// This parameter has an invalid valueSize
-		// "243": {
-		//     "label": "Security Network Key",
-		//     "description": "Security Network Key",
-		//     "unit": "key",
-		//     "valueSize": 16,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": false,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"243": {
+		//	"label": "Security Network Key",
+		//	"description": "Security Network Key",
+		//	"unit": "key",
+		//	"valueSize": 16,
+		//	"minValue": 0,
+		//	"maxValue": 0,
+		//	"defaultValue": 0,
+		//	"readOnly": false,
+		//	"writeOnly": false,
+		//	"allowManualEntry": true
 		// },
 		"252": {
 			"label": "Lock Configuration",

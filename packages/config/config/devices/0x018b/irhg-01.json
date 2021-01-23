@@ -1,0 +1,27 @@
+// Grib IRHG-01
+// IoT Hub
+{
+	"manufacturer": "Grib",
+	"manufacturerId": "0x018b",
+	"label": "IRHG-01",
+	"description": "IoT Hub",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3225
+		},
+		{
+			"productType": "0x0004",
+			"productId": "0x0002",
+			"zwaveAllianceId": 3290
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "-This is the Z-Wave Set Default network operation and a confirmation message appears.\"If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.\""
+	}
+}

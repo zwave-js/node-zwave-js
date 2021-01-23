@@ -1,0 +1,22 @@
+// Pixela Corporation PIX-GW100Z
+// Sensor Gateway
+{
+	"manufacturer": "Pixela Corporation",
+	"manufacturerId": "0x0277",
+	"label": "PIX-GW100Z",
+	"description": "Sensor Gateway",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1759
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Push the hardware reset button.\"Please use this procedure only when the network primary controller is missing or otherwise inoperable.\""
+	}
+}

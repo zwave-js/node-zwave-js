@@ -1,0 +1,22 @@
+// iEXERGY GmbH Wibutler Pro
+// Multiradio server for home automation with optional cloud connectivitiy
+{
+	"manufacturer": "iEXERGY GmbH",
+	"manufacturerId": "0x019e",
+	"label": "Wibutler Pro",
+	"description": "Multiradio server for home automation with optional cloud connectivitiy",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": [1272, 1513]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Start the mobile wibutler app and connect to your wibutler. Open the Z-Wave Controller device from the device list and select the menu entry “Reset Controller” on the “Control Page”."
+	}
+}

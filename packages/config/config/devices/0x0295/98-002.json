@@ -1,0 +1,22 @@
+// fifthplay nv 98-002
+// Home Area Manager
+{
+	"manufacturer": "fifthplay nv",
+	"manufacturerId": "0x0295",
+	"label": "98-002",
+	"description": "Home Area Manager",
+	"devices": [
+		{
+			"productType": "0x0500",
+			"productId": "0x0501",
+			"zwaveAllianceId": 2190
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "The controller runs a local webserver which can be reached by browsing to the controller's MAC address preceded by 'http://FP'.  Example: http://FP<MAC-address>.localA Z-Wave settings page is shown which can be opened by providing a password which is the serial number of the controller (can be found on back of controller). Then the option to 'Learn Mode' will be visible.If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

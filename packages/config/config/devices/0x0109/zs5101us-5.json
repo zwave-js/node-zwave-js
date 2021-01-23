@@ -1,0 +1,24 @@
+// Vision Security ZS5101US-5
+// Wireless Shock Sensor
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZS5101US-5",
+	"description": "Wireless Shock Sensor",
+	"devices": [
+		{
+			"productType": "0x2003",
+			"productId": "0x0308",
+			"zwaveAllianceId": 2099
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZS 5101-5 to your controller.  To get in the “inclusion” mode, please press the program switch of ZS 5101-5 for 1 second at least to be included. The LED on the ZS 5101-5 should go off, if not, please try again.",
+		"exclusion": "Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZS 5101-5 from your controller.  Press the program switch of ZS 5101-5 for 1 second at least to be excluded.",
+		"reset": "*Push the Tamper switch then power on (put in the battery) & hold the Tamper switch for 5 seconds, ZD5101-5 will send the “Device Reset Locally Notification” command and reset to the factory default, LED will solid on, need to take off the battery and re-put in the battery to complete the function. *Please use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

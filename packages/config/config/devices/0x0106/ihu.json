@@ -1,0 +1,19 @@
+// iControl IHU
+// iControl iHub
+{
+	"manufacturer": "iControl",
+	"manufacturerId": "0x0106",
+	"label": "IHU",
+	"description": "iControl iHub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": [680, 96]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

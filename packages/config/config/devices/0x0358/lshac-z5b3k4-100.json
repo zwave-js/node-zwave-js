@@ -1,0 +1,22 @@
+// Star Automation LSHAC-Z5B3K4-100
+// LodeStar
+{
+	"manufacturer": "Star Automation",
+	"manufacturerId": "0x0358",
+	"label": "LSHAC-Z5B3K4-100",
+	"description": "LodeStar",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3175
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "We have an option to reset the Lodestar Z-Wave enabled controller in Technician App under Step-7 of the installation. This option will basically help in removing all the Z-Wave devices paired with Lodestarcontroller. Once the Lodestar Controller responds back to the Tech App with a SUCCESS message, then tech app will then remove all Z-Wave devices from the inventory in the cloud. This is so we can keep theinventory in sync with the Z-Wave devices which are actually paired to the Lodestar controller.If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network."
+	}
+}

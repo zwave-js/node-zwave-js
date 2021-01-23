@@ -1,0 +1,24 @@
+// Kjell & Co Elektronik 51114
+// Smart Smoke  Alarm
+{
+	"manufacturer": "Kjell & Co Elektronik",
+	"manufacturerId": "0x041c",
+	"label": "51114",
+	"description": "Smart Smoke  Alarm",
+	"devices": [
+		{
+			"productType": "0x8002",
+			"productId": "0x1000",
+			"zwaveAllianceId": 3365
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Press the Net_Button 3 times within 1.5s, Green LED is Blinking 3 times within 1 second.. If Inclusion Process is successful, Green led will turn off.",
+		"exclusion": " Press the Net_Button 3 times within 1.5s. .  If Exclusion Process is successful, Green led is Blinking 6 times, then turn off.",
+		"reset": "Long press Net_Button at least 10 seconds in the product. . Device Reset Locally notification is Transmitted.. Please use this procedure only when the network primary controller is missing or otherwise."
+	}
+}

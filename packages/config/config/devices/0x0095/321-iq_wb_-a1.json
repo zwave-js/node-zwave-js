@@ -1,0 +1,19 @@
+// Qees 321-IQ(WB)-A1
+// QEES P321I MyKey Remote EU
+{
+	"manufacturer": "Qees",
+	"manufacturerId": "0x0095",
+	"label": "321-IQ(WB)-A1",
+	"description": "QEES P321I MyKey Remote EU",
+	"devices": [
+		{
+			"productType": "0x3201",
+			"productId": "0x0001",
+			"zwaveAllianceId": 674
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

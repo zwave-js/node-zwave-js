@@ -100,71 +100,71 @@
 		}
 		// TODO: This device uses 18 configuration parameters (10..27, etc.) as 1
 		// Refer to https://www.benext.eu/static/manual/alarmsound.pdf
-		// "10": {
-		//     "label": "sound/light index 1",
-		//     "description": "Sound/light that will be played when index 1 has been selected",
-		//     "valueSize": 18,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": false,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"10": {
+		//	"label": "sound/light index 1",
+		//	"description": "Sound/light that will be played when index 1 has been selected",
+		//	"valueSize": 18,
+		//	"minValue": 0,
+		//	"maxValue": 0,
+		//	"defaultValue": 0,
+		//	"readOnly": false,
+		//	"writeOnly": false,
+		//	"allowManualEntry": true
 		// },
-		// "28": {
-		//     "label": "sound/light index 2",
-		//     "description": "Sound/light that will be played when index 2 has been selected",
-		//     "valueSize": 18,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": false,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"28": {
+		//	"label": "sound/light index 2",
+		//	"description": "Sound/light that will be played when index 2 has been selected",
+		//	"valueSize": 18,
+		//	"minValue": 0,
+		//	"maxValue": 0,
+		//	"defaultValue": 0,
+		//	"readOnly": false,
+		//	"writeOnly": false,
+		//	"allowManualEntry": true
 		// },
-		// "46": {
-		//     "label": "sound/light index 3",
-		//     "description": "Sound/light that will be played when index 3 has been selected",
-		//     "valueSize": 18,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": false,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"46": {
+		//	"label": "sound/light index 3",
+		//	"description": "Sound/light that will be played when index 3 has been selected",
+		//	"valueSize": 18,
+		//	"minValue": 0,
+		//	"maxValue": 0,
+		//	"defaultValue": 0,
+		//	"readOnly": false,
+		//	"writeOnly": false,
+		//	"allowManualEntry": true
 		// },
-		// "64": {
-		//     "label": "sound/light index 4",
-		//     "description": "Sound/light that will be played when index 4 has been selected",
-		//     "valueSize": 18,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": false,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"64": {
+		//	"label": "sound/light index 4",
+		//	"description": "Sound/light that will be played when index 4 has been selected",
+		//	"valueSize": 18,
+		//	"minValue": 0,
+		//	"maxValue": 0,
+		//	"defaultValue": 0,
+		//	"readOnly": false,
+		//	"writeOnly": false,
+		//	"allowManualEntry": true
 		// },
-		// "82": {
-		//     "label": "sound/light index 5",
-		//     "description": "Sound/light that will be played when index 5 has been selected",
-		//     "valueSize": 18,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": false,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"82": {
+		//	"label": "sound/light index 5",
+		//	"description": "Sound/light that will be played when index 5 has been selected",
+		//	"valueSize": 18,
+		//	"minValue": 0,
+		//"maxValue": 0,
+		//	"defaultValue": 0,
+		//	"readOnly": false,
+		//	"writeOnly": false,
+		//	"allowManualEntry": true
 		// },
-		// "100": {
-		//     "label": "sound/light index 6",
-		//     "description": "Sound/light that will be played when index 6 has been selected",
-		//     "valueSize": 18,
-		//     "minValue": 0,
-		//     "maxValue": 0,
-		//     "defaultValue": 0,
-		//     "readOnly": false,
-		//     "writeOnly": false,
-		//     "allowManualEntry": true
+		//"100": {
+		//	"label": "sound/light index 6",
+		//	"description": "Sound/light that will be played when index 6 has been selected",
+		//	"valueSize": 18,
+		//	"minValue": 0,
+		//	"maxValue": 0,
+		//	"defaultValue": 0,
+		//	"readOnly": false,
+		//	"writeOnly": false,
+		//	"allowManualEntry": true
 		// }
 	}
 }

@@ -1,0 +1,22 @@
+// Enblink Co. Ltd. IBDK-01
+// Smart Button
+{
+	"manufacturer": "Enblink Co. Ltd.",
+	"manufacturerId": "0x014d",
+	"label": "IBDK-01",
+	"description": "Smart Button",
+	"devices": [
+		{
+			"productType": "0x0054",
+			"productId": "0x0001",
+			"zwaveAllianceId": [2605, 3209]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Please excute this reset procedure only when the primary controller is missing or inoperable.1. Open battery cover.2. Press and hold the button there3. LED is turned on after 5 seconds. Keep holding.4. LET starts blinking after 10 seconds.5. Release the button when the LED blinks"
+	}
+}

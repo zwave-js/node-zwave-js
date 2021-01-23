@@ -1,0 +1,19 @@
+// Everspring TAC06-JOEL
+//  Door Bell Pushbutton
+{
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "TAC06-JOEL",
+	"description": "Door Bell Pushbutton",
+	"devices": [
+		{
+			"productType": "0x000a",
+			"productId": "0x0001",
+			"zwaveAllianceId": 256
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

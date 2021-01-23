@@ -1,0 +1,22 @@
+// SmartThings, Inc. SmartThings Link
+// SmartThings Link
+{
+	"manufacturer": "SmartThings, Inc.",
+	"manufacturerId": "0x0150",
+	"label": "SmartThings Link",
+	"description": "SmartThings Link",
+	"devices": [
+		{
+			"productType": "0x000a",
+			"productId": "0x002b",
+			"zwaveAllianceId": 3692
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Z-Wave factory resetTo reset your Hub's Z-Wave system to factorydefault settings, you must factory reset the entireHub. You can factory reset your Hub with RemoveDevice menu in SmartThings mobile app.NOTE : Resetting the Hub will restore factorysettings. All device connections, automations, rules,configurations associated with that Hub will be lostin the reset. All devices connected to your Hub willhave to be reset or excluded before they can bereconnected. The steps for resetting andreconnecting each smart device differ. Afterresetting, you can visit our Things category, find thedevices you wish to set up, and follow the guidesprovided. Remember that you will likely need toreset or “exclude” every device before connecting."
+	}
+}

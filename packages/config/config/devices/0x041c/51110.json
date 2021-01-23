@@ -1,0 +1,24 @@
+// Kjell & Co Elektronik 51110
+// Smart Metering Plug
+{
+	"manufacturer": "Kjell & Co Elektronik",
+	"manufacturerId": "0x041c",
+	"label": "51110",
+	"description": "Smart Metering Plug",
+	"devices": [
+		{
+			"productType": "0x8006",
+			"productId": "0x1000",
+			"zwaveAllianceId": 3262
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": " Click [Add] icon in Z-Wave Controller.-  Press the SW_Button 3 times within 1.5s, Blue LED is Blinking 3 times within 1 second.-  If add Process is successful, Blue LED will turn off.",
+		"exclusion": " Click [Remove] icon in Z-Wave Controller. -  Press the SW_Button 3 times within 1.5s -  If remove Process is successful, blue LED is Blinking 6 times, then turn off.",
+		"reset": "Long press SW_Button at least 10 seconds. - Device Reset Locally notification is Transmitted.-Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

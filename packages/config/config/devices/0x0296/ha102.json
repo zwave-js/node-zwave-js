@@ -1,0 +1,22 @@
+// OBLO LIVING LLC HA102
+// Home Automation Gateway
+{
+	"manufacturer": "OBLO LIVING LLC",
+	"manufacturerId": "0x0296",
+	"label": "HA102",
+	"description": "Home Automation Gateway",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 2307
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Reset user preferences - This function will permit to reset all user configuration settings. Short press on FRONT button six times will reset user preferences. During reset LED blink red two times per second.Factory settings - The factory settings function will reset the gateway to the state in which it was delivered. Doing so will delete all of the saved data. Furthermore, all saved Z-Wave settings will be deleted as well as the scenarios already created. Short press on BACK button nine times gateway will reset on factory settings. During reset LED blink red one time per second.If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

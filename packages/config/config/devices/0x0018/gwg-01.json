@@ -1,0 +1,19 @@
+// Balboa Instruments GWG-01
+// LGUplus Gateway Dongle
+{
+	"manufacturer": "Balboa Instruments",
+	"manufacturerId": "0x0018",
+	"label": "GWG-01",
+	"description": "LGUplus Gateway Dongle",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1236
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

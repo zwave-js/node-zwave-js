@@ -1,0 +1,19 @@
+// Residential Control Systems, Inc. (RCS) PMC40-L
+// RCS C Load Controller
+{
+	"manufacturer": "Residential Control Systems, Inc. (RCS)",
+	"manufacturerId": "0x0010",
+	"label": "PMC40-L",
+	"description": "RCS C Load Controller",
+	"devices": [
+		{
+			"productType": "0x0504",
+			"productId": "0x3431",
+			"zwaveAllianceId": 997
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

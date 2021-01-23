@@ -1,0 +1,19 @@
+// MSK - Miyakawa Seisakusho ME-D101
+// MSK CT type electric power measuring instrument
+{
+	"manufacturer": "MSK - Miyakawa Seisakusho",
+	"manufacturerId": "0x0122",
+	"label": "ME-D101",
+	"description": "MSK CT type electric power measuring instrument",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 633
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

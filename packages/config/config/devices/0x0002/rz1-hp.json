@@ -1,0 +1,19 @@
+// Danfoss RZ1-HP
+//  - Single Channel RF Relay Switching Unit
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "RZ1-HP",
+	"description": "Single Channel RF Relay Switching Unit",
+	"devices": [
+		{
+			"productType": "0x8004",
+			"productId": "0x2020",
+			"zwaveAllianceId": 48
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

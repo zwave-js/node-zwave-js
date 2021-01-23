@@ -1,0 +1,22 @@
+// Z-Wave.Me ZME_UZB1
+// USB Z-Wave Mini Adapter
+{
+	"manufacturer": "Z-Wave.Me",
+	"manufacturerId": "0x0115",
+	"label": "ZME_UZB1",
+	"description": "USB Z-Wave Mini Adapter",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1147
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "n/a"
+	}
+}

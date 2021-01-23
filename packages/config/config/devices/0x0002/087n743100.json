@@ -1,0 +1,19 @@
+// Danfoss 087N743100
+// Danfoss RXZ1
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "087N743100",
+	"description": "Danfoss RXZ1",
+	"devices": [
+		{
+			"productType": "0x0804",
+			"productId": "0x2000",
+			"zwaveAllianceId": [693, 699, 700]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

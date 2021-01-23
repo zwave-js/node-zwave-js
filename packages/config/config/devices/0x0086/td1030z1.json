@@ -1,0 +1,19 @@
+// AEON Labs TD1030Z1
+// GoodWay Z-Wave Power Monitor
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "TD1030Z1",
+	"description": "GoodWay Z-Wave Power Monitor",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0006",
+			"zwaveAllianceId": 27
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

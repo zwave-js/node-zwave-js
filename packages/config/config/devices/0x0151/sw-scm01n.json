@@ -1,0 +1,24 @@
+// Sercomm Corp SW-SCM01N
+// Z-Wave Smart Chime (Sound Switch)
+{
+	"manufacturer": "Sercomm Corp",
+	"manufacturerId": "0x0151",
+	"label": "SW-SCM01N",
+	"description": "Z-Wave Smart Chime (Sound Switch)",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3071
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Auto inclusion:1. Follow your Z-Wave controller's instructions on how to put the controller into \"Add\" mode.2. Power on the device.3. The LED will blink during the inclusion process. This process may take up to 4 minutes.4. If the device is successfully added to the network, the LED will turn off. The device will return to normal operation.If the process fails, try repeating steps 1 - 3 again.Manual inclusion:1. Follow your Z-Wave controller's instructions on how to put the controller into \"Add\" mode.2. Press the Paring button once to put the device into inclusion mode.3. The LED will blink during the inclusion process. This process may take up to 4 minutes.4. If the device is successfully added to the network, the LED will turn off. The device will return to normal operation.If the process fails, try repeating steps 1 - 3 again.",
+		"exclusion": "1. Follow your Z-Wave controller's instructions on how to put the controller into \"Remove\" mode.2. Press the Pairing button once.3. The LED will blink for one second while the device is being removed from the network.4. If the device was successfully removed from the network, all Z-Wave information will be cleared,and the Node ID will be excluded from the device.",
+		"reset": "1. Hold the Paring button for 10 second until the LED lights up.2. When LED turns off, all Z-Wave information will be cleared, the Node ID will be excluded from the device, and all settings will be reset to factory defaults.Note: Please use this procedure only when the network's primary controller is missing or otherwise inoperable."
+	}
+}

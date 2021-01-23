@@ -1,0 +1,24 @@
+// Codeatelier GmbH ESTMK-Z-WAV
+// homee Z-Wave Cube Green
+{
+	"manufacturer": "Codeatelier GmbH",
+	"manufacturerId": "0x0349",
+	"label": "ESTMK-Z-WAV",
+	"description": "homee Z-Wave Cube Green",
+	"devices": [
+		{
+			"productType": "0x0013",
+			"productId": "0x3900",
+			"zwaveAllianceId": 3630
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Open the tab [Devices] in the homee app and press the plus icon [+] on the top right side. In order to add a Z-Wave device select the purple button and press [START] on the next screen.",
+		"exclusion": "If you don’t want to continue using a certain device it needs to be removed from homee. To do this go to the settings of the device you wish to remove by tapping on the pencil icon in the devices detail screen. The button to remove the device is on the bottom of the screen. You have 60 seconds to activate the learn mode on the device you wish to remove after conﬁrmation of the removal. Doing this will remove the device from the Z-Wave network and reset it to its factory default settings.",
+		"reset": "NOTE:❗If the Z-Wave cube is reset to factory defaults, all connected Z-Wave devices will  be  removed  and  the  cube  gets  a  new  Home  ID.  If  homee  is  the  primary controller for your network, resetting it will result in the nodes in your network being  orphaned  and  it  will  be  necessary  after  the  reset  to  exclude  and  re-include  all  of  the  nodes  in  the  network. If  this  controller  is  being  used  as  a secondary controller in the network, use this procedure to reset this controller only  in  the  event  that  the  network  primary  controller  is  missing  or  otherwise inoperable.NOTE:❗❗ This process does NOT reset the connected devices itself. They need to be reset manually following the manufacturers manual.To reset the Z-Wave Cube to its factory defaults you need to open the general homee settings. They are reachable via your homee’s icon in the top left corner and a subsequent press on the gear icon on the top right corner. Under the section [Cubes] > [Z-Wave] you can find all settings related to the Z-Wave cube. The menu entry [Reset Cube] resets the Z-Wave Cube back to its factory defaults after additional confirmation."
+	}
+}

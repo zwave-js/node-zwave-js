@@ -1,0 +1,19 @@
+// Kwikset 912
+// Kwikset  Door Lock for U.S.
+{
+	"manufacturer": "Kwikset",
+	"manufacturerId": "0x0090",
+	"label": "912",
+	"description": "Kwikset  Door Lock for U.S.",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0336",
+			"zwaveAllianceId": [1388, 1393]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

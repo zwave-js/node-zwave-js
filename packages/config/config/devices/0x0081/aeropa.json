@@ -1,0 +1,19 @@
+// SIEGENIA-AUBI KG AEROPA
+// C - Wall mounted ventilation unit
+{
+	"manufacturer": "SIEGENIA-AUBI KG",
+	"manufacturerId": "0x0081",
+	"label": "AEROPA",
+	"description": "C - Wall mounted ventilation unit",
+	"devices": [
+		{
+			"productType": "0x0014",
+			"productId": "0x0001",
+			"zwaveAllianceId": 197
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

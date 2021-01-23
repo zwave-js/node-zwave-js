@@ -1,0 +1,22 @@
+// AdTrustMedia LLC dba: eZLO EZ0001
+// eZLO Controller
+{
+	"manufacturer": "AdTrustMedia LLC dba: eZLO",
+	"manufacturerId": "0x025b",
+	"label": "EZ0001",
+	"description": "eZLO Controller",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2471
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.Steps to Reset eZLO Hub1. Sign in to the eZLO app and select the eZLO hub you want your device to connect to.2. Select\"Settings\" from the My eZLO menu3. Click \"Clean eZLO\" button.OR1. Sign in to the eZLO app and select the eZLO hub you want your device to connect to.2. Select\"Devices\" from the My eZLO menu3. Select Z-Wave to filter out only Z-Wave devices.4. Open the \"Z-Wave Actions\" menu. 5. Click \"Reset\""
+	}
+}

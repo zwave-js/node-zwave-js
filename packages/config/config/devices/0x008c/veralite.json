@@ -1,0 +1,24 @@
+// Vera Control VERALITE
+// MIOS VeraLite
+{
+	"manufacturer": "Vera Control",
+	"manufacturerId": "0x008c",
+	"label": "VERALITE",
+	"description": "MIOS VeraLite",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": [999, 1037, 1038]
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0002",
+			"zwaveAllianceId": 1005
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -160,8 +160,8 @@
 			]
 		},
 		"90": {
-			"label": "Enables/disables parameter 91 and 92 below:",
-			"description": "Enables/disables parameter 91 and 92 below:",
+			"label": "Enables/disables parameter 91 and 92 below",
+			"description": "Enables/disables parameter 91 and 92 below",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

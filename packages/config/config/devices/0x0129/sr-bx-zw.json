@@ -1,0 +1,24 @@
+// ASSA ABLOY SR-BX-ZW
+// External siren
+{
+	"manufacturer": "ASSA ABLOY",
+	"manufacturerId": "0x0129",
+	"label": "SR-BX-ZW",
+	"description": "External siren",
+	"devices": [
+		{
+			"productType": "0x6f01",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2039
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "ADDING THE SIRENThis product can be added and operate in any compatible Z-Wave network. All non-battery operated nodes within the network will act as repeaters, regardless of vendor, to increase reliability of the network.Adding steps:• Turn on the battery power switch to activatethe pre-inserted batteries.• The Siren will emit a 2-tone beep.• Put the Z-Wave controller into adding orLearning mode (please refer to the Z-Wavecontroller manual).• Within 1.5 seconds, press the Siren learn button3 times.• Refer to the operation manual of the Z-Wavecontroller to complete the learn-in process.• If the Siren has already been added (learnt) intoanother Z-Wave controller, or if the Siren is unableto be learnt into the current Z-Wave controller,please remove it first (see Removing the siren below)before attempting to add it into the currentZ-Wave controller.",
+		"exclusion": "REMOVING THE SIRENThe Siren must be removed from any existing Z-Wave network before being added into a new Z-Wave network. There are two methods available to remove a device.Removing Mode• Put the existing Z-Wave controller into Removing Mode (please refer to the Z-Wave controller manual).• Within 1.5 seconds, press the learn button 3 times and the Siren will be removed from the existing Z-Wave network.• The Siren is now ready to be added to a new Z-Wave controller.",
+		"reset": "Factory Reset (Only use this when the existing Z-Wave controller is missing or inoperable).• Turn off battery power switch and disconnect 9V power adaptor (if present).• Press and hold the learn button.• While holding the learn button, power on the Siren (power switch ON and reconnect the 9V power adaptor). Keep holding for 10 seconds to complete the factory reset.• Please note that the existing Z-Wave controller will still retain the Siren’s Z-Wave setting. Please refer to the Z-Wave controller manual on remove procedures. Only use this when the existing Z-Wave controller is missing or inoperable.• The Siren is now ready to be added to a new Z-Wave controller."
+	}
+}

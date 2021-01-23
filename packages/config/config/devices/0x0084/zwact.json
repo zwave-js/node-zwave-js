@@ -1,0 +1,19 @@
+// FortrezZ LLC ZWACT
+// DynaQuip
+{
+	"manufacturer": "FortrezZ LLC",
+	"manufacturerId": "0x0084",
+	"label": "ZWACT",
+	"description": "DynaQuip",
+	"devices": [
+		{
+			"productType": "0x0253",
+			"productId": "0x0000",
+			"zwaveAllianceId": [827, 828]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,21 @@
+// MITSUMI ITB-5088
+{
+	"manufacturer": "MITSUMI",
+	"manufacturerId": "0x0112",
+	"label": "ITB-5088",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3200
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Press “RESET” in the Factory Default Reset dialog. This will resetthe Z- Wave chip, and the gateway will show “DEVICE RESETLOCALLY NOTIFICATION” after the restart.If this controller is the primary controller for your network,resetting it will result in the nodes in your network becomingorphaned, and it will be necessary after the reset to exclude andre-include all of the nodes in the network. If this controller is beingused as a secondary controller in the network, use this procedureto reset this controller only in the event that the network primarycontroller is missing or otherwise inoperable."
+	}
+}

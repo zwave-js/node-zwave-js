@@ -1,0 +1,22 @@
+// Ness Corporation Pty Ltd. 106-360
+// Mezzo
+{
+	"manufacturer": "Ness Corporation Pty Ltd.",
+	"manufacturerId": "0x0189",
+	"label": "106-360",
+	"description": "Mezzo",
+	"devices": [
+		{
+			"productType": "0x759e",
+			"productId": "0x6aff",
+			"zwaveAllianceId": 2720
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Follow these instructions to factory reset all or parts of Mezzo:* Tap the Menu button  * Tap Mezzo (under settings).* Tap Advanced Settings.* Tap Factory Default Options.* You now have 7 options:** Default General Options – This will remove all Mezzo settings from the app and Mezzo. This does not affect devices, users etc.** Default Users & Keys – Which will remove all the users connected from the app and Mezzo.** Default Wireless Devices – This will remove all Ness 2 way wireless devices from the app and Mezzo.** Default Z-Wave Devices – This will remove all Z-Wave devices from the app and Mezzo.** Default Scenes – This will remove all scenes from the app and Mezzo.** Default Energy – This will remove all energy entries from the app and Mezzo.** Reset All & Sign Out – This will reset Mezzo to its factory default settings, removing all users, scenes, energy entries, devices and general options from the app and Mezzo.Please Note:Mezzo will take 5-10 minutes to fully factory reset.If Mezzo is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If Mezzo is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

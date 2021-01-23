@@ -1,0 +1,19 @@
+// Electronic Solutions TZ 3300
+//  EU - Handheld remote control
+{
+	"manufacturer": "Electronic Solutions",
+	"manufacturerId": "0x0033",
+	"label": "TZ 3300",
+	"description": "EU - Handheld remote control",
+	"devices": [
+		{
+			"productType": "0x545a",
+			"productId": "0x0001",
+			"zwaveAllianceId": [258, 259]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

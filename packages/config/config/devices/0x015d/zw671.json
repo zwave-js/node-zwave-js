@@ -1,0 +1,24 @@
+// Willis Electric Co., Ltd. ZW671
+// In-Wall Smart Dimmer
+{
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "ZW671",
+	"description": "In-Wall Smart Dimmer",
+	"devices": [
+		{
+			"productType": "0x0212",
+			"productId": "0x272c",
+			"zwaveAllianceId": 2013
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.2. Once the controller is ready to include your device, triple click front Button to include it in the network.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.2. Once the controller is ready to Exclude your device, triple click front Button to exclude it from the network.",
+		"reset": "1. Exclude the device from Z-Wave network to reset it to factory default.2. Please use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

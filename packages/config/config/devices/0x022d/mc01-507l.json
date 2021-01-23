@@ -1,0 +1,22 @@
+// Mercury Corporation MC01-507L
+// IoT Hub
+{
+	"manufacturer": "Mercury Corporation",
+	"manufacturerId": "0x022d",
+	"label": "MC01-507L",
+	"description": "IoT Hub",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0001",
+			"zwaveAllianceId": [1522, 1553, 1635, 2371, 2565, 3354]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Press Reset button more than 5 seconds."
+	}
+}

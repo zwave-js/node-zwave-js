@@ -1,0 +1,19 @@
+// Danfoss 014G0804
+// Genius Valve
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "014G0804",
+	"description": "Genius Valve",
+	"devices": [
+		{
+			"productType": "0x7fff",
+			"productId": "0xa010",
+			"zwaveAllianceId": 2021
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

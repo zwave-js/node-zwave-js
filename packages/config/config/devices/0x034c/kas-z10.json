@@ -1,0 +1,24 @@
+// KOCOM KAS-Z10
+// PIR Sensor
+{
+	"manufacturer": "KOCOM",
+	"manufacturerId": "0x034c",
+	"label": "KAS-Z10",
+	"description": "PIR Sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2756
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Press & hold inclusion/Exclusion button during 1 seconds when Open Sensor is exclusion status Press for 1seconds, LED is turn on Open sensor will try inclusion for 15 seconds when button is released.If inclusion is successful, LED will blink 3 times with 100ms interval",
+		"exclusion": "Press & hold inclusion/Exclusion button during 1 seconds when Open Sensor is exclusion status Press for 1seconds, LED is turn on Open sensor will try exclusion when button is released. If exclusion is successful, LED will blink 3 times with 100ms interval",
+		"reset": "Press & hold inclusion/Exclusion button during 5 seconds. LED turn on and LED turn off after 5sec Release Inclusion/Exclusion Factory reset will be done in 5 seconds and blink 5 times with 100ms interval ※ Please use factory reset only when the network primary controller is missing or otherwise inoperable"
+	}
+}

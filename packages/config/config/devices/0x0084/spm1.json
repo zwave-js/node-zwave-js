@@ -1,0 +1,24 @@
+// FortrezZ LLC SPM1
+// Sump Pump Module
+{
+	"manufacturer": "FortrezZ LLC",
+	"manufacturerId": "0x0084",
+	"label": "SPM1",
+	"description": "Sump Pump Module",
+	"devices": [
+		{
+			"productType": "0x0093",
+			"productId": "0x0114",
+			"zwaveAllianceId": 2211
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1) Set up the inclusion mode at the controller; 2) Briefly press the switch once and the controller will indicate the unit has been included in the network. Also, the LED will blink when the inclusion completes. Inclusion and exclusion are always done at normal transmit power mode. This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufacturers and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.",
+		"exclusion": "1) Set up the exclusion mode at the controller; 2) Briefly press the switch once and then release. The controller will indicates the unit has been removed from the network. The LED will blink when the exclusion completes.",
+		"reset": "The unit can be reset to factory default via 3 quick presses of the program switch. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

@@ -1,0 +1,19 @@
+// Lexel MH-S210
+// Mini Energy switch
+{
+	"manufacturer": "Lexel",
+	"manufacturerId": "0x0015",
+	"label": "MH-S210",
+	"description": "Mini Energy switch",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 939
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

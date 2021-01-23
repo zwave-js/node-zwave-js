@@ -1,0 +1,19 @@
+// Cyberhouse WA105DBZ
+// Linear -1 Siren
+{
+	"manufacturer": "Cyberhouse",
+	"manufacturerId": "0x0014",
+	"label": "WA105DBZ",
+	"description": "Linear -1 Siren",
+	"devices": [
+		{
+			"productType": "0x2009",
+			"productId": "0x0903",
+			"zwaveAllianceId": 1026
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,22 @@
+// TechniSat Digital GmbH 9530
+// DigiPal SMART HOME
+{
+	"manufacturer": "TechniSat Digital GmbH",
+	"manufacturerId": "0x0299",
+	"label": "9530",
+	"description": "DigiPal SMART HOME",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x1644",
+			"zwaveAllianceId": 2033
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Please note, that included devices will not be reset and must be excluded previously or reset on their own. The reset can not be reverted. In the TechniSat CONNECT app, tap the \"three horizontal lines\" icon.Tap the \"gear\" icon button.In the settings menu, select \"Smart Home\".From the \"advanced Z-Wave settings\" menu select \"Reset central unit\"."
+	}
+}

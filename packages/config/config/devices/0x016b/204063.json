@@ -1,0 +1,22 @@
+// Echostar 204063
+// SAGE
+{
+	"manufacturer": "Echostar",
+	"manufacturerId": "0x016b",
+	"label": "204063",
+	"description": "SAGE",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 1422
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Important: Perform this operation with care. Use the reset procedure only when the primary controller is missing or inoperable. •To access the factory reset function, navigate to the Advanced Z-Wave tile.•Press these buttons on the remote in sequence: <332211>.•This will display hidden tiles in the tile list. Navigate to the Factory Reset tile.•Select/Press the System Reset option to initiate a factory reset of the controller.•A popup will be displayed to confirm your desire to reset.•The factory reset (reset dongle) button is used to recover the controller from situations that cannot be recovered from by normal means.•The factory reset button will:•Reset the controller•Obtain a new home ID if the old home ID was in the randomizing range•Remove all devices from the network (devices will need to be factory reset if they were not excluded properly before the reset.)•Designate the controller as the primary SUC/SIS controller•The status of the controller, after a factory reset, will change to Primary: SUC/SIS.•After performing the factory reset, the SAGE Home Automation controller will reboot.•You will have to reset the remote and pair is once again. To reset the remote hold down the Lights and Back buttons together for 15 seconds."
+	}
+}

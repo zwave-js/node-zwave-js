@@ -1,0 +1,32 @@
+// SmartThings, Inc. IM6001-V3P02
+// Samsung SmartThings Hub (2018)
+{
+	"manufacturer": "SmartThings, Inc.",
+	"manufacturerId": "0x0150",
+	"label": "Samsung SmartThings Hub (2018)",
+	"description": "Samsung SmartThings Hub (2018)",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x001f",
+			"zwaveAllianceId": 3058
+		},
+		{
+			"productType": "0x0007",
+			"productId": "0x0020",
+			"zwaveAllianceId": [3035, 3047]
+		},
+		{
+			"productType": "0x0007",
+			"productId": "0x002a",
+			"zwaveAllianceId": 3171
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Z-Wave factory resetTo reset your Hub's Z-Wave system to factory default settings, you must factory reset the entire Hub. You can factory reset your Hub with steps found below.NOTE: Resetting the Hub will restore factory settings. All device connections, automations, rules, configurations, and SmartApps associated with that Hub will be lost in the reset. All devices connected to your Hub will have to be reset or excluded before they can be reconnected. The steps for resetting and reconnecting each smart device differ. After resetting, you can visit our Things category, find the devices you wish to set up, and follow the guides provided. Remember that you will likely need to reset or “exclude” every device before connecting.A physical factory reset is only possible for the Hub v2 with firmware 17.11 and up. If you have a Hub v1 or a Hub with firmware below 17.11, you can reset your Hub by deleting the Location it is connected to with these steps instead. Need to check your Hub’s firmware version? Find out how here.Follow these instructions to reboot the Hub instead, without doing a full factory reset. To factory reset the Hub:Make sure the Hub is plugged in with the included power and network cablesPress and hold the red recessed button on the back of the Hub for 30 seconds. When the LED on the front switches from flashing yellow to solid yellow, release the buttonNote: If you do not release the button within a few seconds after the LED switches to solid yellow, the Hub may not begin the resetThe Hub will take 10-15 minutes to fully factory reset. Once the LEDs on the Hub turn solid green, you should then be able to connect your Hub again. If you lost your original 6-character Welcome Code or are encountering other problems, these articles may help."
+	}
+}

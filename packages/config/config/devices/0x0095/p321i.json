@@ -1,0 +1,19 @@
+// Qees P321I
+// QEES  MyKey Remote US
+{
+	"manufacturer": "Qees",
+	"manufacturerId": "0x0095",
+	"label": "P321I",
+	"description": "QEES  MyKey Remote US",
+	"devices": [
+		{
+			"productType": "0x3201",
+			"productId": "0x0010",
+			"zwaveAllianceId": 675
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

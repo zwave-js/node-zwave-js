@@ -1,0 +1,22 @@
+// PassivSystems Ltd. PL-HB1-ZW
+// PassivLiving Hub
+{
+	"manufacturer": "PassivSystems Ltd.",
+	"manufacturerId": "0x0172",
+	"label": "PL-HB1-ZW",
+	"description": "PassivLiving Hub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2324
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Extract from PassivLiving Hub User Guide:4.7.8. Factory reset hubYou can reset the hubs Z-Wave network by pressing the reset button in the configuration portal. This will remove all devices from your network and your heating will not function. If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable. You can add back in your default devices and configure them byreferring to the sections 4.7. Pre-installed devices , 4.3. Adding devices , 4.2. Hub Heating Roles and Zones and 4.1. Activating / deactivating your hub ."
+	}
+}

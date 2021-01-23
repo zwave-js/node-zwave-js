@@ -1,0 +1,24 @@
+// Remotec ZRP-110
+// Z-Wave Repeater
+{
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "ZRP-110",
+	"description": "Z-Wave Repeater",
+	"devices": [
+		{
+			"productType": "0x1000",
+			"productId": "0x8141",
+			"zwaveAllianceId": [2495, 3621]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Include or Exclude the ZRP-120 from the existing Z-Wave Home Control Network with your primary controller.-Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.-When prompted by your primary controller, triple click the PROG button within 1 second.-The primary controller should indicate that the action was successful. If the controller indicates the action was unsuccessful, please repeat the procedure.",
+		"exclusion": "Include or Exclude the ZRP-120 from the existing Z-Wave Home Control Network with your primary controller.-Refer to your primary controller instructions to process the inclusion / exclusion setup procedure.-When prompted by your primary controller, triple click the PROG button within 1 second.-The primary controller should indicate that the action was successful. If the controller indicates the action was unsuccessful, please repeat the procedure.",
+		"reset": "All Configuration Parameter values and Association information will be restored to factory default settings and excluded from the network.StepSetup KeyLED Indication Status on ZRP-1001Press and keep holding the PROG button for not less than 10 seconds.-LED state will toggle for first 5 seconds of being pressed.-LED state will toggle again after the remaining 5 seconds.2Release the PROG button then triple click the PROG button within 2 seconds of step 1.-LED will stay in previous ON or OFF stage.Remark: All the setting and data will be permanently deleted. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

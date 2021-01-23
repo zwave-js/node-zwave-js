@@ -1,0 +1,24 @@
+// TechniSat Digital GmbH CDL-107U
+// COMMAX Smart Lock
+{
+	"manufacturer": "TechniSat Digital GmbH",
+	"manufacturerId": "0x0299",
+	"label": "CDL-107U",
+	"description": "COMMAX Smart Lock",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3242
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "* Please proceed with the door lock open* To add or include the CDL-107U into a Z-Wave network 1. Set the controller in inclusion mode. 2. Press the [R] button for 6 seconds. 3. Press the [1][4][7] button after pressing the [R] button.",
+		"exclusion": "* Please proceed with the door lock open* To remove or exclude the CDL-107U into a Z-Wave network 1. Set the controller in exclusion mode. 2. Press the [R] button for 6 seconds. 3. Press the [3][6][9] button after pressing the [R] button.",
+		"reset": "* To Factory ResetPlease use this procedure only when the primary controller is missing or otherwise inoperable. 1. Press the [R] button for 9 seconds 2. Press the [1][2][3][6][5][4][7] button after pressing the [R] button"
+	}
+}

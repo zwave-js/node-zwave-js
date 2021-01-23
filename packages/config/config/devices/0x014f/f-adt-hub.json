@@ -1,0 +1,23 @@
+// ADT Security Hub
+{
+	"manufacturer": "ADT",
+	"manufacturerId": "0x014f",
+	"label": "Security Hub",
+	"description": "ADT Security Hub",
+	"devices": [
+		{
+			"productType": "0x4153",
+			"productId": "0x3031",
+			"zwaveAllianceId": 2616
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "In the SmartThings mobile app, go to the \"My Home\" section, \"Things\" tab, and tap \"Add a Thing.\" When the app shows \"Looking for devices...\" the panel is ready to include Z-Wave devices.",
+		"exclusion": "In the SmartThings mobile app, go to the \"My Home\" section, \"Things\" tab, and tap the name of the device to show the device details. Then, tap the gear icon in the upper right and tap \"Remove.\"Alternatively, open the side menu (\"More\" in the iOS app) and tap on \"Hub is Online.\" Tap \"Z-Wave Utilities\" then \"General Device Exclusion\" and then the \"Remove\" button to confirm. The panel will enter Exclude Mode.",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

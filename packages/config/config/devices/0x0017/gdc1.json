@@ -1,0 +1,19 @@
+// HiTech Automation GDC1
+// Telguard
+{
+	"manufacturer": "HiTech Automation",
+	"manufacturerId": "0x0017",
+	"label": "GDC1",
+	"description": "Telguard",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0111",
+			"zwaveAllianceId": 1243
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,22 @@
+// CONNECTION TECHNOLOGY SYSTEMS ICPE
+// iCPE
+{
+	"manufacturer": "CONNECTION TECHNOLOGY SYSTEMS",
+	"manufacturerId": "0x0285",
+	"label": "ICPE",
+	"description": "iCPE",
+	"devices": [
+		{
+			"productType": "0x0201",
+			"productId": "0x0001",
+			"zwaveAllianceId": [1866, 2337, 2338, 2500, 2507, 2508, 2545]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "The user can click the \"Reset\" button on the WEB page to return the controller to factory settings.Note: All connections with included devices and all configurations and settings will be lost. It takes approximately 90 seconds to finish the process."
+	}
+}

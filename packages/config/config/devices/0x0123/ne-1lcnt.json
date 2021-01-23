@@ -1,0 +1,19 @@
+// IWATSU NE-1LCNT
+// Iwatsu
+{
+	"manufacturer": "IWATSU",
+	"manufacturerId": "0x0123",
+	"label": "NE-1LCNT",
+	"description": "Iwatsu",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1190
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

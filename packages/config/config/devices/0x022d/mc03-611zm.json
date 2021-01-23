@@ -1,0 +1,22 @@
+// Mercury Corporation MC03-611ZM
+// IoT Home Manager Hub(LTE Type)
+{
+	"manufacturer": "Mercury Corporation",
+	"manufacturerId": "0x022d",
+	"label": "MC03-611ZM",
+	"description": "IoT Home Manager Hub(LTE Type)",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0301",
+			"zwaveAllianceId": 2503
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.1. Press a reset button until All LEDs are off2. Automatically reboot"
+	}
+}

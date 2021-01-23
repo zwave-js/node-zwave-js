@@ -1,0 +1,19 @@
+// Martin Renz GmbH Empfnger
+// Martin Renz GmbH - UPz- Empfnger
+{
+	"manufacturer": "Martin Renz GmbH",
+	"manufacturerId": "0x0092",
+	"label": "UPz- Empfnger",
+	"description": "Martin Renz GmbH - UPz- Empfnger",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x0002",
+			"zwaveAllianceId": 77
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

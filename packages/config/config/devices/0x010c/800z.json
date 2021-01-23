@@ -1,0 +1,19 @@
+// There Corporation 800Z
+// ThereGate Gateway Controller
+{
+	"manufacturer": "There Corporation",
+	"manufacturerId": "0x010c",
+	"label": "Gateway Controller",
+	"description": "ThereGate Gateway Controller",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 758
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

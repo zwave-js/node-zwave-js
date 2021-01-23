@@ -1,0 +1,24 @@
+// IOTAS CONNECT2
+// IOTAS Hub
+{
+	"manufacturer": "IOTAS",
+	"manufacturerId": "0x042f",
+	"label": "CONNECT2",
+	"description": "IOTAS Hub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3441
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Start inclusion, per instructions on the existing network controller.In the UI, press the learn button.When prompted, enter the 5 digit  underlined portion of the DSK code.Verify secure inclusion completed successfully on the existing network controller per that documentation.",
+		"exclusion": "Start exclusion, per instructions on the existing network controller.In the UI, press the learn button.Verify exclusion completed successfully on the existing network controller per that documentation.",
+		"reset": "In the UI, press Hard Reset."
+	}
+}

@@ -1,0 +1,22 @@
+// White Rabbit SH-ZW+CBB+UT
+// White Rabbit Smart Hub
+{
+	"manufacturer": "White Rabbit",
+	"manufacturerId": "0x027b",
+	"label": "SH-ZW+CBB+UT",
+	"description": "White Rabbit Smart Hub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003",
+			"zwaveAllianceId": 2509
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Click on the Z-Wave Toolbox link found on the Admin tab. Here you will see the Reset Defaults button. Pressing this button brings up the following warning.CAUTION: This will factory reset the Z-Wave controller in the hub. This will cause all of the devices to become disconnected from the hub, and they'll have to be excluded and included again to function. In addition, any pending edits that you've made in the portal will be lost. Are you sure you want to continue?Selecting Yes will result in a complete reset of the controller."
+	}
+}

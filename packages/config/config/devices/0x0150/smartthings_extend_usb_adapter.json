@@ -1,0 +1,22 @@
+// SmartThings, Inc. Extend USB Adaptor
+// SmartThings Extend USB Adaptor
+{
+	"manufacturer": "SmartThings, Inc.",
+	"manufacturerId": "0x0150",
+	"label": "Extend USB Adaptor",
+	"description": "SmartThings Extend USB Adaptor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1644
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": " In the SmartThings mobile app, open the menu in the upper right corner and tap \"My Locations.\" Tap the gear icon at the top right of your Hub's location to access the location settings. Scroll down and check that your Hub is listed as \"Active\" in the Hubs section. Also check that the LED indicator on the front of the Hub is a solid green and not blinking.At the bottom of the location settings, tap the red \"Remove Location\" button and confirm the removal. This will delete your location, including all devices, settings, and SmartApps. Your Hub will be reset back to a factory default state and you will need the claim code that came with your Hub to re-connect it to SmartThings."
+	}
+}

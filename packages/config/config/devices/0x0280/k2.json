@@ -1,0 +1,22 @@
+// Chuango Security Technology Corporation K2
+// smanos Smart Hub
+{
+	"manufacturer": "Chuango Security Technology Corporation",
+	"manufacturerId": "0x0280",
+	"label": "K2",
+	"description": "smanos Smart Hub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": [2865, 2963, 2986]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Note: If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.In “Other Z-Wave Settings” section on the “smanos home” app, click on “Reset Z-Wave Module” and a pop-up box will be displayed. Click on “Reset” and the Z-Wave module inside the K2 will be restored to factory settings."
+	}
+}

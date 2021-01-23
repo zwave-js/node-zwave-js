@@ -1,0 +1,19 @@
+// GE/Jasco 12731
+// GE In-Wall Toggle, Almond
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "12731",
+	"description": "GE In-Wall Toggle, Almond",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3034",
+			"zwaveAllianceId": 1203
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

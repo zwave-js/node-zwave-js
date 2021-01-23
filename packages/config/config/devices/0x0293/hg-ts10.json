@@ -1,0 +1,24 @@
+// Home controls HG-TS10
+// Touch Panel Switch
+{
+	"manufacturer": "Home controls",
+	"manufacturerId": "0x0293",
+	"label": "HG-TS10",
+	"description": "Touch Panel Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x001a",
+			"zwaveAllianceId": 2380
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To include, Touch and hold any button for more than 5 seconds. LED light blinks to indicate inclusion mode.",
+		"exclusion": "To exclude, Touch and hold any button for more than 5 seconds. LED light blinks to indicate exclusion mode.",
+		"reset": "To reset , press and hold first button(left top) for more than 15 seconds. LED lights turn OFF and ON to indicate rest. Note : Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

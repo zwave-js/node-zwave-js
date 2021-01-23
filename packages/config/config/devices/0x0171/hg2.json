@@ -1,0 +1,19 @@
+// WeBeHome AB HG2
+// WeBeHome gateway
+{
+	"manufacturer": "WeBeHome AB",
+	"manufacturerId": "0x0171",
+	"label": "HG2",
+	"description": "WeBeHome gateway",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 1043
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

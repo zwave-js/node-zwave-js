@@ -1,0 +1,19 @@
+// Fibargroup HC2
+// FIBARO
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "HC2",
+	"description": "FIBARO",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x1001",
+			"zwaveAllianceId": 1357
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,22 @@
+// Z-works Inc. ZG-501-V1
+// Z-Works 3G Gateway
+{
+	"manufacturer": "Z-works Inc.",
+	"manufacturerId": "0x024d",
+	"label": "ZG-501-V1",
+	"description": "Z-Works 3G Gateway",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 2207
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Hold down the hardware button (over 10 seconds). This will reset the Z-Wave chip and Z-Wave LED blinks 5 times quickly. Upon reset, the hardware will broadcast the “DEVICE RESET LOCALLY NOTIFICATION”. Reset cannot be aborted.If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

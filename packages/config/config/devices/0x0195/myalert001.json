@@ -1,0 +1,22 @@
+// M2M Solution MYALERT001
+// MyAlert
+{
+	"manufacturer": "M2M Solution",
+	"manufacturerId": "0x0195",
+	"label": "MYALERT001",
+	"description": "MyAlert",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1295
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "On the GUI, we need to go to the Advanced setting screen then on Zwave configuration then push the 'reset' button."
+	}
+}

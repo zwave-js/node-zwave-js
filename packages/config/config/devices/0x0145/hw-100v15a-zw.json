@@ -1,0 +1,19 @@
+// Buffalo Inc. HW-100V15A-ZW
+// Buffalo
+{
+	"manufacturer": "Buffalo Inc.",
+	"manufacturerId": "0x0145",
+	"label": "HW-100V15A-ZW",
+	"description": "Buffalo",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0004",
+			"zwaveAllianceId": 802
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,19 @@
+// Lexel JTB-1007-02
+//  Curtain Motor
+{
+	"manufacturer": "Lexel",
+	"manufacturerId": "0x0015",
+	"label": "JTB-1007-02",
+	"description": "Curtain Motor",
+	"devices": [
+		{
+			"productType": "0x1007",
+			"productId": "0x0002",
+			"zwaveAllianceId": 1287
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

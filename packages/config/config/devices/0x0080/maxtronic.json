@@ -1,0 +1,19 @@
+// MaxTronic Grating Unit
+// MaxTronic - Grating Unit
+{
+	"manufacturer": "MaxTronic",
+	"manufacturerId": "0x0080",
+	"label": "Grating Unit",
+	"description": "MaxTronic - Grating Unit",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003",
+			"zwaveAllianceId": 205
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,18 @@
+// Schlage PIR Motion Sensor
+{
+	"manufacturer": "Schlage",
+	"manufacturerId": "0x011f",
+	"label": "PIR Motion Sensor",
+	"description": "Schlage PIR Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 648
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}
