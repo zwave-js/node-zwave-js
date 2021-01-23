@@ -1,10 +1,10 @@
 // Secure Meters (UK) Ltd. SES301
-// Secure  Temperature Sensor
+// Secure Temperature Sensor
 {
 	"manufacturer": "Secure Meters (UK) Ltd.",
 	"manufacturerId": "0x0059",
 	"label": "SES301",
-	"description": "Secure  Temperature Sensor",
+	"description": "Secure Temperature Sensor",
 	"devices": [
 		{
 			"productType": "0x000d",

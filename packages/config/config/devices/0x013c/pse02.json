@@ -18,7 +18,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"7": {
-			"label": "Costumer  Function",
+			"label": "Costumer Function",
 			"description": "NotificationReport/BinaryReport",
 			"valueSize": 4,
 			"minValue": 0,
@@ -30,7 +30,7 @@
 		},
 		"29": {
 			"label": "Disable Alarm",
-			"description": "Disable the alarm  function.",
+			"description": "Disable the alarm function.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,

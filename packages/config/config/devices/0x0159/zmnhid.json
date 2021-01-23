@@ -436,7 +436,7 @@
 			"allowManualEntry": true
 		},
 		"100": {
-			"label": "Parameter  no.  100",
+			"label": "Parameter no. 100",
 			"description": "Enable / Disable Endpoint I1 or select Notification Type and Event",
 			"valueSize": 1,
 			"minValue": 0,
@@ -448,8 +448,8 @@
 			"allowManualEntry": true
 		},
 		"101": {
-			"label": "Parameter  no.  101",
-			"description": "Enable  /  Disable  Endpoint I2  or  select Notification Type and Event",
+			"label": "Parameter no. 101",
+			"description": "Enable / Disable Endpoint I2 or select Notification Type and Event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -460,8 +460,8 @@
 			"allowManualEntry": true
 		},
 		"102": {
-			"label": "Parameter  no.  102",
-			"description": "Enable  /  Disable  Endpoint I3  or  select Notification Type and Event",
+			"label": "Parameter no. 102",
+			"description": "Enable / Disable Endpoint I3 or select Notification Type and Event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -485,7 +485,7 @@
 		},
 		"120": {
 			"label": "Parameter no. 120",
-			"description": "Digital temperature sensor  reporting",
+			"description": "Digital temperature sensor reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -496,7 +496,7 @@
 		},
 		"121": {
 			"label": "Parameter no. 121",
-			"description": "Digital temperature sensor /  setpoint selector",
+			"description": "Digital temperature sensor / setpoint selector",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -508,7 +508,7 @@
 		},
 		"122": {
 			"label": "Parameter no. 122",
-			"description": "Node ID of external battery  powered room sensor",
+			"description": "Node ID of external battery powered room sensor",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 254,

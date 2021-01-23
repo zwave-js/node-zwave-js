@@ -159,8 +159,8 @@
 			"allowManualEntry": true
 		},
 		"101": {
-			"label": "Reports  for group 1",
-			"description": "Reports  for group 1",
+			"label": "Reports for group 1",
+			"description": "Reports for group 1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1061109568,

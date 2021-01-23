@@ -152,7 +152,7 @@
 		},
 		"22": {
 			"label": "Overload Report",
-			"description": "Switch off Micro Smart Plug in case the power is above  x W",
+			"description": "Switch off Micro Smart Plug in case the power is above x W",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,

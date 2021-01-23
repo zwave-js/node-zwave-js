@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Access the UI by logging into the home live portal (http://id-rec.orange.fr/auth_user/bin/auth0user.cgi).  Click on the Settings Tab on the left side of the screen Click on the backup tab and then on the \"Reset to Default\" button"
+		"reset": "Access the UI by logging into the home live portal (http://id-rec.orange.fr/auth_user/bin/auth0user.cgi). Click on the Settings Tab on the left side of the screen Click on the backup tab and then on the \"Reset to Default\" button"
 	}
 }

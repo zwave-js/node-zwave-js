@@ -18,7 +18,7 @@
 	},
 	"metadata": {
 		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZF5201 to the controller. To get in the “inclusion” mode, the distance between sensor and controller is suggested to be in one meter. Press the program switch of ZF5201 for 1 second at least. The LED on the ZF5201 should go solid, if not, please try again",
-		"exclusion": "For “Exclusion” from (removing from) a network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZF5201 from your controller.  Press the program switch of ZF5201 for 1 second at least to be excluded.",
-		"reset": "Triger the Water Sensor 10 times within 10 sec.  The device will send command class of device reset to controller and back to the factory default state.  Please use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+		"exclusion": "For “Exclusion” from (removing from) a network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZF5201 from your controller. Press the program switch of ZF5201 for 1 second at least to be excluded.",
+		"reset": "Triger the Water Sensor 10 times within 10 sec. The device will send command class of device reset to controller and back to the factory default state. Please use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
 	}
 }

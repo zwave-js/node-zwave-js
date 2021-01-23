@@ -101,7 +101,7 @@
 		},
 		"91": {
 			"label": "Minimum change in wattage",
-			"description": "Minimum change in wattage  for a REPORT to be sent.",
+			"description": "Minimum change in wattage for a REPORT to be sent.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

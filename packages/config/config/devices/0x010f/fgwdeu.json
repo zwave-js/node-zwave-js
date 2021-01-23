@@ -262,7 +262,7 @@
 		},
 		"60": {
 			"label": "Power reports – include self-consumption",
-			"description": "determines whether the power measurements should include  self-consumption",
+			"description": "determines whether the power measurements should include self-consumption",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

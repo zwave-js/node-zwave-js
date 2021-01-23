@@ -249,7 +249,7 @@
 			]
 		},
 		"15": {
-			"label": "CH3  Auto Turn-Off Setting",
+			"label": "CH3 Auto Turn-Off Setting",
 			"description": "Time in minutes to turn off the device connected to CH3 after being turned on",
 			"unit": "Minutes",
 			"valueSize": 4,

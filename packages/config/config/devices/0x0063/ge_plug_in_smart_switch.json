@@ -19,7 +19,7 @@
 	"paramInformation": {
 		"3": {
 			"label": "LED light",
-			"description": "control LED light behavior.  Default is on when connected device is off",
+			"description": "control LED light behavior. Default is on when connected device is off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

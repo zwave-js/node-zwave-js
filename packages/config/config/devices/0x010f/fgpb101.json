@@ -129,8 +129,8 @@
 			"allowManualEntry": true
 		},
 		"15": {
-			"label": "Key Pressed 3 times – value  ON to 2nd group",
-			"description": "SWITCH ON  sent in 2nd association group after 3 presses",
+			"label": "Key Pressed 3 times – value ON to 2nd group",
+			"description": "SWITCH ON sent in 2nd association group after 3 presses",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
@@ -151,7 +151,7 @@
 			"allowManualEntry": true
 		},
 		"21": {
-			"label": "Key Pressed 1 time – value  ON sent to 3rd group",
+			"label": "Key Pressed 1 time – value ON sent to 3rd group",
 			"description": "Value of SWITCH ON command sent in 3rd association group after a single click.",
 			"valueSize": 2,
 			"minValue": 1,

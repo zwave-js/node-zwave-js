@@ -619,7 +619,7 @@
 			]
 		},
 		"2[0x7f000000]": {
-			"label": "Light Effect  for EP 2 (Tampering)",
+			"label": "Light Effect for EP 2 (Tampering)",
 			"description": "Light Effect for EP 2 (Tampering)",
 			"valueSize": 4,
 			"minValue": 1,
@@ -1140,7 +1140,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "No interval.  (default)",
+					"label": "No interval. (default)",
 					"value": 0
 				},
 				{

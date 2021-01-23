@@ -44,7 +44,7 @@
 		},
 		"2": {
 			"label": "Swing",
-			"description": "1=1F/0.5C  -  4=4F/2C",
+			"description": "1=1F/0.5C - 4=4F/2C",
 			"unit": "1F / 0.5C",
 			"valueSize": 1,
 			"minValue": 1,

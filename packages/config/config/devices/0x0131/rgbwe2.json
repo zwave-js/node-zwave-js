@@ -1,10 +1,10 @@
 // Zipato RGBWE2
-// RGBW Bulb  V2
+// RGBW Bulb V2
 {
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "RGBWE2",
-	"description": "RGBW Bulb  V2",
+	"description": "RGBW Bulb V2",
 	"devices": [
 		{
 			"productType": "0x0002",

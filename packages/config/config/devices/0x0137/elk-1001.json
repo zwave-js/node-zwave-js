@@ -1,10 +1,10 @@
 // FollowGood Technology Company Ltd. ELK-1001
-// FollowGood -  Fingerprint Door Lock
+// FollowGood - Fingerprint Door Lock
 {
 	"manufacturer": "FollowGood Technology Company Ltd.",
 	"manufacturerId": "0x0137",
 	"label": "ELK-1001",
-	"description": "FollowGood -  Fingerprint Door Lock",
+	"description": "FollowGood - Fingerprint Door Lock",
 	"devices": [
 		{
 			"productType": "0x1001",

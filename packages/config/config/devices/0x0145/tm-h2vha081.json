@@ -1,10 +1,10 @@
 // Buffalo Inc. TM-H2VHA081
-// Buffalo  Switch
+// Buffalo Switch
 {
 	"manufacturer": "Buffalo Inc.",
 	"manufacturerId": "0x0145",
 	"label": "TM-H2VHA081",
-	"description": "Buffalo  Switch",
+	"description": "Buffalo Switch",
 	"devices": [
 		{
 			"productType": "0x0002",

@@ -352,11 +352,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF_OFF  - Both Channel 1 and Channel 2 OFF",
+					"label": "OFF_OFF - Both Channel 1 and Channel 2 OFF",
 					"value": 0
 				},
 				{
-					"label": "OFF_ON - Channel 1 OFF, Channel  2 ON",
+					"label": "OFF_ON - Channel 1 OFF, Channel 2 ON",
 					"value": 1
 				},
 				{

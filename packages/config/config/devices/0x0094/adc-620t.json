@@ -1,10 +1,10 @@
 // Alarm.com ADC-620T
-// Alarm.com  Module for DSC Panels
+// Alarm.com Module for DSC Panels
 {
 	"manufacturer": "Alarm.com",
 	"manufacturerId": "0x0094",
 	"label": "ADC-620T",
-	"description": "Alarm.com  Module for DSC Panels",
+	"description": "Alarm.com Module for DSC Panels",
 	"devices": [
 		{
 			"productType": "0x000a",
@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.  NOTE: This function will forcibly clear the Alarm.com ADC-620T’s Z-Wave node identification and will also remove all network information from the ADC-620T. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable 1.\tA Z-Wave factory reset must be triggered from the Alarm.com dealer site 2.\tNavigate to the Equipment page.  3.\tClick the “emPower Devices” tab. 4.\tOpen the “Advanced Z-Wave Commands” menu by clicking the button below the Equipment List.  5.\tTowards the bottom next to the “Equipment List Label” text click on the “Reset To Factory Default” button 6.\tAllow 3 minutes for the associated commands to go through and for the ADC-620T to act on them"
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable. NOTE: This function will forcibly clear the Alarm.com ADC-620T’s Z-Wave node identification and will also remove all network information from the ADC-620T. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable 1.\tA Z-Wave factory reset must be triggered from the Alarm.com dealer site 2.\tNavigate to the Equipment page. 3.\tClick the “emPower Devices” tab. 4.\tOpen the “Advanced Z-Wave Commands” menu by clicking the button below the Equipment List. 5.\tTowards the bottom next to the “Equipment List Label” text click on the “Reset To Factory Default” button 6.\tAllow 3 minutes for the associated commands to go through and for the ADC-620T to act on them"
 	}
 }

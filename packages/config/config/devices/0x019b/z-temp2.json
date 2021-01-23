@@ -104,7 +104,7 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Proximity sensor  Enable / Disable",
+			"label": "Proximity sensor Enable / Disable",
 			"description": "Control the proximity sensor.",
 			"valueSize": 2,
 			"minValue": 0,

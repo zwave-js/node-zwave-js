@@ -223,7 +223,7 @@
 		},
 		"62": {
 			"label": "High temperature alarm indicator colour",
-			"description": "Default is red (0x00FF0000).  65535 * Red + 256 * Green + Blue",
+			"description": "Default is red (0x00FF0000). 65535 * Red + 256 * Green + Blue",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16777215,

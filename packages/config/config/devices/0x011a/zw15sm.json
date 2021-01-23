@@ -50,8 +50,8 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "METER_REPORT Instant Energy  Interval",
-			"description": "METER_REPORT Instant Energy  Interval",
+			"label": "METER_REPORT Instant Energy Interval",
+			"description": "METER_REPORT Instant Energy Interval",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,

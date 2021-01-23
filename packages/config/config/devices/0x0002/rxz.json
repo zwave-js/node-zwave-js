@@ -1,5 +1,5 @@
 // Danfoss RXZ
-//  - RF Relay switching unit
+// - RF Relay switching unit
 {
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",

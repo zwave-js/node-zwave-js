@@ -224,7 +224,7 @@
 		},
 		"158": {
 			"label": "S1 Switch Double Click value sent to 2nd association groups",
-			"description": "This parameter determines value sent with Double Click command to devices associated in 2nd  association group.",
+			"description": "This parameter determines value sent with Double Click command to devices associated in 2nd association group.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,

@@ -307,7 +307,7 @@
 		},
 		"28": {
 			"label": "Tamper - broadcast mode",
-			"description": "Determines whether the tamper alarm frame will  be sent in broadcast mode",
+			"description": "Determines whether the tamper alarm frame will be sent in broadcast mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -435,7 +435,7 @@
 					"value": 0
 				},
 				{
-					"label": "Long / None colour  temperature dependent",
+					"label": "Long / None colour temperature dependent",
 					"value": 1
 				},
 				{
@@ -507,7 +507,7 @@
 					"value": 18
 				},
 				{
-					"label": "Long / 2 Short colour  temperature dependent",
+					"label": "Long / 2 Short colour temperature dependent",
 					"value": 19
 				},
 				{

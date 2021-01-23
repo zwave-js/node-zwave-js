@@ -325,7 +325,7 @@
 			"allowManualEntry": true
 		},
 		"22": {
-			"label": "SWITCH ON frame value  for FLICK DOWN",
+			"label": "SWITCH ON frame value for FLICK DOWN",
 			"description": "Value sent in SWITCH ON command frame.",
 			"valueSize": 2,
 			"minValue": 0,

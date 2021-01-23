@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": " Click [Add] icon in Z-Wave Controller.-  Press the SW_Button 3 times within 1.5s, Blue LED is Blinking 3 times within 1 second.-  If add Process is successful, Blue LED will turn off.",
-		"exclusion": " Click [Remove] icon in Z-Wave Controller. -  Press the SW_Button 3 times within 1.5s -  If remove Process is successful, blue LED is Blinking 6 times, then turn off.",
+		"inclusion": " Click [Add] icon in Z-Wave Controller.- Press the SW_Button 3 times within 1.5s, Blue LED is Blinking 3 times within 1 second.- If add Process is successful, Blue LED will turn off.",
+		"exclusion": " Click [Remove] icon in Z-Wave Controller. - Press the SW_Button 3 times within 1.5s - If remove Process is successful, blue LED is Blinking 6 times, then turn off.",
 		"reset": "Long press SW_Button at least 10 seconds. - Device Reset Locally notification is Transmitted.-Please use this procedure only when the network primary controller is missing or otherwise inoperable."
 	}
 }

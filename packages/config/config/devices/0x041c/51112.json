@@ -18,7 +18,7 @@
 	},
 	"metadata": {
 		"inclusion": "Press the Net_Button 3 times within 1.5s, Green LED is Blinking 3 times within 1 second.- If Inclusion Process is successful, Green LED will turn off.",
-		"exclusion": " Press the Net_Button 3 times within 1.5s. -  If Exclusion Process is successful, Green LED is Blinking 6 times, then turn off.",
-		"reset": "Long press Net_Button at least 10 seconds in the product. - Device Reset Locally notification is Transmitted.Please use this procedure only when the network primary controller is missing or otherwise  inoperable."
+		"exclusion": " Press the Net_Button 3 times within 1.5s. - If Exclusion Process is successful, Green LED is Blinking 6 times, then turn off.",
+		"reset": "Long press Net_Button at least 10 seconds in the product. - Device Reset Locally notification is Transmitted.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
 	}
 }

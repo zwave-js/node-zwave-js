@@ -38,7 +38,7 @@
 			"maxNodes": 99
 		},
 		"5": {
-			"label": "Basic on/off -  input I3",
+			"label": "Basic on/off - input I3",
 			"description": "Triggered at change of the input I3 state and reflecting its state",
 			"maxNodes": 99
 		}

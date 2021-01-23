@@ -26,7 +26,7 @@
 	},
 	"metadata": {
 		"inclusion": "In order to include the August Smart Lock on to a Z-Wave network the user will have to do the following:1. Open the August app2. Go to the Lock Settings screen3. Select Z-Wave Settings4. Select Add To A Z-Wave Network5. Put the controller into inclusion mode and select My Hub is in Inclusion Mode on the August app",
-		"exclusion": "In order to exclude  the August Smart Lock from a Z-Wave network the user will have to do the following:1. Open the August app2. Go to the Lock Settings screen3. Select Z-Wave Settings4. Select Remove Z-Wave Device5. Put the controller into exclusion mode and select My Hub is in Exlusion Mode on the August app",
+		"exclusion": "In order to exclude the August Smart Lock from a Z-Wave network the user will have to do the following:1. Open the August app2. Go to the Lock Settings screen3. Select Z-Wave Settings4. Select Remove Z-Wave Device5. Put the controller into exclusion mode and select My Hub is in Exlusion Mode on the August app",
 		"reset": "In order to reset the August Smart Lock the user will have to do the following:1. Open the August app2. Go to the Lock Settings screen3. Select Z-Wave Settings4. Select Remove Z-Wave device5. Select My Hub Is No Longer Working6. Caution: Resetting a Z-Wave device without telling the hub can cause performance issues. Use this procedure only when the Z-Wave hub is missing or otherwise inoperable. 7. Select Reset Z-Wave Device8. On the Reset Z-Wave Device? prompt select Reset"
 	}
 }

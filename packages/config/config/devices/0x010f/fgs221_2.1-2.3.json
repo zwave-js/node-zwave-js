@@ -69,8 +69,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Activate / deactivate functions ALL ON / ALL  OFF",
-			"description": "Activate / deactivate functions ALL ON / ALL  OFF",
+			"label": "Activate / deactivate functions ALL ON / ALL OFF",
+			"description": "Activate / deactivate functions ALL ON / ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

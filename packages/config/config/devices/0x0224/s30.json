@@ -1,10 +1,10 @@
 // LifeShield, LLC S30
-// LifeShield  Base
+// LifeShield Base
 {
 	"manufacturer": "LifeShield, LLC",
 	"manufacturerId": "0x0224",
 	"label": "S30",
-	"description": "LifeShield  Base",
+	"description": "LifeShield Base",
 	"devices": [
 		{
 			"productType": "0x0001",

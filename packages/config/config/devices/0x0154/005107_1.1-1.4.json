@@ -33,7 +33,7 @@
 					"value": 0
 				},
 				{
-					"label": "Trigger, when removed,  and turned off",
+					"label": "Trigger, when removed, and turned off",
 					"value": 1
 				},
 				{
@@ -61,7 +61,7 @@
 			]
 		},
 		"3": {
-			"label": "Send unsolicited  temperature report",
+			"label": "Send unsolicited temperature report",
 			"description": "Threshold temperature to send unsolicited report. 10 = 1°C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -74,7 +74,7 @@
 		},
 		"4": {
 			"label": "temperature report",
-			"description": "Send unsolicited  temperature report after N wake up",
+			"description": "Send unsolicited temperature report after N wake up",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
