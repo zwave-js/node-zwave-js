@@ -10,6 +10,8 @@ import { MessagePriority } from "../message/Constants";
 import type { Endpoint } from "../node/Endpoint";
 import {
 	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -122,6 +124,17 @@ export class TimeParametersCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "date", typeof value);
 		}
 		await this.set(value);
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "dateAndTime":
+				return this.get();
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
 	};
 
 	public async get(): Promise<Date> {
