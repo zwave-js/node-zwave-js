@@ -707,9 +707,10 @@ export class ZWaveNode extends Endpoint {
 
 	/**
 	 * Requests a value for a given property of a given CommandClass by polling the node.
+	 * **Warning:** Some value IDs share a command, so make sure not to blindly call this for every property
 	 */
 	// wotan-disable-next-line no-misused-generics
-	public async pollValue<T extends unknown = unknown>(
+	public pollValue<T extends unknown = unknown>(
 		valueId: ValueID,
 	): Promise<T | undefined> {
 		// Try to retrieve the corresponding CC API
@@ -735,6 +736,7 @@ export class ZWaveNode extends Endpoint {
 			);
 		}
 		// And call it
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		return (api.pollValue as PollValueImplementation<T>)({
 			property: valueId.property,
 			propertyKey: valueId.propertyKey,
