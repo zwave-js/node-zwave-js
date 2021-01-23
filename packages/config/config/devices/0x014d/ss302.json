@@ -4,7 +4,7 @@
 	"manufacturer": "Enblink Co. Ltd.",
 	"manufacturerId": "0x014d",
 	"label": "SS302",
-	"description": "-EU",
+	"description": "",
 	"devices": [
 		{
 			"productType": "0x0001",
@@ -15,6 +15,11 @@
 			"productType": "0x0002",
 			"productId": "0x0302",
 			"zwaveAllianceId": 2022
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x0302",
+			"zwaveAllianceId": 1921
 		}
 	],
 	"firmwareVersion": {

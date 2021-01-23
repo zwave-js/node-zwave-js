@@ -1,9 +1,9 @@
-// TechniSat Digital GmbH 0000/9530
+// TechniSat Digital GmbH 9530
 // DigiPal SMART HOME
 {
 	"manufacturer": "TechniSat Digital GmbH",
 	"manufacturerId": "0x0299",
-	"label": "0000/9530",
+	"label": "9530",
 	"description": "DigiPal SMART HOME",
 	"devices": [
 		{

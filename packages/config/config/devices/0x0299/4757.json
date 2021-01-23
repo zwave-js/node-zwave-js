@@ -1,15 +1,15 @@
-// TechniSat Digital GmbH 0000/4790
-// SONATA 1
+// TechniSat Digital GmbH 4757
+// DIGIT ISIO STC+
 {
 	"manufacturer": "TechniSat Digital GmbH",
 	"manufacturerId": "0x0299",
-	"label": "0000/4790",
-	"description": "SONATA 1",
+	"label": "4757",
+	"description": "DIGIT ISIO STC+",
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x1838",
-			"zwaveAllianceId": 3103
+			"productId": "0x157c",
+			"zwaveAllianceId": [2895, 3008]
 		}
 	],
 	"firmwareVersion": {
