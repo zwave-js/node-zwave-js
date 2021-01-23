@@ -1,0 +1,19 @@
+// Qees QEES MYKEY
+// QEES Ring EU
+{
+	"manufacturer": "Qees",
+	"manufacturerId": "0x0095",
+	"label": "QEES MYKEY",
+	"description": "QEES Ring EU",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 159
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,24 @@
+// Shenzhen Saykey Technology Co., Ltd. SK-3003-07
+// PIR Detect Sensor
+{
+	"manufacturer": "Shenzhen Saykey Technology Co., Ltd.",
+	"manufacturerId": "0x032c",
+	"label": "SK-3003-07",
+	"description": "PIR Detect Sensor",
+	"devices": [
+		{
+			"productType": "0x3003",
+			"productId": "0x0007",
+			"zwaveAllianceId": 2711
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1) Make sure battery level is normally and the product is located within direct range of the Z‐Wave controller.2) Set the main controller into the inclusion/Add device mode (refer to main controller’s operating manual).3) Click the Add/Remove button on the left side of product triple times in 1.5 seconds.4) The product will be detected and included in the Z‐Wave network.",
+		"exclusion": "1) Make sure battery level is normally and the product is located within direct range of the Z‐Wave controller.2) Set the main controller into the exclusion/Remove device mode (refer to main controller’s operating manual).3) Click the Add/Remove button on the bottom side of product triple times in 1.5 seconds.4) The product will be detected and excluded from the Z‐Wave network.",
+		"reset": "The factory default settings are restored when the device is removed from the network or press and hold the Add/Remove button onthe left side of product excess 10 seconds.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

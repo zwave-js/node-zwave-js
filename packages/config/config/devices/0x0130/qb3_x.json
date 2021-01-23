@@ -1,0 +1,24 @@
+// Quby QB3.X
+// Display QB3
+{
+	"manufacturer": "Quby",
+	"manufacturerId": "0x0130",
+	"label": "QB3.X",
+	"description": "Display QB3",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003",
+			"zwaveAllianceId": 3820
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To start learn mode, go to the 'Network functionality' tab and press either the 'Classic' or 'NWI'button, under the 'Learn Mode' header. This will open up a learn mode popup.Press the 'Start' button to start the learn mode. The dialog will show this device's DSK, which can beused to include the device securely into an existing Z-Wave network. Enter the first 5 digits of theDSK on the including node.Learn mode can be used to add this device into another Z-Wave network. It can also be used toreceive network information from another controllerWhen learn mode has completed, the dialog will be updated to show the status. Press the 'Close'button to close the dialog.",
+		"exclusion": "To exclude a device from the network, go to the 'Network functionality' tab and press the 'Exclude'button. This will open up the 'Exclude Device' popup.Press the 'Start' button to start the exclusion process. Next press the exclusion button (or useanother way to start the learn mode) on the to-be-excluded node.When the exclusion process has completed successfully, the dialog will show which node has beenexcluded. Press the 'Close' button to close the dialog.",
+		"reset": "The Z-Wave functionality of the device can be reset to factory defaults by using the 'Factory Reset'button on the 'Network functionality' tab. Pressing this button will open the Factory Reset dialog.If you press the 'Reset' button in the dialog, all Z-Wave functionality will be reset to factory defaults.All information about included devices will be lost. A new HomeID will be generated following asuccessful factory reset. Please use this procedure only when the network primary controller ismissing or otherwise inoperable."
+	}
+}

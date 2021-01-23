@@ -1,0 +1,19 @@
+// Alertme HUB520
+// Jupiter Hub
+{
+	"manufacturer": "Alertme",
+	"manufacturerId": "0x0126",
+	"label": "HUB520",
+	"description": "Jupiter Hub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0006",
+			"zwaveAllianceId": 831
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

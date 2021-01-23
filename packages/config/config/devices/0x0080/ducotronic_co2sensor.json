@@ -1,0 +1,19 @@
+// Vero Duco CO2 sensor
+// DucoTronic CO2 sensor
+{
+	"manufacturer": "DucoTronic",
+	"manufacturerId": "0x0080",
+	"label": "CO2 sensor",
+	"description": "CO2 sensor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001",
+			"zwaveAllianceId": [49, 593]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

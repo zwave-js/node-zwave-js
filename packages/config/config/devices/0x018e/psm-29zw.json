@@ -1,0 +1,23 @@
+// Climax Technology, Ltd. PSM-29ZW
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "PSM-29ZW",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0002",
+			"zwaveAllianceId": [1247, 3747]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Plug the Power Switch into a power outlet.2. Put the Z-wave gateway or control panel into Inclusion or Learning mode (please refer to the Z-wave gateway or control panel manual).3. Within 1.5 seconds, press the Switch Button 3 times.4. Refer to the operation manual of the Z-wave gateway or control panel to complete the learn-in process.5. If the device has already been included (learnt) into another Z-wave Gateway/Control Panel, or if the device is unable to be learnt into the current Z-wave Gateway/Control Panel, please exclude it first (see Exclusion) before attempting to include it into the current Z-wave Gateway/Control Panel.",
+		"exclusion": "1. Put the Z-wave gateway or control panel into Exclusion mode (please refer to the Z-wave gateway or control panel manual).2. Within 1.5 seconds, press the Switch Button 3 times and the device will be removed from the Z-wave network.",
+		"reset": "Please use this procedure only in the event that the primary network controller is missing or otherwise inoperable.1. Press and hold the Switch Button of the device for 12 seconds to factory reset.2. Factory resetting the device will restore it to factory default settings (excluded from the Z-wave network). The Z-wave gateway or control panel will still keep its Z-wave settings. Please refer to the gateway or control panel manual on how to remove the device’s Z-wave settings.3. Factory resetting the device will also clear all accumulated power data."
+	}
+}

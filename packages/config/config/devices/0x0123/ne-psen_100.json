@@ -1,0 +1,19 @@
+// IWATSU Motion Sensor
+// Iwatsu Motion Sensor
+{
+	"manufacturer": "IWATSU",
+	"manufacturerId": "0x0123",
+	"label": "Motion Sensor",
+	"description": "Iwatsu Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0x0027",
+			"zwaveAllianceId": [794, 900, 901]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

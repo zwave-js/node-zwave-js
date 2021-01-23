@@ -1,0 +1,22 @@
+// Technicolor HOVISBOXSH
+// IZE Extender
+{
+	"manufacturer": "Technicolor",
+	"manufacturerId": "0x0240",
+	"label": "HOVISBOXSH",
+	"description": "IZE Extender",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1426
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "* Navigate to Z-Wave network management tools* Click the “Z-WAVE RESET” button and follow onscreen instructions."
+	}
+}

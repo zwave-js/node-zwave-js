@@ -1,0 +1,24 @@
+// Climax Technology, Ltd. DC-23ZW
+// Door Contact
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "DC-23ZW",
+	"description": "Door Contact",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0007",
+			"zwaveAllianceId": 2542
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Pull out the battery insulator; this will connect the battery to power on the Door Contact.2. Put the Z-Wave Gateway or Control Panel into Inclusion mode (Please refer to the Z-Wave Gateway or Control Panel manual).3. Press the Function button 3 times within 1.5 seconds.4. Refer to the operation manual of the Z-Wave Gateway or Control Panel to complete adding process.5. If the Door Contact has already been added (included) into another Z-Wave Gateway/Control Panel, or if the Door Contact is unable to be added into the current Z-Wave Gateway/Control Panel, please exclude it first (see Removing Device) before attempting to include it into the current Z-Wave Gateway/Control Panel.",
+		"exclusion": "1. Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual).2. Within 1.5 seconds, press the Function Button 3 times and the Door Contact will be removed from the Z-Wave network.",
+		"reset": "Press and hold the Function Button of the Door Contact for 10 seconds to factory reset (only use factory reset when network Control Panel/Gateway is missing or inoperable)."
+	}
+}

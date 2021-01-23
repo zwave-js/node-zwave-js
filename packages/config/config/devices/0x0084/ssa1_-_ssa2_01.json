@@ -1,0 +1,19 @@
+// FortrezZ LLC SSA1 - SSA2 01
+// FortrezZ SSA1/SSA2 Siren & Strobe Alarm
+{
+	"manufacturer": "FortrezZ LLC",
+	"manufacturerId": "0x0084",
+	"label": "SSA1 - SSA2 01",
+	"description": "FortrezZ SSA1/SSA2 Siren & Strobe Alarm",
+	"devices": [
+		{
+			"productType": "0x0313",
+			"productId": "0x0107",
+			"zwaveAllianceId": 130
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

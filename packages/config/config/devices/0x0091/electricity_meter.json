@@ -1,0 +1,19 @@
+// Kamstrup A/S UNKNOWN
+// Electricity meters
+{
+	"manufacturer": "Kamstrup A/S",
+	"manufacturerId": "0x0091",
+	"label": "electricity_meter",
+	"description": "Electricity meters",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0091",
+			"zwaveAllianceId": 255
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

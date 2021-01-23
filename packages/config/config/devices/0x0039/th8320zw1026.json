@@ -1,0 +1,19 @@
+// Honeywell TH8320ZW1026
+// Honeywell - Opower
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "TH8320ZW1026",
+	"description": "Honeywell - Opower",
+	"devices": [
+		{
+			"productType": "0x0011",
+			"productId": "0x0002",
+			"zwaveAllianceId": 18
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

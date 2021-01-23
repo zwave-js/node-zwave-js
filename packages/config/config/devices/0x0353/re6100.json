@@ -1,0 +1,24 @@
+// Alula RE6100
+// Connect+ Security Panel with Z-Wave Controller
+{
+	"manufacturer": "Alula",
+	"manufacturerId": "0x0353",
+	"label": "RE6100",
+	"description": "Connect+ Security Panel with Z-Wave Controller",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": [3235, 3306, 3307]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Navigate to the Devices screen using the left side menu on the Touchpad. 2. Touch the “+ Add” icon on the top right corner to start adding Z-Wave. 3. Connect+ will start the addition process and the following messages will display on the right side of the screen. This may take only a few seconds, or up to a minute to complete if the Connect+ controller is busy. 4. When the second message above is displayed, Connect+ is now ready to add the new device. Follow the new device’s instructions to place it into inclusion mode. This is typically a button press.5. After putting the device into inclusion mode, the following message will display on the screen. Depending on the device and number of supported commandclasses, this may take only a few seconds or up to a minute to complete.6. If inclusion is successful, Connect+ will begin a device interrogation and gather current device command class states. It may take several seconds to display current device status on the screen. By default, the device’s initial name is set to the assigned node number within the Z-Wave network. The following is an example of a typical light switch device.",
+		"exclusion": "1.On the Z-Wave device page on the Touchpad, touch the “- Remove” icon in the top right corner.2.Connect+ will start the removal process. Status messages will display on the right side of the screen, and follow similar steps to the Add process. You will be prompted to place the device into exclusion mode, which is typically a button press. Follow the device’s instructions to place it into exclusion mode.3. If removal fails, try again until successful.",
+		"reset": "Two types of Z-Wave reset are supported: soft reset and hard reset. Soft reset will only reboot the Z-Wave controller and will retain all your devices. Use this if you are experiencing persistent network issues to attempt to correct them. A hard reset will set the Z-Wave controller in Connect+ back to its factory default and all network devices will be cleared.1. Navigate to the Settings screen from the left side menu, or the Settings icon on the home screen on the Touchpad.2. In the Settings menu, touch the last item “Panel” and enter your 4-digit security system PIN when prompted.3. In the next sub-menu, scroll down and select the “Z-Wave” menu item.4. Select either “Soft Reset” or “Hard Reset”.  You will see a confirmation message on the screen before performing the reset action.5. A hard reset typically takes 5-10 seconds to complete.  A soft reset will take additional time to complete refreshing all devices on the network, approximately 30 seconds per enrolled device. On large networks this may take several minutes to complete before normal operation is expected to resume.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

@@ -1,0 +1,24 @@
+// UNION COMMUNITY Co., Ltd. YDL110DZ
+// Smart Ashley+Z
+{
+	"manufacturer": "UNION COMMUNITY Co., Ltd.",
+	"manufacturerId": "0x0418",
+	"label": "YDL110DZ",
+	"description": "Smart Ashley+Z",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3204
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Insert the battery. 2. The handle is unhooked. 3. Press and hold the 'B' Tact switch for about 3 seconds. 4. Door lock enters Inclusion Mode.",
+		"exclusion": "1. Insert the battery. 2. The handle is unhooked. 3. Press and hold the 'B' Tact switch for about 3 seconds. 4. (If door lock is in inclusion) Door lock enters exclusion mode.",
+		"reset": "1. Insert the battery. 2. The handle is unhooked. 3. Press and hold the 'A' + 'B' Tact switch for about 5 seconds. 4. Door lock is factory reset.* Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

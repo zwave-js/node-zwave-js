@@ -1,0 +1,19 @@
+// Wayne Dalton XL524
+// RCS  Thermostat
+{
+	"manufacturer": "Wayne Dalton",
+	"manufacturerId": "0x0008",
+	"label": "XL524",
+	"description": "RCS  Thermostat",
+	"devices": [
+		{
+			"productType": "0x5452",
+			"productId": "0x5442",
+			"zwaveAllianceId": 1230
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

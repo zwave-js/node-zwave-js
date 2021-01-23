@@ -7,6 +7,11 @@
 	"description": "Scene Capable Receptacle",
 	"devices": [
 		{
+			"productType": "0x0001",
+			"productId": "0x0334",
+			"zwaveAllianceId": [1019, 1021, 1023]
+		},
+		{
 			"productType": "0x1d04",
 			"productId": "0x0334"
 		}

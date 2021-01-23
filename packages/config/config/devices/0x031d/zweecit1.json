@@ -1,0 +1,24 @@
+// Z-Wave Alliance ZWEECIT1
+// Certified Installer Toolkit
+{
+	"manufacturer": "Z-Wave Alliance",
+	"manufacturerId": "0x031d",
+	"label": "ZWEECIT1",
+	"description": "Certified Installer Toolkit",
+	"devices": [
+		{
+			"productType": "0x1101",
+			"productId": "0x0001",
+			"zwaveAllianceId": [2446, 2464, 2465]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Place the network controller into inclusion mode by following the manufacturer's instructions, then in the CIT user interface, on the home page, click \"Join Network\"",
+		"exclusion": "Place the network controller into exclusion mode by following the manufacturer's instructions, then in the CIT user interface, on the home page, click \"Leave Network\"",
+		"reset": "If the CIT is the primary controller for a network (not recommended) following this procedure will result in nodes being orphaned (no controller).  If the CIT is a part of a network, following this procedure will leave an invalid node in the list for the primary controller.  Therefore, under these two conditions above, use this procedure only if the network primary controller is missing or is otherwise inoperable.In the CIT user interface, click the menu item Network, then Control, and then on the control page click \"Controller Factory Default\"."
+	}
+}

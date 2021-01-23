@@ -1,14 +1,15 @@
-// Secure Meters (UK) Ltd. ASR-ZW
+// Secure Meters (UK) Ltd. SRT322
 // Thermostat Receiver
 {
 	"manufacturer": "Secure Meters (UK) Ltd.",
 	"manufacturerId": "0x0059",
-	"label": "ASR-ZW",
+	"label": "SRT322",
 	"description": "Thermostat Receiver",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": [125, 126]
 		}
 	],
 	"firmwareVersion": {

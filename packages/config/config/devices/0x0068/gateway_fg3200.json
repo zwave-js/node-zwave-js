@@ -1,0 +1,22 @@
+// Good Way Technology Co., Ltd. GATEWAY / FG3200
+// FG3200 Z-Wave® Home Gateway
+{
+	"manufacturer": "Good Way Technology Co., Ltd.",
+	"manufacturerId": "0x0068",
+	"label": "GATEWAY / FG3200",
+	"description": "FG3200 Z-Wave® Home Gateway",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": [2398, 2806]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "The Android  APP application, please see manual 5.1.4&5.1.5 Click “Reset”, show “Are you sure to reset Z-Dongle?”and click OK to reset the Z-Wave network, or FG3200 Reset button 10 seconds after the reset to reset the factory default. And manual P.10 The gateway will send DEVICE_RESET_LOCALLY_NOTIFICATION to associated Z-Wave devices when it is reset or factory-reset.  * If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

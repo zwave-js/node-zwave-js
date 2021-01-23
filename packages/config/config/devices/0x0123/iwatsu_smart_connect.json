@@ -1,0 +1,24 @@
+// IWATSU Smart Connect
+// Iwatsu Smart Connect
+{
+	"manufacturer": "IWATSU",
+	"manufacturerId": "0x0123",
+	"label": "Smart Connect",
+	"description": "Iwatsu Smart Connect",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x0102",
+			"zwaveAllianceId": 946
+		},
+		{
+			"productType": "0x0103",
+			"productId": "0x0103",
+			"zwaveAllianceId": 947
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

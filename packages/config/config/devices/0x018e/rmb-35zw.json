@@ -1,0 +1,24 @@
+// Climax Technology, Ltd. RMB-35ZW
+// Z-Wave Router / USB Power Adaptor
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "RMB-35ZW",
+	"description": "Z-Wave Router / USB Power Adaptor",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x000f",
+			"zwaveAllianceId": 3787
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Connect the Router into the power socket to power on. 2. Put the Z-Wave Gateway or Control Panel into Inclusion mode (please refer to the Z-Wave Gateway or Control Panel manual).3. Within 1.5 seconds, press the Function Button 3 times.4. Refer to the operation manual of the Z-Wave Gateway or Control Panel to complete the adding process.5. If the sensor has already been added (included) into another Z-Wave Gateway/Control Panel, or if the sensor is unable to be added into the current Z-Wave Gateway/Control Panel, please exclude it first (see Removing Device) before attempting to include it into the current Z-Wave Gateway/Control Panel.",
+		"exclusion": "1. Put the Z-Wave Gateway or Control Panel into Exclusion mode (please refer to the Z-Wave Gateway or Control Panel manual).2. Within 1.5 seconds, press the Function Button 3 times and the Router will be removed from the Z-Wave network.",
+		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable).Press and hold the Function Button for 10 seconds to factory reset."
+	}
+}

@@ -1,0 +1,19 @@
+// MSK - Miyakawa Seisakusho ED2.0 METER ADAPTER
+// Prodrive  - ED2.0 Meter Adapter
+{
+	"manufacturer": "MSK - Miyakawa Seisakusho",
+	"manufacturerId": "0x0122",
+	"label": "ED2.0 METER ADAPTER",
+	"description": "Prodrive  - ED2.0 Meter Adapter",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0000",
+			"zwaveAllianceId": 644
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

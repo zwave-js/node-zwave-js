@@ -1,0 +1,24 @@
+// Grib GCR-01S
+// Smart Gas Controller
+{
+	"manufacturer": "Grib",
+	"manufacturerId": "0x018b",
+	"label": "GCR-01S",
+	"description": "Smart Gas Controller",
+	"devices": [
+		{
+			"productType": "0x0040",
+			"productId": "0x0100",
+			"zwaveAllianceId": 1591
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "This must be done when the gas valve is closed.  After doing inclusion action on controller,  hold 5 seconds (-) button until hearing beep once and ‘P’ is blinking on LCD.",
+		"exclusion": "This must be done when the gas valve is closed.  After doing exclusion action on controller,  hold 5 seconds (-) button until hearing beep once and ‘P’ is blinking on LCD.",
+		"reset": "Please use this only when the primary controller is missing or otherwise disabled.This must be done when the gas valve is closed. Hold 15 seconds (-) button till hearing beep once and ‘FS’ is displayed on LCD."
+	}
+}

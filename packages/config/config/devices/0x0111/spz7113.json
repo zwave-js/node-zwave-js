@@ -1,0 +1,19 @@
+// Tronico Technology Co. Ltd. SPZ7113
+// Tronico  SmartPlug
+{
+	"manufacturer": "Tronico Technology Co. Ltd.",
+	"manufacturerId": "0x0111",
+	"label": "SPZ7113",
+	"description": "Tronico  SmartPlug",
+	"devices": [
+		{
+			"productType": "0x1000",
+			"productId": "0x0010",
+			"zwaveAllianceId": 1265
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

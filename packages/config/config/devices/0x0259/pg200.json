@@ -1,0 +1,24 @@
+// Starkoff PG200
+// PowerGate
+{
+	"manufacturer": "Starkoff",
+	"manufacturerId": "0x0259",
+	"label": "PG200",
+	"description": "PowerGate",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0022",
+			"zwaveAllianceId": 2195
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "When the controller is in add mode, press and hold the button for 3 seconds until the RED LED indicator blinks.",
+		"exclusion": "When the controller is in remove mode, press and hold the button for 3 seconds until the RED LED indicator blinks. When the PowerGate unit is disconnected from the Z-Wave network, the RED LED indicator will be toggled every second.",
+		"reset": "Press and hold button for 10 seconds until RED led indicators blink. PowerGate will be initialized and send a device reset locally notification to the controller. Use this function only if the primary controller is lost or otherwise inoperable."
+	}
+}

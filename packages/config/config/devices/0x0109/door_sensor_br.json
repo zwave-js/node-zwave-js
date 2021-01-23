@@ -1,0 +1,19 @@
+// Vision Security Door Sensor BR
+// Vision Security Door Sensor BR
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "Door Sensor BR",
+	"description": "Vision Security Door Sensor BR",
+	"devices": [
+		{
+			"productType": "0x2001",
+			"productId": "0x0103",
+			"zwaveAllianceId": 727
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

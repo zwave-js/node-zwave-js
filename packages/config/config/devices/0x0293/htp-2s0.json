@@ -1,0 +1,24 @@
+// Home controls HTP-2S0
+// 2 Touch Panel Switch
+{
+	"manufacturer": "Home controls",
+	"manufacturerId": "0x0293",
+	"label": "HTP-2S0",
+	"description": "2 Touch Panel Switch",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x4412",
+			"zwaveAllianceId": [3228, 3316, 3318]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Put the controller into ADD device mode. Follow the instructions provided by the controller manufacturer.2. Touch and hold any key on the panel for more than 5 seconds. All indication lights will blink in blue. At this point release the key, the touch panel will start the inclusion process.",
+		"exclusion": "1. Put the controller into REMOVE device mode. Follow the instructions provided by the controller manufacturer.2. Touch and hold any key on the panel for more than 5 seconds. All indication lights will blink blue in color. At this point release the key, the touch panel will start the exclusion process.",
+		"reset": "1. Press the config button 5 times, Indication LED lights will blink red in color, touch panel will start local reset. Touch panel switch will erase network inclusion state after local reset. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

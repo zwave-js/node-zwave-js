@@ -1,0 +1,24 @@
+// Resideo TUXEDOW
+// Chandelier
+{
+	"manufacturer": "Resideo",
+	"manufacturerId": "0x041b",
+	"label": "TUXEDOW",
+	"description": "Chandelier",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0004",
+			"zwaveAllianceId": 3624
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. At the TUXEDOW Home screen: a) Press the Devices icon and then press the SETUP icon to display “Z-Wave Device Management” screen. b) Press the ADD DEVICE icon.2. At the device Module:a) Press the Function Key on the device",
+		"exclusion": "1. At the TUXEDOW Home screen: a) Press the Devices and Setup icons to display the “ZWave Device Management” screen. b) Highlight the device to remove and press the Remove Device icon.2. At the device module: a) Press the Function Key to remove the device from the keypad",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.To activate the Keypad Reset function, press the Setup, System Setup and Advanced Setup icons1. Enter your Authorized Code and press the Keypad Reset icon.2. Select OK or Cancel"
+	}
+}

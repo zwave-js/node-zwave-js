@@ -1,0 +1,24 @@
+// Climax Technology, Ltd. LM-1ZW
+// Luminance Meter
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "LM-1ZW",
+	"description": "Luminance Meter",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0017",
+			"zwaveAllianceId": 2485
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Put the Z-Wave gateway or control panel into Inclusion mode (please refer to the Z-Wave gateway or control panel manual).Within 1.5 seconds, press the Function Button 3 times.Refer to the operation manual of the Z-Wave gateway or control panel to complete the adding process.If the Sensor has already been added (included) into another Z-Wave Gateway/Control Panel, or if the device is unable to be added into the current Z-Wave Gateway/Control Panel, try removing it first (see Removing Device).",
+		"exclusion": "Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual).Within 1.5 seconds, press the Function Button 3 times and the Sensor will be removed from the Z-Wave network, the LED will light on for 1 second to indicate.",
+		"reset": "(Only use factory reset when network Control Panel/Gateway is missing or inoperable)Remove the battery of the Sensor first.Press and hold the Function Button. While holding the Function Button, power on the Sensor by re-inserting the battery, wait for 10 seconds to factory reset, the LED will light on for 1 second to indicate."
+	}
+}

@@ -1,0 +1,21 @@
+// Enblink Co. Ltd. DKC1001
+{
+	"manufacturer": "Enblink Co. Ltd.",
+	"manufacturerId": "0x014d",
+	"label": "DKC1001",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0004",
+			"zwaveAllianceId": 2642
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Tap \"RESET\" button in controller functions menuIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

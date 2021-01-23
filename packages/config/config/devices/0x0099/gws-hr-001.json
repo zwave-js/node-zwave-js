@@ -1,0 +1,22 @@
+// GreenWave Reality Inc. GWS-HR-001
+// AXON™ Home Router
+{
+	"manufacturer": "GreenWave Reality Inc.",
+	"manufacturerId": "0x0099",
+	"label": "GWS-HR-001",
+	"description": "AXON™ Home Router",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0xa001",
+			"zwaveAllianceId": 1609
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "A Reboot/Reset button is located on the backside of the AXON™ Home Router.  It can easily be identified on the back of the unit by its red color and location directly above the yellow RJ45 Ethernet ports and below the USB ports.  Pressing the button will perform one of two functions depending on how long the button is pressed.  A short press will trigger a reboot of the router and will not change any permanent settings. A long press (3 second and longer) will trigger a reset operation and then will reboot the AXON™ Home Router. A reset operation will change all router settings including the Z-Wave Controller settings back to its factory default.  "
+	}
+}

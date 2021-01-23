@@ -1,0 +1,19 @@
+// HiTech Automation 9600801000
+// EbV floor heating regulator
+{
+	"manufacturer": "HiTech Automation",
+	"manufacturerId": "0x0017",
+	"label": "9600801000",
+	"description": "EbV floor heating regulator",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0003",
+			"zwaveAllianceId": 1249
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

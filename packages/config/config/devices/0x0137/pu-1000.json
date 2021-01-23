@@ -1,0 +1,19 @@
+// FollowGood Technology Company Ltd. PU-1000
+// Gateway
+{
+	"manufacturer": "FollowGood Technology Company Ltd.",
+	"manufacturerId": "0x0137",
+	"label": "PU-1000",
+	"description": "Gateway",
+	"devices": [
+		{
+			"productType": "0x2001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 928
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

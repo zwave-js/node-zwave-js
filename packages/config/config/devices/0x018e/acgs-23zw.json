@@ -1,0 +1,24 @@
+// Climax Technology, Ltd. ACGS-23ZW
+// Acoustic Glass Break Detector
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "ACGS-23ZW",
+	"description": "Acoustic Glass Break Detector",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x000e",
+			"zwaveAllianceId": 3240
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "This product can be included and operated in any Z-Wave network with other Z-Wave certified devices from other manufactures and/or other applications. All non-battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network.1. Insert the 3V CR123A Lithium battery into the battery compartment connecting the correct polarity as shown on the battery compartment lid.2. Put the Z-Wave gateway or control panel into Inclusion or Learning mode (please refer to the Z-Wave gateway or control panel manual).3. Within 1 second, press the Function Button 3 times. 4. Refer to the operation manual of the Z-Wave gateway or control panel to complete the learn-in process.5.If the sensor has already been included (learnt) into another Z-Wave Gateway/Control Panel, or if the sensor is unable to be learnt into the current Z-Wave Gateway/Control Panel, please exclude it first (see Exclusion) before attempting to include it into the current Z-Wave Gateway/Control Panel.",
+		"exclusion": "The Glass Break Detector must be removed from existing Z-Wave network before being included into another. There are two methods available to exclude a device.Exclusion Mode1. Put the Z-Wave gateway or control panel into Exclusion mode (please refer to the Z-Wave gateway or control panel manual).2. Within 1 second, press the Function Button 3 times and the Glass Break Detector will be removed from the Z-Wave network.",
+		"reset": "Factory Reset(Only use factory reset when network Control Panel/Gateway is missing or inoperable).1. Remove the batteries of the Glass Break Detector first.2. Press and hold the Function Button. While holding the Function Button, power on the Glass Break Detector by re-inserting the batteries, wait for 10 seconds to factory reset.<NOTE>1. Factory resetting the Glass Break Detector will restore it to factory default settings (excluded from the Z-Wave network). The Z-Wave gateway or control panel will still keep its Z-Wave settings. Please refer to the gateway or control panel manual on how to remove the Glass Break Detector’s Z-Wave settings."
+	}
+}

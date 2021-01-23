@@ -1,0 +1,24 @@
+// Eco Life Engineering Co., Ltd. PSM08-3E
+// Single Function Magnetic Sensor
+{
+	"manufacturer": "Eco Life Engineering Co., Ltd.",
+	"manufacturerId": "0x037c",
+	"label": "PSM08-3E",
+	"description": "Single Function Magnetic Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0036",
+			"zwaveAllianceId": 2940
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "There is a button on PSM08.1. Have Z-Wave™  Controller entered inclusion mode.2. Pressing button once to enter the inclusion mode.3. After add successful, the device will wake to receive the setting command from Z-Wave™ Controller about 20 seconds.",
+		"exclusion": "There is a button on PSM08.1. Have Z-Wave™  Controller entered exclusion mode.2. Pressing button once to enter the exclusion mode.",
+		"reset": "There is a button on PSM08.1. Pressing button for about 5 seconds.2. IDs are excluded and all settings will reset to factory default.Notice: Use this procedure only in the event that the primary controller is lost or otherwise inoperable."
+	}
+}

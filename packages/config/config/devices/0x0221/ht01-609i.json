@@ -1,0 +1,24 @@
+// HOSEOTELNET HT01-609I
+// DOOR/WINDOW SENSOR
+{
+	"manufacturer": "HOSEOTELNET",
+	"manufacturerId": "0x0221",
+	"label": "HT01-609I",
+	"description": "DOOR/WINDOW SENSOR",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003",
+			"zwaveAllianceId": 1974
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Z-Wave primary controller into inclusion mode. And press the inclusion/exclusion switch for sending NIF.",
+		"exclusion": "Z-Wave primary controller into exclusion mode. And press 3 times the inclusion/exclusion switch for sending NIF.",
+		"reset": "Held 10 seconds the inclusion/exclusion switch for sending Device Reset Locally Notification.And reset to the Factory default."
+	}
+}

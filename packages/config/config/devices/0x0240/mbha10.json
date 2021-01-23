@@ -1,0 +1,22 @@
+// Technicolor MBHA10
+// SmartHub
+{
+	"manufacturer": "Technicolor",
+	"manufacturerId": "0x0240",
+	"label": "MBHA10",
+	"description": "SmartHub",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2325
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.Click on Advanced Network SettingsUse “Controller Reset” button in gateway user interfaceReset Z-Wave module to default settings. This will effectively delete the current Z-Wave network and create a new one. All your devices will be deleted and it will be necessary to remove them prior to adding them to another Z-Wave network."
+	}
+}

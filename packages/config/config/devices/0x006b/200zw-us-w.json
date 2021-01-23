@@ -1,0 +1,19 @@
+// Tricklestar Ltd. (former Empower Controls Ltd.) 200ZW-US-W
+// 2-Button Z-Wave Remote Control
+{
+	"manufacturer": "Tricklestar Ltd. (former Empower Controls Ltd.)",
+	"manufacturerId": "0x006b",
+	"label": "200ZW-US-W",
+	"description": "2-Button Z-Wave Remote Control",
+	"devices": [
+		{
+			"productType": "0x0010",
+			"productId": "0x0003",
+			"zwaveAllianceId": [265, 267]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

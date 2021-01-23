@@ -1,0 +1,19 @@
+// ZyXEL SHD1110
+// Temperature/Humidity Sensor
+{
+	"manufacturer": "ZyXEL",
+	"manufacturerId": "0x0135",
+	"label": "SHD1110",
+	"description": "Temperature/Humidity Sensor",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0001",
+			"zwaveAllianceId": 925
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

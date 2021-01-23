@@ -1,0 +1,22 @@
+// 2gig Technologies Inc. 2GIG-GC3-345
+// 2GIG GC3
+{
+	"manufacturer": "2gig Technologies Inc.",
+	"manufacturerId": "0x009b",
+	"label": "2GIG-GC3-345",
+	"description": "2GIG GC3",
+	"devices": [
+		{
+			"productType": "0x4350",
+			"productId": "0x3330",
+			"zwaveAllianceId": 1605
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "From the GC3  Home Screen enter System Settings using the Master Code. Tap on Smart Home Settings and then tap on the Advanced Settings tile.  Tap on the Reset Controller tile.  The system will present a confirmation.  Tap the confirmation.  The system will reset the GC3 Z-Wave network. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

@@ -1,0 +1,19 @@
+// FortrezZ LLC WV-01_1002
+// Wireless, Z-Wave Emergency Water Shut-off Valve
+{
+	"manufacturer": "FortrezZ LLC",
+	"manufacturerId": "0x0084",
+	"label": "WV-01_1002",
+	"description": "Wireless, Z-Wave Emergency Water Shut-off Valve",
+	"devices": [
+		{
+			"productType": "0x0213",
+			"productId": "0x020c",
+			"zwaveAllianceId": 178
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

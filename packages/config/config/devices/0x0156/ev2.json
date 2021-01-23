@@ -1,0 +1,24 @@
+// Vivint EV2
+// Element Thermostat V2
+{
+	"manufacturer": "Vivint",
+	"manufacturerId": "0x0156",
+	"label": "EV2",
+	"description": "Element Thermostat V2",
+	"devices": [
+		{
+			"productType": "0x5448",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3702
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Set your panel to add node mode to add the thermostat as a node on your network.2. The Thermostat main screen shows a welcome message. Press the SIDE button to continue.3. When your panel is ready to connect to the Thermostat, press the SIDE button to connect. This initiates the network connection process. The Thermostat’s screen says “Connecting.” • If the connection fails, the screen says, “Failed.” Press the SIDE button to try connecting again.4. When the Thermostat has successfully joined a Z-Wave network from the panel, the screen displays the message “Next”.5. Complete your setup on the VIVINT panel.6. Press the SIDE button to continue.Your panel indicates that the thermostat was successfully added to its network (see your specific controller’s User Manual for details).",
+		"exclusion": "To get into Installer Settings, from the Home Screen, press and hold the SIDE button for three (3) seconds to access the SETTINGS menu.Use the UP/DN arrows to select the INSTALLER SETTINGS. Press the side button.Use the UP/DN arrows to select the NETWORK settings.If the thermostat IS connected to the Z-Wave Network, “Disconnect” will be displayed. Press the SIDE button todisconnect.",
+		"reset": "Reset will restore the thermostat settings to the factory defaults. It will also disconnect the thermostat from theZ-Wave network.1. Press the DOWN arrow to highlight Reset, then press the SIDE button.2. Confirm that you want to reset the thermostat, select yes, then press the SIDE button. The thermostat resets.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

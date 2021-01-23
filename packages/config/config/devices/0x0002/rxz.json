@@ -1,0 +1,19 @@
+// Danfoss RXZ
+//  - RF Relay switching unit
+{
+	"manufacturer": "Danfoss",
+	"manufacturerId": "0x0002",
+	"label": "RXZ",
+	"description": "RF Relay switching unit",
+	"devices": [
+		{
+			"productType": "0x8004",
+			"productId": "0x0400",
+			"zwaveAllianceId": 279
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

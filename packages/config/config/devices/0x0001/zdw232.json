@@ -1,0 +1,19 @@
+// ACT - Advanced Control Technologies ZDW232
+//  - 2-Wire Dimmer 1-Gang
+{
+	"manufacturer": "ACT - Advanced Control Technologies",
+	"manufacturerId": "0x0001",
+	"label": "ZDW232",
+	"description": "2-Wire Dimmer 1-Gang",
+	"devices": [
+		{
+			"productType": "0x444d",
+			"productId": "0x3332",
+			"zwaveAllianceId": 477
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -8,12 +8,17 @@
 	"devices": [
 		{
 			"productType": "0x0027",
-			"productId": "0x0100"
+			"productId": "0x0100",
+			"zwaveAllianceId": [1294, 2548, 3184, 3185]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "Press configuration button 3 times. LED3 is ON.Press and hold once more for 4 seconds.",
+		"exclusion": "Press configuration button 3 times. LED3 is ON.Press and hold once more for 4 seconds.",
+		"reset": "Press configuration button 25x times. LED 1 is ON. Press and hold once more for 4 seconds to confirm.Please use this procedure only when your network primary controller is missing or otherwise inoperable."
+	}
 }

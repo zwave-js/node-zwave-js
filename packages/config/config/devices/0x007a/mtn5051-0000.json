@@ -1,0 +1,19 @@
+// Merten MTN5051-0000
+// Schneider - Merten
+{
+	"manufacturer": "Merten",
+	"manufacturerId": "0x007a",
+	"label": "MTN5051-0000",
+	"description": "Schneider - Merten",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0004",
+			"zwaveAllianceId": 635
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

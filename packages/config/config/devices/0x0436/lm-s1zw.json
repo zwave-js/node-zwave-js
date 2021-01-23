@@ -1,0 +1,24 @@
+// Lumi LM-S1ZW
+// 1 Gang Touch Panel Switch
+{
+	"manufacturer": "Lumi",
+	"manufacturerId": "0x0436",
+	"label": "LM-S1ZW",
+	"description": "1 Gang Touch Panel Switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x5001",
+			"zwaveAllianceId": 3795
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1.  Put the controller into ADD device mode. Follow the instructions provided by thecontroller manufacturer.2. Touch and hold any key on the panel for more than 5 seconds. All indication lights willblinks in blue. At this point release the key, the touch panel will start inclusionprocess.",
+		"exclusion": "1. Put the controller into REMOVE device mode. Follow the instructions provided by thecontroller manufacturer.2. Touch and hold any key on the panel for more than 5 seconds. All indication lights willblinks blue in color. At this point release the key, the touch panel will startexclusion process.",
+		"reset": "Press the config button 5 times, Indication LEDs lights will blinks red in color, touchpanel will start local reset. Touch panel switch will erase network inclusion stateafter local reset."
+	}
+}

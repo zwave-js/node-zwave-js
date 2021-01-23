@@ -1,0 +1,22 @@
+// Clare Controls CLIQ-MOSM-10
+// CLIQ.mini Controller
+{
+	"manufacturer": "Clare Controls",
+	"manufacturerId": "0x0194",
+	"label": "CLIQ-MOSM-10",
+	"description": "CLIQ.mini Controller",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2574
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.\""
+	}
+}

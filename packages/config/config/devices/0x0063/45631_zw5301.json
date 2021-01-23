@@ -1,0 +1,19 @@
+// GE/Jasco 45631 / ZW5301
+// Battery Operated Keypad Secondary Controller, 4 Groups/Scenes
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "45631 / ZW5301",
+	"description": "Battery Operated Keypad Secondary Controller, 4 Groups/Scenes",
+	"devices": [
+		{
+			"productType": "0x8008",
+			"productId": "0x5301",
+			"zwaveAllianceId": 165
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

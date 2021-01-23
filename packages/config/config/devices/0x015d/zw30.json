@@ -1,0 +1,29 @@
+// Willis Electric Co., Ltd. ZW30
+// In-Wall Smart Switch
+{
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "ZW30",
+	"description": "In-Wall Smart Switch",
+	"devices": [
+		{
+			"productType": "0x0111",
+			"productId": "0x1e1c",
+			"zwaveAllianceId": 1711
+		},
+		{
+			"productType": "0xb111",
+			"productId": "0x1e1c",
+			"zwaveAllianceId": 2348
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to  the Z-Wave network.2. Once the controller is ready to include your device, triple press the Up/Down push button to include it in the network.3. Once your controller has confirmed that the device has been included, refresh the  Z-Wave network to optimize performance.4. The device is associated in the same group when it included in setting process. Now you can control your Z-Wave device according to groups, scenes, schedules and automation programmed.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.2. Once the controller is ready to Exclude your device, triple press the Up/Down push button to exclude from the network.",
+		"reset": "Use controller to remove device from network will reset it to factory default\"Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\""
+	}
+}

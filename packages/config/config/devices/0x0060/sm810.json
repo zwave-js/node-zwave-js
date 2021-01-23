@@ -8,12 +8,17 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0003"
+			"productId": "0x0003",
+			"zwaveAllianceId": [2651, 2774, 2985]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "1. Put the Z-Wave Controller into inclusion mode. 2. Press the tamper switch 3 times within 1.5 seconds to put the unit into inclusion mode.",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode. 2. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode.",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.  1. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode. 2. Within 1 second of step 1, press the tamper switch again and hold for 5 seconds. 3.  Node ID is excluded. The device reverts to factory default state."
+	}
 }

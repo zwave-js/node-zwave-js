@@ -1,0 +1,22 @@
+// LG Electronics LAP255U
+// Woofer IoT
+{
+	"manufacturer": "LG Electronics",
+	"manufacturerId": "0x015b",
+	"label": "LAP255U",
+	"description": "Woofer IoT",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1453
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": " Run Z-Wave Certification Application in Setting, Select \"Things\" on the left  menu,  select \"bridge\" on the right list, andd Select factoryReset on the right list,  push Send button on the Pop up."
+	}
+}

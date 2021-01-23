@@ -1,0 +1,19 @@
+// Secure Meters (UK) Ltd. SES301
+// Secure  Temperature Sensor
+{
+	"manufacturer": "Secure Meters (UK) Ltd.",
+	"manufacturerId": "0x0059",
+	"label": "SES301",
+	"description": "Secure  Temperature Sensor",
+	"devices": [
+		{
+			"productType": "0x000d",
+			"productId": "0x0001",
+			"zwaveAllianceId": 676
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

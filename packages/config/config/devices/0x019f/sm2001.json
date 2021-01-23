@@ -1,0 +1,22 @@
+// Webee Life SM2001
+// Smartee
+{
+	"manufacturer": "Webee Life",
+	"manufacturerId": "0x019f",
+	"label": "SM2001",
+	"description": "Smartee",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1867
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Z-Wave Factory Reset1- On the Home Screen menu of your Webee TV app, select Settings, then navigate to the Developer section to access the Z-Wave console2- Select \"Factory Reset\". This will remove all Z-Wave devices from your Smartee.Important: Note that this procedure will remove ALL Z-Wave devices from the controller.Hub Factory Reset 1- To factory reset Smartee contact customer support at support@webeelife.com and request a MAC reset.2- Only after  MAC reset is processed, navigate to the Home Screen menu of your Webee TV app, select Settings, and navigate to the System section.3- On the Left Panel select \"Backup & Reset\". Then on the Right Panel select \"Factory Data Reset\".4- Tap on \"Reset device\" to complete the reset.IMPORTANT: Do not reset your Smartee without previous consent of the Webee support team and only if the controller is inoperable."
+	}
+}

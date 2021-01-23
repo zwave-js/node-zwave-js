@@ -8,12 +8,17 @@
 	"devices": [
 		{
 			"productType": "0x200f",
-			"productId": "0x0f04"
+			"productId": "0x0f04",
+			"zwaveAllianceId": 1328
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZS6301-5 to your controller. To get in the “inclusion” mode, the distance between detector and controller is suggested to be in one meter. By power on to get included for first time or press the test switch of ZS6301-5 once to be included. After be included, the red LED will go on.",
+		"exclusion": "For “Exclusion” from (removing from) a net work: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZS6301-5 from your controller. Press the test switch of ZS6301-5 once to be excluded.",
+		"reset": "N/A"
+	}
 }

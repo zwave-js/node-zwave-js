@@ -1,0 +1,22 @@
+// Alarm.com ADC-470L
+// Alarm.com Rev4.7 Radio Module
+{
+	"manufacturer": "Alarm.com",
+	"manufacturerId": "0x0094",
+	"label": "ADC-470L",
+	"description": "Alarm.com Rev4.7 Radio Module",
+	"devices": [
+		{
+			"productType": "0x000e",
+			"productId": "0x010e",
+			"zwaveAllianceId": 2297
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "NOTE: This function will forcibly clear the Alarm.com ADC-470L’s Z-Wave node identification and will also remove all network information from the ADC-470L. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable 1.\tA Z-Wave factory reset must be triggered from the Alarm.com dealer site 2.\tNavigate to the Equipment page.  3.\tClick the “emPower Devices” tab. 4.\tOpen the “Advanced Z-Wave Commands” menu by clicking the button below the Equipment List.  5.\tTowards the bottom next to the “Equipment List Label” text click on the “Reset To Factory Default” button 6.\tAllow 3 minutes for the associated commands to go through and for the ADC-470L to act on them"
+	}
+}

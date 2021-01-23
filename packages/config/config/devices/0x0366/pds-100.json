@@ -1,0 +1,24 @@
+// PHILIA TECHNOLOGY Co., Ltd. PDS-100
+// Philia Door Lock
+{
+	"manufacturer": "PHILIA TECHNOLOGY Co., Ltd.",
+	"manufacturerId": "0x0366",
+	"label": "PDS-100",
+	"description": "Philia Door Lock",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2974
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Please proceed with the door lock open.1. Set the controller in inclusion mode.2. Open the battery cover of the indoor body and press the [R] button for 7 seconds.3. Press the [1][4][7] button after pressing the [R] button.",
+		"exclusion": "Please proceed with the door lock open.1. Set the controller in exclusion mode.2. Open the battery cover of the indoor body and press the [R] button for 7 seconds.3. Press the [3][6][7] button after pressing the [R] button.",
+		"reset": "Please proceed with the door lock open.1. Open the battery cover of the indoor body and press the [R] button for 9 seconds.2. Press the [1][2][3][6][5][4][7] button after pressing the [R] button.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

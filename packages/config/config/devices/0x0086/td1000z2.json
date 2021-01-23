@@ -1,0 +1,19 @@
+// AEON Labs TD1000Z2
+// GoodWay Z-Wave Power Switch
+{
+	"manufacturer": "AEON Labs",
+	"manufacturerId": "0x0086",
+	"label": "TD1000Z2",
+	"description": "GoodWay Z-Wave Power Switch",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0005",
+			"zwaveAllianceId": 25
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

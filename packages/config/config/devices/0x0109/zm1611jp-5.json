@@ -1,0 +1,24 @@
+// Vision Security ZM1611JP-5
+// U-Bell
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZM1611JP-5",
+	"description": "U-Bell",
+	"devices": [
+		{
+			"productType": "0x2005",
+			"productId": "0x05a0",
+			"zwaveAllianceId": 3572
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZM1611-5 to your controller. To get in the “inclusion” mode, press and hold the program switch of ZM1611-5 for 3 seconds at least & release to be included. After setting, the LED should go off, if not, please try again. (After sending one time’s Z-Wave NIF and not be included then it will send 4 times NWI in every 30 seconds for auto inclusion. The LED will flash again if the U-Bell has not been included or the LED will go off after inclusion.)",
+		"exclusion": "For “Exclusion” from (removing from) a network: Set up the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to remove the ZM1611-5 from your controller. Press and hold the program switch of ZM1611-5 for 3 seconds at least & release to be excluded. The LED will flash again after exclusion",
+		"reset": "For \"Reset\": Press and hold the Program Switch for 5 seconds “at least”, power on until the LED turns on then release the switch, U-Bell will send Command Class Device Reset Locally for Reset Process. (Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable.)"
+	}
+}

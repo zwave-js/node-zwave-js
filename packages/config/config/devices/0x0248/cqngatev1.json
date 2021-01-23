@@ -1,0 +1,22 @@
+// neusta next GmbH & Co. KG CQNGATEV1
+// coqon qbox
+{
+	"manufacturer": "neusta next GmbH & Co. KG",
+	"manufacturerId": "0x0248",
+	"label": "CQNGATEV1",
+	"description": "coqon qbox",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1802
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "The Qbox supports two reset modes – soft reset and hard reset. Both reset modes will clear all user data from the box, reset the Z-Wave chip (incl. assigning a new homeID) and deregister the Qbox in the cloud backend. Additionally to these actions a hard reset will reset the software version of the box to factory default, so all installed firmware upgrades will be purged. During soft reset, the installed firmware version will be kept. For resetting the Qbox, physical access to the Qbox is required. Please use the reset procedure only when the primary controller is missing or inoperable.If the QBox is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.Soft reset1.Unplug the power adapter from the QBox2.Press the WPS button (the round button besides the USB port on the connector panel) and keep it pressed3.Keep the WPS-button pressed while plugging in the power adapter of the QBox4.Keep the WPS-button pressed until the indicator LED (control leaf) turns solid red5.Release the WPS-button BEFORE the control leaf starts to blink readHard reset1.Unplug the power adapter from the QBox2.Press the WPS button (the round button besides the USB port on the connector panel) and keep it pressed3.Keep the WPS-button pressed while plugging in the power adapter of the QBox4.Keep the WPS-button pressed until the indicator LED (control leaf) start blinking red (it will be solid red for some seconds before starting to blink).5.Release the WPS-button."
+	}
+}

@@ -1,0 +1,19 @@
+// Axesstel Inc AX140
+// Axesstel  Alert System
+{
+	"manufacturer": "Axesstel Inc",
+	"manufacturerId": "0x0146",
+	"label": "AX140",
+	"description": "Axesstel  Alert System",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 954
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

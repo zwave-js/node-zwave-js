@@ -1,0 +1,19 @@
+// Evolve EVLCD1
+// Evolve Single Gang RF Scene Controller
+{
+	"manufacturer": "Evolve",
+	"manufacturerId": "0x0113",
+	"label": "EVLCD1 RF Scene Controller",
+	"description": "Evolve Single Gang RF Scene Controller",
+	"devices": [
+		{
+			"productType": "0x4556",
+			"productId": "0x4c32",
+			"zwaveAllianceId": 59
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

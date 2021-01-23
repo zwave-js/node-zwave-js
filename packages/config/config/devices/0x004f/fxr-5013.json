@@ -1,0 +1,19 @@
+// Flex Automation FXR-5013
+// Relay FIT Triplo
+{
+	"manufacturer": "Flex Automation",
+	"manufacturerId": "0x004f",
+	"label": "FXR-5013",
+	"description": "Relay FIT Triplo",
+	"devices": [
+		{
+			"productType": "0x5102",
+			"productId": "0x0103",
+			"zwaveAllianceId": 2404
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

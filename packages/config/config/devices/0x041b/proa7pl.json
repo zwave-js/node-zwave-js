@@ -1,0 +1,22 @@
+// Resideo PROA7PL
+// All-In-One Touchscreen Security
+{
+	"manufacturer": "Resideo",
+	"manufacturerId": "0x041b",
+	"label": "PROA7PL",
+	"description": "All-In-One Touchscreen Security",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3675
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "If the Control Panel is the primary controller for your network, resetting it results in the devices in yournetwork to be orphaned and is necessary after the reset to exclude and re-include all the devices in the network. This defaults the Z-Wave Controller in the system which removes all programmed Z-Wave devices, however, the devices do not receive a signal to be excluded. So, when they need to be included, they need to be excluded first."
+	}
+}

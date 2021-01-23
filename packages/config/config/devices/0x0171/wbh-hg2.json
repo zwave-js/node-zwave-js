@@ -1,0 +1,22 @@
+// WeBeHome AB WBH-HG2+
+// Home Gateway 2 Plus
+{
+	"manufacturer": "WeBeHome AB",
+	"manufacturerId": "0x0171",
+	"label": "WBH-HG2+",
+	"description": "Home Gateway 2 Plus",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003",
+			"zwaveAllianceId": 2438
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "In the WeBeHome portal:- Open the Z-Wave module configuration page- Press the \"Start\" button on the section \"Reset this Home Gateway Z-Wave network to default settings\"Notice: It is recommended to use Reset only when the primary controller is missing or inoperable. If this Home Gateway is the primary controller for your Z-Wave network a Reset will make all your Z-Wave accessories beeing orphan. After a Reset it is necessary to exclude (or reset) all accessories and then re-include them.If this Home Gateway is used as a secondary controller, use this function to make it leave the Z-Wave network."
+	}
+}

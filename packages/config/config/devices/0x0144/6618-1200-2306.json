@@ -1,0 +1,19 @@
+// Applied Micro Electronics"AME" BV 6618-1200-2306
+// AME Qbox
+{
+	"manufacturer": "Applied Micro Electronics \"AME\" BV",
+	"manufacturerId": "0x0144",
+	"label": "6618-1200-2306",
+	"description": "AME Qbox",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0000",
+			"zwaveAllianceId": 936
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,19 @@
+// Vision Security ZM1602
+// Wireless Siren & Strobe Alarm, Backup battery type
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZM1602",
+	"description": "Wireless Siren & Strobe Alarm, Backup battery type",
+	"devices": [
+		{
+			"productType": "0x2009",
+			"productId": "0x0901",
+			"zwaveAllianceId": [609, 610]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,24 @@
+// Axis Communications Ab T8342
+// Door/Window Sensor
+{
+	"manufacturer": "Axis Communications Ab",
+	"manufacturerId": "0x0364",
+	"label": "T8342",
+	"description": "Door/Window Sensor",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": [2708, 2801, 3083]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Put the Z-Wave Controller into inclusion mode2. Press the tamper switch 3 times within 1.5 seconds to put theunit into inclusion mode.",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.2. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode.",
+		"reset": "This procedure should only be used when the controller is inoperable.1. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode.2. Within 1 second of step 1, press the tamper switch again and hold for 5 seconds.3. Node ID is excluded. The device reverts to factory default state."
+	}
+}

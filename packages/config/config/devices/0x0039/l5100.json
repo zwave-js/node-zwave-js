@@ -1,0 +1,19 @@
+// Honeywell L5100
+// Honeywell Lynx Touch
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "L5100",
+	"description": "Honeywell Lynx Touch",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003",
+			"zwaveAllianceId": 678
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

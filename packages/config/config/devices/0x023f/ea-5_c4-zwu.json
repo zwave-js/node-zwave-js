@@ -1,0 +1,27 @@
+// Control4 Corporation EA-5 / C4-ZWU
+// EA-5 Entertainment and Automation Controller with US Z-Wave Module
+{
+	"manufacturer": "Control4 Corporation",
+	"manufacturerId": "0x023f",
+	"label": "EA-5 / C4-ZWU",
+	"description": "EA-5 Entertainment and Automation Controller with US Z-Wave Module",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0025",
+			"zwaveAllianceId": [1828, 1834, 1868, 1929, 1932]
+		},
+		{
+			"productType": "0x0000",
+			"productId": "0x002c",
+			"zwaveAllianceId": 2447
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.1. Launch Composer.  Click on the Z-Wave Configuration tab in the project properties window.2. Click on \"Reset Defaults\".  This clears the Home ID on the Z-Wave controller and abandons any nodes on the existing network. Any Z-Wave devices previously joined to the network must be removed before they can join the new network."
+	}
+}

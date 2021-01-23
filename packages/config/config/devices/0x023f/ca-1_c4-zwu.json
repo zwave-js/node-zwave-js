@@ -1,0 +1,22 @@
+// Control4 Corporation CA-1 / C4-ZWU
+// CA-1 Control and Automation Controller with US Z-Wave Module
+{
+	"manufacturer": "Control4 Corporation",
+	"manufacturerId": "0x023f",
+	"label": "CA-1 / C4-ZWU",
+	"description": "CA-1 Control and Automation Controller with US Z-Wave Module",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x002d",
+			"zwaveAllianceId": [2245, 2382, 2383]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.1. Launch Composer.  Click on the Z-Wave Configuration tab in the project properties window.2. Click on \"Reset Defaults\".  This clears the Home ID on the Z-Wave controller and abandons any nodes on the existing network. Any Z-Wave devices previously joined to the network must be removed before they can join the new network."
+	}
+}

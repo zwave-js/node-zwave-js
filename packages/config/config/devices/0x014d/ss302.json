@@ -1,0 +1,32 @@
+// Enblink Co. Ltd. SS302
+// -EU
+{
+	"manufacturer": "Enblink Co. Ltd.",
+	"manufacturerId": "0x014d",
+	"label": "SS302",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0302",
+			"zwaveAllianceId": 2023
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0302",
+			"zwaveAllianceId": 2022
+		},
+		{
+			"productType": "0x0003",
+			"productId": "0x0302",
+			"zwaveAllianceId": 1921
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "In setting app, enter into following menu.\"About Enblink > Factory reset\"If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

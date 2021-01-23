@@ -1,0 +1,24 @@
+// Vision Security ZS6102EU-5
+// Smoke Detector
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZS6102EU-5",
+	"description": "Smoke Detector",
+	"devices": [
+		{
+			"productType": "0x2004",
+			"productId": "0x0404",
+			"zwaveAllianceId": 1084
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZS6102-5 to your controller. To get in the “inclusion” mode, the distance between detector and controller is suggested to be in one meter. Press the program switch of ZS6102-5 for 1 second at least to be included. After setting, the LED Setting Lighting should go off, if not, please try again. (Please refer to the user manual to understand the program switch location)",
+		"exclusion": "Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZS6102-5 from your controller. Press the program switch of ZS6102-5 for 1 second at least to be excluded.  The red LED setting light will flash continuously in Exclusion condition. (Please refer to the user manual to understand the program switch location)",
+		"reset": "ZS6102-5 will reset back to the factory default value after being excluded from the network."
+	}
+}

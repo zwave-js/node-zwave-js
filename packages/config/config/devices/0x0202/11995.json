@@ -1,0 +1,19 @@
+// Monoprice 11995
+// Monoprice, P/N , Plug-In Switch
+{
+	"manufacturer": "Monoprice",
+	"manufacturerId": "0x0202",
+	"label": "11995",
+	"description": "Monoprice, P/N , Plug-In Switch",
+	"devices": [
+		{
+			"productType": "0x2007",
+			"productId": "0x0703",
+			"zwaveAllianceId": 1117
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,19 @@
+// Fibargroup FGSS-001
+// FIBARO Smoke Sensor
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "Smoke Sensor",
+	"description": "FIBARO Smoke Sensor",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x1000",
+			"zwaveAllianceId": 1049
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

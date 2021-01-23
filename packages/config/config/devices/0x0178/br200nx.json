@@ -1,0 +1,22 @@
+// Nexia Home Intelligence BR200NX
+// Nexia Bridge
+{
+	"manufacturer": "Nexia Home Intelligence",
+	"manufacturerId": "0x0178",
+	"label": "BR200NX",
+	"description": "Nexia Bridge",
+	"devices": [
+		{
+			"productType": "0x4252",
+			"productId": "0x3230",
+			"zwaveAllianceId": 2364
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Restore Factory Defaults : Using a paper clip or similar object, press the Reset button for at least 5 seconds then release to restore factory defaults. Factory Reset: Resets all Z-Wave information and removes all Z-Wavedevices from the Bridge. If this Bridge is the primary controller for yournetwork, resetting it will result in all the devices in your network beingremoved. Following the reset, it will be necessary to remove and thenadd all of the devices back to your network.Bridge Information: If this Bridge is being used as a secondary orinclusion controller in the network, please reset the Bridge only in theevent that the primary controller is missing or otherwise inoperable."
+	}
+}

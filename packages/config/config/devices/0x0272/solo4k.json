@@ -1,0 +1,22 @@
+// Dune-HD SOLO4K
+// Dune HD Solo 4K
+{
+	"manufacturer": "Dune-HD",
+	"manufacturerId": "0x0272",
+	"label": "SOLO4K",
+	"description": "Dune HD Solo 4K",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1716
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "In the Expert Web UI (http://IP-address:8083/expert): click \"Network\" item at the top of the screen, choose \"Control\" menu item, click \"Controller Factory Default\" button.NOTE: use the reset procedure with extreme care, only when the primary controller is missing or inoperable."
+	}
+}

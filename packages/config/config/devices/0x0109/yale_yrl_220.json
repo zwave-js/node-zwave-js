@@ -1,0 +1,19 @@
+// Vision Security YALE/YRL/220
+// Yale Real Living Touchscreen Lever Lock
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "YALE/YRL/220",
+	"description": "Yale Real Living Touchscreen Lever Lock",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0xffff",
+			"zwaveAllianceId": 630
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

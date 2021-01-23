@@ -1,0 +1,24 @@
+// Ecolink DDLS2-ZWAVE5
+// Z-Wave Plus Smart Switch - Double Rocker
+{
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "DDLS2-ZWAVE5",
+	"description": "Z-Wave Plus Smart Switch - Double Rocker",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0003",
+			"zwaveAllianceId": 2781
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Network InclusionThe Z-Wave Plus Smart Switch must be added to a Z-Wave Plus network prior to use. To include the device in a network both the device and the network controller must be in inclusion mode at the same time. Refer to the instructions provided by the manufacturer of your specific controller for details on initiating the controller’s inclusion mode.1) Verify that the Z-Wave Plus controller you are using is compatible with the Z-Wave Plus Smart Switch.2) Put your Z-Wave Plus Controller into add (inclusion) mode.3) Press the inclusion / exclusion button on the Z-Wave Plus Smart Switch.4) The LED on the front of the unit will turn off if successful included into a network.",
+		"exclusion": "Network Exclusion1) Any Z-Wave Plus Device can be removed from any Z-Wave Plus controller. Follow the directions to put your Z-Wave Plus Controller into exclusion mode.2) Press the inclusion / exclusion button on the Z-Wave Plus Smart Switch.",
+		"reset": "Factory DefaultThe Z-Wave Plus device is automatically factory defaulted when removed from a Z-Wave Plus network. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

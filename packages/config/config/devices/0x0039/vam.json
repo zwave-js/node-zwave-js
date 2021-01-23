@@ -1,0 +1,19 @@
+// Honeywell VAM
+// Honeywell Vista Automation Module
+{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "VAM",
+	"description": "Honeywell Vista Automation Module",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0005",
+			"zwaveAllianceId": [1011, 989]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

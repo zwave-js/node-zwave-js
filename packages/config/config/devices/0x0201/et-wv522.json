@@ -1,0 +1,22 @@
+// Samsung Electronics Co., Ltd. ET-WV522
+// SAMSUNG Connect Home
+{
+	"manufacturer": "Samsung Electronics Co., Ltd.",
+	"manufacturerId": "0x0201",
+	"label": "ET-WV522",
+	"description": "SAMSUNG Connect Home",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0019",
+			"zwaveAllianceId": [2497, 2523]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "If your Wi-Fi hub is frozen and unresponsive, inset a pin into the Reset hole. If you want to clear the location, Tap My Devices and Scroll the screen to the left or right to select a location. Tap →Edit and use the following option. Location name→REMOVE PLACE. If you reset the Wi-Fi hub, you should exclude the Z-Wave device and re-include it. For instructions on how to exclude Z-Wave devices, refer respective Z-Wave device’s user manual."
+	}
+}

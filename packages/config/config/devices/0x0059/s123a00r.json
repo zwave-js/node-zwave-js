@@ -1,14 +1,15 @@
-// Secure Meters (UK) Ltd. S123A00R
+// Secure Meters (UK) Ltd. S123XXXR
 // Z-Wave home energy meter
 {
 	"manufacturer": "Secure Meters (UK) Ltd.",
 	"manufacturerId": "0x0059",
-	"label": "S123A00R",
+	"label": "S123XXXR",
 	"description": "Z-Wave home energy meter",
 	"devices": [
 		{
 			"productType": "0x0005",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 195
 		}
 	],
 	"firmwareVersion": {

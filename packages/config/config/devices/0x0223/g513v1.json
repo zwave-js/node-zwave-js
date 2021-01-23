@@ -1,0 +1,22 @@
+// DTV Research Unipessoal, Lda G513V1
+// TELE System GetMagic
+{
+	"manufacturer": "DTV Research Unipessoal, Lda",
+	"manufacturerId": "0x0223",
+	"label": "G513V1",
+	"description": "TELE System GetMagic",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 1555
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "The Button 3 (the furthest away from the antenna) is used for reset, network reset and factory reset. The gateway reset is done by holding down button from 1 to 5 seconds. During this period LED will blink at 1 second rate. Gateway reset will restart the system without affecting the previously created configuration. Resetting network configuration is done by holding down the button from 5 to 15 seconds. During this period LED will blink with rate 1/4 second. The factory reset is operated by holding down button from 15 to 30 seconds. When factory reset operation is selected, the LED will blink and rate 1/10 second. If button remains pressed for more than 30 seconds, nothing happens."
+	}
+}

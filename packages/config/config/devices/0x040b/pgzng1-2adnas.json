@@ -1,0 +1,24 @@
+// Arlo Technologies, Inc. PGZNG1-2ADNAS
+// Home Automation and Control Unit
+{
+	"manufacturer": "Arlo Technologies, Inc.",
+	"manufacturerId": "0x040b",
+	"label": "PGZNG1-2ADNAS",
+	"description": "Home Automation and Control Unit",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3665
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To add a Z-Wave Device: 1. Click Pulse Devices, and then click Switches, Door Locks, Thermostats, Others. The Z-Wave Devices list screen appears.2. Click Add.3. Click the Z-Wave device’s “include” button.  If you are adding a Z-Wave device with S2 security to an in-home gateway model number PGZNG1 v2, a dialog will prompt you for the 5-digit DSK (Device Specific Key). 4. Follow the instructions on the dialog: a. Locate the 5-digit DSK on the Z-Wave device. b. Enter the 5-digit DSK. c. For assistance in locating the DSK, click the information (i) icon on the dialog.d.Press Continue. 5. Click on the newly added Z-Wave device list item. 6. In the Name field, enter a name for the Z-Wave device, and then click Save.",
+		"exclusion": "To remove a Z-Wave device, click on the device in the Z-Wave Devices list to open the Z-Wave Device Details screen. Click the Remove button.",
+		"reset": "To reset the device, press and hold the reset button on the back of the unit for about 15 seconds.  The unit will then restart.Note: If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to remove and re-add all of the nodes in the network. If this controller is being used as a secondary controller in the network, use thisCopyright © 2014-2018 ICN Acquisition, LLC. All rights reserved.procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

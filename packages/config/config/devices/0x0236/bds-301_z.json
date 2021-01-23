@@ -1,0 +1,24 @@
+// Bandi Comm Tech Inc. BDS-301 Z
+// BANDI
+{
+	"manufacturer": "Bandi Comm Tech Inc.",
+	"manufacturerId": "0x0236",
+	"label": "BDS-301 Z",
+	"description": "BANDI",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002",
+			"zwaveAllianceId": 1538
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Enter the application in the smart phone.2. Touch the\" Add New Device\" in the screen of the smart phone.3. Select\"Switch\".4. Press the top button gently on the switch for 3(three) seconds and then the status led will start to flash.5. Then stop pressing the top button.6. Then the status led will be turned off.",
+		"exclusion": "1. Enter the application in the smart phone.2. Touch the\" Remove New Device\" in the screen of the smart phone.3. Select\"Switch\".4. Press the top button gently on the switch for 3(three) seconds and then the status led will start to flash.5. Then stop pressing the top button.6. Then the status led will be turned on.",
+		"reset": "1. Press the top button on the switch for 10(ten) seconds.2. Then the status led will be turned on.*Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

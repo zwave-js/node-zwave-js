@@ -1,0 +1,24 @@
+// Ecolink SC-ZWAVE5
+// Ecolink Z-Wave Plus Wireless Siren
+{
+	"manufacturer": "Ecolink",
+	"manufacturerId": "0x014a",
+	"label": "SC-ZWAVE5",
+	"description": "Ecolink Z-Wave Plus Wireless Siren",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x000a",
+			"zwaveAllianceId": 1899
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "The Z-Wave Plus Siren must be added to a Z-Wave network prior to use. To include the siren in a network both the siren and the network controller must be in inclusion mode at the same time. Refer to the instructions provided by the manufacturer of your specific controller for details on initiating the controller’s inclusion mode. 1)Verify that the Z-Wave Plus controller you are using is compatible with the Z-Wave Plus Siren.2)Locate the power outlet desired to be used with the Z-Wave Plus Siren.3)Put your Z-Wave Plus Controller into add (inclusion) mode. 4)Plug in the Z-Wave Siren and verify a single beep sound is heard.5)The LED on the front of the unit will turn off if successful included into a network.",
+		"exclusion": "1)Any Z-Wave Plus Device can be removed from any Z-Wave Plus controller. Follow the directions to put your Z-Wave Plus Controller into exclusion mode.2)Unplug and re-plug in your Z-Wave Plus Siren.  3)The device will play a long beep and the LED will begin to breathe if the device is successfully removed from the network.",
+		"reset": "The Z-Wave Plus Siren is automatically factory defaulted when removed from a Z-Wave network. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

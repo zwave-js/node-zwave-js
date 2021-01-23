@@ -1,23 +1,29 @@
-// Aeotec Ltd. ZWA189
+// Aeotec Ltd. ZW189-C15
 // Range Extender 7
 {
 	"manufacturer": "Aeotec Ltd.",
 	"manufacturerId": "0x0371",
-	"label": "ZW189",
+	"label": "ZW189-C15",
 	"description": "Range Extender 7",
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x00bd"
+			"productId": "0x00bd",
+			"zwaveAllianceId": 3699
 		},
 		{
 			"productType": "0x0104",
-			"productId": "0x00bd"
+			"productId": "0x00bd",
+			"zwaveAllianceId": 3616
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "1. Set your Z-Wave Controller into its 'Add Device' mode in order to add the product into your Z-Wave system. Refer to the Controller's manual if you are unsure of how to perform this step.2. Make sure the product is powered. If not, plug it into a wall socket and power on; its LED will be slow fade-in fade-out white color all the time. 3. Single-click Action Button; LED starts fast blinking white color for 30s, which indicates entering inclusion mode.4. If your Z-Wave Controller supports S2 encryption, enter the first 5 digits of DSK into your Controller's interface if /when requested. The DSK can be found on the packaging.5. If inclusion is successful, LED will become a solid white color for 2 seconds and stay on by default. Now, this product is a part of your Z-Wave home control system. You can configure it and its automations via your Z-Wave system; please refer to your software's user guide for precise instructions.6. Should its LED go back to slow fade-in fade-out white color, it indicates inclusion is unsuccessful. Contact us for further support if needed.",
+		"exclusion": "1. Set your Z-Wave Controller into its 'Remove Device' mode in order to remove the product from your Z-Wave system. Refer to the Controller's manual if you are unsure of how to perform this step.2. Make sure the product is powered. If not, plug it into a wall socket and power on. 3. Single-click Action Button; LED will become a flashing white color for 2 seconds, which indicates entering exclusion mode. 4. If the exclusion is successful, LED will change to the default unpaired state which is slow fade-in fade-out white color. 5. Should its LED stay ON or OFF (depending if LED is enabled or disabled), it indicates the exclusion is unsuccessful. Contact us for further support if needed.",
+		"reset": "If the primary controller is missing or inoperable, you may need to reset the device to factory settings.Make sure the product is powered. To complete the reset process manually, press and hold the Action Button for at least 20s, and Factory Reset is performed when released. The LED will become slow fade-in fade-out white color, which indicates the reset operation is successful. Otherwise, please try again. Contact us for further support if needed.Note: 1. This procedure should only be used when the primary controller is missing or inoperable.2. Factory Reset will:(a) Remove the product from Z-Wave network;(b) Delete the Association setting;"
+	}
 }

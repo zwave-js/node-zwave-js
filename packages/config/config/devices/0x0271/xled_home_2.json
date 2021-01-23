@@ -30,7 +30,7 @@
 		},
 		"2": {
 			"label": "LIGHT",
-			"description": "Light threshold [lx]:",
+			"description": "Light threshold [lx]",
 			"valueSize": 2,
 			"minValue": 2,
 			"maxValue": 2000,

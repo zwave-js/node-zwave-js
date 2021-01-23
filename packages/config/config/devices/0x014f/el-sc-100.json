@@ -1,0 +1,22 @@
+// Nortek Security & Control LLC EL-SC-100
+// Elan System Controller
+{
+	"manufacturer": "Nortek Security & Control LLC",
+	"manufacturerId": "0x014f",
+	"label": "EL-SC-100",
+	"description": "Elan System Controller",
+	"devices": [
+		{
+			"productType": "0x5343",
+			"productId": "0x5a57",
+			"zwaveAllianceId": 4030
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "1. Navigation to the Communication Device: ELAN Z-Wave Network page under Security, Climate, Lighting or Input/Output Tabs in Configurator2. Management View: Network Management3. Network Action: Reset4. Execute (button to right of Network action)"
+	}
+}

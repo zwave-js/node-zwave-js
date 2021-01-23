@@ -1,0 +1,19 @@
+// Lexel MH-P210
+// Mini Energy Dimmer
+{
+	"manufacturer": "Lexel",
+	"manufacturerId": "0x0015",
+	"label": "MH-P210",
+	"description": "Mini Energy Dimmer",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 940
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

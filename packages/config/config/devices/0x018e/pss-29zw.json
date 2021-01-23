@@ -1,0 +1,24 @@
+// Climax Technology, Ltd. PSS-29ZW
+// Power Switch Series
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "PSS-29ZW",
+	"description": "Power Switch Series",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3782
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Classic Inclusion1. Plug the Power Switch into a power outlet.2. Put the Z-Wave Gateway or Control Panel into Inclusion mode (please refer to the Z-Wave Gateway or Control Panel manual).3. Within 1.5 seconds, press the Function Button 3 times.4. Refer to the operation manual of the Z-Wave Gateway or Control Panel to complete the adding process.5. If the device has already been added (included) into another Z-Wave Gateway/Control Panel, or if the device is unable to be added into the current Z-Wave Gateway/Control Panel, please exclude it first (see Removing Device) before attempting to include it into the current Z-Wave Gateway/Control Panel.",
+		"exclusion": "The device must be removed from existing Z-Wave network before being included into another. There are two methods available to exclude a device.Exclusion Mode1. Put the Z-Wave Gateway or Control Panel into Exclusion mode (please refer to the Z-Wave Gateway or Control Panel manual).2. Within 1.5 seconds, press the Function Button 3 times and the device will be removed from the Z-Wave network.",
+		"reset": "Factory Reset(Only use factory reset when network Control Panel/Gateway is missing or inoperable).#. Press and hold the Function Button of the device for 10 seconds to factory reset."
+	}
+}

@@ -1,0 +1,24 @@
+// Willis Electric Co., Ltd. ZW1105
+//  Shock Sensor
+{
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "ZW1105",
+	"description": "Shock Sensor",
+	"devices": [
+		{
+			"productType": "0x2003",
+			"productId": "0xb51c",
+			"zwaveAllianceId": 2014
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.2. Once the controller is ready to include your device, triple click the Tamper switch to include it in the network.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.2. Once the controller is ready to Exclude your device, triple click the Tamper switch to exclude it from the network.",
+		"reset": "Press and hold Tamper switch for at least 3 seconds while you insert the batteries.Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+	}
+}

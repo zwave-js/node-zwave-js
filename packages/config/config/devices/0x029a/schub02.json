@@ -1,0 +1,22 @@
+// Scout Alarm SCHUB02
+// Scout Hub 1S
+{
+	"manufacturer": "Scout Alarm",
+	"manufacturerId": "0x029a",
+	"label": "SCHUB02",
+	"description": "Scout Hub 1S",
+	"devices": [
+		{
+			"productType": "0x4882",
+			"productId": "0x3032",
+			"zwaveAllianceId": 2467
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "The Scout hub can be reset to factory defaults by contacting customer support or following instructions for factory reset at scoutalarm.com/knowledge-base. If this controller is theprimary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, usethis procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.Toll-Free Within the United States: 1-844-AT-SCOUT (287-2688)Outside the United States: use the number above, carrier charges apply - please contact your telecom service provider for detailsThe hours our customer support is available may be found at: support.scoutalarm.com"
+	}
+}

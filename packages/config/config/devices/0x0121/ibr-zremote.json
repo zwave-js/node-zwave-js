@@ -1,0 +1,19 @@
+// Napco Security Technologies, Inc. IBR-ZREMOTE
+// I-Bridge Z-Wave Controller
+{
+	"manufacturer": "Napco Security Technologies, Inc.",
+	"manufacturerId": "0x0121",
+	"label": "IBR-ZREMOTE",
+	"description": "I-Bridge Z-Wave Controller",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0101",
+			"zwaveAllianceId": [3689, 968]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,29 @@
+// Vision Security ZU1401
+// USB Dongle
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZU1401",
+	"description": "USB Dongle",
+	"devices": [
+		{
+			"productType": "0x1001",
+			"productId": "0x0101",
+			"zwaveAllianceId": 849
+		},
+		{
+			"productType": "0x1001",
+			"productId": "0x0102",
+			"zwaveAllianceId": 1068
+		},
+		{
+			"productType": "0x0000",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1239
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,24 @@
+// Ring RING BASE STATION
+// Ring Alarm Base Station
+{
+	"manufacturer": "Ring",
+	"manufacturerId": "0x0346",
+	"label": "RING BASE STATION",
+	"description": "Ring Alarm Base Station",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0101",
+			"zwaveAllianceId": 2657
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Classic Inclusion Steps:1. Start inclusion mode on the primary controller 2. From the application’s UI, navigate to controller’s device setting screen -> select Advance options -> Select Z-wave from “Protocol Adapters” and Select “Learn Mode” – DSK will be displayed (refer to the picture below)3. Select “Begin Learn Mode” in the UI4. When the inclusion process in complete, the LED on the base station will be solid blueNote: Joining another Z-Wave network via learn mode is available only when the base station is not already paired to any other devices",
+		"exclusion": "Exclusion Instructions:1. Start exclusion mode on the primary controller 2. From the application’s UI, navigate to controller’s device setting screen -> select Advance options -> Select Z-wave from “Protocol Adapters” and Select “Learn Mode” – DSK will be displayed 3. Select “Begin Learn Mode” in the UI4. When the exclusion process in complete, the LED on the base station will be solid blue",
+		"reset": "Factory Default Instructions1.Using a paper clip press and hold the reset button 2.Wait for the network and power LEDs on the back to start to blink amber color 3.Release the reset button Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

@@ -1,0 +1,19 @@
+// GE/Jasco 12720 / ZW4201
+// GE Z-Wave Plug-in Outdoor Smart Switch
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "12720 / ZW4201",
+	"description": "GE Z-Wave Plug-in Outdoor Smart Switch",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x3031",
+			"zwaveAllianceId": [1194, 1199, 1211]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

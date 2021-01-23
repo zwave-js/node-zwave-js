@@ -1,0 +1,22 @@
+// HomeSeer Technologies HT-SEL
+// HomeSeer HomeTroller-SEL
+{
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HT-SEL",
+	"description": "HomeSeer HomeTroller-SEL",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003",
+			"zwaveAllianceId": [1308, 1309, 1310, 1311, 1314]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Please use this procedure only as a last resort as existing nodes in the network will be orphaned and unable to be controlled.Access the Interfaces page from the UI.  Click on the Z-Wave plug-in link on the interfaces page to be taken to the diagnostics page for the plug-in, then press the Factory Reset button at the top of the page."
+	}
+}

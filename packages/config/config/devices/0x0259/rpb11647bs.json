@@ -1,0 +1,24 @@
+// Starkoff RPB11647BS
+// P-M-O
+{
+	"manufacturer": "Starkoff",
+	"manufacturerId": "0x0259",
+	"label": "RPB11647BS",
+	"description": "P-M-O",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0002",
+			"zwaveAllianceId": 2194
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "When the controller is in add mode, press and hold the button for 3 seconds until the RED LED indicator blinks.",
+		"exclusion": "When the controller is in remove mode, press and hold the button for 3 seconds until the RED LED indicator flashes. When the P-M-O unit is disconnected from the Z-Wave network, the RED LED indicator will be toggled every second.",
+		"reset": "Press and hold button for 10 seconds until green and red led indicators blink. P-M-O will be initialized and send a device reset locally notification to the controller. Use this function only if the primary controller is lost or otherwise inoperable."
+	}
+}

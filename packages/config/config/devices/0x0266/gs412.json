@@ -1,0 +1,24 @@
+// Siterwell Technology HK Co., Ltd. GS412
+// Heat Alarm
+{
+	"manufacturer": "Siterwell Technology HK Co., Ltd.",
+	"manufacturerId": "0x0266",
+	"label": "GS412",
+	"description": "Heat Alarm",
+	"devices": [
+		{
+			"productType": "0x0007",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2572
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "The heat alarm can be included to the Z-Wave network by following operations:1. Make sure the battery is installed well before operating the product. 2. Make sure the alarm is on its final installation position, and then set a main controller into the add (inclusion ) mode.3. Quickly press the test button three times within two seconds, the red LED will light up. 4. If the red LED flashes for about two seconds, it indicates that the alarm have been added (included) successfully, otherwise repeat the operation accordingly.",
+		"exclusion": "1. Make sure the battery is installed well before operating the product. 2. Set the main controller into the remove (exclusion ) mode.3. Quickly press the test button three times within two seconds, the red LED will light up. 4. Wait for the main controller to remove(exclusion) the alarm. If the remove(exclusion) is successful, the red LED flashes for about two seconds, and then exit the remove mode automatically.Note: a. If the alarm is removed(excluded), the alarm will be restored to factory default settings.b.When the alarm is in “Add” or “Remove” mode, you can press the test button to exit and return to operating mode.",
+		"reset": "This operation will delete all information on Z-Wave network, and restore the factory default setting. 1. Remove the battery. 2. Press the button and don't release. And then connect the battery, the red light will on 3 seconds,3 seconds later, then release the button when the red light is off.3. The red light is on for 3 seconds when the button is released. During these 3 seconds, press the button. Only after hearing a beep, restore factory settings successfully. Note: a. Please use this procedure only when the network main controller is missing or inoperable."
+	}
+}

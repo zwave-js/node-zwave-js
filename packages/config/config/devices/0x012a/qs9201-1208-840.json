@@ -1,0 +1,24 @@
+// Qolsys QS9201-1208-840
+// IQ Panel 2+
+{
+	"manufacturer": "Qolsys",
+	"manufacturerId": "0x012a",
+	"label": "QS9201-1208-840",
+	"description": "IQ Panel 2+",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003",
+			"zwaveAllianceId": [3263, 3821]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Swipe down to access “Settings” < Touch “Advanced Settings” < Enter code < Touch “Installation” < Touch “Devices” < Touch “Z-Wave Devices” < Touch “Add Device” < Touch “Pair” < Press pair or learn button on device < Adjust device name as needed <  Select “Automation” < Click “Add” to save",
+		"exclusion": "Swipe down to access “Settings” < Touch “Advanced Settings” < Enter code < Touch “Installation” < Touch “Devices” < Touch “Z-Wave Devices” <  Touch “Delete failed device from panel” < Check boxes next to devices you want to delete < Touch “Delete”",
+		"reset": "1.On home menu, swipe down from the top of the screen.  A pulldown menu should appear.2.Press the SETTINGS icon.3.Press the ADVANCED SETTINGS icon.4.Enter in installer code.5.Press the INSTALLATION icon.6.Press the DEVICES icon.7.Press the Z-WAVE DEVICES icon.8.Press the REMOVE ALL DEVICES icon.9.Press YES on the confirmation dialog to perform a reset."
+	}
+}

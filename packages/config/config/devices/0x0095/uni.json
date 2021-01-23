@@ -1,0 +1,19 @@
+// Qees UNI
+// QEES Dimmer  US
+{
+	"manufacturer": "Qees",
+	"manufacturerId": "0x0095",
+	"label": "UNI",
+	"description": "QEES Dimmer  US",
+	"devices": [
+		{
+			"productType": "0x3101",
+			"productId": "0x0001",
+			"zwaveAllianceId": [594, 595, 611, 612]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

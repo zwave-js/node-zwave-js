@@ -1,0 +1,22 @@
+// Cloud Media STACK BOX
+// Xuan
+{
+	"manufacturer": "Cloud Media",
+	"manufacturerId": "0x0200",
+	"label": "STACK BOX",
+	"description": "Xuan",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1093
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Use this procedure only in the event that the network primary controller is lost or otherwise inoperable.At the back of the box, look for \"Reset\" mark. Use a sharp pin to press inside the hole above the mark for more than 4s."
+	}
+}

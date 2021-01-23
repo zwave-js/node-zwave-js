@@ -1,0 +1,24 @@
+// ABUS Security-Center GmbH & Co. KG SHBE10000
+// Z-Wave Button
+{
+	"manufacturer": "ABUS Security-Center GmbH & Co. KG",
+	"manufacturerId": "0x0403",
+	"label": "SHBE10000",
+	"description": "Z-Wave Button",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0005",
+			"zwaveAllianceId": 3647
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Activate the inclusion mode (teach-in mode) on the gateway. (for further details please refer to the gateways manual)Press the \"+\" key (Add / Inclusion) in your Z-Wave app and follow the instructions to set the gateway to Inclusion mode.Keep the device within range of the gateway.Remove the fuse strip from the battery compartment. The device supports automatic inclusion, i.e. it automatically goes into inclusion mode when it is powered and not yet connected to a gateway. Alternative Inclusion:If the security strip has already been removed, instead press the Link button 3 times quickly (within 1.5 seconds) to start the inclusion on the device.",
+		"exclusion": "Activate the exclusion mode (learn-out mode) at the gateway. (for further details please refer to the gateways manual)Press the \"-\" key (Remove / Exclusion) in your Z-Wave app and follow the instructions to set the gateway to exclusion mode. Press the Link button 3 times quickly (within 1.5 seconds) to start the exclusion on the device. The successful exclusion is displayed in the app or at the gateway.",
+		"reset": "Press the Link button 3 times quickly (within 1.5 seconds). Press quickly (within 1 second)a fourth time and press and hold the Link button for at least 5 seconds. The button is now reset to factory settings.Hint:Please use this procedure only when the network primary controller is missing or otherwise inoperable.If the device is set to factory default, the status is set to \"not included\" and the association settings and possible configurations are reset to default."
+	}
+}

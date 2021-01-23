@@ -1,0 +1,24 @@
+// Zooz ZSE01
+// Indoor Siren
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZSE01",
+	"description": "Indoor Siren",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003",
+			"zwaveAllianceId": 1747
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Power the siren up and bring it in within 3 feet from your controller.2. Put your Z-Wave controller in inclusion mode.3. Press the Z-Wave button on the siren THREE times quickly.4. A new alarm device should appear on your controller's dashboard.",
+		"exclusion": "1. Bring the siren within 3 feet from your Z-Wave gateway controller.2. Put your Z-Wave controller in exclusion/unpairing mode.3. Press and release the Z-Wave button on the siren THREE TIMES quickly.4. The device should disappear from your controller's device list.Please repeat the process following all steps carefully if first attempt is unsuccessful",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To complete the reset process manually, press and hold the Z-Wave button for 10 seconds. NOTE: All previously recorded activity and custom settings will be erased from the siren’s memory."
+	}
+}

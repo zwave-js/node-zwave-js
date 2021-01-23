@@ -1,0 +1,24 @@
+// Philio Technology Corp PAU05
+// Z-Wave Range Extender Repeater
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PAU05",
+	"description": "Z-Wave Range Extender Repeater",
+	"devices": [
+		{
+			"productType": "0x000c",
+			"productId": "0x0074",
+			"zwaveAllianceId": 3611
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Put your Z-Wave controller into inclusion mode by following the instructions provided by thecontroller manufacturer.2.  Pressing Include button of PAU05 three times within 2 seconds will enter inclusion mode.",
+		"exclusion": "1. Put your Z-Wave controller into exclusion mode by following the instructions provided by thecontroller manufacturer.2. Pressing Include button of PAU05 three times within 2 seconds will enter exclusion mode.3. Node ID has been excluded.",
+		"reset": "1. Pressing Include button of PAU05 three times within 2 seconds will enter inclusion mode.2. Within 1 second, press Include button of PAU05 again for 5 seconds.3. IDs are excluded."
+	}
+}

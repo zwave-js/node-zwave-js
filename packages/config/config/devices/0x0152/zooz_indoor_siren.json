@@ -1,19 +1,24 @@
 // UFairy G.R. Tech Zooz Indoor Siren
 // ZSE01
 {
-	"manufacturer": "UFairy G.R. Tech",
+	"manufacturer": "Zooz",
 	"manufacturerId": "0x0152",
 	"label": "Zooz Indoor Siren",
 	"description": "ZSE01",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0003"
+			"productId": "0x0003",
+			"zwaveAllianceId": 1708
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "Inclusion(Add):Please press the Z-Wave button when the Z- Wave controller sends the instructions for inclusion, Press the Button 3 times it will send the NIF",
+		"exclusion": "Exclusion(Remove):Please press the Z-Wave button when the Z-Wave controller sends the instructions for exclusion, Press the Button: 3 times it will send the NIF",
+		"reset": "Press and hold the button 10 seconds . The device will send the reset notification to the list node in the group1 and erases the device memory.Note: This should only be used in the event your networks primary controller is missing or otherwise inoperable."
+	}
 }

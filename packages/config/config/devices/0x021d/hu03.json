@@ -1,0 +1,24 @@
+// Shenzhen Kaadas Intelligent Technology Co., Ltd. HU03
+// Digital Mortise Door Lock
+{
+	"manufacturer": "Shenzhen Kaadas Intelligent Technology Co., Ltd.",
+	"manufacturerId": "0x021d",
+	"label": "HU03",
+	"description": "Digital Mortise Door Lock",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0003",
+			"zwaveAllianceId": [3838, 4035]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Join a network: inclusion Z-Wave network and add the lock. 1.Follow the user guide of hub to enter inclusion mode. 2.Operate on lock following guide below: 3.Enter master mode(** + Master PIN Code + #), Wait for 2 Green Lights + 2 Beeps4.Input “8+1+#” to enter “Inclusion mode” (2 Green Lights + 2 Beeps)",
+		"exclusion": "Log off a network: Exclusion Z-Wave network and remove the lock 1.Follow the user guide of hub to enter exclusion mode. 2.Operate on lock following guide below: 3.Enter master mode(** + Master PIN Code + #), Wait for 2 Green Lights + 2 Beeps4.Input “8+2+#” to enter “Exclusion mode”(2 Green Lights + 2 Beeps)",
+		"reset": "Factory reset:1.Operations on lock 2.Open the door and keep the lock in \"unlock\" status 3.Open battery box and find the reset button. 4.Use a sharp thing to press and hold the reset button. 5.Keep holding the reset button for 5 seconds until hearing voice guide."
+	}
+}

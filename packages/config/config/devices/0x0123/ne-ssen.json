@@ -1,0 +1,24 @@
+// IWATSU NE-SSEN
+// Z-Wave Extender for Smoke Detection Sensor
+{
+	"manufacturer": "IWATSU",
+	"manufacturerId": "0x0123",
+	"label": "NE-SSEN",
+	"description": "Z-Wave Extender for Smoke Detection Sensor",
+	"devices": [
+		{
+			"productType": "0x0a01",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2177
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Push \"Add/Remove Button\" of this equipment for a short time.Also, if this equipment is NOT Added to any network, it is enable to Add automatically when the battery is connected.",
+		"exclusion": "Push \"Add/Remove Button\" of this equipment for a short time.",
+		"reset": "Push and hold \"Add/Remove Button\" for a few seconds more than 5 seconds.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

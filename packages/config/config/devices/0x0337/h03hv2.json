@@ -1,0 +1,22 @@
+// KDDI H03HV2
+// BL 902HW
+{
+	"manufacturer": "KDDI",
+	"manufacturerId": "0x0337",
+	"label": "H03HV2",
+	"description": "BL 902HW",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0003",
+			"zwaveAllianceId": 2541
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "1.It is to pull out the power outlet on HOME Gateway, and wait for approximately 10 seconds.2.It is to hold down the update button on back side ,and at the same time insert the power outlet.After approximately 20 seconds it blinks 3 times at the same time on Update lump ,Network lump, Telephone lump, Wireless 1 lump, Wireless 2 lump, and Power lump, release your hands from the update button. ※Don't power off on HOME Gateway until completed initialize, because it is the cause of breakdown.\"If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.\""
+	}
+}

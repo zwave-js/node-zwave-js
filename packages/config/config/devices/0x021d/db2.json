@@ -1,0 +1,24 @@
+// Shenzhen Kaadas Intelligent Technology Co., Ltd. DB2
+// Touchscreen Digital Deadbolt
+{
+	"manufacturer": "Shenzhen Kaadas Intelligent Technology Co., Ltd.",
+	"manufacturerId": "0x021d",
+	"label": "DB2",
+	"description": "Touchscreen Digital Deadbolt",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3324
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "-Follow the user guide of hub to enter inclusion mode.-Operate on lock following guide below:1.Enter master mode(refer to programming instruction)2.Input “8” to enter “function extension settings”3.Input “1” to join a network.",
+		"exclusion": "-Follow the user guide of hub to enter exclusion mode.-Operate on lock following guide below:1.Enter master mode(refer to programming instruction)2.Input “8” to enter “function extension settings”3.Input “2” to log off a network.",
+		"reset": "※Please use this procedure only when the network primary controller is missing or inoperable.-Operations on lock1.Open the door and keep the lock in \"unlock\" status2.Open battery box and find the reset button. 3.Use a sharp thing to press and hold the reset button.4.Keep holding the reset button and remove a battery from battery box then replace it.5.Keep holding the reset button until hearing voice guide."
+	}
+}

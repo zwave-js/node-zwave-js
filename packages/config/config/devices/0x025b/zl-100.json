@@ -1,0 +1,22 @@
+// AdTrustMedia LLC dba: eZLO ZL-100
+//  Worlds Smallest Hub
+{
+	"manufacturer": "AdTrustMedia LLC dba: eZLO",
+	"manufacturerId": "0x025b",
+	"label": "ZL-100",
+	"description": "Worlds Smallest Hub",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": [3073, 3823, 3843, 3848, 3868]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Press and hold Button for More than 10 seconds. LED will start flashing"
+	}
+}

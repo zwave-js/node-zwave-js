@@ -1,0 +1,24 @@
+// Hoppe FG-FR404-ZW-HF
+// wireless handle
+{
+	"manufacturer": "Hoppe",
+	"manufacturerId": "0x0313",
+	"label": "FG-FR404-ZW-HF",
+	"description": "wireless handle",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2089
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "A Z-Wave network controller in Z-Wave terminology can be connected to the handle. If you want to use a Z-Wave network controller, you must add the handle to the network. Proceed as follows:1. Set the receiver to the inclusion mode2. With the window open, change the handle position at least six times within three seconds, causing the green LED to flash continuously;3. The handle should now be added to the Z-Wave network.4. The green LED flashes once (1 second) when the handle is included",
+		"exclusion": "To remove the handle from your Z-Wave network, do the following:1. Open the window / door.2. Set the Z-Wave controller to the Exclude mode;3. With the window open, change the handle position at least six times within three seconds, causing the green LED to flash continuously;4. The handle should now be removed from the Z-Wave network.5. The red LED flashes once (1 second) if the handle has been successfully excluded.",
+		"reset": "Open the handle. Change window / door position at least 6 times, stopping when the window / door is open. Change the handle position at least 6 times. All this should be completed within 10 seconds.Important: Use this procedure only if the primary network controller is missing or otherwise inoperable."
+	}
+}

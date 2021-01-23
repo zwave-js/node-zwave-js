@@ -1,0 +1,24 @@
+// Climax Technology, Ltd. IR-16ZW
+// Z-Wave Motion Sensor
+{
+	"manufacturer": "Climax Technology, Ltd.",
+	"manufacturerId": "0x018e",
+	"label": "IR-16ZW",
+	"description": "Z-Wave Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": [1313, 2076]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Pull out the battery Insulator steadily.2. The LED indicator will flash for 30 seconds (The PIR is warming up). During the warm up period, the PIR will not be activated. It is recommended that you stay away from the detection area during this time. After the warming period is over, the LED will turn off and the PIR will be ready for operation.3. Put the Z-wave control panel into Inclusion mode (please refer to the Z-wave control panel manual).4. Within 1.5 seconds, press the Function Button 3 times.5. Refer to the operation manual of the Z-wave gateway or control panel to complete the adding process.6. Please press and release the Tamper Switch once after inclusion is completed to ensure the Gateway/Control Panel recognizes the current Tamper condition.7. If the device has already been added (included) into another Z-wave Gateway/Control Panel, or if the device is unable to be added into the current Z-wave Gateway/Control Panel, try removing it first (see Removing Device).",
+		"exclusion": "1. Put the Z-wave gateway or control panel into Exclusion mode (please refer to the Z-wave or control panel manual).2. Within 1.5 seconds, press the Function Button 3 times and the device will be removed from the Z-wave network.",
+		"reset": "Factory resetting the device will restore it to factory default settings (i.e. not included into any Z-wave network). Please only use this procedure if the Z-Wave gateway or control panel is lost or otherwise inoperable.- Press and hold the Function Button of the device for 12 seconds to factory reset."
+	}
+}

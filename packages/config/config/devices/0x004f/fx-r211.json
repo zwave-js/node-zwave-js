@@ -1,0 +1,19 @@
+// Flex Automation FX-R211
+// Micro Relay
+{
+	"manufacturer": "Flex Automation",
+	"manufacturerId": "0x004f",
+	"label": "FX-R211",
+	"description": "Micro Relay",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2405
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

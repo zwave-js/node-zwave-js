@@ -1,0 +1,19 @@
+// Wintop 80
+// Wintop iSensor
+{
+	"manufacturer": "Wintop",
+	"manufacturerId": "0x0097",
+	"label": "80",
+	"description": "Wintop iSensor",
+	"devices": [
+		{
+			"productType": "0x1180",
+			"productId": "0x4500",
+			"zwaveAllianceId": 755
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

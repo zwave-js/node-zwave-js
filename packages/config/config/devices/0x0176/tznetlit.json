@@ -1,0 +1,22 @@
+// Telldus Technologies AB TZNETLIT
+// TellStick ZNet Lite
+{
+	"manufacturer": "Telldus Technologies AB",
+	"manufacturerId": "0x0176",
+	"label": "TZNETLIT",
+	"description": "TellStick ZNet Lite",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 1556
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Navigate to the profile page in Telldus Live!. http://live.telldus.com/profile/indexClick on the locationClick Change settingsClick Z-Wave settingsClick Reset controllerPlease note! Only use the reset procedure when the primary controller is missing or inoperable."
+	}
+}

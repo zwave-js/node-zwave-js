@@ -1,0 +1,24 @@
+// Siterwell Technology HK Co., Ltd. GS559
+// Smoke Alarm Sensor
+{
+	"manufacturer": "Siterwell Technology HK Co., Ltd.",
+	"manufacturerId": "0x0266",
+	"label": "GS559",
+	"description": "Smoke Alarm Sensor",
+	"devices": [
+		{
+			"productType": "0x0005",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2599
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Add(Including) alarm to Z-Wave Network1:Make sure the battery is installed well before operating the product. 2:Make sure the alarm is on its final install location, then set the controller into the Add(Inclusion )mode.3:Quickly, triple click the test button, The LED will light up.4:Issued beep, LED off, the alarm being Add (included)to the network successfully.",
+		"exclusion": "1: Make sure the battery is installed well before operating the product.2: Set the Z-Wave Network controller into Remove(exclusion) mode.3:Quickly, triple click the test button, The LED will light up and alarm enter Remove(Excluding) Mode.4:Wait for the main controller to Remove(exclusion) the alarm.Note: If the alarm is Remove(excluded), then the sensor will be itselfrestored to factory default settings.",
+		"reset": "Reset will delete all information on the Z-Wave network controller, and restore the alarm to factory default settings. 1: Press and hold the test button , Installing the battery, red LED light, until the LED is off, release the button, LED light up again, press the button again, When hearing a beep, restore factory settings successfully.Note: If this sensor is reset, the information of Z-Wave network in the sensor will be deleted. The sensor will be itself restored to factory default settings. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

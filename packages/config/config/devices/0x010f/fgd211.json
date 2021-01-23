@@ -1,0 +1,19 @@
+// Fibargroup FGD211
+// FIBARO Universal Dimmer 500W
+{
+	"manufacturer": "Fibargroup",
+	"manufacturerId": "0x010f",
+	"label": "Universal Dimmer 500W",
+	"description": "FIBARO Universal Dimmer 500W",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0100",
+			"zwaveAllianceId": 88
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -127,7 +127,7 @@
 		},
 		"42": {
 			"label": "Standard power load report",
-			"description": "Defines how much power load must change to be reported,",
+			"description": "Defines how much power load must change to be reported",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,

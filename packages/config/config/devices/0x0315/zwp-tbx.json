@@ -1,0 +1,23 @@
+// zwaveproducts.com ZWP-TBX
+// Z-Wave ToolBox
+{
+	"manufacturer": "zwaveproducts.com",
+	"manufacturerId": "0x0315",
+	"label": "ZWP-TBX",
+	"description": "Z-Wave ToolBox",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2098
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Network Health Tool:Using the Z-Wave controller you intend to troubleshoot, begin the inclusion process to add a new generic Z-Wave device. Select LEARN on the Network Health Tool Device List widget. The Z-Wave controller may include the ZWP-TBX as a generic scene controller or similar device; name the device according to your troubleshooting needs.",
+		"exclusion": "Network Health Tool:Select RESET on the Network Health Tool Device List widget. Be sure to delete the ToolBox from the Z-Wave controller."
+	}
+}

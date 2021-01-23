@@ -1,0 +1,22 @@
+// Trane Corporation TZON1050AC52ZA
+// XL1050
+{
+	"manufacturer": "Trane Corporation",
+	"manufacturerId": "0x008b",
+	"label": "TZON1050AC52ZA",
+	"description": "XL1050",
+	"devices": [
+		{
+			"productType": "0x5441",
+			"productId": "0x3530",
+			"zwaveAllianceId": 1993
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "From the HOME Screen, press MENU on the control, then press NEXIA. Press ADVANCED, then FACTORY RESET. If this bridge is being used as a secondary or inclusion controller in the network, please reset this bridge only in the event that the primary controller is missing or otherwise inoperable."
+	}
+}

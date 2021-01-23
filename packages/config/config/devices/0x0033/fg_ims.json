@@ -1,0 +1,19 @@
+// Electronic Solutions FG IMS
+//  US 115V
+{
+	"manufacturer": "Electronic Solutions",
+	"manufacturerId": "0x0033",
+	"label": "FG IMS",
+	"description": "US 115V",
+	"devices": [
+		{
+			"productType": "0x4647",
+			"productId": "0x0001",
+			"zwaveAllianceId": [306, 307]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

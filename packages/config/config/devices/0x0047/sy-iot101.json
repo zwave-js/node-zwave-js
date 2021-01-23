@@ -1,0 +1,24 @@
+// Somfy SY-IOT101
+// Blind-curtain motor controller
+{
+	"manufacturer": "Somfy",
+	"manufacturerId": "0x0047",
+	"label": "SY-IOT101",
+	"description": "Blind-curtain motor controller",
+	"devices": [
+		{
+			"productType": "0x2018",
+			"productId": "0x1805",
+			"zwaveAllianceId": 2472
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the SY-IOT101to your controller. To get in the “inclusion” mode. - Check if SY-IOT101 module is in exclusion mode. - Press the program switch for above 5 second, then, the LED is turned on. - Release from the program switch. - Then, SY-IOT101 module will try inclusion. - If inclusion is succeeded, LED is blinked 3 times. - If inclusion is failed, LED is turn off.",
+		"exclusion": "For “Exclusion” removing from the network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to add the SY-IOT101 to your controller. To get in the “exclusion” mode. - Check if SY-IOT101 module is in inclusion mode - Press the program switch for above 5 second, then the LED is turned on. - Release from the program switch.  - Then, SY-IOT101 module will try inclusion. - If inclusion is succeeded, LED is blinked 3 times. - If exclusion is failed, LED is turn off.",
+		"reset": "Local Reset (Factory Default Reset ) - Press the program switch for above 10 second, then the LED is blinked until program switch is released. - Release from the program switch. - Then, SY-IOT101 module will try local reset. - If local reset is succeeded, LED is blinked 5 times. - After blinking LED, SY-IOT101 will send the “Device Reset Locally Notification” command and reset to the factory default.  - If local reset is failed, LED is turn off. * Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

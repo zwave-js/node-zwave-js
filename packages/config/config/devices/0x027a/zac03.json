@@ -1,0 +1,24 @@
+// Zooz ZAC03
+// Valve Control
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZAC03",
+	"description": "Valve Control",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0512",
+			"zwaveAllianceId": 1748
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Plug the valve control in within 3 feet from your controller.2. Put your Z-Wave controller in inclusion mode.3. Press the red power button on the valve control THREE times quickly.4. A new on-off device should appear on your controller's dashboard.",
+		"exclusion": "1. Plug the valve control in within 3 feet from your controller.2. Put your Z-Wave controller in exclusion mode.3. Press the red power button on the valve control THREE times quickly.4. The device should disappear from your controller's dashboard.",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To complete the reset process manually, please press and hold the red power button for 10 seconds. The LED indicator on the device will flash to indicate the process has been successfully completed.NOTE: All previously recorded activity and custom settings will be erased from the device’s memory."
+	}
+}

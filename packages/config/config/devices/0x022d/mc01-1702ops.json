@@ -1,0 +1,24 @@
+// Mercury Corporation MC01-1702OPS
+// Door Sensor
+{
+	"manufacturer": "Mercury Corporation",
+	"manufacturerId": "0x022d",
+	"label": "MC01-1702OPS",
+	"description": "Door Sensor",
+	"devices": [
+		{
+			"productType": "0x0401",
+			"productId": "0x0101",
+			"zwaveAllianceId": 2713
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1) Put the Z-Wave Controller into inclusion mode2) Press the Push button one time in door sensor",
+		"exclusion": "1) Put the Z-Wave Controller into exclusion mode2) Press the Push button three times in door sensor",
+		"reset": "1) Press the Push button for more than 10 seconds2) Verify that LED is blinking one time※ Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

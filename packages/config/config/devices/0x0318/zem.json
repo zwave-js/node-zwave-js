@@ -1,0 +1,21 @@
+// SBCK Corp. ZEM
+{
+	"manufacturer": "SBCK Corp.",
+	"manufacturerId": "0x0318",
+	"label": "ZEM",
+	"description": "",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2163
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "1. Operate the Controller APK (Android App.)2. Click \"Setting\"3. Click \"ZW_SET_DEFAULT\"*If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

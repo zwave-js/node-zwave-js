@@ -30,7 +30,7 @@
 		},
 		"2": {
 			"label": "Light",
-			"description": "Light threshold [lx]:",
+			"description": "Light threshold [lx]",
 			"valueSize": 2,
 			"minValue": 2,
 			"maxValue": 2000,
@@ -85,7 +85,7 @@
 		},
 		"8": {
 			"label": "Global_Light",
-			"description": "Use external Ambient Light value:",
+			"description": "Use external Ambient Light value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -96,7 +96,7 @@
 		},
 		"9": {
 			"label": "Slave_Mode",
-			"description": "Disable local control:",
+			"description": "Disable local control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -107,7 +107,7 @@
 		},
 		"10": {
 			"label": "Off_Behaviour",
-			"description": "Off behaviour (timeout):",
+			"description": "Off behaviour (timeout)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -118,7 +118,7 @@
 		},
 		"11": {
 			"label": "On_Behaviour",
-			"description": "On behaviour (timeout):",
+			"description": "On behaviour (timeout)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -129,7 +129,7 @@
 		},
 		"12": {
 			"label": "On_Time_Over",
-			"description": "On behaviour time over (timeout):",
+			"description": "On behaviour time over (timeout)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -140,7 +140,7 @@
 		},
 		"13": {
 			"label": "On_Off_Behaviour",
-			"description": "Sequence On-Off behaviour (timeout):",
+			"description": "Sequence On-Off behaviour (timeout)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -151,7 +151,7 @@
 		},
 		"14": {
 			"label": "Off_On_Behaviour",
-			"description": "Sequence Off-On behaviour (timeout):",
+			"description": "Sequence Off-On behaviour (timeout)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -162,7 +162,7 @@
 		},
 		"15": {
 			"label": "Sequence_Time",
-			"description": "Sequence timing:",
+			"description": "Sequence timing",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,
@@ -173,7 +173,7 @@
 		},
 		"16": {
 			"label": "Motion_Disable",
-			"description": "Motion Off behaviour (timeout):",
+			"description": "Motion Off behaviour (timeout)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,

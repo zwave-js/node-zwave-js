@@ -1,0 +1,19 @@
+// Remotec BW8377IL
+// Remotec
+{
+	"manufacturer": "Remotec",
+	"manufacturerId": "0x5254",
+	"label": "BW8377IL",
+	"description": "Remotec",
+	"devices": [
+		{
+			"productType": "0x0107",
+			"productId": "0x8377",
+			"zwaveAllianceId": 1830
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

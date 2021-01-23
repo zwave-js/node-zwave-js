@@ -1,0 +1,24 @@
+// Sony Mobile Communications Inc. NSD-G1000T
+// ONU Integrated Service Router
+{
+	"manufacturer": "Sony Mobile Communications Inc.",
+	"manufacturerId": "0x0402",
+	"label": "NSD-G1000T",
+	"description": "ONU Integrated Service Router",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3748
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To add a device to the Z-Wave network, press the “Inclusion” button in the Android Controller Application.",
+		"exclusion": "To remove a device from the Z-Wave network, press the “Exclusion” button in the Android Controller Application.",
+		"reset": "Press “RESET” in the Factory Default Reset dialog. This will reset the Z- Wave chip, and the gateway will show “DEVICE RESET LOCALLY NOTIFICATION” after the restart."
+	}
+}

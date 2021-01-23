@@ -1,0 +1,22 @@
+// Amdocs PM-360
+// PowerMaster-360
+{
+	"manufacturer": "Amdocs",
+	"manufacturerId": "0x019c",
+	"label": "PM-360",
+	"description": "PowerMaster-360",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1757
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Log in to your Amdocs Connected Home account (via web portal) and go the Devices section (by clicking on the Devices tab). Scroll down to the bottom of the page and expand the Advanced Settings section (collapsed by default). Click on the \"Reset Network Controller\" button."
+	}
+}

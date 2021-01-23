@@ -8,12 +8,17 @@
 	"devices": [
 		{
 			"productType": "0x0111",
-			"productId": "0x231c"
+			"productId": "0x231c",
+			"zwaveAllianceId": 1945
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "1. Bring your Z-Wave gateway hub or controller as close to the switch as possible2. Put your Z-Wave controller in inclusion mode3. Tap the switch on and off quickly 3 times to finalize the inclusion process4. A new on/off device should appear on your controller's device listTroubleshooting Tips:If you are unable to include the Z-Wave switch to your controller, please try one of the following:- Bring the controller closer to your Z-Wave switch or use a hand-held secondary controller for inclusion- Tap your Z-Wave switch quicker 4 or 5 times once you put the controller in the inclusion mode to ensure the command has gone through- Put your controller in the EXCLUSION mode and tap the switch quickly 3 times, then try adding it to your network again",
+		"exclusion": "1. Bring your Z-Wave gateway hub or controller as close to the switch as possible2. Put your Z-Wave controller in exclusion mode3. Tap the switch on and off quickly 3 times to complete the exclusion process4. The device should disappear from your controller's device listPlease repeat the process following all steps carefully if the first attempt is unsuccessful",
+		"reset": "The switch will be reset to factory defaults only by exclusion using a Z-Wave controller. You may use any certified Z-Wave controller to exclude and reset the switch. This device may not be reset manually when the network’s primary controller is missing or otherwise inoperable. NOTE: All previously recorded activity and custom settings will be erased from the device’s memory."
+	}
 }

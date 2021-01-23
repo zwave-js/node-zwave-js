@@ -1,0 +1,24 @@
+// Willis Electric Co., Ltd. ZW112
+// Motion Sensor
+{
+	"manufacturer": "Willis Electric Co., Ltd.",
+	"manufacturerId": "0x015d",
+	"label": "ZW112",
+	"description": "Motion Sensor",
+	"devices": [
+		{
+			"productType": "0x2003",
+			"productId": "0x701c",
+			"zwaveAllianceId": 2009
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.2. Once the controller is ready to include your device, triple click Tamper switch to include it in the network.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.2. Once the controller is ready to Exclude your device, triple click Tamper switch to exclude it from the network.",
+		"reset": "Press and hold Tamper switch for at least 3 seconds while you insert the battery.  *Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+	}
+}

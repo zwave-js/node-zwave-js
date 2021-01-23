@@ -1,0 +1,19 @@
+// Cyberhouse TBZ48
+// Linear  Thermostat
+{
+	"manufacturer": "Cyberhouse",
+	"manufacturerId": "0x0014",
+	"label": "TBZ48",
+	"description": "Linear  Thermostat",
+	"devices": [
+		{
+			"productType": "0x5442",
+			"productId": "0x5431",
+			"zwaveAllianceId": 1286
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

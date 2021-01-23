@@ -167,7 +167,7 @@
 		},
 		"58": {
 			"label": "D parameter",
-			"description": "Available config. parameters (data type is2 Byte DEC):",
+			"description": "Available config. parameters (data type is2 Byte DEC)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,

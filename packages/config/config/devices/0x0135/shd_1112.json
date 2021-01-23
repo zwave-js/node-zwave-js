@@ -1,0 +1,19 @@
+// ZyXEL SHD 1112
+// PIR Sensor
+{
+	"manufacturer": "ZyXEL",
+	"manufacturerId": "0x0135",
+	"label": "SHD 1112",
+	"description": "PIR Sensor",
+	"devices": [
+		{
+			"productType": "0x0101",
+			"productId": "0x0001",
+			"zwaveAllianceId": 892
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

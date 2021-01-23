@@ -1,0 +1,19 @@
+// GE/Jasco 45652
+// GE Energy Monitoring Lamp Module
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "45652",
+	"description": "GE Energy Monitoring Lamp Module",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3032",
+			"zwaveAllianceId": 1207
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

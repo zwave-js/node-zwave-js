@@ -1,0 +1,22 @@
+// Sharp DN3E6JE089
+// IoT Gateway
+{
+	"manufacturer": "Sharp",
+	"manufacturerId": "0x010b",
+	"label": "IoT Gateway",
+	"description": "IoT Gateway",
+	"devices": [
+		{
+			"productType": "0x4561",
+			"productId": "0x0089",
+			"zwaveAllianceId": 2999
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "When you tap the Setting button in Moble Application, Settings dialog is displayed. Then select \"Reset\" and press “RESET” button in Factory Default Reset dialog. This will reset the Z-Wave chip and all LEDs blinks, and the product will broadcast the “DEVICE RESET LOCALLY NOTIFICATION” after restart.If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

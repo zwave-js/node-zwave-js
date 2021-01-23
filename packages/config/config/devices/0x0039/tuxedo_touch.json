@@ -1,14 +1,15 @@
-// Honeywell Tuxedo Touch
+// Honeywell TUXEDO TOUCH
 // Tuxedo Touch Keypad and Z-Wave Controller
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
-	"label": "Tuxedo Touch",
+	"label": "TUXEDO TOUCH",
 	"description": "Tuxedo Touch Keypad and Z-Wave Controller",
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": [604, 634]
 		}
 	],
 	"firmwareVersion": {

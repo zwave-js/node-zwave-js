@@ -1,4 +1,4 @@
-// Novar Electrical Devices and Systems (EDS) LDM32
+// Novar Electrical Devices and Systems (EDS) LDM32S
 // MK Honeywell Astral 2 Load Wall Dimmer - LDM32UC
 {
 	"manufacturer": "Novar Electrical Devices and Systems (EDS)",
@@ -8,7 +8,23 @@
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0102"
+			"productId": "0x0102",
+			"zwaveAllianceId": [224, 250]
+		},
+		{
+			"productType": "0x0304",
+			"productId": "0x0102",
+			"zwaveAllianceId": 222
+		},
+		{
+			"productType": "0x0904",
+			"productId": "0x0102",
+			"zwaveAllianceId": 188
+		},
+		{
+			"productType": "0x0804",
+			"productId": "0x0102",
+			"zwaveAllianceId": 223
 		}
 	],
 	"firmwareVersion": {

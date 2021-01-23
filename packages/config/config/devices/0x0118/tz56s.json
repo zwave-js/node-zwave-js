@@ -1,0 +1,19 @@
+// TKB Home TZ56S
+// TKB Switch
+{
+	"manufacturer": "TKB Home",
+	"manufacturerId": "0x0118",
+	"label": "TZ56S",
+	"description": "TKB Switch",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x1056",
+			"zwaveAllianceId": 1412
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

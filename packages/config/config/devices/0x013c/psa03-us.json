@@ -1,0 +1,24 @@
+// Philio Technology Corp PSA03-US
+// DoorLock
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PSA03-US",
+	"description": "DoorLock",
+	"devices": [
+		{
+			"productType": "0x000a",
+			"productId": "0x0069",
+			"zwaveAllianceId": 2987
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1.check Z-WaveTM Controller entered inclusion mode.2.Press the Add/Remove function“enterPC” is enter “0000”(default)enterPC->enter-> 1 -> 0 ->enter3.After add successful, it will have twice beep sounds.if inclusion fail it will have five beep.Notice 1 : if you reset doorlock ,you have to do OPERATING INSTRUCTION no.1(door handling identification process )Notice 2:if Door lock in learn mode,device can stop on operation setting mode,until success include or 60s time out.",
+		"exclusion": "1.check Z-WaveTM Controller entered exclusion mode.2.Press the Add/Remove function“enterPC” is enter “0000”(default)enterPC->enter-> 1 -> 0 ->enter3.After remove successful, it will have twice beep sounds.if exclusion fail it will have five beep.Notice 1 : if you reset doorlock ,you have to do OPERATING INSTRUCTION no.1(door handling identification process )Notice 2:if Door lock in learn mode,device can stop on operation setting mode,until success include or 60s time out.",
+		"reset": "1.Press the black key in battery cover, and until 5s time up.device can beep two times.2.Device can send resetlocally notificationnote : Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

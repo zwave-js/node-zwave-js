@@ -1,0 +1,24 @@
+// Siterwell Technology HK Co., Ltd. GS816
+// carbon monoxide alarm
+{
+	"manufacturer": "Siterwell Technology HK Co., Ltd.",
+	"manufacturerId": "0x0266",
+	"label": "GS816",
+	"description": "carbon monoxide alarm",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2593
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network:a: Put the Z-Wave interface controller into “include” mode, and following its instruction to add the GS816B to your controller. To get in the “inclusion” mode, the position of the detector and controller should be kept in the usual working position.b: Power on the detector, in 2 seconds, press the button three times in the warm-up state or the normal standby state, this detector will be automatically with the controller network with the red light flash every two seconds. If the network is successful, the red led always on about 5 seconds, else the yellow led always on 5 seconds.Note: Inclusion network status, you can click on the button to exit.",
+		"exclusion": "For “Exclusion” from (removing from) a network:a: Put the Z-Wave Interface Controller into “exclusion” mode.b: Power on the detector, in 2 seconds, press the button three times in the warm-up state or the normal standby state, this detector will be automatically remove from the controller network with the red light flash every two seconds. If the network is exclusion successful, the red led4 / 8always on about 5 seconds, else the yellow led always on 5 seconds.Note: Exclusion network status, you can click on the button to exit.Note: If the alarm is remove(excluded), then the sensor will be itself restored to factory default settings.",
+		"reset": "It happens automatically when the device is excluded or you can use the following steps to reset factory settings.a: Remove the battery.b: Press the button and don't let go. And then connecting the battery, the red led will on 3 seconds,3 seconds later, when the red light is off, then release the button.c. When the button is released, the red light is lit for 3 seconds. In these 3 seconds, press the button, then the red led will flash quickly about 10 seconds (NOTE: Do not turn off the power when the red led flashes). After successful recovery factory settings, the product into preheating state.Note: If this sensor is reset, the information of Z-Wave network in the sensor will be deleted. The sensor will be itself restored to factory default settings. Please use this procedure only when the network primary controller is missing or otherwise inoperable.NOTE: Damage to the ZWAVE module will not affect the main function of the alarm, only affect the module related functions."
+	}
+}

@@ -1,0 +1,22 @@
+// Philio Technology Corp PSC03
+// Control Center Gateway
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PSC03",
+	"description": "Control Center Gateway",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0054",
+			"zwaveAllianceId": 2964
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Reset the Z-Wave controller. It will reset the Z-Wave controller and will be assign a new Z-Wave home id. Please click \"Reset Gateway\", it will show \"Reset\" messageIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.(Please check your user document, the detail in 3.1.3)"
+	}
+}

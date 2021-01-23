@@ -1,0 +1,22 @@
+// Elexa Consumer Products Inc. DMGW1
+// Hub
+{
+	"manufacturer": "Elexa Consumer Products Inc.",
+	"manufacturerId": "0x021f",
+	"label": "DMGW1",
+	"description": "Hub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2178
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "To reset the Network to the default settings, press and hold the Main button(on top of the Z-box) for 10 seconds. Release the button when the LED quickly flashes red indicating reset. Refer to the Dome App to reconnect the Z-box.If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

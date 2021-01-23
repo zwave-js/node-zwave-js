@@ -47,7 +47,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Light Dimming Speed",
-			"description": "This changes the speed in which the attached light dims up or down. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed.\n      Range:0-98\n      Default: 4",
+			"description": "This changes the speed in which the attached light dims up or down. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. Range:0-98 Default: 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
@@ -59,7 +59,7 @@
 		},
 		"2": {
 			"label": "Light Dimming Speed (From Switch)",
-			"description": "This changes the speed in which the attached light dims up or down when controlled from the physical switch. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 1.\n      Range:0-99\n      Default: 99",
+			"description": "This changes the speed in which the attached light dims up or down when controlled from the physical switch. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 1. Range:0-99 Default: 99",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -71,7 +71,7 @@
 		},
 		"3": {
 			"label": "Light Ramp Rate",
-			"description": "This changes the speed in which the attached light turns on or off. For example, when a user sends the switch a basicSet(value: 0xFF) or basicSet(value: 0x00), this is the speed in which those actions take place. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 1.\n      Range:0-99\n      Default: 99",
+			"description": "This changes the speed in which the attached light turns on or off. For example, when a user sends the switch a basicSet(value: 0xFF) or basicSet(value: 0x00), this is the speed in which those actions take place. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 1. Range:0-99 Default: 99",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -83,7 +83,7 @@
 		},
 		"4": {
 			"label": "Light Ramp Rate (From Switch)",
-			"description": "This changes the speed in which the attached light turns on or off from the physical switch. For example, when a user presses the up or down button, this is the speed in which those actions take place. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 1.\n      Range:0-99\n      Default: 99",
+			"description": "This changes the speed in which the attached light turns on or off from the physical switch. For example, when a user presses the up or down button, this is the speed in which those actions take place. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 1. Range:0-99 Default: 99",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -95,7 +95,7 @@
 		},
 		"5": {
 			"label": "Minimum Light Level",
-			"description": "The minimum level that the dimmer allows the bulb to be dimmed to. Useful when the user has an LED bulb that does not turn on or flickers at a lower level.\n      Range:1-45\n      Default: 1",
+			"description": "The minimum level that the dimmer allows the bulb to be dimmed to. Useful when the user has an LED bulb that does not turn on or flickers at a lower level. Range:1-45 Default: 1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 45,
@@ -107,7 +107,7 @@
 		},
 		"6": {
 			"label": "Maximum Light Level",
-			"description": "The maximum level that the dimmer allows the bulb to be dimmed to. Useful when the user has an LED bulb that reaches its maximum level before the dimmer value of 99.\n      Range:55-99\n      Default: 99",
+			"description": "The maximum level that the dimmer allows the bulb to be dimmed to. Useful when the user has an LED bulb that reaches its maximum level before the dimmer value of 99. Range:55-99 Default: 99",
 			"valueSize": 1,
 			"minValue": 55,
 			"maxValue": 99,
@@ -119,7 +119,7 @@
 		},
 		"7": {
 			"label": "Minimum Fan Level",
-			"description": "The minimum level that the dimmer allows the fan to be dimmed to. Useful when the user has a fan that does not turn at a lower level.\n      Range:1-45\n      Default: 1",
+			"description": "The minimum level that the dimmer allows the fan to be dimmed to. Useful when the user has a fan that does not turn at a lower level. Range:1-45 Default: 1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 45,
@@ -131,7 +131,7 @@
 		},
 		"8": {
 			"label": "Maximum Fan Level",
-			"description": "The maximum level that the dimmer allows the fan to be dimmed to.\n      Range:55-99\n      Default: 99",
+			"description": "The maximum level that the dimmer allows the fan to be dimmed to. Range:55-99 Default: 99",
 			"valueSize": 1,
 			"minValue": 55,
 			"maxValue": 99,
@@ -143,7 +143,7 @@
 		},
 		"10": {
 			"label": "Auto Off Light Timer",
-			"description": "Automatically turns the light switch off after this many seconds. When the switch is turned on a timer is started that is the duration of this setting. When the timer expires, the switch is turned off.\n      Range:0-32767\n      Default: 0",
+			"description": "Automatically turns the light switch off after this many seconds. When the switch is turned on a timer is started that is the duration of this setting. When the timer expires, the switch is turned off. Range:0-32767 Default: 0",
 			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
@@ -156,7 +156,7 @@
 		},
 		"11": {
 			"label": "Auto Off Fan Timer",
-			"description": "Automatically turns the fan switch off after this many seconds. When the switch is turned on a timer is started that is the duration of this setting. When the timer expires, the switch is turned off.\n      Range:0-32767\n      Default: 0",
+			"description": "Automatically turns the fan switch off after this many seconds. When the switch is turned on a timer is started that is the duration of this setting. When the timer expires, the switch is turned off. Range:0-32767 Default: 0",
 			"units": "s",
 			"valueSize": 2,
 			"minValue": 0,
@@ -169,7 +169,7 @@
 		},
 		"12": {
 			"label": "Default Light Level (Local)",
-			"description": "Default level for the dimmer when it is powered on from the local switch. A setting of 0 means that the switch will return to the level that it was on before it was turned off.\n      Range:1-99\n      Default: 0",
+			"description": "Default level for the dimmer when it is powered on from the local switch. A setting of 0 means that the switch will return to the level that it was on before it was turned off. Range:1-99 Default: 0",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -181,7 +181,7 @@
 		},
 		"13": {
 			"label": "Default Light Level (Z-Wave)",
-			"description": "Default level for the dimmer when it is powered on from a Z-Wave command. A setting of 0 means that the switch will return to the level that it was on before it was turned off.\n      Range:1-99\n      Default: 0",
+			"description": "Default level for the dimmer when it is powered on from a Z-Wave command. A setting of 0 means that the switch will return to the level that it was on before it was turned off. Range:1-99 Default: 0",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -193,7 +193,7 @@
 		},
 		"14": {
 			"label": "Default Fan Level (Local)",
-			"description": "Default level for the fan dimmer when it is powered on from the local switch.\n      Default: Last State",
+			"description": "Default level for the fan dimmer when it is powered on from the local switch. Default: Last State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -223,7 +223,7 @@
 		},
 		"15": {
 			"label": "Default Fan Level (Z-Wave)",
-			"description": "Default level for the fan dimmer when it is powered on from the local switch.\n      Default: Last State",
+			"description": "Default level for the fan dimmer when it is powered on from the local switch. Default: Last State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -253,7 +253,7 @@
 		},
 		"16": {
 			"label": "Light State After Power Restored",
-			"description": "The state the switch should return to once power is restored after power failure. 0 = off, 1-99 = level, 100=previous.\n      Range:0-100\n      Default: 100",
+			"description": "The state the switch should return to once power is restored after power failure. 0 = off, 1-99 = level, 100=previous. Range:0-100 Default: 100",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -265,7 +265,7 @@
 		},
 		"17": {
 			"label": "Fan State After Power Restored",
-			"description": "The state the switch should return to once power is restored after power failure.\n      Default: Off",
+			"description": "The state the switch should return to once power is restored after power failure. Default: Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -277,7 +277,7 @@
 		},
 		"18": {
 			"label": "Light LED Indicator Color",
-			"description": "This is the color of the Light LED strip represented as part of the HUE color wheel. Since the wheel has 360 values and this parameter only has 255, the following equation can be used to determine the color: value/255 * 360 = Hue color wheel value\n      Range: 0 to 255\n      Default: 170",
+			"description": "This is the color of the Light LED strip represented as part of the HUE color wheel. Since the wheel has 360 values and this parameter only has 255, the following equation can be used to determine the color: value/255 * 360 = Hue color wheel value Range: 0 to 255 Default: 170",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -289,7 +289,7 @@
 		},
 		"19": {
 			"label": "Light LED Strip Intensity",
-			"description": "This is the intensity of the Light LED strip.\n      Range: 0-10\n      Default: 5",
+			"description": "This is the intensity of the Light LED strip. Range: 0-10 Default: 5",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -301,7 +301,7 @@
 		},
 		"20": {
 			"label": "Fan LED Indicator Color",
-			"description": "This is the color of the Fan LED strip represented as part of the HUE color wheel. Since the wheel has 360 values and this parameter only has 255, the following equation can be used to determine the color: value/255 * 360 = Hue color wheel value\n      Range: 0 to 255\n      Default: 170",
+			"description": "This is the color of the Fan LED strip represented as part of the HUE color wheel. Since the wheel has 360 values and this parameter only has 255, the following equation can be used to determine the color: value/255 * 360 = Hue color wheel value Range: 0 to 255 Default: 170",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -313,7 +313,7 @@
 		},
 		"21": {
 			"label": "Fan LED Strip Intensity",
-			"description": "This is the intensity of the Fan LED strip.\n      Range: 0-10\n      Default: 5",
+			"description": "This is the intensity of the Fan LED strip. Range: 0-10 Default: 5",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -325,7 +325,7 @@
 		},
 		"22": {
 			"label": "Light LED Strip Intensity (When OFF)",
-			"description": "This is the intensity of the Light LED strip when the switch is off. This is useful for users to see the light switch location when the lights are off.\n      Range: 0-10\n      Default: 1",
+			"description": "This is the intensity of the Light LED strip when the switch is off. This is useful for users to see the light switch location when the lights are off. Range: 0-10 Default: 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -337,7 +337,7 @@
 		},
 		"23": {
 			"label": "Fan LED Strip Intensity (When OFF)",
-			"description": "This is the intensity of the Fan LED strip when the switch is off. This is useful for users to see the light switch location when the lights are off.\n      Range: 0-10\n      Default: 1",
+			"description": "This is the intensity of the Fan LED strip when the switch is off. This is useful for users to see the light switch location when the lights are off. Range: 0-10 Default: 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -349,7 +349,7 @@
 		},
 		"24[0x7f000000]": {
 			"label": "Light LED Strip Effect",
-			"description": "Light LED Strip Effect.\n          0 = Off, 1 = Solid, 2 = Slow Blink, 3 = Fast Blink, 4 = Chase, 5 = Pulse\n      Default: 0",
+			"description": "Light LED Strip Effect. 0 = Off, 1 = Solid, 2 = Slow Blink, 3 = Fast Blink, 4 = Chase, 5 = Pulse Default: 0",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 5,
@@ -387,7 +387,7 @@
 		},
 		"24[0xff0000]": {
 			"label": "Light LED Strip Effect Duration",
-			"description": "Light LED Strip Effect Duration.\n       1 to 60 = seconds, 61 to 120  minutes, 121 -  254 = hours, 255 = Indefinitely\n          Default: 0",
+			"description": "Light LED Strip Effect Duration.  1 to 60 = seconds, 61 to 120  minutes, 121 -  254 = hours, 255 = Indefinitely Default: 0",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -399,7 +399,7 @@
 		},
 		"24[0xff00]": {
 			"label": "Light LED Strip Effect Intensity",
-			"description": "Light LED Strip Effect Intensity.\n        0 to 9.  0 = dim, 9 = bright\n          Default: 3",
+			"description": "Light LED Strip Effect Intensity. 0 to 9.  0 = dim, 9 = bright Default: 3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 9,
@@ -411,7 +411,7 @@
 		},
 		"24[0xff]": {
 			"label": "Light LED Strip Effect Color",
-			"description": "Light LED Strip Effect Color.\n    Color - 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value\n      Range: 0-255\n      Default: 0",
+			"description": "Light LED Strip Effect Color. Color - 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value Range: 0-255 Default: 0",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -457,7 +457,7 @@
 		},
 		"25[0x7f000000]": {
 			"label": "Fan LED Strip Effect",
-			"description": "Fan LED Strip Effect.\n     0 = Off, 1 = Solid, 2 = Slow Blink, 3 = Fast Blink, 4 = Chase, 5 = Pulse\n   Default: 0",
+			"description": "Fan LED Strip Effect. 0 = Off, 1 = Solid, 2 = Slow Blink, 3 = Fast Blink, 4 = Chase, 5 = Pulse Default: 0",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 5,
@@ -495,7 +495,7 @@
 		},
 		"25[0xff0000]": {
 			"label": "Fan LED Strip Effect Duration",
-			"description": "Fan LED Strip Duration.\n    1 to 60 = seconds, 61 to 120  minutes, 121 -  254 = hours, 255 = Indefinitely\n          Default: 0",
+			"description": "Fan LED Strip Duration. 1 to 60 = seconds, 61 to 120  minutes, 121 -  254 = hours, 255 = Indefinitely Default: 0",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -507,7 +507,7 @@
 		},
 		"25[0xff00]": {
 			"label": "Fan LED Strip Effect Intensity",
-			"description": "Fan LED Strip Intensity\n    0 to 9.  0 = dim, 9 = bright\n     Default: 3",
+			"description": "Fan LED Strip Intensity 0 to 9.  0 = dim, 9 = bright Default: 3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 9,
@@ -519,7 +519,7 @@
 		},
 		"25[0xff]": {
 			"label": "Fan LED Strip Effect Color",
-			"description": "Fan LED Color\n 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value\n      Range: 0-255\n      Default: 0",
+			"description": "Fan LED Color 0 - 255. Hue color wheel. value/255 * 360 = Hue color wheel value Range: 0-255 Default: 0",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -565,7 +565,7 @@
 		},
 		"26": {
 			"label": "Light LED Strip Timeout",
-			"description": "When the LED strip is disabled (Light LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted.\n      Range: 0-10\n      Default: 3    Disabled: 0",
+			"description": "When the LED strip is disabled (Light LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted. Range: 0-10 Default: 3 Disabled: 0",
 			"unit": "s",
 			"valueSize": 1,
 			"minValue": 0,
@@ -578,7 +578,7 @@
 		},
 		"27": {
 			"label": "Fan LED Strip Timeout",
-			"description": "When the LED strip is disabled (Fan LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted.\n      Range: 0-10\n      Default: 3      Disabled: 0",
+			"description": "When the LED strip is disabled (Fan LED Strip Intensity is set to 0), this setting allows the LED strip to turn on temporarily while being adjusted. Range: 0-10 Default: 3 Disabled: 0",
 			"unit": "s",
 			"valueSize": 1,
 			"minValue": 0,
@@ -591,7 +591,7 @@
 		},
 		"28": {
 			"label": "Active Power Reports",
-			"description": "The power level change that will result in a new power report being sent. The value is a percentage of the previous report. 0 = disabled.\n      Range:0-100\n      Default: 10",
+			"description": "The power level change that will result in a new power report being sent. The value is a percentage of the previous report. 0 = disabled. Range:0-100 Default: 10",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -603,7 +603,7 @@
 		},
 		"29": {
 			"label": "Periodic Power & Energy Reports",
-			"description": "Time period between consecutive power & energy reports being sent (in seconds). The timer is reset after each report is sent.\n      Range:0-32767\n      Default: 3600",
+			"description": "Time period between consecutive power & energy reports being sent (in seconds). The timer is reset after each report is sent. Range:0-32767 Default: 3600",
 			"units": "s",
 			"valueSize": 2,
 			"minValue": 0,
@@ -616,7 +616,7 @@
 		},
 		"30": {
 			"label": "Energy Reports",
-			"description": "The energy level change that will result in a new energy report being sent. The value is a percentage of the previous report.\n      Range:0-100\n      Default: 10",
+			"description": "The energy level change that will result in a new energy report being sent. The value is a percentage of the previous report. Range:0-100 Default: 10",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

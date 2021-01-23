@@ -1,0 +1,22 @@
+// Vera Control NA930
+// Homelive Base
+{
+	"manufacturer": "Vera Control",
+	"manufacturerId": "0x008c",
+	"label": "NA930",
+	"description": "Homelive Base",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0022",
+			"zwaveAllianceId": 1643
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Please use this procedure only in the event that the system primary controller is missing or otherwise inoperable. To reset the controller, press the reset button for 20 seconds. This will reset it to factory default."
+	}
+}

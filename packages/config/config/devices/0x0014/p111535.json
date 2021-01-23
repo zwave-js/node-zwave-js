@@ -1,0 +1,19 @@
+// Cyberhouse P111535
+// BFT B-EBA
+{
+	"manufacturer": "Cyberhouse",
+	"manufacturerId": "0x0014",
+	"label": "P111535",
+	"description": "BFT B-EBA",
+	"devices": [
+		{
+			"productType": "0x0100",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1305
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

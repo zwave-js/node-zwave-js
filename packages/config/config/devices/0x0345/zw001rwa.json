@@ -1,19 +1,24 @@
-// SWidget ZW001RWA
+// Swidget Corp ZW000RW
 // Swidget module with USB port
 {
-	"manufacturer": "SWidget",
+	"manufacturer": "Swidget Corp",
 	"manufacturerId": "0x0345",
-	"label": "ZW001RWA",
+	"label": "ZW000RW",
 	"description": "Swidget module with USB port",
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 3087
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "NOTE: Before beginning the network add procedure, ensure there are no devices plugged into either receptacle outlet. After the device has ben successfully added to the network, DO NOT plug anything into either receptacle outlet for at least 2 minutes to allow the module time to synchronize with the outlet metering hardware, or the accuracy of your meter readings may be adversely affected.1.Follow network ADD steps for your Z-Wave controller/hub to prepare the network to accept a device addition.2.Lightly press the push button on the Swidget Z-Wave Insert and hold for 10-15 seconds until the LED illuminates solid blue, then release the button. The LED will flash blue to indicate ADD mode is enabled. No manual or external Z-Wave operations are possible during this activity.3. The Swidget Z-Wave Insert will remain in ADD mode for up to 60 seconds. If the device is successfully added to the Z-Wave network, the LED will be solid blue for 5 seconds then return to the normal operational state; LED will be solid green if switch is ON (default), LED will not be illuminated if switch is OFF. If the device fails to be successfully added to the network after 60 seconds, the red LED will begin to flash. If necessary, consult your Z-Wave controller/hub manual and re-try. 4.Please see section 4.4 on how to perform a local device reset if multiple remove attempts fail.",
+		"exclusion": "1. Follow network REMOVE steps for your Z-Wave controller/hub. 2.Lightly press the push button on the Swidget Z-Wave Insert and hold for approximately 10 seconds until the LED illuminates solid blue, then release the button. The LED will flash blue to indicate REMOVE mode is enabled. 3. The Swidget Z-Wave Insert will remain in REMOVE mode for up to 60 seconds. If the device is successfully removed from the Z-Wave network, the LED will be solid blue for 5 seconds then return to the normal operational state. If the device fails to be successfully removed from the network after 60 seconds, the red LED will begin to flash. If necessary, consult your Z-Wave controller/hub manual and re-try.4.Please see section 4.4 on how to perform a local device reset if multiple remove attempts fail.",
+		"reset": "To perform a local device reset, lightly press and hold the push button on the Swidget Z-Wave Insert for approximately 20 seconds until the LED turns SOLID RED, and then release. After 10 seconds the LED will illuminate SOLID BLUE; indicating user is passing through network add/remove period. After 15 seconds elapsed hold time, the LED will turn off•After 20 seconds elapsed hold time, the LED will turn SOLID RED; indicating that the user has entered the device reset period. Releasing the button during this period triggers the Factory Default Local Reset operations.When the Reset operation is in progress, the LED will progress from green to blue to red repeatedly until the reset process is complete, after which the LED will be turned OFF.If the user continues to hold the button, after 25 seconds elapse, the user will leave the device reset period, the LED will turn OFF, and no actions will be taken when the button is released. NOTE: The local reset procedure should only be used when the original controller is inoperable or has been replaced, or if Network Add or Network Remove operations have failed after a few attempts.Resetting to factory default settings will, reset the Swidget Z-Wave 500 Series Insert network parameters to the default removed state, and delete the Lifeline Association if it exists."
+	}
 }

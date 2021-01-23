@@ -1,14 +1,15 @@
-// Reitz-Group.de 064394
-// Schuko Plug Dimmer
+// Schuko 064394
+// Plug Dimmer
 {
-	"manufacturer": "Reitz-Group.de",
+	"manufacturer": "Schuko",
 	"manufacturerId": "0x0064",
 	"label": "064394",
-	"description": "Schuko Plug Dimmer",
+	"description": "Plug Dimmer",
 	"devices": [
 		{
 			"productType": "0x1001",
-			"productId": "0x0000"
+			"productId": "0x0000",
+			"zwaveAllianceId": 370
 		}
 	],
 	"firmwareVersion": {

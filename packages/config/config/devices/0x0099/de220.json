@@ -1,0 +1,19 @@
+// GreenWave Reality Inc. DE220
+// GreenWave Reality In Home Display
+{
+	"manufacturer": "GreenWave Reality Inc.",
+	"manufacturerId": "0x0099",
+	"label": "DE220",
+	"description": "GreenWave Reality In Home Display",
+	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0001",
+			"zwaveAllianceId": [47, 86, 97]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

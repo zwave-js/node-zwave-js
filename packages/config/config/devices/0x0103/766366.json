@@ -1,0 +1,19 @@
+// Diehl AKO 766366
+// DiehlControls Dimmer Actuator
+{
+	"manufacturer": "Diehl AKO",
+	"manufacturerId": "0x0103",
+	"label": "766366",
+	"description": "DiehlControls Dimmer Actuator",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0002",
+			"zwaveAllianceId": [1208, 996]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

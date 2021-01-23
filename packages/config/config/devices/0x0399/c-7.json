@@ -1,0 +1,22 @@
+// Hubitat C-7
+// Hubitat Elevation
+{
+	"manufacturer": "Hubitat",
+	"manufacturerId": "0x0399",
+	"label": "C-7",
+	"description": "Hubitat Elevation",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3921
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "1. Navigate to http://[Your hub IP address]:8081 (i.e. http://192.168.1.10:8081)2. Select the Full Reset button.3. Type the words \"full reset\" into the box just above the Full Reset button, then press the Full Reset button.4. After the Full Reset, the hub will automatically shutdown.Warning!Resetting the Hubitat Elevation® hub to factory default values will delete all installed device connections, apps and user code from the hub. All devices connected to your hub will have to be reset or excluded before they can be re- connected. If this controller is the primary Z-Wave controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary Z-Wave controller in the network, use this procedure to reset this controller only in the event thatthe network primary controller is missing or otherwise inoperable."
+	}
+}

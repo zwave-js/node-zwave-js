@@ -1,0 +1,24 @@
+// Strattec Advanced Logic, LLC 8002
+// Westinghouse RTS-Z-AU
+{
+	"manufacturer": "Strattec Advanced Logic, LLC",
+	"manufacturerId": "0x0217",
+	"label": "8002",
+	"description": "Westinghouse RTS-Z-AU",
+	"devices": [
+		{
+			"productType": "0x0800",
+			"productId": "0x0002",
+			"zwaveAllianceId": 2170
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To include our device into a controller.1. Perform 'Include' on the controller.2. From the lock's main menu item \"7.Z-Wave\", select the \"Z-WaveInclusion\" option by using the arrow keys to scroll to it and then pressing 'M' to select it. After a few seconds, you should see \" Success\" on the lock.",
+		"exclusion": "To exclude our device into a controller.1. Perform 'Exclude' on the controller.2. From the lock's main menu item \"7.Z-Wave\", select the \"Z-WaveExclusion\" option by using the arrow keys to scroll to it and then pressing 'M' to select it. After a few seconds, you should see \" Success\" on the lock.",
+		"reset": "If your controller fails or is replaced or if you need to perform a Factory reset on the device so that an inclusion may be performed again or with a new controller. Factory reset can be done on the device by selecting 'Hard Reset' from the Main Menu on device's display and pressing the M button. When prompted to reset is complete the display with return to the Main Menu.Note: When a Hard Reset is completed, the Z-Wave node id is initialized to 0 and the device can't be controlled by Z-Wave. In order to control the device again, the controller needs to include the device on Z-Wave network.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

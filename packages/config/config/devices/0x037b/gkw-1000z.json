@@ -1,0 +1,24 @@
+// Guardtec Inc. GKW-1000Z
+// KeyWe Rim Lock
+{
+	"manufacturer": "Guardtec Inc.",
+	"manufacturerId": "0x037b",
+	"label": "GKW-1000Z",
+	"description": "KeyWe Rim Lock",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x0001",
+			"zwaveAllianceId": 3191
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Please proceed with the door lock open.1. Set the controller in inclusion mode.2. Open the battery cover of the indoor body and press the [REG] button.3. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button.4. Press the [8][8] button after pressing the [*] button.",
+		"exclusion": "Please proceed with the door lock open.1. Set the controller in exclusion mode.2. Open the battery cover of the indoor body and press the [REG] button.3. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button.4. Press the [9][9] button after pressing the [*] button.",
+		"reset": "Please proceed with the door lock open.Please use this procedure only when the primary controller is missing or otherwise inoperable.1. Open the battery cover of the indoor body and press the [REG] button.2. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button.3. Press the [5] button after pressing the [*] button.4. Press the [5] button after pressing the [*] button.5. Press the Master Pin [1][2][3][4] (Default value) button after pressing the [#] button*Master pins can change user settings."
+	}
+}

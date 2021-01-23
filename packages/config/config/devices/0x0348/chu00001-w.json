@@ -1,0 +1,22 @@
+// KUNDO xT GmbH CHU00001-W
+// Central Home Unit
+{
+	"manufacturer": "KUNDO xT GmbH",
+	"manufacturerId": "0x0348",
+	"label": "CHU00001-W",
+	"description": "Central Home Unit",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2761
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Factory default ResetThe Central Home Unit can reset the Z-Wave network and it's device list. To do so open the Configuration User-Interface with the URL provided in the manual. Fill in your login credentials and confirm. This opens up the  Management view of your Z-Wave network. In the Main Menu under the section \"More\" you can find the entry \"Reset network\". This will start the reset network operation. If success the device section will only show the controller device.Please use this procedure only when the network is not working correctly.If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

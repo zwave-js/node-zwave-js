@@ -1,0 +1,24 @@
+// Alarm.com HT-138S
+// xDSL / GFAST GW
+{
+	"manufacturer": "Alarm.com",
+	"manufacturerId": "0x0094",
+	"label": "HT-138S",
+	"description": "xDSL / GFAST GW",
+	"devices": [
+		{
+			"productType": "0x0012",
+			"productId": "0x0112",
+			"zwaveAllianceId": 3298
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "NOTE: This process leverages Network Wide Inclusion. In addition, any controllers added to the Alarm.com GATEWAY will have network information replicated over to them.  1.\tUsing Mobiletech a.\tInstall the MobileTech App (if not already done) and select the customer of interest.  b.\tMove all Z-Wave devices to their final location on the property.  c.\tNavigate to the Equipment List page.  d.\tSelect emPower Management.  e.\tSelect Add Z-Wave Devices  f.\tWait for the bolded message: Checking for new devices on the network  g.\tTrigger a device to add it to the network.  h.\tWhen a device is added successfully, it will show up on this screen following a 30 second delay.  i.\tContinue triggering devices. You may add many devices to the network without reentering Add Mode. 2.\tUsing the Dealer Website a.\tNavigate to the Equipment page.  b.\tClick the emPower Devices tab. c.\tOpen the Advanced Z-Wave Commands menu below the Equipment List.  d.\tClick Add Z-Wave Devices.  e.\tWait for the bolded message: Checking for new devices on the network.  f.\tTrigger a device to add it to the network.  g.\tWhen a device is added successfully, it will show up on this screen following a 30 second delay.  h.\tContinue triggering devices. You may add many devices to the network without reentering Add Mode.",
+		"exclusion": "1.\tUsing Mobiletech a.\tInstall the MobileTech App (if not already done) and select the customer of interest.  b.\tMove all Z-Wave devices you plan to remove close to the Alarm.com GATEWAY.  c.\tNavigate to the Equipment List page.  d.\tSelect emPower Management.  e.\tSelect Remove Z-Wave Devices  f.\tWait for the bolded message: Checking for removed devices on the network  g.\tTrigger a device to remove it from the network.  h.\tWhen a device is removed successfully and its network information is erased, it will show up on this screen following a 30 second delay.  i.\tContinue triggering devices. You may remove many devices to the network without reentering Remove Mode. 2.\tUsing the Dealer Website a.\tMove all Z-Wave devices you plan to remove close to the Alarm.com GATEWAY. b.\tNavigate to the Equipment page.  c.\tClick the emPower Devices tab. d.\tOpen the Advanced Z-Wave Commands menu below the Equipment List.  e.\tClick Remove Z-Wave Devices.  f.\tWait for the bolded message: Checking for removed devices on the network.  g.\tTrigger a device to remove it from the network.  h.\tWhen a device is removed successfully and its network information is erased, it will show up on this screen following a 30 second delay.  i.\tContinue triggering devices. You may remove many devices to the network without reentering Remove Mode.",
+		"reset": "2.4 Reset Alarm.com Z-WAVE DEVICE to default state This process will clear all nodes from the Alarm.com Z-WAVE DEVICE’s network, change the Alarm.com Z-WAVE DEVICE’s home ID, and reset all Z-Wave settings to their default values. To perform a Z-Wave reset, follow these steps: 1. Log into the Partner Portal at https://alarmadmin.alarm.com/default.aspx and select a customer. 2. Navigate to the “Equipment” page. 3. Click the “emPower Devices” tab. 4. Expand the “Advanced Z-Wave Commands” box. 5. Click the “Remove All Z-Wave Devices” button. 6. Allow 3 minutes for the associated commands to go through and for the Z-WAVE DEVICE to act on them"
+	}
+}

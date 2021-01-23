@@ -224,7 +224,7 @@
 					"value": 1
 				},
 				{
-					"label": ",only activate scene ID1 when key2's relay open",
+					"label": "only activate scene ID1 when key2's relay open",
 					"value": 2
 				},
 				{

@@ -1,0 +1,22 @@
+// Telular TGFX-HUB1
+// FlexHub
+{
+	"manufacturer": "Telular",
+	"manufacturerId": "0x017e",
+	"label": "TGFX-HUB1",
+	"description": "FlexHub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0002",
+			"zwaveAllianceId": 2567
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "To return the FlexHub to factory defaults, use a pin or paper clip to press the recessed Reset button for 15 seconds.  Observe the marquee pattern on the LEDs indicating the factory default is complete.Note that if the FlexHub is the primary controller for your network, resetting it to factory defaults will result in the nodes in your network being orphaned.  It will be necessary after the reset to exclude and re-include all of the nodes in the network.  If the FlexHub is being used as a secondary controller in the network, return to factory defaults only in the event that the network primary controller is missing or otherwise inoperable."
+	}
+}

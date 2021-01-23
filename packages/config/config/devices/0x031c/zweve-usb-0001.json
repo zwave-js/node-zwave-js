@@ -1,0 +1,22 @@
+// Ilevia srl  ZWEVE-USB-0001
+// ZWEVEUSB
+{
+	"manufacturer": "Ilevia srl",
+	"manufacturerId": "0x031c",
+	"label": "ZWEVE-USB-0001",
+	"description": "ZWEVEUSB",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0000",
+			"zwaveAllianceId": 2469
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "The host software controls how to reset it"
+	}
+}

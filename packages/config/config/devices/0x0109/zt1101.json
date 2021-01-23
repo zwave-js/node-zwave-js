@@ -1,0 +1,27 @@
+// Vision Security ZT1101
+// Keyfob
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZT1101",
+	"description": "Keyfob",
+	"devices": [
+		{
+			"productType": "0x201b",
+			"productId": "0x1b02",
+			"zwaveAllianceId": 1327
+		},
+		{
+			"productType": "0x1002",
+			"productId": "0x0202",
+			"zwaveAllianceId": 1706
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Press 4 buttons together for 10 seconds. The LED colors will turn red after 2 seconds for 2 seconds and turn green for another 2 seconds. Keyfob will send “Device Reset Locally Notification” command and reset to the factory default. (Red LED flashes fast means reset completely). Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable. "
+	}
+}

@@ -1,0 +1,24 @@
+// Home controls HTP-1S
+// 1 Touch Panel Dimmer
+{
+	"manufacturer": "Home controls",
+	"manufacturerId": "0x0293",
+	"label": "HTP-1S",
+	"description": "1 Touch Panel Dimmer",
+	"devices": [
+		{
+			"productType": "0x0003",
+			"productId": "0x4410",
+			"zwaveAllianceId": [3131, 3205, 3208]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Put the controller into INCLUSION mode. Follow the instructions provided by the controller manufacturer.2. Touch and hold at the centre of touch area for more than 5 seconds. Indication LEDs blinks blue. At this point release the key, the touch dimmer switch start inclusion process.",
+		"exclusion": "1. Put the controller into EXCLUSION mode. Follow the instructions provided by the controller manufacturer.2. Touch and hold at the centre of touch area for more than 5 seconds. Indication LEDs blinks blue. At this point release the key, the touch dimmer switch start exclusionprocess.",
+		"reset": "1. Press the config button 5 time, Indication LEDs lights will blinks red in color, touch dimmer switch will start local reset. Touch dimmer switch will erase network inclusion state after local reset.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

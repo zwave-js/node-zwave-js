@@ -1,0 +1,24 @@
+// Raylios ZD2112JP-5
+// Door Sensor
+{
+	"manufacturer": "Raylios",
+	"manufacturerId": "0x0370",
+	"label": "ZD2112JP-5",
+	"description": "Door Sensor",
+	"devices": [
+		{
+			"productType": "0x2001",
+			"productId": "0x01a1",
+			"zwaveAllianceId": 2796
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZD2112 to your controller. To get in the “inclusion” mode, the distance between sensor and controller is suggested to be in one meter. Press the program switch of ZD2112 for sending the NIF. After sending NIF, Z-Wave will send the auto inclusion; otherwise, ZD2112 will go to sleep after 20 seconds.",
+		"exclusion": "For “Exclusion” from (removing from) a network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZD2112 from your controller.  Press the program switch of ZD2112 for 1 second at least to be excluded.Note: All user and network settings will be cleared and the device reset to factory defaults when the device is excluded.",
+		"reset": "Factory Default Reset: Trigger the rear cover switch to send the Alarm Report and trigger the reed switch (close & open) 5 times in 10 seconds, ZD2112 will send the “Device Reset Locally Notification” command and reset to the factory default.  (Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable.)"
+	}
+}

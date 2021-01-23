@@ -1,9 +1,9 @@
-// GE/Jasco ZW4002
+// GE/Jasco 14287 (ZW4002)
 // In-Wall Smart Fan Control
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "ZW4002",
+	"label": "14287 (ZW4002)",
 	"description": "In-Wall Smart Fan Control",
 	"devices": [
 		{
@@ -15,6 +15,7 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
 			"label": "Lifeline",
@@ -81,5 +82,8 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
 	}
 }

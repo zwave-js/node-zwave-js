@@ -1,0 +1,19 @@
+// Flex Automation FX-D211
+// Micro Dimmer
+{
+	"manufacturer": "Flex Automation",
+	"manufacturerId": "0x004f",
+	"label": "FX-D211",
+	"description": "Micro Dimmer",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2406
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,19 @@
+// Lexel LS-8015-ZW
+// Door Lock
+{
+	"manufacturer": "Lexel",
+	"manufacturerId": "0x0015",
+	"label": "LS-8015-ZW",
+	"description": "Door Lock",
+	"devices": [
+		{
+			"productType": "0x8015",
+			"productId": "0x0001",
+			"zwaveAllianceId": 941
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,24 @@
+// China Security & Fire IOT Sensing CO., Ltd. LH-990ZW
+// Wireless Passive Infrared Detector
+{
+	"manufacturer": "China Security & Fire IOT Sensing CO., Ltd.",
+	"manufacturerId": "0x0320",
+	"label": "LH-990ZW",
+	"description": "Wireless Passive Infrared Detector",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2456
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "Put the Z-Wave Interface Controller into “Inclusion” mode, and following its instruction to include LH-990ZW to your controller. This PIR needs to be included before installation.1、Pull out the insulating strip, making the device power on. 2、Pressing the test key three times.3、Red LED will blink three times while the network inclusion successful 4、If inclusion failed, the sensor will go into sleep mode. To wake up the sensor again, you need to press the key to trigger an inclusion process, and then repeat steps from 3 to 4.",
+		"exclusion": " Put the Z-Wave interface controller into “Exclusion” mode and following its instruction to exclude PIR from your Z-Wave controller:1、Pressing the test key three times the enter exclusion mode.2、Red LED will blink three times while the network exclusion successful.",
+		"reset": "Press the test key five times while installing battery.Note: Use this procedure only in the event that primary controller is lost."
+	}
+}

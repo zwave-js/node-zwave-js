@@ -8,12 +8,17 @@
 	"devices": [
 		{
 			"productType": "0x0221",
-			"productId": "0x251c"
+			"productId": "0x251c",
+			"zwaveAllianceId": 1588
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.2. Once the controller is ready to include your device, press up and release the toggle to include it in the network.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.2. Once the controller is ready to Exclude your device, press up and release the toggle to exclude it from the network.",
+		"reset": "Press and hold the top button for at least 3 seconds while you plug the smart switch into a receptacle.Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+	}
 }

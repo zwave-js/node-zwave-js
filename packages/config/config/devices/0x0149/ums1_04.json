@@ -1,0 +1,19 @@
+// wiDom UMS1.04
+// wiDom Universal Roller Shutter
+{
+	"manufacturer": "wiDom",
+	"manufacturerId": "0x0149",
+	"label": "UMS1.04",
+	"description": "wiDom Universal Roller Shutter",
+	"devices": [
+		{
+			"productType": "0x0014",
+			"productId": "0x0204",
+			"zwaveAllianceId": 1079
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -8,12 +8,17 @@
 	"devices": [
 		{
 			"productType": "0x8009",
-			"productId": "0x1000"
+			"productId": "0x1000",
+			"zwaveAllianceId": 2951
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true
+	"metadata": {
+		"inclusion": "Click [Add] icon in Z-Wave Controller.-  Press the Net_Button 3 times within 1.5s, Green LED is Blinking 3 times within 1 .5second.-  If add Process is successful, Green LED will turn off.",
+		"exclusion": " Click [Remove] icon in Z-Wave Controller. -  Press the Net_Button 3 times within 1.5second. -  If remove Process is successful, Green LED is Blinking 6 times, then turn off.",
+		"reset": "-Long press Net_Button at least 10 seconds in the product."
+	}
 }

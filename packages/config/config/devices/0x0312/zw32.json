@@ -1,0 +1,29 @@
+// NIE Technology Co., Ltd. ZW32
+// Smart Outlet
+{
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "ZW32",
+	"description": "Smart Outlet",
+	"devices": [
+		{
+			"productType": "0xa000",
+			"productId": "0xa007",
+			"zwaveAllianceId": 3252
+		},
+		{
+			"productType": "0xb115",
+			"productId": "0x201c",
+			"zwaveAllianceId": 2460
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.2. Once the controller is ready to include your device, triple press the front button to include it into the network.3. Once your controller has confirmed that the device has been included, refresh the Z-Wave network to optimize performance.4. The device is associated in the same group when it included in setting process.  Now you can control your Z-Wave device according to groups, scenes, schedules  and automation programmed.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device  from the Z-Wave network.2. Once the controller is ready to Exclude your device, triple press the front button to exclude it from the network.",
+		"reset": "Use controller to remove device from network will reset it to factory default.\"Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\""
+	}
+}

@@ -1,0 +1,19 @@
+// Cyberhouse WD500Z
+// Linear -1
+{
+	"manufacturer": "Cyberhouse",
+	"manufacturerId": "0x0014",
+	"label": "WD500Z",
+	"description": "Linear -1",
+	"devices": [
+		{
+			"productType": "0x4457",
+			"productId": "0x3034",
+			"zwaveAllianceId": 1032
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

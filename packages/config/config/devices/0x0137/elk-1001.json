@@ -1,0 +1,19 @@
+// FollowGood Technology Company Ltd. ELK-1001
+// FollowGood -  Fingerprint Door Lock
+{
+	"manufacturer": "FollowGood Technology Company Ltd.",
+	"manufacturerId": "0x0137",
+	"label": "ELK-1001",
+	"description": "FollowGood -  Fingerprint Door Lock",
+	"devices": [
+		{
+			"productType": "0x1001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 747
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

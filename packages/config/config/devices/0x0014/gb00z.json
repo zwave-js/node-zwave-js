@@ -1,0 +1,19 @@
+// Cyberhouse GB00Z
+// Linear -1
+{
+	"manufacturer": "Cyberhouse",
+	"manufacturerId": "0x0014",
+	"label": "GB00Z",
+	"description": "Linear -1",
+	"devices": [
+		{
+			"productType": "0x4742",
+			"productId": "0x3030",
+			"zwaveAllianceId": 1094
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

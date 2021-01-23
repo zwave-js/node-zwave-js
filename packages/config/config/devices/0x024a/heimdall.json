@@ -1,0 +1,22 @@
+// BTSTAR(HK) TECHNOLOGY COMPANY Ltd. HEIMDALL
+// Heimdall
+{
+	"manufacturer": "BTSTAR(HK) TECHNOLOGY COMPANY Ltd.",
+	"manufacturerId": "0x024a",
+	"label": "HEIMDALL",
+	"description": "Heimdall",
+	"devices": [
+		{
+			"productType": "0x0102",
+			"productId": "0x0304",
+			"zwaveAllianceId": 1832
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Click “Reset” , show “Proccessing…” to reset the Z-Wave network.Refer user manual  page 12"
+	}
+}

@@ -1,0 +1,24 @@
+// Ei Electronics EIA650RFZ
+// Z-Wave Photoelectric Smoke Alarm
+{
+	"manufacturer": "Ei Electronics",
+	"manufacturerId": "0x026b",
+	"label": "EIA650RFZ",
+	"description": "Z-Wave Photoelectric Smoke Alarm",
+	"devices": [
+		{
+			"productType": "0x0004",
+			"productId": "0x0004",
+			"zwaveAllianceId": [2222, 2228]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "To include the device start the inclusion on your controller and then hit the little button on the wireless module for 1 second",
+		"exclusion": "To exclude the device start the inclusion on your controller and then hit  the little button on the wireless module for 1 second",
+		"reset": "To reset the device keep the button pushed for 10 seconds. After 5 seconds the led starts flashing and after another 5seconds there is a short beep signaling the successful reset back to factory defaults. Use this procedure only when the network primary controller is missing or otherwise inoperable."
+	}
+}

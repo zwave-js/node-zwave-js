@@ -40,7 +40,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when the load is ON,",
+					"label": "LED ON when the load is ON",
 					"value": 0
 				},
 				{

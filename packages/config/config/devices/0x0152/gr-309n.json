@@ -1,0 +1,24 @@
+// UFairy G.R. Tech GR-309N
+// Door/Window detector
+{
+	"manufacturer": "UFairy G.R. Tech",
+	"manufacturerId": "0x0152",
+	"label": "GR-309N",
+	"description": "Door/Window detector",
+	"devices": [
+		{
+			"productType": "0x0500",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1684
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "press the Z-Wave button 1 time in the door sensor when the Z-Wave controller sends the instructions for inclusion or Add new devices.",
+		"exclusion": "press the Z-Wave button 1 time in the door sensor when the Z-Wave controller sends the instructions for exclusion or Remove devices",
+		"reset": "Press the button 6 times the device will send the reset notification to the list node in the group 1 and erases the device memory, when the light flash is resetting success\"Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\""
+	}
+}
