@@ -1,6 +1,7 @@
-// undefined WP-02SF
+// Dongguan Will Power WP-02SF
 // Z-Wave Touchable Smart Valve
 {
+	"manufacturer": "Dongguan Will Power",
 	"manufacturerId": "0x044b",
 	"label": "WP-02SF",
 	"description": "Z-Wave Touchable Smart Valve",
