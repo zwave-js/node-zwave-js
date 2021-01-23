@@ -21,6 +21,8 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -198,6 +200,20 @@ export class ProtectionCCAPI extends CCAPI {
 			await this.setExclusiveControl(value);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "local":
+			case "rf":
+				return (await this.get())?.[property];
+			case "exclusiveControlNodeId":
+				return this.getExclusiveControl();
+			default:
+				throwUnsupportedProperty(this.ccId, property);
 		}
 	};
 
