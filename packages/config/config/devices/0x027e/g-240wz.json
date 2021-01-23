@@ -1,6 +1,7 @@
 // undefined G-240WZ
 // Nokia Smart Home GPON ONT
 {
+	"manufacturer": "Nokia",
 	"manufacturerId": "0x027e",
 	"label": "G-240WZ",
 	"description": "Nokia Smart Home GPON ONT",
