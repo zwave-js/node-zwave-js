@@ -22,6 +22,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Press 4 buttons together for 10 seconds. The LED colors will turn red after 2 seconds for 2 seconds and turn green for another 2 seconds. Keyfob will send “Device Reset Locally Notification” command and reset to the factory default. (Red LED flashes fast means reset completely).\nRemark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable.\n"
+		"reset": "Press 4 buttons together for 10 seconds. The LED colors will turn red after 2 seconds for 2 seconds and turn green for another 2 seconds. Keyfob will send “Device Reset Locally Notification” command and reset to the factory default. (Red LED flashes fast means reset completely). Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable. "
 	}
 }
