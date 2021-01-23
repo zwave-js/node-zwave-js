@@ -16,6 +16,8 @@ const setValueApiRegex = /^\tprotected \[SET_VALUE\]/m;
 const noSetValueApiRegex = /^\/\/ @noSetValueAPI/m; // This comment marks a CC that needs no setValue API
 const interviewRegex = /^\tpublic async interview/m;
 const noInterviewRegex = /^\/\/ @noInterview/m; // This comment marks a CC that needs no interview procedure
+const pollValueApiRegex = /^\tprotected \[POLL_VALUE\]/m;
+const noPollValueApiRegex = /^\/\/ @noPollValueAPI/m; // This comment marks a CC that needs no pollValue API
 
 const onlyIncomplete = !!yargs.argv.onlyIncomplete;
 
@@ -31,6 +33,7 @@ interface CCInfo {
 	version: number;
 	API: boolean;
 	setValue: boolean;
+	pollValue: boolean;
 	interview: boolean;
 }
 
@@ -49,7 +52,13 @@ interface CCInfo {
 			.filter((cc) => Number.isNaN(+cc))
 			.map((name) => [
 				name,
-				{ version: 0, API: false, setValue: false, interview: false },
+				{
+					version: 0,
+					API: false,
+					setValue: false,
+					pollValue: false,
+					interview: false,
+				},
 			]),
 	);
 
@@ -64,6 +73,10 @@ interface CCInfo {
 				(hasAPI && setValueApiRegex.test(fileContent)) ||
 				noApiRegex.test(fileContent) ||
 				noSetValueApiRegex.test(fileContent);
+			const pollValue =
+				(hasAPI && pollValueApiRegex.test(fileContent)) ||
+				noApiRegex.test(fileContent) ||
+				noPollValueApiRegex.test(fileContent);
 			const interview =
 				interviewRegex.test(fileContent) ||
 				noInterviewRegex.test(fileContent);
@@ -71,6 +84,7 @@ interface CCInfo {
 				version: ccVersion,
 				API: hasAPI,
 				setValue,
+				pollValue,
 				interview,
 			});
 		} catch {
@@ -85,12 +99,13 @@ interface CCInfo {
 		"Interview?",
 		"API?",
 		"setValue?",
+		"pollValue?",
 	];
 	const rows: string[][] = [];
 
 	for (const [
 		name,
-		{ version, interview, API, setValue },
+		{ version, interview, API, setValue, pollValue },
 	] of allCCs.entries()) {
 		const { version: latest, deprecated, obsolete } = getLatestVersion(
 			name,
@@ -124,6 +139,7 @@ interface CCInfo {
 		const hasInterview = interview ? c.green(" ✔ ") : c.red(" ❌ ");
 		const hasAPI = API ? c.green(" ✔ ") : c.red(" ❌ ");
 		const hasSetValue = setValue ? c.green(" ✔ ") : c.red(" ❌ ");
+		const hasPollValue = pollValue ? c.green(" ✔ ") : c.red(" ❌ ");
 		const prefix =
 			implementationStatus === "done"
 				? "✔"
@@ -139,6 +155,7 @@ interface CCInfo {
 				hasInterview,
 				hasAPI,
 				hasSetValue,
+				hasPollValue,
 			]);
 		}
 	}
