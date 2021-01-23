@@ -22,8 +22,11 @@ import { MessagePriority } from "../message/Constants";
 import {
 	ignoreTimeout,
 	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
+	throwMissingPropertyKey,
 	throwUnsupportedProperty,
 	throwUnsupportedPropertyKey,
 	throwWrongValueType,
@@ -156,6 +159,37 @@ export class MeterCCAPI extends PhysicalCCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "value":
+			case "previousValue":
+			case "deltaTime": {
+				if (propertyKey == undefined) {
+					throwMissingPropertyKey(this.ccId, property);
+				} else if (typeof propertyKey !== "number") {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+				}
+
+				const { rateType, scale } = splitPropertyKey(propertyKey);
+				return (
+					await this.get({
+						rateType,
+						scale,
+					})
+				)?.[property];
+			}
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(options?: MeterCCGetOptions) {
