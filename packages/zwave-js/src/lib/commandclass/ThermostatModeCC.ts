@@ -19,6 +19,8 @@ import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	ignoreTimeout,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -93,6 +95,18 @@ export class ThermostatModeCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.set(value);
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "mode":
+				return (await this.get())?.[property];
+
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
