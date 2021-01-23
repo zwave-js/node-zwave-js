@@ -22,6 +22,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "When the Z-Wave dongle in the ISY is factory reset it is also given a new Home Id and new S0 security keys are generated. To factory reset the Z-Wave dongle, select Z-Wave | Advanced | Factory Reset Z-Wave DongleIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network.  If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+		"reset": "When the Z-Wave dongle in the ISY is factory reset it is also given a new Home Id and new S0 security keys are generated. To factory reset the Z-Wave dongle, select Z-Wave | Advanced | Factory Reset Z-Wave DongleIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
 	}
 }

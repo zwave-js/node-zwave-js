@@ -1,10 +1,10 @@
 // AEON Labs TD1010Z2
-// Goodway  (Lamp Dimmer-USA) 2/5
+// Goodway (Lamp Dimmer-USA) 2/5
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "TD1010Z2",
-	"description": "Goodway  (Lamp Dimmer-USA) 2/5",
+	"description": "Goodway (Lamp Dimmer-USA) 2/5",
 	"devices": [
 		{
 			"productType": "0x0000",

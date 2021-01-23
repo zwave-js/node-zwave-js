@@ -33,7 +33,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "LED Light on when Z-Wave turned OFF  (Default)",
+					"label": "LED Light on when Z-Wave turned OFF (Default)",
 					"value": 0
 				},
 				{

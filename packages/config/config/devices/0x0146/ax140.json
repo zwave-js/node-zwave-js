@@ -1,10 +1,10 @@
 // Axesstel Inc AX140
-// Axesstel  Alert System
+// Axesstel Alert System
 {
 	"manufacturer": "Axesstel Inc",
 	"manufacturerId": "0x0146",
 	"label": "AX140",
-	"description": "Axesstel  Alert System",
+	"description": "Axesstel Alert System",
 	"devices": [
 		{
 			"productType": "0x0001",

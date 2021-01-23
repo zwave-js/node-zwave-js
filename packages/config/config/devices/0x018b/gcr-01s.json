@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "This must be done when the gas valve is closed.  After doing inclusion action on controller,  hold 5 seconds (-) button until hearing beep once and ‘P’ is blinking on LCD.",
-		"exclusion": "This must be done when the gas valve is closed.  After doing exclusion action on controller,  hold 5 seconds (-) button until hearing beep once and ‘P’ is blinking on LCD.",
+		"inclusion": "This must be done when the gas valve is closed. After doing inclusion action on controller, hold 5 seconds (-) button until hearing beep once and ‘P’ is blinking on LCD.",
+		"exclusion": "This must be done when the gas valve is closed. After doing exclusion action on controller, hold 5 seconds (-) button until hearing beep once and ‘P’ is blinking on LCD.",
 		"reset": "Please use this only when the primary controller is missing or otherwise disabled.This must be done when the gas valve is closed. Hold 15 seconds (-) button till hearing beep once and ‘FS’ is displayed on LCD."
 	}
 }

@@ -142,7 +142,7 @@
 			]
 		},
 		"4": {
-			"label": "LED for network  error",
+			"label": "LED for network error",
 			"description": "If the LED should indicate a network error by flashing or not",
 			"valueSize": 1,
 			"minValue": 0,

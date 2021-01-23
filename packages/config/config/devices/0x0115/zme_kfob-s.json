@@ -175,7 +175,7 @@
 		},
 		"13": {
 			"label": "Command to Control Group C",
-			"description": "Set  Command to Control Group C",
+			"description": "Set Command to Control Group C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

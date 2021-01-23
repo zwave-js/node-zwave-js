@@ -1,10 +1,10 @@
 // Intermatic PE953
-// Intermatic MultiWave  Five Channel Wireless Remote Controller
+// Intermatic MultiWave Five Channel Wireless Remote Controller
 {
 	"manufacturer": "Intermatic",
 	"manufacturerId": "0x0005",
 	"label": "PE953",
-	"description": "Intermatic MultiWave  Five Channel Wireless Remote Controller",
+	"description": "Intermatic MultiWave Five Channel Wireless Remote Controller",
 	"devices": [
 		{
 			"productType": "0x5045",

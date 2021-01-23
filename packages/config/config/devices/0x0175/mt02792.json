@@ -54,7 +54,7 @@
 			]
 		},
 		"3": {
-			"label": "Definition of  warning of current  load (A)",
+			"label": "Definition of warning of current load (A)",
 			"description": "1300*0.01A = 13A",
 			"unit": "0.01A",
 			"valueSize": 2,
@@ -77,7 +77,7 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "Mode for restoring  status",
+			"label": "Mode for restoring status",
 			"description": "Restore switch state mode.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -124,7 +124,7 @@
 		},
 		"7": {
 			"label": "LED display mode",
-			"description": "Display  device status",
+			"description": "Display device status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -166,7 +166,7 @@
 			]
 		},
 		"9": {
-			"label": "Device from  command status",
+			"label": "Device from command status",
 			"description": "RF off command mode",
 			"valueSize": 1,
 			"minValue": 0,

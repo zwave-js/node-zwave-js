@@ -23,7 +23,7 @@
 	"paramInformation": {
 		"254": {
 			"label": "Enable configuration",
-			"description": "Lock/unlock  all  configuration  parameters.",
+			"description": "Lock/unlock all configuration parameters.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

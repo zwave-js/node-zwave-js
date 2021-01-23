@@ -114,7 +114,7 @@
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "ON command  sent to 2nd assoc. group",
+			"label": "ON command sent to 2nd assoc. group",
 			"description": "Value of ON command frame sent to 2nd association group",
 			"valueSize": 2,
 			"minValue": 0,
@@ -125,7 +125,7 @@
 			"allowManualEntry": true
 		},
 		"13": {
-			"label": "OFF command  sent to 2nd assoc. group",
+			"label": "OFF command sent to 2nd assoc. group",
 			"description": "The value of 0 turns OFF the device, 255 turns it ON.",
 			"valueSize": 2,
 			"minValue": 0,

@@ -29,6 +29,6 @@
 	"metadata": {
 		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into“inclusion” mode and following its instruction to add the ZR1202 to your controller. To get into the “inclusion” mode, the distance between module and controller is suggested to be in one meter. Press the program switch on the ZR1202 three times in 3 seconds. The LED should stop flashing, if not, please try again.",
 		"exclusion": "For “Exclusion” from (removing from) a network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZR1202 from your controller. Press the program switch on the ZR1202 three times in 3 seconds to be excluded. Note: LED setting light will flash continuously in Exclusion condition. ",
-		"reset": "Press Program Switch for 5 seconds, the ZR1202 will reset back to factory default.  (Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable.)"
+		"reset": "Press Program Switch for 5 seconds, the ZR1202 will reset back to factory default. (Remark: This is to be used only in the case of primary controller being inoperable or otherwise unavailable.)"
 	}
 }

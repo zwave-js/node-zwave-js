@@ -387,7 +387,7 @@
 		},
 		"24[0xff0000]": {
 			"label": "Light LED Strip Effect Duration",
-			"description": "Light LED Strip Effect Duration.  1 to 60 = seconds, 61 to 120  minutes, 121 -  254 = hours, 255 = Indefinitely Default: 0",
+			"description": "Light LED Strip Effect Duration. 1 to 60 = seconds, 61 to 120 minutes, 121 - 254 = hours, 255 = Indefinitely Default: 0",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -399,7 +399,7 @@
 		},
 		"24[0xff00]": {
 			"label": "Light LED Strip Effect Intensity",
-			"description": "Light LED Strip Effect Intensity. 0 to 9.  0 = dim, 9 = bright Default: 3",
+			"description": "Light LED Strip Effect Intensity. 0 to 9. 0 = dim, 9 = bright Default: 3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 9,
@@ -495,7 +495,7 @@
 		},
 		"25[0xff0000]": {
 			"label": "Fan LED Strip Effect Duration",
-			"description": "Fan LED Strip Duration. 1 to 60 = seconds, 61 to 120  minutes, 121 -  254 = hours, 255 = Indefinitely Default: 0",
+			"description": "Fan LED Strip Duration. 1 to 60 = seconds, 61 to 120 minutes, 121 - 254 = hours, 255 = Indefinitely Default: 0",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -507,7 +507,7 @@
 		},
 		"25[0xff00]": {
 			"label": "Fan LED Strip Effect Intensity",
-			"description": "Fan LED Strip Intensity 0 to 9.  0 = dim, 9 = bright Default: 3",
+			"description": "Fan LED Strip Intensity 0 to 9. 0 = dim, 9 = bright Default: 3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 9,
@@ -658,7 +658,7 @@
 		},
 		"51": {
 			"label": "Instant On",
-			"description": "Enables instant on (ie: disables the 700ms button delay). Note, if you disable the delay, it will also disable scene control except for the following: Light on/off pressed, held, released, Fan on/off  pressed, held, released & light up/down fan up/down  pressed (firmware 1.36+).",
+			"description": "Enables instant on (ie: disables the 700ms button delay). Note, if you disable the delay, it will also disable scene control except for the following: Light on/off pressed, held, released, Fan on/off pressed, held, released & light up/down fan up/down pressed (firmware 1.36+).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.  If Talk-Z is your primary controller, use of this procedure could result in your Z-Wave devices being orphaned and having no central controller to communicate with; use this procedure with caution.This implies that Z-Wave network back to its factory settings1. From the Talk-Z page, press the Reset button.2. To confirm reset, press the yes button.3. If this process is successful,  All node information disappeared in Talk-Z"
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable. If Talk-Z is your primary controller, use of this procedure could result in your Z-Wave devices being orphaned and having no central controller to communicate with; use this procedure with caution.This implies that Z-Wave network back to its factory settings1. From the Talk-Z page, press the Reset button.2. To confirm reset, press the yes button.3. If this process is successful, All node information disappeared in Talk-Z"
 	}
 }

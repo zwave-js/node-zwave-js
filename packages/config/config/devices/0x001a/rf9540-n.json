@@ -76,7 +76,7 @@
 		},
 		"4": {
 			"label": "Basic Set Value",
-			"description": "Send value to  association group on trigger",
+			"description": "Send value to association group on trigger",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

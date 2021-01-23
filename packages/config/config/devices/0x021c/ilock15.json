@@ -19,6 +19,6 @@
 	"metadata": {
 		"inclusion": "1）Set gateway in Inclusion.2）Set door lock in learn mode. press reset button -> input admin password + # -> press 03）Wait until success.",
 		"exclusion": "1）Set gateway in exclusion .2）Set door lock in learn mode. press reset button -> input admin password + # -> press 03）Wait until success.",
-		"reset": "User should reset device for safety when receiving lock first or if forget the password or if lost card. The reset way : hold the reset button about 7s, when hear “Di“ sound, then release the button, door lock will be reset. Factory default reset will reset all user (password and card) and  home ID and device ID (about Z-Wave function), so be carefully to do reset. The default admin password is 123456 .Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"reset": "User should reset device for safety when receiving lock first or if forget the password or if lost card. The reset way : hold the reset button about 7s, when hear “Di“ sound, then release the button, door lock will be reset. Factory default reset will reset all user (password and card) and home ID and device ID (about Z-Wave function), so be carefully to do reset. The default admin password is 123456 .Please use this procedure only when the network primary controller is missing or otherwise inoperable."
 	}
 }

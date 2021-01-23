@@ -1,5 +1,5 @@
 // Danfoss RZ1-HP
-//  - Single Channel RF Relay Switching Unit
+// - Single Channel RF Relay Switching Unit
 {
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",

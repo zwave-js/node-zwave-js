@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "From the HOME Screen, press MENU, NEXIA, ADVANCED, then FACTORY RESET.  Resets all Z-Wave information and removes all devices from the bridge. If this bridge is the primary controller for your network, resetting it will result in all the devices in your network being removed. Following the reset, it will be necessary to remove and then add all of the devices back to your network.  If this bridge is being used as a secondary or inclusion controller in the network, please reset this bridge only in the event that the primary controller is missing or otherwise inoperable."
+		"reset": "From the HOME Screen, press MENU, NEXIA, ADVANCED, then FACTORY RESET. Resets all Z-Wave information and removes all devices from the bridge. If this bridge is the primary controller for your network, resetting it will result in all the devices in your network being removed. Following the reset, it will be necessary to remove and then add all of the devices back to your network. If this bridge is being used as a secondary or inclusion controller in the network, please reset this bridge only in the event that the primary controller is missing or otherwise inoperable."
 	}
 }

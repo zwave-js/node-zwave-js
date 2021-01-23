@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "The 738Zplus can perform a Factory Default Reset by initializing defaults in the panel programming menu.  Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"reset": "The 738Zplus can perform a Factory Default Reset by initializing defaults in the panel programming menu. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
 	}
 }

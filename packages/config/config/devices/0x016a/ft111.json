@@ -270,8 +270,8 @@
 			"allowManualEntry": true
 		},
 		"103": {
-			"label": "Reports  sent to Report group 3",
-			"description": "Reports  sent to Report group 3",
+			"label": "Reports sent to Report group 3",
+			"description": "Reports sent to Report group 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,

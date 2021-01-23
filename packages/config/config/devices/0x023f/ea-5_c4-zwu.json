@@ -22,6 +22,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.1. Launch Composer.  Click on the Z-Wave Configuration tab in the project properties window.2. Click on \"Reset Defaults\".  This clears the Home ID on the Z-Wave controller and abandons any nodes on the existing network. Any Z-Wave devices previously joined to the network must be removed before they can join the new network."
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.1. Launch Composer. Click on the Z-Wave Configuration tab in the project properties window.2. Click on \"Reset Defaults\". This clears the Home ID on the Z-Wave controller and abandons any nodes on the existing network. Any Z-Wave devices previously joined to the network must be removed before they can join the new network."
 	}
 }

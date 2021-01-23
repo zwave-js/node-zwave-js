@@ -1,10 +1,10 @@
 // Residential Control Systems, Inc. (RCS) PSCH21
-// RCS  Pool Controller
+// RCS Pool Controller
 {
 	"manufacturer": "Residential Control Systems, Inc. (RCS)",
 	"manufacturerId": "0x0010",
 	"label": "PSCH21",
-	"description": "RCS  Pool Controller",
+	"description": "RCS Pool Controller",
 	"devices": [
 		{
 			"productType": "0x5053",

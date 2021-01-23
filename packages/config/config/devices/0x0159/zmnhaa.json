@@ -22,12 +22,12 @@
 			"maxNodes": 16
 		},
 		"2": {
-			"label": "basic on/off -  input I2",
+			"label": "basic on/off - input I2",
 			"description": "(triggered at change of the input I2 state and reflecting its state)",
 			"maxNodes": 16
 		},
 		"3": {
-			"label": "basic on/off -  input I3",
+			"label": "basic on/off - input I3",
 			"description": "ttriggered at change of the input I3 state and reflecting its state)",
 			"maxNodes": 16
 		},

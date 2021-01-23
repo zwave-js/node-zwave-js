@@ -1,10 +1,10 @@
 // Kwikset 916
-// Kwikset  Door Lock for U.S.
+// Kwikset Door Lock for U.S.
 {
 	"manufacturer": "Kwikset",
 	"manufacturerId": "0x0090",
 	"label": "916",
-	"description": "Kwikset  Door Lock for U.S.",
+	"description": "Kwikset Door Lock for U.S.",
 	"devices": [
 		{
 			"productType": "0x0001",

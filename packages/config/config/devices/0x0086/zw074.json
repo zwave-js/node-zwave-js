@@ -60,7 +60,7 @@
 		},
 		"3": {
 			"label": "On time",
-			"description": "Time to keep state On before sending  Off command",
+			"description": "Time to keep state On before sending Off command",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 15300,
@@ -169,8 +169,8 @@
 			"allowManualEntry": true
 		},
 		"44": {
-			"label": "Battery level  to induce an automatic report.",
-			"description": "Battery level  to induce an automatic report.",
+			"label": "Battery level to induce an automatic report.",
+			"description": "Battery level to induce an automatic report.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -214,8 +214,8 @@
 			"allowManualEntry": true
 		},
 		"102": {
-			"label": "Reports sent automatically  for group 2",
-			"description": "Reports sent automatically  for group 2",
+			"label": "Reports sent automatically for group 2",
+			"description": "Reports sent automatically for group 2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,

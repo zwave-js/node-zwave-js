@@ -24,7 +24,7 @@
 	},
 	"paramInformation": {
 		"176": {
-			"label": "Staircase  timer byte 1",
+			"label": "Staircase timer byte 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -34,7 +34,7 @@
 			"allowManualEntry": true
 		},
 		"177": {
-			"label": "Staircase  timer byte 2",
+			"label": "Staircase timer byte 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

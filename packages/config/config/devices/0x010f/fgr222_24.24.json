@@ -338,7 +338,7 @@
 		},
 		"40": {
 			"label": "Power reports",
-			"description": "change that needs to occur  to trigger the power report",
+			"description": "change that needs to occur to trigger the power report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

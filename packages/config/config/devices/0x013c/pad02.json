@@ -18,7 +18,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Mode of  Switch Off  function",
+			"label": "Mode of Switch Off function",
 			"description": "Switch button mode (enabled/disabled).",
 			"valueSize": 1,
 			"minValue": 0,

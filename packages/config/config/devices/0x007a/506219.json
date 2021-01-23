@@ -80,7 +80,7 @@
 		},
 		"54": {
 			"label": "Move shutter single-surface",
-			"description": "direction of  movement changes after each switching  process",
+			"description": "direction of movement changes after each switching process",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

@@ -152,7 +152,7 @@
 			]
 		},
 		"11": {
-			"label": "Value sent to Square  association group",
+			"label": "Value sent to Square association group",
 			"description": "1-99 or 255 (last state)",
 			"valueSize": 2,
 			"minValue": 1,

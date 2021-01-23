@@ -1,10 +1,10 @@
 // Tronico Technology Co. Ltd. SPZ7113
-// Tronico  SmartPlug
+// Tronico SmartPlug
 {
 	"manufacturer": "Tronico Technology Co. Ltd.",
 	"manufacturerId": "0x0111",
 	"label": "SPZ7113",
-	"description": "Tronico  SmartPlug",
+	"description": "Tronico SmartPlug",
 	"devices": [
 		{
 			"productType": "0x1000",

@@ -69,8 +69,8 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Value for Group 2 with 1 click on  UP button",
-			"description": "Value for Group 2 with 1 click on  UP button",
+			"label": "Value for Group 2 with 1 click on UP button",
+			"description": "Value for Group 2 with 1 click on UP button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,

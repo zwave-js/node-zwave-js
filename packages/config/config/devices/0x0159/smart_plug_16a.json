@@ -127,7 +127,7 @@
 			]
 		},
 		"40": {
-			"label": "Treshold Change in Power  for reporting",
+			"label": "Treshold Change in Power for reporting",
 			"description": "Change of power consumption [Watt] reporting threshold",
 			"unit": "%",
 			"valueSize": 1,

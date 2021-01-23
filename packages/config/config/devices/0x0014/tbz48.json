@@ -1,10 +1,10 @@
 // Cyberhouse TBZ48
-// Linear  Thermostat
+// Linear Thermostat
 {
 	"manufacturer": "Cyberhouse",
 	"manufacturerId": "0x0014",
 	"label": "TBZ48",
-	"description": "Linear  Thermostat",
+	"description": "Linear Thermostat",
 	"devices": [
 		{
 			"productType": "0x5442",

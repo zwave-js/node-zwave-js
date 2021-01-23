@@ -99,7 +99,7 @@
 		// },
 		"252": {
 			"label": "Lock Configuration",
-			"description": "Configuration lock.  1=enable, 0=disable",
+			"description": "Configuration lock. 1=enable, 0=disable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

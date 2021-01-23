@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": " Run Z-Wave Certification Application in Setting, Select \"Things\" on the left  menu,  select \"bridge\" on the right list, andd Select factoryReset on the right list,  push Send button on the Pop up."
+		"reset": " Run Z-Wave Certification Application in Setting, Select \"Things\" on the left menu, select \"bridge\" on the right list, andd Select factoryReset on the right list, push Send button on the Pop up."
 	}
 }

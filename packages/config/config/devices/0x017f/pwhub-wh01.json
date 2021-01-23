@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "The HUB does not have a master factory reset function that will reset all radios. However, it does support a reset for Z-Wave products. The HUBs Z-Wave controller is reset using the Z-Wave Controls interface located under the HUB's settings menu.  Within the Z-Wave Controls interface is a \"Reset Z-Wave\" button which will remove all nodes and reset the Z-Wave radio."
+		"reset": "The HUB does not have a master factory reset function that will reset all radios. However, it does support a reset for Z-Wave products. The HUBs Z-Wave controller is reset using the Z-Wave Controls interface located under the HUB's settings menu. Within the Z-Wave Controls interface is a \"Reset Z-Wave\" button which will remove all nodes and reset the Z-Wave radio."
 	}
 }

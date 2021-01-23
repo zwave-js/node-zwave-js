@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Restoring factory settings returns your Z-Wave Plus Extender to its default settings and removes Z-Wave device definitions.Please use this procedure only when the network primary controller is missing or otherwise inoperable.To restore factory settings:1.Tap  . The main menu appears.2.Tap Settings. The Settings menu appears.Tap Z-Wave. The Z-Wave screen appears.Tap Reset to Factory."
+		"reset": "Restoring factory settings returns your Z-Wave Plus Extender to its default settings and removes Z-Wave device definitions.Please use this procedure only when the network primary controller is missing or otherwise inoperable.To restore factory settings:1.Tap . The main menu appears.2.Tap Settings. The Settings menu appears.Tap Z-Wave. The Z-Wave screen appears.Tap Reset to Factory."
 	}
 }
