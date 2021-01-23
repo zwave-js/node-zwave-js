@@ -1,6 +1,7 @@
-// undefined C-7
+// Hubitat C-7
 // Hubitat Elevation
 {
+	"manufacturer": "Hubitat",
 	"manufacturerId": "0x0399",
 	"label": "C-7",
 	"description": "Hubitat Elevation",
