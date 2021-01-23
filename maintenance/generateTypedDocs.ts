@@ -16,6 +16,7 @@ import {
 	Node,
 	Project,
 	SyntaxKind,
+	TypeLiteralNode,
 } from "ts-morph";
 import {
 	formatWithPrettier,
@@ -112,24 +113,41 @@ export function getTransformedSource(
 	node: ExportedDeclarations,
 	options: ImportRange["options"],
 ): string {
+	// Remove @internal and @deprecated members
+	if (Node.isInterfaceDeclaration(node)) {
+		const commentsToRemove: { remove(): void }[] = [];
+		const walkDeclaration = (
+			node: InterfaceDeclaration | TypeLiteralNode,
+		) => {
+			for (const member of node.getMembers()) {
+				if (
+					member
+						.getJsDocs()
+						.some((doc) =>
+							/@(deprecated|internal)/.test(doc.getInnerText()),
+						)
+				) {
+					commentsToRemove.push(member);
+				}
+				if (Node.isInterfaceDeclaration(member)) {
+					walkDeclaration(member);
+				} else if (Node.isPropertySignature(member)) {
+					const typeNode = member.getTypeNode();
+					if (Node.isTypeLiteralNode(typeNode)) {
+						walkDeclaration(typeNode);
+					}
+				}
+			}
+		};
+		walkDeclaration(node);
+		for (let i = commentsToRemove.length - 1; i >= 0; i--) {
+			commentsToRemove[i].remove();
+		}
+	}
+
 	// Remove exports keyword
 	if (Node.isModifierableNode(node)) {
 		node = node.toggleModifier("export", false);
-	}
-
-	// Remove @internal and @deprecated members
-	if (Node.isInterfaceDeclaration(node)) {
-		for (const member of node.getMembers()) {
-			if (
-				member
-					.getJsDocs()
-					.some((doc) =>
-						/@(deprecated|internal)/.test(doc.getInnerText()),
-					)
-			) {
-				member.remove();
-			}
-		}
 	}
 
 	let ret: string;

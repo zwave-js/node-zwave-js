@@ -85,6 +85,8 @@ export class BinarySwitchCCAPI extends CCAPI {
 		};
 	}
 
+	private refreshTimeout: NodeJS.Timeout | undefined;
+
 	/**
 	 * Sets the switch to the given value
 	 * @param targetValue The target value to set
@@ -115,8 +117,16 @@ export class BinarySwitchCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 
 		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get();
+			// Refresh the current value after a delay
+			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+			setTimeout(async () => {
+				this.refreshTimeout = undefined;
+				try {
+					await this.get();
+				} catch {
+					/* ignore */
+				}
+			}, duration?.toMilliseconds() ?? 1000).unref();
 		}
 	}
 
