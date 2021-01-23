@@ -7,11 +7,6 @@
 	"description": "U-Fairy Control Valve",
 	"devices": [
 		{
-			"productType": "0x0003",
-			"productId": "0x0512",
-			"zwaveAllianceId": 1537
-		},
-		{
 			"productType": "0x0202",
 			"productId": "0x0511",
 			"zwaveAllianceId": 1008
