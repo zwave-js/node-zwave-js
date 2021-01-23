@@ -81,7 +81,7 @@
 		},
 		"3": {
 			"label": "Normally Wet vs Normally Dry",
-			"description": "Default is set as a Normally DRY sensor. Use this to switch to Normally WET sensor.The device only accepts one of two possible values:  0 (0x00) - Normally Dry (default).  240 (0xF0) - Normally Wet.",
+			"description": "Default is set as a Normally DRY sensor. Use this to switch to Normally WET sensor. The device only accepts one of two possible values:  0 (0x00) - Normally Dry (default).  240 (0xF0) - Normally Wet.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 240,
