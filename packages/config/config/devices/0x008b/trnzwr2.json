@@ -4,7 +4,7 @@
 	"manufacturer": "Trane Corporation",
 	"manufacturerId": "0x008b",
 	"label": "TRNZWR2",
-	"description": "Trane Z WAVE Mini Split Remote control - ANZ,",
+	"description": "Trane Z WAVE Mini Split Remote control - ANZ, ",
 	"devices": [
 		{
 			"productType": "0x4d53",

@@ -22,6 +22,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "The Z-Wave network reset procedure performs a default factory reset on Piper’s Z-Wave controller component, which clears all user and Z- Wave network settings. A new Z-Wave network will be established. Afterwards, any previously existing Z-Wave devices must be reset and then added to the new network via the Piper app.\r\nThe Reset Z-Wave option is located under Settings->Wireless Accessories->Advanced Options"
+		"reset": "The Z-Wave network reset procedure performs a default factory reset on Piper’s Z-Wave controller component, which clears all user and Z- Wave network settings. A new Z-Wave network will be established. Afterwards, any previously existing Z-Wave devices must be reset and then added to the new network via the Piper app. The Reset Z-Wave option is located under Settings->Wireless Accessories->Advanced Options"
 	}
 }

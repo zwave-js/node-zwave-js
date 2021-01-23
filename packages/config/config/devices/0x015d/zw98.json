@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.2. Once the controller is ready to Exclude your device, press up and release the button to exclude it from the network. ",
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.2. Once the controller is ready to Exclude your device, press up and release the button to exclude it from the network.",
 		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a devicefrom the Z-wave network.2. Once the controller is ready to Exclude your device, press up and release thetoggle to exclude it from the network.Note: ",
-		"reset": "Press and hold the top button for at least 3 seconds while you plug the smart switch into a receptacle.\"\"Use this procedure only in the event that the network primary controller is missing or otherwise inoperable\"\" "
+		"reset": "Press and hold the top button for at least 3 seconds while you plug the smart switch into a receptacle.\"\"Use this procedure only in the event that the network primary controller is missing or otherwise inoperable\"\""
 	}
 }

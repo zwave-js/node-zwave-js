@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Press and hold the button on the control for approximately 15 seconds (the LED will stop flashing when complete.\"\"Please use this procedure only when the network primary controller is missing or otherwise inoperable.\"\" "
+		"reset": "Press and hold the button on the control for approximately 15 seconds (the LED will stop flashing when complete.\"\"Please use this procedure only when the network primary controller is missing or otherwise inoperable.\"\""
 	}
 }

@@ -17,7 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Press the Accessory Setup button to enter the Z-Wave Network setup:Press the Cooler button to join the Z-Wave Network and start the connection process on the Z-Wave controller. ",
+		"inclusion": "Press the Accessory Setup button to enter the Z-Wave Network setup:Press the Cooler button to join the Z-Wave Network and start the connection process on the Z-Wave controller.",
 		"exclusion": "Press the Accessory Setup button to enter the Z-Wave Network setup:Press the Warmer button to remove this thermostat from the Network. When prompted, press the Warmer button again to confirm thermostat removal from the Z-Wave network.If the controller is not present, press the Fan button to remove the thermostat forcefully from the network.",
 		"reset": "Press the Accessory Setup button to enter the Z-Wave Network setup:Press the Warmer button to remove this thermostat from the Network. When prompted, press the Warmer button again to confirm thermostat removal from the Z-Wave network.If the controller is lost or otherwise inoperable, press the Fan button to remove the thermostat forcefully from the network."
 	}
