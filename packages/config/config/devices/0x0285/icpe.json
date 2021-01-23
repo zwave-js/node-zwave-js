@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "The user can click the \"\"Reset\"\" button on the WEB page to return the controller to factory settings.Note: All connections with included devices and all configurations and settings will be lost. It takes approximately 90 seconds to finish the process."
+		"reset": "The user can click the \"Reset\" button on the WEB page to return the controller to factory settings.Note: All connections with included devices and all configurations and settings will be lost. It takes approximately 90 seconds to finish the process."
 	}
 }

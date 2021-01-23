@@ -19,6 +19,6 @@
 	"metadata": {
 		"inclusion": "press the Z-Wave button 1 time in the door sensor when the Z-Wave controller sends the instructions for inclusion or Add new devices.",
 		"exclusion": "press the Z-Wave button 1 time in the door sensor when the Z-Wave controller sends the instructions for exclusion or Remove devices",
-		"reset": "Press the button 6 times the device will send the reset notification to the list node in the group 1 and erases the device memory, when the light flash is resetting success\"\"Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\"\""
+		"reset": "Press the button 6 times the device will send the reset notification to the list node in the group 1 and erases the device memory, when the light flash is resetting success\"Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\""
 	}
 }
