@@ -16,6 +16,8 @@ import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	ignoreTimeout,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -274,6 +276,23 @@ export class SoundSwitchCCAPI extends CCAPI {
 			}
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "defaultToneId":
+			case "defaultVolume":
+				return (await this.getConfiguration())?.[property];
+
+			case "toneId":
+			case "volume":
+				return (await this.getPlaying())?.[property];
+
+			default:
+				throwUnsupportedProperty(this.ccId, property);
 		}
 	};
 }
