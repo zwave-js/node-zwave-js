@@ -7,8 +7,8 @@
 	"description": "Sensor Gateway",
 	"devices": [
 		{
-			"productType": "0x0x01",
-			"productId": "0x0x01",
+			"productType": "0x0001",
+			"productId": "0x0001",
 			"zwaveAllianceId": 1759
 		}
 	],
