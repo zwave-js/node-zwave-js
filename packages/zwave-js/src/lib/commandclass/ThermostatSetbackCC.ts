@@ -14,7 +14,12 @@ import {
 	encodeSetbackState,
 	SetbackState,
 } from "../values/SetbackState";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	throwUnsupportedProperty,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -58,6 +63,19 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "setbackType":
+			case "setbackState":
+				return (await this.get())?.[property];
+
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
