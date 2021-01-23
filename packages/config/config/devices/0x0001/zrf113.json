@@ -4,7 +4,7 @@
 	"manufacturer": "ACT - Advanced Control Technologies",
 	"manufacturerId": "0x0001",
 	"label": "ZRF113",
-	"description": "- Isolated Contact Fixture Module",
+	"description": "Isolated Contact Fixture Module",
 	"devices": [
 		{
 			"productType": "0x5246",

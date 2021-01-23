@@ -4,7 +4,7 @@
 	"manufacturer": "ACT - Advanced Control Technologies",
 	"manufacturerId": "0x0001",
 	"label": "ZDW232",
-	"description": "- 2-Wire Dimmer 1-Gang",
+	"description": "2-Wire Dimmer 1-Gang",
 	"devices": [
 		{
 			"productType": "0x444d",

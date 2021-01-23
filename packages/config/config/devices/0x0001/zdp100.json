@@ -4,7 +4,7 @@
 	"manufacturer": "ACT - Advanced Control Technologies",
 	"manufacturerId": "0x0001",
 	"label": "ZDP100",
-	"description": "- Scene Capable Dimmer Module",
+	"description": "Scene Capable Dimmer Module",
 	"devices": [
 		{
 			"productType": "0x4450",

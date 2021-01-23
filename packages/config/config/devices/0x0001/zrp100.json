@@ -4,7 +4,7 @@
 	"manufacturer": "ACT - Advanced Control Technologies",
 	"manufacturerId": "0x0001",
 	"label": "ZRP100",
-	"description": "- Z-Wave Plug-In Appliance Module",
+	"description": "Z-Wave Plug-In Appliance Module",
 	"devices": [
 		{
 			"productType": "0x5250",

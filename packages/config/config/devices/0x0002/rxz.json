@@ -4,7 +4,7 @@
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",
 	"label": "RXZ",
-	"description": "- RF Relay switching unit",
+	"description": "RF Relay switching unit",
 	"devices": [
 		{
 			"productType": "0x8004",

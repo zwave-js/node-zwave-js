@@ -4,7 +4,7 @@
 	"manufacturer": "ACT - Advanced Control Technologies",
 	"manufacturerId": "0x0001",
 	"label": "ZDW104",
-	"description": "- Wall Mounted Dimmer",
+	"description": "Wall Mounted Dimmer",
 	"devices": [
 		{
 			"productType": "0x4457",
