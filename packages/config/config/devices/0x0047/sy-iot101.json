@@ -1,0 +1,24 @@
+// Somfy SY-IOT101
+// Blind-curtain motor controller
+{
+	"manufacturer": "Somfy",
+	"manufacturerId": "0x0047",
+	"label": "SY-IOT101",
+	"description": "Blind-curtain motor controller",
+	"devices": [
+		{
+			"productType": "0x2018",
+			"productId": "0x1805",
+			"zwaveAllianceId": 2472
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the SY-IOT101to your controller. To get in the “inclusion” mode.\r\n   - Check if SY-IOT101 module is in exclusion mode.\r\n- Press the program switch for above 5 second, then, the LED is turned on.\r\n- Release from the program switch.\r\n- Then, SY-IOT101 module will try inclusion.\r\n- If inclusion is succeeded, LED is blinked 3 times.\r\n- If inclusion is failed, LED is turn off.\r\n",
+		"exclusion": "For “Exclusion” removing from the network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to add the SY-IOT101 to your controller. To get in the “exclusion” mode.\r\n   - Check if SY-IOT101 module is in inclusion mode\r\n- Press the program switch for above 5 second, then the LED is turned on.\r\n- Release from the program switch. \r\n- Then, SY-IOT101 module will try inclusion.\r\n- If inclusion is succeeded, LED is blinked 3 times.\r\n- If exclusion is failed, LED is turn off.\r\n",
+		"reset": "Local Reset (Factory Default Reset )\r\n- Press the program switch for above 10 second, then the LED is blinked until program switch is released.\r\n- Release from the program switch.\r\n- Then, SY-IOT101 module will try local reset.\r\n- If local reset is succeeded, LED is blinked 5 times.\r\n- After blinking LED, SY-IOT101 will send the “Device Reset Locally Notification” command and reset to the factory default. \r\n- If local reset is failed, LED is turn off.\r\n* Please use this procedure only when the network primary controller is missing or otherwise inoperable.\r\n"
+	}
+}

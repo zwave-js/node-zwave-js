@@ -1,0 +1,19 @@
+// Insignia NS-42E859A11
+// Insignia LED TV 42
+{
+	"manufacturer": "Insignia",
+	"manufacturerId": "0x0100",
+	"label": "NS-42E859A11",
+	"description": "Insignia LED TV 42",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0020",
+			"zwaveAllianceId": 132
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

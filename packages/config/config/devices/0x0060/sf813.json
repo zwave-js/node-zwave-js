@@ -1,0 +1,19 @@
+// Everspring SF813
+// Smoke Sensor
+{
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "SF813",
+	"description": "Smoke Sensor",
+	"devices": [
+		{
+			"productType": "0x0000",
+			"productId": "0x0002",
+			"zwaveAllianceId": 879
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

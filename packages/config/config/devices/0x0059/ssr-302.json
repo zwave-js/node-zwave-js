@@ -8,19 +8,27 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": 116
 		},
 		{
 			"productType": "0x0003",
-			"productId": "0x0005"
+			"productId": "0x0005",
+			"zwaveAllianceId": 1618
 		},
 		{
 			"productType": "0x0003",
-			"productId": "0x0006"
+			"productId": "0x0006",
+			"zwaveAllianceId": 1619
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "STEP 1: Ensure the LED is flashing RED on the SSR 302, if not follow the ‘Exclusion’ steps first.\r\nSTEP 2: Put the 3rd party controller into inclusion mode.\r\nSTEP 3: Press and hold both white buttons on the SSR 302 until the LED starts flashing green.\r\nThe SSR 302 has been added onto the network and the LED will go solid amber.\r\n\r\nNOTE: If the LED does not go solid amber then the add process has been unsuccessful.",
+		"exclusion": "STEP 1: Put the 3rd party controller into exclusion mode.\r\nSTEP 2: Press and hold the two white buttons on the SSR 302.\r\nThe SSR 302 has been removed from the network when the LED starts flashing red.\r\n\r\nNOTE: If the LED does not flash red then the remove process has been unsuccessful.",
+		"reset": "\"\"Please use this procedure only when the primary controller is missing or otherwise inoperable.\"\"\r\n\r\nFollow ‘Exclusion’ steps."
 	}
 }

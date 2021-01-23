@@ -1,0 +1,19 @@
+// GE/Jasco 10974/ZW4002
+// Fan Control
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "10974/ZW4002",
+	"description": "Fan Control",
+	"devices": [
+		{
+			"productType": "0x0507",
+			"productId": "0x0403",
+			"zwaveAllianceId": 930
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

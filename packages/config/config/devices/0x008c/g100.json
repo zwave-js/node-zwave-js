@@ -1,0 +1,19 @@
+// Vera Control G100
+// Bosch  Controller
+{
+	"manufacturer": "Vera Control",
+	"manufacturerId": "0x008c",
+	"label": "G100",
+	"description": "Bosch  Controller",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0032",
+			"zwaveAllianceId": 1123
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

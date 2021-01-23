@@ -1,0 +1,19 @@
+// Wintop IPLUGENERGY
+// Wintop iPlugEnergy
+{
+	"manufacturer": "Wintop",
+	"manufacturerId": "0x0097",
+	"label": "IPLUGENERGY",
+	"description": "Wintop iPlugEnergy",
+	"devices": [
+		{
+			"productType": "0x6943",
+			"productId": "0x4500",
+			"zwaveAllianceId": 673
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

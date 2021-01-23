@@ -1,0 +1,22 @@
+// D-Link DCH-G020
+// mydlink® Connected Home Hub
+{
+	"manufacturer": "D-Link",
+	"manufacturerId": "0x0108",
+	"label": "DCH-G020",
+	"description": "mydlink® Connected Home Hub",
+	"devices": [
+		{
+			"productType": "0x0020",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1297
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Press and hold the “Reset button” for 5 seconds on DCH‐G020"
+	}
+}

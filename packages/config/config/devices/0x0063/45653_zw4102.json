@@ -1,0 +1,19 @@
+// GE/Jasco 45653/ZW4102
+// GE Appliance Module 45653
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "45653/ZW4102",
+	"description": "GE Appliance Module 45653",
+	"devices": [
+		{
+			"productType": "0x5052",
+			"productId": "0x3032",
+			"zwaveAllianceId": 1192
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

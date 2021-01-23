@@ -1,0 +1,22 @@
+// Logitech N-R0009
+// Harmony Home Hub Extender
+{
+	"manufacturer": "Logitech",
+	"manufacturerId": "0x007f",
+	"label": "N-R0009",
+	"description": "Harmony Home Hub Extender",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 1321
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "n/a"
+	}
+}

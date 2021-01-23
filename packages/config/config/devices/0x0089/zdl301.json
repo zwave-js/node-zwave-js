@@ -1,0 +1,19 @@
+// Team Precision PCL ZDL301
+// Easy Light Dimmer Link
+{
+	"manufacturer": "Team Precision PCL",
+	"manufacturerId": "0x0089",
+	"label": "ZDL301",
+	"description": "Easy Light Dimmer Link",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0101",
+			"zwaveAllianceId": 167
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

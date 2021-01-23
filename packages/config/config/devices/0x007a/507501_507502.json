@@ -1,14 +1,15 @@
-// Merten 507502
+// Merten 507501 / 507502
 // Flush-mounted switch
 {
 	"manufacturer": "Merten",
 	"manufacturerId": "0x007a",
-	"label": "507502",
+	"label": "507501 / 507502",
 	"description": "Flush-mounted switch",
 	"devices": [
 		{
 			"productType": "0x8001",
-			"productId": "0x8002"
+			"productId": "0x8002",
+			"zwaveAllianceId": 319
 		},
 		{
 			"productType": "0x8001",

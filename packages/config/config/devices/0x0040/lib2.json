@@ -1,0 +1,34 @@
+// Novar Electrical Devices and Systems (EDS) LIB2
+// 2G Battery Controller
+{
+	"manufacturer": "Novar Electrical Devices and Systems (EDS)",
+	"manufacturerId": "0x0040",
+	"label": "LIB2",
+	"description": "2G Battery Controller",
+	"devices": [
+		{
+			"productType": "0x0302",
+			"productId": "0x0102",
+			"zwaveAllianceId": 240
+		},
+		{
+			"productType": "0x0902",
+			"productId": "0x0102",
+			"zwaveAllianceId": 186
+		},
+		{
+			"productType": "0x0802",
+			"productId": "0x0102",
+			"zwaveAllianceId": 242
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0102",
+			"zwaveAllianceId": [241, 283]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

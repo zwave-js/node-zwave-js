@@ -1,0 +1,34 @@
+// Novar Electrical Devices and Systems (EDS) LIB1
+// 1G Battery Controller
+{
+	"manufacturer": "Novar Electrical Devices and Systems (EDS)",
+	"manufacturerId": "0x0040",
+	"label": "LIB1",
+	"description": "1G Battery Controller",
+	"devices": [
+		{
+			"productType": "0x0302",
+			"productId": "0x0101",
+			"zwaveAllianceId": 243
+		},
+		{
+			"productType": "0x0902",
+			"productId": "0x0101",
+			"zwaveAllianceId": 182
+		},
+		{
+			"productType": "0x0802",
+			"productId": "0x0101",
+			"zwaveAllianceId": 244
+		},
+		{
+			"productType": "0x0002",
+			"productId": "0x0101",
+			"zwaveAllianceId": [246, 251]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,19 @@
+// Trane Corporation TRANE T400
+// Trane TZEMT400B - Home Energy Management Thermostat
+{
+	"manufacturer": "Trane Corporation",
+	"manufacturerId": "0x008b",
+	"label": "TRANE T400",
+	"description": "Trane TZEMT400B - Home Energy Management Thermostat",
+	"devices": [
+		{
+			"productType": "0x5452",
+			"productId": "0x5432",
+			"zwaveAllianceId": 108
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

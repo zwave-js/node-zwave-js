@@ -1,14 +1,16 @@
-// Trane Corporation Schlage
+// Trane Corporation LE130
+
 // LE130
 {
-	"manufacturer": "Trane Corporation",
+	"manufacturer": "Schlage",
 	"manufacturerId": "0x008b",
-	"label": "Schlage",
+	"label": "LE130",
 	"description": "LE130",
 	"devices": [
 		{
 			"productType": "0x4d53",
-			"productId": "0x4331"
+			"productId": "0x4331",
+			"zwaveAllianceId": 615
 		}
 	],
 	"firmwareVersion": {

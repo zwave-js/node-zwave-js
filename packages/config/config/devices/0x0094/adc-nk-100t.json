@@ -1,0 +1,22 @@
+// Alarm.com  ADC-NK-100T
+//  Alarm.com Hub
+{
+	"manufacturer": "Alarm.com",
+	"manufacturerId": "0x0094",
+	"label": "ADC-NK-100T",
+	"description": "Alarm.com Hub",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0102",
+			"zwaveAllianceId": 1760
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\r\n\r\nThis resets the Hub to its factory settings.\r\nCAUTION: Factory Resetting erases all\r\ndevices and settings.\r\nNOTE: The command to enable or disable\r\nFactory Resetting can be sent from the\r\nAlarm.com Dealer Website’s AirFX Toolkit.\r\nFactory Resetting is only available during\r\nthe first 120 seconds after initially powering\r\non the Hub.\r\n• After entering Advanced Mode, press and hold the\r\nEnrollment button ( ) for 10 seconds. When the\r\nreset process has begun, the Status Light will blink\r\norange slowly and the Hub will beep five times.\r\n• To cancel Factory Resetting, you must\r\nimmediately press and release the Enrollment\r\nbutton ( ). This feature is only available\r\nduring the first five seconds after Factory\r\nResetting has begun.\r\n• When Factory Resetting is complete, the Status\r\nLight will shine solid orange for 10 seconds.\r\n• Next, contact Alarm.com Customer Support to\r\nreinitialize the Hub."
+	}
+}

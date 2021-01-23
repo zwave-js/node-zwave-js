@@ -1,14 +1,15 @@
-// Vision Security PID11995
+// Vision Security ZL7201
 // Monoprice ZWave On/Off Plugin
 {
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
-	"label": "PID11995",
+	"label": "ZL7201",
 	"description": "Monoprice ZWave On/Off Plugin",
 	"devices": [
 		{
 			"productType": "0x2007",
-			"productId": "0x0703"
+			"productId": "0x0703",
+			"zwaveAllianceId": 876
 		}
 	],
 	"firmwareVersion": {

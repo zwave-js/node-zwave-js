@@ -1,0 +1,19 @@
+// VDA VITRUM II SWITCH
+// Vitrum II EU on-off wireless
+{
+	"manufacturer": "VDA",
+	"manufacturerId": "0x010a",
+	"label": "VITRUM II SWITCH",
+	"description": "Vitrum II EU on-off wireless",
+	"devices": [
+		{
+			"productType": "0x1200",
+			"productId": "0x5200",
+			"zwaveAllianceId": 87
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

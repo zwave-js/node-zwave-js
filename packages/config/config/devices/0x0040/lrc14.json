@@ -1,0 +1,34 @@
+// Novar Electrical Devices and Systems (EDS) LRC14
+//  Remote Control
+{
+	"manufacturer": "Novar Electrical Devices and Systems (EDS)",
+	"manufacturerId": "0x0040",
+	"label": "LRC14",
+	"description": "Remote Control",
+	"devices": [
+		{
+			"productType": "0x0301",
+			"productId": "0x0100",
+			"zwaveAllianceId": 245
+		},
+		{
+			"productType": "0x0901",
+			"productId": "0x0100",
+			"zwaveAllianceId": 185
+		},
+		{
+			"productType": "0x0801",
+			"productId": "0x0100",
+			"zwaveAllianceId": 247
+		},
+		{
+			"productType": "0x0001",
+			"productId": "0x0100",
+			"zwaveAllianceId": [248, 284]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

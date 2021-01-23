@@ -1,0 +1,19 @@
+// Kwikset 914
+// Kwikset  Door Lock for U.S.
+{
+	"manufacturer": "Kwikset",
+	"manufacturerId": "0x0090",
+	"label": "914",
+	"description": "Kwikset  Door Lock for U.S.",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0436",
+			"zwaveAllianceId": [1387, 1394]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,19 @@
+// Merten 5044XX
+// 5044xx - Radio sensor cover for in-wall switch
+{
+	"manufacturer": "Merten",
+	"manufacturerId": "0x007a",
+	"label": "5044XX",
+	"description": "5044xx - Radio sensor cover for in-wall switch",
+	"devices": [
+		{
+			"productType": "0x4002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 321
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

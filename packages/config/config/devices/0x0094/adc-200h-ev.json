@@ -1,0 +1,24 @@
+// Alarm.com ADC-200H-EV
+// Alarm.com Interlogix Simon XT/i Radio Module
+{
+	"manufacturer": "Alarm.com",
+	"manufacturerId": "0x0094",
+	"label": "ADC-200H-EV",
+	"description": "Alarm.com Interlogix Simon XT/i Radio Module",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0101",
+			"zwaveAllianceId": 1686
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"metadata": {
+		"inclusion": "1.1 Adding devices to the Alarm.com Module’s Z-Wave Network\r\nNOTE: This process leverages Network Wide Inclusion. In addition, any controllers added to the Alarm.com Module will have network information replicated over to them.\r\n1. Using Mobiletech\r\na. Install the MobileTech App (if not already done) and select the customer of interest.\r\nb. Move all Z-Wave devices to their final location on the property.\r\nc. Navigate to the Equipment List page.\r\nd. Select emPower Management.\r\ne. Select Add Z-Wave Devices\r\nf. Wait for the bolded message: Checking for new devices on the network\r\ng. Trigger a device to add it to the network.\r\nh. When a device is added successfully, it will show up on this screen following a 30 second delay.\r\ni. Continue triggering devices. You may add many devices to the network without reentering Add Mode.\r\n2. Using the Dealer Website\r\na. Navigate to the Equipment page.\r\nb. Click the emPower Devices tab.\r\nc. Open the Advanced Z-Wave Commands menu below the Equipment List.\r\nd. Click Add Z-Wave Devices.\r\ne. Wait for the bolded message: Checking for new devices on the network.\r\nf. Trigger a device to add it to the network.\r\ng. When a device is added successfully, it will show up on this screen following a 30 second delay.\r\nh. Continue triggering devices. You may add many devices to the network without reentering Add Mode.\r\n3. Using the Simon XTi Panel\r\na. Enter System Programming.\r\nb. Select Interactive Services.\r\nc. Select Z-Wave.\r\nd. Select Add Device.\r\ne. Trigger a device to add it to the network.\r\nf. When a device is added successfully, the panel will beep.\r\ng. You will need to re-enter Add Mode before triggering the next device.",
+		"exclusion": "List page.\r\nd. Select emPower Management.\r\ne. Select Delete Z-Wave Devices\r\nf. Wait for the bolded message: Checking for deleted devices on the network\r\ng. Trigger a device to remove it from the network.\r\nh. When a device is deleted successfully and its network information is erased, it will show up on this screen following a 30 second delay.\r\ni. Continue triggering devices. You may delete many devices to the network without reentering Delete Mode.\r\n2. Using the Dealer Website\r\na. Move all Z-Wave devices you plan to delete close to the Alarm.com Module.\r\nb. Navigate to the Equipment page.\r\nc. Click the emPower Devices tab.\r\nd. Open the Advanced Z-Wave Commands menu below the Equipment List.\r\ne. Click Delete Z-Wave Devices.\r\nf. Wait for the bolded message: Checking for deleted devices on the network.\r\ng. Trigger a device to remove it from the network.\r\nh. When a device is deleted successfully and its network information is erased, it will show up on this screen following a 30 second delay.\r\ni. Continue triggering devices. You may delete many devices to the network without reentering Delete Mode.\r\n3. Using the Simon XTi Panel\r\na. Enter System Programming.\r\nb. Select Interactive Services.\r\nc. Select Z-Wave.\r\nd. Select Delete Device.\r\ne. Trigger a device to remove it from the network.\r\nf. When a device is deleted successfully and its network information is erased, the panel will beep.\r\ng. You will need to re-enter Delete Mode before triggering the next device.",
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\r\n\r\n1.3 Reset Alarm.com Module to default state\r\nNOTE: This function will forcibly clear the Alarm.com module’s Z-Wave node identification and will also remove all network information from the module.\r\n1. A Z-Wave factory reset must be triggered from the Alarm.com dealer site\r\n2. Navigate to the Equipment page.\r\n3. Click the “emPower Devices” tab.\r\n4. Open the “Advanced Z-Wave Commands” menu by clicking the button below the Equipment List.\r\n5. Towards the bottom next to the “Equipment List Label” text click on the “Reset To Factory Default” button\r\n6. Allow 3 minutes for the associated commands to go through and for the module to act on them"
+	}
+}

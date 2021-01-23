@@ -1,0 +1,19 @@
+// FortrezZ LLC SSA3-P4
+// Siren & Strobe Alarm
+{
+	"manufacturer": "FortrezZ LLC",
+	"manufacturerId": "0x0084",
+	"label": "SSA3-P4",
+	"description": "Siren & Strobe Alarm",
+	"devices": [
+		{
+			"productType": "0x0343",
+			"productId": "0x0205",
+			"zwaveAllianceId": 931
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

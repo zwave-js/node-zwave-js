@@ -1,0 +1,34 @@
+// Novar Electrical Devices and Systems (EDS) LSM11H
+// 1G Switch
+{
+	"manufacturer": "Novar Electrical Devices and Systems (EDS)",
+	"manufacturerId": "0x0040",
+	"label": "LSM11H",
+	"description": "1G Switch",
+	"devices": [
+		{
+			"productType": "0x0305",
+			"productId": "0x0101",
+			"zwaveAllianceId": 228
+		},
+		{
+			"productType": "0x0905",
+			"productId": "0x0101",
+			"zwaveAllianceId": 181
+		},
+		{
+			"productType": "0x0805",
+			"productId": "0x0101",
+			"zwaveAllianceId": 229
+		},
+		{
+			"productType": "0x0005",
+			"productId": "0x0101",
+			"zwaveAllianceId": [230, 253]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

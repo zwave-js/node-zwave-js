@@ -1,0 +1,19 @@
+// Adventure Interactive 0201002 V1.13
+// AI Ring US (QEES)
+{
+	"manufacturer": "Adventure Interactive",
+	"manufacturerId": "0x009e",
+	"label": "0201002 V1.13",
+	"description": "AI Ring US (QEES)",
+	"devices": [
+		{
+			"productType": "0x0001",
+			"productId": "0x0001",
+			"zwaveAllianceId": 168
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

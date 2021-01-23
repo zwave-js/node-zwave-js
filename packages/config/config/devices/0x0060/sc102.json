@@ -1,0 +1,19 @@
+// Everspring SC102
+// Z-Wave Gateway w/ Casiva Server Solution
+{
+	"manufacturer": "Everspring",
+	"manufacturerId": "0x0060",
+	"label": "SC102",
+	"description": "Z-Wave Gateway w/ Casiva Server Solution",
+	"devices": [
+		{
+			"productType": "0x000e",
+			"productId": "0x0001",
+			"zwaveAllianceId": 122
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

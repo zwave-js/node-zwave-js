@@ -1,14 +1,15 @@
-// Vision Security PID11994
+// Vision Security ZL7101
 // Monoprice ZWave Dimmer Plugin
 {
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
-	"label": "PID11994",
+	"label": "ZL7101",
 	"description": "Monoprice ZWave Dimmer Plugin",
 	"devices": [
 		{
 			"productType": "0x2008",
-			"productId": "0x0803"
+			"productId": "0x0803",
+			"zwaveAllianceId": 877
 		}
 	],
 	"firmwareVersion": {

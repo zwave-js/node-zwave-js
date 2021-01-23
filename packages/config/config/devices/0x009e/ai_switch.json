@@ -1,0 +1,19 @@
+// Adventure Interactive AI SWITCH
+// AI Switch US (QEES)
+{
+	"manufacturer": "Adventure Interactive",
+	"manufacturerId": "0x009e",
+	"label": "AI SWITCH",
+	"description": "AI Switch US (QEES)",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 166
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

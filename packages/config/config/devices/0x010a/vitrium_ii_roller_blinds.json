@@ -1,0 +1,19 @@
+// VDA VITRIUM II Roller Blinds
+// VITRUM II Control of Roller Blinds - EU BOX
+{
+	"manufacturer": "VDA",
+	"manufacturerId": "0x010a",
+	"label": "VITRIUM II Roller Blinds",
+	"description": "VITRUM II Control of Roller Blinds - EU BOX",
+	"devices": [
+		{
+			"productType": "0x1300",
+			"productId": "0x5a00",
+			"zwaveAllianceId": 7
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

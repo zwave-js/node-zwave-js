@@ -1,0 +1,19 @@
+// Wintop IGAT
+// Wintop iGate
+{
+	"manufacturer": "Wintop",
+	"manufacturerId": "0x0097",
+	"label": "IGAT",
+	"description": "Wintop iGate",
+	"devices": [
+		{
+			"productType": "0x6123",
+			"productId": "0x4500",
+			"zwaveAllianceId": 622
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

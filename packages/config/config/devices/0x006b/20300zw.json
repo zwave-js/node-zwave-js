@@ -1,0 +1,19 @@
+// Tricklestar Ltd. (former Empower Controls Ltd.) 20300ZW
+// EU Z-Wave Interface Device + Mac Widget HAI
+{
+	"manufacturer": "Tricklestar Ltd. (former Empower Controls Ltd.)",
+	"manufacturerId": "0x006b",
+	"label": "20300ZW",
+	"description": "EU Z-Wave Interface Device + Mac Widget HAI",
+	"devices": [
+		{
+			"productType": "0x0028",
+			"productId": "0x0000",
+			"zwaveAllianceId": 212
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

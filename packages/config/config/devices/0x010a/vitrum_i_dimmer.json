@@ -1,0 +1,24 @@
+// VDA VITRUM I
+// Vitrum I dimmer wireless
+{
+	"manufacturer": "VDA",
+	"manufacturerId": "0x010a",
+	"label": "VITRUM I",
+	"description": "Vitrum I dimmer wireless",
+	"devices": [
+		{
+			"productType": "0x1100",
+			"productId": "0x4900",
+			"zwaveAllianceId": 121
+		},
+		{
+			"productType": "0x2100",
+			"productId": "0x8900",
+			"zwaveAllianceId": 95
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}

@@ -1,0 +1,24 @@
+// Trane Corporation T500
+//  Z-Wave Thermostat
+{
+	"manufacturer": "Trane Corporation",
+	"manufacturerId": "0x008b",
+	"label": "T500",
+	"description": "Z-Wave Thermostat",
+	"devices": [
+		{
+			"productType": "0x5452",
+			"productId": "0x5434",
+			"zwaveAllianceId": 80
+		},
+		{
+			"productType": "0x5452",
+			"productId": "0x5437",
+			"zwaveAllianceId": 734
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	}
+}
