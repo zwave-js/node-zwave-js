@@ -1,6 +1,7 @@
 // undefined DCM-5.1.1-Z
 // Data Collecting Module NEVOTON
 {
+	"manufacturer": "NEVOTON",
 	"manufacturerId": "0x0227",
 	"label": "DCM-5.1.1-Z",
 	"description": "Data Collecting Module NEVOTON",
