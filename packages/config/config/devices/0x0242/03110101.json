@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "A. Press Button switch 3 times in a row to link device to Z-Wave network or remove device from Z-Wave network. \r\nB. Press Button switch 3 times in a row again to cancel to link device to Z-Wave network. ",
-		"exclusion": "A. Acknowledge of Green LED lightning. \r\nB. Press Button switch 3 times in a row to link device to Z-Wave network or remove device from Z-Wave network. ",
-		"reset": "A. Press Fn switch over 2minutes to initialize connecting network information. \r\nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+		"inclusion": "A. Press Button switch 3 times in a row to link device to Z-Wave network or remove device from Z-Wave network. B. Press Button switch 3 times in a row again to cancel to link device to Z-Wave network. ",
+		"exclusion": "A. Acknowledge of Green LED lightning. B. Press Button switch 3 times in a row to link device to Z-Wave network or remove device from Z-Wave network. ",
+		"reset": "A. Press Fn switch over 2minutes to initialize connecting network information. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
 	}
 }

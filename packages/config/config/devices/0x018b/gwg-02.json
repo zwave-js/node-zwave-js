@@ -22,6 +22,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "-\tRun ‘ZW_SET_DEFAULT’ in Setting, then click YES of UZB PoP UP"
+		"reset": "-Run ‘ZW_SET_DEFAULT’ in Setting, then click YES of UZB PoP UP"
 	}
 }

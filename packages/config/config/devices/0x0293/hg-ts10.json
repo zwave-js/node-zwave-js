@@ -19,6 +19,6 @@
 	"metadata": {
 		"inclusion": "To include, Touch and hold any button for more than 5 seconds. LED light blinks to indicate inclusion mode. ",
 		"exclusion": "To exclude, Touch and hold any button for more than 5 seconds. LED light blinks to indicate exclusion mode.",
-		"reset": "To reset , press and hold first button(left top) for more than 15 seconds. LED lights turn OFF and ON to indicate rest. \r\n\r\nNote : Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"reset": "To reset , press and hold first button(left top) for more than 15 seconds. LED lights turn OFF and ON to indicate rest. Note : Please use this procedure only when the network primary controller is missing or otherwise inoperable."
 	}
 }

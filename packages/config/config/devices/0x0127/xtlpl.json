@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Use the initialize defaults function to set a panel’s programmed memory back to the factory defaults and remove any existing Z-Wave programming. Follow these steps to initialize a panel’s defaults:\r\n1. Reset the panel.\r\n2. Enter 6653 (PROG) at a keypad and press CMD to enter the panel programming menu.\r\n3. Press CMD until INITIALIZATION displays and press a top row select key or area.\r\n4. Press CMD until DEFAULTS? NO YES displays. Press the select key or area under YES.\r\n5. Press the select key or area under YES when SURE? YES NO displays.\r\n\r\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"reset": "Use the initialize defaults function to set a panel’s programmed memory back to the factory defaults and remove any existing Z-Wave programming. Follow these steps to initialize a panel’s defaults:1. Reset the panel.2. Enter 6653 (PROG) at a keypad and press CMD to enter the panel programming menu.3. Press CMD until INITIALIZATION displays and press a top row select key or area.4. Press CMD until DEFAULTS? NO YES displays. Press the select key or area under YES.5. Press the select key or area under YES when SURE? YES NO displays.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
 	}
 }

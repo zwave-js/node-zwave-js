@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "If the Control Panel is the primary controller for your network, resetting it results in the devices in your\r\nnetwork to be orphaned and is necessary after the reset to exclude and re-include all the devices in the network. This defaults the Z-Wave Controller in the system which removes all programmed Z-Wave devices, however, the devices do not receive a signal to be excluded. So, when they need to be included, they need to be excluded first."
+		"reset": "If the Control Panel is the primary controller for your network, resetting it results in the devices in yournetwork to be orphaned and is necessary after the reset to exclude and re-include all the devices in the network. This defaults the Z-Wave Controller in the system which removes all programmed Z-Wave devices, however, the devices do not receive a signal to be excluded. So, when they need to be included, they need to be excluded first."
 	}
 }

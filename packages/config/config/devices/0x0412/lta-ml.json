@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "To add or include the LTA-ML into a Z-Wave network:\r\nAfter installing LTA-ML near the PiACK II, and then connecting to the AC Adapter which is included in the same package:\r\n1.\tSet the controller in inclusion mode.\r\n2.\tPush the “pairing” button once.\r\n3.\tWait 5 seconds.\r\n4.\tConfirm the “Home Gateway” LED of the front panel is on.\r\n",
-		"exclusion": "To remove or exclude the LTA-ML from a Z-Wave network:\r\n1.\tSet the controller in exclusion mode.\r\n2.\tPush the “pairing” button 3 times.\r\n3.\tConfirm the “Home Gateway” LED of the front panel is off.",
-		"reset": "To factory reset the LTA-ML:\r\n1.\tConfirm the LTA-ML has been already included into a Z-Wave network.\r\n2.\tRemove the AC adapter’s plug and turn off the LTA-ML.\r\n3.\tSet the AC adapter’s plug again and wait more than 15 seconds but no longer than 75 seconds.\r\n4.\tPush the “pairing” button for 10 seconds and the “Home Gateway” LED turns off.\r\n※Please use this procedure only when the primary controller is missing or otherwise inoperable.\r\n"
+		"inclusion": "To add or include the LTA-ML into a Z-Wave network:After installing LTA-ML near the PiACK II, and then connecting to the AC Adapter which is included in the same package:1.Set the controller in inclusion mode.2.Push the “pairing” button once.3.Wait 5 seconds.4.Confirm the “Home Gateway” LED of the front panel is on.",
+		"exclusion": "To remove or exclude the LTA-ML from a Z-Wave network:1.Set the controller in exclusion mode.2.Push the “pairing” button 3 times.3.Confirm the “Home Gateway” LED of the front panel is off.",
+		"reset": "To factory reset the LTA-ML:1.Confirm the LTA-ML has been already included into a Z-Wave network.2.Remove the AC adapter’s plug and turn off the LTA-ML.3.Set the AC adapter’s plug again and wait more than 15 seconds but no longer than 75 seconds.4.Push the “pairing” button for 10 seconds and the “Home Gateway” LED turns off.※Please use this procedure only when the primary controller is missing or otherwise inoperable."
 	}
 }

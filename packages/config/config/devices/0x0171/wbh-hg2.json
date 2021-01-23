@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "In the WeBeHome portal:\r\n- Open the Z-Wave module configuration page\r\n- Press the \"\"Start\"\" button on the section \"\"Reset this Home Gateway Z-Wave network to default settings\"\"\r\n\r\nNotice: \r\nIt is recommended to use Reset only when the primary controller is missing or inoperable. If this Home Gateway is the primary controller for your Z-Wave network a Reset will make all your Z-Wave accessories beeing orphan. After a Reset it is necessary to exclude (or reset) all accessories and then re-include them.\r\n\r\nIf this Home Gateway is used as a secondary controller, use this function to make it leave the Z-Wave network."
+		"reset": "In the WeBeHome portal:- Open the Z-Wave module configuration page- Press the \"\"Start\"\" button on the section \"\"Reset this Home Gateway Z-Wave network to default settings\"\"Notice: It is recommended to use Reset only when the primary controller is missing or inoperable. If this Home Gateway is the primary controller for your Z-Wave network a Reset will make all your Z-Wave accessories beeing orphan. After a Reset it is necessary to exclude (or reset) all accessories and then re-include them.If this Home Gateway is used as a secondary controller, use this function to make it leave the Z-Wave network."
 	}
 }
