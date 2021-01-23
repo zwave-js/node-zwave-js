@@ -14,7 +14,13 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { ignoreTimeout, PhysicalCCAPI } from "./API";
+import {
+	ignoreTimeout,
+	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	throwUnsupportedProperty,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -65,6 +71,31 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "level":
+			case "isLow":
+			case "chargingStatus":
+			case "rechargeable":
+			case "backup":
+			case "overheating":
+			case "lowFluid":
+			case "rechargeOrReplace":
+			case "lowTemperatureStatus":
+			case "disconnected":
+				return (await this.get())?.[property];
+
+			case "maximumCapacity":
+			case "temperature":
+				return (await this.getHealth())?.[property];
+
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
