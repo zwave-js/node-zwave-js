@@ -1,19 +1,14 @@
-// Express Controls EZMULTIPL
+// Express Controls EZMultiPli
 // Multi Sensor
 {
 	"manufacturer": "Express Controls",
 	"manufacturerId": "0x001e",
-	"label": "EZMULTIPL",
+	"label": "EZMultiPli",
 	"description": "Multi Sensor",
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0001",
-			"zwaveAllianceId": [
-				1124,
-				1254,
-				2794
-			]
+			"productId": "0x0001"
 		}
 	],
 	"firmwareVersion": {
@@ -36,111 +31,62 @@
 	"paramInformation": {
 		"1": {
 			"label": "OnTime",
-			"description": "OnTime sets the number of minutes that the lights stay on when motion has not been detected. A value of 0 is a special mode where the lights are constantly sent a command to turn them on whenever motion is detected. EZMultiPli will NOT turn the lights off in this mode. Recommended values: 5 min for hallways 20 min for an office environment 60 min for a library, office or other room where someone may be sitting still for a long time",
+			"description": "OnTime",
+			"unit": "Minutes",
 			"valueSize": 1,
-			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 10,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Send only ON every time motion is detected",
-					"value": 0
-				},
-				{
-					"label": "Minutes of No Motion before OFF sent",
-					"value": 127
-				}
-			]
+			"allowManualEntry": true
 		},
 		"2": {
 			"label": "OnLevel",
-			"description": "OnLevel is the value sent by the Z-Wave BASIC_SET command to all Group 2 nodes when motion is detected. A value of 0 will turn the lights off (not recommended). A value between 1 and 99 will set the dim level to between 1% and 99% (99% is full on). A value of -1 will turn the light “on” which depends on the device but most will set the dim level to the last dim setting.",
+			"description": "OnLevel",
+			"unit": "Percent",
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": -1,
 			"maxValue": 99,
 			"defaultValue": -1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Dim level",
-					"value": 99
-				},
-				{
-					"label": "ON",
-					"value": -1
-				}
-			]
+			"allowManualEntry": true
 		},
 		"3": {
 			"label": "LiteMin",
-			"description": "A Luminance report is sent to the system controller every LiteMin minutes if the value has changed by more than 5% since the last reading. A value of zero turns this mode off. Luminance values can still be obtained at any time by the home-control application in this mode.",
+			"description": "LiteMin",
+			"unit": "Minutes",
 			"valueSize": 1,
-			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 60,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Minutes between light level reports",
-					"value": 127
-				}
-			]
+			"allowManualEntry": true
 		},
 		"4": {
 			"label": "TempMin",
-			"description": "A Temperature report is sent to the system controller every TempMin minutes if the value has changed by more than 0.5F since the last reading. A value of zero turns this mode off. Temperature values can still be obtained at any time by the home-control application in this mode.",
+			"description": "A Temperature report is sent to the controller every TempMin minutes.",
+			"unit": "Minutes",
 			"valueSize": 1,
-			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 60,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Minutes between temperature reports",
-					"value": 127
-				}
-			]
+			"allowManualEntry": true
 		},
 		"5": {
 			"label": "TempAdj",
-			"description": "Temperature adjust by 1/10th this value",
+			"description": "TempAdj",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"metadata": {
-		"inclusion": "SmartStart or press and release the button on the side. LED blinks slowly light blue when not included. Once included, the LED blinks white when motion is detected for about 5 minutes to test the motion detection area",
-		"exclusion": "When EZMultiPli is first plugged into the wall outlet, the LED should blink an aqua color. This indicates that it is not currently joined (or paired) to a Z-Wave network. If the LED is blinking white each time motion is detected, then it is already joined to a Z-Wave network. If the LED is blinking white you will need to exclude it from the other Z-Wave network before attempting to join a new one. Follow the procedure of the Z-Wave primary controller to begin the exclusion process. Once the primary controller is ready to receive the exclusion command, press and release the push button on the side of EZMultiPli. The primary controller should give an indication that the reset process has completed. EZMultiPlis LED will blink aqua when it is ready to be added to a Z-Wave network",
-		"reset": "Factory Reset If the exclusion process above is not working or the controller EZMultiPli was originally joined to is lost or not available, the following process can be used to factory reset EZMultiPli. Press and continue to hold the push button in for about 60 seconds. The LED will blink blue faster and faster and then shift to yellow and continue to blink faster and faster. Once the LED goes out, EZMultiPli is reset to the factory defaults and will blink aqua indicating it is ready to be added to a Z-Wave network"
 	}
 }

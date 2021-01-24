@@ -1,15 +1,14 @@
-// Diehl AKO 751529
+// Diehl AKO SES FS-ZW
 // Plug Actuator
 {
 	"manufacturer": "Diehl AKO",
 	"manufacturerId": "0x0103",
-	"label": "751529",
+	"label": "SES FS-ZW",
 	"description": "Plug Actuator",
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0002",
-			"zwaveAllianceId": 737
+			"productId": "0x0002"
 		}
 	],
 	"firmwareVersion": {
@@ -52,6 +51,7 @@
 		"2": {
 			"label": "Energy minimum report time",
 			"description": "Minimum time between two (non-requested) energy values",
+			"unit": "1s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -63,6 +63,7 @@
 		"3": {
 			"label": "Energy maximum report time",
 			"description": "Maximum time between two energy values, independently of changes in the value",
+			"unit": "1s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -74,6 +75,7 @@
 		"4": {
 			"label": "Power minimum report time",
 			"description": "Minimum time between two (non-requested) power values",
+			"unit": "1s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -85,6 +87,7 @@
 		"5": {
 			"label": "Power maximum report time",
 			"description": "Maximum time between two power values, independently of changes in the value",
+			"unit": "1s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -96,6 +99,7 @@
 		"6": {
 			"label": "Energy delta value",
 			"description": "Minimum change required for a new energy value to be transmitted.",
+			"unit": "0.1 Wh",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -107,6 +111,7 @@
 		"7": {
 			"label": "Power delta value",
 			"description": "Minimum change required for a new power value to be transmitted.",
+			"unit": "0.1 Wh",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,

@@ -1,50 +1,37 @@
-// GE/Jasco 14299/ZW3006
+// GE/Jasco/Jasco 14299
 // GE/Jasco In-Wall 1000W Incandescent Smart Dimmer
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14299/ZW3006",
+	"label": "GE/Jasco 14299",
 	"description": "GE/Jasco In-Wall 1000W Incandescent Smart Dimmer",
 	"devices": [
 		{
 			"productType": "0x4944",
-			"productId": "0x3039",
-			"zwaveAllianceId": 2168
+			"productId": "0x3039"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Group 1",
-			"maxNodes": 5,
-			"isLifeline": true
-		},
-		"2": {
-			"label": "Group 2",
-			"maxNodes": 5
-		},
-		"3": {
-			"label": "Double Tap",
-			"maxNodes": 5,
-			"isLifeline": true
-		}
-	},
+	"supportsZWavePlus": true,
 	"paramInformation": {
 		"3": {
 			"label": "LED Light",
-			"description": "When shipped from the factory, the LED is set to turn ON when the connected light is turned OFF. This is the default setting and can be changed if your primary controller supports the node configuration function. To make the LED turn ON when the light is turned ON, change parameter 3’s value to “1”. To turn the LED OFF at all times, change parameter 3’s value to 2",
+			"description": "LED Light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
+				{
+					"label": "LED ON when load is OFF",
+					"value": 0
+				},
 				{
 					"label": "LED ON when load is ON",
 					"value": 1
@@ -52,21 +39,16 @@
 				{
 					"label": "LED always OFF",
 					"value": 2
-				},
-				{
-					"label": "Default",
-					"value": 0
 				}
 			]
 		},
 		"4": {
 			"label": "Invert Switch",
-			"description": "If the switch is accidentally installed upside down with “On” at the bottom and “Off” at the top, the default On/Off rocker settings can be reversed by changing parameter 4’s value to “1”",
+			"description": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -82,85 +64,73 @@
 			]
 		},
 		"7": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim Steps",
 			"description": "number of steps or levels",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim Timing",
 			"description": "timing of steps",
 			"valueSize": 2,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim 2 Steps",
 			"description": "number of steps or levels",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim 2 Timing",
 			"description": "timing of steps",
 			"valueSize": 2,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim 3 Steps",
 			"description": "number of steps or levels",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim 3 Timing",
 			"description": "timing of steps",
 			"valueSize": 2,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true,
-		"disableBasicMapping": true
-	},
-	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the top or bottom of the wireless smart switch (rocker) to add it in the network. Please reference the controller’s manual for instructions",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart dimmer (rocker) to remove it from the network",
-		"reset": "Quickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully. NOTE: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+		"treatBasicSetAsEvent": true
 	}
 }

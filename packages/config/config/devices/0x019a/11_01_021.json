@@ -1,39 +1,14 @@
-// Sensative AB 11 01 022
+// Sensative AB 11-01-021
 // Strips Guard 700
 {
 	"manufacturer": "Sensative AB",
 	"manufacturerId": "0x019a",
-	"label": "11 01 022",
+	"label": "11-01-021",
 	"description": "Strips Guard 700",
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0004",
-			"zwaveAllianceId": [
-				3726,
-				3855,
-				3927,
-				3938,
-				3941,
-				3942,
-				3943,
-				3944,
-				3945,
-				3946,
-				3947,
-				3948,
-				4048,
-				4049,
-				4051,
-				4052,
-				4053,
-				4054,
-				4055,
-				4056,
-				4057,
-				4059,
-				4060
-			]
+			"productId": "0x0004"
 		}
 	],
 	"firmwareVersion": {
@@ -51,10 +26,10 @@
 	"paramInformation": {
 		"1": {
 			"label": "Notification type",
-			"description": "Select the notification type for the door and window open or close events",
+			"description": "Define the notification type.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -67,20 +42,98 @@
 				},
 				{
 					"label": "Notification report (Access Control)",
-					"value": 0
+					"value": 1
 				},
 				{
 					"label": "Notification report (Home Security)",
-					"value": 0
+					"value": 2
 				}
 			]
 		},
-		"2": {
-			"label": "LED indication",
-			"description": "Turn On or Off LED for specific event indications (ex. alarms)",
+		"15": {
+			"label": "Activate supervision",
+			"description": "Activate Supervision command for only important alarm events or all events. Supervised commands require a confirmation from the gateway when a notification is received.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Events sent with S2 Encapsulation only",
+					"value": 0
+				},
+				{
+					"label": "Only Door Open Alarm Report (Events sent with S2 and supervision encapsulation)",
+					"value": 1
+				},
+				{
+					"label": "Unsolicited reports (Door Open/Close, Tamper clear, Wake-up notification and Battery Report events sent with S2 and supervision encapsulation)",
+					"value": 2
+				}
+			]
+		},
+		"16": {
+			"label": "Supervision report wait time",
+			"description": "Only used if parameter 22 is set to 1 (High security). The number of milliseconds to wait for a Supervision response when a Supervised message is sent.",
+			"unit": "ms",
+			"valueSize": 2,
+			"minValue": 500,
+			"maxValue": 30000,
+			"defaultValue": 10000,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"17": {
+			"label": "Number of failed event retries",
+			"description": "Only used if parameter 22 is set to 1 (High security). Number of retries when a confirmation is not received. 0 = No retry, 1 - 5 = Number of retries when a confirmation is not received.",
+			"unit": "retries",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 5,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Failed Event Retry Interval",
+			"description": "Only used if parameter 22 is set to 1 (High security). The minimum number of seconds between retries. Min = 1 second, Max = 60 seconds",
+			"unit": "seconds",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 60,
+			"defaultValue": 6,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Heartbeat interval",
+			"description": "Only used if parameter 22 is set to 1 (High security). Number of minutes between periodic battery reports (Heartbeats). Accepts multiples of 5 mins. Any arbitary value between 5 and 70 will be rounded up to a multiple of 5.",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 5,
+			"maxValue": 70,
+			"defaultValue": 70,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "LED indication",
+			"description": "Turn On or Off LED for specific event indications (ex. alarms).",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -93,103 +146,16 @@
 				},
 				{
 					"label": "On",
-					"value": 0
+					"value": 1
 				}
 			]
-		},
-		"15": {
-			"label": "Activate supervision",
-			"description": "Activate Supervision command for only important alarm events or all events. Supervised commands require a confirmation from the gateway when a notification is received",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Events sent with S2 Encapsulation only",
-					"value": 0
-				},
-				{
-					"label": "Only Door Open Alarm Report (Events sent with S2 and supervision encapsulation)",
-					"value": 0
-				},
-				{
-					"label": "Unsolicited reports (Door Open/Close, Tamper clear, Wake-up notification and Battery Report events sent with S2 and supervision encapsulation)",
-					"value": 0
-				}
-			]
-		},
-		"16": {
-			"label": "Supervision report wait time",
-			"description": "(ms)",
-			"valueSize": 2,
-			"minValue": 500,
-			"maxValue": 30000,
-			"defaultValue": 1500,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"17": {
-			"label": "No. of failed event retries",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"18": {
-			"label": "Failed Event Retry Interval",
-			"description": "Min = 1 second, Max = 60 seconds",
-			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 1,
-			"maxValue": 60,
-			"defaultValue": 6,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"19": {
-			"label": "Heartbeat interval",
-			"description": "(mins) - Accepts multiples of 5 mins. - Any arbitary value in between 5 and 70 will be rounded up to a multiple of 5",
-			"valueSize": 1,
-			"unit": "minutes",
-			"minValue": 5,
-			"maxValue": 70,
-			"defaultValue": 70,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"21": {
-			"label": "nth Heartbeat report with supervision",
-			"description": "(Applicable if #15 set to 2 (all reports))",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 5,
-			"defaultValue": 5,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
 		},
 		"22": {
 			"label": "Security Level",
-			"description": "Select the level of security",
+			"description": "Select the level of security. High Security (Enables parameters 16-19, 21). Standard (Forces parameter behaviour as follows: #16=1000, #17=Sensative standard**, #18=0, #19=Off, #21=Off ** Retries with an incrementally longer period until reconnected.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -197,19 +163,14 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": ": Standard (Forces parameter behaviour as follows: #16=1000, #17=Sensative standard**, #18=0, #19=Off, #21=Off ** Retries with an incrementally longer period until reconnected",
+					"label": "Standard Security",
 					"value": 0
 				},
 				{
-					"label": ": High Security (Enables parameters 16-19, 21)",
-					"value": 0
+					"label": "High Security",
+					"value": 1
 				}
 			]
 		}
-	},
-	"metadata": {
-		"inclusion": "Set your controller in add or remove mode (see your controller’s manual). Follow the instruction below for Wake up. A long LED blink indicates that the add/remove was successful. To wake up Strips manually for communication with the Z-Wave controller, move the magnet towards and away from the rounded edge. Repeat 3 times.",
-		"exclusion": "Set your controller in add or remove mode (see your controller’s manual). Follow the instruction below for Wake up. A long LED blink indicates that the add/remove was successful. To wake up Strips manually for communication with the Z-Wave controller, move the magnet towards and away from the rounded edge. Repeat 3 times.",
-		"reset": "You may need to reset Strips if your Z-Wave controller is missing or not responding. Follow the instructions for “Wake up” above, but on the 3rd repetition, keep the magnet at the rounded edge for 10 seconds. A long LED signal indicates success"
 	}
 }
