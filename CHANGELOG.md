@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.0.2 (2021-01-24)
 ### Bugfixes
 * After setting the `hexColor` of Color Switch CC, the individual color components are no longer polled by one
 * Increased the verification poll delay after a set command to avoid capturing intermediate and outdated values
