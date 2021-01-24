@@ -1516,8 +1516,17 @@ It is probably asleep, moving its messages to the wakeup queue.`,
 			);
 			// Mark the node as asleep
 			// The handler for the asleep status will move the messages to the wakeup queue
-			// We need to re-add the current transaction because otherwise it will be dropped
-			this.sendThread.send({ type: "add", transaction });
+			// We need to re-add the current transaction if that is allowed because otherwise it will be dropped silently
+			if (this.mayMoveToWakeupQueue(transaction)) {
+				this.sendThread.send({ type: "add", transaction });
+			} else {
+				transaction.promise.reject(
+					new ZWaveError(
+						`The node is asleep`,
+						ZWaveErrorCodes.Controller_MessageDropped,
+					),
+				);
+			}
 			node.markAsAsleep();
 			return true;
 		} else {
@@ -2275,6 +2284,27 @@ ${handlers.length} left`,
 		});
 	}
 
+	/** Checks if a message is allowed to go into the wakeup queue */
+	private mayMoveToWakeupQueue(transaction: Transaction): boolean {
+		const msg = transaction.message;
+		switch (true) {
+			// Pings and handshake responses will block the send queue until wakeup,
+			// so they must be dropped
+			case messageIsPing(msg):
+			case transaction.priority === MessagePriority.Handshake:
+			// Outgoing handshake requests are very likely not valid after wakeup, so drop them too
+			case transaction.priority === MessagePriority.PreTransmitHandshake:
+			// We also don't want to immediately send the node to sleep when it wakes up
+			case isCommandClassContainer(msg) &&
+				msg.command instanceof WakeUpCCNoMoreInformation:
+			// compat queries because they will be recreated when the node wakes up
+			case transaction.tag === "compat":
+				return false;
+		}
+
+		return true;
+	}
+
 	/** Moves all messages for a given node into the wakeup queue */
 	private moveMessagesToWakeupQueue(nodeId: number): void {
 		const reject: TransactionReducerResult = {
@@ -2287,39 +2317,12 @@ ${handlers.length} left`,
 			priority: MessagePriority.WakeUp,
 		};
 
-		const reducer: TransactionReducer = (transaction, source) => {
+		const reducer: TransactionReducer = (transaction, _source) => {
 			const msg = transaction.message;
 			if (msg.getNodeId() !== nodeId) return { type: "keep" };
-
-			// Remove compat queries because they will be recreated when the node wakes up
-			if (transaction.tag === "compat") {
-				return reject;
-			}
-			if (source === "queue") {
-				if (messageIsPing(msg)) {
-					// Pings must be rejected, so the next message may be queued
-					return reject;
-				} else {
-					// For all other messages, change the priority to wakeup
-					return requeue;
-				}
-			} else {
-				// The current outermost transaction must also be transferred,
-				// but only if it is not a ping or a handshake response,
-				// because that will block the send queue until wakeup
-				if (
-					messageIsPing(msg) ||
-					transaction.priority === MessagePriority.Handshake ||
-					// We don't want to immediately send the node to sleep when it wakes up,
-					// so drop these messages
-					(isCommandClassContainer(msg) &&
-						msg.command instanceof WakeUpCCNoMoreInformation)
-				) {
-					return reject;
-				} else {
-					return requeue;
-				}
-			}
+			// Drop all messages that are not allowed in the wakeup queue
+			// For all other messages, change the priority to wakeup
+			return this.mayMoveToWakeupQueue(transaction) ? requeue : reject;
 		};
 
 		// Apply the reducer to the send thread
