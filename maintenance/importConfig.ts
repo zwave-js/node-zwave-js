@@ -1948,7 +1948,7 @@ function normalizeIdentifier(originalIdentifier: string) {
  * 																			*
  ****************************************************************************/
 function sanitizeString(originalString: string) {
-	originalString = originalString.replace(/\r\n/g, "\n\n");
+	originalString = originalString.replace(/\r\n/g, "\n");
 	originalString = originalString.replace(/\r/g, "\n");
 	originalString = originalString.replace(/\n\n\n\n/g, "\n\n");
 	originalString = originalString.replace(/\t/g, " ");
