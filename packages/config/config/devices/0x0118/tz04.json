@@ -1,14 +1,15 @@
-// TKB Home TZ04
+// TKB Home TZ04U
 // In Wall Dual Relay Switch
 {
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
-	"label": "TZ04",
+	"label": "TZ04U",
 	"description": "In Wall Dual Relay Switch",
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0003"
+			"productId": "0x0003",
+			"zwaveAllianceId": 858
 		}
 	],
 	"firmwareVersion": {
@@ -133,7 +134,7 @@
 			"description": "Restore switch state mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -171,7 +172,7 @@
 			"description": "RF off command mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -200,8 +201,8 @@
 			"label": "Endpoint 3",
 			"description": "Endpoint 3",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,

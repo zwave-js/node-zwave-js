@@ -8,7 +8,12 @@
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": [
+				213,
+				639,
+				871
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -44,7 +49,7 @@
 			"description": "Enable or Disable the status message function",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

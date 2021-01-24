@@ -1,14 +1,15 @@
-// GreenWave Reality Inc. GWPN6
+// GreenWave Reality Inc. NP240 / NP242
 // Multi-socket PowerNode (6-plug)
 {
 	"manufacturer": "GreenWave Reality Inc.",
 	"manufacturerId": "0x0099",
-	"label": "GWPN6",
+	"label": "NP240 / NP242",
 	"description": "Multi-socket PowerNode (6-plug)",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0004"
+			"productId": "0x0004",
+			"zwaveAllianceId": [54, 56, 57, 590]
 		},
 		{
 			"productType": "0x0003",
@@ -66,8 +67,8 @@
 			"label": "Wheel position",
 			"description": "Wheel position on the GreenWave device (read-only)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 128,
+			"maxValue": 137,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": true,

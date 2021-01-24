@@ -1,14 +1,15 @@
-// Ecolink PIR
+// Ecolink PIRZWAVE1
 // Z-Wave PIR Motion Sensor
 {
 	"manufacturer": "Ecolink",
 	"manufacturerId": "0x014a",
-	"label": "PIR",
+	"label": "PIRZWAVE1",
 	"description": "Z-Wave PIR Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 791
 		}
 	],
 	"firmwareVersion": {

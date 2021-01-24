@@ -1,18 +1,20 @@
-// Trane Corporation TZEMT400BB32MAA
+// Trane Corporation T400
 // Trane Z-Wave Programmable Thermostat
 {
 	"manufacturer": "Trane Corporation",
 	"manufacturerId": "0x008b",
-	"label": "TZEMT400BB32MAA",
+	"label": "T400",
 	"description": "Trane Z-Wave Programmable Thermostat",
 	"devices": [
 		{
 			"productType": "0x5452",
-			"productId": "0x5431"
+			"productId": "0x5431",
+			"zwaveAllianceId": 109
 		},
 		{
 			"productType": "0x5452",
-			"productId": "0x5433"
+			"productId": "0x5433",
+			"zwaveAllianceId": 107
 		},
 		{
 			"productType": "0x5452",
@@ -35,7 +37,7 @@
 			"label": "Schedule Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x4449",
-			"productId": "0x0003"
+			"productId": "0x0003",
+			"zwaveAllianceId": 751
 		}
 	],
 	"firmwareVersion": {
@@ -25,8 +26,8 @@
 	"paramInformation": {
 		"1": {
 			"label": "Delayed Off",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
@@ -36,8 +37,8 @@
 		},
 		"2": {
 			"label": "Panic On Time",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
@@ -47,8 +48,8 @@
 		},
 		"3": {
 			"label": "Panic Off Time",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
@@ -59,8 +60,8 @@
 		"4": {
 			"label": "Basic Set Value",
 			"description": "Not available in earlier versions of the device.",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
@@ -114,8 +115,8 @@
 		},
 		"7": {
 			"label": "Dimmer Ramp Time",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,

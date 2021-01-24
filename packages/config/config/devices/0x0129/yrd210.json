@@ -1,14 +1,15 @@
-// ASSA ABLOY YRD210
+// Yale YRD210
 // Push Button Deadbolt
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
 	"label": "YRD210",
 	"description": "Push Button Deadbolt",
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0000"
+			"productId": "0x0000",
+			"zwaveAllianceId": 687
 		},
 		{
 			"productType": "0x0004",
@@ -34,8 +35,8 @@
 		"1": {
 			"label": "Audio Mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 3,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
@@ -103,8 +104,8 @@
 		"5": {
 			"label": "Language",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -142,7 +143,7 @@
 			"description": "Operating Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

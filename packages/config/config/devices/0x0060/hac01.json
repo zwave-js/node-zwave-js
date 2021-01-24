@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0010",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 694
 		}
 	],
 	"firmwareVersion": {
@@ -38,7 +39,6 @@
 		"2": {
 			"label": "Amount Of Delay",
 			"description": "Amount Of Delay (seconds) to send the Basic Set Off command.",
-			"unit": "s",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

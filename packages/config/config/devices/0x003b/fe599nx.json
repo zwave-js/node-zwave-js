@@ -1,14 +1,15 @@
-// Allegion FE599NX
+// Allegion CKPD FE599
 // Connected Keypad with Lever
 {
 	"manufacturer": "Allegion",
 	"manufacturerId": "0x003b",
-	"label": "FE599NX",
+	"label": "CKPD FE599",
 	"description": "Connected Keypad with Lever",
 	"devices": [
 		{
 			"productType": "0x634b",
-			"productId": "0x504c"
+			"productId": "0x504c",
+			"zwaveAllianceId": 311
 		}
 	],
 	"firmwareVersion": {

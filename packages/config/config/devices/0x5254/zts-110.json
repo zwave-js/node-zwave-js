@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0200",
-			"productId": "0x8031"
+			"productId": "0x8031",
+			"zwaveAllianceId": 679
 		},
 		{
 			"productType": "0x0202",
@@ -84,7 +85,7 @@
 			"description": "Set Temperature Scale to Farhenheit or Centigrade. DEFAULT =1 Farhenheit",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -128,7 +129,7 @@
 			"description": "Set Easy Mode 0:DISABLE 1:ENABLED DEFAULT:ENABLED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -150,7 +151,7 @@
 			"description": "Configures for 12 or 24 Hour format. Default is 12 Hours.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,

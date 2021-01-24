@@ -1,14 +1,15 @@
-// Z-Wave.Me ZME_05433
+// Z-Wave.Me ZME_06433
 // Zwave.Me Dimmer Set Everlux
 {
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
-	"label": "ZME_05433",
+	"label": "ZME_06433",
 	"description": "Zwave.Me Dimmer Set Everlux",
 	"devices": [
 		{
 			"productType": "0x1000",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": 19
 		}
 	],
 	"firmwareVersion": {
@@ -65,10 +66,9 @@
 		"2": {
 			"label": "Automatically switch off after",
 			"description": "If not zero, automatically switch off after a user defined time",
-			"unit": "Sec",
 			"valueSize": 2,
 			"minValue": 0,
-			"maxValue": 65535,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -138,10 +138,9 @@
 		"5": {
 			"label": "Dimming speed",
 			"description": "Time to dim on button presses",
-			"unit": "10ms",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 30,
 			"defaultValue": 30,
 			"unsigned": true,
 			"readOnly": false,
@@ -161,8 +160,8 @@
 		"6": {
 			"label": "Dimming long speed",
 			"description": "Time to dim on button holds and StartLevelChange",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,

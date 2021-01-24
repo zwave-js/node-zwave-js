@@ -1,14 +1,15 @@
-// Eaton RFTR9505
+// Eaton RFTR9505-T
 // Duplex receptacle
 {
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
-	"label": "RFTR9505",
+	"label": "RFTR9505-T",
 	"description": "Duplex receptacle",
 	"devices": [
 		{
 			"productType": "0x5244",
-			"productId": "0x0000"
+			"productId": "0x0000",
+			"zwaveAllianceId": 741
 		}
 	],
 	"firmwareVersion": {
@@ -26,8 +27,8 @@
 		"2": {
 			"label": "Panic ON time",
 			"description": "Panic ON time",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": -128,
 			"maxValue": 127,
 			"defaultValue": 0,

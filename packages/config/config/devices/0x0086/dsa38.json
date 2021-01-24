@@ -1,14 +1,19 @@
-// AEON Labs DSA38
+// AEON Labs DSA38-ZW
 // Panic Button Key Fob
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
-	"label": "DSA38",
+	"label": "DSA38-ZW",
 	"description": "Panic Button Key Fob",
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0026"
+			"productId": "0x0026",
+			"zwaveAllianceId": [
+				1284,
+				1285,
+				1288
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -28,7 +33,7 @@
 			"description": "Defines the switching mode of Button 1",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

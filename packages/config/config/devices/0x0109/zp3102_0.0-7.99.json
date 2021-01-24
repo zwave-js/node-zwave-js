@@ -8,19 +8,23 @@
 	"devices": [
 		{
 			"productType": "0x2002",
-			"productId": "0x0201"
+			"productId": "0x0201",
+			"zwaveAllianceId": [72, 84]
 		},
 		{
 			"productType": "0x2002",
-			"productId": "0x0202"
+			"productId": "0x0202",
+			"zwaveAllianceId": [703, 728]
 		},
 		{
 			"productType": "0x2002",
-			"productId": "0x0203"
+			"productId": "0x0203",
+			"zwaveAllianceId": 804
 		},
 		{
 			"productType": "0x2002",
-			"productId": "0x0204"
+			"productId": "0x0204",
+			"zwaveAllianceId": 847
 		},
 		{
 			"productType": "0x2002",
@@ -42,8 +46,8 @@
 		"1": {
 			"label": "On time in minutes",
 			"description": "Delay before sending OFF",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,

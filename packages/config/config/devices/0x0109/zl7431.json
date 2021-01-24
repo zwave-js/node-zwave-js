@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x200c",
-			"productId": "0x0c02"
+			"productId": "0x0c02",
+			"zwaveAllianceId": 1792
 		},
 		{
 			"productType": "0x2016",
@@ -31,8 +32,8 @@
 			"label": "Indicator Light",
 			"description": "Indicator Light",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,

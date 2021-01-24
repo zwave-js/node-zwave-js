@@ -13,6 +13,11 @@
 		},
 		{
 			"productType": "0x5452",
+			"productId": "0x5435",
+			"zwaveAllianceId": 79
+		},
+		{
+			"productType": "0x5452",
 			"productId": "0x5437",
 			"zwaveAllianceId": 734
 		}
@@ -20,5 +25,34 @@
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
-	}
+	},
+	"associations": {
+		"1": {
+			"label": "Reports",
+			"maxNodes": 1,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"132": {
+			"label": "Schedule Mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Hold",
+					"value": 0
+				},
+				{
+					"label": "Schedule",
+					"value": 1
+				}
+			]
+		}
 }

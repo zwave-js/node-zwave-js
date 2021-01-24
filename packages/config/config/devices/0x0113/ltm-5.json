@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x5457",
-			"productId": "0x3033"
+			"productId": "0x3033",
+			"zwaveAllianceId": 155
 		}
 	],
 	"firmwareVersion": {
@@ -28,7 +29,7 @@
 			"description": "Dimmers controlled by this switch will start dimming from their current level.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -50,7 +51,7 @@
 			"description": "In night-light mode the LED on the switch will turn ON when the switch is turned OFF.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -72,7 +73,7 @@
 			"description": "Change the top of the switch to OFF and the bottom of the switch to ON.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -94,7 +95,7 @@
 			"description": "The dimmer will start dimming from its current level.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -116,7 +117,7 @@
 			"description": "Flicker LED while transmitting.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": false,
@@ -154,7 +155,7 @@
 			"description": "Poll only the first node in Group 1.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

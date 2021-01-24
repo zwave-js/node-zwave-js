@@ -7,8 +7,14 @@
 	"description": "Flood Sensor",
 	"devices": [
 		{
+			"productType": "0x0000",
+			"productId": "0x0001",
+			"zwaveAllianceId": [922, 973]
+		},
+		{
 			"productType": "0x000b",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": [217, 585, 736]
 		}
 	],
 	"firmwareVersion": {
@@ -29,8 +35,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Basic Level Set",
-			"description": "The value sent with Basic commands in case of detected flood",
+			"label": "Dim Level Sent via Basic Set",
+			"description": "The dim level sent to a lamp module upon activation: (0) Off; (1)-(99) Dim Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,

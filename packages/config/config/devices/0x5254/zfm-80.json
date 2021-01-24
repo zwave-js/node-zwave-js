@@ -1,14 +1,15 @@
-// Remotec ZFM-80
+// Remotec ZFM-80 / ZDW-80 / ZRW-80
 // Fixture Switch Module
 {
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
-	"label": "ZFM-80",
+	"label": "ZFM-80 / ZDW-80 / ZRW-80",
 	"description": "Fixture Switch Module",
 	"devices": [
 		{
 			"productType": "0x8000",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": 660
 		}
 	],
 	"firmwareVersion": {
@@ -59,8 +60,8 @@
 		"2": {
 			"label": "Timeout",
 			"description": "Set timeout period",
-			"unit": "minutes",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 240,
 			"defaultValue": 0,

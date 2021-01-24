@@ -1,14 +1,15 @@
-// Z-Wave.Me ZME_05431
+// Z-Wave.Me ZME_06431
 // Flush mountable switch
 {
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
-	"label": "ZME_05431",
+	"label": "ZME_06431",
 	"description": "Flush mountable switch",
 	"devices": [
 		{
 			"productType": "0x1000",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 20
 		}
 	],
 	"firmwareVersion": {

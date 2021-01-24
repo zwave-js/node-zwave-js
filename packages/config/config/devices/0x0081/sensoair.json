@@ -1,14 +1,15 @@
-// SIEGENIA-AUBI KG Sensoair
+// SIEGENIA-AUBI KG SENSOAIR
 // Air quality sensor for indoor use
 {
 	"manufacturer": "SIEGENIA-AUBI KG",
 	"manufacturerId": "0x0081",
-	"label": "Sensoair",
+	"label": "SENSOAIR",
 	"description": "Air quality sensor for indoor use",
 	"devices": [
 		{
 			"productType": "0x00a0",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 266
 		}
 	],
 	"firmwareVersion": {

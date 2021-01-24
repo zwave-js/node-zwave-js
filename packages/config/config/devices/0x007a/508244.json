@@ -1,14 +1,15 @@
-// Merten 5082xx
+// Merten 508244
 // Battery Powered Wall Controller MOVE
 {
 	"manufacturer": "Merten",
 	"manufacturerId": "0x007a",
-	"label": "5082xx",
+	"label": "508244",
 	"description": "Battery Powered Wall Controller MOVE",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 268
 		}
 	],
 	"firmwareVersion": {

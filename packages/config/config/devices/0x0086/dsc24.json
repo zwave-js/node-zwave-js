@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0018"
+			"productId": "0x0018",
+			"zwaveAllianceId": [712, 770, 778]
 		}
 	],
 	"firmwareVersion": {
@@ -56,7 +57,7 @@
 			"description": "Enables automatic notifications to associated devices",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -82,7 +83,7 @@
 			"description": "Enables/disables parameter 91 and 92 below",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -137,8 +138,8 @@
 		"101": {
 			"label": "Group 1 report",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
+			"minValue": 2,
+			"maxValue": 8,
 			"defaultValue": 8,
 			"readOnly": false,
 			"writeOnly": false,
@@ -161,8 +162,8 @@
 		"102": {
 			"label": "Group 2 report",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
+			"minValue": 2,
+			"maxValue": 8,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -185,8 +186,8 @@
 		"103": {
 			"label": "Group 3 report",
 			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 65535,
+			"minValue": 2,
+			"maxValue": 8,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
