@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Push the hardware reset button.\"Please use this procedure only when the network primary controller is missing or otherwise inoperable.\""
+		"reset": "Push the hardware reset button.\n\n\"Please use this procedure only when the network primary controller is missing or otherwise inoperable.\""
 	}
 }

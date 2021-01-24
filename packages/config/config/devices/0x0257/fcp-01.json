@@ -19,6 +19,6 @@
 	"metadata": {
 		"inclusion": "After doing inclusion action on controller, then hold 5 seconds “STOP SOUND” button till hearing beep once",
 		"exclusion": "After doing exclusion action on controller, then hold 5 seconds “STOP SOUND” button till hearing beep once",
-		"reset": "Hold 10 seconds “STOP SOUND” button till hearing beep once-Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "Hold 10 seconds “STOP SOUND” button till hearing beep once\n\n-Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }
