@@ -40,6 +40,7 @@
 			"label": "Amount Of Delay",
 			"description": "Amount Of Delay (seconds) to send the Basic Set Off command.",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1,
