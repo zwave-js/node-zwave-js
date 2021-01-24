@@ -1,6 +1,6 @@
 // Wenzhou MTLC Electric Appliances Co., Ltd. ZW500DM
 // In-wall Smart Meter Dimmer Switch
-			{
+{
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
 	"label": "ZW500DM",
@@ -136,8 +136,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "When the primary controller is in the adding mode, flicks the paddle 3 times in the\n\n1.5 second. The primary controller will verify the adding, assign a node ID number\n\nfor the module",
-		"exclusion": "When the primary controller is in the removing mode, flicks the paddle 3 times in\n\nthe 1.5 second. The primary controller will verify the removing, remove the module\n\nfrom the current Z-Wave network, and the LED will blink when the module is on\n\npower",
-		"reset": "Flicks the program button 3 times in the 1.5 second then press once and hold for\n\n2 second.the device will send a device reset locally notification to controller. Then\n\nclear all of information for the network, and restore factory defaults, and reset the\n\nmodule. Use this procedure only in the event that the network primary\n\ncontroller is missing or otherwise inoperable"
+		"inclusion": "When the primary controller is in the adding mode, flicks the paddle 3 times in the 1.5 second. The primary controller will verify the adding, assign a node ID number for the module",
+		"exclusion": "When the primary controller is in the removing mode, flicks the paddle 3 times in the 1.5 second. The primary controller will verify the removing, remove the module from the current Z-Wave network, and the LED will blink when the module is on power",
+		"reset": "Flicks the program button 3 times in the 1.5 second then press once and hold for 2 second.the device will send a device reset locally notification to controller. Then clear all of information for the network, and restore factory defaults, and reset the module. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }

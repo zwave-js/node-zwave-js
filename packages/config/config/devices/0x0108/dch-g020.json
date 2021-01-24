@@ -1,6 +1,6 @@
 // D-Link DCH-G020
 // mydlink® Connected Home Hub
-			{
+{
 	"manufacturer": "D-Link",
 	"manufacturerId": "0x0108",
 	"label": "DCH-G020",

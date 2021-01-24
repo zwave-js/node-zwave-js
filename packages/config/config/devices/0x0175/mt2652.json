@@ -1,6 +1,6 @@
 // Devolo MT2652
 // Scene Switch
-			{
+{
 	"manufacturer": "Devolo",
 	"manufacturerId": "0x0175",
 	"label": "MT2652",
@@ -377,6 +377,6 @@
 	"metadata": {
 		"inclusion": "Place your primary controller in inclusion mode by following the manufacturer's instructions, then activate inclusion on the wall controller by pressing any one of the four buttons for one second. Inclusion mode is indicated by the red/green blinking of the LEDs until the timeout occurs after 10 seconds",
 		"exclusion": "Re-Inclusion and Exclusion are performed by pushing button 1 in management mode. Pushing all four buttons for 5 sec. turns the device into management mode (indicated by blinking green LED)",
-		"reset": "Use this procedure only if the primary controller is missing or otherwise inoperable. \n(1) Turn the device into Management Mode by keeping all four buttons pushed for 5 seconds, (2) click on Button 3, (3) keep button 4 pushed for 4 seconds"
+		"reset": "Use this procedure only if the primary controller is missing or otherwise inoperable. (1) Turn the device into Management Mode by keeping all four buttons pushed for 5 seconds, (2) click on Button 3, (3) keep button 4 pushed for 4 seconds"
 	}
 }

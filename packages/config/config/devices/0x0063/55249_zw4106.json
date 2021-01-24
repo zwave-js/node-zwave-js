@@ -1,6 +1,6 @@
 // GE/Jasco 55249/ZW4106
 // Plug-in Smart Switch (Dual Plug with Simultaneous Control)
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "55249/ZW4106",
@@ -68,8 +68,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the sensor in the Z-Wave network.\n\n2. Once the controller is ready to add your sensor, ensure battery is installed with the correct polarity in the sensor and the battery tab has\n\nbeen removed.\n\n3. Press and release the programming button (see Figure 2). This starts the manual add process. The red LED (see Figure 2) will begin to\n\nflash quickly as it begins the add process.\n\n4. The red LED will activate for 3 seconds to confirm the sensor has been added in the network.\n\n5. The controller’s app will indicate if it has discovered the sensor. If prompted by the controller to enter the S2 security code, refer to the QR\n\ncode/security number on the back of the box, or the QR code label on the product (see Figure 3). Enter the 5-digit code.\n\nNote: Your controller may need to be within 10ft. of the sensor to be added.\n\nUsing the controller, you can activate interactive automations when the sensor detects when a door or window is opened or closed.\n\nFunctions may vary depending on gateway or controller",
-		"exclusion": "To remove the sensor from the Z-Wave network\n\n1. Follow the instructions for your Z-Wave certified controller to remove the sensor from the Z-Wave network.\n\n2. Once the controller is ready to remove your sensor, press and release the programming button on the sensor\n\n1 time to remove it from the network (see Figure 4).\n\n3. The red LED will blink 5 times to indicate it has been removed",
-		"reset": "1. Press the programming button 10 times within 6 seconds (interval between presses of the button cannot be\n\nlonger than 1 second).\n\n2. The red LED will activate for 2 seconds, followed by 3 quick flashes"
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the sensor in the Z-Wave network. 2. Once the controller is ready to add your sensor, ensure battery is installed with the correct polarity in the sensor and the battery tab has been removed. 3. Press and release the programming button (see Figure 2). This starts the manual add process. The red LED (see Figure 2) will begin to flash quickly as it begins the add process. 4. The red LED will activate for 3 seconds to confirm the sensor has been added in the network. 5. The controller’s app will indicate if it has discovered the sensor. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product (see Figure 3). Enter the 5-digit code. Note: Your controller may need to be within 10ft. of the sensor to be added. Using the controller, you can activate interactive automations when the sensor detects when a door or window is opened or closed. Functions may vary depending on gateway or controller",
+		"exclusion": "To remove the sensor from the Z-Wave network 1. Follow the instructions for your Z-Wave certified controller to remove the sensor from the Z-Wave network. 2. Once the controller is ready to remove your sensor, press and release the programming button on the sensor 1 time to remove it from the network (see Figure 4). 3. The red LED will blink 5 times to indicate it has been removed",
+		"reset": "1. Press the programming button 10 times within 6 seconds (interval between presses of the button cannot be longer than 1 second). 2. The red LED will activate for 2 seconds, followed by 3 quick flashes"
 	}
 }

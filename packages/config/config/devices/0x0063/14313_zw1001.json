@@ -1,6 +1,6 @@
 // GE/Jasco 14313/ZW1001
 // In-Wall Smart Outlet
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "14313/ZW1001",
@@ -67,8 +67,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified\n\ncontroller to include a device to the Z-Wave network.\n\n2. Once the controller is ready to include your device, press and\n\nrelease the Program Button to include it in the network.\n\n3. Once your controller has confirmed that the device has been\n\nincluded, refresh the Z-Wave network to optimize performance",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\n\nexclude a device from the Z-Wave network.\n\n2. Once the controller is ready to Exclude your device, press and\n\nrelease the manual/program button on the smart dimmer to\n\nexclude it from the network",
-		"reset": "Press and hold the button for at least 3 seconds. The LED light\n\nwill blink 5 times to confirm.\n\nNote: This should only be used in the event your network’s\n\nprimary controller is missing or otherwise inoperable"
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include a device to the Z-wave network. 2. Once the controller is ready to include your device, press and release the Program Button to include it in the network. 3. Once your controller has confirmed that the device has been included, refresh the Z-wave network to optimize performance",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network. 2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart dimmer to exclude it from the network",
+		"reset": "1. Press and hold the button for at least 3 seconds. The LED light will blink 5 times to confirm. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }
