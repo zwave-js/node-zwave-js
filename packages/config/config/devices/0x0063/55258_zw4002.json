@@ -1,6 +1,6 @@
 // GE/Jasco 55258/ZW4002
 // In-Wall 3-Speed Fan Control
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "55258/ZW4002",
@@ -60,8 +60,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press and release the top or bottom rocker",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press and release the top or bottom rocker",
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the top or bottom rocker",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the top or bottom rocker",
 		"reset": "Quickly press ON (top) button three times, then immediately press the OFF (bottom) button three times. The LED will flash ON/OFF five times when completed successfully"
 	}
 }

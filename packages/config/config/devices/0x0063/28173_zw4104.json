@@ -1,6 +1,6 @@
 // GE/Jasco 28173 (ZW4104)
 // Plug-in Smart Switch (Dual Plug)
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "28173 (ZW4104)",
@@ -68,8 +68,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "Adding your device to a Z-Wave network:\n\n1. Follow the instructions for your Z-Wave certified controller to\n\ninclude the device to the Z-Wave network.\n\n2. Once the controller is ready to include your smart switch,\n\nsingle press and release the manual/program button on the\n\nsmart switch to include it in the network.\n\nNow you have complete control to turn your lamp ON/OFF\n\naccording to groups, scenes, schedules and interactive\n\nautomations programmed by your controller.\n\nIf your Z-Wave certified controller features Remote Access,\n\nyou can now control your lighting from your mobile devices",
-		"exclusion": "To exclude and reset the device:\n\n1. Follow the instructions for your Z-Wave certified controller to\n\nexclude a device from the Z-Wave network.\n\n2. Once the controller is ready to Exclude your device, press\n\nand release the manual/program button on the smart switch\n\nto exclude it from the network",
-		"reset": "To return your switch to factory defaults:\n\n1. If plugged in, unplug the Switch from the receptacle.\n\n2. Press and hold the top button for at least 3 seconds while\n\nyou plug the switch into a receptacle.\n\nNote: This should only be used in the event your networks’\n\nprimary controller is missing or otherwise inoperable"
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include the device to the Z-wave network. 2. Once the controller is ready to include your smart switch, single press and release the manual/program button on the smart dimmer to include it in the network. 3. Once your controller has confirmed that the smart switch has been included, refresh the Z-wave network to optimize performance.",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network. 2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart switch to exclude it from the network.",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle. 2. Press and hold the top button for at least 3 seconds while you plug the switch into a receptacle. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable."
 	}
 }

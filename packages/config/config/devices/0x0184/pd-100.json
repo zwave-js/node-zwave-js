@@ -1,6 +1,6 @@
 // Dragon Tech Industrial, Ltd. PD-100
 // Plug in Dimmer Switch
-			{
+{
 	"manufacturer": "Dragon Tech Industrial, Ltd.",
 	"manufacturerId": "0x0184",
 	"label": "PD-100",
@@ -79,8 +79,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "1. Plug the 2-pin AC power plugs of lighting device to the receptacle of HS-PD100+\n\n2. Insert the module's 3-pin plug into an AC outlet of your preferred location. In normal operating mode, the LED on the front panel will be lit. \n\n3. Add(Include) the module into your network by a Z-Wave certified controller.\n\n Normally, the sequence is as follows:\n\na. Place your network controller into inclusion mode by following the controller manufacturer's instructions\n\nb. When the controller is ready, single click the button on the front of HS-PD100+ \n\nc. The controller should indicate that the new device was added successfully.",
-		"exclusion": "a. Place your network controller into exclusion mode by following the controller manufacturer's instructions\n\nb. When the controller is ready, single click the button on the front of HS-PD100+ \n\nc. The controller should indicate that the device was excluded successfully.",
-		"reset": "Use this procedure only in the event that the network primary controller is lost or otherwise inoperable.\n\n1. Unplug the HS-PD100+ from the AC outlet and also unplug the power plugs of the lighting from the module (if plugged in)\n\n2. Press and hold the button on the HS-PD100+\n\n3. Plug the HS-PD100+ back into the AC outlet with the button pressed\n\n4. After 3 seconds, release the button. If you see the button blink, that means that the HS-PD100+ has been reset successfully"
+		"inclusion": "1. Plug the 2-pin AC power plugs of lighting device to the receptacle of PD-100 2. Insert the module's 3-pin plug into an AC outlet of your preferred location. In normal operating mode, the LED on the front panel will be lit. 3. Add(Include) the module into your network by a Z-Wave certified controller. Normally, the sequence is as follows: a. Place your network controller into inclusion mode by following the controller manufacturer's instructions b. When the controller is ready, single click the button on the front of PD-100 c. The controller should indicate that the new device was added successfully.",
+		"exclusion": "a. Place your network controller into exclusion mode by following the controller manufacturer's instructions b. When the controller is ready, single click the button on the front of PD-100 c. The controller should indicate that the device was excluded successfully.",
+		"reset": "Use this procedure only in the event that the network primary controller is lost or otherwise inoperable. 1. Unplug the PD-100 from the AC outlet and also unplug the power plugs of the lighting from the module (if plugged in) 2. Press and hold the button on the PD-100 3. Plug the PD-100 back into the AC outlet with the button pressed 4. After 3 seconds, release the button. If you see the button blink, that means that the PD-100 has been reset successfully"
 	}
 }

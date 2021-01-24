@@ -1,6 +1,6 @@
 // Axis Communications Ab T8342
 // Door/Window Sensor
-			{
+{
 	"manufacturer": "Axis Communications Ab",
 	"manufacturerId": "0x0364",
 	"label": "T8342",
@@ -9,11 +9,7 @@
 		{
 			"productType": "0x0003",
 			"productId": "0x0001",
-			"zwaveAllianceId": [
-				2708,
-				2801,
-				3083
-			]
+			"zwaveAllianceId": [2708, 2801, 3083]
 		}
 	],
 	"firmwareVersion": {
@@ -21,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Auto inclusion\n\nThe detector supports the auto inclusion feature where it will automatically enter Inclusion mode when first powered up. This will\n\nalso apply when powered up after a factory reset.\n\n1. Put a Z-Wave controller into inclusion mode.\n\n2. Remove the strip of insulating film from the battery cover on the front of casing. The LED on the device should turn ON\n\n3. The inclusion process should be completed when the LED stops blinking\n\n4. Perform test before you refit the battery cover.\n\nManual inclusion\n\nYou can also choose to manually add the Z-Wave device to a control device. Please follow the steps described below.\n\nNote\n\nFor best results, exclude the device before starting the inclusion process. For more details see the installation guide\n\n1. Press the tamper switch 3 times within 1.5 seconds to put the unit into learning (inclusion/exclusion) mode.\n\n2. The inclusion process should be completed when the LED stops blinking\n\n3. Perform a test before you refit the cover",
-		"exclusion": "Manual exclusion\n\n1. Detach the battery cover.\n\n2. Press the tamper switch 3 times within 1.5 seconds to put the unit into learning (inclusion/exclusion) mode.\n\n3. The exclusion process should be completed when the LED stops blinking\n\n4. Refit the battery cover",
-		"reset": "Factory Reset (This procedure should only be used when the controller is inoperable.)\n\n1. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode.\n\n2. Within 1 second of step 1, press the tamper switch again and hold until LED is off (about 5 seconds).\n\n3. Node ID is excluded. The device reverts to 2-second on, 2-second off factory default state and will be in auto-inclusion mode for 4 minutes"
+		"inclusion": "1. Put the Z-Wave Controller into inclusion mode2. Press the tamper switch 3 times within 1.5 seconds to put theunit into inclusion mode.",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.2. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode.",
+		"reset": "This procedure should only be used when the controller is inoperable.1. Press the tamper switch 3 times within 1.5 seconds to put the unit into exclusion mode.2. Within 1 second of step 1, press the tamper switch again and hold for 5 seconds.3. Node ID is excluded. The device reverts to factory default state."
 	}
 }

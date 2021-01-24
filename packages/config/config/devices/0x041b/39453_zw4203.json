@@ -1,6 +1,6 @@
 // Resideo 39453 / ZW4203
 // Plug-in Outdoor Smart Switch
-			{
+{
 	"manufacturer": "Resideo",
 	"manufacturerId": "0x041b",
 	"label": "39453 / ZW4203",
@@ -90,8 +90,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "ADDING YOUR DEVICE TO A Z-WAVE NETWORK\n\n1. Follow the instructions for your Z-Wave certified\n\ncontroller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press\n\nand release the manual/program button on the smart\n\nswitch to add it in the network.\n\n3. The controller’s app will indicate if it has discovered the\n\nswitch. If prompted by the controller to enter the S2\n\nsecurity code, refer to the QR code/security number on\n\nthe side of the box or the QR code label on the product\n\n(see Figure 1). Enter the 5-digit code",
-		"exclusion": "TO REMOVE AND RESET THE DEVICE\n\n1. Follow the instructions for your Z-Wave certified\n\ncontroller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press\n\nand release the manual/program button on the smart\n\nswitch to remove it from the network",
-		"reset": "TO RETURN YOUR SWITCH TO FACTORY DEFAULTS\n\n1. If plugged in, unplug the device from the receptacle.\n\n2. Press and hold the manual/program button, plug the\n\ndevice in and continue to hold for at least 3 seconds.\n\nNOTE: This should only be used in the event your network’s\n\nprimary controller is missing or otherwise inoperable"
+		"inclusion": "ADDING YOUR DEVICE TO A Z-WAVE NETWORK 1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the manual/program button on the smart switch to add it in the network. 3. The controller’s app will indicate if it has discovered the switch. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the side of the box or the QR code label on the product (see Figure 1). Enter the 5-digit code",
+		"exclusion": "TO REMOVE AND RESET THE DEVICE 1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the manual/program button on the smart switch to remove it from the network",
+		"reset": "TO RETURN YOUR SWITCH TO FACTORY DEFAULTS 1. If plugged in, unplug the device from the receptacle. 2. Press and hold the manual/program button, plug the device in and continue to hold for at least 3 seconds. NOTE: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }

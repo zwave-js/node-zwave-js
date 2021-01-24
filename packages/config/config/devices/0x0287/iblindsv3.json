@@ -1,6 +1,6 @@
 // HAB Home Intelligence, LLC IB3.0
 // Window Blind Controller
-			{
+{
 	"manufacturer": "HAB Home Intelligence, LLC",
 	"manufacturerId": "0x0287",
 	"label": "iblinds V3",

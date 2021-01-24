@@ -1,6 +1,6 @@
 // Devolo MT:2653
 // Home Control Key-
-			{
+{
 	"manufacturer": "Devolo",
 	"manufacturerId": "0x0175",
 	"label": "MT:2653",
@@ -375,6 +375,6 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"reset": "Enter management mode by push all four buttons together for one second - green led blinks slowly), then hit button 3 followed by keeping button 4 pushed down for 10 seconds. The first five seconds the green LED still blinks followed by a long red, shot green sequence. Once LEDs go off, reset was executed. Please use this\n\nprocedure only if the device is secondary controller and the primary controller is missing or otherwise inoperable"
+		"reset": "Enter management mode by push all four buttons together for one second - green led blinks slowly), then hit button 3 followed by keeping button 4 pushed down for 10 seconds. The first five seconds the green LED still blinks followed by a long red, shot green sequence. Once LEDs go off, reset was executed. Please use this procedure only if the device is secondary controller and the primary controller is missing or otherwise inoperable"
 	}
 }

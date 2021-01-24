@@ -1,6 +1,6 @@
 // Everspring AD147
 // Z-Wave Dimmer Plug
-			{
+{
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
 	"label": "AD147",
@@ -79,8 +79,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n2. Press the link key three times within 1.5 seconds to put the unit into inclusion mode. (Please refer to the documentation for the location of the link key.)",
-		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n2. Press the link key three times within 1.5 seconds to put the unit into exclusion mode. (Please refer to the documentation for the location of the link key.)",
-		"reset": "(This procedure should only be used when the network primary controller is inoperable.)\n1. Press the link key three times within 1.5 seconds to put the unit into exclusion mode.\n2. Within 1 second of step 1, press link key again and hold it until LED is off (about 5 seconds). (Please refer to the documentation for the location of the link key.)\n3. Node ID is excluded. The device reverts to factory default state and will be in auto-inclusion mode for 4 minutes"
+		"inclusion": "1. Put the Z-Wave Controller into inclusion mode. 2. Press the link key three times within 1.5 seconds to put the unit into inclusion mode. (Please refer to the documentation for the location of the link key.)",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode. 2. Press the link key three times within 1.5 seconds to put the unit into exclusion mode. (Please refer to the documentation for the location of the link key.)",
+		"reset": "(This procedure should only be used when the network primary controller is inoperable.) 1. Press the link key three times within 1.5 seconds to put the unit into exclusion mode. 2. Within 1 second of step 1, press link key again and hold it until LED is off (about 5 seconds). (Please refer to the documentation for the location of the link key.) 3. Node ID is excluded. The device reverts to factory default state and will be in auto-inclusion mode for 4 minutes"
 	}
 }

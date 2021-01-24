@@ -1,6 +1,6 @@
 // GE/Jasco 55252/ ZW3105
 // Plug-in Smart Dimmer (Dual Plug with Pass through Outlet)
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "55252/ ZW3105",
@@ -140,8 +140,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press the program button of the smart dimmer",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave\n\nnetwork.\n\n2. Once the controller is ready to remove your device, press and release the manual/program button on the smart dimmer",
-		"reset": "1. If plugged in, unplug the dimmer from the receptacle.\n\n2. Press and hold the top button for at least there seconds while you plug the dimmer into a receptacle"
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press the program button of the smart dimmer",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the manual/program button on the smart dimmer",
+		"reset": "1. If plugged in, unplug the dimmer from the receptacle. 2. Press and hold the top button for at least there seconds while you plug the dimmer into a receptacle"
 	}
 }
