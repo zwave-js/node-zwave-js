@@ -9,10 +9,7 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0001",
-			"zwaveAllianceId": [
-				3106,
-				684
-			]
+			"zwaveAllianceId": [3106, 684]
 		}
 	],
 	"firmwareVersion": {
