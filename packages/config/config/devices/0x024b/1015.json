@@ -26,6 +26,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "You can login the WEB of LS1015 to set the product to the factory default state.\n\nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "You can login the WEB of LS1015 to set the product to the factory default state. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }

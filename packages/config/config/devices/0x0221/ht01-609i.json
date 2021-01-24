@@ -19,6 +19,6 @@
 	"metadata": {
 		"inclusion": "Z-Wave primary controller into inclusion mode. And press the inclusion/exclusion switch for sending NIF",
 		"exclusion": "Z-Wave primary controller into exclusion mode. And press 3 times the inclusion/exclusion switch for sending NIF",
-		"reset": "Held 10 seconds the inclusion/exclusion switch for sending Device Reset Locally Notification.\n\nAnd reset to the Factory default"
+		"reset": "Held 10 seconds the inclusion/exclusion switch for sending Device Reset Locally Notification.\nAnd reset to the Factory default"
 	}
 }

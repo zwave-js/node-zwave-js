@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Inclusion:\n\n1. Insert the battery.\n\n2. The handle is unhooked.\n\n3. Press and hold the 'B' Tact switch for about 3 seconds.\n\n4. Door lock enters Inclusion Mode",
-		"exclusion": "Exclusion:\n\n1. Insert the battery.\n\n2. The handle is unhooked.\n\n3. Press and hold the 'B' Tact switch for about 3 seconds.\n\n4. (If door lock is in inclusion) Door lock enters exclusion mode",
-		"reset": "1. Insert the battery.\n\n2. The handle is unhooked.\n\n3. Press and hold the 'A' + 'B' Tact switch for about 5 seconds.\n\n4. Door lock is factory reset.\n\n* Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"inclusion": "Inclusion:\n1. Insert the battery.\n2. The handle is unhooked.\n3. Press and hold the 'B' Tact switch for about 3 seconds.\n4. Door lock enters Inclusion Mode",
+		"exclusion": "Exclusion:\n1. Insert the battery.\n2. The handle is unhooked.\n3. Press and hold the 'B' Tact switch for about 3 seconds.\n4. (If door lock is in inclusion) Door lock enters exclusion mode",
+		"reset": "1. Insert the battery.\n2. The handle is unhooked.\n3. Press and hold the 'A' + 'B' Tact switch for about 5 seconds.\n4. Door lock is factory reset.\n* Please use this procedure only when the network primary controller is missing or otherwise inoperable."
 	}
 }

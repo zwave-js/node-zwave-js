@@ -19,6 +19,6 @@
 	"metadata": {
 		"inclusion": "Add：It will trigger ADD/REMOVE after press the OPEN button for more than 5seconds. Try again if failed. Notice: The triggering will be activated after the PRESS stopped",
 		"exclusion": "B. Remove：It will trigger ADD/REMOVE after press the OPEN button for more than 5 seconds. Try again if failed. Notice: The triggering will be activated after the PRESS stopped",
-		"reset": "Support Device Locally Reset\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "Support Device Locally Reset\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

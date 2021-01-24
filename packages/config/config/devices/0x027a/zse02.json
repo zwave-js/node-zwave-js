@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "1. Bring the motion sensor within 3 feet from your controller.\n\n2. Put your Z-Wave controller in inclusion mode.\n\n3. Press and release the Z-Wave button on the motion sensor TWICE quickly (to lock and unlock it).\n\n4. A new motion detection device should appear on your controller's dashboard",
-		"exclusion": "1. Bring the motion sensor within 3 feet from your controller.\n\n2. Put your Z-Wave controller in exclusion mode.\n\n3. Press and release the Z-Wave button on the motion sensor TWICE quickly (to lock and unlock it).\n\n4. The device should disappear from your controller's dashboard.",
-		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To complete the reset process manually, please press the Z-Wave SIX TIMES quickly (3 lock-unlock cycles).\n\nNOTE: All previously recorded activity and custom settings will be erased from the device’s memory."
+		"inclusion": "1. Bring the motion sensor within 3 feet from your controller.\n2. Put your Z-Wave controller in inclusion mode.\n3. Press and release the Z-Wave button on the motion sensor TWICE quickly (to lock and unlock it).\n4. A new motion detection device should appear on your controller's dashboard",
+		"exclusion": "1. Bring the motion sensor within 3 feet from your controller.\n2. Put your Z-Wave controller in exclusion mode.\n3. Press and release the Z-Wave button on the motion sensor TWICE quickly (to lock and unlock it).\n4. The device should disappear from your controller's dashboard.",
+		"reset": "If your primary controller is missing or inoperable, you may need to reset the device to factory settings. To complete the reset process manually, please press the Z-Wave SIX TIMES quickly (3 lock-unlock cycles).\nNOTE: All previously recorded activity and custom settings will be erased from the device’s memory."
 	}
 }

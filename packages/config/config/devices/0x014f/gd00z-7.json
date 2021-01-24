@@ -22,8 +22,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "1. Place your Z-Wave Controller into\n\nDiscovery or Include mode.\n\n2. Press and release the link button\n\non the GD00Z-8.-GC\n\n3. Confirm that the GD00Z-8-GC was\n\nrecognized by your Z-Wave Controller",
-		"exclusion": "1. Place your Z-Wave Controller into\n\nExclude mode.\n\n2. Press and release the link button\n\non the GD00Z-8.-GC\n\n3. Confirm that the GD00Z-8-GC was\n\nexcluded by your Z-Wave Controller",
-		"reset": "Reset the GD00Z-8-ADT by pressing the LINK button 5 times. A quick beep followed by a longer beep will indicate the reset.\n\nReset should only be used in the case of a missing or inoperative primary controller"
+		"inclusion": "1. Place your Z-Wave Controller into\nDiscovery or Include mode.\n\n2. Press and release the link button\non the GD00Z-8.-GC\n\n3. Confirm that the GD00Z-8-GC was\nrecognized by your Z-Wave Controller",
+		"exclusion": "1. Place your Z-Wave Controller into\nExclude mode.\n\n2. Press and release the link button\non the GD00Z-8.-GC\n\n3. Confirm that the GD00Z-8-GC was\nexcluded by your Z-Wave Controller",
+		"reset": "Reset the GD00Z-8-ADT by pressing the LINK button 5 times. A quick beep followed by a longer beep will indicate the reset.\nReset should only be used in the case of a missing or inoperative primary controller"
 	}
 }

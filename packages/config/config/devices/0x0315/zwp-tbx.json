@@ -17,7 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Network Health Tool:\n\nUsing the Z-Wave controller you intend to troubleshoot, begin the inclusion process to add a new generic Z-Wave device. Select LEARN on the Network Health Tool Device List widget. The Z-Wave controller may include the ZWP-TBX as a generic scene controller or similar device; name the device according to your troubleshooting needs",
-		"exclusion": "Network Health Tool:\n\nSelect RESET on the Network Health Tool Device List widget. Be sure to delete the ToolBox from the Z-Wave controller"
+		"inclusion": "Network Health Tool:\nUsing the Z-Wave controller you intend to troubleshoot, begin the inclusion process to add a new generic Z-Wave device. Select LEARN on the Network Health Tool Device List widget. The Z-Wave controller may include the ZWP-TBX as a generic scene controller or similar device; name the device according to your troubleshooting needs",
+		"exclusion": "Network Health Tool:\nSelect RESET on the Network Health Tool Device List widget. Be sure to delete the ToolBox from the Z-Wave controller"
 	}
 }

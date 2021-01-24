@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "1. At the TUXEDOW Home screen:\n\n a) Press the Devices icon and then press the SETUP icon to display “Z-Wave Device Management” screen.\n\n b) Press the ADD DEVICE icon.\n\n2. At the device Module:\n\na) Press the Function Key on the device",
-		"exclusion": "1. At the TUXEDOW Home screen:\n\n a) Press the Devices and Setup icons to display the “ZWave Device Management” screen.\n\n b) Highlight the device to remove and press the Remove Device icon.\n\n2. At the device module:\n\n a) Press the Function Key to remove the device from the keypad",
+		"inclusion": "1. At the TUXEDOW Home screen:\n a) Press the Devices icon and then press the SETUP icon to display “Z-Wave Device Management” screen.\n b) Press the ADD DEVICE icon.\n2. At the device Module:\na) Press the Function Key on the device",
+		"exclusion": "1. At the TUXEDOW Home screen:\n a) Press the Devices and Setup icons to display the “ZWave Device Management” screen.\n b) Highlight the device to remove and press the Remove Device icon.\n2. At the device module:\n a) Press the Function Key to remove the device from the keypad",
 		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n\nTo activate the Keypad Reset function, press the Setup, System Setup and Advanced Setup icons\n\n1. Enter your Authorized Code and press the Keypad Reset icon.\n\n2. Select OK or Cancel"
 	}
 }

@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "To add or include the LTA-ML into a Z-Wave network:\n\nAfter installing LTA-ML near the PiACK II, and then connecting to the AC Adapter which is included in the same package:\n\n1. Set the controller in inclusion mode.\n\n2. Push the “pairing” button once.\n\n3. Wait 5 seconds.\n\n4. Confirm the “Home Gateway” LED of the front panel is on.",
-		"exclusion": "To remove or exclude the LTA-ML from a Z-Wave network:\n\n1. Set the controller in exclusion mode.\n\n2. Push the “pairing” button 3 times.\n\n3. Confirm the “Home Gateway” LED of the front panel is off",
-		"reset": "To factory reset the LTA-ML:\n\n1. Confirm the LTA-ML has been already included into a Z-Wave network.\n\n2. Remove the AC adapter’s plug and turn off the LTA-ML.\n\n3. Set the AC adapter’s plug again and wait more than 15 seconds but no longer than 75 seconds.\n\n4. Push the “pairing” button for 10 seconds and the “Home Gateway” LED turns off.\n\n※Please use this procedure only when the primary controller is missing or otherwise inoperable."
+		"inclusion": "To add or include the LTA-ML into a Z-Wave network:\nAfter installing LTA-ML near the PiACK II, and then connecting to the AC Adapter which is included in the same package:\n1. Set the controller in inclusion mode.\n2. Push the “pairing” button once.\n3. Wait 5 seconds.\n4. Confirm the “Home Gateway” LED of the front panel is on.",
+		"exclusion": "To remove or exclude the LTA-ML from a Z-Wave network:\n1. Set the controller in exclusion mode.\n2. Push the “pairing” button 3 times.\n3. Confirm the “Home Gateway” LED of the front panel is off",
+		"reset": "To factory reset the LTA-ML:\n1. Confirm the LTA-ML has been already included into a Z-Wave network.\n2. Remove the AC adapter’s plug and turn off the LTA-ML.\n3. Set the AC adapter’s plug again and wait more than 15 seconds but no longer than 75 seconds.\n4. Push the “pairing” button for 10 seconds and the “Home Gateway” LED turns off.\n※Please use this procedure only when the primary controller is missing or otherwise inoperable."
 	}
 }
