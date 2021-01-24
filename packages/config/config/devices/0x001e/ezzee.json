@@ -1,6 +1,6 @@
 // Express Controls EZZEE
 // EZZee
-{
+			{
 	"manufacturer": "Express Controls",
 	"manufacturerId": "0x001e",
 	"label": "EZZEE",
@@ -9,7 +9,10 @@
 		{
 			"productType": "0x0005",
 			"productId": "0x0002",
-			"zwaveAllianceId": [1244, 1252]
+			"zwaveAllianceId": [
+				1244,
+				1252
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -17,6 +20,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Use the SerialAPI"
+		"reset": "Please do this only after removing all nodes from the network.\nFrom the Z-Wave Plug-In menu, choose \"Controller Management\". Under the options for the interface that is using the Z-Net controller, choose \"ERASE this Interface and Create A New Network\", and follow the system prompts"
 	}
 }

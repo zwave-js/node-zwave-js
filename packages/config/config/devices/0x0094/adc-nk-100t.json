@@ -1,6 +1,6 @@
 // Alarm.com ADC-NK-100T
 // Alarm.com Hub
-{
+			{
 	"manufacturer": "Alarm.com",
 	"manufacturerId": "0x0094",
 	"label": "ADC-NK-100T",
@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable. This resets the Hub to its factory settings. CAUTION: Factory Resetting erases all devices and settings. NOTE: The command to enable or disable Factory Resetting can be sent from the Alarm.com Dealer Website’s AirFX Toolkit. Factory Resetting is only available during the first 120 seconds after initially powering on the Hub. • After entering Advanced Mode, press and hold the Enrollment button ( ) for 10 seconds. When the reset process has begun, the Status Light will blink orange slowly and the Hub will beep five times. • To cancel Factory Resetting, you must immediately press and release the Enrollment button ( ). This feature is only available during the first five seconds after Factory Resetting has begun. • When Factory Resetting is complete, the Status Light will shine solid orange for 10 seconds. • Next, contact Alarm.com Customer Support to reinitialize the Hub."
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\n\nThis resets the Hub to its factory settings.\n\nCAUTION: Factory Resetting erases all\n\ndevices and settings.\n\nNOTE: The command to enable or disable\n\nFactory Resetting can be sent from the\n\nAlarm.com Dealer Website’s AirFX Toolkit.\n\nFactory Resetting is only available during\n\nthe first 120 seconds after initially powering\n\non the Hub.\n\n• After entering Advanced Mode, press and hold the\n\nEnrollment button ( ) for 10 seconds. When the\n\nreset process has begun, the Status Light will blink\n\norange slowly and the Hub will beep five times.\n\n• To cancel Factory Resetting, you must\n\nimmediately press and release the Enrollment\n\nbutton ( ). This feature is only available\n\nduring the first five seconds after Factory\n\nResetting has begun.\n\n• When Factory Resetting is complete, the Status\n\nLight will shine solid orange for 10 seconds.\n\n• Next, contact Alarm.com Customer Support to\n\nreinitialize the Hub"
 	}
 }

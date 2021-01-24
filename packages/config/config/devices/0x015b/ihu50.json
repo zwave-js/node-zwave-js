@@ -1,6 +1,6 @@
 // LG Electronics IHU50
 // Home IoT Hub
-{
+			{
 	"manufacturer": "LG Electronics",
 	"manufacturerId": "0x015b",
 	"label": "IHU50",
@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Select ‘setDefault’ in [Command List] Click Send(Default) button."
+		"reset": "Select ‘setDefault’ in [Command List]\n Click Send(Default) button."
 	}
 }

@@ -1,6 +1,6 @@
 // Shenzhen Kaadas Intelligent Technology Co., Ltd. DB2
 // Touchscreen Digital Deadbolt
-{
+			{
 	"manufacturer": "Shenzhen Kaadas Intelligent Technology Co., Ltd.",
 	"manufacturerId": "0x021d",
 	"label": "DB2",
@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "-Follow the user guide of hub to enter inclusion mode.-Operate on lock following guide below:1.Enter master mode(refer to programming instruction)2.Input “8” to enter “function extension settings”3.Input “1” to join a network.",
-		"exclusion": "-Follow the user guide of hub to enter exclusion mode.-Operate on lock following guide below:1.Enter master mode(refer to programming instruction)2.Input “8” to enter “function extension settings”3.Input “2” to log off a network.",
-		"reset": "※Please use this procedure only when the network primary controller is missing or inoperable.-Operations on lock1.Open the door and keep the lock in \"unlock\" status2.Open battery box and find the reset button. 3.Use a sharp thing to press and hold the reset button.4.Keep holding the reset button and remove a battery from battery box then replace it.5.Keep holding the reset button until hearing voice guide."
+		"inclusion": "-Follow the user guide of hub to enter inclusion mode.\n\n-Operate on lock following guide below:\n\n1.Enter master mode(refer to programming instruction)\n\n2.Input “8” to enter “function extension settings”\n\n3.Input “1” to join a network",
+		"exclusion": "-Follow the user guide of hub to enter exclusion mode.\n\n-Operate on lock following guide below:\n\n1.Enter master mode(refer to programming instruction)\n\n2.Input “8” to enter “function extension settings”\n\n3.Input “2” to log off a network",
+		"reset": "※Please use this procedure only when the network primary controller is missing or inoperable.\n\n-Operations on lock\n\n1.Open the door and keep the lock in \"unlock\" status\n\n2.Open battery box and find the reset button. \n\n3.Use a sharp thing to press and hold the reset button.\n\n4.Keep holding the reset button and remove a battery from battery box then replace it.\n\n5.Keep holding the reset button until hearing voice guide"
 	}
 }

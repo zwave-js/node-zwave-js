@@ -1,6 +1,6 @@
 // Nexia Home Intelligence TH100NX
 // Remote Temperature and Humidity Sensor
-{
+			{
 	"manufacturer": "Nexia Home Intelligence",
 	"manufacturerId": "0x0178",
 	"label": "TH100NX",
@@ -501,8 +501,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "Set your primary controller into inclusion mode. Press and release the \"\"Install\"\" button on the sensor. The \"\"Status\"\" LED will blink rapidly for 3 seconds indicating successful inclusion into the network",
-		"exclusion": "Set your primary controller into exclusion mode. Press and release the \"\"Install\"\" button on the sensor. The \"\"Status\"\" LED will blink rapidly for 3 seconds indicating successful exclusion from the network",
+		"inclusion": "Set your primary controller into inclusion mode. Press and release the \"Install\" button on the sensor. The \"Status\" LED will blink rapidly for 3 seconds indicating successful inclusion into the network",
+		"exclusion": "Set your primary controller into exclusion mode. Press and release the \"Install\" button on the sensor. The \"Status\" LED will blink rapidly for 3 seconds indicating successful exclusion from the network",
 		"reset": "Press and hold Install button for 10 seconds. Factory Reset should only be used if the primary controller is missing or inoperable."
 	}
 }

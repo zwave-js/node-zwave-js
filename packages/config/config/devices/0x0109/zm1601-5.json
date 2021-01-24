@@ -1,6 +1,6 @@
 // Vision Security ZM1601-5
 // Siren with LED strobe light
-{
+			{
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZM1601-5",
