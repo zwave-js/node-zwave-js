@@ -1,11 +1,16 @@
-// Wintop iShutter
+// Wintop ISHUTTER
 // iShutter
 {
 	"manufacturer": "Wintop",
 	"manufacturerId": "0x0097",
-	"label": "iShutter",
+	"label": "ISHUTTER",
 	"description": "iShutter",
 	"devices": [
+		{
+			"productType": "0x0023",
+			"productId": "0x0045",
+			"zwaveAllianceId": 637
+		},
 		{
 			"productType": "0x0024",
 			"productId": "0x0045"

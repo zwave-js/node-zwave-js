@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0009"
+			"productId": "0x0009",
+			"zwaveAllianceId": 140
 		}
 	],
 	"firmwareVersion": {
@@ -36,8 +37,8 @@
 		"1": {
 			"label": "Voltage",
 			"description": "Voltage to calculate wattage from amperage.",
-			"unit": "V",
 			"valueSize": 2,
+			"unit": "V",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 240,
@@ -48,8 +49,8 @@
 		"4": {
 			"label": "Current Threshold - Whole HEM",
 			"description": "Threshold change in wattage to induce an automatic report (Whole HEM).",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 50,
@@ -61,8 +62,8 @@
 		"5": {
 			"label": "Current Threshold - Clamp 1",
 			"description": "Threshold change in wattage to induce an automatic report (Clamp 1)",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 50,
@@ -74,8 +75,8 @@
 		"6": {
 			"label": "Current Threshold - Clamp 2",
 			"description": "Threshold change in wattage to induce an automatic report (Clamp 2)",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 50,
@@ -87,8 +88,8 @@
 		"7": {
 			"label": "Current Threshold - Clamp 3",
 			"description": "Threshold change in wattage to induce an automatic report (Clamp 3)",
-			"unit": "W",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 60000,
 			"defaultValue": 50,
@@ -100,8 +101,8 @@
 		"8": {
 			"label": "Percent Change - Whole HEM",
 			"description": "Percentage change in wattage to induce an automatic report (Whole HEM)",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
@@ -112,8 +113,8 @@
 		"9": {
 			"label": "Percent Change - Clamp 1",
 			"description": "Percentage change in wattage to induce an automatic report (Clamp 1)",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
@@ -124,8 +125,8 @@
 		"10": {
 			"label": "Percent Change - Clamp 2",
 			"description": "Percentage change in wattage to induce an automatic report (Clamp 2)",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
@@ -136,8 +137,8 @@
 		"11": {
 			"label": "Percent Change - Clamp 3",
 			"description": "Percentage change in wattage to induce an automatic report (Clamp 3)",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 50,
@@ -187,8 +188,8 @@
 		},
 		"111": {
 			"label": "Interval to send Report Group 1",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 2678400,
 			"defaultValue": 720,
@@ -198,8 +199,8 @@
 		},
 		"112": {
 			"label": "Interval to send Report Group 2",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 2678400,
 			"defaultValue": 720,
@@ -209,8 +210,8 @@
 		},
 		"113": {
 			"label": "Interval to send Report Group 3",
-			"unit": "seconds",
 			"valueSize": 4,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 2678400,
 			"defaultValue": 720,
@@ -801,7 +802,6 @@
 		},
 		"103[0x0100]": {
 			"label": "Report Group 3: Meter Report for Watt (clamp 1)",
-			"unit": "W",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -822,8 +822,8 @@
 		},
 		"103[0x0200]": {
 			"label": "Report Group 3: Meter Report for Watt (clamp 2)",
-			"unit": "W",
 			"valueSize": 4,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,

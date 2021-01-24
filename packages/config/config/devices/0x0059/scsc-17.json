@@ -1,14 +1,15 @@
-// Secure Meters (UK) Ltd. SCSC-17
+// Secure Meters (UK) Ltd. C17-ZW
 // 7 Day Room Thermostat
 {
 	"manufacturer": "Secure Meters (UK) Ltd.",
 	"manufacturerId": "0x0059",
-	"label": "SCSC-17",
+	"label": "C17-ZW",
 	"description": "7 Day Room Thermostat",
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": [1740, 864]
 		}
 	],
 	"firmwareVersion": {

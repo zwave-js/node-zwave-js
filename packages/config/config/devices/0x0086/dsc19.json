@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0013"
+			"productId": "0x0013",
+			"zwaveAllianceId": [707, 766, 774]
 		}
 	],
 	"firmwareVersion": {
@@ -45,7 +46,7 @@
 			"description": "Load will be closed when current more that 2.7A and time more than 2 minutes",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -79,7 +80,7 @@
 			"description": "Send load notification to associated devices",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -105,7 +106,7 @@
 			"description": "Automated sending of a Report triggered by minimal change of value.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -214,7 +215,7 @@
 			"description": "Parameter to set External button type",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": false,

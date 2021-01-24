@@ -8,11 +8,13 @@
 	"devices": [
 		{
 			"productType": "0x0900",
-			"productId": "0x1000"
+			"productId": "0x1000",
+			"zwaveAllianceId": 1054
 		},
 		{
 			"productType": "0x0900",
-			"productId": "0x2000"
+			"productId": "0x2000",
+			"zwaveAllianceId": 1072
 		},
 		{
 			"productType": "0x0900",
@@ -86,7 +88,7 @@
 			"description": "Associations command class choice",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 4,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -120,7 +122,7 @@
 			"description": "MODE1, Example: change saturation level from 0% to 99%",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

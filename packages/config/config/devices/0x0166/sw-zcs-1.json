@@ -1,14 +1,15 @@
-// CBCC Domotique SAS SW-ZCS-1
+// CBCC Domotique SAS SW-ZCS
 // Cord Switch
 {
 	"manufacturer": "CBCC Domotique SAS",
 	"manufacturerId": "0x0166",
-	"label": "SW-ZCS-1",
+	"label": "SW-ZCS",
 	"description": "Cord Switch",
 	"devices": [
 		{
 			"productType": "0x0100",
-			"productId": "0x0100"
+			"productId": "0x0100",
+			"zwaveAllianceId": 1082
 		}
 	],
 	"firmwareVersion": {

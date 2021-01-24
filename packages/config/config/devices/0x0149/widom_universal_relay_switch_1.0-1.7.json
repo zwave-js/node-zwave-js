@@ -1,14 +1,15 @@
-// wiDom WiDom Universal Relay Switch
+// wiDom UBS104
 // WiDom Universal Relay Switch
 {
 	"manufacturer": "wiDom",
 	"manufacturerId": "0x0149",
-	"label": "WiDom Universal Relay Switch",
+	"label": "UBS104",
 	"description": "WiDom Universal Relay Switch",
 	"devices": [
 		{
 			"productType": "0x0012",
-			"productId": "0x0104"
+			"productId": "0x0104",
+			"zwaveAllianceId": 1016
 		}
 	],
 	"firmwareVersion": {

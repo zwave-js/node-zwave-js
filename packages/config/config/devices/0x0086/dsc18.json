@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0012"
+			"productId": "0x0012",
+			"zwaveAllianceId": [708, 767, 775]
 		}
 	],
 	"firmwareVersion": {
@@ -43,7 +44,7 @@
 			"label": "Current Overload Protection",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -64,7 +65,7 @@
 			"label": "Notification on Status Change",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -90,7 +91,7 @@
 			"description": "Automated sending of a Report triggered by minimal change of value.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -196,7 +197,7 @@
 			"label": "Turn External Button Mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": false,

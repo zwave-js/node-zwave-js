@@ -1,18 +1,24 @@
-// ACT - Advanced Control Technologies ZIR010
+// ACT - Advanced Control Technologies ZIR000 / ZIR000
 // PIR Motion Sensor
 {
 	"manufacturer": "ACT - Advanced Control Technologies",
 	"manufacturerId": "0x0001",
-	"label": "ZIR010",
+	"label": "ZIR000 / ZIR010",
 	"description": "PIR Motion Sensor",
 	"devices": [
 		{
 			"productType": "0x4952",
-			"productId": "0x3030"
+			"productId": "0x3030",
+			"zwaveAllianceId": 550
 		},
 		{
 			"productType": "0x4952",
 			"productId": "0x3130"
+		},
+		{
+			"productType": "0x4952",
+			"productId": "0x3330",
+			"zwaveAllianceId": 549
 		}
 	],
 	"firmwareVersion": {
@@ -79,7 +85,7 @@
 			"description": "Disabling the zir010 trom sending commands unsolicited",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -99,8 +105,8 @@
 		"22": {
 			"label": "Awake Time",
 			"description": "Duration ranges from 15 to 45 seconds. Valid values range from 15 to 45.",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 15,
 			"maxValue": 45,
 			"defaultValue": 30,

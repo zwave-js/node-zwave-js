@@ -1,14 +1,15 @@
-// GreenWave Reality Inc. GWPN5
+// GreenWave Reality Inc. NP210
 // Multi-socket PowerNode (5-plug)
 {
 	"manufacturer": "GreenWave Reality Inc.",
 	"manufacturerId": "0x0099",
-	"label": "GWPN5",
+	"label": "NP210",
 	"description": "Multi-socket PowerNode (5-plug)",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0003"
+			"productId": "0x0003",
+			"zwaveAllianceId": 716
 		}
 	],
 	"firmwareVersion": {
@@ -64,8 +65,8 @@
 			"label": "Wheel position",
 			"description": "Wheel position on the GreenWave device (read-only)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 128,
+			"maxValue": 137,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

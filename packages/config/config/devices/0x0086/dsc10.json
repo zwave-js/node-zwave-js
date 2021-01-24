@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x000a"
+			"productId": "0x000a",
+			"zwaveAllianceId": 704
 		}
 	],
 	"firmwareVersion": {
@@ -121,8 +122,8 @@
 		"91": {
 			"label": "Minimum Change to send Report (Watt)",
 			"description": "The value represents the minimum change in wattage for a Report to be sent.",
-			"unit": "Watts",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 32000,
 			"defaultValue": 50,
@@ -133,8 +134,8 @@
 		"92": {
 			"label": "Minimum Change to send Report (%)",
 			"description": "The minimum change in wattage Percent for a report to be sent",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,

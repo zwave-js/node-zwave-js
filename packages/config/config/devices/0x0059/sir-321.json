@@ -1,9 +1,9 @@
-// Secure Meters (UK) Ltd. SIR-321
+// Secure Meters (UK) Ltd. SIR 321
 // RF Countdown Timer
 {
 	"manufacturer": "Secure Meters (UK) Ltd.",
 	"manufacturerId": "0x0059",
-	"label": "SIR-321",
+	"label": "SIR 321",
 	"description": "RF Countdown Timer",
 	"devices": [
 		{
@@ -12,7 +12,8 @@
 		},
 		{
 			"productType": "0x0010",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": 1012
 		}
 	],
 	"firmwareVersion": {
@@ -49,8 +50,8 @@
 		"2": {
 			"label": "Temperature Scale",
 			"description": "Set the Temperatur scale to Celsius",
-			"unit": "C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 0,
@@ -61,8 +62,8 @@
 		"3": {
 			"label": "Temperature reporting intervals",
 			"description": "Define the time interval for the temperature report that is sent.",
-			"unit": "sec",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
@@ -73,8 +74,8 @@
 		"4": {
 			"label": "Delta configuration temperature reporting",
 			"description": "Set the delta-configuration of the temperature report in Celsius or Fahrenheit",
-			"unit": "C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
@@ -85,8 +86,8 @@
 		"5": {
 			"label": "Temperature Cutoff",
 			"description": "Set the Cutoff in Celsius",
-			"unit": "C",
 			"valueSize": 2,
+			"unit": "°C",
 			"minValue": 0,
 			"maxValue": 1000,
 			"defaultValue": 0,

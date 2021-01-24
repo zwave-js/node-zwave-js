@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x001c"
+			"productId": "0x001c",
+			"zwaveAllianceId": 705
 		}
 	],
 	"firmwareVersion": {
@@ -38,7 +39,7 @@
 			"description": "If the reverse clamping pliers, negative power is detected.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

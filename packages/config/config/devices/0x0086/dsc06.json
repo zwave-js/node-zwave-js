@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0006"
+			"productId": "0x0006",
+			"zwaveAllianceId": 133
 		}
 	],
 	"firmwareVersion": {
@@ -104,8 +105,8 @@
 		"92": {
 			"label": "Minimum change in wattage %",
 			"description": "Minimum change in wattage % to trigger event",
-			"unit": "%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 10,
@@ -137,7 +138,7 @@
 			"label": "Group 1 report",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 65535,
+			"maxValue": 12,
 			"defaultValue": 8,
 			"readOnly": false,
 			"writeOnly": false,
@@ -169,7 +170,7 @@
 			"label": "Group 2 report",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 65535,
+			"maxValue": 12,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -201,7 +202,7 @@
 			"label": "Group 3 report",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 65535,
+			"maxValue": 12,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,

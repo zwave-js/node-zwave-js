@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x400a"
+			"productId": "0x400a",
+			"zwaveAllianceId": 2594
 		}
 	],
 	"firmwareVersion": {
@@ -26,7 +27,6 @@
 		"1": {
 			"label": "Valve Type",
 			"description": "Type of Valve being controlled",
-			"unit": "NO/NC",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -69,7 +69,6 @@
 		"3": {
 			"label": "PWM period",
 			"description": "Pulse-width modulation period",
-			"unit": "min",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
