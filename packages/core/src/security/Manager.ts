@@ -129,7 +129,7 @@ export class SecurityManager {
 				key,
 				setTimeout(() => {
 					this.expireNonce(key);
-				}, this.nonceTimeout),
+				}, this.nonceTimeout).unref(),
 			);
 		}
 	}
