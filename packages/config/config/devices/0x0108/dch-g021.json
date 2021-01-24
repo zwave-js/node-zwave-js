@@ -1,6 +1,6 @@
 // D-Link DCH-G021
 // Staples Connect Hub powered by D-Link
-			{
+{
 	"manufacturer": "D-Link",
 	"manufacturerId": "0x0108",
 	"label": "DCH-G021",
@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "On home tile screen click “Hub Settings” Click “Advanced Options” Click “Restore” (under Restore to Factory Settings) and follow the on screen instructions."
+		"reset": "On home tile screen click “Hub Settings” Click “Advanced Options” Click “Restore” (under Restore to Factory Settings) and follow the on screen instructions. "
 	}
 }

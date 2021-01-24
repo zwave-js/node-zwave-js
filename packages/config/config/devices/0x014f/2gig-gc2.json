@@ -1,6 +1,6 @@
 // Nortek Security & Control LLC 2GIG-GC2
 // 2GIG GC2e Wireless Security & Automation System
-			{
+{
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
 	"label": "2GIG-GC2",
