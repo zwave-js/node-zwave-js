@@ -35,6 +35,18 @@
 						"type": "string",
 						"description": "The product ID of this device as a 4-digit hex string",
 						"pattern": "^0x[0-9a-f]{4}$"
+					},
+					"zwaveAllianceId": {
+						"description": "The IDs of the Z-Wave Alliance product database belonging to this device",
+						"oneOf": [
+							{ "type": "integer" },
+							{
+								"type": "array",
+								"minItems": 1,
+								"items": { "type": "integer" },
+								"uniqueItems": true
+							}
+						]
 					}
 				},
 				"required": ["productType", "productId"],
@@ -64,6 +76,24 @@
 					"additionalProperties": false
 				}
 			]
+		},
+		"metadata": {
+			"type": "object",
+			"properties": {
+				"inclusion": {
+					"type": "string",
+					"description": "Inclusion instructions for this device"
+				},
+				"exclusion": {
+					"type": "string",
+					"description": "Exclusion instructions for this device"
+				},
+				"reset": {
+					"type": "string",
+					"description": "Instructions for resetting the device to factory defaults"
+				}
+			},
+			"additionalProperties": false
 		},
 		"supportsZWavePlus": {
 			"const": true

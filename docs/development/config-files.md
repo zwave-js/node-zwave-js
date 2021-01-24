@@ -14,6 +14,7 @@ The following properties are defined and should always be present in the same or
 | `description`       | A longer description of the device, usually the full name                                                             |
 | `devices`           | An array of product type and product ID combinations, [see below](#devices) for details.                              |
 | `firmwareVersion`   | The firmware version range this config file is valid for, [see below](#firmwareVersion) for details.                  |
+| `metadata`          | Metadata that is intended to help the user, like inclusion instructions etc. [See below](#metadata) for details.      |
 | `associations`      | The association groups the device supports, [see below](#associations) for details.                                   |
 | `supportsZWavePlus` | If set to `true`, the device complies with the Z-Wave+ standard. In this case, omit the `associations` property.      |
 | `proprietary`       | A dictionary of settings for the proprietary CC. The settings depend on each proprietary CC implementation.           |
@@ -22,7 +23,7 @@ The following properties are defined and should always be present in the same or
 
 ### `devices`
 
-Each device in the Z-Wave standard is identified by its product type and product ID. A config file that is valid for both `0x0123 / 0x1000` and `0x2345 / 0x0001` would have the following `devices` entry:
+Each device in the Z-Wave standard is identified by its product type and product ID. If a config file was imported from the _Z-Wave Alliance_ database, their identifiers are noted here too. A config file that is valid for both `0x0123 / 0x1000` and `0x2345 / 0x0001` would have the following `devices` entry:
 
 ```json
 "devices": [
@@ -32,7 +33,8 @@ Each device in the Z-Wave standard is identified by its product type and product
 	},
 	{
 		"productType": "0x2345",
-		"productId": "0x0001"
+		"productId": "0x0001",
+		"zwaveAllianceId": 6789 // or an array, e.g. [6788, 6789]
 	}
 ]
 ```
@@ -50,6 +52,18 @@ Since different firmware versions of a device may have different config params, 
 
 The default `min` version is `0.0` and the default `max` version is `255.255`.
 All other firmware ranges should be reflected in the filename.
+
+### `metadata`
+
+Can be used to add instructions for the user to a device:
+
+```json
+"metadata": {
+	"inclusion": "How to include this device",
+	"exclusion": "How to exclude this device",
+	"reset": "How to factory-reset this device"
+}
+```
 
 ### `associations`
 
