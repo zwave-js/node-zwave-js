@@ -1,14 +1,15 @@
-// Ingersoll Rand (was Ecolink) DWZWAVE1
+// Schlage DWZWAVE1
 // Z-Wave Door/Window Sensor
 {
-	"manufacturer": "Ingersoll Rand (was Ecolink)",
+	"manufacturer": "Schlage",
 	"manufacturerId": "0x011f",
 	"label": "DWZWAVE1",
 	"description": "Z-Wave Door/Window Sensor",
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": 647
 		}
 	],
 	"firmwareVersion": {

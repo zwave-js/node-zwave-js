@@ -1,19 +1,19 @@
-// BeNext powerSwitch
+// BeNext PowerSwitch
 // Power Switch EU
 {
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
-	"label": "powerSwitch",
+	"label": "PowerSwitch",
 	"description": "Power Switch EU",
 	"devices": [
 		{
 			"productType": "0x0008",
-			"productId": "0x0101"
+			"productId": "0x0100",
+			"zwaveAllianceId": 61
 		},
 		{
 			"productType": "0x0008",
-			"productId": "0x0100",
-			"zwaveAllianceId": 61
+			"productId": "0x0101"
 		}
 	],
 	"firmwareVersion": {

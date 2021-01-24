@@ -1,14 +1,15 @@
-// Fibargroup FGWP101
+// Fibargroup FGWPE/F-101
 // Metered Wall Plug Switch
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
-	"label": "FGWP101",
+	"label": "FGWPE/F-101",
 	"description": "Metered Wall Plug Switch",
 	"devices": [
 		{
 			"productType": "0x0600",
-			"productId": "0x1000"
+			"productId": "0x1000",
+			"zwaveAllianceId": 993
 		}
 	],
 	"firmwareVersion": {
@@ -36,7 +37,7 @@
 			"description": "Once activated, Wall Plug will keep a connected device ...",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -58,7 +59,7 @@
 			"description": "Define how will the Plug react after the power supply is back on.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -91,7 +92,7 @@
 			"description": "Parameter defines how the Wall Plug will respond to alarms ...",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -191,7 +192,7 @@
 			"description": "This parameter determines whether energy metering ...",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -237,7 +238,7 @@
 			"description": "Parameter defines the way 2nd association group devices ...",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 6,
 			"defaultValue": 6,
 			"unsigned": true,
 			"readOnly": false,
@@ -290,7 +291,7 @@
 			"label": "LED color when device is on",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 9,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -343,7 +344,7 @@
 			"label": "LED color when device is off",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 8,
 			"defaultValue": 8,
 			"unsigned": true,
 			"readOnly": false,
@@ -392,7 +393,7 @@
 			"label": "LED color when Z Wave alarm",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 9,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,

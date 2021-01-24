@@ -8,7 +8,13 @@
 	"devices": [
 		{
 			"productType": "0x0006",
-			"productId": "0x0000"
+			"productId": "0x0000",
+			"zwaveAllianceId": 1358
+		},
+		{
+			"productType": "0x0006",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2743
 		}
 	],
 	"firmwareVersion": {
@@ -25,12 +31,13 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Audio Volume",
-			"description": "Sets the volume level of the beeps and voice prompts",
+			"label": "Volume",
+			"description": "Volume of product during operation",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -50,12 +57,12 @@
 			]
 		},
 		"2": {
-			"label": "Auto Re-lock",
-			"description": "When enabled, the unit will automatically re-lock",
+			"label": "Auto Relock",
+			"description": "Auto relock On/Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 0,
+			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -72,11 +79,11 @@
 			]
 		},
 		"3": {
-			"label": "Re-lock Time",
-			"description": "Time after unlocking that the device will lock",
-			"unit": "Seconds",
+			"label": "Relock Time",
+			"description": "Amount of time (secs)",
 			"valueSize": 1,
-			"minValue": 5,
+			"unit": "seconds",
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 30,
 			"unsigned": true,
@@ -120,11 +127,23 @@
 				}
 			]
 		},
+		"6": {
+			"label": "Remote Relock Time",
+			"description": "Amount of time (secs)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
 		"7": {
 			"label": "Shutdown Time",
 			"description": "Number of times the device is locked out after the invalid retries are exceeded",
-			"unit": "Seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 30,
@@ -158,5 +177,10 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "Put the Z-Wave controller into add mode Enter the Master code on the lock, followed by # Press the 4 button, followed by # Press the 1 button followed by # Refer to the operation manual of the Z-Wave controller to complete the add/inclusion process For more information on this please visit: www.yale.co.uk/smart-living",
+		"exclusion": "Put the Z-Wave controller into remove mode Enter the Master code on the lock, followed by # Press the 4 button, followed by # Press the 2 button followed by # Refer to the operation manual of the Z-Wave controller to complete the remove/exclusion process For more information on this please visit: www.yale.co.uk/smart-living",
+		"reset": "Enter the Master code on the lock, followed by # Press the 4 button, followed by # Press the 0 button followed by # Please use this procedure only when the network controller is missing or inoperable"
 	}
 }

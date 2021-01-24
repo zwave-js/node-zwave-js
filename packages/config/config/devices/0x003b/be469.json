@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x6341",
-			"productId": "0x5044"
+			"productId": "0x5044",
+			"zwaveAllianceId": 748
 		}
 	],
 	"firmwareVersion": {
@@ -128,7 +129,6 @@
 		},
 		"8": {
 			"label": "Lock Specific Alarm Alert Sensitivity",
-			"unit": "BE469 Only",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -238,7 +238,6 @@
 		},
 		"11": {
 			"label": "Lock Specific Alarm Disable—Local Controls",
-			"unit": "BE469 Only",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

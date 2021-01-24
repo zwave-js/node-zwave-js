@@ -8,11 +8,13 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0004"
+			"productId": "0x0004",
+			"zwaveAllianceId": 114
 		},
 		{
 			"productType": "0x0002",
-			"productId": "0x001d"
+			"productId": "0x001d",
+			"zwaveAllianceId": [701, 764, 772]
 		}
 	],
 	"firmwareVersion": {
@@ -31,7 +33,7 @@
 			"label": "Send Sensor binary report on open/close events",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -52,7 +54,7 @@
 			"label": "Enable wake up 10 minutes when power on",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -73,7 +75,7 @@
 			"label": "Send Basic Set on open/close event",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

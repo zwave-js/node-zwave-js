@@ -1,23 +1,11 @@
-// FortrezZ LLC WWA-01 / WWA-02
+// FortrezZ LLC WWA-02
 // Wireless Water and Temperature Alarm
 {
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
-	"label": "WWA-01 / WWA-02",
+	"label": "WWA-02",
 	"description": "Wireless Water and Temperature Alarm",
 	"devices": [
-		{
-			"productType": "0x0053",
-			"productId": "0x0216"
-		},
-		{
-			"productType": "0x0061",
-			"productId": "0x010c"
-		},
-		{
-			"productType": "0x0063",
-			"productId": "0x010c"
-		},
 		{
 			"productType": "0x0013",
 			"productId": "0x0210",
@@ -32,6 +20,18 @@
 			"productType": "0x0023",
 			"productId": "0x0109",
 			"zwaveAllianceId": 91
+		},
+		{
+			"productType": "0x0053",
+			"productId": "0x0216"
+		},
+		{
+			"productType": "0x0061",
+			"productId": "0x010c"
+		},
+		{
+			"productType": "0x0063",
+			"productId": "0x010c"
 		}
 	],
 	"firmwareVersion": {

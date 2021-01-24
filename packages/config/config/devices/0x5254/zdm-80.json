@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x8201",
-			"productId": "0x8021"
+			"productId": "0x8021",
+			"zwaveAllianceId": 1155
 		}
 	],
 	"firmwareVersion": {
@@ -102,8 +103,8 @@
 		"17": {
 			"label": "Dimming time frame",
 			"description": "Dimming time frame",
-			"unit": "seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 3,

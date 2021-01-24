@@ -1,14 +1,15 @@
-// Eaton RF9542
+// Eaton RF9542-Z
 // Dimmer Accessory Switch
 {
 	"manufacturer": "Eaton",
 	"manufacturerId": "0x001a",
-	"label": "RF9542",
+	"label": "RF9542-Z",
 	"description": "Dimmer Accessory Switch",
 	"devices": [
 		{
 			"productType": "0x4441",
-			"productId": "0x0000"
+			"productId": "0x0000",
+			"zwaveAllianceId": [745, 971]
 		},
 		{
 			"productType": "0x4441",
@@ -29,9 +30,9 @@
 	"paramInformation": {
 		"1": {
 			"label": "Delayed OFF time",
-			"description": "delay time in seconds",
-			"unit": "s",
+			"description": "Delay time in seconds",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
@@ -42,9 +43,9 @@
 		},
 		"2": {
 			"label": "Panic ON time",
-			"description": "time in seconds for panic mode",
-			"unit": "s",
+			"description": "Time in seconds for panic mode",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
@@ -55,9 +56,9 @@
 		},
 		"3": {
 			"label": "Panic OFF time",
-			"description": "off time in seconds for panic mode",
-			"unit": "s",
+			"description": "Off time in seconds for panic mode",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,
@@ -68,7 +69,7 @@
 		},
 		"4": {
 			"label": "Basic Set Value",
-			"description": "send this value to associated devices",
+			"description": "Send this value to associated devices",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -82,8 +83,8 @@
 			"label": "Power Up State",
 			"description": "Power Up State of the switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -108,8 +109,8 @@
 			"label": "Panic mode enable",
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -128,8 +129,9 @@
 		},
 		"7": {
 			"label": "Dimmer Ramp Time",
-			"description": "time in seconds to ramp to desired level",
+			"description": "Time in seconds to ramp to desired level",
 			"valueSize": 1,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 0,

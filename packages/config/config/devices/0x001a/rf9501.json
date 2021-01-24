@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x534c",
-			"productId": "0x0000"
+			"productId": "0x0000",
+			"zwaveAllianceId": 740
 		}
 	],
 	"firmwareVersion": {
@@ -75,8 +76,8 @@
 			"label": "Power Up State",
 			"description": "Power Up State of the switch",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -101,8 +102,8 @@
 			"label": "Panic mode enable",
 			"description": "Enables this switch to participate in panic mode",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,

@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0006",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": [271, 3, 923, 934, 974]
 		}
 	],
 	"firmwareVersion": {
@@ -28,8 +29,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Basic Set Level",
-			"description": "Set basic set value to be on or off",
+			"label": "Dim Level Sent via Basic Set",
+			"description": "The dim level sent to a lamp module upon activation: (0) Off; (1)-(99) Dim Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,

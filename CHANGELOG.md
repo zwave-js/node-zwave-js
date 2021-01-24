@@ -3,6 +3,16 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## 6.0.2 (2021-01-24)
+### Bugfixes
+* After setting the `hexColor` of Color Switch CC, the individual color components are no longer polled by one
+* Increased the verification poll delay after a set command to avoid capturing intermediate and outdated values
+* `NonceReport`s no longer get stuck in the wakeup queue if a sleeping device does not acknowledge the receipt after requesting one
+
+### Config file changes
+* Imported all missing manufacturer names from the Z-Wave Alliance website
+* Imported several hundred device configuration files from the Z-Wave Alliance website
+
 ## 6.0.1 (2021-01-21)
 ### Bugfixes
 * The `stateId` property of `Scene Activation CC` is now stateless

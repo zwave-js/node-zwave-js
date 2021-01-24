@@ -1,14 +1,15 @@
-// Reitz-Group.de Reitz 05431
+// Reitz-Group.de ZW-ES-1000 / Reitz 05431
 // Duewi ZW BJ ES 1000 / Reitz 05431 / ZWave.me 05457 Single button wall switch
 {
 	"manufacturer": "Reitz-Group.de",
 	"manufacturerId": "0x0064",
-	"label": "Reitz 05431",
+	"label": "ZW-ES-1000 / Reitz 05431",
 	"description": "Duewi ZW BJ ES 1000 / Reitz 05431 / ZWave.me 05457 Single button wall switch",
 	"devices": [
 		{
 			"productType": "0x2001",
-			"productId": "0x0000"
+			"productId": "0x0000",
+			"zwaveAllianceId": [338, 351]
 		}
 	],
 	"firmwareVersion": {
@@ -35,7 +36,7 @@
 			"label": "Set LED indication mode",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
@@ -77,7 +78,7 @@
 			"description": "Function of RF off command",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -107,7 +108,7 @@
 			"description": "Switch on dimming by buttons",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -129,7 +130,7 @@
 			"description": "restore switch state",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -162,7 +163,7 @@
 			"description": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -184,7 +185,7 @@
 			"description": "Switch by buttons",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -210,7 +211,7 @@
 			"description": "Action on button single press or hold",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 5,
 			"defaultValue": 4,
 			"unsigned": true,
 			"readOnly": false,
@@ -248,7 +249,7 @@
 			"description": "Action on button double press or hold",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 5,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -311,7 +312,7 @@
 			"label": "What to do on button Down press",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,

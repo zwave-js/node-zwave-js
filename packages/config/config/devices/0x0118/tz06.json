@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0004"
+			"productId": "0x0004",
+			"zwaveAllianceId": [840, 866]
 		}
 	],
 	"firmwareVersion": {
@@ -111,8 +112,8 @@
 		"4": {
 			"label": "Auto OFF Timer",
 			"description": "Auto OFF Timer Countdown",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,

@@ -8,6 +8,11 @@
 	"devices": [
 		{
 			"productType": "0x6501",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1301
+		},
+		{
+			"productType": "0x6501",
 			"productId": "0x000c"
 		},
 		{
@@ -65,7 +70,7 @@
 			"description": "Prevents setpoint changes at thermostat.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

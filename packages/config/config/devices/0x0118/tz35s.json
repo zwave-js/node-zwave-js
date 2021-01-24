@@ -1,14 +1,15 @@
-// TKB Home TZ35S
+// TKB Home TZ55S
 // Single Paddle Wall Dimmer
 {
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
-	"label": "TZ35S",
+	"label": "TZ55S",
 	"description": "Single Paddle Wall Dimmer",
 	"devices": [
 		{
 			"productType": "0x0808",
-			"productId": "0x0808"
+			"productId": "0x0808",
+			"zwaveAllianceId": [1359, 1360, 1361, 1362]
 		}
 	],
 	"firmwareVersion": {

@@ -8,11 +8,17 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": [1423, 1948, 1952]
 		},
 		{
 			"productType": "0x0101",
 			"productId": "0x0103"
+		},
+		{
+			"productType": "0x0202",
+			"productId": "0x0511",
+			"zwaveAllianceId": 884
 		}
 	],
 	"firmwareVersion": {

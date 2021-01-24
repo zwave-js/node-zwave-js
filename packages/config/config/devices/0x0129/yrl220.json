@@ -1,9 +1,9 @@
-// ASSA ABLOY YRL220
+// Yale YRL210 / YRL220
 // Yale Real Living Touchscreen Lever Lock
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "YRL220",
+	"label": "YRL210 / YRL220",
 	"description": "Yale Real Living Touchscreen Lever Lock",
 	"devices": [
 		{
@@ -12,7 +12,8 @@
 		},
 		{
 			"productType": "0x0001",
-			"productId": "0x0000"
+			"productId": "0x0000",
+			"zwaveAllianceId": 686
 		},
 		{
 			"productType": "0x0001",
@@ -234,7 +235,7 @@
 		"15": {
 			"label": "Reset to Factory Defaults",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": false,

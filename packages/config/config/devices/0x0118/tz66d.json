@@ -1,14 +1,15 @@
-// TKB Home TZ66D
+// TKB Home TZ66
 // Dual Paddle Wall Switch
 {
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
-	"label": "TZ66D",
+	"label": "TZ66",
 	"description": "Dual Paddle Wall Switch",
 	"devices": [
 		{
 			"productType": "0x0102",
-			"productId": "0x1020"
+			"productId": "0x1020",
+			"zwaveAllianceId": 45
 		}
 	],
 	"firmwareVersion": {
@@ -124,7 +125,7 @@
 			"description": "Enable Shade Control Group 2",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -203,7 +204,7 @@
 			"description": "Poll Group 2",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
