@@ -22,6 +22,8 @@ import {
 import {
 	ignoreTimeout,
 	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
@@ -413,6 +415,33 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			await this.set(propertyKey, userIdStatus as any, value);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "keypadMode":
+				return this.getKeypadMode();
+			case "masterCode":
+				return this.getMasterCode();
+			case "userIdStatus":
+			case "userCode": {
+				if (propertyKey == undefined) {
+					throwMissingPropertyKey(this.ccId, property);
+				} else if (typeof propertyKey !== "number") {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+				}
+				return (await this.get(propertyKey))?.[property];
+			}
+			default:
+				throwUnsupportedProperty(this.ccId, property);
 		}
 	};
 

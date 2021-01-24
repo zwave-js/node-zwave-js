@@ -10,6 +10,8 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -90,6 +92,13 @@ export class LockCCAPI extends PhysicalCCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.set(value);
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		if (property === "locked") return this.get();
+		throwUnsupportedProperty(this.ccId, property);
 	};
 }
 

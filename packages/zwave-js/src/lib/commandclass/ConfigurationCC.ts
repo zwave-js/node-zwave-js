@@ -30,6 +30,8 @@ import { MessagePriority } from "../message/Constants";
 import {
 	ignoreTimeout,
 	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -223,6 +225,21 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 		void this.get(property).catch(() => {
 			/* ignore */
 		});
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		// Config parameters are addressed with numeric properties/keys
+		if (typeof property !== "number") {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+		if (propertyKey != undefined && typeof propertyKey !== "number") {
+			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		}
+
+		return this.get(property, { valueBitMask: propertyKey });
 	};
 
 	/**

@@ -8,7 +8,12 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { PhysicalCCAPI } from "./API";
+import {
+	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	throwUnsupportedProperty,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -63,6 +68,17 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "state":
+				return this.get();
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
 
 	public async get(): Promise<ThermostatOperatingState> {
 		this.assertSupportsCommand(

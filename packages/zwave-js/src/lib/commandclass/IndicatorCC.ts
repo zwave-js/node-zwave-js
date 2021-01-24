@@ -19,6 +19,8 @@ import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	ignoreTimeout,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -233,6 +235,17 @@ export class IndicatorCCAPI extends CCAPI {
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		if (property === "value") return this.get();
+		if (typeof property === "number") {
+			return this.get(property);
+		}
+
+		throwUnsupportedProperty(this.ccId, property);
 	};
 
 	public async get(

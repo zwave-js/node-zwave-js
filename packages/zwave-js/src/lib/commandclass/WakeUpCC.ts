@@ -13,6 +13,8 @@ import { NodeStatus } from "../node/Types";
 import {
 	CCAPI,
 	ignoreTimeout,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -75,6 +77,17 @@ export class WakeUpCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.setInterval(value, this.driver.controller.ownNodeId ?? 1);
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "wakeUpInterval":
+				return (await this.getInterval())?.[property];
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

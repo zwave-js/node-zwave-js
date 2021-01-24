@@ -21,6 +21,12 @@ export type SetValueImplementation = (
 	value: unknown,
 ) => Promise<void>;
 
+/** Used to identify the method on the CC API class that handles polling values from nodes */
+export const POLL_VALUE: unique symbol = Symbol.for("CCAPI_POLL_VALUE");
+export type PollValueImplementation<T extends unknown = unknown> = (
+	property: Pick<ValueID, "property" | "propertyKey">,
+) => Promise<T | undefined>;
+
 // Since the setValue API is called from a point with very generic parameters,
 // we must do narrowing inside the API calls. These three methods are for convenience
 export function throwUnsupportedProperty(
@@ -91,6 +97,15 @@ export class CCAPI {
 	public get setValue(): SetValueImplementation | undefined {
 		// wotan-disable-next-line no-restricted-property-access
 		return this[SET_VALUE];
+	}
+
+	protected [POLL_VALUE]: PollValueImplementation | undefined;
+	/**
+	 * Can be used on supported CC APIs to poll a CC value by property name (and optionally the property key)
+	 */
+	public get pollValue(): PollValueImplementation | undefined {
+		// wotan-disable-next-line no-restricted-property-access
+		return this[POLL_VALUE];
 	}
 
 	/**

@@ -9,6 +9,8 @@ import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import {
 	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -123,6 +125,18 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		}
 		// Refresh the current value
 		await this.fibaroVenetianBlindsGet();
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "position":
+			case "tilt":
+				return (await this.fibaroVenetianBlindsGet())?.[property];
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
 	};
 }
 

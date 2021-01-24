@@ -16,6 +16,8 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -141,6 +143,19 @@ export class BinarySwitchCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.set(value);
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "currentValue":
+			case "targetValue":
+			case "duration":
+				return (await this.get())?.[property];
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
 	};
 }
 

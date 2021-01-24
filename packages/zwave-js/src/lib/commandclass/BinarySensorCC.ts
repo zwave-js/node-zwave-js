@@ -12,7 +12,13 @@ import {
 import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { ignoreTimeout, PhysicalCCAPI } from "./API";
+import {
+	ignoreTimeout,
+	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	throwUnsupportedProperty,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -95,6 +101,18 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		if (typeof property === "string") {
+			const sensorType = (BinarySensorType as any)[property] as
+				| BinarySensorType
+				| undefined;
+			if (sensorType) return this.get(sensorType);
+		}
+		throwUnsupportedProperty(this.ccId, property);
+	};
 
 	/**
 	 * Retrieves the current value from this sensor

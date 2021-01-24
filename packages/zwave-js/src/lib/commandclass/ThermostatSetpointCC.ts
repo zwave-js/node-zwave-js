@@ -17,6 +17,8 @@ import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	ignoreTimeout,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -177,6 +179,27 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 				getSetpointScaleValueID(this.endpoint.index, propertyKey),
 			);
 		await this.set(propertyKey, value, preferredScale ?? 0);
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "setpoint":
+				if (typeof propertyKey !== "number") {
+					throw new ZWaveError(
+						`${
+							CommandClasses[this.ccId]
+						}: "${property}" must be further specified by a numeric property key`,
+						ZWaveErrorCodes.Argument_Invalid,
+					);
+				}
+
+				return (await this.get(propertyKey))?.value;
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
 	};
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
