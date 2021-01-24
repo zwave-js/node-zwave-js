@@ -1,6 +1,6 @@
 // Popp & Co POPE009303
 // Wall Controller
-			{
+{
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
 	"label": "POPE009303",
@@ -375,6 +375,6 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"reset": "Use this procedure only if the primary controller is missing or otherwise inoperable. \n\n(1) Turn the device into Management Mode by keeping all four buttons pushed for 5 seconds, (2) click on Button 3, (3) keep button 4 pushed for 4 seconds"
+		"reset": "Use this procedure only if the primary controller is missing or otherwise inoperable. (1) Turn the device into Management Mode by keeping all four buttons pushed for 5 seconds, (2) click on Button 3, (3) keep button 4 pushed for 4 seconds"
 	}
 }

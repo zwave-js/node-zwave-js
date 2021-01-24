@@ -1,6 +1,6 @@
 // Sensative AB 11 01 011
 // Strips-MaZw
-			{
+{
 	"manufacturer": "Sensative AB",
 	"manufacturerId": "0x019a",
 	"label": "11 01 011",
@@ -95,8 +95,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "The iamsmart Window & Sensor is delivered in \"auto-add\" mode. \n\nFollow the process below to add the iamsmart Window & Sensor in a Z-Wave network.\n\n1. Start the add mode on the Z-Wave controller. \n\nSee the controller’s manual.\n\n2. Remove both magnets from the iamsmart Window & Door Sensor. The iamsmart Window & Door Sensor blinks twice to confirm the command and successful addition. \n\n3. A long LED blink indicates that the add process was successful\n\n4. The Z-Wave controller application should now allow you to monitor your iamsmart Window & Door Sensor status.\n\n5. Move the squared magnet as shown in the picture . Check that the Z-Wave system indicates the status correctly.\n\n6. If the Z-Wave system does not respond, it may be needed to change the iamsmart Window & Door Sensor’s notification type.\n\nManual add:\n\n1. Set the controller to add mode (See your controller’s manual). \n\n2. Place the round magnet at the rounded edge of the iamsmart Window & Door Sensor. \n\nWhen the LED blinks, move the magnet away. Repeat 3 times in total within 10 seconds. \n\n3. A long LED blink indicates that the add process was successful",
-		"exclusion": "1. Set the controller in remove mode (See your controller’s manual). \n\n2. Place the round magnet at the rounded edge of the iamsmart Window & Door Sensor. \n\nWhen the LED blinks, move the magnet away. Repeat 3 times in total within 10 seconds. \n\n3. A long LED blink indicates that the remove process was successful",
-		"reset": "In order to reset the iamsmart Window & Door Sensor (needed when the controller is lost or inoperable):\n\n1. Place the round magnet at the rounded edge of the iamsmart Window & Door Sensor. \n\n2. When the LED blinks, move the magnet away. Repeat 3 times in total within 10 seconds.\n\n3. On the 3rd repetition, leave the magnet at the rounded edge for 10s. \n\n4. A long LED signal indicates success"
+		"inclusion": "Strips is delivered in \"\"auto-add\"\" mode. Follow the process below to add Strips in a Z-Wave network. 1. Start the add mode on the Z-Wave controller. See the controller’s manual. 2. Remove both magnets from Strips. Strips blinks twice to confirm the command and successful addition. 3. A long LED blink indicates that the add process was successful 4. The Z-Wave controller application should now allow you to monitor your Strips sensor status. 5. Move the squared magnet as shown in the picture . Check that the Z-Wave system indicates the status correctly 6. If the Z-Wave system do not respond, it may be needed to change Strips’ notification type. Manual add: 1. Set the controller to add mode (See your controller’s manual). 2. Place the round magnet at the rounded edge of Strips. When the LED blinks, move the magnet away. Repeat 3 times in total within 10 seconds. 3. A long LED blink indicates that the add process was successful.",
+		"exclusion": "1. Set the controller in remove mode (See your controller’s manual). 2. Place the round magnet at the rounded edge of Strips. When the LED blinks, move the magnet away. Repeat 3 times in total within 10 seconds. 3. A long LED blink indicates that the remove process was successful",
+		"reset": "In order to reset Strips (only possible when the connection to the controller is lost): 1. Place the round magnet at the rounded edge of Strips. 2. When the LED blinks, move the magnet away. Repeat 3 times in total within 10 seconds. 3. After 5 LED blinks, place the magnet at the rounded edge again for 10 seconds. 4. A long LED signal indicates success."
 	}
 }

@@ -1,6 +1,6 @@
 // GE/Jasco 28170 (ZW3105)
 // Plug-in Smart Dimmer (Dual Plug)
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "28170 (ZW3105)",
@@ -136,8 +136,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include the device to the Z-wave network.\n2. Once the controller is ready to include your smart switch, single press and release the manual/program button on the smart dimmer to include it in the network.\n3. Once your controller has confirmed that the smart switch has been included, refresh the Z-wave network to optimize performance",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\n\nremove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press and\n\nrelease the manual/program button on the smart dimmer to\n\nremove it from the network",
-		"reset": "To return your dimmer to factory defaults:\n\n1. If plugged in, unplug the dimmer from the receptacle.\n\n2. Press and hold the top button for at least 3 seconds while you\n\nplug the dimmer into a receptacle.\n\nNote: This should only be used in the event your networks’ primary\n\ncontroller is missing or otherwise inoperable"
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include the device to the Z-wave network. 2. Once the controller is ready to include your smart switch, single press and release the manual/program button on the smart dimmer to include it in the network. 3. Once your controller has confirmed that the smart switch has been included, refresh the Z-wave network to optimize performance",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network. 2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart switch to exclude it from the network",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle. 2. Press and hold the top button for at least 3 seconds while you plug the switch into a receptacle. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }

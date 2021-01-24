@@ -1,6 +1,6 @@
 // GE/Jasco 52252/52253/ZW3012
 // Enbrighten Z-Wave Plus In-Wall Smart Dimmer, No Neutral, LED-CFL, White and Light Almond Paddles, 700S
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "52252/52253/ZW3012",
@@ -224,8 +224,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press and release the top or bottom of the smart dimmer (rocker)",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press and release the top or bottom of the smart dimmer (rocker)",
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the top or bottom of the smart dimmer (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the top or bottom of the smart dimmer (rocker)",
 		"reset": "1. Quickly press ON (top) button three times, then immediately press the OFF (bottom) button three times. The LED will flash ON/OFF five times when completed successfully"
 	}
 }

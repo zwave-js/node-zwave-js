@@ -1,6 +1,6 @@
 // Vision Security ZM1602-5
 // Siren with DC adapter
-			{
+{
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZM1602-5",
@@ -88,7 +88,7 @@
 	},
 	"metadata": {
 		"inclusion": "Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZM 1602 to your controller. To get in the “inclusion” mode, the distance between siren and controller is suggested to be in one meter. Open the bracket and press the program switch of ZM 1602 for 1 second at least & release to be included. After setting, the LED Setting Lighting should go off",
-		"exclusion": "Set up the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZM 1602 from your controller. Press the Tamper Switch of ZM 1602 for 1 second at least & release to be excluded.",
+		"exclusion": "Set up the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZM 1602 from your controller. Press the Tamper Switch of ZM 1602 for 1 second at least & release to be excluded",
 		"reset": "This device can’t be reset manually. It is reset to factory defaults when it is excluded. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

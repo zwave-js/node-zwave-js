@@ -1,6 +1,6 @@
 // Qolsys IQPanel2
 // IQPanel2
-			{
+{
 	"manufacturer": "Qolsys",
 	"manufacturerId": "0x012a",
 	"label": "IQPanel2",
@@ -9,10 +9,7 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0002",
-			"zwaveAllianceId": [
-				2197,
-				3092
-			]
+			"zwaveAllianceId": [2197, 3092]
 		}
 	],
 	"firmwareVersion": {

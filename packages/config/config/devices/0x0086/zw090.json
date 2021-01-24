@@ -1,6 +1,6 @@
 // AEON Labs ZW090
 // Z‐Stick Gen5 USB Controller
-			{
+{
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW090",
@@ -126,6 +126,6 @@
 		}
 	},
 	"metadata": {
-		"reset": "Use this procedure only in the event that the primary controller is missing or otherwise inoperable.\n\nPress and hold the Action Button on Z-Stick for 20 seconds and then release"
+		"reset": "Use this procedure only in the event that the primary controller is missing or otherwise inoperable. Press and hold the Action Button on Z-Stick for 20 seconds and then release"
 	}
 }
