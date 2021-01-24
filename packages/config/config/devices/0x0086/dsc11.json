@@ -8,8 +8,7 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x000b",
-			"zwaveAllianceId": 1015
+			"productId": "0x000b"
 		}
 	],
 	"firmwareVersion": {
@@ -27,6 +26,7 @@
 		"1": {
 			"label": "Voltage to calculate power",
 			"description": "Line voltage used for device calculations of wattage",
+			"unit": "v",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -73,6 +73,7 @@
 		"7": {
 			"label": "Wattage Threshold - Socket 2",
 			"description": "Threshold change in wattage to induce a automatic report",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -85,6 +86,7 @@
 		"8": {
 			"label": "Wattage Threshold - Socket 3",
 			"description": "Threshold change in wattage to induce a automatic report",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -97,6 +99,7 @@
 		"9": {
 			"label": "Wattage Threshold - Socket 4",
 			"description": "Threshold change in wattage to induce a automatic report",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -109,6 +112,7 @@
 		"10": {
 			"label": "Wattage Threshold - Socket 5",
 			"description": "Threshold change in wattage to induce a automatic report",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -121,6 +125,7 @@
 		"11": {
 			"label": "Wattage Threshold - Socket 6",
 			"description": "Threshold change in wattage to induce a automatic report",
+			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -133,8 +138,8 @@
 		"12": {
 			"label": "Percent Change - Whole Strip",
 			"description": "Percentage change in wattage to induce a automatic report",
-			"valueSize": 1,
 			"unit": "%",
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5,
@@ -145,8 +150,8 @@
 		"13": {
 			"label": "Percent Change - Socket 1",
 			"description": "Percentage change in wattage to induce a automatic report",
-			"valueSize": 1,
 			"unit": "%",
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5,
@@ -179,8 +184,8 @@
 		"16": {
 			"label": "Percent Change - Socket 4",
 			"description": "Percentage change in wattage to induce a automatic report",
-			"valueSize": 1,
 			"unit": "%",
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5,
@@ -191,8 +196,8 @@
 		"17": {
 			"label": "Percent Change - Socket 5",
 			"description": "Percentage change in wattage to induce a automatic report",
-			"valueSize": 1,
 			"unit": "%",
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5,
@@ -203,8 +208,8 @@
 		"18": {
 			"label": "Percent Change - Socket 6",
 			"description": "Percentage change in wattage to induce a automatic report",
-			"valueSize": 1,
 			"unit": "%",
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 5,
@@ -217,7 +222,7 @@
 			"description": "Status of load changed,send group 1",
 			"valueSize": 4,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 65535,
 			"defaultValue": 8,
 			"readOnly": false,
 			"writeOnly": false,
@@ -294,6 +299,7 @@
 		"101[0xff]": {
 			"label": "select channels to report consumtion as item 1",
 			"description": "A binary field for reporting consumption (kWh) of channels",
+			"unit": "kWh",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -305,6 +311,7 @@
 		"101[0xff00]": {
 			"label": "Select channels to report power as item 1",
 			"description": "A binary field to choose channels to report power",
+			"unit": "W",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -327,6 +334,7 @@
 		"102[0xff00]": {
 			"label": "Item 2 (power)",
 			"description": "Channel(s) to auto-report wattage",
+			"unit": "W",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,

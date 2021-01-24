@@ -1,15 +1,14 @@
-// Popp & Co POPE004001
+// Popp & Co 004001
 // Smoke Detector and Siren
 {
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
-	"label": "POPE004001",
+	"label": "004001",
 	"description": "Smoke Detector and Siren",
 	"devices": [
 		{
 			"productType": "0x0100",
-			"productId": "0x0201",
-			"zwaveAllianceId": 2111
+			"productId": "0x0201"
 		}
 	],
 	"firmwareVersion": {
@@ -33,11 +32,11 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Siren alarm sequence interval",
-			"description": "seconds",
+			"label": "Siren alarm sequence interval in seconds",
+			"description": "This parameter defines the total length of the interval in seconds.",
+			"unit": "Seconds",
 			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
+			"minValue": 3,
 			"maxValue": 129,
 			"defaultValue": 10,
 			"unsigned": true,
@@ -47,37 +46,33 @@
 		},
 		"2": {
 			"label": "Siren alarm tone length",
-			"description": "seconds",
+			"description": "Total length of the sound versus silence within this interval.",
+			"unit": "Seconds",
 			"valueSize": 1,
-			"unit": "seconds",
-			"minValue": 0,
+			"minValue": 3,
 			"maxValue": 129,
-			"defaultValue": 8,
+			"defaultValue": 10,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Value of BASIC On-Command",
-			"description": "BASIC Command Value",
+			"label": "Value of On-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Value of BASIC Off-Command",
-			"description": "BASIC Command Value",
+			"label": "Value of Off-Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -87,7 +82,7 @@
 			"description": "Inform other smoke detectors of same type about smoke alarms",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -109,7 +104,7 @@
 			"description": "Inform other smoke detectors of same type about battery alarms",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -126,10 +121,5 @@
 				}
 			]
 		}
-	},
-	"metadata": {
-		"inclusion": "To Include, hit the little button on the wireless module for 1 second",
-		"exclusion": "To Exclude, hit the little button on the wireless module for 1 second",
-		"reset": "To reset the device keep the button pushed for 10 seconds. After 5 seconds the led starts flashing and after another 5 seconds there is a short beep signaling the successful reset back to factory defaults. Use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

@@ -1,33 +1,34 @@
-// GE/Jasco 14295/ZW3004
+// GE/Jasco 14295
 // In-Wall Dimmer Switch
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14295/ZW3004",
+	"label": "14295",
 	"description": "In-Wall Dimmer Switch",
 	"devices": [
 		{
 			"productType": "0x4944",
-			"productId": "0x3130",
-			"zwaveAllianceId": 2048
+			"productId": "0x3130"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"supportsZWavePlus": true,
 	"associations": {
+		// One entry for each association group
 		"1": {
-			"label": "Group 1",
+			"label": "Lifeline",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Group 2",
+			"label": "Basic - Local Load",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Double Tap",
+			"label": "Basic - Double Tap", // required
 			"maxNodes": 5,
 			"isLifeline": true
 		}
@@ -35,106 +36,93 @@
 	"paramInformation": {
 		"4": {
 			"label": "Invert Switch",
-			"description": "Invert Switch",
+			"description": "Invert the ON/OFF Switch State.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Default",
+					"label": "(Default) No",
 					"value": 0
 				},
 				{
-					"label": "Invert",
+					"label": "Yes",
 					"value": 1
 				}
 			]
 		},
 		"7": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim Rate Steps",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim Rate step timing",
 			"description": "Timing of steps or levels",
 			"valueSize": 2,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim 2 Rate Steps",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim 2 Step Timing",
 			"description": "Timing of steps",
 			"valueSize": 2,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim 3 Rate Steps",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "Dim Rate Adjustments",
+			"label": "Dim 3 Rate Timing",
 			"description": "Timing of steps or levels",
 			"valueSize": 2,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 3,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true,
-		"disableBasicMapping": true
-	},
-	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network. 2. Once the controller is ready to include your device, press and release the top or bottom of the wireless smart dimmer (rocker) to include it in the network",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. 2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart dimmer (rocker) to exclude it from the network",
-		"reset": "1. Quickly press ON (up) button (3) times then immediately press the OFF (down) button (3) times. Note: This should only be used in the even your network's primary controller is missing or otherwise inoperable."
+		"treatBasicSetAsEvent": true
 	}
 }
