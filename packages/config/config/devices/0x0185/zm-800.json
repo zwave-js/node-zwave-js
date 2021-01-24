@@ -1,6 +1,6 @@
 // Ningbo Sentek Electronics Co., Ltd. ZM-800
 // PIR motion sensor
-{
+			{
 	"manufacturer": "Ningbo Sentek Electronics Co., Ltd.",
 	"manufacturerId": "0x0185",
 	"label": "ZM-800",
@@ -60,8 +60,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "1. Make sure ZM-800 is in the range of the Z-Wave controller. 2. Set the Z-Wave controller to the inclusion mode. 3. Quickly pressing TP-Switch2 button 3 times on the ZM-800. 4. The ZM-800 is added to the network",
-		"exclusion": "1. Make sure ZM-800 is in the range of the Z-Wave controller. 2. Set the Z-Wave controller to the exclusion mode. 3. Quickly pressing TP-Switch2 button 3 times on the ZM-800. 4. The ZM-800 is deleted from the network",
-		"reset": "Note: Use the reset procedure only in the event that the network primary controller is missing or otherwise inoperable. 1. Presse the TP-Switch2 button more than 5 seconds. 2. Z-Wave LED is start blinking. 3. Release the TP-Switch2 button right now. 4. Z-Wave LED off, reset is performed"
+		"inclusion": "1. Make sure ZM-800 is in the range of the Z-Wave controller. \n\n2. Set the Z-Wave controller to the inclusion mode. \n\n3. Quickly pressing TP-Switch2 button 3 times on the ZM-800.\n\n4. The ZM-800 is added to the network",
+		"exclusion": "1. Make sure ZM-800 is in the range of the Z-Wave controller. \n\n2. Set the Z-Wave controller to the exclusion mode. \n\n3. Quickly pressing TP-Switch2 button 3 times on the ZM-800.\n\n4. The ZM-800 is deleted from the network",
+		"reset": "Note: Use the reset procedure only in the event that the network primary controller is missing or otherwise inoperable.\n\n1. Presse the TP-Switch2 button more than 5 seconds. \n\n2. Z-Wave LED is start blinking.\n\n3. Release the TP-Switch2 button right now.\n\n4. Z-Wave LED off, reset is performed"
 	}
 }

@@ -1,6 +1,6 @@
 // Resideo 39446 / ZW3107
 // Plug-in Dimmer (Dual Plug Simultaneous Control)
-{
+			{
 	"manufacturer": "Resideo",
 	"manufacturerId": "0x041b",
 	"label": "39446 / ZW3107",
@@ -218,8 +218,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "ADDING YOUR DEVICE TO A Z-WAVE NETWORK 1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the manual/program button on the smart dimmer. Repeat as necessary to add the dimmer to the network. You have complete control",
-		"exclusion": "TO REMOVE AND RESET THE DEVICE 1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the manual/program button on the smart dimmer to remove it from the network",
-		"reset": "TO RETURN YOUR DIMMER TO FACTORY DEFAULTS 1. If plugged in, unplug the dimmer from the receptacle 2. Press and hold the top button, plug the device in and continue to hold for at least 3 seconds. NOTE: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+		"inclusion": "ADDING YOUR DEVICE TO A Z-WAVE NETWORK\n\n1. Follow the instructions for your Z-Wave certified\n\ncontroller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press\n\nand release the manual/program button on the smart\n\ndimmer. Repeat as necessary to add the dimmer to\n\nthe network.\n\nYou have complete control",
+		"exclusion": "TO REMOVE AND RESET THE DEVICE\n\n1. Follow the instructions for your Z-Wave certified\n\ncontroller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press\n\nand release the manual/program button on the smart\n\ndimmer to remove it from the network",
+		"reset": "TO RETURN YOUR DIMMER TO FACTORY DEFAULTS\n\n1. If plugged in, unplug the dimmer from the receptacle\n\n2. Press and hold the top button, plug the device in and\n\ncontinue to hold for at least 3 seconds.\n\nNOTE: This should only be used in the event your network’s\n\nprimary controller is missing or otherwise inoperable"
 	}
 }

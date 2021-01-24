@@ -1,6 +1,6 @@
 // GE/Jasco 28174
 // Plug-in Dual Smart Dimmer With 3.4A USB Charging
-{
+			{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "28174",
@@ -196,7 +196,7 @@
 	},
 	"metadata": {
 		"inclusion": "Adding your device to a Z-wave network: 1. Follow the instructions for your Z-wave certified controller to include the smart dimmer to the Z-wave network. 2. Once the controller is ready to include your smart dimmer, single press and release the manual/program button on the smart dimmer to include it in the network. 3. Once your controller has confirmed that the smart dimmer has been included, refresh the Z-wave network to optimize performance. Please reference the controller/gateway’s manual for instructions. Now you have complete control to turn your lamp ON/OFF or set Dim levels according to groups, scenes, schedules and interactive automations programmed by your controller. If your Z-wave certified controller features Remote Access, you can now control your lighting from your mobile devices",
-		"exclusion": "To exclude and reset the device: 1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network. 2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart dimmer to exclude it from the network",
-		"reset": "To return your dimmer to factory defaults: 1. If plugged in, unplug the Dimmer from the receptacle. 2. Press and hold the top button for at least 3 seconds while you plug the dimmer into a receptacle. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+		"exclusion": "To exclude and reset the device:\n1. Follow the instructions for your Z-wave certified controller to\nexclude a device from the Z-wave network.\n2. Once the controller is ready to Exclude your device, press and\nrelease the manual/program button on the smart dimmer to\nexclude it from the network",
+		"reset": "To return your dimmer to factory defaults:\n1. If plugged in, unplug the Dimmer from the receptacle.\n2. Press and hold the top button for at least 3 seconds while you\nplug the dimmer into a receptacle.\nNote: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable"
 	}
 }

@@ -1,6 +1,6 @@
 // Resideo 39456 / ZW1002
 // In-Wall Tamper Resistant Outlet
-{
+			{
 	"manufacturer": "Resideo",
 	"manufacturerId": "0x041b",
 	"label": "39456 / ZW1002",
@@ -64,8 +64,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "CONNECTING YOUR DEVICE TO A Z-WAVE NETWORK 1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the program button. Repeat as necessary to add the smart outlet to the network. You have complete control",
-		"exclusion": "REMOVING AND RESETTING THE DEVICE 1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the manual/program button",
-		"reset": "RETURNING SWITCH TO FACTORY DEFAULTS Quickly press the button three times. Then, press the button for at least three seconds. The LED will blink five times to confirm. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+		"inclusion": "CONNECTING YOUR DEVICE TO A Z-WAVE NETWORK\n\n1. Follow the instructions for your Z-Wave certified controller to add a\n\ndevice to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press and release the\n\nprogram button. Repeat as necessary to add the smart outlet to\n\nthe network.\n\nYou have complete control",
+		"exclusion": "REMOVING AND RESETTING THE DEVICE\n\n1. Follow the instructions for your Z-Wave certified controller to remove a\n\ndevice from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press and release the\n\nmanual/program button",
+		"reset": "RETURNING SWITCH TO FACTORY DEFAULTS\n\nQuickly press the button three times. Then, press the button for at least three\n\nseconds. The LED will blink five times to confirm.\n\nNote: This should only be used in the event your network’s primary controller\n\nis missing or otherwise inoperable"
 	}
 }

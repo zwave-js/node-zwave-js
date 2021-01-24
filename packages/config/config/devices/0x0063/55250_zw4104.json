@@ -1,6 +1,6 @@
 // GE/Jasco 55250/ZW4104
 // Plug-in Smart Switch (Dual Plug with Pass through Outlet)
-{
+			{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "55250/ZW4104",
@@ -68,8 +68,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the smart switch to the Z-Wave network. 2. Once the controller is ready to add your smart switch, press and release the manual/program button on the smart switch",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a smart switch from the Z-Wave network. 2. Once the controller is ready to remove your smart switch, press and release the manual/program button on the smart switch",
-		"reset": "1. If plugged in, unplug the smart switch from the receptacle. 2. Press and hold the program button for at least three seconds while you plug the smart switch into a receptacle"
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the smart switch to the Z-Wave network.\n\n2. Once the controller is ready to add your smart switch, press and release the manual/program button on the smart switch",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a smart switch from the Z-Wave network.\n\n2. Once the controller is ready to remove your smart switch, press and release the manual/program button on the smart switch",
+		"reset": "1. If plugged in, unplug the smart switch from the receptacle.\n\n2. Press and hold the program button for at least three seconds while you plug the smart switch into a receptacle"
 	}
 }

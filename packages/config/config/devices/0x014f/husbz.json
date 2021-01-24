@@ -1,6 +1,6 @@
 // Nortek Security & Control LLC HUSBZ
 // SmartStick+
-{
+			{
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
 	"label": "HUSBZ",
@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Not applicable."
+		"reset": "Not applicable"
 	}
 }
