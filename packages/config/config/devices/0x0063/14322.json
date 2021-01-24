@@ -1,6 +1,6 @@
 // GE/Jasco 14322
 // Jasco In-Wall Smart Dimmer (White Toggle)
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "14322",
@@ -125,8 +125,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "Adding your device to a Z-wave network:\n1. Follow the instructions for your Z-wave certified controller to include a device to\nthe Z-wave network.\n2. Once the controller is ready to include your device, press up and release on the\ntoggle to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh\nthe Z-wave network to optimize performance.\nPlease reference the controller’s manual for instructions.\nNow you have complete control to turn your fixture ON/OFF or dim\naccording to groups, scenes, schedules and interactive automations\nprogrammed by your controller.\nIf your Z-wave certified controller features Remote Access, you can now control\nyour fixture from your mobile devices",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\n\nexclude a device from the Z-Wave network.\n\n2. Once the controller is ready to Exclude your device, press\n\nand release the top or bottom of the wireless smart dimmer\n\n(rocker) to exclude it from the network",
-		"reset": "To return your switch to factory defaults:\n1. Quickly press ON (Up) button three (3) times then immediately press the OFF\n(Down) button three (3) times. Note: This should only be used in the event your\nnetwork’s primary controller is missing or otherwise inoperable"
+		"inclusion": "Adding your device to a Z-wave network: 1. Follow the instructions for your Z-wave certified controller to include a device to the Z-wave network. 2. Once the controller is ready to include your device, press up and release on the toggle to include it in the network. 3. Once your controller has confirmed that the device has been included, refresh the Z-wave network to optimize performance. Please reference the controller’s manual for instructions. Now you have complete control to turn your fixture ON/OFF or dim according to groups, scenes, schedules and interactive automations programmed by your controller. If your Z-wave certified controller features Remote Access, you can now control your fixture from your mobile devices",
+		"exclusion": "To exclude and reset the device 1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network. 2. Once the controller is ready to Exclude your device, press up and release on the toggle to exclude it from the network",
+		"reset": "To return your switch to factory defaults: 1. Quickly press ON (Up) button three (3) times then immediately press the OFF (Down) button three (3) times. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }

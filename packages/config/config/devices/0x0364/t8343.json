@@ -1,6 +1,6 @@
 // Axis Communications Ab T8343
 // Alert Button
-			{
+{
 	"manufacturer": "Axis Communications Ab",
 	"manufacturerId": "0x0364",
 	"label": "T8343",
@@ -9,11 +9,7 @@
 		{
 			"productType": "0x0005",
 			"productId": "0x0001",
-			"zwaveAllianceId": [
-				2703,
-				2800,
-				3086
-			]
+			"zwaveAllianceId": [2703, 2800, 3086]
 		}
 	],
 	"firmwareVersion": {
@@ -21,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Auto inclusion\n\n1. Carefully remove the front cover by pulling the bottom of the front cover.\n\n2. Put a Z-Wave controller into inclusion mode.\n\n3. Insert 2 AAA-batteries (1,5V) into the battery compartment with the correct polarity. The LED on the device should turn ON\n\n4. Enter PIN number into the Z-Wave controller. The PIN number can be found on the device. See where in the installation\n\nguide.\n\n5. The inclusion process should be completed when the LED stops blinking\n\n6. Perform test before you refit the battery cover. See How to test the Z-Wave Device.\n\nManual inclusion\n\n1. Carefully remove the front cover by pulling the bottom of the front cover. There is a link button which is used to put the\n\ndevice in learning mode (inclusion/exclusion).\n\n2. Press the link button 3 times within 1.5 seconds to put the unit into learning (inclusion/exclusion) mode.\n\n3. Enter PIN number into the Z-Wave controller. The PIN number can be found on the device. See where in the installation\n\nguide.\n\n4. The inclusion process should be completed when the LED stops blinking\n\n5. Perform test before you refit the battery cover",
-		"exclusion": "Manual exclusion\n\nNote\n\nFor more details see the installation guide\n\n1. Detach the battery cover.\n\n2. Press the link button 3 times within 1.5 seconds to put the unit into learning (inclusion/exclusion) mode.\n\n3. The exclusion process should be completed when the LED stops blinking\n\n4. Refit the battery cover",
-		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n\n1. Press the link button 3 times within 1.5 seconds to put the unit into exclusion mode.\n\n2. Within 1 second of step 1, press the link button again and hold for 5 seconds.\n\n3. Node ID is excluded. The device reverts to factory default state"
+		"inclusion": "1.Put the Z-Wave Controller into inclusion mode.2.Press the link button 3 times within 1.5 seconds to put the unit into inclusion mode.",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.2. Press the link button 3 times within 1.5 seconds to put the unit into exclusion mode.",
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.1. Press the link button 3 times within 1.5 seconds to put the unit into exclusion mode.2. Within 1 second of step 1, press the link button again and hold for 5 seconds.3. Node ID is excluded. The device reverts to factory default state."
 	}
 }

@@ -1,5 +1,5 @@
 // Avadesign Technology Co. DA VINCI V3
-			{
+{
 	"manufacturer": "Avadesign Technology Co.",
 	"manufacturerId": "0x025d",
 	"label": "DA VINCI V3",
@@ -1973,8 +1973,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "To Add (Include) to the network:\n\nPress the #1 button 3 times.",
-		"exclusion": "To Remove (Exclude) from the network:\n\nPress the #1 button 3 times",
-		"reset": "Double Press the following buttons in the\n\nfollowing order 8,1,3.\n\nUse the reset procedure only when the primary controller is missing or inoperable"
+		"inclusion": "Press button #1 for 5 seconds and release",
+		"exclusion": "Press button #1 for 5 seconds and release",
+		"reset": "Double Press the following buttons in the following order 8,1,3. Use the reset procedure only when the primary controller is missing or inoperable"
 	}
 }

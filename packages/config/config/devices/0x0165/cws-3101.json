@@ -1,6 +1,6 @@
 // ID-RF CWS-3-1-0X
 // Wall Switch
-			{
+{
 	"manufacturer": "ID-RF",
 	"manufacturerId": "0x0165",
 	"label": "CWS-3-1-0X",
@@ -258,6 +258,6 @@
 		}
 	},
 	"metadata": {
-		"reset": "Simultaneously push on buttons 3 and 4, during 1 second. The LED will blink red and green to validate the factory reset.\n\nA factory reset will completely delete the memory of the wall switch and restore all parameters to default value.\nIn \"Standalone\" Mode, make sure to remove all the devices added or associated in the wall switch's network before performing a factory reset. \nIn \"Gateway\" Mode, use the factory reset procedure only when the primary controller (i.e the Gateway) is missing or defective. Reset the wall switch does not mean that it has been removed from the primary controller memory. Remove the wall switch (through the primary controller) before performing a factory reset."
+		"reset": "Simultaneously push on buttons 3 and 4, during 1 second. The LED will blink red and green to validate the factory reset. A factory reset will completely delete the memory of the wall switch and restore all parameters to default value. In \"\"Standalone\"\" Mode, make sure to remove all the devices added or associated in the wall switch's network before performing a factory reset. In \"\"Gateway\"\" Mode, use the factory reset procedure only when the primary controller (i.e the Gateway) is missing or defective. Reset the wall switch does not mean that it has been removed from the primary controller memory. Remove the wall switch (through the primary controller) before performing a factory reset."
 	}
 }

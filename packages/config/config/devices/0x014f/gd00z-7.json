@@ -1,6 +1,6 @@
 // Nortek Security & Control LLC GD00Z-7
 // Z-Wave Garage Door Controller
-			{
+{
 	"manufacturer": "Nortek Security & Control LLC",
 	"manufacturerId": "0x014f",
 	"label": "GD00Z-7",
@@ -9,12 +9,7 @@
 		{
 			"productType": "0x4744",
 			"productId": "0x3531",
-			"zwaveAllianceId": [
-				2635,
-				2904,
-				3685,
-				3710
-			]
+			"zwaveAllianceId": [2635, 2904, 3685, 3710]
 		}
 	],
 	"firmwareVersion": {
@@ -22,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "1. Place your Z-Wave Controller into\n\nDiscovery or Include mode.\n\n2. Press and release the link button\n\non the GD00Z-8.-GC\n\n3. Confirm that the GD00Z-8-GC was\n\nrecognized by your Z-Wave Controller",
-		"exclusion": "1. Place your Z-Wave Controller into\n\nExclude mode.\n\n2. Press and release the link button\n\non the GD00Z-8.-GC\n\n3. Confirm that the GD00Z-8-GC was\n\nexcluded by your Z-Wave Controller",
-		"reset": "Reset the GD00Z-8-ADT by pressing the LINK button 5 times. A quick beep followed by a longer beep will indicate the reset.\n\nReset should only be used in the case of a missing or inoperative primary controller"
+		"inclusion": "1. Place your Z-Wave Controller into Include mode.2. Press and release the link button on the GD00Z-8-ADT.",
+		"exclusion": "1. Place your Z-Wave Controller into Exclude mode.2. Press and release the link button on the GD00Z-8-ADT.",
+		"reset": "Reset the GD00Z-8-ADT by pressing the LINK button 5 times. A quick beep followed by a longer beep will indicate the reset.Reset should only be used in the case of a missing or inoperative primary controller."
 	}
 }
