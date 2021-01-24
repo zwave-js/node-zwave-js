@@ -1594,10 +1594,9 @@ async function maintenanceParse(): Promise<void> {
 
 			// Add a comment explaining which device this is
 			// prettier-ignore
-			const output = 
-`// ${jsonData.manufacturer} ${jsonData.label}${jsonData.description ? (`
+			const output = `// ${jsonData.manufacturer} ${jsonData.label}${jsonData.description ? (`
 // ${jsonData.description}`) : ""}
-			${stringify(normalizeConfig(jsonData), "\t")}`;
+${stringify(normalizeConfig(jsonData), "\t")}`;
 			await fs.writeFile(file, output, "utf8");
 		}
 	}
