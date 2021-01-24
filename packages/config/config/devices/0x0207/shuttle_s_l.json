@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Press configuration button 3 times. LED3 is ON.\n\nPress and hold once more for 4 seconds",
-		"exclusion": "Press configuration button 3 times. LED3 is ON.\n\nPress and hold once more for 4 seconds",
-		"reset": "Press configuration button 25x times. LED 1 is ON. Press and hold once more for 4 seconds to confirm.\n\nPlease use this procedure only when your network primary controller is missing or otherwise inoperable"
+		"inclusion": "Press configuration button 3 times. LED3 is ON.\nPress and hold once more for 4 seconds",
+		"exclusion": "Press configuration button 3 times. LED3 is ON.\nPress and hold once more for 4 seconds",
+		"reset": "Press configuration button 25x times. LED 1 is ON. Press and hold once more for 4 seconds to confirm.\nPlease use this procedure only when your network primary controller is missing or otherwise inoperable"
 	}
 }

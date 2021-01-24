@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "You can add the device by either hardware button.\n\n-hardware button : Press the Add/Remove button.(1Second)\n\n1. Click an [Add] icon in Z-Wave PC Controller Program\n\n2. Press the hardware button in a Kumho light lamp for 1 second\n\n3. The device will be added to the Z-Wave network",
-		"exclusion": "You can remove the devicee by either hardware button.\n\n-hardware button : Press the Add/Remove button.(1Second)\n\n1. Click a [Remove] icon in Z-Wave PC Controller Program\n\n2. Press the hardware button in a Kumho light lamp for 1 second\n\n3. The device will be removed from the Z-Wave network",
-		"reset": "\"Use this procedure only when the network primary controller is missing or otherwise inoperable.\"\n\n1. Press the hardware button in a Kumho light lamp for 10 seconds\n\n2. Device Reset Locally notification will be sent"
+		"inclusion": "You can add the device by either hardware button.\n-hardware button : Press the Add/Remove button.(1Second)\n1. Click an [Add] icon in Z-Wave PC Controller Program\n2. Press the hardware button in a Kumho light lamp for 1 second\n3. The device will be added to the Z-Wave network",
+		"exclusion": "You can remove the devicee by either hardware button.\n-hardware button : Press the Add/Remove button.(1Second)\n1. Click a [Remove] icon in Z-Wave PC Controller Program\n2. Press the hardware button in a Kumho light lamp for 1 second\n3. The device will be removed from the Z-Wave network",
+		"reset": "\"Use this procedure only when the network primary controller is missing or otherwise inoperable.\"\n\n1. Press the hardware button in a Kumho light lamp for 10 seconds\n2. Device Reset Locally notification will be sent"
 	}
 }

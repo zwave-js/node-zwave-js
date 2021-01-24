@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Put the Z-Wave Interface Controller into “Inclusion” mode, and following its instruction to include LH-990ZW to your controller. This PIR needs to be included before installation.\n\n1、 Pull out the insulating strip, making the device power on. \n\n2、 Pressing the test key three times.\n\n3、 Red LED will blink three times while the network inclusion successful \n\n4、 If inclusion failed, the sensor will go into sleep mode. To wake up the sensor again, you need to press the key to trigger an inclusion process, and then repeat steps from 3 to 4.",
-		"exclusion": "Put the Z-Wave interface controller into “Exclusion” mode and following its instruction to exclude PIR from your Z-Wave controller:\n\n1、 Pressing the test key three times the enter exclusion mode.\n\n2、 Red LED will blink three times while the network exclusion successful.",
-		"reset": "Press the test key five times while installing battery.\n\nNote: Use this procedure only in the event that primary controller is lost."
+		"inclusion": "Put the Z-Wave Interface Controller into “Inclusion” mode, and following its instruction to include LH-990ZW to your controller. This PIR needs to be included before installation.\n1、 Pull out the insulating strip, making the device power on. \n2、 Pressing the test key three times.\n3、 Red LED will blink three times while the network inclusion successful \n4、 If inclusion failed, the sensor will go into sleep mode. To wake up the sensor again, you need to press the key to trigger an inclusion process, and then repeat steps from 3 to 4.",
+		"exclusion": "Put the Z-Wave interface controller into “Exclusion” mode and following its instruction to exclude PIR from your Z-Wave controller:\n1、 Pressing the test key three times the enter exclusion mode.\n2、 Red LED will blink three times while the network exclusion successful.",
+		"reset": "Press the test key five times while installing battery.\nNote: Use this procedure only in the event that primary controller is lost."
 	}
 }
