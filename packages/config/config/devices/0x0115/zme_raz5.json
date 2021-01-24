@@ -1,6 +1,6 @@
 // Z-Wave.Me Razberry500
 // Razberry500
-			{
+{
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
 	"label": "Razberry500",
@@ -9,10 +9,7 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0001",
-			"zwaveAllianceId": [
-				1150,
-				1260
-			]
+			"zwaveAllianceId": [1150, 1260]
 		}
 	],
 	"firmwareVersion": {
