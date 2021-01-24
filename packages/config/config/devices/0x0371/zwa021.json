@@ -98,7 +98,7 @@
 			]
 		},
 		"5": {
-			"label": "Measured  Temperature",
+			"label": "Measured Temperature",
 			"description": "Measured Temperature report. Reporting Delta in 1/10 Celsius. '0' to disable reporting.",
 			"unit": "1/10 °C",
 			"valueSize": 1,

@@ -30,7 +30,7 @@
 		},
 		"2": {
 			"label": "Control Mode",
-			"description": "Control  other  devices  or  issue  various  scene activation...",
+			"description": "Control other devices or issue various scene activation...",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

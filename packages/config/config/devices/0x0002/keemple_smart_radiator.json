@@ -1,10 +1,10 @@
 // Danfoss Keemple smart radiator
-// Electronic radiator thermostat,  intended for use with water based room radiators.
+// Electronic radiator thermostat, intended for use with water based room radiators.
 {
 	"manufacturer": "Danfoss",
 	"manufacturerId": "0x0002",
 	"label": "Keemple smart radiator",
-	"description": "Electronic radiator thermostat,  intended for use with water based room radiators.",
+	"description": "Electronic radiator thermostat, intended for use with water based room radiators.",
 	"devices": [
 		{
 			"productType": "0x6fff",

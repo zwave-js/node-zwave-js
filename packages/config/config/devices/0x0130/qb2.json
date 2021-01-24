@@ -1,10 +1,10 @@
 // Quby QB2
-// Quby  Energy Display
+// Quby Energy Display
 {
 	"manufacturer": "Quby",
 	"manufacturerId": "0x0130",
 	"label": "QB2",
-	"description": "Quby  Energy Display",
+	"description": "Quby Energy Display",
 	"devices": [
 		{
 			"productType": "0x0001",

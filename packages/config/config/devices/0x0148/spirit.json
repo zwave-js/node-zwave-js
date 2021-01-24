@@ -103,7 +103,7 @@
 			]
 		},
 		"5": {
-			"label": "Measured  Temperature report",
+			"label": "Measured Temperature report",
 			"description": "Measured Temperature report",
 			"unit": "°C",
 			"valueSize": 1,
@@ -115,7 +115,7 @@
 			"allowManualEntry": true
 		},
 		"6": {
-			"label": "Valve opening  percentage report",
+			"label": "Valve opening percentage report",
 			"description": "Valve opening percentage report",
 			"unit": "%",
 			"valueSize": 1,

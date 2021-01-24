@@ -1,10 +1,10 @@
 // Qees P321I
-// QEES  MyKey Remote US
+// QEES MyKey Remote US
 {
 	"manufacturer": "Qees",
 	"manufacturerId": "0x0095",
 	"label": "P321I",
-	"description": "QEES  MyKey Remote US",
+	"description": "QEES MyKey Remote US",
 	"devices": [
 		{
 			"productType": "0x3201",

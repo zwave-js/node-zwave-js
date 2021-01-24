@@ -19,6 +19,6 @@
 	"metadata": {
 		"inclusion": "1. Put the controller into ADD device mode. Follow the instructions provided by the controller manufacturer.2. Touch and hold any key on the panel for more than 5 seconds. All indication lights will blink in blue color. At this point release the key, the touch panel will start the inclusion process.",
 		"exclusion": "1. Put the controller into REMOVE device mode. Follow the instructions provided by the controller manufacturer.2. Touch and hold any key on the panel for more than 5 seconds. All indication lights will blink in blue color. At this point release the key, the touch panel will start the exclusion process.",
-		"reset": "Using a screwdriver press the config button 5 times.  All indication lights will blink in red color. Touch panel will start local reset. Touch panel switch will erase network inclusion state after local reset. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"reset": "Using a screwdriver press the config button 5 times. All indication lights will blink in red color. Touch panel will start local reset. Touch panel switch will erase network inclusion state after local reset. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
 	}
 }

@@ -98,7 +98,7 @@
 		},
 		"6": {
 			"label": "Power Report Percentage Threshold",
-			"description": "Mini Plug to report energy usage  percentage rate.",
+			"description": "Mini Plug to report energy usage percentage rate.",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
@@ -130,7 +130,7 @@
 			]
 		},
 		"8": {
-			"label": "Auto Turn-Off Timer  Enable",
+			"label": "Auto Turn-Off Timer Enable",
 			"description": ": Use this parameter to enable or disable the auto turn-off timer function",
 			"valueSize": 1,
 			"minValue": 0,

@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "•To add the unit to the network, put the controller (purchased separately) into the pairing/add/inclusion mode and then press and hold the inclusion/exclusion button on the side of the detector for at least 5 seconds.  The blue light will begin to flash to indicate it’s in the pairing mode.  When the blue light goes solid, the unit has been included in the network.  If the blue light is not illuminated, the unit is not part of a network",
-		"exclusion": "•To remove the unit from a network put the controller (purchased separately) into the pairing/removal/exclusion mode and then press and hold the inclusion/exclusion button on the side of the detector for at least 5 seconds.  The blue light will begin to flash and will go out when the device is removed from the network",
-		"reset": "•This device will perform a Z-Wave factory reset when the exclusion process stated above is followed.  Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"inclusion": "•To add the unit to the network, put the controller (purchased separately) into the pairing/add/inclusion mode and then press and hold the inclusion/exclusion button on the side of the detector for at least 5 seconds. The blue light will begin to flash to indicate it’s in the pairing mode. When the blue light goes solid, the unit has been included in the network. If the blue light is not illuminated, the unit is not part of a network",
+		"exclusion": "•To remove the unit from a network put the controller (purchased separately) into the pairing/removal/exclusion mode and then press and hold the inclusion/exclusion button on the side of the detector for at least 5 seconds. The blue light will begin to flash and will go out when the device is removed from the network",
+		"reset": "•This device will perform a Z-Wave factory reset when the exclusion process stated above is followed. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

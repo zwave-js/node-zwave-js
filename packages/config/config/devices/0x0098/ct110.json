@@ -359,8 +359,8 @@
 			"allowManualEntry": true
 		},
 		"10[0x0fff0000]": {
-			"label": "Temperature Reporting Filter  (upper bound)",
-			"description": "Temperature Reporting Filter  (upper bound)",
+			"label": "Temperature Reporting Filter (upper bound)",
+			"description": "Temperature Reporting Filter (upper bound)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 124,

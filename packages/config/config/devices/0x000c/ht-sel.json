@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Please use this procedure only as a last resort as existing nodes in the network will be orphaned and unable to be controlled.Access the Interfaces page from the UI.  Click on the Z-Wave plug-in link on the interfaces page to be taken to the diagnostics page for the plug-in, then press the Factory Reset button at the top of the page."
+		"reset": "Please use this procedure only as a last resort as existing nodes in the network will be orphaned and unable to be controlled.Access the Interfaces page from the UI. Click on the Z-Wave plug-in link on the interfaces page to be taken to the diagnostics page for the plug-in, then press the Factory Reset button at the top of the page."
 	}
 }

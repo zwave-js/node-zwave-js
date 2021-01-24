@@ -1,10 +1,10 @@
 // Willis Electric Co., Ltd. ZW78S
-// In-line, in-wall  110v Z-Wave power switch
+// In-line, in-wall 110v Z-Wave power switch
 {
 	"manufacturer": "Willis Electric Co., Ltd.",
 	"manufacturerId": "0x015d",
 	"label": "ZW78S",
-	"description": "In-line, in-wall  110v Z-Wave power switch",
+	"description": "In-line, in-wall 110v Z-Wave power switch",
 	"devices": [
 		{
 			"productType": "0x0115",

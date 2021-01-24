@@ -111,8 +111,8 @@
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Interval between temperature  readings",
-			"description": "Interval between temperature  readings",
+			"label": "Interval between temperature readings",
+			"description": "Interval between temperature readings",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,

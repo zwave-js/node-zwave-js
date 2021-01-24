@@ -19,7 +19,7 @@
 	"paramInformation": {
 		"1": {
 			"label": "Wind Speed Action Threshold",
-			"description": "Available Parameters: 0  - Off 1 - 30 in milliseconds Default = 6 m/s",
+			"description": "Available Parameters: 0 - Off 1 - 30 in milliseconds Default = 6 m/s",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,

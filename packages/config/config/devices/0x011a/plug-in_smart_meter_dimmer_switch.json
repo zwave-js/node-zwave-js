@@ -80,8 +80,8 @@
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Accumulated Autosend Interval (  METER_REPORT)",
-			"description": "Accumulated Autosend Interval (  METER_REPORT)",
+			"label": "Accumulated Autosend Interval ( METER_REPORT)",
+			"description": "Accumulated Autosend Interval ( METER_REPORT)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -81,7 +81,7 @@
 			]
 		},
 		"5": {
-			"label": "Type of alarm frame for 1st  group (FLOOD)",
+			"label": "Type of alarm frame for 1st group (FLOOD)",
 			"description": "Command frame sent by the Sensor in case flooding",
 			"valueSize": 1,
 			"minValue": 0,
@@ -336,7 +336,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Default  (flood detection, reactions)",
+					"label": "Default (flood detection, reactions)",
 					"value": 0
 				},
 				{

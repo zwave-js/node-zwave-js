@@ -251,7 +251,7 @@
 		},
 		"37[0xe0]": {
 			"label": "Time Base of Color Change Speed",
-			"description": "Applies only when the Color Transition Style is  set to Fade Out/In",
+			"description": "Applies only when the Color Transition Style is set to Fade Out/In",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2,

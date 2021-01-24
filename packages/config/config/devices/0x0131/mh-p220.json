@@ -116,7 +116,7 @@
 		},
 		"4": {
 			"label": "ALL ON / ALL OFF",
-			"description": "forbid/allow  ALL ON/ALL OFF",
+			"description": "forbid/allow ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

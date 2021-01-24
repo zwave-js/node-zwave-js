@@ -1,5 +1,5 @@
 // LS Control ES861C
-//  Setpoint sensor
+// Setpoint sensor
 {
 	"manufacturer": "LS Control",
 	"manufacturerId": "0x0071",

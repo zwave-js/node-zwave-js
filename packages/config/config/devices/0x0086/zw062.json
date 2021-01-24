@@ -1,10 +1,10 @@
 // AEON Labs ZW062
-// Aeon Labs Garage Door Controller  Gen5
+// Aeon Labs Garage Door Controller Gen5
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
 	"label": "ZW062",
-	"description": "Aeon Labs Garage Door Controller  Gen5",
+	"description": "Aeon Labs Garage Door Controller Gen5",
 	"devices": [
 		{
 			"productType": "0x0003",

@@ -1,10 +1,10 @@
 // Dragon Tech Industrial, Ltd. HS-DTA19+
-// HomeSeer  Smart Bulb
+// HomeSeer Smart Bulb
 {
 	"manufacturer": "Dragon Tech Industrial, Ltd.",
 	"manufacturerId": "0x0184",
 	"label": "HS-DTA19+",
-	"description": "HomeSeer  Smart Bulb",
+	"description": "HomeSeer Smart Bulb",
 	"devices": [
 		{
 			"productType": "0x4754",
@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "1. Turn Off power to the light bulb socket2. Screw in the light bulb3. Place your network controller into inclusion mode by following the controller manufacturer's instructions4. Turn On power to the light bulb.  If successful, the LED light bulb will flash twice to indicate successful inclusion.5. If the controller/gateway shows it was a fail, repeat the procedure.Note: If Inclusion still fails after the 2nd attempt, you need to first RESET the Smart Bulb before repeating the above steps.",
-		"exclusion": "1. Turn off power to the light bulb socket2. Follow the network controller instruction to place your network controller into exclusion mode to remove the light bulb from the network.3. After being prompted by the network controller, turn On power to the light bulb.  If successful, the LED light bulb will flash twice to indicate successful inclusion.",
-		"reset": "You may manually reset the light bulb as follows:1.  Flick the wall switch “OFF-ON” 4 times within 4 seconds. 2. The Smart Bulb will flash twice after Reset is successful.  Use this procedure only in the event that the network primary controller is lost or otherwise inoperable."
+		"inclusion": "1. Turn Off power to the light bulb socket2. Screw in the light bulb3. Place your network controller into inclusion mode by following the controller manufacturer's instructions4. Turn On power to the light bulb. If successful, the LED light bulb will flash twice to indicate successful inclusion.5. If the controller/gateway shows it was a fail, repeat the procedure.Note: If Inclusion still fails after the 2nd attempt, you need to first RESET the Smart Bulb before repeating the above steps.",
+		"exclusion": "1. Turn off power to the light bulb socket2. Follow the network controller instruction to place your network controller into exclusion mode to remove the light bulb from the network.3. After being prompted by the network controller, turn On power to the light bulb. If successful, the LED light bulb will flash twice to indicate successful inclusion.",
+		"reset": "You may manually reset the light bulb as follows:1. Flick the wall switch “OFF-ON” 4 times within 4 seconds. 2. The Smart Bulb will flash twice after Reset is successful. Use this procedure only in the event that the network primary controller is lost or otherwise inoperable."
 	}
 }

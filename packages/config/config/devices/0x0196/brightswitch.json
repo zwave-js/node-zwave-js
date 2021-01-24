@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "From the main screen select Gear, then Connections, then Z-Wave, then \"Edit *name*'s Network\" (name is the name of the network). Next, select either \"Z-Wave Reset *name*\" or \"Delete Entire *name*'s Network\".  Please note this process will break connections to all Z-Wave devices and they will need to be removed or reset individually before they can be added to another network.  Also note that selecting \"Delete Entire *name*'s Network\" will instruct other Brightswitches on the network to reset their own Z-Wave processors, clearing all associations. Therefore please only use the reset is the primary controller is missing or inoperable."
+		"reset": "From the main screen select Gear, then Connections, then Z-Wave, then \"Edit *name*'s Network\" (name is the name of the network). Next, select either \"Z-Wave Reset *name*\" or \"Delete Entire *name*'s Network\". Please note this process will break connections to all Z-Wave devices and they will need to be removed or reset individually before they can be added to another network. Also note that selecting \"Delete Entire *name*'s Network\" will instruct other Brightswitches on the network to reset their own Z-Wave processors, clearing all associations. Therefore please only use the reset is the primary controller is missing or inoperable."
 	}
 }

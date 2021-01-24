@@ -612,7 +612,7 @@
 		},
 		"158": {
 			"label": "1st ch – Double Click value sent to 2nd/3rd",
-			"description": "First channel – Double Click  value sent to 2nd and 3rd association groups",
+			"description": "First channel – Double Click value sent to 2nd and 3rd association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,

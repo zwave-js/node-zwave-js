@@ -52,7 +52,7 @@
 		},
 		"40": {
 			"label": "Reporting on power change",
-			"description": "This parameter is valid for Active Powers Total, Phase1,  Phase2 and Phase3.",
+			"description": "This parameter is valid for Active Powers Total, Phase1, Phase2 and Phase3.",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -89,7 +89,7 @@
 		},
 		"43": {
 			"label": "Other Values - Reporting on time interval",
-			"description": "Energy reports for  Voltage, Current, Total Power Factor, Total Reactive Power",
+			"description": "Energy reports for Voltage, Current, Total Power Factor, Total Reactive Power",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,

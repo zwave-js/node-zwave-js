@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "1 For proper inclusion, bring the Water Main Shut-Off to the final location where it will be used. *2 Follow the instructions for your Z-Wave controller to enter inclusion mode.3 Make sure the Water Main Shut-Off is powered on, and when prompted by your controller, press the “open/close” button quickly 3 times in a row.  The LED will stop blinking and stay on continuously upon successful inclusion.*For non Z-Wave Plus networks, please consult the owner’s manual for your primary controller to determine the best method and location for adding the Water Main Shut-Off to your Z-Wave network.",
+		"inclusion": "1 For proper inclusion, bring the Water Main Shut-Off to the final location where it will be used. *2 Follow the instructions for your Z-Wave controller to enter inclusion mode.3 Make sure the Water Main Shut-Off is powered on, and when prompted by your controller, press the “open/close” button quickly 3 times in a row. The LED will stop blinking and stay on continuously upon successful inclusion.*For non Z-Wave Plus networks, please consult the owner’s manual for your primary controller to determine the best method and location for adding the Water Main Shut-Off to your Z-Wave network.",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified Controller to enter exclusion mode. 2. When prompted, press the “open/close” button on the Shut-Off quickly 3 times in a row.",
-		"reset": "Press and hold the open/close button for at least 10 seconds then release.  The Shut-Off’s memory will be erased to factory settings.  A flashing light indicates a successful factory reset.  Beware that resetting your device will disconnect it from your system. Only do this if the controller is missing or otherwise unreachable!"
+		"reset": "Press and hold the open/close button for at least 10 seconds then release. The Shut-Off’s memory will be erased to factory settings. A flashing light indicates a successful factory reset. Beware that resetting your device will disconnect it from your system. Only do this if the controller is missing or otherwise unreachable!"
 	}
 }

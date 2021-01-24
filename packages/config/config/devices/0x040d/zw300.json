@@ -19,6 +19,6 @@
 	"metadata": {
 		"inclusion": "Tap \"add device\" on your app, then tap enter to lock.Enter programming code -> confirm -> Enter 9 -> confirmIf you hear 2 long beeps from your lock the programming was successful.If you hear short 3 beeps from your lock you must start over again.",
 		"exclusion": "Tap \"remove device\" on your app, then tap enter to lock.Enter programming code -> confirm -> Enter 9 -> confirmIf you hear 2 long beeps from your lock the programming was successful.If you hear short 3 beeps from your lock you must start over again.",
-		"reset": "Press the R button for more than 5 seconds; the programming is reset back to the original factory codes once you hear 3 long beeps.  Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"reset": "Press the R button for more than 5 seconds; the programming is reset back to the original factory codes once you hear 3 long beeps. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
 	}
 }

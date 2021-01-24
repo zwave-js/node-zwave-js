@@ -150,7 +150,7 @@
 					"value": 2
 				},
 				{
-					"label": "Input I1 doesn't  influence the process",
+					"label": "Input I1 doesn't influence the process",
 					"value": 32767
 				}
 			]
@@ -167,7 +167,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Input I2 influences  cooling with condense sensor",
+					"label": "Input I2 influences cooling with condense sensor",
 					"value": 2000
 				},
 				{
@@ -589,7 +589,7 @@
 					"value": 8
 				},
 				{
-					"label": "temperature & setpoint  from ext batt sensor",
+					"label": "temperature & setpoint from ext batt sensor",
 					"value": 10
 				}
 			]

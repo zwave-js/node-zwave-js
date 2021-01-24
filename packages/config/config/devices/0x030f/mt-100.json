@@ -108,7 +108,7 @@
 		},
 		"7": {
 			"label": "Light Sensor Polling Interva Time",
-			"description": "Set the light sensor measure ambient illumination level  interval time",
+			"description": "Set the light sensor measure ambient illumination level interval time",
 			"unit": "Second",
 			"valueSize": 2,
 			"minValue": 60,

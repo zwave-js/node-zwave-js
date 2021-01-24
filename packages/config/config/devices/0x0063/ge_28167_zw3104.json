@@ -76,7 +76,7 @@
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Dim Timing  (When Manually Controlled)",
+			"label": "Dim Timing (When Manually Controlled)",
 			"description": "Dim Rate Adjustments (When Manually Controlled)",
 			"valueSize": 2,
 			"minValue": 1,

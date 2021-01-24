@@ -142,7 +142,7 @@
 		},
 		"102": {
 			"label": "Reports for Group 2",
-			"description": "Which reports sent automatically  for group 2",
+			"description": "Which reports sent automatically for group 2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
