@@ -63,6 +63,7 @@
 			"label": "Temperature reporting intervals",
 			"description": "Define the time interval for the temperature report that is sent.",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 0,
