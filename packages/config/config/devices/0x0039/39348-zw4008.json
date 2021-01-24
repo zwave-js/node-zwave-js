@@ -1,5 +1,3 @@
-// Honeywell 39348/ZW4008
-// 39348 / ZW4008 In-Wall Smart Switch
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
@@ -84,13 +82,5 @@
 				}
 			]
 		}
-	},
-	"compat": {
-		"disableBasicMapping": true
-	},
-	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the top or bottom of the wireless smart switch (rocker) to add it in the network. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the top or bottom of the wireless smart switch (rocker) to remove it from the network",
-		"reset": "Quickly press ON (top) button 3 times, then, immediately press the OFF (bottom) button 3 times. The LED will flash ON/OFF 5 times when completed successfully. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }

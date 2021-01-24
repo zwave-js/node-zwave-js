@@ -1,7 +1,5 @@
-// AcTEC (Fuzhou) Electronics Co., Ltd. 1414140
-// Q-Light Puck
 {
-	"manufacturer": "AcTEC (Fuzhou) Electronics Co., Ltd.",
+	"manufacturer": "Q-light",
 	"manufacturerId": "0x0433",
 	"label": "Z-Wave Puck",
 	"description": "Q-Light Puck",
@@ -222,10 +220,5 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"metadata": {
-		"inclusion": "Classic Learn Mode: 1. Place the Z-Wave Puck within the direct range of your Z-Wave controller. 2. Identify switch S1/S2 (turns the light on) or the Internal button (located on the device’s housing). 3. Set the main controller in (security/non-security) add mode (see the controller’s manual). 4. Quickly, three times press switch S1 / S2 or Internal button. 5. Wait for the adding process to end. 6. Successful adding will be confirmed by the Z-Wave controller’s message",
-		"exclusion": "Removing (Exclusion): Allowing to remove the Z-Wave device from existing Z-Wave network. 1. Place the Z-Wave Puck within the direct range of your Z-Wave controller. 2. Identify switch S1/S2 (turns the light on) or the Internal button (located on the device’s housing). 3. Set the main controller in (security/non-security) add mode (see the controller’s manual). 4. Quickly, three times press switch S1 / S2 or Internal button. 5. Wait for the removing process to end",
-		"reset": "Resetting the Z-Wave Puck: 1. Quickly, nine times press switch S1 / S2 or Internal button. 2. Wait for the resetting process to end, which is signaled with the LED indicator blinks 20 times. Device reset status: Turn on the light at maximum brightness. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

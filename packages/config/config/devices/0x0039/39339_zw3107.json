@@ -108,13 +108,5 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"compat": {
-		"disableBasicMapping": true
-	},
-	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the smart dimmer to the Z-Wave network. 2. Once the controller is ready to add your smart dimmer, single press and release the manual/program button on the smart dimmer to add it in the network. Please reference the controller/gateway’s manual for instructions",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the manual/program button on the smart dimmer to remove it from the network",
-		"reset": "To return your dimmer to factory defaults: 1. If plugged in, unplug the dimmer from the receptacle. 2. Press and hold the top button for at least 3 seconds while you plug the dimmer into a receptacle. Note: This should only be used in the event your networks’ primary controller is missing or otherwise inoperable"
 	}
 }

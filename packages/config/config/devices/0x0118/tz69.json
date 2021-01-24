@@ -102,7 +102,6 @@
 			"description": "Above this level, switch enters overload mode",
 			"unit": "Watt",
 			"valueSize": 2,
-			"unit": "W",
 			"minValue": 10,
 			"maxValue": 3000,
 			"defaultValue": 3000,
@@ -122,10 +121,5 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"metadata": {
-		"inclusion": "1. have your Z-Wave controller entered inclusion mode 2. press the socket on/off button three times within 1.5 seconds will be included",
-		"exclusion": "1. have your Z-Wave controller entered exclusion mode 2. press the socket on/off button three times within 1.5 seconds will be excluded",
-		"reset": "1. press the socket on/off button three times within 1.5 seconds 2. then the fourth time press and hold for seconds until the socket LED is off 3. the socket reset successfully Use the \"\"Reset\"\" procedure only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }

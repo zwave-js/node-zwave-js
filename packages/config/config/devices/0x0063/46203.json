@@ -57,12 +57,6 @@
 		}
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true,
-		"disableBasicMapping": true
-	},
-	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press up and release the toggle",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press up and release the toggle",
-		"reset": "Quickly press ON (up) button three times then immediately press the OFF (down) button three times"
+		"treatBasicSetAsEvent": true
 	}
 }

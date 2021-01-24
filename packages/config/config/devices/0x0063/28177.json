@@ -39,13 +39,5 @@
 				}
 			]
 		}
-	},
-	"compat": {
-		"disableBasicMapping": true
-	},
-	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-wave certified controller to add the device to the Z-wave network. 2. Once the controller is ready to add your smart switch, single press and release the manual/program button on the smart switch to add it in the network. 3. Once your controller has confirmed that the smart switch has been added, refresh the Z-wave network to optimize performance.",
-		"exclusion": "1. Follow the instructions for your Z-wave certified controller to remove a device from the Z-wave network. 2. Once the controller is ready to remove your device, press and release the manual/program button on the smart switch to remove it from the network",
-		"reset": "1. If plugged in, unplug the Switch from the receptacle. 2. Press and hold the top button for at least 3 seconds while you plug the switch into a receptacle. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }

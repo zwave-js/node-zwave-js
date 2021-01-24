@@ -42,13 +42,5 @@
 				}
 			]
 		}
-	},
-	"compat": {
-		"disableBasicMapping": true
-	},
-	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include the device to the Z-wave network. 2. Once the controller is ready to include your smart switch, single press and release the manual/program button on the smart dimmer to include it in the network. 3. Once your controller has confirmed that the smart switch has been included, refresh the Z-wave network to optimize performance.",
-		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network. 2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart switch to exclude it from the network.",
-		"reset": "1. If plugged in, unplug the Switch from the receptacle. 2. Press and hold the top button for at least 3 seconds while you plug the switch into a receptacle. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable."
 	}
 }

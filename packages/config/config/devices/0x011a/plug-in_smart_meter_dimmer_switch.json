@@ -132,10 +132,5 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"metadata": {
-		"inclusion": "While the gateway/remote is in the adding mode and the blue LED blinks on the ZWN-323M, flicks the program button 3 times in the 1.5 second. The gateway or remote will verify the adding, assign a node ID number for the module",
-		"exclusion": "While the gateway or remote in the removing mode, flicks the program button 3 times in the 1.5 second. The gateway or remote will verify the deleting, remove the module from the current Z-Wave network, and the LED will blink when the module is on power",
-		"reset": "Flicks the program button 3 times in the 1.5 second then press once and hold for 2 second.the device will send a device reset locally notification to controller. Then clear all of information for the network, and restore factory defaults, and reset the module. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }

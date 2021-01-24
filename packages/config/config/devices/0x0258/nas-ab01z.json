@@ -120,10 +120,5 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"metadata": {
-		"inclusion": "In the front casing, there is button that is used to carry out include, exclude or reset factory default settings on PCB Board. When power is first supplied, the LED will flash on and off alternately at one second intervals within 5 seconds if the detector has not been added a Z‐Wave network. Please get familiar with the terms below before starting the operations. This product can be included and operated in any Z‐Wave network with other Z‐Wave certified devices from other manufacturers and/or other applications. All non‐battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network",
-		"exclusion": "1. Remove the siren cover. 2. Make sure the siren is powered. 3. Set Z‐Wave controller or Z‐Wave gateway into inclusion mode (Refer to the controller or gateway operating manual) 4. Press the button three times within 1.5 second, the device will enter inclusion mode. And the LED will flash on and off alternately five times. Note: If siren has not been added to Z‐wave network, the siren will enter inclusion mode automatically when it is powered on. You should let the controller enter into inclusion first before power on the siren in order to run this function",
-		"reset": "Reset procedure will delete all information on the Z‐Wave network and Z‐Wave controller or Z‐Wave Gateway, and restore the siren to factory default settings. 1. Remove the device cover. 2. Make sure the siren is powered. 3. Press and hold the button for 10 seconds, led will blink once. 4. Release the button. Note: to use the reset procedure only when the primary controller is missing or inoperable"
 	}
 }

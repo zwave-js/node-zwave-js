@@ -172,10 +172,5 @@
 				}
 			]
 		}
-	},
-	"metadata": {
-		"inclusion": "Set your controller in add or remove mode (see your controller’s manual). Follow the instruction below for Wake up. A long LED blink indicates that the add/remove was successful. To wake up Strips manually for communication with the Z-Wave controller, move the magnet towards and away from the rounded edge. Repeat 3 times.",
-		"exclusion": "Set your controller in add or remove mode (see your controller’s manual). Follow the instruction below for Wake up. A long LED blink indicates that the add/remove was successful. To wake up Strips manually for communication with the Z-Wave controller, move the magnet towards and away from the rounded edge. Repeat 3 times.",
-		"reset": "You may need to reset Strips if your Z-Wave controller is missing or not responding. Follow the instructions for “Wake up” above, but on the 3rd repetition, keep the magnet at the rounded edge for 10 seconds. A long LED signal indicates success"
 	}
 }

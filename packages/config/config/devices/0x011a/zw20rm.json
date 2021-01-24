@@ -132,10 +132,5 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"metadata": {
-		"inclusion": "Once program button is pressed and hold for 3 second, the device will enter into learn mode to accomplish adding or removing by controller. Refer to the instruction for your primary controller to access the setup function and add or remove devices",
-		"exclusion": "Once program button is pressed and hold for 3 second, the device will enter into learn mode to accomplish adding or removing by controller. Refer to the instruction for your primary controller to access the setup function and add or remove devices",
-		"reset": "Once program button is pressed and hold for 10 second, the device will send a device reset locally notification to controller. Then clear all of information for the network, and restore factory defaults, and reset the module. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
 	}
 }
