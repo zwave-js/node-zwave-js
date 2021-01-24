@@ -1,6 +1,6 @@
 // Essence Security ES800ZWP_EU_MXX
 // Z-Wave extender
-{
+			{
 	"manufacturer": "Essence Security",
 	"manufacturerId": "0x0160",
 	"label": "ES800ZWP_EU_MXX",
@@ -9,7 +9,12 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0001",
-			"zwaveAllianceId": [2311, 2329, 2386, 2387]
+			"zwaveAllianceId": [
+				2311,
+				2329,
+				2386,
+				2387
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -17,6 +22,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Restoring factory settings returns your Z-Wave Plus Extender to its default settings and removes Z-Wave device definitions.Please use this procedure only when the network primary controller is missing or otherwise inoperable.To restore factory settings:1.Tap . The main menu appears.2.Tap Settings. The Settings menu appears.Tap Z-Wave. The Z-Wave screen appears.Tap Reset to Factory."
+		"reset": "Restoring factory settings returns your Z-Wave Plus Extender to its default settings and removes Z-Wave device definitions.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable.\n\nTo restore factory settings:\n\n1. Tap . The main menu appears.\n\n2. Tap Settings. The Settings menu appears.\n\nTap Z-Wave. The Z-Wave screen appears.\n\nTap Reset to Factory"
 	}
 }

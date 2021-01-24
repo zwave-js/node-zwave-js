@@ -1,6 +1,6 @@
 // Milanity, Inc. NLMN11
 // Milan Infoway
-{
+			{
 	"manufacturer": "Milanity, Inc.",
 	"manufacturerId": "0x0238",
 	"label": "NLMN11",
@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "If you need to reset the controller to Factory Default, click on \"Settings\" and click on \"Network Management Basic\" and click on \"Controller Reset\" in Milan Infoway Configuration software. Please refer Milan Configuration Guide for further details."
+		"reset": "If you need to reset the controller to Factory Default, click on \"Settings\" and click on \"Network Management Basic\" and click on \"Controller Reset\" in Milan Infoway Configuration software. Please refer Milan Configuration Guide for further details"
 	}
 }
