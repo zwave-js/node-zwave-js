@@ -1,0 +1,57 @@
+// Vision Security ZL7261DE
+// Plug-in On/Off Energy Monitor Module
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZL7261DE",
+	"description": "Plug-in On/Off Energy Monitor Module",
+	"devices": [
+		{
+			"productType": "0x201a",
+			"productId": "0x1a02",
+			"zwaveAllianceId": 1071
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Auto report timing",
+			"description": "The number of seconds desired between automatic meter reports",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 60,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Report when Watt change",
+			"description": "The number of watts change to cause reports to be sent",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 50,
+			"defaultValue": 50,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZL7261 into your controller. To get in the “Inclusion” mode, the distance between ZL7261 and controller is suggested to be in one meter. By power up to get included for first time, or press the Program switch (The LED at the top of plug-in) 3 times within 2 seconds to be included",
+		"exclusion": "For “Exclusion” from (removing from) a network: Set up the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZL7261 from your controller. Press the Program Switch (The LED at the top of plug-in) 3 times within 2 seconds to be excluded",
+		"reset": "Reset: Press the Program Switch (The LED at the top of plug-in) then power on (plug-in) and hold for 5 seconds before release the switch. Noticed: only use Reset for the situation where the primary controller is inoperable or lost"
+	}
+}

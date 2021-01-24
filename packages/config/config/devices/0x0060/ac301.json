@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0015",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 3772
 		}
 	],
 	"firmwareVersion": {
@@ -25,21 +26,22 @@
 	"paramInformation": {
 		"1": {
 			"label": "Temperature Auto Report period setting",
-			"description": "Temperature Auto Report period setting",
-			"unit": "minutes",
+			"description": "1~255(min)",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 120,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"2": {
 			"label": "Temperature offset for internal sensor",
-			"description": "Temperature offset for internal sensor (-80~+80 Offsets the measured temperature by -8.0°C~+8.0°C)",
+			"description": "-80~+80 offsets the measured temperature by -8.0℃~+8.0℃",
 			"valueSize": 1,
-			"unit": "1/10 °C",
+			"unit": "°C",
 			"minValue": -80,
 			"maxValue": 80,
 			"defaultValue": 0,
@@ -49,50 +51,54 @@
 		},
 		"3": {
 			"label": "Maximum Set point value",
-			"description": "Maximum Set point value",
+			"description": "5~35 for 5℃~35℃",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 5,
 			"maxValue": 35,
 			"defaultValue": 35,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"4": {
 			"label": "Minimum Set point value",
-			"description": "Minimum Set point value",
+			"description": "5~35 for 5℃~35℃",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 5,
 			"maxValue": 35,
 			"defaultValue": 5,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"5": {
 			"label": "Frost protection temperature",
-			"description": "Frost protection temperature",
+			"description": "5~15 for 5℃~15℃",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 5,
 			"maxValue": 15,
 			"defaultValue": 5,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"6": {
 			"label": "Open window detect function",
-			"description": "Open window detect function",
+			"description": "0: Disable;1: Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Disabled",
@@ -106,25 +112,28 @@
 		},
 		"7": {
 			"label": "Open window detect time period",
-			"description": "Open window detect time period",
-			"unit": "minutes",
+			"description": "2~30(min)",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 2,
 			"maxValue": 30,
 			"defaultValue": 15,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Open window detect temperature drop setting",
+			"label": "open window detect temperature drop setting",
+			"description": "4=2℃;5=2.5℃;6= 3℃;7=3.5℃;8=4℃",
 			"valueSize": 1,
 			"minValue": 4,
 			"maxValue": 8,
 			"defaultValue": 4,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "2 °C",
@@ -150,22 +159,39 @@
 		},
 		"9": {
 			"label": "Open window detect delay time select",
-			"description": "Open window detect delay time select",
-			"unit": "minutes",
+			"description": "10~60(min)",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 10,
 			"maxValue": 60,
 			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Manual Override takeover period",
+			"description": "1~48 means 30mins to 24hrs",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 8,
+			"defaultValue": 8,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	},
 	"compat": {
-		// This device only accepts Thermostat Setpoint Set commands with a specific float encoding
 		"overrideFloatEncoding": {
 			"precision": 1,
 			"size": 2
 		}
+	},
+	"metadata": {
+		"inclusion": "1. Put the Z-Wave Controller into inclusion mode. 2. Press the P button 3 times within 1.5 seconds to put the unit into inclusion mode.",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode. 2. Press the P button 3 times within 1.5 seconds to put the unit into exclusion mode.",
+		"reset": "1. Press the P button 3 times within 1.5 seconds to put the unit into exclusion mode. 2. Within 1 second of step 1, press the button P again and hold for 5 seconds. 3. Node ID is excluded. The device reverts to factory default state. ((This procedure should only be used when the controller is inoperable.))"
 	}
 }

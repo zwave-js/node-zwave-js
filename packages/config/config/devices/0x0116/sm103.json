@@ -1,14 +1,15 @@
-// Chromagic Technologies Corporation SM103
+// Chromagic Technologies Corporation HSP02
 // Door/Window Contact
 {
 	"manufacturer": "Chromagic Technologies Corporation",
 	"manufacturerId": "0x0116",
-	"label": "SM103",
+	"label": "HSP02",
 	"description": "Door/Window Contact",
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 606
 		}
 	],
 	"firmwareVersion": {

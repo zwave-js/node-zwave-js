@@ -1,34 +1,36 @@
-// GE/Jasco 14292
+// GE/Jasco 14292/ZW4003
 // In-Wall Toggle Switch
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14292",
+	"label": "14292/ZW4003",
 	"description": "In-Wall Toggle Switch",
 	"devices": [
 		{
 			"productType": "0x4952",
-			"productId": "0x3037"
+			"productId": "0x3037",
+			"zwaveAllianceId": [
+				1856,
+				2502
+			]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
-		// One entry for each association group
 		"1": {
-			"label": "Lifeline",
+			"label": "Group 1",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic - Local Load",
+			"label": "Group 2",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Basic - Double Tap", // required
+			"label": "Double Tap",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
@@ -36,27 +38,34 @@
 	"paramInformation": {
 		"4": {
 			"label": "Invert Switch",
-			"description": "Invert Switch",
+			"description": "If the switch is accidentally installed upside down with “On” at the bottom and “Off” at the top, the default On/Off rocker settings can be reversed by changing parameter 4’s value to “1”",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal Switch Install",
+					"label": "Default",
 					"value": 0
 				},
 				{
-					"label": "Inverted Switch Install",
+					"label": "Invert",
 					"value": 1
 				}
 			]
 		}
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"treatBasicSetAsEvent": true,
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network. 2. Once the controller is ready to include your device, press up and release on the toggle to include it in the network. 3. Once your controller has confirmed that the device has been included, refresh the Z-Wave network to optimize performance.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. 2. Once the controller is ready to exclude your device, press up and release on the toggle to exclude it from the network.",
+		"reset": "1. Quickly press ON (up) 3 times then immediately press the OFF (Down) button 3 times. Note: This should only be used in the event your networks primary controller is missing or otherwise inoperable."
 	}
 }

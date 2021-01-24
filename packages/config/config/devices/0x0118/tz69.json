@@ -1,14 +1,22 @@
-// TKB Home TZ69
+// TKB Home TZ69G
 // Smart meter switch
 {
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
-	"label": "TZ69",
+	"label": "TZ69G",
 	"description": "Smart meter switch",
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": [
+				1640,
+				1665,
+				1666,
+				1850,
+				1886,
+				1950
+			]
 		},
 		{
 			"productType": "0x0116",
@@ -76,8 +84,8 @@
 		"3": {
 			"label": "Watt Meter Report Period",
 			"description": "5s x 720 (default) = 3600s = 1 hour",
-			"unit": "5 seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 32767,
 			"defaultValue": 720,
@@ -88,8 +96,8 @@
 		"4": {
 			"label": "kWH Meter Report Period",
 			"description": "10m * 6 (default) = 60m = 1 hour",
-			"unit": "10 minutes",
 			"valueSize": 2,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 32767,
 			"defaultValue": 6,
@@ -100,8 +108,8 @@
 		"5": {
 			"label": "Threshold of Watt for Load Caution",
 			"description": "Above this level, switch enters overload mode",
-			"unit": "Watt",
 			"valueSize": 2,
+			"unit": "W",
 			"minValue": 10,
 			"maxValue": 3000,
 			"defaultValue": 3000,
@@ -112,7 +120,6 @@
 		"6": {
 			"label": "Threshold of kWH for Load Caution",
 			"description": "Over this level, unit with go into overload mode",
-			"unit": "kWH",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,
@@ -121,5 +128,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "1. have your Z-Wave controller entered inclusion mode 2. press the socket on/off button three times within 1.5 seconds will be included",
+		"exclusion": "1. have your Z-Wave controller entered exclusion mode 2. press the socket on/off button three times within 1.5 seconds will be excluded",
+		"reset": "1. press the socket on/off button three times within 1.5 seconds 2. then the fourth time press and hold for seconds until the socket LED is off 3. the socket reset successfully Use the \"\"Reset\"\" procedure only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }

@@ -1,36 +1,38 @@
-// GE/Jasco 14287 (ZW4002)
+// GE/Jasco 14287/ZW4002
 // In-Wall Smart Fan Control
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14287 (ZW4002)",
+	"label": "14287/ZW4002",
 	"description": "In-Wall Smart Fan Control",
 	"devices": [
 		{
 			"productType": "0x4944",
-			"productId": "0x3131"
+			"productId": "0x3131",
+			"zwaveAllianceId": [
+				2103,
+				2506
+			]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
-			"label": "Lifeline",
-			"maxNodes": 1,
+			"label": "Group 1",
+			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Controlled with local load",
-			"description": "Supports Basic Set and is controlled with the local load",
+			"label": "Group 2",
 			"maxNodes": 5
 		},
 		"3": {
 			"label": "Double Tap",
-			"description": "Supports Basic Set and is controlled by double pressing the On or Off button",
-			"maxNodes": 5
+			"maxNodes": 5,
+			"isLifeline": true
 		}
 	},
 	"paramInformation": {
@@ -39,7 +41,7 @@
 			"description": "Defines the behavior of the blue LED",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -62,10 +64,10 @@
 		},
 		"4": {
 			"label": "Invert Switch",
-			"description": "Invert the ON/OFF Switch State",
+			"description": "If the switch is accidentally installed upside down with “On” at the bottom and “Off” at the top, the default On/Off",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -73,17 +75,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Default",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Invert",
 					"value": 1
 				}
 			]
 		}
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"treatBasicSetAsEvent": true,
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network. 2. Once the controller is ready to include your device, press and release the top or bottom of the smart fan control switch (rocker) to include it in the network. 3. Once your controller has confirmed the device has been included, refresh the Z-Wave network to optimize performance",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. 2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart switch (rocker) to exclude it from the network",
+		"reset": "1. Quickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }

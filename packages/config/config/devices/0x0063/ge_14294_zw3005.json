@@ -8,146 +8,160 @@
 	"devices": [
 		{
 			"productType": "0x4944",
-			"productId": "0x3038"
+			"productId": "0x3038",
+			"zwaveAllianceId": [
+				1442,
+				2105
+			]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
-		// One entry for each association group
 		"1": {
-			"label": "Lifeline",
+			"label": "Group 1",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic - Local Load",
+			"label": "Group 2",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Basic - Double Tap", // required
+			"label": "Double Tap",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
 		"3": {
-			"label": "Night Light",
-			"description": "Defines the behavior of the blue LED. Default is on when switch is off.",
+			"label": "LED Light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when switch is OFF",
+					"label": "LED Light on when Z-Wave turned OFF (Default)",
 					"value": 0
 				},
 				{
-					"label": "LED on when switch is ON",
+					"label": "LED Light on when Z-Wave turned On",
 					"value": 1
 				},
 				{
-					"label": "LED always off",
+					"label": "LED Light always OFF",
 					"value": 2
 				}
 			]
 		},
 		"4": {
 			"label": "Invert Switch",
-			"description": "Invert the ON/OFF Switch State.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "(Default)",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Invert Switch",
 					"value": 1
 				}
 			]
 		},
 		"7": {
-			"label": "On/Off Command Dim Step",
-			"description": "Indicates how many levels the dimmer will change per step.",
+			"label": "Dim Rate Adjustments (From Z-Wave Controller)",
+			"description": "number of steps or levels",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "On/Off Command Dim Rate",
-			"description": "This sets how often the dim level will change.",
-			"valueSize": 2,
-			"minValue": 1,
+			"label": "Dim Rate Adjustments (From Z-Wave Controller)",
+			"description": "Timing of the steps",
+			"valueSize": 1,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Local Control Dim Step",
-			"description": "How many levels the dimmer will change for each step.",
+			"label": "Dim Rate Adjustments (When manually Controlled)",
+			"description": "number of steps or levels",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Local Control Dim Rate",
-			"description": "This sets how often the dim level will change.",
-			"valueSize": 2,
-			"minValue": 1,
+			"label": "Dim Rate Adjustments (When manually controlled)",
+			"description": "Timing of the steps",
+			"valueSize": 1,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "ALL ON/ALL OFF Dim Step",
-			"description": "How many levels the dimmer will change per step.",
+			"label": "Dim Rate Adjustments (When receiving All-On/All-Off command)",
+			"description": "number of steps or levels",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "ALL ON/ALL OFF Dim Rate",
-			"description": "This sets how often the dim level will change.",
-			"valueSize": 2,
-			"minValue": 1,
+			"label": "Dim Rate Adjustments (When receiving All-On/All-Off command)",
+			"description": "Timing of the steps",
+			"valueSize": 1,
+			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 1,
+			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"treatBasicSetAsEvent": true,
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include a device to the Z-wave network. 2. Once the controller is ready to include your device, press and release the top or bottom of the wireless smart switch(rocker) to include it in the network",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network. 2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart switch(rocker) to exclude it from the network.",
+		"reset": "1. Quickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully. Note: This should only be used in the event your networks primary controller is missing or otherwise inoperable."
 	}
 }

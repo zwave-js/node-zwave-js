@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0111",
-			"productId": "0x0201"
+			"productId": "0x0201",
+			"zwaveAllianceId": 1848
 		}
 	],
 	"firmwareVersion": {
@@ -35,12 +36,13 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "LED is on when load is on",
-			"description": "Synchronization of load power and LED indicator",
+			"label": "LEDdirect",
+			"description": "synchronization of load power and LED indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -132,5 +134,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "When the primary controller is in the adding mode, flicks the paddle 3 times in the 1.5 second. The primary controller will verify the adding, assign a node ID number for the module",
+		"exclusion": "When the primary controller is in the removing mode, flicks the paddle 3 times in the 1.5 second. The primary controller will verify the removing, remove the module from the current Z-Wave network, and the LED will blink when the module is on power",
+		"reset": "Flicks the program button 3 times in the 1.5 second then press once and hold for 2 second.the device will send a device reset locally notification to controller. Then clear all of information for the network, and restore factory defaults, and reset the module. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }

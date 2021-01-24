@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0005"
+			"productId": "0x0005",
+			"zwaveAllianceId": 979
 		}
 	],
 	"firmwareVersion": {
@@ -32,7 +33,6 @@
 		"1": {
 			"label": "True Period",
 			"description": "Timeout before unit transmits ON/OFF state after manual button press",
-			"unit": "100ms",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
@@ -44,7 +44,6 @@
 		"2": {
 			"label": "Send Basic Command to Group 2",
 			"description": "Configure the unit to send command to other devices in Grouping 2",
-			"unit": "integer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -66,7 +65,6 @@
 		"3": {
 			"label": "Meter Report Period (W)",
 			"description": "How often the meter should report load (W).",
-			"unit": "10s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3240,
@@ -78,7 +76,6 @@
 		"4": {
 			"label": "Meter Report Period (kWh)",
 			"description": "How often the meter should report load (kWh).",
-			"unit": "1min",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10080,

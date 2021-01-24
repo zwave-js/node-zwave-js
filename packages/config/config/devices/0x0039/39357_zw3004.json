@@ -1,97 +1,139 @@
-// Honeywell 39357 (ZW3004)
+// Honeywell 39357 / ZW3004
 // Z-Wave in-wall Smart Dimmer
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
-	"label": "39357 (ZW3004)",
+	"label": "39357 / ZW3004",
 	"description": "Z-Wave in-wall Smart Dimmer",
 	"devices": [
 		{
 			"productType": "0x4944",
-			"productId": "0x3130"
+			"productId": "0x3130",
+			"zwaveAllianceId": 2727
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"4": {
 			"label": "Invert Switch",
+			"description": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Default",
+					"value": 0
+				},
+				{
+					"label": "Invert",
+					"value": 1
+				}
+			]
 		},
 		"7": {
-			"label": "Z-Wave: Number of Steps or Levels",
-			"description": "Number of steps when set by controller",
-			"valueSize": 2,
-			"minValue": 1,
+			"label": "Dim Rate Adjustments",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Z-Wave: Timing of Steps or Levels",
-			"description": "Timing when set by controller",
+			"label": "Dim Rate Adjustments",
+			"description": "Timing of steps or levels",
 			"valueSize": 2,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Manual: Number of Steps or Levels",
-			"description": "Number of steps when using the switch",
-			"valueSize": 2,
-			"minValue": 1,
+			"label": "Dim Rate Adjustments",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Manual: Timing of Steps",
-			"description": "Timing of steps when using the switch",
+			"label": "Dim Rate Adjustments",
+			"description": "Timing of steps",
 			"valueSize": 2,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "All-On/All-Off: Number of Steps or Levels",
-			"description": "Number of steps when receiving all-on or all-off command",
-			"valueSize": 2,
-			"minValue": 1,
+			"label": "Dim Rate Adjustments",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "All-On/All-Off: Timing of Steps or Levels",
-			"description": "Timing of steps when receiving all-on or all-off command",
+			"label": "Dim Rate Adjustments",
+			"description": "Timing of steps or levels",
 			"valueSize": 2,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network. 2. Once the controller is ready to include your device, press and release the top or bottom of the wireless smart dimmer (rocker) to include it in the network",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. 2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart dimmer (rocker) to exclude it from the network",
+		"reset": "1. Quickly press ON (up) button (3) times then immediately press the OFF (down) button (3) times. Note: This should only be used in the even your network's primary controller is missing or otherwise inoperable."
 	}
 }

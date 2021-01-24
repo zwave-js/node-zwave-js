@@ -1,14 +1,36 @@
-// Sensative AB 11-01-011
+// Sensative AB 11 01 011
 // Strips-MaZw
 {
 	"manufacturer": "Sensative AB",
 	"manufacturerId": "0x019a",
-	"label": "11-01-011",
+	"label": "11 01 011",
 	"description": "Strips-MaZw",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0003"
+			"productId": "0x0003",
+			"zwaveAllianceId": [
+				1510,
+				1753,
+				1790,
+				1862,
+				1863,
+				2073,
+				2080,
+				2144,
+				2146,
+				2827,
+				3296,
+				3297,
+				3369,
+				3388,
+				3389,
+				3426,
+				3427,
+				3428,
+				3429,
+				3430
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -25,10 +47,10 @@
 	"paramInformation": {
 		"1": {
 			"label": "Notification type",
-			"description": "Define the notification type.",
+			"description": "0 = Binary sensor report 1 = Notification report 2 = Basic report",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -36,7 +58,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Binary Sensor report",
+					"label": "Binary sensor report",
 					"value": 0
 				},
 				{
@@ -50,11 +72,11 @@
 			]
 		},
 		"2": {
-			"label": "LED indication",
-			"description": "Specify if LED should indicate special event.",
+			"label": "LED Indication",
+			"description": "0 = Specific event indication (*) Off 1 = On",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -62,7 +84,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Off",
+					"label": "Specific event indication (*) Off",
 					"value": 0
 				},
 				{
@@ -71,5 +93,10 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "Strips is delivered in \"\"auto-add\"\" mode. Follow the process below to add Strips in a Z-Wave network. 1. Start the add mode on the Z-Wave controller. See the controller’s manual. 2. Remove both magnets from Strips. Strips blinks twice to confirm the command and successful addition. 3. A long LED blink indicates that the add process was successful 4. The Z-Wave controller application should now allow you to monitor your Strips sensor status. 5. Move the squared magnet as shown in the picture . Check that the Z-Wave system indicates the status correctly 6. If the Z-Wave system do not respond, it may be needed to change Strips’ notification type. Manual add: 1. Set the controller to add mode (See your controller’s manual). 2. Place the round magnet at the rounded edge of Strips. When the LED blinks, move the magnet away. Repeat 3 times in total within 10 seconds. 3. A long LED blink indicates that the add process was successful.",
+		"exclusion": "1. Set the controller in remove mode (See your controller’s manual). 2. Place the round magnet at the rounded edge of Strips. When the LED blinks, move the magnet away. Repeat 3 times in total within 10 seconds. 3. A long LED blink indicates that the remove process was successful",
+		"reset": "In order to reset Strips (only possible when the connection to the controller is lost): 1. Place the round magnet at the rounded edge of Strips. 2. When the LED blinks, move the magnet away. Repeat 3 times in total within 10 seconds. 3. After 5 LED blinks, place the magnet at the rounded edge again for 10 seconds. 4. A long LED signal indicates success."
 	}
 }

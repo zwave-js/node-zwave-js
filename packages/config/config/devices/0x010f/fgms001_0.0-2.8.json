@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0800",
-			"productId": "0x1001"
+			"productId": "0x1001",
+			"zwaveAllianceId": 1048
 		},
 		{
 			"productType": "0x0800",
@@ -109,8 +110,8 @@
 		"6": {
 			"label": "Motion Alarm Cancellation Delay",
 			"description": "Period of time after wich Motion alarm will be cancelled.",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 1,
 			"maxValue": 65535,
 			"defaultValue": 30,
@@ -124,7 +125,7 @@
 			"description": "The parameter determines the part of day in which the PIR sensor will be active.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -148,7 +149,6 @@
 		"9": {
 			"label": "Night / Day",
 			"description": "The parameter defines the difference between night and day.",
-			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65535,
@@ -235,7 +235,7 @@
 			"description": "The parameter determines the behaviour of tamper and how it reports.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 4,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -269,7 +269,7 @@
 			"description": "Alarm frame will or will not be sent in broadcast mode.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -289,7 +289,6 @@
 		"40": {
 			"label": "Illumination Report Threshold",
 			"description": "Change in level of light intensity resulting in illumination report.",
-			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -326,8 +325,8 @@
 		"62": {
 			"label": "Interval of Temperature Measuring",
 			"description": "The parameter determines how often the temperature will be measured.",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 900,
@@ -365,7 +364,7 @@
 			"description": "Way in which LED diode behaves after motion has been detected.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 26,
 			"defaultValue": 10,
 			"unsigned": true,
 			"readOnly": false,
@@ -496,7 +495,6 @@
 		"82": {
 			"label": "Lower Ambient Illumination Level",
 			"description": "Below which LED brightness is set to 1%",
-			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -509,7 +507,6 @@
 		"83": {
 			"label": "Upper Ambient Illumination Level",
 			"description": "Above which LED brightness is set to 100%",
-			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -546,7 +543,7 @@
 			"description": "Indicating mode resembles a police car (white, red and blue).",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

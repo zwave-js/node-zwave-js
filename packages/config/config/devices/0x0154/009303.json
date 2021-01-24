@@ -1,28 +1,53 @@
-// Popp & Co 009303
+// Popp & Co POPE009303
 // Wall Controller
 {
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
-	"label": "009303",
+	"label": "POPE009303",
 	"description": "Wall Controller",
 	"devices": [
 		{
 			"productType": "0x0100",
-			"productId": "0x0101"
+			"productId": "0x0101",
+			"zwaveAllianceId": 2110
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 10,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 10
+		},
+		"3": {
+			"label": "Group 3",
+			"maxNodes": 10
+		},
+		"4": {
+			"label": "Double Tap",
+			"maxNodes": 10,
+			"isLifeline": true
+		},
+		"5": {
+			"label": "Double Tap",
+			"maxNodes": 10,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"1": {
 			"label": "Button 1 and 3 pair mode",
-			"description": "Button 1 and 3 pair mode.",
+			"description": "In separate mode button 1 works with group A, button 3 with groups C. Click is On, Hold is dimming Up, Double click is Off, Click-Hold is dimming Down. In pair button 1/3 are Up/Down correspondingly. Click is On/Off, Hold is dimming Up/Down. Single clicks works with group A, double click with group C",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -30,11 +55,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separately",
+					"label": "seperately",
 					"value": 0
 				},
 				{
-					"label": "In pair without double clicks (Default)",
+					"label": "In pair without double clicks",
 					"value": 1
 				},
 				{
@@ -45,10 +70,10 @@
 		},
 		"2": {
 			"label": "Button 2 and 4 pair mode",
-			"description": "Button 2 and 4 pair mode.",
+			"description": "In separate mode button 2 works with control group B, button 4 with control group D. Click is On, Hold is dimming Up, Double click is Off, Click-Hold is dimming Down. In pair button B/D are Up/Down correspondingly. Click is On/Off, Hold is dimming Up/Down. Single clicks works with group B, double click with group D",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -56,11 +81,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separately",
+					"label": "seperately",
 					"value": 0
 				},
 				{
-					"label": "In pair without double clicks (Default)",
+					"label": "In pair without double clicks",
 					"value": 1
 				},
 				{
@@ -70,11 +95,11 @@
 			]
 		},
 		"11": {
-			"label": "Command to control Group A",
-			"description": "Command to control Group A",
+			"label": "Command to Control Group A",
+			"description": "This parameter defines the command to be sent to devices of control group A when the related button is pressed",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 8,
 			"defaultValue": 8,
 			"unsigned": true,
 			"readOnly": false,
@@ -82,49 +107,45 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch On/Off and Dim (send Basic Set and Switch Multilevel)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch On/Off only (send Basic Set)",
 					"value": 2
 				},
 				{
-					"label": "Switch all",
+					"label": "Switch All",
 					"value": 3
 				},
 				{
-					"label": "Send scenes",
+					"label": "Send Scenes",
 					"value": 4
 				},
 				{
-					"label": "Send preconfigured scenes",
+					"label": "Send Preconfigured Scenes",
 					"value": 5
 				},
 				{
-					"label": "Control devices in proximity",
-					"value": 6
-				},
-				{
-					"label": "Control door lock",
+					"label": "Control DoorLock",
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to Gateway",
 					"value": 8
 				}
 			]
 		},
 		"12": {
-			"label": "Command to control Group B",
-			"description": "Command to control Group B",
+			"label": "Command to Control Group B",
+			"description": "This parameter defines the command to be sent to devices of control group B when the related button is pressed",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 8,
 			"defaultValue": 8,
 			"unsigned": true,
 			"readOnly": false,
@@ -132,49 +153,45 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch On/Off and Dim (send Basic Set and Switch Multilevel)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch On/Off only (send Basic Set)",
 					"value": 2
 				},
 				{
-					"label": "Switch all",
+					"label": "Switch All",
 					"value": 3
 				},
 				{
-					"label": "Send scenes",
+					"label": "Send Scenes",
 					"value": 4
 				},
 				{
-					"label": "Send preconfigured scenes",
+					"label": "Send Preconfigured Scenes",
 					"value": 5
 				},
 				{
-					"label": "Control devices in proximity",
-					"value": 6
-				},
-				{
-					"label": "Control door lock",
+					"label": "Control DoorLock",
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to Gateway",
 					"value": 8
 				}
 			]
 		},
 		"13": {
-			"label": "Command to control Group C",
-			"description": "Command to control Group C",
+			"label": "Command to Control Group C",
+			"description": "This parameter defines the command to be sent to devices of control group C when the related button is pressed",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 8,
 			"defaultValue": 8,
 			"unsigned": true,
 			"readOnly": false,
@@ -182,49 +199,45 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch On/Off and Dim (send Basic Set and Switch Multilevel)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch On/Off only (send Basic Set)",
 					"value": 2
 				},
 				{
-					"label": "Switch all",
+					"label": "Switch All",
 					"value": 3
 				},
 				{
-					"label": "Send scenes",
+					"label": "Send Scenes",
 					"value": 4
 				},
 				{
-					"label": "Send preconfigured scenes",
+					"label": "Send Preconfigured Scenes",
 					"value": 5
 				},
 				{
-					"label": "Control devices in proximity",
-					"value": 6
-				},
-				{
-					"label": "Control door lock",
+					"label": "Control DoorLock",
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to Gateway",
 					"value": 8
 				}
 			]
 		},
 		"14": {
-			"label": "Command to control Group D",
-			"description": "Command to control Group D",
+			"label": "Command to Control Group D",
+			"description": "This parameter defines the command to be sent to devices of control group D when the related button is pressed",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 8,
 			"defaultValue": 8,
 			"unsigned": true,
 			"readOnly": false,
@@ -232,48 +245,44 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Switch on/off and Dim",
+					"label": "Switch On/Off and Dim (send Basic Set and Switch Multilevel)",
 					"value": 1
 				},
 				{
-					"label": "Switch on/off only (send Basic Set)",
+					"label": "Switch On/Off only (send Basic Set)",
 					"value": 2
 				},
 				{
-					"label": "Switch all",
+					"label": "Switch All",
 					"value": 3
 				},
 				{
-					"label": "Send scenes",
+					"label": "Send Scenes",
 					"value": 4
 				},
 				{
-					"label": "Send preconfigured scenes",
+					"label": "Send Preconfigured Scenes",
 					"value": 5
 				},
 				{
-					"label": "Control devices in proximity",
-					"value": 6
-				},
-				{
-					"label": "Control door lock",
+					"label": "Control DoorLock",
 					"value": 7
 				},
 				{
-					"label": "Central scene to gateway (default)",
+					"label": "Central Scene to Gateway",
 					"value": 8
 				}
 			]
 		},
 		"21": {
-			"label": "Send the following switch all commands",
+			"label": "Send the following Switch All commands",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": -1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -281,7 +290,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off only (default)",
+					"label": "Switch off only",
 					"value": 1
 				},
 				{
@@ -290,7 +299,7 @@
 				},
 				{
 					"label": "Switch all on and off",
-					"value": 255
+					"value": -1
 				}
 			]
 		},
@@ -298,49 +307,7 @@
 			"label": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "No (default)",
-					"value": 0
-				},
-				{
-					"label": "Yes",
-					"value": 1
-				}
-			]
-		},
-		"25": {
-			"label": "Block wake up even when Wake Up Interval is set",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Wake up is blocked (default)",
-					"value": 0
-				},
-				{
-					"label": "Wake up is possible",
-					"value": 1
-				}
-			]
-		},
-		"30": {
-			"label": "End unsolicited battery report on Wake Up.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -352,14 +319,62 @@
 					"value": 0
 				},
 				{
-					"label": "To same node as Wake Up Notification",
+					"label": "Yes",
+					"value": 1
+				}
+			]
+		},
+		"25": {
+			"label": "Blocks wakeup even when wakeup interval is set",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Wakeup is blocked",
+					"value": 0
+				},
+				{
+					"label": "Wakeup is not blocked",
+					"value": 1
+				}
+			]
+		},
+		"30": {
+			"label": "Send unsolicited Battery Report on Wake Up",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No",
+					"value": 0
+				},
+				{
+					"label": "To same node as wake up notification",
 					"value": 1
 				},
 				{
-					"label": "Broadcast to neighbors",
+					"label": "Broadcast",
 					"value": 2
 				}
 			]
 		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"reset": "Use this procedure only if the primary controller is missing or otherwise inoperable. (1) Turn the device into Management Mode by keeping all four buttons pushed for 5 seconds, (2) click on Button 3, (3) keep button 4 pushed for 4 seconds"
 	}
 }

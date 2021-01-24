@@ -1,0 +1,94 @@
+// Vision Security ZM1602-5
+// Siren with DC adapter
+{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZM1602-5",
+	"description": "Siren with DC adapter",
+	"devices": [
+		{
+			"productType": "0x2009",
+			"productId": "0x0907",
+			"zwaveAllianceId": 1276
+		},
+		{
+			"productType": "0x2009",
+			"productId": "0x0908",
+			"zwaveAllianceId": 2901
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Siren/Strobe mode",
+			"description": "User can change value from 0 to 2 to turn either Siren sound, Strobe light, or both when triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All Enable - Default",
+					"value": 0
+				},
+				{
+					"label": "Strobe Only",
+					"value": 2
+				},
+				{
+					"label": "Siren Only",
+					"value": 1
+				}
+			]
+		},
+		"2": {
+			"label": "Alarm Auto Stop Time",
+			"description": "User can change the duration of siren time when triggered",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "30 seconds - Default",
+					"value": 0
+				},
+				{
+					"label": "Will Not Automatically Stop",
+					"value": 3
+				},
+				{
+					"label": "60 seconds",
+					"value": 1
+				},
+				{
+					"label": "120 seconds",
+					"value": 2
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZM 1602 to your controller. To get in the “inclusion” mode, the distance between siren and controller is suggested to be in one meter. Open the bracket and press the program switch of ZM 1602 for 1 second at least & release to be included. After setting, the LED Setting Lighting should go off",
+		"exclusion": "Set up the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZM 1602 from your controller. Press the Tamper Switch of ZM 1602 for 1 second at least & release to be excluded",
+		"reset": "This device can’t be reset manually. It is reset to factory defaults when it is excluded. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+	}
+}

@@ -1,0 +1,71 @@
+// Resideo 39449 / ZW4106
+//  Plug-in Switch (Dual Plug Simultaneous Control)
+{
+	"manufacturer": "Resideo",
+	"manufacturerId": "0x041b",
+	"label": "39449 / ZW4106",
+	"description": "Plug-in Switch (Dual Plug Simultaneous Control)",
+	"devices": [
+		{
+			"productType": "0x5052",
+			"productId": "0x3033",
+			"zwaveAllianceId": 3827
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Parameter 3",
+			"description": "Invert/disable LED (Adjusts when the indicator LED is turned ON, OFF or disables it entirely)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON/device ON",
+					"value": 0
+				},
+				{
+					"label": "LED ON/device OFF",
+					"value": 1
+				},
+				{
+					"label": "Disable LED",
+					"value": 2
+				}
+			]
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "ADDING YOUR DEVICE TO A Z-WAVE NETWORK 1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the manual/program button on the smart switch. Repeat as necessary to add the switch to the network",
+		"exclusion": "TO REMOVE AND RESET THE DEVICE 1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the manual/program button on the smart switch to remove it from the network",
+		"reset": "TO RETURN YOUR SWITCH TO FACTORY DEFAULTS 1. If plugged in, unplug the device from the receptacle. 2. Press and hold the top button, plug the device in and continue to hold for at least 3 seconds. NOTE: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+	}
+}

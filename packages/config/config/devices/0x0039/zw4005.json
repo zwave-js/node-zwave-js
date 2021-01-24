@@ -1,28 +1,47 @@
-// Honeywell ZW4005
+// Honeywell 39455 / ZW4005
 // In Wall Paddle
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
-	"label": "ZW4005",
+	"label": "39455 / ZW4005",
 	"description": "In Wall Paddle",
 	"devices": [
 		{
 			"productType": "0x4952",
-			"productId": "0x3036"
+			"productId": "0x3036",
+			"zwaveAllianceId": [
+				2689,
+				3745
+			]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"3": {
-			"label": "Night Light",
-			"description": "Defines the behavior of the blue LED. Default is on when switch is off.",
+			"label": "LED Light",
+			"description": "LED light on when Z-Wave turned off (default)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": 1,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -30,30 +49,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when switch is OFF",
-					"value": 0
-				},
-				{
-					"label": "LED on when switch is ON",
+					"label": "LED light on when Z-Wave turned on",
 					"value": 1
 				},
 				{
-					"label": "LED always off",
+					"label": "LED light always off",
 					"value": 2
 				}
 			]
 		},
 		"4": {
 			"label": "Invert Switch",
-			"description": "Invert the ON/OFF Switch State.",
+			"description": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "No",
@@ -64,6 +79,36 @@
 					"value": 1
 				}
 			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "Alternate Exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press any button on the switch",
+					"value": 0
+				},
+				{
+					"label": "Press two times ON button and two times OFF button",
+					"value": 1
+				}
+			]
 		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network. 2. Once the controller is ready to include your device, press and release the top or bottom of the wireless smart switch(rocker) to include it in the network. 3. Once your controller has confirmed that the device has been included, refresh the Z-Wave network to optimize performance",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. 2. Once the controller is ready to exclude your device, press and release the top button of the wireless smart switch (rocker) to exclude it from the network",
+		"reset": "Quickly press ON (Top) button 3 times then immediately press the OFF (Bottom) button 3 times. The LED will flash ON/OFF 5 times when completed successfully. Note: Please use this reset procedure only when the primary controller is missing or inoperable."
 	}
 }

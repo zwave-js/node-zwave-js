@@ -1,124 +1,142 @@
-// Spectrum Brands SmartCode 888
+// Spectrum Brands 888
 // Touchpad Electronic Deadbolt
 {
 	"manufacturer": "Spectrum Brands",
 	"manufacturerId": "0x0090",
-	"label": "SmartCode 888",
+	"label": "888",
 	"description": "Touchpad Electronic Deadbolt",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0541"
+			"productId": "0x0541",
+			"zwaveAllianceId": 2176
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"33": {
-			"label": "SKU",
-			"description": "Set the first four most significant bytes of the SKU",
+			"label": "SKU number, 1st 4 bytes",
+			"description": "All printable characters",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"34": {
-			"label": "SKU (Last 4)",
-			"description": "The four least significant bytes of the SKU",
+			"label": "SKU number, last 4 bytes",
+			"description": "All printable characters",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"35": {
-			"label": "Interior Status LED",
-			"description": "Allows user to get/set the value for the Interior Status LED control",
+			"label": "Interior Status LED control",
+			"description": "The configuration parameter 35 is a one byte field that will allow the user to get / set the value for the Interior Status LED control. The value of 0 means that the setting is disabled; whereas the value of 1 means that the setting is enabled. Sending a set command with the default field set to 1 will cause the control to revert back to its factory default setting.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "disable status LED",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "enable status LED",
 					"value": 1
 				}
 			]
 		},
 		"37": {
 			"label": "Audio Feature Control",
-			"description": "Allows the user to get/set the audio feed back command",
+			"description": "The configuration parameter 37 is a one byte field that will allow the user to get / set the value for the Audio feature. The value of 0 means that the setting is disabled; whereas the value of 1 means that the setting is enabled. Sending a set command with the default field set to 1 will cause the control to revert back to its factory default setting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "disable audio feature",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "enable audio feature",
 					"value": 1
 				}
 			]
 		},
 		"40": {
-			"label": "Factory Default",
-			"description": "Reset to factory default settings",
+			"label": "Reset to Default",
+			"description": "This configuration parameter allows the smart home controller to force a factory reset of the lock. After receiving this request, the lock will send a Device Reset Locally message back to the lifeline controller. The only possible value for this parameter is 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Normal",
+					"label": "No Action",
 					"value": 0
 				},
 				{
-					"label": "Factory Default",
+					"label": "Force Factory Reset",
 					"value": 1
 				}
 			]
 		},
 		"47": {
-			"label": "Motor Load Control",
-			"description": "Allows the device to send motor load alarms",
+			"label": "Motor Load Test",
+			"description": "The configuration parameter 47 uses 1 byte that will allow the user to get / set the value to enable or disable the motor load alarm. Setting this byte to 0 will disable the alarm, whereas setting this byte to 1 will enable the alarm. If a motor load alarm has been activated and the alarm has been enabled, the alarm will be sent via the Power Management group in the Notification Command Class as a Load Error (0x09)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "do not run test",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "enable test to run",
 					"value": 1
 				}
 			]
@@ -177,5 +195,10 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "Initiate the process to add the lock to your system at your smart home controller. When prompted by your smart home system to add the lock, press button “A” on the lock interior one time. The red LED will illuminate when the lock enters Add Mode. Please allow time for the controller to add the lock to your system",
+		"exclusion": "Follow your smart home system’s instructions to remove the lock from the network. When prompted by the system, press button A” on the lock interior once. The red LED will illuminate when the lock enters Remove mode.",
+		"reset": "A factory reset will delete all user codes associated with the lock and will remove itself from your smart home system. Please only perform a factory reset when the primary controller is missing or inoperable. To perform a factory reset, please perform the following: 1. Remove the battery pack 2. Press and HOLD the Program button while reinserting the battery pack. 3. Keep holding the button for 30 seconds until the lock beeps and the status LED flashes red. 4. Press the Program button once more. The status LED will flash green and red several times. 5. After a few seconds, the lock will initiate the door handing process"
 	}
 }

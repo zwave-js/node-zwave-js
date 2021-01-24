@@ -1,14 +1,15 @@
-// Everspring HSM02
+// Everspring HSM02-0
 // Door/Window Contact
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
-	"label": "HSM02",
+	"label": "HSM02-0",
 	"description": "Door/Window Contact",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0002"
+			"productId": "0x0002",
+			"zwaveAllianceId": 957
 		},
 		{
 			"productType": "0x0202",

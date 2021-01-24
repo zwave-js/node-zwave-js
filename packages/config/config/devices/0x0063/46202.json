@@ -1,39 +1,68 @@
-// GE/Jasco 46202
+// GE/Jasco 14292/46202/ZW4009
 // GE Enbrighten Z-Wave Plus Smart Switch
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "46202",
+	"label": "14292/46202/ZW4009",
 	"description": "GE Enbrighten Z-Wave Plus Smart Switch",
 	"devices": [
 		{
 			"productType": "0x4952",
-			"productId": "0x3137"
+			"productId": "0x3137",
+			"zwaveAllianceId": 3350
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
-		// One entry for each association group
 		"1": {
-			"label": "Lifeline",
+			"label": "Group 1",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic - Local Load",
+			"label": "Group 2",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Basic - Double Tap", // required
+			"label": "Double Tap",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
+		"3": {
+			"label": "LED Indication Configuration",
+			"description": "Configure LED indication to default, invert, always off or always on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when device is OFF, LED is OFF when device is ON",
+					"value": 0
+				},
+				{
+					"label": "LED ON when device is ON, LED is OFF when device is OFF",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				},
+				{
+					"label": "LED Always ON",
+					"value": 3
+				}
+			]
+		},
 		"4": {
 			"label": "Invert Switch",
 			"description": "Invert Switch",
@@ -54,9 +83,37 @@
 					"value": 1
 				}
 			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "Default - normal exclusion Active - perform a series of button presses to help eliminate accidental exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press any button on the switch",
+					"value": 0
+				},
+				{
+					"label": "Press two times ON button and two time OFF button, LED will flash 5 times if successful",
+					"value": 1
+				}
+			]
 		}
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"treatBasicSetAsEvent": true,
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the top or bottom of the wireless smart switch (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the top or bottom of the wireless smart switch (rocker)",
+		"reset": "1. Quickly press ON (top) button three times then immediately press the OFF (Bottom) button three times. The LED will flash ON/OFF five times when completed successfully. Note: This should only be used if your network’s primary controller is missing or otherwise inoperable"
 	}
 }

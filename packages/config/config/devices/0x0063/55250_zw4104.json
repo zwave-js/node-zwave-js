@@ -1,0 +1,75 @@
+// GE/Jasco 55250/ZW4104
+// Plug-in Smart Switch (Dual Plug with Pass through Outlet)
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "55250/ZW4104",
+	"description": "Plug-in Smart Switch (Dual Plug with Pass through Outlet)",
+	"devices": [
+		{
+			"productType": "0x5052",
+			"productId": "0x3134",
+			"zwaveAllianceId": 3936
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "0 = Light is ON when Load is ON (Default) 1 = Light is On when Load is Off 2 = Light is always OFF 3 = Light is always ON",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED On when load is On, LED Off when load is Off (Default)",
+					"value": 0
+				},
+				{
+					"label": "LED is guidelight",
+					"value": 1
+				},
+				{
+					"label": "Always OFF",
+					"value": 2
+				},
+				{
+					"label": "Always ON",
+					"value": 3
+				}
+			]
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the smart switch to the Z-Wave network. 2. Once the controller is ready to add your smart switch, press and release the manual/program button on the smart switch",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a smart switch from the Z-Wave network. 2. Once the controller is ready to remove your smart switch, press and release the manual/program button on the smart switch",
+		"reset": "1. If plugged in, unplug the smart switch from the receptacle. 2. Press and hold the program button for at least three seconds while you plug the smart switch into a receptacle"
+	}
+}

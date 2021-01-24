@@ -8,7 +8,12 @@
 	"devices": [
 		{
 			"productType": "0x4952",
-			"productId": "0x3036"
+			"productId": "0x3036",
+			"zwaveAllianceId": [
+				1438,
+				1879,
+				2501
+			]
 		},
 		{
 			"productType": "0x4952",
@@ -19,31 +24,29 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
-		// One entry for each association group
 		"1": {
-			"label": "Lifeline",
+			"label": "Group 1",
 			"maxNodes": 5,
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic - Local Load",
+			"label": "Group 2",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Basic - Double Tap", // required
+			"label": "Double Tap",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
 		"3": {
-			"label": "Night Light",
-			"description": "Defines the behavior of the blue LED. Default is on when switch is off.",
+			"label": "LED Light",
+			"description": "When shipped from the factory, the LED is set to turn ON when the connected light is turned OFF. This is the default setting and can be changed if your primary controller supports the node configuration function. To make the LED turn ON when the light is turned ON, change parameter 3’s value to “1”. To turn the LED OFF at all times, change parameter 3’s value to 2",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -51,25 +54,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when switch is OFF",
+					"label": "LED Light on when Z-Wave turned OFF (Default)",
 					"value": 0
 				},
 				{
-					"label": "LED on when switch is ON",
+					"label": "LED Light on when Z-Wave turned On",
 					"value": 1
 				},
 				{
-					"label": "LED always off",
+					"label": "LED Light Always Off",
 					"value": 2
 				}
 			]
 		},
 		"4": {
 			"label": "Invert Switch",
-			"description": "Invert the ON/OFF Switch State.",
+			"description": "If the switch is accidentally installed upside down with “On” at the bottom and “Off” at the top, the default On/Off rocker settings can be reversed by changing parameter 4’s value to “1”",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -77,17 +80,23 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "(Default)",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Invert Switch",
 					"value": 1
 				}
 			]
 		}
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"treatBasicSetAsEvent": true,
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include a device to the Z-wave network. 2. Once the controller is ready to include your device, press and release the top or bottom of the wireless smart switch(rocker) to include it in the network",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network. 2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart switch(rocker) to exclude it from the network.",
+		"reset": "1. Quickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully. Note: This should only be used in the event your networks primary controller is missing or otherwise inoperable."
 	}
 }

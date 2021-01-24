@@ -1,14 +1,15 @@
-// BeNext Molite
+// BeNext MOLIT
 // Movement sensor with temperature and light sensor
 {
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
-	"label": "Molite",
+	"label": "MOLIT",
 	"description": "Movement sensor with temperature and light sensor",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0100"
+			"productId": "0x0100",
+			"zwaveAllianceId": 76
 		},
 		{
 			"productType": "0x0003",

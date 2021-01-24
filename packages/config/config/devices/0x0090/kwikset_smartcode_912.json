@@ -1,52 +1,881 @@
-// Spectrum Brands Kwikset SmartCode 912
+// Spectrum Brands GED1455
 // Touch Pad Keyed Entry Lever
 {
 	"manufacturer": "Spectrum Brands",
 	"manufacturerId": "0x0090",
-	"label": "Kwikset SmartCode 912",
+	"label": "GED1455",
 	"description": "Touch Pad Keyed Entry Lever",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0339"
+			"productId": "0x0339",
+			"zwaveAllianceId": [
+				2004,
+				2129,
+				2238
+			]
+		},
+		{
+			"productType": "0x0006",
+			"productId": "0x0339",
+			"zwaveAllianceId": 2378
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
-		"31": {
-			"label": "Dipswitch Settings",
-			"description": "Dipswitch Settings",
-			"unit": "Dipswitch Settings",
+		"1": {
+			"label": "User Code 1 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #1. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 15,
-			"defaultValue": 5,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"2": {
+			"label": "User Code 2 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #2. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"3": {
+			"label": "User Code 3 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #3. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"4": {
+			"label": "User Code 4 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #4. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"5": {
+			"label": "User Code 5 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #5. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"6": {
+			"label": "User Code 6 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #6. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"7": {
+			"label": "User Code 7 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #7. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"8": {
+			"label": "User Code 8 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #8. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"9": {
+			"label": "User Code 9 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #9. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"10": {
+			"label": "User Code 10 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #10. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"11": {
+			"label": "User Code 11 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #11. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"12": {
+			"label": "User Code 12 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #12. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"13": {
+			"label": "User Code 13 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #13. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"14": {
+			"label": "User Code 14 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #14. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"15": {
+			"label": "User Code 15 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #15. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"16": {
+			"label": "User Code 16 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #16. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"17": {
+			"label": "User Code 17 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #17. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"18": {
+			"label": "User Code 18 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #18. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"19": {
+			"label": "User Code 19 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #19. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"20": {
+			"label": "User Code 20 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #20. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"21": {
+			"label": "User Code 21 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #21. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"22": {
+			"label": "User Code 22 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #22. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"23": {
+			"label": "User Code 23 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #23. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"24": {
+			"label": "User Code 24 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #24. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"25": {
+			"label": "User Code 25 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #25. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"26": {
+			"label": "User Code 26 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #26. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"27": {
+			"label": "User Code 27 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #27. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"28": {
+			"label": "User Code 28 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #28. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"29": {
+			"label": "User Code 29 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #29. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"30": {
+			"label": "User Code 30 Type",
+			"description": "This configuration parameter is used to get or set the type of user for their corresponding user code. By default, all user codes are set to the Owner type unless otherwise specified. The parameter type is associated with the user code location, so this parameter refers to the user code in slot #30. Caution must be used when setting these values. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"31": {
+			"label": "Dipswitch settings",
+			"description": "This is a one byte read only bit mask that returns the state of the user accessible dipswitches on the rear panel of the door lock. 0x01: Lock Status LED (1: enabled, 0: disabled) 0x02: Autolock setting (1: enabled, 0: disabled) 0x04: Buzzer (1: enabled, 0: disabled)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 11,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All disabled",
+					"value": 0
+				},
+				{
+					"label": "Lock Status LED enabled",
+					"value": 1
+				},
+				{
+					"label": "Autolock enabled",
+					"value": 2
+				},
+				{
+					"label": "Buzzer enabled",
+					"value": 4
+				},
+				{
+					"label": "Status LED &amp; autolock enabled",
+					"value": 3
+				},
+				{
+					"label": "Status LED, autolock, and buzzer enabled",
+					"value": 7
+				}
+			]
 		},
 		"33": {
-			"label": "first four most significant bytes of the SKU",
-			"description": "SKU (length = 8 bytes)",
+			"label": "SKU number, 1st 4 bytes",
+			"description": "All printable characters",
 			"valueSize": 4,
-			"minValue": 32,
+			"minValue": 0,
 			"maxValue": 126,
-			"defaultValue": 32,
+			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"34": {
-			"label": "four least significant bytes of the SKU.",
-			"description": "SKU (length = 8 bytes)",
+			"label": "SKU number, last 4 bytes",
+			"description": "All printable characters",
 			"valueSize": 4,
-			"minValue": 32,
+			"minValue": 0,
 			"maxValue": 126,
-			"defaultValue": 32,
+			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -63,15 +892,16 @@
 			"allowManualEntry": true
 		},
 		"40": {
-			"label": "Factory Reset",
-			"description": "Reset Lock to Factory Default",
+			"label": "Reset to Default",
+			"description": "Force Factory Reset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
-			"defaultValue": 0,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Normal Operation",
@@ -83,5 +913,10 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "Initiate the process to add the lock to your system at your smart home controller. When prompted by your smart home system to add the lock, press button “A” on the lock interior one time. The red LED will illuminate when the lock enters Add Mode. Please allow time for the controller to add the lock to your system",
+		"exclusion": "Follow your smart home system’s instructions to remove the lock from the network. When prompted by the system, press button A” on the lock interior once. The red LED will illuminate when the lock enters Remove mode.",
+		"reset": "A factory reset will delete all user codes associated with the lock and will remove itself from your smart home system. Please only perform a factory reset when the primary controller is missing or inoperable. To perform a factory reset, please perform the following: 1. Remove the battery pack 2. Press and HOLD the Program button while reinserting the battery pack. 3. Keep holding the button for 30 seconds until the lock beeps and the status LED flashes red. 4. Press the Program button once more. The status LED will flash green and red several times. 5. After a few seconds, the lock will initiate the door handing process"
 	}
 }

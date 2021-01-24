@@ -1,116 +1,127 @@
-// GE/Jasco 28175 (ZW3106)
+// GE/Jasco 28175/ZW3106
 // Plug-In Dual Smart Dimmer
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "28175 (ZW3106)",
+	"label": "28175/ZW3106",
 	"description": "Plug-In Dual Smart Dimmer",
 	"devices": [
 		{
 			"productType": "0x5044",
-			"productId": "0x3132"
+			"productId": "0x3132",
+			"zwaveAllianceId": 2210
 		}
 	],
 	"firmwareVersion": {
 		"min": "5.23",
 		"max": "5.23"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"3": {
 			"label": "LED Light",
-			"description": "Adjust Button LED Light",
+			"description": "When shipped from the factory, the LED is set to turn ON when the connected light is turned ON. This is the default setting and can be changed if your primary controller supports the node configuration function. To make the LED turn ON when the light is turned Off, change parameter 3’s value to “0”. To turn the LED OFF at all times, change parameter 3’s value to 2. • Parameter No: 3 • Length: 1 Byte • Valid Values = 0, 1 or 2 (default 1)",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON / Device OFF",
-					"value": 0
-				},
-				{
-					"label": "LED ON / Device ON (Default)",
-					"value": 1
-				},
-				{
-					"label": "Disable LED",
+					"label": "LED Light Always OFF",
 					"value": 2
+				},
+				{
+					"label": "LED Light On when deivce is Off",
+					"value": 1
 				}
 			]
 		},
 		"7": {
-			"label": "command steps",
-			"description": "number of steps or levels per dim command",
+			"label": "When receiving a Z-Wave Dimmer Command End Point 1",
+			"description": "Number of Steps or levels",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "command timing",
-			"description": "timing of the command steps",
-			"unit": "ms * 10",
+			"label": "When receiving a Z-Wave Dimmer Command End Point 1",
+			"description": "Timing of the steps",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 1,
+			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "manual steps",
-			"description": "number of steps or levels per dimmer button press",
-			"unit": "steps",
+			"label": "Manual Control Dimming End Point 2",
+			"description": "number of steps or levels",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"10": {
-			"label": "manual timing",
-			"description": "timing of the manual steps",
-			"unit": "ms * 10",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 255,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"11": {
-			"label": "All on/off steps",
-			"description": "number of steps or levels per all on/off command",
-			"unit": "steps",
+		"10": {
+			"label": "Manual Control Dimming End Point 2",
+			"description": "TIming of the steps",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "When Receiving an All-On or All-Off Command",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "All on/off timing",
-			"description": "timing of the all on/off command",
-			"unit": "ms * 10",
+			"label": "When Receiving an All-On or All-Off Command",
+			"description": "Timing of the steps",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 255,
-			"defaultValue": 1,
+			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -137,5 +148,13 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to add the device to the Z-wave network. 2. Once the controller is ready to add your smart switch, single press and release the manual/program button on the smart switch to add it in the network. 3. Once your controller has confirmed that the smart switch has been added, refresh the Z-wave network to optimize performance.",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to remove a device from the Z-wave network. 2. Once the controller is ready to remove your device, press and release the manual/program button on the smart switch to remove it from the network",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle. 2. Press and hold the top button for at least 3 seconds while you plug the switch into a receptacle. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }

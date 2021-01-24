@@ -1,14 +1,15 @@
-// ID-RF CWS-3101
+// ID-RF CWS-3-1-0X
 // Wall Switch
 {
 	"manufacturer": "ID-RF",
 	"manufacturerId": "0x0165",
-	"label": "CWS-3101",
+	"label": "CWS-3-1-0X",
 	"description": "Wall Switch",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0003"
+			"productId": "0x0003",
+			"zwaveAllianceId": 1383
 		}
 	],
 	"firmwareVersion": {
@@ -48,11 +49,11 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Buttons 1 and 3 profile",
-			"description": "To set-up the profile of buttons 1 and 3",
+			"label": "Buttons 1&amp;amp;3 Profile",
+			"description": "To set-up the profie of buttons 1 & 3s",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -60,25 +61,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene",
-					"value": 0
-				},
-				{
-					"label": "Mono",
+					"label": "MONO. Button 1 is not paired with button 3",
 					"value": 1
 				},
 				{
-					"label": "Duo",
+					"label": "DUO. Button 1 is paired with button 3",
 					"value": 2
+				},
+				{
+					"label": "SCENE. Product sends “Central Scene Notification” Commands or “Scene Activation” Commands",
+					"value": 0
 				}
 			]
 		},
 		"2": {
-			"label": "Buttons 2 and 4 profile",
-			"description": "To set-up the profile of buttons 2 and 4",
+			"label": "Buttons 2&amp;amp;4 Profile",
+			"description": "To set-up the profie of buttons 2 & 4",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -86,16 +87,16 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene",
+					"label": "SCENE. Product sends “Central Scene Notification” Commands or “Scene Activation” Commands",
 					"value": 0
 				},
 				{
-					"label": "Mono",
-					"value": 1
+					"label": "DUO. Button 1 is paired with button 3",
+					"value": 2
 				},
 				{
-					"label": "Duo",
-					"value": 2
+					"label": "MONO. Button 1 is not paired with button 3",
+					"value": 1
 				}
 			]
 		},
@@ -104,7 +105,7 @@
 			"description": "To choose the way of sending Scene to the gateway",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -112,21 +113,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Central Scene",
+					"label": "Use “CENTRAL SCENE” Commands",
 					"value": 0
 				},
 				{
-					"label": "Scene Activation",
+					"label": "Use “SCENE ACTIVATION” Commands",
 					"value": 1
 				}
 			]
 		},
 		"4": {
-			"label": "Button 1 configuration",
-			"description": "To set-up the how button 1 behaves, when set in MONO Profile",
+			"label": "Button 1 Configuration",
+			"description": "To set-up the how button 1 behaves, when set in MONO Profie",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -134,25 +135,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Control group 2",
+					"label": "Single Press sends broadcast “Switch All Off” Command",
+					"value": 2
+				},
+				{
+					"label": "Single Press sends “Basic Set” Command to associated devices in Group 2",
 					"value": 0
 				},
 				{
-					"label": "All switches ON",
+					"label": "Single Press sends broadcast “Switch All On” Command",
 					"value": 1
-				},
-				{
-					"label": "All switches OFF",
-					"value": 2
 				}
 			]
 		},
 		"5": {
-			"label": "Button 2 configuration",
-			"description": "To set-up the how button 2 behaves, when set in MONO Profile",
+			"label": "Button 2 Configuration",
+			"description": "To set-up the how button 2 behaves, when set in MONO Profie",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -160,25 +161,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Control group 3",
-					"value": 0
-				},
-				{
-					"label": "All switches ON",
+					"label": "Single Press sends broadcast “Switch All On” Command",
 					"value": 1
 				},
 				{
-					"label": "All switches OFF",
+					"label": "Single Press sends broadcast “Switch All Off” Command",
 					"value": 2
+				},
+				{
+					"label": "Single Press sends “Basic Set” Command to associated devices in Group 3",
+					"value": 0
 				}
 			]
 		},
 		"6": {
-			"label": "Button 3 configuration",
-			"description": "To set-up the how button 3 behaves, when set in MONO Profile",
+			"label": "Button 3 Configuration",
+			"description": "To set-up the how button 3 behaves, when set in MONO Profie",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -186,25 +187,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Control group 4",
-					"value": 0
-				},
-				{
-					"label": "All switches ON",
+					"label": "Single Press sends broadcast “Switch All On” Command",
 					"value": 1
 				},
 				{
-					"label": "All switches OFF",
+					"label": "Single Press sends broadcast “Switch All Off” Command",
 					"value": 2
+				},
+				{
+					"label": "Single Press sends “Basic Set” Command to associated devices in Group 4",
+					"value": 0
 				}
 			]
 		},
 		"7": {
-			"label": "Button 4 configuration",
-			"description": "To set-up the how button 4 behaves, when set in MONO Profile",
+			"label": "Button 4 Configuration",
+			"description": "To set-up the how button 4 behaves, when set in MONO Profie",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -212,25 +213,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Control group 5",
+					"label": "Single Press sends “Basic Set” Command to associated devices in Group 5",
 					"value": 0
 				},
 				{
-					"label": "All switches ON",
+					"label": "Single Press sends broadcast “Switch All On” Command",
 					"value": 1
 				},
 				{
-					"label": "All switches OFF",
+					"label": "Single Press sends broadcast “Switch All Off” Command",
 					"value": 2
 				}
 			]
 		},
 		"8": {
-			"label": "LED Management",
+			"label": "Led Management",
 			"description": "How to set up LED behaviour",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -238,22 +239,25 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No LED",
+					"label": "Led does not acknowledge button action and does not acknowledge result of radio command sent",
 					"value": 0
 				},
 				{
-					"label": "Flash Blue after button press",
+					"label": "When the end-user performs a Single press, Double press or Hold Press on a button, led blinks blue to acknowledge the button action",
 					"value": 1
 				},
 				{
-					"label": "Blink to confirm command",
-					"value": 2
+					"label": "Combined behaviors of 0x01 and 0x02 modes",
+					"value": 3
 				},
 				{
-					"label": "Flash Blue and blink to confirm command",
-					"value": 3
+					"label": "When the end-user sends a controlled command:  “Basic Set” Command  “Central Scene Notification” Command  “Multilevel Switch Stop Level Change” Command Led blinks GREEN to acknowledge transmission success or blinks RED to acknowledge transmission failed",
+					"value": 2
 				}
 			]
 		}
+	},
+	"metadata": {
+		"reset": "Simultaneously push on buttons 3 and 4, during 1 second. The LED will blink red and green to validate the factory reset. A factory reset will completely delete the memory of the wall switch and restore all parameters to default value. In \"\"Standalone\"\" Mode, make sure to remove all the devices added or associated in the wall switch's network before performing a factory reset. In \"\"Gateway\"\" Mode, use the factory reset procedure only when the primary controller (i.e the Gateway) is missing or defective. Reset the wall switch does not mean that it has been removed from the primary controller memory. Remove the wall switch (through the primary controller) before performing a factory reset."
 	}
 }

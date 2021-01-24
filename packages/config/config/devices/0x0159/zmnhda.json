@@ -1,14 +1,15 @@
-// Qubino ZMNHDA
+// Qubino ZMNHDA2
 // Flush dimmer
 {
 	"manufacturer": "Qubino",
 	"manufacturerId": "0x0159",
-	"label": "ZMNHDA",
+	"label": "ZMNHDA2",
 	"description": "Flush dimmer",
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0001"
+			"productId": "0x0001",
+			"zwaveAllianceId": 1231
 		}
 	],
 	"firmwareVersion": {
@@ -40,7 +41,7 @@
 			"description": "Switch type (input I1)",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -62,7 +63,7 @@
 			"description": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -84,7 +85,7 @@
 			"description": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -136,7 +137,7 @@
 			"description": "State of the device after a power failure",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

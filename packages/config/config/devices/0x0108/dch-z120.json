@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x000d"
+			"productId": "0x000d",
+			"zwaveAllianceId": 1152
 		}
 	],
 	"firmwareVersion": {
@@ -29,7 +30,7 @@
 	"paramInformation": {
 		"2": {
 			"label": "Basic Set Level",
-			"description": "Setting the BASIC command value to turn on the light.",
+			"description": "Basic Set Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -51,11 +52,12 @@
 		},
 		"3": {
 			"label": "PIR Sensitivity",
-			"description": "Set the sensitivity for the PIR (Passive Infrared Sensor).",
+			"description": "PIR Level",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 99,
+			"maxValue": 0,
 			"defaultValue": 80,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
@@ -68,11 +70,12 @@
 		},
 		"4": {
 			"label": "Light Threshold",
-			"description": "Set the illumination threshold to turn on the light.",
+			"description": "Light Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 99,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true,
@@ -89,85 +92,113 @@
 		},
 		"5": {
 			"label": "Operation Mode",
-			"description": "Parameter to set the Operation Mode.",
+			"description": "Operation mode. Using bit to control. Bit0: Reserve. Bit1: 1 means test mode, 0 means normal mode. Notice: This bit only effect by the DIP Switch setting to “customer mode”, otherwise it decides by DIP Switch setting to Test or Normal Mode. Bit2: Reserve. Bit3: Setting the temperature scale. 0: Fahrenheit, 1:Celsius Bit4: Disable the illumination report after event triggered. (1:Disable, 0:Enable) Bit5: Disable the temperature report after event triggered. (1:Disable, 0:Enable) Bit6: Reserve. Bit7: Disable the back key release into test mode. (1:Disable, 0:Enable) Notice: The reserve bit is allowed any value, but no effect",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
+			"minValue": -128,
+			"maxValue": 32,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Bit1: 1 means test mode, 0 means normal mode. Notice: This bit only effect by the DIP Switch setting to “customer mode”, otherwise it decides by DIP Switch setting to Test or Normal Mode",
+					"value": 2
+				},
+				{
+					"label": "Setting the temperature scale.0: Fahrenheit, 1:Celsius",
+					"value": 8
+				},
+				{
+					"label": "Disable the illumination report after event triggered. (1:Disable, 0:Enable)",
+					"value": 16
+				},
+				{
+					"label": "Disable the temperature report after event triggered. (1:Disable, 0:Enable)",
+					"value": 32
+				},
+				{
+					"label": "Disable the back key release into test mode. (1:Disable, 0:Enable) Notice: The reserve bit is allowed any value, but no effect",
+					"value": -128
+				}
+			]
 		},
 		"6": {
-			"label": "Multi-Sensor Function Switch",
-			"description": "Parameter to set the sensor functions.",
+			"label": "Mult-Sensor Function Switch",
+			"description": "Disable PIR integrate Illumination to turn ON the lighting nodes in the association group 2. (1:Disable, 0:Enable)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 63,
 			"defaultValue": 4,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"8": {
 			"label": "PIR Re-Detect Interval Time",
-			"description": "Set re-detect time after PIR motion triggered",
+			"description": "PIR Re-Detect Interval Time",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"9": {
 			"label": "Turn Off Light Time",
-			"description": "Set delay time to turn off light after motion triggered.",
+			"description": "Turn Off Light Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 4,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
-			"description": "Interval time for auto reporting the battery level",
+			"description": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"12": {
 			"label": "Auto Report Illumination Time",
-			"description": "Interval time for auto reporting the illumination.",
+			"description": "Auto Report Illumination Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"13": {
 			"label": "Auto Report Temperature Time",
-			"description": "Interval time for auto reporting the temperature.",
+			"description": "Auto Report Temperature Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 12,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"20": {
 			"label": "Auto Report Tick Interval",
-			"description": "Interval time for auto reporting each tick.",
+			"description": "Auto Report Tick Interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -179,22 +210,24 @@
 		},
 		"21": {
 			"label": "Temperature Differential Report",
-			"description": "The temperature differential to report.",
+			"description": "Temperature Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"22": {
 			"label": "Illumination Differential Report",
-			"description": "The illumination differential to report.",
+			"description": "Illumination Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -304,5 +337,10 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "There are two tamper keys in the device, one is in the back side, another is in the front side. Both of them can add, remove, reset or association from Z-Wave network. To add into a Z-Wave network: 1. Have Z-Wave Controller entered inclusion mode. 2. Pressing tamper key three times within 1.5 seconds to enter the inclusion mode. 3. After add successful, the device will wake to receive the setting command from Z-Wave Controller about 20 seconds",
+		"exclusion": "There are two tamper keys in the device, one is in the back side, another is in the front side. Both of them can add, remove, reset or association from Z-Wave network. To remove the device from a Z-Wave network: 1. Have Z-Wave Controller entered exclusion mode. 2. Pressing tamper key three times within 1.5 seconds to enter the exclusion mode. Node ID has been excluded",
+		"reset": "There are two tamper keys in the device, one is in the back side, another is in the front side. Both of them can add, remove, reset or association from Z-Wave network. To reset the device: Notice: Use this procedure only in the event that the primary controller is lost or otherwise inoperable. 1. Pressing tamper key four times within 1.5 seconds and do not release the tamper key in the 4th pressed, and the LED will light ON. 2. After 3 seconds the LED will turn OFF, after that within 2 seconds, release the tamper key. If successful, the LED will light ON one second. Otherwise, the LED will flash once. 3. IDs are excluded and all settings will reset to factory default"
 	}
 }

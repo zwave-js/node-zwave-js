@@ -1,0 +1,202 @@
+// GE/Jasco 28174
+// Plug-in Dual Smart Dimmer With 3.4A USB Charging
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "28174",
+	"description": "Plug-in Dual Smart Dimmer With 3.4A USB Charging",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3131",
+			"zwaveAllianceId": [
+				1421,
+				2209
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "When shipped from the factory, the LED is set to turn ON when the connected light is turned OFF. This is the default setting and can be changed if your primary controller supports the node configuration function. To make the LED turn ON when the light is turned ON, change parameter 3’s value to “1”. To turn the LED OFF at all times, change parameter 3’s value to 2.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED light on when on",
+					"value": 1
+				},
+				{
+					"label": "LED Light off at all times",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Endpoint 1 when receiving a dim command",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "number of steps or levels",
+					"value": 99
+				},
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		},
+		"8": {
+			"label": "Endpoint 1 when receiving a dim command",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timing of steps",
+					"value": 255
+				},
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		},
+		"9": {
+			"label": "End point 2 when receiving a dim command",
+			"description": "number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "number of steps or levels",
+					"value": 99
+				},
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		},
+		"10": {
+			"label": "Endpoint 2 when receiving a dim command",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "timing of steps",
+					"value": 255
+				},
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		},
+		"11": {
+			"label": "When receiving an all on or all off command",
+			"description": "To adjust all command speed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "To adjust all command speed",
+					"value": 99
+				},
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		},
+		"12": {
+			"label": "When receiving an all on or all off command",
+			"description": "To adjust all command timer",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "To adjust all command timer",
+					"value": 255
+				},
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "Adding your device to a Z-wave network: 1. Follow the instructions for your Z-wave certified controller to include the smart dimmer to the Z-wave network. 2. Once the controller is ready to include your smart dimmer, single press and release the manual/program button on the smart dimmer to include it in the network. 3. Once your controller has confirmed that the smart dimmer has been included, refresh the Z-wave network to optimize performance. Please reference the controller/gateway’s manual for instructions. Now you have complete control to turn your lamp ON/OFF or set Dim levels according to groups, scenes, schedules and interactive automations programmed by your controller. If your Z-wave certified controller features Remote Access, you can now control your lighting from your mobile devices",
+		"exclusion": "To exclude and reset the device: 1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network. 2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart dimmer to exclude it from the network",
+		"reset": "To return your dimmer to factory defaults: 1. If plugged in, unplug the Dimmer from the receptacle. 2. Press and hold the top button for at least 3 seconds while you plug the dimmer into a receptacle. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+	}
+}

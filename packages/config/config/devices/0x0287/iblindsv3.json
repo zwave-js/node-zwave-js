@@ -1,12 +1,15 @@
+// HAB Home Intelligence, LLC IB3.0
+// Window Blind Controller
 {
-	"manufacturer": "HAB Home Intelligence LLC",
+	"manufacturer": "HAB Home Intelligence, LLC",
 	"manufacturerId": "0x0287",
-	"label": "iblinds V3",
+	"label": "IB3.0",
 	"description": "Window Blind Controller",
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0071"
+			"productId": "0x0071",
+			"zwaveAllianceId": 4009
 		}
 	],
 	"firmwareVersion": {
@@ -23,9 +26,9 @@
 	"paramInformation": {
 		"1": {
 			"label": "Close Interval",
-			"description": "Auto Calibration Tightness. Lower value = tighter, Higher value = looser (MUST BE RECALIBRATED). Range: 16-32",
+			"description": "Smaller interval will make the blinds close tighter",
 			"valueSize": 1,
-			"minValue": 16,
+			"minValue": 15,
 			"maxValue": 32,
 			"defaultValue": 22,
 			"unsigned": true,
@@ -35,7 +38,7 @@
 		},
 		"2": {
 			"label": "Reverse Direction",
-			"description": "Reverse closing direction",
+			"description": "Used to reverse the direction of the blinds",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -46,18 +49,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No",
+					"label": "Forward Direction - 0% = Closed Down",
 					"value": 0
 				},
 				{
-					"label": "Yes",
+					"label": "Reverse Direction - 0% = Closed Up",
 					"value": 1
 				}
 			]
 		},
 		"3": {
-			"label": "Send Reports",
-			"description": "Used to disable Z-Wave Report. This is useful for systems that poll iblinds immediately after sending a position command. Disable if this an immediate report is causing iblinds motor to function improperly.",
+			"label": "Disable Report",
+			"description": "Used to disable Z-Wave Report. This is useful for systems that poll iblinds immediately after sending a position command. Disable if this an immediate report is causing iblinds motor to function improperly",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -68,18 +71,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enabled",
+					"label": "Enable Device Reset Locally",
 					"value": 0
 				},
 				{
-					"label": "Disabled",
+					"label": "Disable Device Reset Locally",
 					"value": 1
 				}
 			]
 		},
 		"4": {
 			"label": "Default ON Value",
-			"description": "Value that iblinds will open to by default",
+			"description": "Set the default On Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -90,8 +93,8 @@
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "Reset Button Disable",
-			"description": "Will disable the reset button on the motor, preventing it from accidentally being pressed",
+			"label": "Reserved",
+			"description": "Reserved for Manufactuer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -99,7 +102,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "No",
@@ -113,7 +116,7 @@
 		},
 		"6": {
 			"label": "Speed",
-			"description": "How fast iblinds will close in seconds",
+			"description": "The larger the value the slower the speed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -123,5 +126,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "Press the inclusion (IN/EX) button 3 times and wait for the device to be discovered and joined to the Z-Wave network. Follow the directions for your Z-Wave controller to uniquely identify your device. (Ex: Bedroom iblinds)",
+		"exclusion": "Press the exclude (IN/EX) button 3 times and wait for the device to be removed from the Z-Wave network",
+		"reset": "Press the IN/EX button 5 times for Device Reset Locally (Factory Reset)"
 	}
 }

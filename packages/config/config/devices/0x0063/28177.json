@@ -1,43 +1,70 @@
-// GE/Jasco 28177
+// GE/Jasco 28177/ZW4105
 // GE Z-Wave Plus Wireless Smart Lighting Control Appliance Module
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "28177",
+	"label": "28177/ZW4105",
 	"description": "GE Z-Wave Plus Wireless Smart Lighting Control Appliance Module",
 	"devices": [
 		{
 			"productType": "0x5052",
-			"productId": "0x3132"
+			"productId": "0x3132",
+			"zwaveAllianceId": [
+				2192,
+				2626
+			]
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"3": {
-			"label": "Night Light",
-			"description": "Defines the behavior of the blue LED.",
+			"label": "LED Light",
+			"description": "When shipped from the factory, the LED is set to turn ON when the connected light is turned On. This is the default setting and can be changed if your primary controller supports the node configuration function. To make the LED turn ON when the light is turned Off, change parameter 3’s value to “1”. To turn the LED OFF at all times, change parameter 3’s value to 2. • Parameter No: 3 • Length: 1 Byte • Valid Values = 0, 1 or 2 (default 0)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 1,
+			"minValue": 1,
+			"maxValue": 2,
+			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when switch is OFF",
+					"label": "LED Light On when deivce is Off",
 					"value": 1
 				},
 				{
-					"label": "LED Light Always ON",
+					"label": "LED Light Always On",
 					"value": 2
 				}
 			]
 		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to add the device to the Z-wave network. 2. Once the controller is ready to add your smart switch, single press and release the manual/program button on the smart switch to add it in the network. 3. Once your controller has confirmed that the smart switch has been added, refresh the Z-wave network to optimize performance.",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to remove a device from the Z-wave network. 2. Once the controller is ready to remove your device, press and release the manual/program button on the smart switch to remove it from the network",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle. 2. Press and hold the top button for at least 3 seconds while you plug the switch into a receptacle. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }
