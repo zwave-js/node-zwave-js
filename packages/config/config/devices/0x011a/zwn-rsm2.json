@@ -13,7 +13,10 @@
 		{
 			"productType": "0x0111",
 			"productId": "0x0605",
-			"zwaveAllianceId": [1777, 2242]
+			"zwaveAllianceId": [
+				1777,
+				2242
+			]
 		},
 		{
 			"productType": "0x0111",
@@ -54,8 +57,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "When the controller is in add mode, and once program button is pressed and released, or Flick 3 times of the connected switch in 1.5S, will also set the ZWN-RSM1 module enter into learn mode and then the controller will verify the add.",
-		"exclusion": "When the controller is in remove mode, and once program button is pressed and released, or Flick 3 times of the connected switch in 1.5S, will also set the ZWN-RSM1 module enter into learn mode and then the controller will verify the remove",
+		"inclusion": "When the controller is in add mode,Press and release the program button of ZWN-RSM2 module,or Flick 3 times of the connected switch with Aux1 line(or Aux 2 line) in 1.5 second. Then the controller will add the module into current Z-Wave network",
+		"exclusion": "When the controller is in remove mode,Press and release the program button of ZWN-RSM2 module, or Flick 3 times of the connected switch with Aux1 line (or Aux2 line) in 1.5 second. Then the controller will remove the module from current Z-Wave network",
 		"reset": "Once program button is pressed and hold for 10 second, the device will send a device reset locally notification to controller. Then clear all of information for the network, and restore factory defaults, and reset the module. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }

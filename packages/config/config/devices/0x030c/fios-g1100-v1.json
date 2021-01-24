@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Bring up Verizon Connected Home mobile application (“CoHo App”). Navigate to the “Z-Wave Troubleshooting” page in one of the following ways: a) Triple bar icon -> Support -> “Z-Wave Troubleshooting”. b) Triple bar icon -> Device Screen -> Axon gateway -> “Z-Wave Troubleshooting Tools”.From there, press “Reset” button, to reset the Z-Wave network, this will remove all devices from the controller. BHR is the primary controller for Z-Wave network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network."
+		"reset": "Bring up Verizon Connected Home mobile application (“CoHo App”). Navigate to the “Z-Wave Troubleshooting” page in one of the following ways: a) Triple bar icon -> Support -> “Z-Wave Troubleshooting”. b) Triple bar icon -> Device Screen -> Axon gateway -> “Z-Wave Troubleshooting Tools”.\n\nFrom there, press “Reset” button, to reset the Z-Wave network, this will remove all devices from the controller. \n\nBHR is the primary controller for Z-Wave network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network."
 	}
 }

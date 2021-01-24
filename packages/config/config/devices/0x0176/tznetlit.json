@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Navigate to the profile page in Telldus Live!. http://live.telldus.com/profile/indexClick on the locationClick Change settingsClick Z-Wave settingsClick Reset controllerPlease note! Only use the reset procedure when the primary controller is missing or inoperable."
+		"reset": "Navigate to the profile page in Telldus Live!. \nhttp://live.telldus.com/profile/index\nClick on the location\nClick Change settings\nClick Z-Wave settings\nClick Reset controller\n\nPlease note! Only use the reset procedure when the primary controller is missing or inoperable"
 	}
 }

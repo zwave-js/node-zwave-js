@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Press & hold inclusion/Exclusion button during 1 seconds when Open Sensor is exclusion status Press for 1seconds, LED is turn on Open sensor will try inclusion for 15 seconds when button is released.If inclusion is successful, LED will blink 3 times with 100ms interval",
-		"exclusion": "Press & hold inclusion/Exclusion button during 1 seconds when Open Sensor is exclusion status Press for 1seconds, LED is turn on Open sensor will try exclusion when button is released. If exclusion is successful, LED will blink 3 times with 100ms interval",
-		"reset": "Press & hold inclusion/Exclusion button during 5 seconds. LED turn on and LED turn off after 5sec Release Inclusion/Exclusion Factory reset will be done in 5 seconds and blink 5 times with 100ms interval ※ Please use factory reset only when the network primary controller is missing or otherwise inoperable"
+		"inclusion": " Press & hold inclusion/Exclusion button during 1 seconds when Open Sensor is exclusion status \n\n Press for 1seconds, LED is turn on \n\n Open sensor will try inclusion for 15 seconds when button is released.\n\n If inclusion is successful, LED will blink 3 times with 100ms interval",
+		"exclusion": " Press & hold inclusion/Exclusion button during 1 seconds when Open Sensor is exclusion status \n\n Press for 1seconds, LED is turn on \n\n Open sensor will try exclusion when button is released. \n\n If exclusion is successful, LED will blink 3 times with 100ms interval",
+		"reset": " Press & hold inclusion/Exclusion button during 5 seconds. \n\n LED turn on and LED turn off after 5sec \n\n Release Inclusion/Exclusion \n\n Factory reset will be done in 5 seconds and blink 5 times with 100ms interval \n\n※ Please use factory reset only when the network primary controller is missing or otherwise inoperable"
 	}
 }

@@ -9,7 +9,10 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0001",
-			"zwaveAllianceId": [3106, 684]
+			"zwaveAllianceId": [
+				3106,
+				684
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -17,6 +20,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "To reset the device, press and hold the reset button on the back of the unit for about 15 seconds. The unit will then restart."
+		"reset": "To reset the device, press and hold the reset button on the back of the unit for about 15 seconds. The unit will then restart"
 	}
 }
