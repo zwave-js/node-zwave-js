@@ -1533,10 +1533,79 @@ async function maintenanceParse(): Promise<void> {
 				includedZwaFiles = includedZwaFiles.concat(
 					device.zwaveAllianceId,
 				);
-			} else {
+			} else if (device.zwaveAllianceId) {
 				includedZwaFiles.push(device.zwaveAllianceId);
-				console.log();
 			}
+		}
+
+		for (const zwafile of zwaData) {
+			for (const referenceDevice of includedZwaFiles) {
+				const inclusion = zwafile?.Texts?.find(
+					(document) => document.Type === 1,
+				)?.value;
+				const exclusion = zwafile?.Texts?.find(
+					(document) => document.Type === 2,
+				)?.value;
+				const reset = zwafile?.Texts?.find(
+					(document) => document.Type === 5,
+				)?.value;
+				if (jsonData.metadata && zwafile.Texts) {
+					if (zwafile.Id === referenceDevice) {
+						if (jsonData.metadata.inclusion && inclusion) {
+							jsonData.metadata.inclusion = keepLongest(
+								jsonData.metadata.inclusion,
+								inclusion,
+							);
+							jsonData.metadata.inclusion = sanitizeString(
+								jsonData.metadata.inclusion,
+							);
+						}
+					}
+					if (zwafile.Id === referenceDevice) {
+						if (jsonData.metadata.exclusion && exclusion) {
+							jsonData.metadata.exclusion = keepLongest(
+								jsonData.metadata.exclusion,
+								exclusion,
+							);
+							jsonData.metadata.exclusion = sanitizeString(
+								jsonData.metadata.exclusion,
+							);
+						}
+					}
+					if (zwafile.Id === referenceDevice) {
+						if (jsonData.metadata.reset && reset) {
+							jsonData.metadata.reset = keepLongest(
+								jsonData.metadata.reset,
+								reset,
+							);
+							jsonData.metadata.reset = sanitizeString(
+								jsonData.metadata.reset,
+							);
+						}
+					}
+				}
+			}
+		}
+
+		if (jsonData.metadata) {
+			/*************************************
+			 *   Write the configuration file    *
+			 *************************************/
+
+			// Add a comment explaining which device this is
+			// prettier-ignore
+			const output = `// ${jsonData.manufacturer} ${jsonData.label}${jsonData.description ? (`
+// ${jsonData.description}`) : ""}
+			${stringify(normalizeConfig(jsonData), "\t")}`;
+			await fs.writeFile(file, output, "utf8");
+		}
+	}
+
+	function keepLongest(current_group: any, test_group: any) {
+		if (current_group.length >= test_group.length) {
+			return current_group;
+		} else {
+			return test_group;
 		}
 	}
 }
@@ -1879,11 +1948,12 @@ function normalizeIdentifier(originalIdentifier: string) {
  * 																			*
  ****************************************************************************/
 function sanitizeString(originalString: string) {
-	originalString = originalString.replace(/\r\n/g, " ");
-	originalString = originalString.replace(/\n/g, " ");
-	originalString = originalString.replace(/\r/g, " ");
+	originalString = originalString.replace(/\r\n/g, "\n\n");
+	originalString = originalString.replace(/\r/g, "\n");
+	originalString = originalString.replace(/\n\n\n\n/g, "\n\n");
 	originalString = originalString.replace(/\t/g, " ");
-	originalString = originalString.replace(/\\"\\"/g, '\\"');
+	// eslint-disable-next-line prettier/prettier
+	originalString = originalString.replace(/\"\"/g, '"');
 	originalString = originalString.replace(/      /g, " ");
 	originalString = originalString.replace(/     /g, " ");
 	originalString = originalString.replace(/    /g, " ");
