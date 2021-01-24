@@ -1,6 +1,6 @@
 // Fakro AMZ SOLAR
 // Solar Awning
-{
+			{
 	"manufacturer": "Fakro",
 	"manufacturerId": "0x0085",
 	"label": "AMZ SOLAR",
@@ -120,8 +120,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "Include - This function allow you to add awning blind to the network Z-Wave. Follow the procedur adding device to the network Z-Wave according to user manual supplied with the product. Then, press the programming button P on the awning blind for 1 second. Autoinclusion - This feature allow you to add hard to reach devices to Z-Wave network. 3-times ON and OFF the power awning blind (OFF-ON-OFF-ON-OFF-ON) causes the introduction of awning blind to Autoinclusion mode. Please note that the procedure has been started the time between on and off can not exceed 20s. Autoinclusion mode is activated for a maximum of 10 minutes. During this time, we can add an awning to any Z-Wave controller running in the Include procedure.",
+		"inclusion": "Include - This function allow you to add awning blind to the network Z-Wave. Follow the procedur adding device to the network Z-Wave according to user manual supplied with the product. Then, press the programming button P on the awning blind for 1 second.\n\nAutoinclusion - This feature allow you to add hard to reach devices to Z-Wave network. 3-times ON and OFF the power awning blind (OFF-ON-OFF-ON-OFF-ON) causes the introduction of awning blind to Autoinclusion mode. Please note that the procedure has been started the time between on and off can not exceed 20s. Autoinclusion mode is activated for a maximum of 10 minutes. During this time, we can add an awning to any Z-Wave controller running in the Include procedure.",
 		"exclusion": "Exclude - This function allow you to remove awning blind from the network Z-Wave. Follow the procedur removing device from the network Z-Wave according to user manual supplied with the product. Then, press the programming button P on the awning blind for 1 second. Function removes information only about newtork Z-Wave",
-		"reset": "Device Reset Locally – This function allows you to reset the Z-Wave network without the use of Z-Wave controller. Press 5 times the programming button P fast, the awning blind was removed from the Z-Wave network, restore the default parameters, name and locations. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "Device Reset Locally – This function allows you to reset the Z-Wave network without the use of Z-Wave controller. Press 5 times the programming button P fast, the awning blind was removed from the Z-Wave network, restore the default parameters, name and locations. \n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }
