@@ -1,6 +1,6 @@
 // Honeywell 39357 / ZW3004
 // Z-Wave in-wall Smart Dimmer
-			{
+{
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39357 / ZW3004",
@@ -132,8 +132,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to\n\ninclude a device to the Z-Wave network.\n\n2. Once the controller is ready to include your device, press\n\nand release the top or bottom of the wireless smart dimmer\n\n(rocker) to include it in the network",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\n\nexclude a device from the Z-Wave network.\n\n2. Once the controller is ready to Exclude your device, press\n\nand release the top or bottom of the wireless smart dimmer\n\n(rocker) to exclude it from the network",
-		"reset": "1. Quickly press ON (up) button (3) times then immediately press the OFF (down) button (3) times. \n\nNote: This should only be used in the even your network's primary controller is missing or otherwise inoperable."
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network. 2. Once the controller is ready to include your device, press and release the top or bottom of the wireless smart dimmer (rocker) to include it in the network",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. 2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart dimmer (rocker) to exclude it from the network",
+		"reset": "1. Quickly press ON (up) button (3) times then immediately press the OFF (down) button (3) times. Note: This should only be used in the even your network's primary controller is missing or otherwise inoperable."
 	}
 }

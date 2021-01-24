@@ -1,6 +1,6 @@
 // Philio Technology Corp PST02-1C
 // Slim Multi-Sensor (Door/Temperature/Illumination)
-			{
+{
 	"manufacturer": "Philio Technology Corp",
 	"manufacturerId": "0x013c",
 	"label": "PST02-1C",
@@ -253,8 +253,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "1. Have Z-WaveTM Controller enter inclusion mode.\n\n2. Pressing tamper key three times within 1.5 seconds\n\nwill enter the inclusion mode.\n\n3. After add successful, the device will wake to receive the setting command from Z-WaveTM Controller, about 20 seconds",
-		"exclusion": "1. Have Z-WaveTM Controller enter exclusion mode.\n\n2. Pressing tamper key three times within 1.5 seconds will enter the exclusion mode.\n\nNode ID has been excluded",
-		"reset": "Notice: Use this procedure only in the event\n\nthat the primary controller is lost or otherwise inoperable.\n\n1. Pressing tamper key four times within 1.5 seconds and do not release the tamper key on the 4th press, the LED lite will ON.\n\n2. After 3 seconds the LED will turn OFF, after that within 2 seconds, release the tamper key. If successful, the LED will light ON one second.\n\nOtherwise, the LED will flash once.\n\n3. IDs are excluded and all settings will reset to factory default"
+		"inclusion": "1. Have Z-WaveTM Controller enter inclusion mode. 2. Pressing tamper key three times within 1.5 seconds will enter the inclusion mode. 3. After add successful, the device will wake to receive the setting command from Z-WaveTM Controller, about 20 seconds",
+		"exclusion": "1. Have Z-WaveTM Controller enter exclusion mode. 2. Pressing tamper key three times within 1.5 seconds will enter the exclusion mode. Node ID has been excluded",
+		"reset": "Notice: Use this procedure only in the event that the primary controller is lost or otherwise inoperable. 1. Pressing tamper key four times within 1.5 seconds and do not release the tamper key on the 4th press, the LED lite will ON. 2. After 3 seconds the LED will turn OFF, after that within 2 seconds, release the tamper key. If successful, the LED will light ON one second. Otherwise, the LED will flash once. 3. IDs are excluded and all settings will reset to factory default"
 	}
 }

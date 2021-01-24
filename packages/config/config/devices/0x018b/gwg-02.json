@@ -1,6 +1,6 @@
 // Grib GWG-02
 // IoT Hub
-			{
+{
 	"manufacturer": "Grib",
 	"manufacturerId": "0x018b",
 	"label": "GWG-02",
@@ -9,12 +9,7 @@
 		{
 			"productType": "0x0002",
 			"productId": "0x0001",
-			"zwaveAllianceId": [
-				1641,
-				1915,
-				2113,
-				2384
-			]
+			"zwaveAllianceId": [1641, 1915, 2113, 2384]
 		},
 		{
 			"productType": "0x0002",
@@ -27,6 +22,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "- Run ‘ZW_SET_DEFAULT’ in Setting, then click YES of UZB PoP UP\n\n- Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\n\n- If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "-Run ‘ZW_SET_DEFAULT’ in Setting, then click YES of UZB PoP UP"
 	}
 }

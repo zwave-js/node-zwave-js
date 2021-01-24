@@ -1,6 +1,6 @@
 // GE/Jasco 39354 / 54912 / ZW4009
 // In-Wall Smart Toggle Switch
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "39354 / 54912 / ZW4009",
@@ -90,8 +90,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press up on the toggle",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press up on the toggle",
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press up on the toggle",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press up on the toggle",
 		"reset": "Quickly press up three times, then, immediately press down three times"
 	}
 }

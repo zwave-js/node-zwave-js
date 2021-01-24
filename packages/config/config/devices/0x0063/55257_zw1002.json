@@ -1,6 +1,6 @@
 // GE/Jasco 55257/ZW1002
 // In-Wall Tamper Resistant Smart Outlet
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "55257/ZW1002",
@@ -64,8 +64,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press and release the program button",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device to the Z-Wave network. \n\n2. Once the controller is ready to add your device, press and release the manual/program button",
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the program button",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the manual/program button",
 		"reset": "Press the button three times, then press and hold the button for at least three seconds. The LED will blink five times to confirm"
 	}
 }

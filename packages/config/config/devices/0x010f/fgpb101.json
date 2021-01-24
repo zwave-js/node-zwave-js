@@ -1,6 +1,6 @@
 // Fibargroup FGPB-101
 // A real push button (switch) available in several colors.
-			{
+{
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
 	"label": "FGPB-101",
@@ -543,8 +543,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "1) Place the Button within the direct range of your Z-Wave controller.\n\n2) Set the main controller in (security/non-security) add mode (see the controller’s manual).\n\n3) Click the Button at least six times.\n\n4) Wait for the adding process to end.\n\n5) Successful adding will be confirmed by the Z-Wave controller’s message.",
-		"exclusion": "1) Place the Button within the direct range of your Z-Wave controller.\n\n2) Set the main controller in remove mode (see the controller’s manual).\n\n3) Click the Button at least six times.\n\n4) Wait for the removing process to end.\n\n5) Successful removing will be confirmed by the Z-Wave controller’s message.",
-		"reset": "Reset procedure allows to restore the device back to its factory settings, which means all information about the Z-Wave controller and user configuration will be deleted. In order to reset the device:\n\n1) Click the Button exactly five times.\n\n2) Press and hold the Button for at least 5 seconds.\n\nResetting the device is not the recommended way of removing the device from the Z-Wave network. Use reset procedure only if the primary controller is missing or inoperable. Certain device removal can be achieved by the procedure of removing."
+		"inclusion": "1) Place the Button within the direct range of your Z-Wave controller. 2) Set the main controller in (security/non-security) add mode (see the controller’s manual). 3) Click the Button at least six times. 4) Wait for the adding process to end. 5) Successful adding will be confirmed by the Z-Wave controller’s message.",
+		"exclusion": "1) Place the Button within the direct range of your Z-Wave controller. 2) Set the main controller in remove mode (see the controller’s manual). 3) Click the Button at least six times. 4) Wait for the removing process to end. 5) Successful removing will be confirmed by the Z-Wave controller’s message.",
+		"reset": "Reset procedure allows to restore the device back to its factory settings, which means all information about the Z-Wave controller and user configuration will be deleted. In order to reset the device: 1) Click the Button exactly five times. 2) Press and hold the Button for at least 5 seconds. Please use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

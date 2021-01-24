@@ -1,6 +1,6 @@
 // EbV 9601921000
 // heatapp! repeater S2
-			{
+{
 	"manufacturer": "EbV",
 	"manufacturerId": "0x017c",
 	"label": "9601921000",
@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "To add (inclusion) the device press and hold the button for 3-8 seconds. When pressing the button, the led will flash short and after 3 seconds when the led has a steady light release the button",
-		"exclusion": "To remove (exclusion) the device press and hold the button for 3-8 seconds. When pressing the button, the led will flash short and after 3 seconds when the led has a steady light release the button",
-		"reset": "Press the button for more than 10 seconds to reset the\n\ndevice to factory default settings. The led will be released\n\nafter the device reset to factory defaults has been\n\nperformed.\n\nPlease use this procedure only when the network primary\n\ncontroller is missing or otherwise inoperable"
+		"inclusion": "To add (inclusion) the device press and hold the button for 3-8 seconds. When pressing the button, the led will flash short and after 3 seconds when the led has a steady light release the button.",
+		"exclusion": "To remove (exclusion) the device press and hold the button for 3-8 seconds. When pressing the button, the led will flash short and after 3 seconds when the led has a steady light release the button.",
+		"reset": "Press the button for more than 10 seconds to reset thedevice to factory default settings. The led will be releasedafter the device reset to factory defaults has beenperformed.Please use this procedure only when the network primarycontroller is missing or otherwise inoperable."
 	}
 }

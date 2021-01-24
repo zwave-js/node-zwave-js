@@ -1,6 +1,6 @@
 // Honeywell 39354/ZW4009
 // In-Wall Smart Toggle Switch
-			{
+{
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39354/ZW4009",
@@ -90,8 +90,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press up on the toggle.\n\nA. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product.\n\nNow you have complete control to turn your fixture ON/OFF according to groups, scenes, schedules and interactive automations programmed by your controller. If your Z-Wave certified controller features remote access, you can control your fixture from your mobile devices",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press up on the toggle",
-		"reset": "Quickly press UP button 3 times, then, immediately press the DOWN button 3 times.\n\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press up on the toggle. A. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product. Now you have complete control to turn your fixture ON/OFF according to groups, scenes, schedules and interactive automations programmed by your controller. If your Z-Wave certified controller features remote access, you can control your fixture from your mobile devices",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press up on the toggle",
+		"reset": "Quickly press UP button 3 times, then, immediately press the DOWN button 3 times. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }

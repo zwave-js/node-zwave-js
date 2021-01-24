@@ -1,6 +1,6 @@
 // GE/Jasco 28176/ZW4105
 // Plug-in Dual Smart Switch, Independant Control With USB Charging
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "28176/ZW4105",
@@ -60,8 +60,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-wave certified controller to\n\nadd the device to the Z-wave network.\n\n2. Once the controller is ready to add your smart switch,\n\nsingle press and release the manual/program button on the\n\nsmart switch to add it in the network.\n\n3. Once your controller has confirmed that the smart switch\n\nhas been added, refresh the Z-wave network to optimize\n\nperformance.",
-		"exclusion": "1. Follow the instructions for your Z-wave certified controller to\n\nremove a device from the Z-wave network.\n\n2. Once the controller is ready to remove your device, press and\n\nrelease the manual/program button on the smart switch to\n\nremove it from the network",
-		"reset": "1. If plugged in, unplug the Switch from the receptacle.\n\n2. Press and hold the top button for at least 3 seconds while you\n\nplug the switch into a receptacle.\n\nNote: This should only be used in the event your network’s\n\nprimary controller is missing or otherwise inoperable"
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to add the device to the Z-wave network. 2. Once the controller is ready to add your smart switch, single press and release the manual/program button on the smart switch to add it in the network. 3. Once your controller has confirmed that the smart switch has been added, refresh the Z-wave network to optimize performance.",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to remove a device from the Z-wave network. 2. Once the controller is ready to remove your device, press and release the manual/program button on the smart switch to remove it from the network",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle. 2. Press and hold the top button for at least 3 seconds while you plug the switch into a receptacle. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }

@@ -1,6 +1,6 @@
 // GE/Jasco 53831/ZW5314
 // Portable Remote, Simple Controller, 4 Button
-			{
+{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "53831/ZW5314",
@@ -60,8 +60,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified hub to add a device tothe Z-Wave network.\n\n2. Once the hub is ready to add your device, press and hold either button for three seconds.\n\n3. The LED will flash two times when the remote sends add notification (NIF).\n\n4. The LED will keep lighting up for one minute if inclusion is successful.\n\n5. Following the instructions for your Z-Wave certified hub, assign actions for each button press. An action can be many combinations of scenes, groups or events, and is greatly dependent on the hub capabilities.",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified hub to remove a device from the Z-Wave network.\n\n2. Once the hub is ready to remove your device, press and hold either button for three seconds.\n\n3. The LED will flash two times when the remote sends remove notification (NIF)",
-		"reset": "1. Press and release button 1 10 times quickly. All button presses must be within six seconds.\n\n2. The LED will flash five times when completed successfully."
+		"inclusion": "1. Follow the instructions for your Z-Wave certified hub to add a device tothe Z-Wave network. 2. Once the hub is ready to add your device, press and hold either button for three seconds. 3. The LED will flash two times when the remote sends add notification (NIF). 4. The LED will keep lighting up for one minute if inclusion is successful. 5. Following the instructions for your Z-Wave certified hub, assign actions for each button press. An action can be many combinations of scenes, groups or events, and is greatly dependent on the hub capabilities.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified hub to remove a device from the Z-Wave network. 2. Once the hub is ready to remove your device, press and hold either button for three seconds. 3. The LED will flash two times when the remote sends remove notification (NIF)",
+		"reset": "1. Press and release button 1 10 times quickly. All button presses must be within six seconds. 2. The LED will flash five times when completed successfully."
 	}
 }
