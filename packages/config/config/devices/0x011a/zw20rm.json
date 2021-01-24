@@ -1,15 +1,14 @@
-// Wenzhou MTLC Electric Appliances Co., Ltd. ZWN-333M
+// Wenzhou MTLC Electric Appliances Co., Ltd. ZW20RM
 // In-wall Smart Meter Duplex Receptacle
 {
 	"manufacturer": "Wenzhou MTLC Electric Appliances Co., Ltd.",
 	"manufacturerId": "0x011a",
-	"label": "ZWN-333M",
+	"label": "ZW20RM",
 	"description": "In-wall Smart Meter Duplex Receptacle",
 	"devices": [
 		{
 			"productType": "0x0111",
-			"productId": "0x0101",
-			"zwaveAllianceId": 1766
+			"productId": "0x0101"
 		}
 	],
 	"firmwareVersion": {
@@ -36,13 +35,12 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "LEDdirect",
-			"description": "synchronization of load power and LED indicator. 0: Power on, LED off 1: Power on, LED on",
+			"label": "Synchronization of load power and LED indicator",
+			"description": "Synchronization of load power and LED indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -134,10 +132,5 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"metadata": {
-		"inclusion": "Once program button is pressed and hold for 3 second, the device will enter into learn mode to accomplish adding or removing by controller. Refer to the instruction for your primary controller to access the setup function and add or remove devices",
-		"exclusion": "Once program button is pressed and hold for 3 second, the device will enter into learn mode to accomplish adding or removing by controller. Refer to the instruction for your primary controller to access the setup function and add or remove devices",
-		"reset": "Once program button is pressed and hold for 10 second, the device will send a device reset locally notification to controller. Then clear all of information for the network, and restore factory defaults, and reset the module. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
 	}
 }

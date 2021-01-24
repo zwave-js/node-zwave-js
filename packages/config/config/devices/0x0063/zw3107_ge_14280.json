@@ -1,40 +1,21 @@
-// GE/Jasco 14280 (ZW3107)
+// GE/Jasco ZW3107 / GE 14280
 // Plug-In Smart Dimmer (Dual Linked Outlets)
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14280 (ZW3107)",
+	"label": "ZW3107 / GE 14280",
 	"description": "Plug-In Smart Dimmer (Dual Linked Outlets)",
 	"devices": [
 		{
 			"productType": "0x5044",
-			"productId": "0x3033",
-			"zwaveAllianceId": [
-				1400,
-				2139
-			]
+			"productId": "0x3033"
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Group 1",
-			"maxNodes": 5,
-			"isLifeline": true
-		},
-		"2": {
-			"label": "Group 2",
-			"maxNodes": 5
-		},
-		"3": {
-			"label": "Double Tap",
-			"maxNodes": 5,
-			"isLifeline": true
-		}
-	},
+	"supportsZWavePlus": true,
 	"paramInformation": {
 		"3": {
 			"label": "LED Light",
@@ -43,13 +24,12 @@
 			"minValue": 0,
 			"maxValue": 2,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED Light on when Z-Wave tunred OFF (Default)",
+					"label": "LED Light on when Z-Wave turned OFF",
 					"value": 0
 				},
 				{
@@ -64,142 +44,60 @@
 		},
 		"7": {
 			"label": "Dim Rate",
-			"description": "Dim Rate",
+			"description": "number of steps or levels",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "number of steps or levels",
-					"value": 99
-				},
-				{
-					"label": "",
-					"value": 0
-				}
-			]
+			"allowManualEntry": true
 		},
 		"8": {
 			"label": "Dim Rate Adjustments (From Z-Wave Controller)",
-			"description": "Timing of steps PLEASE NOTE: Values should be entered using their singed values only, which means for example that a configuration value of 1 byte in size must have values in the range -128 to 127. Values specified here above or below the range specified by the values size need to be converted to their 2's compliment value, or if your controller supports it, may be entered using hexadecimal notation",
+			"description": "Timing of the steps",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
+			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timing of the steps",
-					"value": 255
-				},
-				{
-					"label": "",
-					"value": 0
-				}
-			]
+			"allowManualEntry": true
 		},
 		"9": {
 			"label": "Dim rate Adjustments (When Manually Controlled)",
-			"description": "Dim rate adjustments (when manually controlled )",
+			"description": "number of steps or levels",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "number of steps or levels",
-					"value": 99
-				},
-				{
-					"label": "",
-					"value": 0
-				}
-			]
+			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Dim Rate Adjustments (When Manually Contolled)",
-			"description": "PLEASE NOTE: Values should be entered using their signed values only, which means for example that a configuration value of 1 byte in size must have values in the range -128 to 127. Values specified here above or below the range specified by the value's size need to be converted to their 2's compliment value, or if your controller supports it, may be entered using hexadecimal notation",
+			"label": "Dim Timing (When Manually Controlled)",
+			"description": "(When Manually Controlled)",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timing of the steps",
-					"value": 255
-				},
-				{
-					"label": "",
-					"value": 0
-				}
-			]
-		},
-		"11": {
-			"label": "Dim Rate Adjustments (When Receiving All-On/All-Off Command)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "number of steps of levels",
-					"value": 99
-				},
-				{
-					"label": "",
-					"value": 0
-				}
-			]
+			"allowManualEntry": true
 		},
-		"12": {
-			"label": "Dim Rate Adjustments (When Receiving All-On/All-Off Command)",
-			"description": "Timing of the steps PLEASE NOTE: Values should be entered using their signed values only, which means for example that a configuration value of 1 byte in size must have values in the range -128 to 127. Values specified here above or below the range specified by the value's size need to be converted to their 2's compliment value, or if your controller supports it, may be entered using hexadecimal notation",
+		"11": {
+			"label": "Dim Rate Adjustments",
+			"description": "(When Receiving All-On/All-Off Command)",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Timing of the steps",
-					"value": 255
-				},
-				{
-					"label": "",
-					"value": 0
-				}
-			]
+			"allowManualEntry": true
 		}
-	},
-	"compat": {
-		"disableBasicMapping": true
-	},
-	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include the device to the Z-wave network. 2. Once the controller is ready to include your smart dimmer, single press and release the manual/program button on the smart dimmer to include it in the network.",
-		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network. 2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart dimmer to exclude it from the network.",
-		"reset": "1. If plugged in, unplug the Switch from the receptacle. 2. Press and hold the top button for at least 3 seconds while you plug the dimmer into a receptacle. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable."
 	}
 }

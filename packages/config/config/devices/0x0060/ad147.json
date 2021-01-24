@@ -1,18 +1,14 @@
-// Everspring AD147-6
+// Everspring AD147
 // Z-Wave Dimmer Plug
 {
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
-	"label": "AD147-6",
+	"label": "AD147",
 	"description": "Z-Wave Dimmer Plug",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0003",
-			"zwaveAllianceId": [
-				1065,
-				1527
-			]
+			"productId": "0x0003"
 		}
 	],
 	"firmwareVersion": {
@@ -35,66 +31,51 @@
 	"paramInformation": {
 		"1": {
 			"label": "Basic Set Command value",
-			"description": "Basic Set Command value. When the device sends a BASIC SET command, the value indicated here will be sent",
+			"description": "Basic Set Command value",
+			"unit": "Percentage",
 			"valueSize": 2,
-			"unit": "%",
-			"minValue": 99,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "",
-					"value": 99
-				},
-				{
-					"label": "",
-					"value": 255
-				}
-			]
+			"allowManualEntry": true
 		},
 		"2": {
-			"label": "The delaying time to report to Group 1",
-			"valueSize": 1,
+			"label": "Delaying Time to report to Group 1",
+			"description": "The delaying time to report to Group 1",
 			"unit": "seconds",
-			"minValue": 0,
+			"valueSize": 1,
+			"minValue": 3,
 			"maxValue": 25,
 			"defaultValue": 3,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"3": {
 			"label": "Remember the last status",
+			"description": "Remember the last status",
+			"unit": "binary",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"4": {
 			"label": "Output mode setting: Dimming, On/Off",
-			"description": "0 (Dimmable) or 1 (On/Off)",
+			"description": "Output mode setting: Dimming, On/Off",
+			"unit": "binary",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"metadata": {
-		"inclusion": "1. Put the Z-Wave Controller into inclusion mode. 2. Press the link key three times within 1.5 seconds to put the unit into inclusion mode. (Please refer to the documentation for the location of the link key.)",
-		"exclusion": "1. Put the Z-Wave Controller into exclusion mode. 2. Press the link key three times within 1.5 seconds to put the unit into exclusion mode. (Please refer to the documentation for the location of the link key.)",
-		"reset": "(This procedure should only be used when the network primary controller is inoperable.) 1. Press the link key three times within 1.5 seconds to put the unit into exclusion mode. 2. Within 1 second of step 1, press link key again and hold it until LED is off (about 5 seconds). (Please refer to the documentation for the location of the link key.) 3. Node ID is excluded. The device reverts to factory default state and will be in auto-inclusion mode for 4 minutes"
 	}
 }

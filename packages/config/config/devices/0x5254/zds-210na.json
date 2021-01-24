@@ -1,15 +1,14 @@
-// Remotec BW8130
+// Remotec ZDS-210NA
 // Dimming Switch Module (Dual Mode)
 {
 	"manufacturer": "Remotec",
 	"manufacturerId": "0x5254",
-	"label": "BW8130",
+	"label": "ZDS-210NA",
 	"description": "Dimming Switch Module (Dual Mode)",
 	"devices": [
 		{
 			"productType": "0x8200",
-			"productId": "0x8130",
-			"zwaveAllianceId": 1153
+			"productId": "0x8130"
 		}
 	],
 	"firmwareVersion": {
@@ -73,8 +72,8 @@
 		"17": {
 			"label": "Dimmer time from 0% to max.",
 			"description": "Dimmer time from 0% to max.",
-			"valueSize": 1,
 			"unit": "seconds",
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
 			"defaultValue": 3,
@@ -85,8 +84,8 @@
 		"18": {
 			"label": "Maximum Dimmer level control",
 			"description": "Maximum Dimmer level control",
+			"unit": "percent",
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 2,
 			"maxValue": 99,
 			"defaultValue": 99,
@@ -97,8 +96,8 @@
 		"19": {
 			"label": "Minimum Dimmer level control",
 			"description": "Minimum Dimmer level control",
+			"unit": "percent",
 			"valueSize": 1,
-			"unit": "%",
 			"minValue": 1,
 			"maxValue": 98,
 			"defaultValue": 13,

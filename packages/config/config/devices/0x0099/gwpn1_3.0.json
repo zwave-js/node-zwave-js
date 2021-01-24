@@ -1,21 +1,14 @@
-// GreenWave Reality Inc. NS210-F/NS212-F V1
+// GreenWave Reality Inc. GWPN1
 // Single-socket PowerNode
 {
 	"manufacturer": "GreenWave Reality Inc.",
 	"manufacturerId": "0x0099",
-	"label": "NS210-F/NS212-F V1",
+	"label": "GWPN1",
 	"description": "Single-socket PowerNode",
 	"devices": [
 		{
 			"productType": "0x0002",
-			"productId": "0x0002",
-			"zwaveAllianceId": [
-				52,
-				55,
-				58,
-				589,
-				629
-			]
+			"productId": "0x0002"
 		}
 	],
 	"firmwareVersion": {
@@ -46,8 +39,8 @@
 		"0": {
 			"label": "Min. variation of load current",
 			"description": "Minimum variation in load current before a message is sent.",
-			"valueSize": 1,
 			"unit": "%",
+			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
 			"defaultValue": 0,
@@ -71,8 +64,8 @@
 			"label": "Wheel position",
 			"description": "Wheel position on the GreenWave device (read-only)",
 			"valueSize": 1,
-			"minValue": 128,
-			"maxValue": 137,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
