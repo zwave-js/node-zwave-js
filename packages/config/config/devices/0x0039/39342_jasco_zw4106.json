@@ -1,6 +1,6 @@
 // Honeywell 39342 / ZW4106
 // Plug-In Smart Switch (Dual Linked Outlets, Grounded)
-{
+			{
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39342 / ZW4106",
@@ -63,8 +63,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "Adding your device to a Z-Wave network: 1. Follow the instructions for your Z-Wave certified controller to include the device to the Z-Wave network. 2. Once the controller is ready to include your smart switch, single press and release the manual/program button on the smart switch to include it in the network. Now you have complete control to turn your lamp ON/OFF according to groups, scenes, schedules and interactive automations programmed by your controller. If your Z-Wave certified controller features Remote Access, you can now control your lighting from your mobile devices",
-		"exclusion": "To exclude and reset the device: 1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. 2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart switch to exclude it from the network",
-		"reset": "To return your switch to factory defaults: 1. If plugged in, unplug the device from the receptacle. 2. Press and hold the top button, plug the device in, and continue to hold for at least 3 seconds. Note: This should only be used in the event your networks’ primary controller is missing or otherwise inoperable"
+		"inclusion": "Adding your device to a Z-Wave network:\n\n1. Follow the instructions for your Z-Wave certified controller to\n\ninclude the device to the Z-Wave network.\n\n2. Once the controller is ready to include your smart switch,\n\nsingle press and release the manual/program button on the\n\nsmart switch to include it in the network.\n\nNow you have complete control to turn your lamp ON/OFF\n\naccording to groups, scenes, schedules and interactive\n\nautomations programmed by your controller.\n\nIf your Z-Wave certified controller features Remote Access,\n\nyou can now control your lighting from your mobile devices",
+		"exclusion": "To exclude and reset the device:\n\n1. Follow the instructions for your Z-Wave certified controller to\n\nexclude a device from the Z-Wave network.\n\n2. Once the controller is ready to Exclude your device, press\n\nand release the manual/program button on the smart switch\n\nto exclude it from the network",
+		"reset": "To return your switch to factory defaults:\n\n1. If plugged in, unplug the device from the receptacle.\n\n2. Press and hold the top button, plug the device in, and continue to hold for at least 3 seconds.\n\nNote: This should only be used in the event your networks’\n\nprimary controller is missing or otherwise inoperable"
 	}
 }

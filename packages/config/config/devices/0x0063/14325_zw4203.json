@@ -1,6 +1,6 @@
 // GE/Jasco 14325/ZW4203
 // Plug-in Outdoor Smart Switch
-{
+			{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "14325/ZW4203",
@@ -89,8 +89,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the smart switch to the Z-Wave network. 2. Once the controller is ready to add your outdoor smart switch, press and release the manual/program button on the smart switch. 3. The controller’s app will indicate if it has discovered the switch. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the side of the box or the QR code label on the product (see Figure 1). Enter the 5-digit code",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the manual/program button on the smart switch to remove it from the network",
-		"reset": "1. If plugged in, unplug the switch from the receptacle. 2. Press and hold the manual/program button for at least 3 seconds while you plug the switch into a receptacle. Note: This should only be used if your network’s primary controller is missing or otherwise inoperable"
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the smart switch to the Z-Wave network.\n\n2. Once the controller is ready to add your outdoor smart switch, press and release the manual/program button on the smart switch.\n\n3. The controller’s app will indicate if it has discovered the switch. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the side of the box or the QR code label on the product (see Figure 1). Enter the 5-digit code",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press and release the manual/program button on the smart switch to remove it from the network",
+		"reset": "1. If plugged in, unplug the switch from the receptacle.\n\n2. Press and hold the manual/program button for at least 3 seconds while you plug the switch into a receptacle.\n\nNote: This should only be used if your network’s primary controller is missing or otherwise inoperable"
 	}
 }

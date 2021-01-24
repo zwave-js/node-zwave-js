@@ -1,6 +1,6 @@
 // Express Controls EZMULTIPL
 // Multi Sensor
-{
+			{
 	"manufacturer": "Express Controls",
 	"manufacturerId": "0x001e",
 	"label": "EZMULTIPL",
@@ -139,8 +139,8 @@
 		}
 	},
 	"metadata": {
-		"inclusion": "SmartStart or press and release the button on the side. LED blinks slowly light blue when not included. Once included, the LED blinks white when motion is detected for about 5 minutes to test the motion detection area",
-		"exclusion": "When EZMultiPli is first plugged into the wall outlet, the LED should blink an aqua color. This indicates that it is not currently joined (or paired) to a Z-Wave network. If the LED is blinking white each time motion is detected, then it is already joined to a Z-Wave network. If the LED is blinking white you will need to exclude it from the other Z-Wave network before attempting to join a new one. Follow the procedure of the Z-Wave primary controller to begin the exclusion process. Once the primary controller is ready to receive the exclusion command, press and release the push button on the side of EZMultiPli. The primary controller should give an indication that the reset process has completed. EZMultiPlis LED will blink aqua when it is ready to be added to a Z-Wave network",
-		"reset": "Factory Reset If the exclusion process above is not working or the controller EZMultiPli was originally joined to is lost or not available, the following process can be used to factory reset EZMultiPli. Press and continue to hold the push button in for about 60 seconds. The LED will blink blue faster and faster and then shift to yellow and continue to blink faster and faster. Once the LED goes out, EZMultiPli is reset to the factory defaults and will blink aqua indicating it is ready to be added to a Z-Wave network"
+		"inclusion": "When the HSM200 has not yet been joined to a Z-Wave network, the LED blinks aqua.\n\nTo Include: Put the controller into learn mode, (in the HomeSeer Z-Wave Plug-in, choose controller functions and add/include device.) then press and release the push button on the side of the HSM200. The LED will blink blue while the HSM200 is trying to join the Z-Wave network. Once joined to the network, the HSM200 enters a motion sensor test mode and the LED will blink white each time motion is detected. This mode lasts for about 5 minutes and then the LED will go out.\nIf the HSM200 is unable to join the network, it will return to blinking aqua",
+		"exclusion": "When EZMultiPli is first plugged into the wall outlet, the LED should blink an aqua color. This indicates that it is not currently joined (or paired) to a Z-Wave network. If the LED is blinking white each time motion is detected, then it is already joined to a Z-Wave network. If the LED is blinking white you will need to exclude it from the other Z-Wave network before attempting to join a new one.\n\nFollow the procedure of the Z-Wave primary controller to begin the exclusion process. Once the primary controller is ready to receive the exclusion command, press and release the push button on the side of EZMultiPli. The primary controller should give an indication that the reset process has completed. EZMultiPlis LED will blink aqua when it is ready to be added to a Z-Wave network",
+		"reset": "Factory Reset\n\nIf the exclusion process above is not working or the controller EZMultiPli was originally joined to is lost or not available, the following process can be used to factory reset EZMultiPli.\n\nPress and continue to hold the push button in for about 60 seconds. The LED will blink blue faster and faster and then shift to yellow and continue to blink faster and faster. Once the LED goes out, EZMultiPli is reset to the factory defaults and will blink aqua indicating it is ready to be added to a Z-Wave network."
 	}
 }

@@ -1,6 +1,6 @@
 // Vera Control NA930
 // Homelive Base
-{
+			{
 	"manufacturer": "Vera Control",
 	"manufacturerId": "0x008c",
 	"label": "NA930",
@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Please use this procedure only in the event that the system primary controller is missing or otherwise inoperable. To reset the controller, press the reset button for 20 seconds. This will reset it to factory default."
+		"reset": "Please use this procedure only in the event that the system primary controller is missing or otherwise inoperable. \n\nTo reset the controller, press the reset button for 20 seconds. This will reset it to factory default."
 	}
 }

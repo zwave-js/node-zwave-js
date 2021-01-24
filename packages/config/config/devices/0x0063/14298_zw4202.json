@@ -1,6 +1,6 @@
 // GE/Jasco 14298/ZW4202
 // Plug-in Outdoor Smart Switch
-{
+			{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "14298/ZW4202",
@@ -90,8 +90,8 @@
 		"disableBasicMapping": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the top or bottom of the wireless smart switch (rocker)",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network. 2. Once the controller is ready to remove your device, press and release the top or bottom of the wireless smart switch (rocker)",
-		"reset": "1. If plugged in, unplug the Switch from the receptacle. 2. Press and hold the button for at least 3 seconds while you plug the switch into a receptacle. Note: This should only be used in the event your network’s primary controller is missing or otherwise inoperable."
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\n\ncontroller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press and\n\nrelease the top or bottom of the wireless smart switch (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller\n\nto remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press and\n\nrelease the top or bottom of the wireless smart switch (rocker)",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle.\n\n2. Press and hold the button for at least 3 seconds\n\nwhile you plug the switch into a receptacle.\n\nNote: This should only be used in the event your network’s\n\nprimary controller is missing or otherwise inoperable."
 	}
 }

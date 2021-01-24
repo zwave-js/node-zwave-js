@@ -1,6 +1,6 @@
 // Vivint CP04
 // Vivint Smart Hub
-{
+			{
 	"manufacturer": "Vivint",
 	"manufacturerId": "0x0156",
 	"label": "CP04",
@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "To add a Z-Wave device to the panel network — as with all sensors and peripheral devices — follow the detailed installation instructions included with that particular device.To access Z-Wave settings from the control panel, go to:Menu > Software Version > Installer Toolbox > Smart Home Devices > Z-Wave",
-		"exclusion": "To remove a Z-Wave device to the panel network — as with all sensors and peripheral devices — follow the detailed installation instructions included with that particular device.To access Z-Wave settings from the control panel, go to:Menu > Software Version > Installer Toolbox > Smart Home Devices > Z-Wave",
-		"reset": "The SmartHub’s Z-Wave network can be reset to a default state, removing all Z-Wave devices in the process. Please use this procedure only when the network primary controller is missing or otherwise inoperable. To do this, follow these instructions from the settings tab:5.21. 2. 3. 4. 5. 6.On the “Support” page, touch “Software version” Enter the default installer PIN code (2203)Select “Smart Home devices”Select “Z-Wave”Select “Reset controller”Follow the on-screen instructions to complete the operation."
+		"inclusion": "To add a Z-Wave device to the panel network — as with all sensors and peripheral devices — follow the detailed installation instructions included with that particular device.\n\nTo access Z-Wave settings from the control panel, go to:\n\nMenu > Software Version > Installer Toolbox > Smart Home Devices > Z-Wave",
+		"exclusion": "To remove a Z-Wave device to the panel network — as with all sensors and peripheral devices — follow the detailed installation instructions included with that particular device.\n\nTo access Z-Wave settings from the control panel, go to:\n\nMenu > Software Version > Installer Toolbox > Smart Home Devices > Z-Wave",
+		"reset": "The SmartHub’s Z-Wave network can be reset to a default state, removing all Z-Wave devices in the process. Please use this procedure only when the network primary controller is missing or otherwise inoperable. To do this, follow these instructions from the settings tab:\n\n5.2\n\n1. 2. 3. 4. 5. 6.\n\nOn the “Support” page, touch “Software version” Enter the default installer PIN code (2203)\n\nSelect “Smart Home devices”\n\nSelect “Z-Wave”\n\nSelect “Reset controller”\n\nFollow the on-screen instructions to complete the operation"
 	}
 }

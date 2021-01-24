@@ -1,6 +1,6 @@
 // Wink Inc. PWHUB-WH01
 // Wink Hub
-{
+			{
 	"manufacturer": "Wink Inc.",
 	"manufacturerId": "0x017f",
 	"label": "PWHUB-WH01",
@@ -9,7 +9,11 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0001",
-			"zwaveAllianceId": [1061, 1990, 2169]
+			"zwaveAllianceId": [
+				1061,
+				1990,
+				2169
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -17,6 +21,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "The HUB does not have a master factory reset function that will reset all radios. However, it does support a reset for Z-Wave products. The HUBs Z-Wave controller is reset using the Z-Wave Controls interface located under the HUB's settings menu. Within the Z-Wave Controls interface is a \"Reset Z-Wave\" button which will remove all nodes and reset the Z-Wave radio."
+		"reset": "The HUB does not have a master factory reset function that will reset all radios. However, it does support a reset for Z-Wave products. The HUBs Z-Wave controller is reset using the Z-Wave Controls interface located under the HUB's settings menu. Within the Z-Wave Controls interface is a \"Reset Z-Wave\" button which will remove all nodes and reset the Z-Wave radio.\n\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }
