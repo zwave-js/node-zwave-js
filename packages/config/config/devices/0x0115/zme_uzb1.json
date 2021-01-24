@@ -1,6 +1,6 @@
 // Z-Wave.Me ZME_UZB1
 // USB Z-Wave Mini Adapter
-{
+			{
 	"manufacturer": "Z-Wave.Me",
 	"manufacturerId": "0x0115",
 	"label": "ZME_UZB1",

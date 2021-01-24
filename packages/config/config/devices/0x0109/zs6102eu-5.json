@@ -1,6 +1,6 @@
 // Vision Security ZS6102EU-5
 // Smoke Detector
-{
+			{
 	"manufacturer": "Vision Security",
 	"manufacturerId": "0x0109",
 	"label": "ZS6102EU-5",
