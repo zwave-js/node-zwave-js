@@ -8,8 +8,7 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x001a",
-			"zwaveAllianceId": [709, 768, 776]
+			"productId": "0x001a"
 		}
 	],
 	"firmwareVersion": {
@@ -33,7 +32,7 @@
 			"description": "Notification on Status Change",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -124,8 +123,8 @@
 			"label": "External Button Type",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
+			"maxValue": 255,
+			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -149,7 +148,7 @@
 			"label": "Partner ID",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -182,7 +181,7 @@
 			"label": "Enable/disable Lock Configuration",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -224,6 +223,7 @@
 		"2[0xff]": {
 			"label": "LED blink repeat",
 			"description": "Number of times LED should blink",
+			"unit": "cycles",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -235,6 +235,7 @@
 		"2[0xff00]": {
 			"label": "LED duty time",
 			"description": "length of time LED will blink on/off per cycle",
+			"unit": "0.1s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,

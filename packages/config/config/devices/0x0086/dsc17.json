@@ -1,15 +1,14 @@
-// AEON Labs DSC17103 ZW
+// AEON Labs DSC17
 // Micro Double Smart Switch
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
-	"label": "DSC17103 ZW",
+	"label": "DSC17",
 	"description": "Micro Double Smart Switch",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0011",
-			"zwaveAllianceId": 1622
+			"productId": "0x0011"
 		}
 	],
 	"firmwareVersion": {
@@ -35,6 +34,7 @@
 		"2": {
 			"label": "Blink",
 			"description": "This is a double byte value.",
+			"unit": "0.1s",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -70,7 +70,7 @@
 			"description": "Enables automatic notifications to associated devices",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -96,7 +96,7 @@
 			"description": "Automated sending of a Report triggered by minimal change of value.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

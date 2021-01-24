@@ -1,9 +1,9 @@
-// FortrezZ LLC MIMOLIT
+// FortrezZ LLC MIMOlite
 // Digital or Analog Voltage input and/or Dry Contact Relay
 {
 	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
-	"label": "MIMOLIT",
+	"label": "MIMOlite",
 	"description": "Digital or Analog Voltage input and/or Dry Contact Relay",
 	"devices": [
 		{
@@ -28,8 +28,7 @@
 		},
 		{
 			"productType": "0x0453",
-			"productId": "0x0111",
-			"zwaveAllianceId": 1756
+			"productId": "0x0111"
 		}
 	],
 	"firmwareVersion": {
@@ -65,12 +64,12 @@
 			"label": "Clear_Pulse_Meter_Counts",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
 				{
 					"label": "Clear Pulse Meter Counts",
@@ -83,7 +82,7 @@
 			"description": "Input-to-relay Mapping",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -104,8 +103,8 @@
 			"label": "Lower_Threshold_High",
 			"description": "Lower Threshold, High",
 			"valueSize": 1,
-			"minValue": 187,
-			"maxValue": 187,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 187,
 			"unsigned": true,
 			"readOnly": false,
@@ -122,8 +121,8 @@
 			"label": "Lower_Threshold_Low",
 			"description": "Lower Threshold, Low",
 			"valueSize": 1,
-			"minValue": 171,
-			"maxValue": 171,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 171,
 			"unsigned": true,
 			"readOnly": false,
@@ -140,7 +139,7 @@
 			"label": "Upper_Threshold_High",
 			"description": "Upper Threshold, High",
 			"valueSize": 1,
-			"minValue": 255,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
@@ -158,8 +157,8 @@
 			"label": "Upper_Threshold_Low",
 			"description": "Upper Threshold, Low",
 			"valueSize": 1,
-			"minValue": 254,
-			"maxValue": 254,
+			"minValue": 0,
+			"maxValue": 255,
 			"defaultValue": 254,
 			"unsigned": true,
 			"readOnly": false,
@@ -176,7 +175,7 @@
 			"label": "Trigger_Level_And_Input_Threshold",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 255,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
@@ -206,7 +205,7 @@
 			"description": "Multilevel AutoReport Interval",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 255,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
@@ -228,7 +227,7 @@
 			"description": "Momentary Relay1 output enable/disable (100msec).",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 5,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,

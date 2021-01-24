@@ -1,15 +1,12 @@
-// FortrezZ LLC FTS05P
-// FTS05P Flood and Temperature Sensor
 {
-	"manufacturer": "FortrezZ LLC",
+	"manufacturer": "FortrezZ",
 	"manufacturerId": "0x0084",
 	"label": "FTS05P",
 	"description": "FTS05P Flood and Temperature Sensor",
 	"devices": [
 		{
 			"productType": "0x00a3",
-			"productId": "0x020a",
-			"zwaveAllianceId": 2458
+			"productId": "0x020a"
 		},
 		{
 			"productType": "0x00a3",
@@ -57,8 +54,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Temperature Low threshold",
-			"description": "-10 deg to 69 deg C",
+			"label": "Temperature Low Threshold",
+			"description": "Use this to change the low temperature alarm threshold. Set the range between -10 and 69 deg C.Note: The user configuration value is a positive decimal integer 0 through 255, but the device interprets the value as 8-bit Two's complement. Examples: -10 in Two's complement is 246 decimal (0xF6). -2 in Two's complement is 254 decimal (xFE) -1 in Two's complement is 255 decimal (xFF) 0 in Two's complement is 0 decimal (0x00). 69 in Two's complement is 69 decimal (0x45). Thus the valid range the user may enter is 0-69 and 246-255.",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 0,
@@ -70,8 +67,8 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Temperature High threshold",
-			"description": "-9 deg to 70 deg C",
+			"label": "Temperature High Threshold",
+			"description": "Use this to change the high temperature alarm threshold. Set the range between -9 and 70 deg C.Note: The user configuration value is a positive decimal integer 0 through 255, but the device interprets the value as 8-bit Two's complement. Examples: -9 in Two's complement is 247 decimal (0xF7). -2 in Two's complement is 254 decimal (xFE) -1 in Two's complement is 255 decimal (xFF) 0 in Two's complement is 0 decimal (0x00). 70 in Two's complement is 70 decimal (0x46). Thus the valid range the user may enter is 0-70 and 247-255.",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 0,
@@ -84,7 +81,7 @@
 		},
 		"3": {
 			"label": "Normally Wet vs Normally Dry",
-			"description": "0 or 240",
+			"description": "Default is set as a Normally DRY sensor. Use this to switch to Normally WET sensor. The device only accepts one of two possible values: 0 (0x00) - Normally Dry (default). 240 (0xF0) - Normally Wet.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 240,
@@ -96,7 +93,7 @@
 		},
 		"4": {
 			"label": "Water Alarm Association Mode",
-			"description": "240 or 0",
+			"description": "Use this to send basic set ON or Basic Set OFF when an alarm is detected. The device only accepts one of two possible values: 0 (0x00) - For sending basic set OFF when alarm detected. 240 (0xF0) - For sending basic Set ON (default) when alarm detected.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 240,
@@ -106,10 +103,5 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"metadata": {
-		"inclusion": "1) Set up the Add/Inclusion mode at the controller; 2) Briefly press the switch once and the controller will indicate the unit has been added into the network. Also, the LED will blink 2 quick blinks when complete.",
-		"exclusion": "1) Set up the Remove/Exclusion mode at the controller; 2) Press and hold the switch for approx. 2 seconds and then release. The controller will indicates the unit has been removed from the network. The LED will blink 4 quick blinks when complete",
-		"reset": "Reset the device to factory Defaults - Press and hold the program button for longer than 15 seconds. When complete, the LED will flash approx. 30 times. This can be done while the device is either in or out of a network. Please use this procedure only when the network primary controller is missing or otherwise inoperable. Caution – When this is done in-network, the device will no longer be in the network and all configurations and associations will be set to default."
 	}
 }

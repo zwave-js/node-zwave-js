@@ -8,13 +8,11 @@
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x0088",
-			"zwaveAllianceId": 1962
+			"productId": "0x0088"
 		},
 		{
 			"productType": "0x0003",
-			"productId": "0x1088",
-			"zwaveAllianceId": 2171
+			"productId": "0x1088"
 		},
 		{
 			"productType": "0x0003",
@@ -44,42 +42,31 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Configure Alarm Music Volume",
-			"description": "unsigned",
+			"label": "Configure Alarm music volume",
+			"description": "Configure Alarm music volume",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 3,
-			"unsigned": true,
+			"defaultValue": 2,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Configure Alarm Music Duration Time",
-			"description": "This Parameter defines the alarm music duration time when siren receive an alarm sensor notification report or an alarm command from controller. The duration time is divided into 5 stages: Siren is not on (Parameter is set to ‘0’), 30 second (Parameter is set to ‘1’), 1 minute (Parameter is set to ‘2’), 5 minute (Parameter is set to ‘3’) and Siren is always on until battery is dead (Parameter is set to ‘255’). Default value is ‘2’",
+			"label": "Alarm music duration time",
+			"description": "Alarm music duration time",
 			"valueSize": 1,
-			"minValue": 3,
+			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 2,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "unsigned",
-					"value": 3
-				},
-				{
-					"label": "unsigned",
-					"value": 255
-				}
-			]
+			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Configuring Door Bell Music Duration Time",
-			"description": "unsigned",
+			"label": "Door bell music duration time",
+			"description": "Door bell music duration time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -90,81 +77,48 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Configure Door Bell Music Volume",
-			"description": "unsigned",
+			"label": "Door bell music volume",
+			"description": "Door bell music volume",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 3,
-			"defaultValue": 1,
-			"unsigned": true,
+			"defaultValue": 2,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"5": {
-			"label": "Configure Alarm Music Index",
-			"description": "unsigned",
+			"label": "Alarm music index",
+			"description": "Alarm music index",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 10,
-			"unsigned": true,
+			"defaultValue": 9,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"6": {
-			"label": "Configure Door Bell Music Index",
-			"description": "unsigned",
+			"label": "Door bell music index",
+			"description": "Door bell music index",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 10,
-			"defaultValue": 9,
-			"unsigned": true,
+			"defaultValue": 10,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Configure Default Siren On Mode",
-			"description": "unsigned",
+			"label": "Default Siren on mode",
+			"description": "Default Siren on mode",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 1,
 			"maxValue": 2,
 			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"8": {
-			"label": "Configure Alarm Led Enable",
-			"description": "unsigned",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 1,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"9": {
-			"label": "Configure Door Bell Led Enable",
-			"description": "unsigned",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
-			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
-	},
-	"metadata": {
-		"inclusion": "In the front casing, there is button that is used to carry out include, exclude or reset factory default settings on PCB Board. When power is first supplied, the LED will flash on and off alternately at one second intervals within 5 seconds if the detector has not been added a Z‐Wave network. Please get familiar with the terms below before starting the operations. This product can be included and operated in any Z‐Wave network with other Z‐Wave certified devices from other manufacturers and/or other applications. All non‐battery operated nodes within the network will act as repeaters regardless of vendor to increase reliability of the network",
-		"exclusion": "1. Remove the siren cover. 2. Make sure the siren is powered. 3. Set Z‐Wave controller or Z‐Wave gateway into inclusion mode (Refer to the controller or gateway operating manual) 4. Press the button three times within 1.5 second, the device will enter inclusion mode. And the LED will flash on and off alternately five times. Note: If siren has not been added to Z‐wave network, the siren will enter inclusion mode automatically when it is powered on. You should let the controller enter into inclusion first before power on the siren in order to run this function",
-		"reset": "Reset procedure will delete all information on the Z‐Wave network and Z‐Wave controller or Z‐Wave Gateway, and restore the siren to factory default settings. 1. Remove the device cover. 2. Make sure the siren is powered. 3. Press and hold the button for 10 seconds, led will blink once. 4. Release the button. Note: to use the reset procedure only when the primary controller is missing or inoperable"
 	}
 }
