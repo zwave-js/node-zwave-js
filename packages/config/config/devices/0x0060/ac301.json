@@ -1,6 +1,6 @@
 // Everspring AC301
 // Thermostatic Radiator Valve
-{
+			{
 	"manufacturer": "Everspring",
 	"manufacturerId": "0x0060",
 	"label": "AC301",
@@ -167,5 +167,10 @@
 			"precision": 1,
 			"size": 2
 		}
+	},
+	"metadata": {
+		"inclusion": "1. Put the Z-Wave Controller into inclusion mode.\n\n2. Press the P button 3 times within 1.5 seconds to put the unit into inclusion mode.",
+		"exclusion": "1. Put the Z-Wave Controller into exclusion mode.\n\n2. Press the P button 3 times within 1.5 seconds to put the unit into exclusion mode.",
+		"reset": "1. Press the P button 3 times within 1.5 seconds to put the unit into exclusion mode.\n\n2. Within 1 second of step 1, press the button P again and hold for 5 seconds.\n\n3. Node ID is excluded. The device reverts to factory default state.\n\n((This procedure should only be used when the controller is inoperable.))"
 	}
 }

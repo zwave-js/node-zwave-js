@@ -1,6 +1,6 @@
 // Popp & Co 004001
 // Smoke Detector and Siren
-{
+			{
 	"manufacturer": "Popp & Co",
 	"manufacturerId": "0x0154",
 	"label": "004001",
@@ -121,5 +121,10 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"inclusion": "To Include, hit the little button on the wireless module for 1 second",
+		"exclusion": "To Exclude, hit the little button on the wireless module for 1 second",
+		"reset": "To reset the device keep the button pushed for 10 seconds. After 5 seconds the led starts flashing and after another 5\n\nseconds there is a short beep signaling the successful reset back to factory defaults. Use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

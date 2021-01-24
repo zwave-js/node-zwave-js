@@ -1,6 +1,6 @@
 // Honeywell 39358
 // Z-Wave In-Wall Smart Fan Control
-{
+			{
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
 	"label": "39358",
@@ -38,5 +38,13 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.\n\n2. Once the controller is ready to include your device, press and release the top or bottom of the smart fan control switch (rocker) to include it in the network.\n\n3. Once your controller has confirmed the device has been included, refresh the Z-Wave network to optimize performance",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. \n\n2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart switch (rocker) to exclude it from the network",
+		"reset": "1. Quickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully.\n\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }

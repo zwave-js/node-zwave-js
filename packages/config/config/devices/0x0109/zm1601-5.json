@@ -1,0 +1,62 @@
+// Vision Security ZM1601-5
+// Siren with LED strobe light
+			{
+	"manufacturer": "Vision Security",
+	"manufacturerId": "0x0109",
+	"label": "ZM1601-5",
+	"description": "Siren with LED strobe light",
+	"devices": [
+		{
+			"productType": "0x2005",
+			"productId": "0x0505",
+			"zwaveAllianceId": 1009
+		},
+		{
+			"productType": "0x2005",
+			"productId": "0x0508",
+			"zwaveAllianceId": 1278
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Siren/Strobe Mode",
+			"description": "0(All Enable),1(Siren Only),2(Storbe only)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Alarm Auto Stop Time",
+			"description": "0(30s),1(60s),2(120s),3(unlimited)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "For “Inclusion” (adding to) a network, put the Z-Wave™ network controller into “inclusion” mode, and following its instruction to add the ZM 1601 to your controller. To get the ZM 1601 in the “inclusion” mode, open the bracket and press the program switch of ZM 1601 for 1 second at least & release to be included. After waiting a few seconds the LED Setting Lighting should go off, if not, please try again. (After sending the Z-Wave NIF one time if the ZM1601 is not included it will send 4 times Network Wide Inclusion request every 4 ~ 6 seconds for auto inclusion. The orange LED will flash again if the siren has not been included or the orange LED will go off after inclusion.)",
+		"exclusion": "For “Exclusion” from (removing from) a network: Set up the Z-Wave™ network controller into “exclusion” mode, and following its instruction to delete the ZM 1601 from your controller. Press the program switch of ZM 1601 for 1 second at least & release to be excluded. Note: a. LED setting light will flash (orange color) continuously in Exclusion condition for 25 seconds. b. All user and network settings will be cleared and the device reset to factory defaults when the device is excluded",
+		"reset": "All user and network settings will be cleared and the device reset to factory defaults when the device is excluded"
+	}
+}

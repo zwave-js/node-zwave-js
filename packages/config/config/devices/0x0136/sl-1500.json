@@ -1,6 +1,6 @@
 // Systech Corporation SL-1500
 // SysLINK M2M Gateway
-{
+			{
 	"manufacturer": "Systech Corporation",
 	"manufacturerId": "0x0136",
 	"label": "SL-1500",
@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "1.Click the customize button on the upper right-hand corner of the mashup. 2.Click Select App.3.Select the proper application.4.As list of gateways appear on the Gateways mashup, click the Manage Gateways button. 5.In the lower left-hand corner, press the Factory Reset button.6.Confirm the factory reset."
+		"reset": "1. Click the customize button on the upper right-hand corner of the mashup. \n2. Click Select App.\n3. Select the proper application.\n4. As list of gateways appear on the Gateways mashup, click the Manage Gateways button. \n5. In the lower left-hand corner, press the Factory Reset button.\n6. Confirm the factory reset."
 	}
 }

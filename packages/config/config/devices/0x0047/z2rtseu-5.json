@@ -1,6 +1,6 @@
 // Somfy Z2RTSEU-5
 // Z-WAVE2RTS Interface
-{
+			{
 	"manufacturer": "Somfy",
 	"manufacturerId": "0x0047",
 	"label": "Z2RTSEU-5",
@@ -9,7 +9,10 @@
 		{
 			"productType": "0x3001",
 			"productId": "0x0b01",
-			"zwaveAllianceId": [1913, 2760]
+			"zwaveAllianceId": [
+				1913,
+				2760
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -17,8 +20,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Inclusion: 1. Enable the Z-Wave HUB into the Inclusion mode. 2. Short press the Z-Wave PROG button for 3 times. ZWave2RTS interface will be included in the Z-Wave network automatically. 3. The Z-WAVE LED turns OFF indicating that the Z-Wave2RTS interface has successfully joined the Z-Wave network.",
-		"exclusion": "Exclusion: 1. Power ON the Z-Wave2RTS interface. 2. Enable the Z-Wave HUB into exclusion mode. 3. Short press the Z-Wave PROG button for 3 times. 4. The Z-WAVE LED flashes indicating that the Z-Wave2RTS interface has successfully been removed from the Z-Wave network.",
-		"reset": "Reset the Z-Wave module to factory mode: 1. Power OFF the Z-Wave2RTS interface. 2. Press and hold the Z-Wave PROG button. 3. Power ON the Z-Wave2RTS interface and wait for 10 seconds. 4. The Z-Wave LED flashes indicating that the data is cleared and it is open to join Z-Wave network. Remark: Please use this procedure only in the event that your network primary controller is missing or otherwise inoperable!!!"
+		"inclusion": "Inclusion:\n\n1. Enable the Z-Wave HUB into the Inclusion mode.\n\n2. Short press the Z-Wave PROG button for 3 times. ZWave2RTS interface will be included in the Z-Wave network automatically.\n\n3. The Z-WAVE LED turns OFF indicating that the Z-Wave2RTS interface has successfully joined the Z-Wave network",
+		"exclusion": "Exclusion:\n\n1. Power ON the Z-Wave2RTS interface.\n\n2. Enable the Z-Wave HUB into exclusion mode.\n\n3. Short press the Z-Wave PROG button for 3 times.\n\n4. The Z-WAVE LED flashes indicating that the Z-Wave2RTS interface has successfully been removed from the Z-Wave network",
+		"reset": "Reset the Z-Wave module to factory mode:\n\n1. Power OFF the Z-Wave2RTS interface.\n\n2. Press and hold the Z-Wave PROG button.\n\n3. Power ON the Z-Wave2RTS interface and wait for 10 seconds.\n\n4. The Z-Wave LED flashes indicating that the data is cleared and it is open to join Z-Wave network.\n\nRemark: Please use this procedure only in the event that your network primary controller is missing or otherwise inoperable!!!"
 	}
 }

@@ -1,0 +1,163 @@
+// CBCC Domotique SAS SW-ZRC
+// Z-Wave remote control (aka RemSwiid)
+			{
+	"manufacturer": "CBCC Domotique SAS",
+	"manufacturerId": "0x0166",
+	"label": "SW-ZRC",
+	"description": "Z-Wave remote control (aka RemSwiid)",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2360
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"9": {
+			"label": "Group 9",
+			"maxNodes": 8,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Set priority Association Group number for an Association Source Node",
+			"description": "See above",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Function of RemSwiid™ Device key A",
+			"description": "See above",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Function of RemSwiid™ Device key B",
+			"description": "See above",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Function of RemSwiid™ Device key C",
+			"description": "See above",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Function of RemSwiid™ Device key D",
+			"description": "See above",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Function of RemSwiid™ Device key E",
+			"description": "See above",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Function of RemSwiid™ Device key F",
+			"description": "See above",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Function of RemSwiid™ Device key G",
+			"description": "See above",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Function of RemSwiid™ Device key H",
+			"description": "See above",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Send unsolicited Battery Report on Wake Up",
+			"description": "See above",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Dimming mode",
+			"description": "See above",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": true,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"reset": "1. Press and hold both the “Stop” and “All” keys until the red and green LEDs both start blinking at the same time (after about 3 seconds)\n\n2. Press three times (3x) on the “Up” command key of the RemSwiid™ remote and the blue Z-Wave LED will also light up. After about 2-3 seconds, the blue and red LEDs will turn off and the green LED will remain lit for 1-2 seconds indicating that the reset has been completed.\n\nResetting the RemSwiid™ remote will result in its taking on a new randomly generated Home ID. Obviously, if the RemSwiid™ remote is the primary controller in the Z-Wave network, resetting it will result in the nodes in the network being orphaned and it will be necessary after the reset to exclude and re-include all the nodes in a network with a new Home ID. If the RemSwiid™ is being used as a secondary controller in the network, the reset procedure should only be used once it has been excluded from the network, except of course if such exclusion is not feasible (e.g. if the network’s primary controller is missing or otherwise inoperable)"
+	}
+}

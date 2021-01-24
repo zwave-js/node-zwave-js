@@ -1,6 +1,6 @@
 // Secure Meters (UK) Ltd. SES 302
 // Temperature sensor
-{
+			{
 	"manufacturer": "Secure Meters (UK) Ltd.",
 	"manufacturerId": "0x0059",
 	"label": "SES 302",
@@ -47,5 +47,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "Step 1.On the Z-Wave controller, select Include for adding a device to the network. \nStep 2: On the SES 302, press the button, hold and release after 1 second to send a request (Network Information Frame) to join the network. On successful inclusion the LED will flash 2 times. The total process can take up to 20 seconds. If the LED flashes 4-times this means that the inclusion process has failed, so try moving the SES 302 to another position and repeat the Inclusion steps. If the inclusion process fails again, the device may be already included in another network. So first exclude and then include the device. The controller will show when the inclusion operation is successful",
+		"exclusion": "Step 1.On the Z-Wave controller, select exclusion for removing a device from the network. \nStep 2: On the SES 302, press the button, hold and release after 1 second to send a request (Network Information Frame) to remove from the network. On successful exclusion the LED will flash 2 times. The total process can take up to 2 seconds. If the LED flashes 4-times this means that the exclusion process has failed, so try moving the SES 302 to another position and repeat the exclusion steps. The controller will show when the exclusion operation is successful",
+		"reset": "Please use this procedure only when the primary controller is missing or otherwise inoperable.\nTo reset the device to factory resst, press the button 3 times within 3 seconds it will put the device in factory default, that include setting all the configuration, Association to factory default and removing the device from Z-Wave network"
 	}
 }

@@ -1,6 +1,6 @@
 // AdTrustMedia LLC dba: eZLO ZL-100
 // Worlds Smallest Hub
-{
+			{
 	"manufacturer": "AdTrustMedia LLC dba: eZLO",
 	"manufacturerId": "0x025b",
 	"label": "ZL-100",
@@ -9,7 +9,13 @@
 		{
 			"productType": "0x0002",
 			"productId": "0x0001",
-			"zwaveAllianceId": [3073, 3823, 3843, 3848, 3868]
+			"zwaveAllianceId": [
+				3073,
+				3823,
+				3843,
+				3848,
+				3868
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -17,6 +23,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Press and hold Button for More than 10 seconds. LED will start flashing"
+		"reset": "1. Click the gear icon on the left sidebar\n\n2. Click Reset hub to default.\n\n3. Click Yes when prompted to confirm, or No if you decide not to reset the ZL-100.\n\n4. If you confirm the ZL-100 reset request, it returns to its default settings. The My ZLINKs page is displayed.\n\nThe image of the reset ZL-100 now displays a default name and color.\n\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }

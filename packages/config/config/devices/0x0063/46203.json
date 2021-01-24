@@ -1,6 +1,6 @@
 // GE/Jasco 46203
 // GE Enbrighten Z-Wave Plus Smart Dimmer
-{
+			{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "46203",
@@ -57,6 +57,12 @@
 		}
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"treatBasicSetAsEvent": true,
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\n\ncontroller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press and release\n\nthe top or bottom of the wireless smart dimmer (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller\n\nto remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press and\n\nrelease the top or bottom of the wireless smart dimmer (rocker)",
+		"reset": "1. Quickly press ON (top) button three times, then immediately\n\npress the OFF (Bottom) button three times. The LED will\n\nflash ON/OFF five times when completed successfully.\n\nNote: This should only be used if your network’s primary\n\ncontroller is missing or otherwise inoperable"
 	}
 }

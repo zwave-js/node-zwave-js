@@ -1,6 +1,6 @@
 // Spectrum Brands Kwikset Obsidian 954
 // Obsidian Touchscreen Electronic Deadbolt
-{
+			{
 	"manufacturer": "Spectrum Brands",
 	"manufacturerId": "0x0090",
 	"label": "Kwikset Obsidian 954",
@@ -172,5 +172,10 @@
 			"writeOnly": true,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "Initiate the process to add the lock to your system at your smart home controller.\n\nWhen prompted by your smart home system to add the lock, press button “A” on the lock interior one time. The red LED will illuminate when the lock enters Add Mode.\n\nPlease allow time for the controller to add the lock to your system",
+		"exclusion": "Follow your smart home system’s instructions to remove the lock from the network. When prompted by the system, press button A” on the lock interior once. The red LED will illuminate when the lock enters Remove mode.",
+		"reset": "A factory reset will delete all user codes associated with the lock and will remove itself from your smart home system.\n\nPlease only perform a factory reset when the primary controller is missing or inoperable.\n\nTo perform a factory reset, please perform the following: \n\n1. Remove the battery pack\n\n2. Press and HOLD the Program button while reinserting the battery pack.\n\n3. Keep holding the button for 30 seconds until the lock beeps and the status LED flashes red.\n\n4. Press the Program button once more. The status LED will flash green and red several times.\n\n5. After a few seconds, the lock will initiate the door handing process"
 	}
 }

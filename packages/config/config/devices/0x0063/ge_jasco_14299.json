@@ -1,6 +1,6 @@
 // GE/Jasco/Jasco 14299
 // GE/Jasco In-Wall 1000W Incandescent Smart Dimmer
-{
+			{
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
 	"label": "GE/Jasco 14299",
@@ -131,6 +131,12 @@
 		}
 	},
 	"compat": {
-		"treatBasicSetAsEvent": true
+		"treatBasicSetAsEvent": true,
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to\n\ninclude a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device,\n\npress and release the top or bottom of the wireless smart\n\nswitch (rocker) to add it in the network.\n\nPlease reference the controller’s manual for instructions",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\n\nremove a device from the Z-Wave network.\n\n2. Once the controller is ready to Exclude your device, press\n\nand release the top or bottom of the wireless smart dimmer\n\n(rocker) to remove it from the network",
+		"reset": "Quickly press ON (Top) button three (3) times then immediately\n\npress the OFF (Bottom) button three (3) times. The LED will flash\n\nON/OFF 5 times when completed successfully.\n\nNOTE: This should only be used in the event your network’s\n\nprimary controller is missing or otherwise inoperable"
 	}
 }

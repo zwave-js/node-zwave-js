@@ -1,0 +1,97 @@
+// GE/Jasco 46562/ZW4008
+// In-Wall Smart Switch
+			{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "46562/ZW4008",
+	"description": "In-Wall Smart Switch",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3136",
+			"zwaveAllianceId": 3357
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Indication Configuration",
+			"description": "Configure LED indication to default, invert, always off or always on",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when device is OFF, LED is OFF when device is ON",
+					"value": 0
+				},
+				{
+					"label": "LED ON when device is ON, LED is OFF when device is OFF",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				},
+				{
+					"label": "LED Always ON",
+					"value": 3
+				}
+			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "Default - normal exclusion Active - perform a series of button presses to help eliminate accidental exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press any button on the switch",
+					"value": 0
+				},
+				{
+					"label": "Press two times ON button and two time OFF button, LED will flash 5 times if successful",
+					"value": 1
+				}
+			]
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\n\ncontroller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press and\n\nrelease the top or bottom of the wireless smart switch (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller\n\nto remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press and\n\nrelease the top or bottom of the wireless smart switch (rocker)",
+		"reset": "1. Quickly press ON (top) button three times then immediately\n\npress the OFF (Bottom) button three times. The LED will\n\nflash ON/OFF five times when completed successfully.\n\nNote: This should only be used if your network’s primary\n\ncontroller is missing or otherwise inoperable"
+	}
+}

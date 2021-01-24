@@ -1,5 +1,7 @@
-{
-	"manufacturer": "First Alert (BRK Brands Inc)",
+// BRK Brands, Inc. ZCOMBO
+// ZCombo-G Smoke/CO Alarm
+			{
+	"manufacturer": "BRK Brands, Inc.",
 	"manufacturerId": "0x0138",
 	"label": "ZCOMBO-G",
 	"description": "ZCombo-G Smoke/CO Alarm",
@@ -59,5 +61,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "ADD\n\n1. Slide battery door open.\n\n2. Insert batteries checking the correct orientation.\n\n3. Press and hold the test button. Keep it held down as you slide the battery drawer closed. You may then release the button.\n\nNOTE: Use only your finger or thumb on the test button. The use of any other instrument is strictly prohibited",
+		"exclusion": "REMOVE\n\n1. Slide battery door open.\n\n2. Remove and re-insert batteries checking the correct orientation.\n\n3. Press and hold the test button. Keep it held down as you slide the battery drawer closed. You may then release the button.\n\nNOTE: Use only your finger or thumb on the test button. The use of any other instrument is strictly prohibited",
+		"reset": "RESET DEVICE\n\nIf the device is powered up with the test button held down for 10+ seconds, the device will reset all Z-Wave settings and leave the network.\n\nUpon completion of the Reset operation, the LED will glow and the horn will sound for ~1 second.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

@@ -1,6 +1,6 @@
 // TKB Home TZ69
 // Smart meter switch
-{
+			{
 	"manufacturer": "TKB Home",
 	"manufacturerId": "0x0118",
 	"label": "TZ69",
@@ -121,5 +121,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "1. have your Z-Wave controller entered inclusion mode\n\n2. press the socket on/off button three times within 1.5 seconds will be included",
+		"exclusion": "1. have your Z-Wave controller entered exclusion mode\n\n2. press the socket on/off button three times within 1.5 seconds will be excluded",
+		"reset": "1. To reset, press the socket on/off button three times within 1.5 seconds\n\n2. then the fourth time, press and hold for seconds until the socket LED is off\n\n3. the socket reset successfully\n\nUse the \"Reset\" procedure only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }

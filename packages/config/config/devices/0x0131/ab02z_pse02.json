@@ -1,6 +1,6 @@
 // Zipato AB02Z_PSE02
 // Indoor Siren
-{
+			{
 	"manufacturer": "Zipato",
 	"manufacturerId": "0x0131",
 	"label": "AB02Z_PSE02",
@@ -96,5 +96,10 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "The indoor siren can be included to the Z-Wave network by pressing the code button.\n\n1) Disassemble the siren and insert the battery into\n\nthe siren. Make sure the device is located within\n\nthe direct range of the controller.\n\n2) Set the controller into the inclusion mode (see\n\nmain controller’s operating manual).\n\n3) Quickly triple click the code button, LED light will\n\nflash red for 5 times.\n\n4) The Indoor siren will be detected and included\n\nin the Z-Wave network.\n\n5) Wait for the main controller to configure the siren.\n\nSMART START. This product also supports Z-Wave Smart Start option which enables easier inclusion. QR code for SmartStart inclusion is printed on the battery cover. SmartStart option is only possible when network controller is also supporting SmartStart",
+		"exclusion": "1) Make sure the siren is connected to power source. 2) Set the main controller into the exclusion mode\n\n(see main controller’s operating manual).\n\n3) Quickly triple click the code button, LED light\n\nwill flash red for 5 times\n\n4) Wait for the main controller to remove the sensor",
+		"reset": "Reset procedure will remove all information on the Z-Wave network or Z-Wave controller and restore the sensor to factory default settings. Please use this procedure only when the network primary controller is missing or otherwise inoperable.\n\n1) Remove the sensor’s cover\n\n2) Make sure the sensor is connected to power source \n\n3) Press the code button for 10 seconds, LED will flash blue for 3 seconds\n\n4) Release the code button\n\nNote: \n\nWhen the siren is being restored to factory settings, please make sure power source is connected."
 	}
 }

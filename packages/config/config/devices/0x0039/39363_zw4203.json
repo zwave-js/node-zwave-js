@@ -1,0 +1,95 @@
+// Honeywell 39363/ZW4203
+// Plug-in Outdoor Smart Switch
+			{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39363/ZW4203",
+	"description": "Plug-in Outdoor Smart Switch",
+	"devices": [
+		{
+			"productType": "0x4f50",
+			"productId": "0x3034",
+			"zwaveAllianceId": 3476
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Indication Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when device is OFF, LED is OFF when device is ON",
+					"value": 0
+				},
+				{
+					"label": "LED ON when device is ON, LED is OFF",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				},
+				{
+					"label": "LED always ON",
+					"value": 3
+				}
+			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press the button once to exclude",
+					"value": 0
+				},
+				{
+					"label": "Press the button twice and hold on the third press",
+					"value": 1
+				}
+			]
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. \n\n2. Once the controller is ready to add your device, press and the manual/program button on the smart switch.\n\nIf prompted by the controller to enter the S2 security code, refer to the QR code/security number on the box or the QR code label on the product. Enter the 5-digit code",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press the manual/program button on the smart switch to remove it from the network",
+		"reset": "1. If plugged in, unplug the device from the receptacle.\n\n2. Press and hold the manual/program button, plug the device in, and continue to hold for at least 3 seconds.\n\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+	}
+}

@@ -1,0 +1,74 @@
+// GE/Jasco 14313/ZW1001
+// In-Wall Smart Outlet
+			{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14313/ZW1001",
+	"description": "In-Wall Smart Outlet",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3039",
+			"zwaveAllianceId": [
+				1371,
+				1935
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "When shipped from the factory, the LED is set to turn ON when the connected light is turned OFF. This is the default setting and can be changed if your primary controller supports the node configuration function. To make the LED turn ON when the light is turned ON, change parameter 3’s value to “1”. To turn the LED OFF at all times, change parameter 3’s value to 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Light off when Z-Wave turned On",
+					"value": 0
+				},
+				{
+					"label": "LED Light on when Z-Wave turned On",
+					"value": 1
+				},
+				{
+					"label": "LED Always Off",
+					"value": 2
+				}
+			]
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\n\ncontroller to include a device to the Z-Wave network.\n\n2. Once the controller is ready to include your device, press and\n\nrelease the Program Button to include it in the network.\n\n3. Once your controller has confirmed that the device has been\n\nincluded, refresh the Z-Wave network to optimize performance",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\n\nexclude a device from the Z-Wave network.\n\n2. Once the controller is ready to Exclude your device, press and\n\nrelease the manual/program button on the smart dimmer to\n\nexclude it from the network",
+		"reset": "Press and hold the button for at least 3 seconds. The LED light\n\nwill blink 5 times to confirm.\n\nNote: This should only be used in the event your network’s\n\nprimary controller is missing or otherwise inoperable"
+	}
+}

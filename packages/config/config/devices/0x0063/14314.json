@@ -1,0 +1,74 @@
+// GE/Jasco 14314
+// In-Wall Smart Fan Control
+			{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14314",
+	"description": "In-Wall Smart Fan Control",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3138",
+			"zwaveAllianceId": [
+				1369,
+				1937
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "When shipped from the factory, the LED is set to turn ON when the connected light is turned OFF. This is the default setting and can be changed if your primary controller supports the node configuration function.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when on",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				},
+				{
+					"label": "Default",
+					"value": 0
+				}
+			]
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "Linking your device\n1. Follow the instructions for your Z-wave certified controller to include a device to\nthe Z-wave network.\n2. Once the controller is ready to include your device, press and release the top or\nbottom of the wireless smart switch(rocker) to include it in the network.\nNote: Your controller may need to be within 10 feet of the device to be included.\n3. Once your controller has confirmed that the device has been included, refresh the\nZ-wave network to optimize performance.\nPlease reference the controller’s manual for instructions",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. \n\n2. Once the controller is ready to Exclude your device, press and release the top or bottom of the wireless smart switch (rocker) to exclude it from the network",
+		"reset": "1. Quickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully.\n\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+	}
+}

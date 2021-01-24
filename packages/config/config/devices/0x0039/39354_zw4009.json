@@ -1,0 +1,97 @@
+// Honeywell 39354/ZW4009
+// In-Wall Smart Toggle Switch
+			{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39354/ZW4009",
+	"description": "In-Wall Smart Toggle Switch",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3137",
+			"zwaveAllianceId": 3400
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Indication Configuration",
+			"description": "0 (default) - LED ON when device is OFF, LED OFF when device is ON 1 - LED ON when device is ON, LED OFF when device is OFF 2 - LED Always OFF 3 - LED Always ON",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when device is OFF, LED OFF when device is ON",
+					"value": 0
+				},
+				{
+					"label": "LED ON when device is ON, LED OFF when device is OFF",
+					"value": 1
+				},
+				{
+					"label": "LED Always OFF",
+					"value": 2
+				},
+				{
+					"label": "LED Always ON",
+					"value": 3
+				}
+			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "0 (default) - Press any button on the device 1 - Press 2 times ON button and then 2 times OFF button, LED will flash 5 times if done successful",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press any button on the device",
+					"value": 0
+				},
+				{
+					"label": "Press 2 times ON button and then 2 times OFF button, LED will flash 5 times if done successful",
+					"value": 1
+				}
+			]
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press up on the toggle.\n\nA. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product.\n\nNow you have complete control to turn your fixture ON/OFF according to groups, scenes, schedules and interactive automations programmed by your controller. If your Z-Wave certified controller features remote access, you can control your fixture from your mobile devices",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press up on the toggle",
+		"reset": "Quickly press UP button 3 times, then, immediately press the DOWN button 3 times.\n\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+	}
+}

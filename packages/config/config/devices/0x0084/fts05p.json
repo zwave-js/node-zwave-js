@@ -1,5 +1,7 @@
-{
-	"manufacturer": "FortrezZ",
+// FortrezZ LLC FTS05P
+// FTS05P Flood and Temperature Sensor
+			{
+	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
 	"label": "FTS05P",
 	"description": "FTS05P Flood and Temperature Sensor",

@@ -1,0 +1,202 @@
+// Honeywell 39443 / ZW3104
+// Plug-in Dimmer (Single Plug)
+			{
+	"manufacturer": "Honeywell",
+	"manufacturerId": "0x0039",
+	"label": "39443 / ZW3104",
+	"description": "Plug-in Dimmer (Single Plug)",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3038",
+			"zwaveAllianceId": [
+				2681,
+				3743
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "When shipped from the factory, the LED is set to turn ON when the connected light is turned On. This is the default setting and can be changed if your primary controller supports the node configuration function or by a manual method. To make the LED turn ON when the light is turned ON, change parameter 3’s value to “1”. To turn the LED OFF at all times, change parameter 3’s value to 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "default",
+					"value": 0
+				},
+				{
+					"label": "LED On when light is turned On",
+					"value": 1
+				},
+				{
+					"label": "LED always Off",
+					"value": 2
+				}
+			]
+		},
+		"6": {
+			"label": "Dim up/down rate",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dim up/down the light to the specified level quickly by command except value 0 and FF",
+					"value": 0
+				},
+				{
+					"label": "Dim up/down the light to the specified level slowly by command except value 0 and FF",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Dim Rate Adjustments (From Z-Wave Controller)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Dim Rate Adjustments (From Z-Wave Controller)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Dime Rate Adjustments (When Manually Controlled)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dim Rate Adjustments (When Manually Controlled)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Dim Rate Adjustments (When Receiving All-On/Off Commands)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Dim Rate Adjustments (When Receiving All-On/Off Command",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Enable/disable switch mode",
+			"description": "Enable and disable switch mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "Minimum dim level",
+			"description": "Number of Steps",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add\n\nthe smart dimmer to the Z-Wave network.\n\n2. Once the controller is ready to add your smart dimmer, single\n\npress and release the manual/program button on the smart\n\ndimmer to add it in the network.\n\nPlease reference the controller/gateway’s manual for instructions",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\n\nremove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press and\n\nrelease the manual/program button on the smart dimmer to\n\nremove it from the network",
+		"reset": "To return your dimmer to factory defaults:\n\n1. If plugged in, unplug the device from the receptacle.\n\n2. Press and hold the top button, plug the device in, and continue to hold for at least 3 seconds.\n\nNote: This should only be used in the event your networks’ primary\n\ncontroller is missing or otherwise inoperable"
+	}
+}

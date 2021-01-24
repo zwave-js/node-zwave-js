@@ -1,0 +1,228 @@
+// GE/Jasco 14326
+// In-Wall Smart Dimmer (1000W)
+			{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14326",
+	"description": "In-Wall Smart Dimmer (1000W)",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3136",
+			"zwaveAllianceId": [
+				1375,
+				2041
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "When shipped from the factory, the LED is set to turn ON when the connected light is turned OFF. This is the default setting and can be changed if your primary controller supports the node configuration function. To make the LED turn ON when the light is turned ON, change parameter 3’s value to “1”. To turn the LED OFF at all times, change parameter 3’s value to 2",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED light on when on",
+					"value": 1
+				},
+				{
+					"label": "LED light at all times",
+					"value": 2
+				},
+				{
+					"label": "Default",
+					"value": 0
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "If the switch is accidentally installed upside down with “On” at the bottom and “Off” at the top, the default On/Off rocker settings can be reversed by changing parameter 4’s value to “1”",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Invert",
+					"value": 1
+				},
+				{
+					"label": "Default",
+					"value": 0
+				}
+			]
+		},
+		"7": {
+			"label": "Dim Rate Adjustments When receiving a Z-Wave Dim Command",
+			"description": "number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "number of steps or levels",
+					"value": 99
+				},
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		},
+		"8": {
+			"label": "Dim Rate Adjustments When receiving a Z-Wave Dim Command",
+			"description": "Timing of the steps. For values over 127, consult your controller's user guide; some controllers may require values above 127 to be entered using the 2's Complement value or using Hexadecimal notation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timing of the steps",
+					"value": 255
+				},
+				{
+					"label": "Instant",
+					"value": 0
+				}
+			]
+		},
+		"9": {
+			"label": "Dim Rate Adjustments When manually controlling dimming",
+			"description": "number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "number of steps or levels",
+					"value": 99
+				},
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		},
+		"10": {
+			"label": "Dim Rate Adjustments When manually controlling dimming",
+			"description": "Dim Rate Adjustments When manually controlling dimming. For values over 127, consult your controller's user guide; some controllers may require values above 127 to be entered using the 2's Complement value or using Hexadecimal notation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "timing of the steps",
+					"value": 255
+				},
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		},
+		"11": {
+			"label": "Dim Rate Adjustments When receiving an All-On or All-Off command",
+			"description": "Dim Rate Adjustments When receiving an All-On or All-Off command",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "number of steps or levels",
+					"value": 99
+				},
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		},
+		"12": {
+			"label": "Dim Rate Adjustments When receiving an All-On or All-Off command",
+			"description": "Dim Rate Adjustments When receiving an All-On or All-Off command. For values over 127, consult your controller's user guide; some controllers may require values above 127 to be entered using the 2's Complement value or using Hexadecimal notation",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Timing of the steps",
+					"value": 255
+				},
+				{
+					"label": "",
+					"value": 0
+				}
+			]
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "Adding your device to a Z-wave network\n1. Follow the instructions for your Z-wave certified controller to include a device to the Z-wave\nnetwork.\n2. Once the controller is ready to include your device, press and release the top or bottom of the\nwireless smart switch(rocker) to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh the Z-wave network\nto optimize performance.\nPlease reference the controller’s manual for instructions.\nNow you have complete control to turn your fixture ON/OFFaccording to groups, scenes, schedules\nand interactive automations programmed by your controller.\nIf your Z-wave certified controller features Remote Access, you can now control your fixture from\nyour mobile devices",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\n\nremove a device from the Z-Wave network.\n\n2. Once the controller is ready to Exclude your device, press\n\nand release the top or bottom of the wireless smart dimmer\n\n(rocker) to remove it from the network",
+		"reset": "To return your switch to factory defaults:\nQuickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three\n(3) times. The LED will flash ON/OFF 5 times when completed successfully.\nNote: This should only be used in the event your networks’ primary controller is\nmissing or otherwise inoperable"
+	}
+}

@@ -1,0 +1,225 @@
+// Resideo 39446 / ZW3107
+// Plug-in Dimmer (Dual Plug Simultaneous Control)
+			{
+	"manufacturer": "Resideo",
+	"manufacturerId": "0x041b",
+	"label": "39446 / ZW3107",
+	"description": "Plug-in Dimmer (Dual Plug Simultaneous Control)",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3033",
+			"zwaveAllianceId": 3825
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Parameter 3",
+			"description": "Invert/disable LED (Adjusts when the indicator LED is turned ON, OFF or disabled)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON / Device Off",
+					"value": 0
+				},
+				{
+					"label": "(Default) LED On / Device On",
+					"value": 1
+				},
+				{
+					"label": "Disable LED",
+					"value": 2
+				}
+			]
+		},
+		"6": {
+			"label": "Parameter 6",
+			"description": "Dim up/down rate",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "(Default) = Dim up/down the light to the specified level quickly by command except value 0 and FF",
+					"value": 0
+				},
+				{
+					"label": "1 = Dim up/down the light to the specified level slowly by command except value 0 and FF",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Parameter 7",
+			"description": "Dim rate steps when using Z-Wave controller (Adjusts the number of steps the light level will stop on when dimming)",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 99,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Valid Values",
+					"value": 99
+				},
+				{
+					"label": "Default - 3 steps",
+					"value": 3
+				}
+			]
+		},
+		"8": {
+			"label": "Parameter 8",
+			"description": "Dim rate timing when using Z-Wave controller (Adjusts the timing of each step in 10ms increments)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10ms per step",
+					"value": 1
+				},
+				{
+					"label": "Valid Values",
+					"value": 255
+				}
+			]
+		},
+		"9": {
+			"label": "Parameter 9",
+			"description": "Dim rate steps when manually controlled (Adjusts the number of steps the light level will stop on when dimming",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 99,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Valid Values",
+					"value": 99
+				},
+				{
+					"label": "Default - 3 steps",
+					"value": 3
+				}
+			]
+		},
+		"10": {
+			"label": "Parameter 10",
+			"description": "Dim rate timing when manually controlled (Adjusts the timing of each step in 10ms increments)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10ms per step",
+					"value": 1
+				},
+				{
+					"label": "Valid Values",
+					"value": 255
+				}
+			]
+		},
+		"11": {
+			"label": "Parameter 11",
+			"description": "Dim rate steps when receiving all-ON/OFF command (Adjusts the number of steps the light level will stop on when dimming)",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 99,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Valid Values",
+					"value": 99
+				},
+				{
+					"label": "Default - 3 steps",
+					"value": 3
+				}
+			]
+		},
+		"12": {
+			"label": "Parameter 12",
+			"description": "Dim rate timing when receiving all-ON/OFF command (Adjusts the timing of each step in 10ms increments)",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "10ms per step",
+					"value": 1
+				},
+				{
+					"label": "Valid Values",
+					"value": 255
+				}
+			]
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "ADDING YOUR DEVICE TO A Z-WAVE NETWORK\n\n1. Follow the instructions for your Z-Wave certified\n\ncontroller to add a device to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press\n\nand release the manual/program button on the smart\n\ndimmer. Repeat as necessary to add the dimmer to\n\nthe network.\n\nYou have complete control",
+		"exclusion": "TO REMOVE AND RESET THE DEVICE\n\n1. Follow the instructions for your Z-Wave certified\n\ncontroller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press\n\nand release the manual/program button on the smart\n\ndimmer to remove it from the network",
+		"reset": "TO RETURN YOUR DIMMER TO FACTORY DEFAULTS\n\n1. If plugged in, unplug the dimmer from the receptacle\n\n2. Press and hold the top button, plug the device in and\n\ncontinue to hold for at least 3 seconds.\n\nNOTE: This should only be used in the event your network’s\n\nprimary controller is missing or otherwise inoperable"
+	}
+}

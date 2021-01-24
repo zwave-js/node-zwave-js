@@ -1,0 +1,86 @@
+// Dragon Tech Industrial, Ltd. PD-100
+// Plug in Dimmer Switch
+			{
+	"manufacturer": "Dragon Tech Industrial, Ltd.",
+	"manufacturerId": "0x0184",
+	"label": "PD-100",
+	"description": "Plug in Dimmer Switch",
+	"devices": [
+		{
+			"productType": "0x4744",
+			"productId": "0x3032",
+			"zwaveAllianceId": [
+				1125,
+				1680
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED backlight for key switch",
+			"description": "This parameter controls the operation of the LED backlight in conjunction with the operating state of the switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED indicator turns ON when the connected appliance is ON. LED indciator will be OFF when the connected appliance is OFF",
+					"value": 1
+				},
+				{
+					"label": "When the connected appliance is OFF, the LED indicator will be ON. When the connected appliance is ON, the LED indicator will be OFF",
+					"value": 0
+				},
+				{
+					"label": "Key switch LED backlight is always OFF",
+					"value": 2
+				}
+			]
+		},
+		"9": {
+			"label": "Dimming Steps",
+			"description": "Set preferred increments of levels. Higher the number the faster the device will change brightness level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Duration of each level",
+			"description": "For every unit increase or descrease, the duration is increased or decreased by 10msec. Higher the number, slower the duration it takes to adjust the dim level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Plug the 2-pin AC power plugs of lighting device to the receptacle of HS-PD100+\n\n2. Insert the module's 3-pin plug into an AC outlet of your preferred location. In normal operating mode, the LED on the front panel will be lit. \n\n3. Add(Include) the module into your network by a Z-Wave certified controller.\n\n Normally, the sequence is as follows:\n\na. Place your network controller into inclusion mode by following the controller manufacturer's instructions\n\nb. When the controller is ready, single click the button on the front of HS-PD100+ \n\nc. The controller should indicate that the new device was added successfully.",
+		"exclusion": "a. Place your network controller into exclusion mode by following the controller manufacturer's instructions\n\nb. When the controller is ready, single click the button on the front of HS-PD100+ \n\nc. The controller should indicate that the device was excluded successfully.",
+		"reset": "Use this procedure only in the event that the network primary controller is lost or otherwise inoperable.\n\n1. Unplug the HS-PD100+ from the AC outlet and also unplug the power plugs of the lighting from the module (if plugged in)\n\n2. Press and hold the button on the HS-PD100+\n\n3. Plug the HS-PD100+ back into the AC outlet with the button pressed\n\n4. After 3 seconds, release the button. If you see the button blink, that means that the HS-PD100+ has been reset successfully"
+	}
+}

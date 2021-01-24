@@ -1,0 +1,132 @@
+// GE/Jasco 14322
+// Jasco In-Wall Smart Dimmer (White Toggle)
+			{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14322",
+	"description": "Jasco In-Wall Smart Dimmer (White Toggle)",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3137",
+			"zwaveAllianceId": [
+				1372,
+				2123
+			]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"4": {
+			"label": "Invert Switch",
+			"description": "Invert Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Dim Rate Adjustment",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Dim Rate Adjustment",
+			"description": "timing of the steps",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Dim Rate Adjustments",
+			"description": "number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dim Rate Adjustments",
+			"description": "timing of the steps",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Dim Rate Adjustments",
+			"description": "number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Dim Rate Adjustments",
+			"description": "timing of the steps",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "Adding your device to a Z-wave network:\n1. Follow the instructions for your Z-wave certified controller to include a device to\nthe Z-wave network.\n2. Once the controller is ready to include your device, press up and release on the\ntoggle to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh\nthe Z-wave network to optimize performance.\nPlease reference the controller’s manual for instructions.\nNow you have complete control to turn your fixture ON/OFF or dim\naccording to groups, scenes, schedules and interactive automations\nprogrammed by your controller.\nIf your Z-wave certified controller features Remote Access, you can now control\nyour fixture from your mobile devices",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\n\nexclude a device from the Z-Wave network.\n\n2. Once the controller is ready to Exclude your device, press\n\nand release the top or bottom of the wireless smart dimmer\n\n(rocker) to exclude it from the network",
+		"reset": "To return your switch to factory defaults:\n1. Quickly press ON (Up) button three (3) times then immediately press the OFF\n(Down) button three (3) times. Note: This should only be used in the event your\nnetwork’s primary controller is missing or otherwise inoperable"
+	}
+}

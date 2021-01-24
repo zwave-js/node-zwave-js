@@ -1,0 +1,71 @@
+// Resideo 39456 / ZW1002
+// In-Wall Tamper Resistant Outlet
+			{
+	"manufacturer": "Resideo",
+	"manufacturerId": "0x041b",
+	"label": "39456 / ZW1002",
+	"description": "In-Wall Tamper Resistant Outlet",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3133",
+			"zwaveAllianceId": 3836
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "Parameter 3",
+			"description": "Invert/Disable LED (Adjusts when the indicator LED is turned ON, OFF, or disabled)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON/Device OFF",
+					"value": 0
+				},
+				{
+					"label": "LED ON/Device ON",
+					"value": 1
+				},
+				{
+					"label": "Disable LED",
+					"value": 2
+				}
+			]
+		}
+	},
+	"compat": {
+		"disableBasicMapping": true
+	},
+	"metadata": {
+		"inclusion": "CONNECTING YOUR DEVICE TO A Z-WAVE NETWORK\n\n1. Follow the instructions for your Z-Wave certified controller to add a\n\ndevice to the Z-Wave network.\n\n2. Once the controller is ready to add your device, press and release the\n\nprogram button. Repeat as necessary to add the smart outlet to\n\nthe network.\n\nYou have complete control",
+		"exclusion": "REMOVING AND RESETTING THE DEVICE\n\n1. Follow the instructions for your Z-Wave certified controller to remove a\n\ndevice from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press and release the\n\nmanual/program button",
+		"reset": "RETURNING SWITCH TO FACTORY DEFAULTS\n\nQuickly press the button three times. Then, press the button for at least three\n\nseconds. The LED will blink five times to confirm.\n\nNote: This should only be used in the event your network’s primary controller\n\nis missing or otherwise inoperable"
+	}
+}
