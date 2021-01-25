@@ -160,7 +160,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": true
 		}
 	},
 	"compat": {
