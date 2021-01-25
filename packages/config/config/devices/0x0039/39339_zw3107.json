@@ -82,7 +82,7 @@
 			]
 		},
 		"7": {
-			"label": "Dim Rate Adjustments (From Z-Wave Controller)",
+			"label": "Dim Rate Steps (From Z-Wave Controller)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
 			"minValue": 1,
@@ -94,7 +94,7 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Dim Rate Adjustments (From Z-Wave Controller)",
+			"label": "Dim Rate Timing (From Z-Wave Controller)",
 			"description": "Timing of steps",
 			"valueSize": 2,
 			"minValue": 1,
@@ -106,7 +106,7 @@
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Dime Rate Adjustments (When Manually Controlled)",
+			"label": "Dime Rate Steps (When Manually Controlled)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
 			"minValue": 1,
@@ -118,7 +118,7 @@
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Dim Rate Adjustments (When Manually Controlled)",
+			"label": "Dim Rate Timing (When Manually Controlled)",
 			"description": "Timing of steps",
 			"valueSize": 2,
 			"minValue": 0,
@@ -130,7 +130,7 @@
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "Dim Rate Adjustments (When Receiving All-On/Off Commands)",
+			"label": "Dim Rate Steps (When Receiving All-On/Off Commands)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
 			"minValue": 1,
@@ -142,7 +142,7 @@
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "Dim Rate Adjustments (All-On/Off Command)",
+			"label": "Dim Rate Timing (All-On/Off Command)",
 			"description": "Timing of steps",
 			"valueSize": 2,
 			"minValue": 1,
