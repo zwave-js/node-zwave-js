@@ -50,7 +50,7 @@
 			"label": "Auto Temperature Report Interval",
 			"description": "Auto Temperature Report Interval from 0.1°C to 5°C",
 			"valueSize": 1,
-			"unit": "°C",
+			"unit": "0.1 °C",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 10,
