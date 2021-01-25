@@ -105,7 +105,7 @@
 					"value": 2
 				},
 				{
-					"label": "ALL ON / ALL OFF (Default)",
+					"label": "ALL ON / ALL OFF",
 					"value": 255
 				}
 			]
@@ -298,7 +298,7 @@
 					"value": 0
 				},
 				{
-					"label": "Home Security: Motion Detection (Default)",
+					"label": "Home Security: Motion Detection",
 					"value": 1
 				},
 				{

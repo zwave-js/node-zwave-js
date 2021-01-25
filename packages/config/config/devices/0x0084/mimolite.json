@@ -218,7 +218,7 @@
 					"value": 0
 				},
 				{
-					"label": "Enable Reports every 30 seconds (Default)",
+					"label": "Enable Reports every 30 seconds",
 					"value": 3
 				}
 			]
@@ -236,7 +236,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "Disabled (Default)",
+					"label": "Disabled",
 					"value": 0
 				},
 				{

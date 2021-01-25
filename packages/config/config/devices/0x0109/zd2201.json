@@ -37,7 +37,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Celsius (Default)",
+					"label": "Celsius",
 					"value": 0
 				},
 				{

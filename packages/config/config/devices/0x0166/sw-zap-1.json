@@ -30,7 +30,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled (Default)",
+					"label": "Disabled",
 					"value": 0
 				},
 				{

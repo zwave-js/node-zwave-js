@@ -46,7 +46,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON when load is OFF (Default)",
+					"label": "LED ON when load is OFF",
 					"value": 0
 				},
 				{
@@ -75,7 +75,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Dim quickly (Default)",
+					"label": "Dim quickly",
 					"value": 0
 				},
 				{

@@ -58,7 +58,7 @@
 					"value": 2
 				},
 				{
-					"label": "Operated by Indicator Command Class (Default)",
+					"label": "Operated by Indicator Command Class",
 					"value": 3
 				}
 			]
@@ -88,7 +88,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off (Default)",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -117,7 +117,7 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (Default)",
+					"label": "Yes",
 					"value": 1
 				}
 			]
@@ -160,7 +160,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No (Default)",
+					"label": "No",
 					"value": 0
 				},
 				{
@@ -185,7 +185,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No (Default)",
+					"label": "No",
 					"value": 0
 				},
 				{

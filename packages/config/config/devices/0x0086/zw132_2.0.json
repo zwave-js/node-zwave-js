@@ -680,7 +680,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Nothing",
+					"label": "Nothing",
 					"value": 0
 				},
 				{
