@@ -1,4 +1,3 @@
-import { ZWaveError } from "@zwave-js/core";
 import {
 	JSONObject,
 	ObjectKeyMap,
@@ -7,7 +6,8 @@ import {
 } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
-import { pathExists, readFile, writeFile } from "fs-extra";
+import { createHash } from "crypto";
+import { createReadStream, pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import { CompatConfig } from "./CompatConfig";
@@ -41,66 +41,116 @@ export const devicesDir = path.join(configDir, "devices");
 export const indexPath = path.join(devicesDir, "index.json");
 export type DeviceConfigIndex = DeviceConfigIndexEntry[];
 
-/** @internal */
-export async function loadDeviceIndexInternal(): Promise<DeviceConfigIndex> {
-	if (!(await pathExists(indexPath))) {
-		return generateDeviceIndex();
-	}
-	try {
-		const fileContents = await readFile(indexPath, "utf8");
-		return JSON5.parse(fileContents);
-	} catch (e: unknown) {
-		if (e instanceof ZWaveError) {
-			throw e;
-		} else {
-			throwInvalidConfig("devices");
-		}
-	}
+export async function hashFiles(files: string[]): Promise<Buffer> {
+	// Just to be sure
+	files.sort();
+
+	const hash = createHash("sha1");
+	// Hash all files in sequence
+	const tasks = files.map((file) => () =>
+		new Promise<void>((resolve) => {
+			const strm = createReadStream(file, { encoding: "utf8" });
+			strm.once("end", () => {
+				strm.close();
+				resolve();
+			});
+			strm.pipe(hash, { end: false });
+		}),
+	);
+	for (const task of tasks) await task();
+
+	const ret = hash.digest();
+	hash.destroy();
+	return ret;
 }
 
-/** Generates an index for all device config files */
-async function generateDeviceIndex(): Promise<DeviceConfigIndex> {
+/**
+ * @internal
+ * Loads the index file to quickly access the device configs.
+ * Transparently handles updating the index if necessary
+ */
+export async function loadDeviceIndexInternal(
+	forceWrite?: boolean,
+): Promise<DeviceConfigIndex> {
+	// We need to enumerate the files to hash them and/or generate the index
 	const configFiles = await enumFilesRecursive(
 		devicesDir,
 		(file) => file.endsWith(".json") && !file.endsWith("index.json"),
 	);
 
-	const index: DeviceConfigIndex = [];
-
-	for (const file of configFiles) {
-		const relativePath = path
-			.relative(devicesDir, file)
-			.replace(/\\/g, "/");
-		const fileContents = await readFile(file, "utf8");
-		// Try parsing the file
-		const config = new DeviceConfig(relativePath, fileContents);
-		// Add the file to the index
-		index.push(
-			...config.devices.map((dev: any) => ({
-				manufacturerId: formatId(config.manufacturerId.toString(16)),
-				...dev,
-				firmwareVersion: config.firmwareVersion,
-				filename: relativePath,
-			})),
-		);
+	// The index file needs to be regenerated if it does not exist
+	let needsUpdate = !(await pathExists(indexPath));
+	let index: DeviceConfigIndex | undefined;
+	let hash: string | undefined;
+	let fileHash: string | undefined;
+	// ...or if cannot be parsed or is in an old format
+	if (!needsUpdate) {
+		try {
+			const fileContents = await readFile(indexPath, "utf8");
+			const parsed = JSON5.parse(fileContents);
+			index = parsed.devices;
+			hash = parsed.hash;
+		} catch {
+			// console.error("Error while parsing index file - regenerating...");
+			needsUpdate = true;
+		} finally {
+			if (!index || !hash) {
+				// console.error("Index file was malformed - regenerating...");
+				needsUpdate = true;
+			}
+		}
+	}
+	// ...or if the hash does not match
+	if (!needsUpdate) {
+		fileHash = (await hashFiles(configFiles)).toString("hex");
+		if (hash !== fileHash) {
+			// console.error(
+			// 	`Hash changed. Cached: ${hash}. Actual: ${fileHash} - regenerating...`,
+			// );
+			needsUpdate = true;
+		}
 	}
 
-	if (!!process.env.CI || process.env.NODE_ENV !== "test") {
-		// Write the index (but not during tests)
-		await writeFile(
-			path.join(devicesDir, "index.json"),
-			`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
-	${stringify(index, "\t")}
-	`,
-			"utf8",
-		);
+	if (needsUpdate) {
+		index = [];
+		if (!fileHash) {
+			fileHash = (await hashFiles(configFiles)).toString("hex");
+		}
+
+		for (const file of configFiles) {
+			const relativePath = path
+				.relative(devicesDir, file)
+				.replace(/\\/g, "/");
+			const fileContents = await readFile(file, "utf8");
+			// Try parsing the file
+			const config = new DeviceConfig(relativePath, fileContents);
+			// Add the file to the index
+			index.push(
+				...config.devices.map((dev: any) => ({
+					manufacturerId: formatId(
+						config.manufacturerId.toString(16),
+					),
+					...dev,
+					firmwareVersion: config.firmwareVersion,
+					filename: relativePath,
+				})),
+			);
+		}
+
+		if (forceWrite || process.env.NODE_ENV !== "test") {
+			// Save the index to disk (but not during unit tests)
+			await writeFile(
+				path.join(devicesDir, "index.json"),
+				`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
+${stringify({ hash: fileHash, devices: index }, "\t")}
+`,
+				"utf8",
+			);
+			console.log(`Device index regenerated`);
+		}
 	}
 
-	return index;
-}
-
-export async function saveDeviceIndex(index: DeviceConfigIndex): Promise<void> {
-	await writeFile(indexPath, stringify(index));
+	return index!;
 }
 
 function isHexKeyWith4Digits(val: any): val is string {
