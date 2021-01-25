@@ -208,6 +208,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,
+			"unit": "%",
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -219,6 +220,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 99,
+			"unit": "%",
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
