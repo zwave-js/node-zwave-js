@@ -41,7 +41,7 @@ export function reportProblem({
 	if (process.env.CI) {
 		// Since Github hides the filename in the logs if we use the annotation syntax, we need to write it twice
 		console[severity](
-			`${filename}:\n::${severity}${
+			`\n${filename}:\n::${severity}${
 				severity === "warn" ? "ing" : ""
 			} file=${filename}${
 				line != undefined ? `,line=${line}` : ""
