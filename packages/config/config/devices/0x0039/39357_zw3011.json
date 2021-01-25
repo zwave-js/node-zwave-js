@@ -156,16 +156,12 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 0,
+			"defaultValue": 99,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
+			"allowManualEntry": true,
 			"options": [
-				{
-					"label": "Default",
-					"value": 0
-				},
 				{
 					"label": "1=1%, 99=99%",
 					"value": 99
