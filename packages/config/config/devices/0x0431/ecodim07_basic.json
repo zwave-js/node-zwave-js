@@ -3,7 +3,7 @@
 {
 	"manufacturer": "EcoDim",
 	"manufacturerId": "0x0431",
-	"label": "ECO-DIM.07 Z-Wave",
+	"label": "ECO-DIM.07 Basic",
 	"description": "ECO-DIM.07 Z-Wave Led dimmer Basic push/rotary 0-200W",
 	"devices": [
 		{
@@ -145,7 +145,7 @@
 			"description": "Setting default brightness when turn on the dimmer from off status. Setting of 0 means that the dimmer will use parameter 1. Default value: 0 Valid values: 0-99",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 100,
+			"maxValue": 99,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
