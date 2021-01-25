@@ -1,9 +1,9 @@
-// EcoBright EcoDim07
+// EcoBright ECO-DIM.07 Pro
 // Smart Dimmer Switch 200W LED
 {
 	"manufacturer": "EcoBright",
 	"manufacturerId": "0x0431",
-	"label": "EcoDim07",
+	"label": "ECO-DIM.07 Pro",
 	"description": "Smart Dimmer Switch 200W LED",
 	"devices": [
 		{
