@@ -75,7 +75,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Default",
+					"label": "Normal Orientation",
 					"value": 0
 				},
 				{
@@ -96,7 +96,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Dim quickly (Default)",
+					"label": "Dim quickly",
 					"value": 0
 				},
 				{
