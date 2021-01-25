@@ -449,12 +449,8 @@ export class ConfigManager {
 		productId: number,
 		firmwareVersion?: string | false,
 	): Promise<DeviceConfig | undefined> {
-		if (!this.index) {
-			throw new ZWaveError(
-				"The config has not been loaded yet!",
-				ZWaveErrorCodes.Driver_NotReady,
-			);
-		}
+		// Load/regenerate the index if necessary
+		if (!this.index) await this.loadDeviceIndex();
 
 		// Look up the device in the index
 		let indexEntry: DeviceConfigIndexEntry | undefined;
@@ -465,11 +461,11 @@ export class ConfigManager {
 				productType,
 				productId,
 			);
-			indexEntry = this.index.find(
+			indexEntry = this.index!.find(
 				(e) => e.firmwareVersion === false && predicate(e),
 			);
 		} else {
-			indexEntry = this.index.find(
+			indexEntry = this.index!.find(
 				getDeviceEntryPredicate(
 					manufacturerId,
 					productType,
