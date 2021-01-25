@@ -1,9 +1,9 @@
-// Honeywell 39446 / ZW3107
+// Honeywell 39339 / 39446 / ZW3107
 // Z-Wave Plug-in Smart Dimmer
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
-	"label": "39446 / ZW3107",
+	"label": "39339 / 39446 / ZW3107",
 	"description": "Z-Wave Plug-in Smart Dimmer",
 	"devices": [
 		{
