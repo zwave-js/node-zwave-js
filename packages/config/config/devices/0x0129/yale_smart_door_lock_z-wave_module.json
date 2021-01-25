@@ -68,11 +68,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Auto relock Off",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "Aut Relock On",
+					"label": "On",
 					"value": 255
 				}
 			]
