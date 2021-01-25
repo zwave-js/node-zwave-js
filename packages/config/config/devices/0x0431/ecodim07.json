@@ -22,7 +22,7 @@
 			"description": "Switch state after power failure",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -30,11 +30,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "OFF",
+					"label": "Off",
 					"value": 0
 				},
 				{
-					"label": "ON",
+					"label": "On",
 					"value": 1
 				},
 				{
@@ -48,7 +48,7 @@
 			"description": "Send notification to associated device when status is changed.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
