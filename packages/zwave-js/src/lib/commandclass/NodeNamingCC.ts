@@ -4,6 +4,8 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -82,6 +84,19 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 				await this.setLocation(value);
 				// Refresh the current value
 				await this.getLocation();
+		}
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "name":
+				return this.getName();
+			case "location":
+				return this.getLocation();
+			default:
+				throwUnsupportedProperty(this.ccId, property);
 		}
 	};
 

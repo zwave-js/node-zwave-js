@@ -20,6 +20,8 @@ import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	ignoreTimeout,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -161,6 +163,15 @@ export class CentralSceneCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.setConfiguration(value);
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		if (property === "slowRefresh") {
+			return (await this.getConfiguration())?.[property];
+		}
+		throwUnsupportedProperty(this.ccId, property);
 	};
 }
 

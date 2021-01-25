@@ -17,7 +17,13 @@ import {
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { ignoreTimeout, PhysicalCCAPI } from "./API";
+import {
+	ignoreTimeout,
+	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	throwUnsupportedProperty,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -75,6 +81,26 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		}
 		return super.supportsCommand(cmd);
 	}
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		// Look up the necessary information
+		const valueId: ValueID = {
+			commandClass: CommandClasses["Multilevel Sensor"],
+			endpoint: this.endpoint.index,
+			property,
+		};
+		const ccSpecific = this.endpoint
+			.getNodeUnsafe()
+			?.valueDB.getMetadata(valueId)?.ccSpecific;
+		if (!ccSpecific) {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+
+		const { sensorType, scale } = ccSpecific;
+		return this.get(sensorType, scale);
+	};
 
 	public async get(): Promise<MultilevelSensorValue & { type: number }>;
 	public async get(sensorType: number, scale: number): Promise<number>;

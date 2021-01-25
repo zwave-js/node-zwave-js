@@ -21,6 +21,8 @@ import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	ignoreTimeout,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
@@ -346,6 +348,28 @@ export class ColorSwitchCCAPI extends CCAPI {
 			await this.set({ hexColor: value });
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		if (propertyKey == undefined) {
+			throwMissingPropertyKey(this.ccId, property);
+		} else if (typeof propertyKey !== "number") {
+			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		}
+
+		switch (property) {
+			case "currentColor":
+				return (await this.get(propertyKey))?.currentValue;
+			case "targetColor":
+				return (await this.get(propertyKey))?.targetValue;
+			case "duration":
+				return (await this.get(propertyKey))?.duration;
+			default:
+				throwUnsupportedProperty(this.ccId, property);
 		}
 	};
 }

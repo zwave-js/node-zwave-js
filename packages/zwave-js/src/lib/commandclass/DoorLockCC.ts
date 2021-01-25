@@ -21,6 +21,8 @@ import { MessagePriority } from "../message/Constants";
 import {
 	ignoreTimeout,
 	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -165,6 +167,36 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			await this.setConfiguration(config);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "currentMode":
+			case "targetMode":
+			case "duration":
+			case "outsideHandlesCanOpenDoor":
+			case "insideHandlesCanOpenDoor":
+			case "latchStatus":
+			case "boltStatus":
+			case "doorStatus":
+			case "lockTimeout":
+				return (await this.get())?.[property];
+
+			case "operationType":
+			case "outsideHandlesCanOpenDoorConfiguration":
+			case "insideHandlesCanOpenDoorConfiguration":
+			case "lockTimeoutConfiguration":
+			case "autoRelockTime":
+			case "holdAndReleaseTime":
+			case "twistAssist":
+			case "blockToBlock":
+				return (await this.getConfiguration())?.[property];
+
+			default:
+				throwUnsupportedProperty(this.ccId, property);
 		}
 	};
 
