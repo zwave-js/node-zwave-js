@@ -80,7 +80,7 @@
 					"value": 0
 				},
 				{
-					"label": "Press 2 times ON button and then 2 times OFF button, LED will flash 5 times if done successful",
+					"label": "Press ON button 2x, then OFF button 2x",
 					"value": 1
 				}
 			]
