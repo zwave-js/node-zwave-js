@@ -96,6 +96,7 @@
 			"minValue": 0,
 			"maxValue": 10,
 			"defaultValue": 10,
+			"unit": "seconds",
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
