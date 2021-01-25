@@ -28,7 +28,8 @@
 		},
 		{
 			"productType": "0x0453",
-			"productId": "0x0111"
+			"productId": "0x0111",
+			"zwaveAllianceId": 1756
 		}
 	],
 	"firmwareVersion": {
@@ -64,7 +65,7 @@
 			"label": "Clear_Pulse_Meter_Counts",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 0,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -82,12 +83,12 @@
 			"description": "Input-to-relay Mapping",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
+			"allowManualEntry": false,
 			"options": [
 				{
 					"label": "Disabled",
@@ -175,7 +176,7 @@
 			"label": "Trigger_Level_And_Input_Threshold",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
@@ -205,7 +206,7 @@
 			"description": "Multilevel AutoReport Interval",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 3,
 			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,

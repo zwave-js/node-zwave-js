@@ -1,12 +1,15 @@
+// Honeywell 39348/ZW4008
+// 39348 / ZW4008 In-Wall Smart Switch
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
-	"label": "39348-ZW4008",
+	"label": "39348/ZW4008",
 	"description": "39348 / ZW4008 In-Wall Smart Switch",
 	"devices": [
 		{
 			"productType": "0x4952",
-			"productId": "0x3135"
+			"productId": "0x3135",
+			"zwaveAllianceId": 3599
 		}
 	],
 	"firmwareVersion": {
@@ -20,22 +23,22 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic - Load",
+			"label": "Local Load",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Basic - Double Tap",
+			"label": "Double Tap",
 			"maxNodes": 5,
 			"isLifeline": true
 		}
 	},
 	"paramInformation": {
 		"3": {
-			"label": "LED Indication Configuration",
-			"description": "Sets when the LED on the switch is lit.",
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -43,15 +46,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when light off",
+					"label": "LED ON when load is OFF (Default)",
 					"value": 0
 				},
 				{
-					"label": "LED on when light on",
+					"label": "LED On when light is turned On",
 					"value": 1
 				},
 				{
-					"label": "LED always off",
+					"label": "LED always Off",
 					"value": 2
 				},
 				{
@@ -62,7 +65,7 @@
 		},
 		"19": {
 			"label": "Alternate Exclusion",
-			"description": "0 (default) - Press any button on the device 1 - Press 2 times ON button and then 2 times OFF button, LED will flash 5 times if done successful",
+			"description": "0 (default) - Press any button on the device \n1 - Press 2 times ON button and then 2 times OFF button, LED will flash 5 times if done successful",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -73,14 +76,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Any button",
+					"label": "Press any button on the device",
 					"value": 0
 				},
 				{
-					"label": "2x ON button, 2x OFF button",
+					"label": "Press 2 times ON button and then 2 times OFF button, LED will flash 5 times if done successful",
 					"value": 1
 				}
 			]
 		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top or bottom of the wireless smart switch (rocker) to add it in the network.\n\nIf prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release the top or bottom of the wireless smart switch (rocker) to remove it from the network",
+		"reset": "Quickly press ON (top) button 3 times, then, immediately press the OFF (bottom) button 3 times. The LED will flash ON/OFF 5 times when completed successfully.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }
