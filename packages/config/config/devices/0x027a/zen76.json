@@ -143,6 +143,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
+			"unit": "minutes",
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -154,6 +155,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
+			"unit": "minutes",
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -209,7 +211,7 @@
 			"description": "Enable or disable local on/off control. If enabled, you’ll only be able to control the connected light via Z-Wave. Scenes and other functionality will still be available through paddles.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -255,7 +257,7 @@
 			"description": "Report type for paddle control.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,

@@ -147,6 +147,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
+			"unit": "minutes",
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -158,6 +159,7 @@
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
+			"unit": "minutes",
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -194,6 +196,7 @@
 			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 1,
+			"unit": "seconds",
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -377,6 +380,7 @@
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 5,
+			"unit": "seconds",
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
