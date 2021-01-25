@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "1. Put Primary Controller into \nInclusion Mode\n\n2. Press and Hold Shade Programming Button for >2seconds",
-		"exclusion": "1. Put Primary Controller into \nExclusion Mode\n\n2. Press and Hold Shade Programming Button for >2seconds",
+		"inclusion": "1. Put Primary Controller into Inclusion Mode\n\n2. Press and Hold Shade Programming Button for >2seconds",
+		"exclusion": "1. Put Primary Controller into Exclusion Mode\n\n2. Press and Hold Shade Programming Button for >2seconds",
 		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable\n\nPress and hold the button on the shade for approximately 15 seconds (the LED will stop flashing when complete)"
 	}
 }
