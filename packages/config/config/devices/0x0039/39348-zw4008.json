@@ -3,8 +3,8 @@
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
-	"label": "39348/ZW4008",
-	"description": "39348 / ZW4008 In-Wall Smart Switch",
+	"label": "39348 / ZW4008",
+	"description": "In-Wall Smart Switch",
 	"devices": [
 		{
 			"productType": "0x4952",
