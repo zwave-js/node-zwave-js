@@ -8,13 +8,13 @@
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x0002",
-			"zwaveAllianceId": 3644
+			"productId": "0x0001",
+			"zwaveAllianceId": [3238, 3308]
 		},
 		{
 			"productType": "0x0001",
-			"productId": "0x0001",
-			"zwaveAllianceId": [3238, 3308]
+			"productId": "0x0002",
+			"zwaveAllianceId": 3644
 		}
 	],
 	"firmwareVersion": {
@@ -22,8 +22,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Inclusion1. Click '+' on the upper right corner2. Select 'Z-Wave'3. Choose 'Add'4. Waiting for the procedure to finish5. Select security level6. Input DSK code",
-		"exclusion": "Exclusion1. Choose device on homepage2. Select '...' on the upper right corner3. Choose ‘Remove'",
-		"reset": "Factory Reset1. Click '+' on the upper right corner2. Select 'Z-Wave'3. Choose 'Reset'If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable."
+		"inclusion": "Inclusion\n\n1. Click '+' on the upper right corner\n\n2. Select 'Z-Wave'\n\n3. Choose 'Add'\n\n4. Waiting for the procedure to finish\n\n5. Select security level\n\n6. Input DSK code",
+		"exclusion": "Exclusion\n\n1. Choose device on homepage\n\n2. Select '...' on the upper right corner\n\n3. Choose ‘Remove'",
+		"reset": "Factory Reset\n1. Click '+' on the upper right corner\n2. Select 'Z-Wave'\n3. Choose 'Reset'\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }

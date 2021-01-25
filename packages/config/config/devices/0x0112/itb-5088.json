@@ -16,6 +16,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Press “RESET” in the Factory Default Reset dialog. This will resetthe Z- Wave chip, and the gateway will show “DEVICE RESETLOCALLY NOTIFICATION” after the restart.If this controller is the primary controller for your network,resetting it will result in the nodes in your network becomingorphaned, and it will be necessary after the reset to exclude andre-include all of the nodes in the network. If this controller is beingused as a secondary controller in the network, use this procedureto reset this controller only in the event that the network primarycontroller is missing or otherwise inoperable."
+		"reset": "Press “RESET” in the Factory Default Reset dialog. This will reset\nthe Z- Wave chip, and the gateway will show “DEVICE RESET\nLOCALLY NOTIFICATION” after the restart.\nIf this controller is the primary controller for your network,\nresetting it will result in the nodes in your network becoming\norphaned, and it will be necessary after the reset to exclude and\nre-include all of the nodes in the network. If this controller is being\nused as a secondary controller in the network, use this procedure\nto reset this controller only in the event that the network primary\ncontroller is missing or otherwise inoperable"
 	}
 }
