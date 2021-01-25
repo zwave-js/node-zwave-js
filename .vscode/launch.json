@@ -18,8 +18,8 @@
 				"-r",
 				"tsconfig-paths/register",
 				"${workspaceFolder}/maintenance/importConfig.ts",
-				//				"-dm -s zwa"
-				"-p"
+				"-dm -s zwa"
+				//"-p"
 			],
 			"console": "integratedTerminal",
 			//"internalConsoleOptions": "neverOpen",
