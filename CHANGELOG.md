@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.1.0 (2021-01-26)
 ### Features
 * Added a `pollValue` method to `ZWaveNode` to perform get request for a specific ValueID
 
