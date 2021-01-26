@@ -3,6 +3,18 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Features
+* Added a `pollValue` method to `ZWaveNode` to perform get request for a specific ValueID
+
+### Bugfixes
+* Massively improved the ValueDB performance (about 500x speedup) for medium to large networks
+
+### Config file changes
+* Updated and cleaned up many device configuration files with imports from the Z-Wave Alliance website
+* Added config files for Zooz ZEN34, ZEN76, and ZEN77
+* Fix: swap ZW080 bitmasks for siren volume and siren sound
+
 ## 6.0.2 (2021-01-24)
 ### Bugfixes
 * After setting the `hexColor` of Color Switch CC, the individual color components are no longer polled by one
