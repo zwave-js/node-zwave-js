@@ -111,21 +111,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "2nd Group Sent as Secure",
-					"value": 1
-				},
-				{
-					"label": "3rd Group Sent as Secure",
-					"value": 2
-				},
-				{
-					"label": "4th Group Sent as Secure",
-					"value": 4
-				}
-			]
+			"allowManualEntry": true
 		},
 		"10": {
 			"label": "Key Pressed 1 time – command sent to 2nd association group",
@@ -161,7 +147,7 @@
 			"label": "Key Pressed 1 time – value of SWITCH ON command sent to 2nd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
-			"minValue": 99,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
@@ -213,7 +199,7 @@
 			"label": "Key Pressed 2 times – value of SWITCH ON command sent to 2nd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
-			"minValue": 99,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 99,
 			"unsigned": true,
@@ -265,7 +251,7 @@
 			"label": "Key Pressed 3 times – value of SWITCH ON command sent to 2nd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
-			"minValue": 99,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
@@ -317,7 +303,7 @@
 			"label": "Key Pressed 1 time – value of SWITCH ON command sent to 3rd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
-			"minValue": 99,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
@@ -369,7 +355,7 @@
 			"label": "Key Pressed 2 times – value of SWITCH ON command sent to 3rd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
-			"minValue": 99,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 99,
 			"unsigned": true,
@@ -421,7 +407,7 @@
 			"label": "Key Pressed 3 times – value of SWITCH ON command sent to 3rd association group",
 			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
-			"minValue": 99,
+			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
