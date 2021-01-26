@@ -1,6 +1,6 @@
 import { JsonlDB } from "@alcalzone/jsonl-db";
 import { highResTimestamp } from "@zwave-js/core/src/util/date";
-import { ValueDB } from "@zwave-js/core/src/values/ValueDB";
+import { indexDBsByNode, ValueDB } from "@zwave-js/core/src/values/ValueDB";
 import * as fs from "fs-extra";
 
 const values: JsonlDB<any> = new JsonlDB("test.values.jsonl", {
@@ -43,8 +43,15 @@ const valueDBs = new Map<number, ValueDB>();
 	console.timeEnd("open value DB");
 
 	console.time("index value DB");
+	const indexes = indexDBsByNode([values, metadata]);
+
 	for (let nodeId = 1; nodeId <= MAX_NODES; nodeId++) {
-		const valueDB = new ValueDB(nodeId, values, metadata);
+		const valueDB = new ValueDB(
+			nodeId,
+			values,
+			metadata,
+			indexes.get(nodeId),
+		);
 		valueDBs.set(nodeId, valueDB);
 	}
 	console.timeEnd("index value DB");

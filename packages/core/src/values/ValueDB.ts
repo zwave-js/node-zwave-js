@@ -151,17 +151,25 @@ export interface SetValueOptions {
  */
 export class ValueDB extends EventEmitter {
 	// This is a wrapper around the driver's on-disk value and metadata key value stores
+
+	/**
+	 * @param nodeId The ID of the node this Value DB belongs to
+	 * @param valueDB The DB instance which stores values
+	 * @param metadataDB The DB instance which stores metadata
+	 * @param ownKeys An optional pre-created index of this ValueDB's own keys
+	 */
 	public constructor(
 		nodeId: number,
 		valueDB: JsonlDB,
 		metadataDB: JsonlDB<ValueMetadata>,
+		ownKeys?: Set<string>,
 	) {
 		super();
 		this.nodeId = nodeId;
 		this._db = valueDB;
 		this._metadata = metadataDB;
 
-		this._index = this.buildIndex();
+		this._index = ownKeys ?? this.buildIndex();
 	}
 
 	private nodeId: number;
@@ -579,4 +587,32 @@ function compareDBKeyFast(
 			return false;
 	}
 	return true;
+}
+
+/** Extracts an index for each node from one or more JSONL DBs */
+export function indexDBsByNode(databases: JsonlDB[]): Map<number, Set<string>> {
+	const indexes = new Map<number, Set<string>>();
+	for (const db of databases) {
+		for (const key of db.keys()) {
+			const nodeId = extractNodeIdFromDBKeyFast(key);
+			if (!indexes.has(nodeId)) {
+				indexes.set(nodeId, new Set());
+			}
+			indexes.get(nodeId)!.add(key);
+		}
+	}
+	return indexes;
+}
+
+function extractNodeIdFromDBKeyFast(key: string): number {
+	const start = 10; // {"nodeId":
+	if (key.charCodeAt(start - 1) !== 58) {
+		console.error(key.slice(start - 1));
+		throw new Error("Invalid input format!");
+	}
+	let end = start + 1;
+	const len = key.length;
+
+	while (end < len && key.charCodeAt(end) !== 44) end++;
+	return parseInt(key.slice(start, end));
 }
