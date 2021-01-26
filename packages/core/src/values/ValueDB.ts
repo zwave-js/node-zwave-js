@@ -160,11 +160,26 @@ export class ValueDB extends EventEmitter {
 		this.nodeId = nodeId;
 		this._db = valueDB;
 		this._metadata = metadataDB;
+
+		this._index = this.buildIndex();
 	}
 
 	private nodeId: number;
 	private _db: JsonlDB<unknown>;
 	private _metadata: JsonlDB<ValueMetadata>;
+	private _index: Set<string>;
+
+	private buildIndex(): Set<string> {
+		const ret = new Set<string>();
+		for (const key of this._db.keys()) {
+			if (compareDBKeyFast(key, this.nodeId)) ret.add(key);
+		}
+		for (const key of this._metadata.keys()) {
+			if (!ret.has(key) && compareDBKeyFast(key, this.nodeId))
+				ret.add(key);
+		}
+		return ret;
+	}
 
 	private valueIdToDBKey(valueID: ValueID): string {
 		return JSON.stringify({
@@ -219,6 +234,7 @@ export class ValueDB extends EventEmitter {
 				event = "value added";
 			}
 
+			this._index.add(dbKey);
 			this._db.set(dbKey, value);
 			if (options.noEvent !== true) {
 				this.emit(event, cbArg);
@@ -240,6 +256,9 @@ export class ValueDB extends EventEmitter {
 		options: SetValueOptions = {},
 	): boolean {
 		const dbKey: string = this.valueIdToDBKey(valueId);
+		if (!this._metadata.has(dbKey)) {
+			this._index.delete(dbKey);
+		}
 		if (this._db.has(dbKey)) {
 			const prevValue = this._db.get(dbKey);
 			this._db.delete(dbKey);
@@ -277,8 +296,8 @@ export class ValueDB extends EventEmitter {
 		predicate: (id: ValueID) => boolean,
 	): (ValueID & { value: unknown })[] {
 		const ret: ReturnType<ValueDB["findValues"]> = [];
-		for (const key of this._db.keys()) {
-			if (!compareDBKeyFast(key, this.nodeId)) continue;
+		for (const key of this._index) {
+			if (!this._db.has(key)) continue;
 			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
 
 			if (predicate(valueId)) {
@@ -291,47 +310,47 @@ export class ValueDB extends EventEmitter {
 	/** Returns all values that are stored for a given CC */
 	public getValues(forCC: CommandClasses): (ValueID & { value: unknown })[] {
 		const ret: ReturnType<ValueDB["getValues"]> = [];
-		this._db.forEach((value, key) => {
-			if (compareDBKeyFast(key, this.nodeId, { commandClass: forCC })) {
+		for (const key of this._index) {
+			if (
+				compareDBKeyFast(key, this.nodeId, { commandClass: forCC }) &&
+				this._db.has(key)
+			) {
 				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+				const value = this._db.get(key);
 				ret.push({ ...valueId, value });
 			}
-		});
+		}
 		return ret;
 	}
 
 	/** Clears all values from the value DB */
 	public clear(options: SetValueOptions = {}): void {
-		const oldValues = [...this._db].filter(([key]) => {
-			return compareDBKeyFast(key, this.nodeId);
-		});
-		const oldMetadataKeys = [...this._metadata.keys()].filter((key) => {
-			return compareDBKeyFast(key, this.nodeId);
-		});
-
-		oldValues.forEach(([key, prevValue]) => {
-			this._db.delete(key);
-			if (options.noEvent !== true) {
-				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-				const cbArg: ValueRemovedArgs = {
-					...valueId,
-					prevValue,
-				};
-				this.emit("value removed", cbArg);
+		for (const key of this._index) {
+			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+			if (this._db.has(key)) {
+				const prevValue = this._db.get(key);
+				this._db.delete(key);
+				if (options.noEvent !== true) {
+					const cbArg: ValueRemovedArgs = {
+						...valueId,
+						prevValue,
+					};
+					this.emit("value removed", cbArg);
+				}
 			}
-		});
-		oldMetadataKeys.forEach((key) => {
-			this._metadata.delete(key);
+			if (this._metadata.has(key)) {
+				this._metadata.delete(key);
 
-			if (options.noEvent !== true) {
-				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-				const cbArg: MetadataUpdatedArgs = {
-					...valueId,
-					metadata: undefined,
-				};
-				this.emit("metadata updated", cbArg);
+				if (options.noEvent !== true) {
+					const cbArg: MetadataUpdatedArgs = {
+						...valueId,
+						metadata: undefined,
+					};
+					this.emit("metadata updated", cbArg);
+				}
 			}
-		});
+		}
+		this._index.clear();
 	}
 
 	/**
@@ -358,8 +377,12 @@ export class ValueDB extends EventEmitter {
 		}
 
 		if (metadata) {
+			this._index.add(dbKey);
 			this._metadata.set(dbKey, metadata);
 		} else {
+			if (!this._db.has(dbKey)) {
+				this._index.delete(dbKey);
+			}
 			this._metadata.delete(dbKey);
 		}
 
@@ -395,12 +418,16 @@ export class ValueDB extends EventEmitter {
 		metadata: ValueMetadata;
 	})[] {
 		const ret: ReturnType<ValueDB["getAllMetadata"]> = [];
-		this._metadata.forEach((meta, key) => {
-			if (compareDBKeyFast(key, this.nodeId, { commandClass: forCC })) {
+		for (const key of this._index) {
+			if (
+				compareDBKeyFast(key, this.nodeId, { commandClass: forCC }) &&
+				this._metadata.has(key)
+			) {
 				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-				ret.push({ ...valueId, metadata: meta });
+				const metadata = this._metadata.get(key)!;
+				ret.push({ ...valueId, metadata });
 			}
-		});
+		}
 		return ret;
 	}
 
@@ -411,8 +438,8 @@ export class ValueDB extends EventEmitter {
 		metadata: ValueMetadata;
 	})[] {
 		const ret: ReturnType<ValueDB["findMetadata"]> = [];
-		for (const key of this._metadata.keys()) {
-			if (!compareDBKeyFast(key, this.nodeId)) continue;
+		for (const key of this._index) {
+			if (!this._metadata.has(key)) continue;
 			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
 
 			if (predicate(valueId)) {
