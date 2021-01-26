@@ -61,7 +61,7 @@
 		},
 		"6": {
 			"label": "Dim Rate",
-			"description": "0 = Dim up/down the light to the specified level quickly by command except value 0 and FF 1 = Dim up/down the light to the specified level slowly by command except value 0 and FF \nSpeed of Dim when button is pressed and held for up or down",
+			"description": "0 = Dim up/down the light to the specified level quickly by command except value 0 and FF 1 = Dim up/down the light to the specified level slowly by command except value 0 and FF. Speed of Dim when button is pressed and held for up or down",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

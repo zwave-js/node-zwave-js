@@ -92,7 +92,7 @@
 		},
 		"252": {
 			"label": "Enable/disable the configuration parameters to be locked",
-			"description": "This parameter is used to Enable/disable the configuration parameters to be locked.\n(0== disable, 1== enable)",
+			"description": "This parameter is used to Enable/disable the configuration parameters to be locked. (0== disable, 1== enable)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

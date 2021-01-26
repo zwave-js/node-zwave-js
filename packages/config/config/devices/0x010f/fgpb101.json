@@ -204,7 +204,7 @@
 		},
 		"10": {
 			"label": "Key Pressed 1 time – command sent to 2nd association group",
-			"description": "This parameter defines commands sent to devices associated in 2nd association group after a single click.\n0 - no action\n1 - SWITCH ON\n2 - SWITCH OFF\n3 - SWITCH ON/OFF – alternately",
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a single click. 0 - no action 1 - SWITCH ON 2 - SWITCH OFF 3 - SWITCH ON/OFF – alternately",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -256,7 +256,7 @@
 		},
 		"12": {
 			"label": "Key Pressed 2 times – command sent to 2nd association group",
-			"description": "This parameter defines commands sent to devices associated in 2nd association group after a double click.\n0- no action\n1- SWITCH ON\n2- SWITCH OFF\n3- SWITCH ON/OFF – alternately",
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a double click. 0- no action 1- SWITCH ON 2- SWITCH OFF 3- SWITCH ON/OFF – alternately",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -308,7 +308,7 @@
 		},
 		"14": {
 			"label": "Key Pressed 3 times – command sent to 2nd association group",
-			"description": "This parameter defines commands sent to devices associated in 2nd association group after a triple click.\n\n0- no action\n1- SWITCH ON\n2- SWITCH OFF\n3- SWITCH ON/OFF – alternately",
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a triple click. 0- no action 1- SWITCH ON\n2- SWITCH OFF 3- SWITCH ON/OFF – alternately",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -360,7 +360,7 @@
 		},
 		"20": {
 			"label": "Key Pressed 1 time – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after a single click.\n0- no action\n1- SWITCH ON\n2- SWITCH OFF\n3- SWITCH ON/OFF – alternately",
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a single click. 0- no action 1- SWITCH ON 2- SWITCH OFF 3- SWITCH ON/OFF – alternately",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -412,7 +412,7 @@
 		},
 		"22": {
 			"label": "Key Pressed 2 times – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after a double click.\n0 - no action\n1- SWITCH ON\n2- SWITCH OFF\n3- SWITCH ON/OFF – alternately",
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a double click. 0 - no action 1- SWITCH ON 2- SWITCH OFF 3- SWITCH ON/OFF – alternately",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -464,7 +464,7 @@
 		},
 		"24": {
 			"label": "Key Pressed 3 times – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after a triple click.\n0 - no action\n1- SWITCH ON\n2- SWITCH OFF\n3 - SWITCH ON/OFF – alternately",
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a triple click. 0 - no action 1- SWITCH ON 2- SWITCH OFF 3 - SWITCH ON/OFF – alternately",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -516,7 +516,7 @@
 		},
 		"29": {
 			"label": "Key Held Down – command sent to 3rd association group",
-			"description": "This parameter defines commands sent to devices associated in 3rd association group after holding the button down.\n0- no action\n1- START LEVEL CHANGE UP (brightening)\n2- START LEVEL CHANGE DOWN (dimming)\n3- START LEVEL CHANGE UP/DOWN (brightening/dimming) – alternately",
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after holding the button down. 0- no action 1- START LEVEL CHANGE UP (brightening) 2- START LEVEL CHANGE DOWN (dimming) 3- START LEVEL CHANGE UP/DOWN (brightening/dimming) – alternately",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
