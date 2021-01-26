@@ -1,7 +1,7 @@
 import { JsonlDB } from "@alcalzone/jsonl-db";
+import { highResTimestamp } from "@zwave-js/core/src/util/date";
+import { ValueDB } from "@zwave-js/core/src/values/ValueDB";
 import * as fs from "fs-extra";
-import { highResTimestamp } from "../util/date";
-import { ValueDB } from "./ValueDB";
 
 const values: JsonlDB<any> = new JsonlDB("test.values.jsonl");
 const metadata: JsonlDB<any> = new JsonlDB("test.metadata.jsonl");
@@ -45,4 +45,6 @@ const valueDBs = new Map<number, ValueDB>();
 	await metadata.close();
 	await fs.remove("test.values.jsonl");
 	await fs.remove("test.metadata.jsonl");
-})().catch(() => {});
+})().catch(() => {
+	/* ignore */
+});
