@@ -310,9 +310,9 @@ export class ValueDB extends EventEmitter {
 		});
 
 		oldValues.forEach(([key, prevValue]) => {
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
 			this._db.delete(key);
 			if (options.noEvent !== true) {
+				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
 				const cbArg: ValueRemovedArgs = {
 					...valueId,
 					prevValue,
@@ -321,10 +321,10 @@ export class ValueDB extends EventEmitter {
 			}
 		});
 		oldMetadataKeys.forEach((key) => {
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
 			this._metadata.delete(key);
 
 			if (options.noEvent !== true) {
+				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
 				const cbArg: MetadataUpdatedArgs = {
 					...valueId,
 					metadata: undefined,
