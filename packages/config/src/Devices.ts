@@ -41,10 +41,12 @@ export const devicesDir = path.join(configDir, "devices");
 export const indexPath = path.join(devicesDir, "index.json");
 export type DeviceConfigIndex = DeviceConfigIndexEntry[];
 
-async function getLastChangeRecursive(dir: string): Promise<Date> {
+async function hasChangedDeviceFiles(
+	dir: string,
+	lastChange: Date,
+): Promise<boolean> {
 	// Check if there are any files BUT index.json that were changed
 	// or directories that were modified
-	let ret = new Date(0);
 	const filesAndDirs = await fs.readdir(dir);
 	for (const f of filesAndDirs) {
 		const fullPath = path.join(dir, f);
@@ -53,17 +55,15 @@ async function getLastChangeRecursive(dir: string): Promise<Date> {
 		if (
 			(dir !== devicesDir || f !== "index.json") &&
 			(stat.isFile() || stat.isDirectory()) &&
-			stat.mtime > ret
+			stat.mtime > lastChange
 		) {
-			ret = stat.mtime;
-		}
-		if (stat.isDirectory()) {
+			return true;
+		} else if (stat.isDirectory()) {
 			// we need to go deeper!
-			const lastChange = await getLastChangeRecursive(fullPath);
-			if (lastChange > ret) ret = lastChange;
+			if (await hasChangedDeviceFiles(fullPath, lastChange)) return true;
 		}
 	}
-	return ret;
+	return false;
 }
 
 // export async function hashFiles(files: string[]): Promise<Buffer> {
@@ -128,9 +128,7 @@ export async function loadDeviceIndexInternal(
 
 	// ...or if there were any changes in the file system
 	if (!needsUpdate) {
-		const mtime = await getLastChangeRecursive(devicesDir);
-		// console.error(`mtime ${mtime}, cached: ${mtimeIndex}`);
-		needsUpdate = mtime >= mtimeIndex!;
+		needsUpdate = await hasChangedDeviceFiles(devicesDir, mtimeIndex!);
 	}
 
 	if (needsUpdate) {
