@@ -92,9 +92,7 @@ jobs:
       run: yarn run build
 
     - name: Lint config files
-      run: |
-        npx lerna run generateDeviceIndex
-        npx lerna run lint:config --no-prefix
+      run: npx lerna run lint:config --no-prefix
 
     - name: Lint Z-Wave specifics
       run: npx lerna run lint:zwave --no-prefix
@@ -140,9 +138,7 @@ jobs:
       run: yarn run build
 
     - name: Run component tests
-      run: |
-        npx lerna run generateDeviceIndex
-        yarn run test:ci
+      run: yarn run test:ci
       env:
         CI: true
 
@@ -235,9 +231,7 @@ jobs:
       run: yarn run build
 
     - name: Generate coverage
-      run: |
-        npx lerna run generateDeviceIndex
-        yarn run coverage:ci
+      run: yarn run coverage:ci
       env:
         CI: true
     - name: Upload to Coveralls
