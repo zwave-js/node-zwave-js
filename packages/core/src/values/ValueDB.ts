@@ -278,8 +278,8 @@ export class ValueDB extends EventEmitter {
 	): (ValueID & { value: unknown })[] {
 		const ret: ReturnType<ValueDB["findValues"]> = [];
 		for (const key of this._db.keys()) {
+			if (!compareDBKeyFast(key, this.nodeId)) continue;
 			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-			if (nodeId !== this.nodeId) continue;
 
 			if (predicate(valueId)) {
 				ret.push({ ...valueId, value: this._db.get(key) });
@@ -292,10 +292,10 @@ export class ValueDB extends EventEmitter {
 	public getValues(forCC: CommandClasses): (ValueID & { value: unknown })[] {
 		const ret: ReturnType<ValueDB["getValues"]> = [];
 		this._db.forEach((value, key) => {
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-			if (nodeId !== this.nodeId) return;
-
-			if (forCC === valueId.commandClass) ret.push({ ...valueId, value });
+			if (compareDBKeyFast(key, this.nodeId, { commandClass: forCC })) {
+				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+				ret.push({ ...valueId, value });
+			}
 		});
 		return ret;
 	}
@@ -303,12 +303,10 @@ export class ValueDB extends EventEmitter {
 	/** Clears all values from the value DB */
 	public clear(options: SetValueOptions = {}): void {
 		const oldValues = [...this._db].filter(([key]) => {
-			const { nodeId } = this.dbKeyToValueId(key);
-			return nodeId === this.nodeId;
+			return compareDBKeyFast(key, this.nodeId);
 		});
 		const oldMetadataKeys = [...this._metadata.keys()].filter((key) => {
-			const { nodeId } = this.dbKeyToValueId(key);
-			return nodeId === this.nodeId;
+			return compareDBKeyFast(key, this.nodeId);
 		});
 
 		oldValues.forEach(([key, prevValue]) => {
@@ -398,11 +396,10 @@ export class ValueDB extends EventEmitter {
 	})[] {
 		const ret: ReturnType<ValueDB["getAllMetadata"]> = [];
 		this._metadata.forEach((meta, key) => {
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-			if (nodeId !== this.nodeId) return;
-
-			if (forCC === valueId.commandClass)
+			if (compareDBKeyFast(key, this.nodeId, { commandClass: forCC })) {
+				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
 				ret.push({ ...valueId, metadata: meta });
+			}
 		});
 		return ret;
 	}
@@ -415,8 +412,8 @@ export class ValueDB extends EventEmitter {
 	})[] {
 		const ret: ReturnType<ValueDB["findMetadata"]> = [];
 		for (const key of this._metadata.keys()) {
+			if (!compareDBKeyFast(key, this.nodeId)) continue;
 			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-			if (nodeId !== this.nodeId) continue;
 
 			if (predicate(valueId)) {
 				ret.push({ ...valueId, metadata: this._metadata.get(key)! });
@@ -522,4 +519,35 @@ export function dbKeyToValueIdFast(key: string): { nodeId: number } & ValueID {
 			property,
 		};
 	}
+}
+
+/** Used to filter DB entries without JSON parsing */
+function compareDBKeyFast(
+	key: string,
+	nodeId: number,
+	valueId?: Partial<ValueID>,
+): boolean {
+	if (!key.includes(`{"nodeId":${nodeId},`)) return false;
+	if (!valueId) return true;
+
+	if ("commandClass" in valueId) {
+		if (!key.includes(`,"commandClass":${valueId.commandClass},`))
+			return false;
+	}
+	if ("endpoint" in valueId) {
+		if (!key.includes(`,"endpoint":${valueId.endpoint},`)) return false;
+	}
+	if (typeof valueId.property === "string") {
+		if (!key.includes(`,"property":"${valueId.property}"`)) return false;
+	} else if (typeof valueId.property === "number") {
+		if (!key.includes(`,"property":${valueId.property}`)) return false;
+	}
+	if (typeof valueId.propertyKey === "string") {
+		if (!key.includes(`,"propertyKey":"${valueId.propertyKey}"`))
+			return false;
+	} else if (typeof valueId.propertyKey === "number") {
+		if (!key.includes(`,"propertyKey":${valueId.propertyKey}`))
+			return false;
+	}
+	return true;
 }
