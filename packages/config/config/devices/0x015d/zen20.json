@@ -112,7 +112,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer Disabled (Default)",
+					"label": "Timer Disabled",
 					"value": 0
 				},
 				{
@@ -145,7 +145,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer Disabled (Default)",
+					"label": "Timer Disabled",
 					"value": 0
 				},
 				{
@@ -178,7 +178,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer Disabled (Default)",
+					"label": "Timer Disabled",
 					"value": 0
 				},
 				{
@@ -211,7 +211,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer Disabled (Default)",
+					"label": "Timer Disabled",
 					"value": 0
 				},
 				{
@@ -244,7 +244,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer Disabled (Default)",
+					"label": "Timer Disabled",
 					"value": 0
 				},
 				{
@@ -277,7 +277,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer Disabled (Default)",
+					"label": "Timer Disabled",
 					"value": 0
 				},
 				{
@@ -310,7 +310,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer Disabled (Default)",
+					"label": "Timer Disabled",
 					"value": 0
 				},
 				{
@@ -343,7 +343,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer Disabled (Default)",
+					"label": "Timer Disabled",
 					"value": 0
 				},
 				{
@@ -376,7 +376,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer Disabled (Default)",
+					"label": "Timer Disabled",
 					"value": 0
 				},
 				{
@@ -409,7 +409,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Timer Disabled (Default)",
+					"label": "Timer Disabled",
 					"value": 0
 				},
 				{
@@ -446,7 +446,7 @@
 					"value": 0
 				},
 				{
-					"label": "Manual control enabled for all outlets (Default)",
+					"label": "Manual control enabled for all outlets",
 					"value": 1
 				}
 			]

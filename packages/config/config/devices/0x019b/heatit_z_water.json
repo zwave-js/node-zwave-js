@@ -33,7 +33,7 @@
 					"value": 0
 				},
 				{
-					"label": "LED turned on. (Default)",
+					"label": "LED turned on.",
 					"value": 1
 				},
 				{
@@ -69,7 +69,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No thermistor, input is disabled. (Default)",
+					"label": "No thermistor, input is disabled.",
 					"value": 0
 				},
 				{
@@ -90,7 +90,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No thermistor, input is disabled. (Default)",
+					"label": "No thermistor, input is disabled.",
 					"value": 0
 				},
 				{
@@ -111,7 +111,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No thermistor, input is disabled. (Default)",
+					"label": "No thermistor, input is disabled.",
 					"value": 0
 				},
 				{
@@ -132,7 +132,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No thermistor, input is disabled. (Default)",
+					"label": "No thermistor, input is disabled.",
 					"value": 0
 				},
 				{

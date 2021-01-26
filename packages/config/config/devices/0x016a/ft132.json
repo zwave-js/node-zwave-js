@@ -557,7 +557,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Reset all configuration parameters",
+					"label": "Reset all configuration parameters",
 					"value": 0
 				},
 				{

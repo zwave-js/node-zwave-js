@@ -37,7 +37,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -315,7 +315,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Reset all configuration parameters",
+					"label": "Reset all configuration parameters",
 					"value": 0
 				},
 				{

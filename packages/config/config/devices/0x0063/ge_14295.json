@@ -46,7 +46,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) No",
+					"label": "No",
 					"value": 0
 				},
 				{

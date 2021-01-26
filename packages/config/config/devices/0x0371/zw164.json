@@ -485,7 +485,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Single Playback (Default)",
+					"label": "Single Playback",
 					"value": 0
 				},
 				{
