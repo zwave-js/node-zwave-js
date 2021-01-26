@@ -10,6 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -194,7 +195,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	 * Returns the number of association groups a node supports.
 	 * Association groups are consecutive, starting at 1.
 	 */
-	public async getGroupCount(): Promise<number> {
+	public async getGroupCount(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			MultiChannelAssociationCommand,
 			MultiChannelAssociationCommand.SupportedGroupingsGet,
@@ -207,11 +208,11 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 				endpoint: this.endpoint.index,
 			},
 		);
-		const response = (await this.driver.sendCommand<MultiChannelAssociationCCSupportedGroupingsReport>(
+		const response = await this.driver.sendCommand<MultiChannelAssociationCCSupportedGroupingsReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.groupCount;
+		);
+		return response?.groupCount;
 	}
 
 	/**
@@ -229,15 +230,13 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = (await this.driver.sendCommand<MultiChannelAssociationCCReport>(
+		const response = await this.driver.sendCommand<MultiChannelAssociationCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			maxNodes: response.maxNodes,
-			nodeIds: response.nodeIds,
-			endpoints: response.endpoints,
-		};
+		);
+		if (response) {
+			return pick(response, ["maxNodes", "nodeIds", "endpoints"]);
+		}
 	}
 
 	/**

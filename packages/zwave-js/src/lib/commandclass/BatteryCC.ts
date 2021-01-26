@@ -11,7 +11,7 @@ import {
 	validatePayload,
 	ValueMetadata,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -105,22 +105,24 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BatteryCCReport>(
+		const response = await this.driver.sendCommand<BatteryCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			level: response.level,
-			isLow: response.isLow,
-			chargingStatus: response.chargingStatus,
-			rechargeable: response.rechargeable,
-			backup: response.backup,
-			overheating: response.overheating,
-			lowFluid: response.lowFluid,
-			rechargeOrReplace: response.rechargeOrReplace,
-			lowTemperatureStatus: response.lowTemperatureStatus,
-			disconnected: response.disconnected,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"level",
+				"isLow",
+				"chargingStatus",
+				"rechargeable",
+				"backup",
+				"overheating",
+				"lowFluid",
+				"rechargeOrReplace",
+				"lowTemperatureStatus",
+				"disconnected",
+			]);
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -131,14 +133,13 @@ export class BatteryCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BatteryCCHealthReport>(
+		const response = await this.driver.sendCommand<BatteryCCHealthReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			maximumCapacity: response.maximumCapacity,
-			temperature: response.temperature,
-		};
+		);
+		if (response) {
+			return pick(response, ["maximumCapacity", "temperature"]);
+		}
 	}
 }
 

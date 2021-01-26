@@ -137,7 +137,7 @@ export class TimeParametersCCAPI extends CCAPI {
 		}
 	};
 
-	public async get(): Promise<Date> {
+	public async get(): Promise<Date | undefined> {
 		this.assertSupportsCommand(
 			TimeParametersCommand,
 			TimeParametersCommand.Get,
@@ -147,11 +147,11 @@ export class TimeParametersCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<TimeParametersCCReport>(
+		const response = await this.driver.sendCommand<TimeParametersCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.dateAndTime;
+		);
+		return response?.dateAndTime;
 	}
 
 	public async set(dateAndTime: Date): Promise<void> {

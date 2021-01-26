@@ -5,7 +5,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -65,15 +65,13 @@ export class ClockCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ClockCCReport>(
+		const response = await this.driver.sendCommand<ClockCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			weekday: response.weekday,
-			hour: response.hour,
-			minute: response.minute,
-		};
+		);
+		if (response) {
+			return pick(response, ["weekday", "hour", "minute"]);
+		}
 	}
 
 	public async set(

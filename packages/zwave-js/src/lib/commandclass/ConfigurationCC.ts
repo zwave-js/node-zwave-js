@@ -22,7 +22,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
@@ -268,56 +268,43 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			parameter,
 			allowUnexpectedResponse,
 		});
-		try {
-			const response = (await this.driver.sendCommand<ConfigurationCCReport>(
-				cc,
-				this.commandOptions,
-			))!;
-			// Nodes may respond with a different parameter, e.g. if we
-			// requested a non-existing one
-			if (response.parameter === parameter) {
-				if (!valueBitMask) return response.value;
-				// If a partial parameter was requested, extract that value
-				return (
-					((response.value as any) & valueBitMask) >>>
-					getMinimumShiftForBitMask(valueBitMask)
-				);
-			}
-			this.driver.controllerLog.logNode(this.endpoint.nodeId, {
-				message: `Received unexpected ConfigurationReport (param = ${
-					response.parameter
-				}, value = ${response.value.toString()})`,
-				direction: "inbound",
-				level: "error",
-			});
-			throw new ConfigurationCCError(
-				`The first existing parameter on this node is ${response.parameter}`,
-				ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber,
-				response.parameter,
+		const response = await this.driver.sendCommand<ConfigurationCCReport>(
+			cc,
+			this.commandOptions,
+		);
+		if (!response) return;
+		// Nodes may respond with a different parameter, e.g. if we
+		// requested a non-existing one
+		if (response.parameter === parameter) {
+			if (!valueBitMask) return response.value;
+			// If a partial parameter was requested, extract that value
+			return (
+				((response.value as any) & valueBitMask) >>>
+				getMinimumShiftForBitMask(valueBitMask)
 			);
-		} catch (e) {
-			if (
-				e instanceof ZWaveError &&
-				e.code === ZWaveErrorCodes.Controller_NodeTimeout
-			) {
-				// A timeout has to be expected. We return undefined to
-				// signal that no value was received
-				return undefined;
-			}
-			// This error was unexpected
-			throw e;
 		}
+		this.driver.controllerLog.logNode(this.endpoint.nodeId, {
+			message: `Received unexpected ConfigurationReport (param = ${
+				response.parameter
+			}, value = ${response.value.toString()})`,
+			direction: "inbound",
+			level: "error",
+		});
+		throw new ConfigurationCCError(
+			`The first existing parameter on this node is ${response.parameter}`,
+			ZWaveErrorCodes.ConfigurationCC_FirstParameterNumber,
+			response.parameter,
+		);
 	}
 
 	/**
 	 * Sets a new value for a given config parameter of the device.
-	 * The return value indicates whether the command succeeded (`true`) or timed out (`false`).
 	 */
 	public async set(
 		parameter: number,
 		value: ConfigValue,
 		valueSize: 1 | 2 | 4,
-	): Promise<boolean> {
+	): Promise<void> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
@@ -330,19 +317,15 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			value,
 			valueSize,
 		});
-		// A timeout has to be expected, don't throw in that case
-		return ignoreTimeout(async () => {
-			await this.driver.sendCommand(cc, this.commandOptions);
-		});
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	/**
 	 * Resets a configuration parameter to its default value.
-	 * The return value indicates whether the command succeeded (`true`) or timed out (`false`).
 	 *
 	 * WARNING: This will throw on legacy devices (ConfigurationCC v3 and below)
 	 */
-	public async reset(parameter: number): Promise<boolean> {
+	public async reset(parameter: number): Promise<void> {
 		this.assertSupportsCommand(
 			ConfigurationCommand,
 			ConfigurationCommand.Set,
@@ -354,10 +337,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			parameter,
 			resetToDefault: true,
 		});
-		// A timeout has to be expected, don't throw in that case
-		return ignoreTimeout(async () => {
-			await this.driver.sendCommand(cc, this.commandOptions);
-		});
+		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
 	/** Resets all configuration parameters to their default value */
@@ -381,50 +361,52 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 		});
-		const response = (await this.driver.sendCommand<ConfigurationCCPropertiesReport>(
+		const response = await this.driver.sendCommand<ConfigurationCCPropertiesReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			valueSize: response.valueSize,
-			valueFormat: response.valueFormat,
-			minValue: response.minValue,
-			maxValue: response.maxValue,
-			defaultValue: response.defaultValue,
-			nextParameter: response.nextParameter,
-			altersCapabilities: response.altersCapabilities,
-			isReadonly: response.isReadonly,
-			isAdvanced: response.isAdvanced,
-			noBulkSupport: response.noBulkSupport,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"valueSize",
+				"valueFormat",
+				"minValue",
+				"maxValue",
+				"defaultValue",
+				"nextParameter",
+				"altersCapabilities",
+				"isReadonly",
+				"isAdvanced",
+				"noBulkSupport",
+			]);
+		}
 	}
 
 	/** Requests the name of a configuration parameter from the node */
-	public async getName(parameter: number): Promise<string> {
+	public async getName(parameter: number): Promise<string | undefined> {
 		const cc = new ConfigurationCCNameGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 		});
-		const response = (await this.driver.sendCommand<ConfigurationCCNameReport>(
+		const response = await this.driver.sendCommand<ConfigurationCCNameReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.name;
+		);
+		return response?.name;
 	}
 
 	/** Requests usage info for a configuration parameter from the node */
-	public async getInfo(parameter: number): Promise<string> {
+	public async getInfo(parameter: number): Promise<string | undefined> {
 		const cc = new ConfigurationCCInfoGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			// Don't set an endpoint here, Configuration is device specific, not endpoint specific
 			parameter,
 		});
-		const response = (await this.driver.sendCommand<ConfigurationCCInfoReport>(
+		const response = await this.driver.sendCommand<ConfigurationCCInfoReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.info;
+		);
+		return response?.info;
 	}
 
 	/**

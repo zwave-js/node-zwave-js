@@ -90,7 +90,7 @@ export class SoundSwitchCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async getToneCount(): Promise<number> {
+	public async getToneCount(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			SoundSwitchCommand,
 			SoundSwitchCommand.TonesNumberGet,
@@ -100,11 +100,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<SoundSwitchCCTonesNumberReport>(
+		const response = await this.driver.sendCommand<SoundSwitchCCTonesNumberReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.toneCount;
+		);
+		return response?.toneCount;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -119,11 +119,11 @@ export class SoundSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			toneId,
 		});
-		const response = (await this.driver.sendCommand<SoundSwitchCCToneInfoReport>(
+		const response = await this.driver.sendCommand<SoundSwitchCCToneInfoReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return pick(response, ["duration", "name"]);
+		);
+		if (response) return pick(response, ["duration", "name"]);
 	}
 
 	public async setConfiguration(
@@ -160,11 +160,13 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<SoundSwitchCCConfigurationReport>(
+		const response = await this.driver.sendCommand<SoundSwitchCCConfigurationReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return pick(response, ["defaultToneId", "defaultVolume"]);
+		);
+		if (response) {
+			return pick(response, ["defaultToneId", "defaultVolume"]);
+		}
 	}
 
 	public async play(toneId: number, volume?: number): Promise<void> {
@@ -225,11 +227,13 @@ export class SoundSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<SoundSwitchCCTonePlayReport>(
+		const response = await this.driver.sendCommand<SoundSwitchCCTonePlayReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return pick(response, ["toneId", "volume"]);
+		);
+		if (response) {
+			return pick(response, ["toneId", "volume"]);
+		}
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (

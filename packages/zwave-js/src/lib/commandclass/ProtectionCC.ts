@@ -15,7 +15,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -225,14 +225,13 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ProtectionCCReport>(
+		const response = await this.driver.sendCommand<ProtectionCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			local: response.local,
-			rf: response.rf,
-		};
+		);
+		if (response) {
+			return pick(response, ["local", "rf"]);
+		}
 	}
 
 	public async set(
@@ -266,19 +265,21 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ProtectionCCSupportedReport>(
+		const response = await this.driver.sendCommand<ProtectionCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			supportsExclusiveControl: response.supportsExclusiveControl,
-			supportsTimeout: response.supportsTimeout,
-			supportedLocalStates: response.supportedLocalStates,
-			supportedRFStates: response.supportedRFStates,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"supportsExclusiveControl",
+				"supportsTimeout",
+				"supportedLocalStates",
+				"supportedRFStates",
+			]);
+		}
 	}
 
-	public async getExclusiveControl(): Promise<number> {
+	public async getExclusiveControl(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.ExclusiveControlGet,
@@ -288,11 +289,11 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ProtectionCCExclusiveControlReport>(
+		const response = await this.driver.sendCommand<ProtectionCCExclusiveControlReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.exclusiveControlNodeId;
+		);
+		return response?.exclusiveControlNodeId;
 	}
 
 	public async setExclusiveControl(nodeId: number): Promise<void> {
@@ -314,7 +315,7 @@ export class ProtectionCCAPI extends CCAPI {
 		}
 	}
 
-	public async getTimeout(): Promise<Timeout> {
+	public async getTimeout(): Promise<Timeout | undefined> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.TimeoutGet,
@@ -324,11 +325,11 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ProtectionCCTimeoutReport>(
+		const response = await this.driver.sendCommand<ProtectionCCTimeoutReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.timeout;
+		);
+		return response?.timeout;
 	}
 
 	public async setTimeout(timeout: Timeout): Promise<void> {

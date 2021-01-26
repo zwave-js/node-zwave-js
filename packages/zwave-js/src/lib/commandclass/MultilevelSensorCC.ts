@@ -102,8 +102,13 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return this.get(sensorType, scale);
 	};
 
-	public async get(): Promise<MultilevelSensorValue & { type: number }>;
-	public async get(sensorType: number, scale: number): Promise<number>;
+	public async get(): Promise<
+		(MultilevelSensorValue & { type: number }) | undefined
+	>;
+	public async get(
+		sensorType: number,
+		scale: number,
+	): Promise<number | undefined>;
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(sensorType?: number, scale?: number) {
 		this.assertSupportsCommand(
@@ -117,10 +122,11 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			sensorType,
 			scale,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSensorCCReport>(
+		const response = await this.driver.sendCommand<MultilevelSensorCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
+		);
+		if (!response) return;
 
 		if (sensorType === undefined) {
 			// Overload #1: return the full response
@@ -135,7 +141,9 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		}
 	}
 
-	public async getSupportedSensorTypes(): Promise<readonly number[]> {
+	public async getSupportedSensorTypes(): Promise<
+		readonly number[] | undefined
+	> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.GetSupportedSensor,
@@ -145,16 +153,16 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSensorCCSupportedSensorReport>(
+		const response = await this.driver.sendCommand<MultilevelSensorCCSupportedSensorReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedSensorTypes;
+		);
+		return response?.supportedSensorTypes;
 	}
 
 	public async getSupportedScales(
 		sensorType: number,
-	): Promise<readonly number[]> {
+	): Promise<readonly number[] | undefined> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.GetSupportedScale,
@@ -165,11 +173,11 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSensorCCSupportedScaleReport>(
+		const response = await this.driver.sendCommand<MultilevelSensorCCSupportedScaleReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.sensorSupportedScales;
+		);
+		return response?.sensorSupportedScales;
 	}
 
 	public async sendReport(

@@ -211,23 +211,25 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<DoorLockCCCapabilitiesReport>(
+		const response = await this.driver.sendCommand<DoorLockCCCapabilitiesReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return pick(response, [
-			"autoRelockSupported",
-			"blockToBlockSupported",
-			"boltSupported",
-			"doorSupported",
-			"holdAndReleaseSupported",
-			"latchSupported",
-			"twistAssistSupported",
-			"supportedDoorLockModes",
-			"supportedInsideHandles",
-			"supportedOperationTypes",
-			"supportedOutsideHandles",
-		]);
+		);
+		if (response) {
+			return pick(response, [
+				"autoRelockSupported",
+				"blockToBlockSupported",
+				"boltSupported",
+				"doorSupported",
+				"holdAndReleaseSupported",
+				"latchSupported",
+				"twistAssistSupported",
+				"supportedDoorLockModes",
+				"supportedInsideHandles",
+				"supportedOperationTypes",
+				"supportedOutsideHandles",
+			]);
+		}
 	}
 
 	private refreshTimeout: NodeJS.Timeout | undefined;
@@ -243,21 +245,23 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<DoorLockCCOperationReport>(
+		const response = await this.driver.sendCommand<DoorLockCCOperationReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return pick(response, [
-			"currentMode",
-			"targetMode",
-			"duration",
-			"outsideHandlesCanOpenDoor",
-			"insideHandlesCanOpenDoor",
-			"latchStatus",
-			"boltStatus",
-			"doorStatus",
-			"lockTimeout",
-		]);
+		);
+		if (response) {
+			return pick(response, [
+				"currentMode",
+				"targetMode",
+				"duration",
+				"outsideHandlesCanOpenDoor",
+				"insideHandlesCanOpenDoor",
+				"latchStatus",
+				"boltStatus",
+				"doorStatus",
+				"lockTimeout",
+			]);
+		}
 	}
 
 	public async set(mode: DoorLockMode): Promise<void> {
@@ -315,20 +319,22 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<DoorLockCCConfigurationReport>(
+		const response = await this.driver.sendCommand<DoorLockCCConfigurationReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return pick(response, [
-			"operationType",
-			"outsideHandlesCanOpenDoorConfiguration",
-			"insideHandlesCanOpenDoorConfiguration",
-			"lockTimeoutConfiguration",
-			"autoRelockTime",
-			"holdAndReleaseTime",
-			"twistAssist",
-			"blockToBlock",
-		]);
+		);
+		if (response) {
+			return pick(response, [
+				"operationType",
+				"outsideHandlesCanOpenDoorConfiguration",
+				"insideHandlesCanOpenDoorConfiguration",
+				"lockTimeoutConfiguration",
+				"autoRelockTime",
+				"holdAndReleaseTime",
+				"twistAssist",
+				"blockToBlock",
+			]);
+		}
 	}
 }
 

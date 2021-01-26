@@ -75,16 +75,18 @@ export class BinarySwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BinarySwitchCCReport>(
+		const response = await this.driver.sendCommand<BinarySwitchCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			// interpret unknown values as false
-			currentValue: response.currentValue || false,
-			targetValue: response.targetValue,
-			duration: response.duration,
-		};
+		);
+		if (response) {
+			return {
+				// interpret unknown values as false
+				currentValue: response.currentValue || false,
+				targetValue: response.targetValue,
+				duration: response.duration,
+			};
+		}
 	}
 
 	private refreshTimeout: NodeJS.Timeout | undefined;

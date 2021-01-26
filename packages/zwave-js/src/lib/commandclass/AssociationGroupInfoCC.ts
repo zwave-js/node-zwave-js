@@ -285,7 +285,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async getGroupName(groupId: number): Promise<string> {
+	public async getGroupName(groupId: number): Promise<string | undefined> {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
 			AssociationGroupInfoCommand.NameGet,
@@ -296,11 +296,11 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = (await this.driver.sendCommand<AssociationGroupInfoCCNameReport>(
+		const response = await this.driver.sendCommand<AssociationGroupInfoCCNameReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.name;
+		);
+		if (response) return response.name;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -316,22 +316,26 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			groupId,
 			refreshCache,
 		});
-		const response = (await this.driver.sendCommand<AssociationGroupInfoCCInfoReport>(
+		const response = await this.driver.sendCommand<AssociationGroupInfoCCInfoReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		// SDS13782: If List Mode is set to 0, the Group Count field MUST be set to 1.
-		const { groupId: _, ...info } = response.groups[0];
-		return {
-			hasDynamicInfo: response.hasDynamicInfo,
-			...info,
-		};
+		);
+		if (response) {
+			// SDS13782: If List Mode is set to 0, the Group Count field MUST be set to 1.
+			const { groupId: _, ...info } = response.groups[0];
+			return {
+				hasDynamicInfo: response.hasDynamicInfo,
+				...info,
+			};
+		}
 	}
 
 	public async getCommands(
 		groupId: number,
 		allowCache: boolean = true,
-	): Promise<AssociationGroupInfoCCCommandListReport["commands"]> {
+	): Promise<
+		AssociationGroupInfoCCCommandListReport["commands"] | undefined
+	> {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
 			AssociationGroupInfoCommand.CommandListGet,
@@ -343,11 +347,11 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			groupId,
 			allowCache,
 		});
-		const response = (await this.driver.sendCommand<AssociationGroupInfoCCCommandListReport>(
+		const response = await this.driver.sendCommand<AssociationGroupInfoCCCommandListReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.commands;
+		);
+		if (response) return response.commands;
 	}
 }
 

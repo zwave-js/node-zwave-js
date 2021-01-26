@@ -118,7 +118,9 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 	 * Retrieves the current value from this sensor
 	 * @param sensorType The (optional) sensor type to retrieve the value for
 	 */
-	public async get(sensorType?: BinarySensorType): Promise<boolean> {
+	public async get(
+		sensorType?: BinarySensorType,
+	): Promise<boolean | undefined> {
 		this.assertSupportsCommand(
 			BinarySensorCommand,
 			BinarySensorCommand.Get,
@@ -129,12 +131,12 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = (await this.driver.sendCommand<BinarySensorCCReport>(
+		const response = await this.driver.sendCommand<BinarySensorCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
+		);
 		// We don't want to repeat the sensor type
-		return response.value;
+		if (response) return response.value;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -148,10 +150,10 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BinarySensorCCSupportedReport>(
+		const response = await this.driver.sendCommand<BinarySensorCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
+		);
 		// We don't want to repeat the sensor type
 		return response.supportedSensorTypes;
 	}

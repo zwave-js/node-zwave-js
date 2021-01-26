@@ -11,7 +11,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -96,19 +96,23 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<VersionCCReport>(
+		const response = await this.driver.sendCommand<VersionCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			libraryType: response.libraryType,
-			protocolVersion: response.protocolVersion,
-			firmwareVersions: response.firmwareVersions,
-			hardwareVersion: response.hardwareVersion,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"libraryType",
+				"protocolVersion",
+				"firmwareVersions",
+				"hardwareVersion",
+			]);
+		}
 	}
 
-	public async getCCVersion(requestedCC: CommandClasses): Promise<number> {
+	public async getCCVersion(
+		requestedCC: CommandClasses,
+	): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			VersionCommand,
 			VersionCommand.CommandClassGet,
@@ -119,11 +123,11 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			requestedCC,
 		});
-		const response = (await this.driver.sendCommand<VersionCCCommandClassReport>(
+		const response = await this.driver.sendCommand<VersionCCCommandClassReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.ccVersion;
+		);
+		return response?.ccVersion;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -137,13 +141,13 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<VersionCCCapabilitiesReport>(
+		const response = await this.driver.sendCommand<VersionCCCapabilitiesReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			supportsZWaveSoftwareGet: response.supportsZWaveSoftwareGet,
-		};
+		);
+		if (response) {
+			return pick(response, ["supportsZWaveSoftwareGet"]);
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -157,23 +161,23 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<VersionCCZWaveSoftwareReport>(
+		const response = await this.driver.sendCommand<VersionCCZWaveSoftwareReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			sdkVersion: response.sdkVersion,
-			applicationFrameworkAPIVersion:
-				response.applicationFrameworkAPIVersion,
-			applicationFrameworkBuildNumber:
-				response.applicationFrameworkBuildNumber,
-			hostInterfaceVersion: response.hostInterfaceVersion,
-			hostInterfaceBuildNumber: response.hostInterfaceBuildNumber,
-			zWaveProtocolVersion: response.zWaveProtocolVersion,
-			zWaveProtocolBuildNumber: response.zWaveProtocolBuildNumber,
-			applicationVersion: response.applicationVersion,
-			applicationBuildNumber: response.applicationBuildNumber,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"sdkVersion",
+				"applicationFrameworkAPIVersion",
+				"applicationFrameworkBuildNumber",
+				"hostInterfaceVersion",
+				"hostInterfaceBuildNumber",
+				"zWaveProtocolVersion",
+				"zWaveProtocolBuildNumber",
+				"applicationVersion",
+				"applicationBuildNumber",
+			]);
+		}
 	}
 }
 

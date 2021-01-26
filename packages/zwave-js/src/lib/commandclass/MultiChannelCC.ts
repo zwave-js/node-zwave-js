@@ -123,21 +123,23 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<MultiChannelCCEndPointReport>(
+		const response = await this.driver.sendCommand<MultiChannelCCEndPointReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			isDynamicEndpointCount: response.countIsDynamic,
-			identicalCapabilities: response.identicalCapabilities,
-			individualEndpointCount: response.individualCount,
-			aggregatedEndpointCount: response.aggregatedCount,
-		};
+		);
+		if (response) {
+			return {
+				isDynamicEndpointCount: response.countIsDynamic,
+				identicalCapabilities: response.identicalCapabilities,
+				individualEndpointCount: response.individualCount,
+				aggregatedEndpointCount: response.aggregatedCount,
+			};
+		}
 	}
 
 	public async getEndpointCapabilities(
 		endpoint: number,
-	): Promise<EndpointCapability> {
+	): Promise<EndpointCapability | undefined> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.CapabilityGet,
@@ -148,17 +150,17 @@ export class MultiChannelCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
-		const response = (await this.driver.sendCommand<MultiChannelCCCapabilityReport>(
+		const response = await this.driver.sendCommand<MultiChannelCCCapabilityReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.capability;
+		);
+		return response?.capability;
 	}
 
 	public async findEndpoints(
 		genericClass: number,
 		specificClass: number,
-	): Promise<readonly number[]> {
+	): Promise<readonly number[] | undefined> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.EndPointFind,
@@ -170,16 +172,16 @@ export class MultiChannelCCAPI extends CCAPI {
 			genericClass,
 			specificClass,
 		});
-		const response = (await this.driver.sendCommand<MultiChannelCCEndPointFindReport>(
+		const response = await this.driver.sendCommand<MultiChannelCCEndPointFindReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.foundEndpoints;
+		);
+		return response?.foundEndpoints;
 	}
 
 	public async getAggregatedMembers(
 		endpoint: number,
-	): Promise<readonly number[]> {
+	): Promise<readonly number[] | undefined> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.AggregatedMembersGet,
@@ -190,11 +192,11 @@ export class MultiChannelCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			requestedEndpoint: endpoint,
 		});
-		const response = (await this.driver.sendCommand<MultiChannelCCAggregatedMembersReport>(
+		const response = await this.driver.sendCommand<MultiChannelCCAggregatedMembersReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.members;
+		);
+		return response?.members;
 	}
 
 	public async sendEncapsulated(
@@ -215,7 +217,9 @@ export class MultiChannelCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getEndpointCountV1(ccId: CommandClasses): Promise<number> {
+	public async getEndpointCountV1(
+		ccId: CommandClasses,
+	): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			MultiChannelCommand,
 			MultiChannelCommand.GetV1,
@@ -225,11 +229,11 @@ export class MultiChannelCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			requestedCC: ccId,
 		});
-		const response = (await this.driver.sendCommand<MultiChannelCCV1Report>(
+		const response = await this.driver.sendCommand<MultiChannelCCV1Report>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.endpointCount;
+		);
+		return response?.endpointCount;
 	}
 
 	public async sendEncapsulatedV1(encapsulated: CommandClass): Promise<void> {

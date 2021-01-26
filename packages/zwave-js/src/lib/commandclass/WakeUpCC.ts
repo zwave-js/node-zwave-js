@@ -6,6 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import type { ZWaveNode } from "../node/Node";
@@ -98,14 +99,13 @@ export class WakeUpCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<WakeUpCCIntervalReport>(
+		const response = await this.driver.sendCommand<WakeUpCCIntervalReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			wakeUpInterval: response.wakeUpInterval,
-			controllerNodeId: response.controllerNodeId,
-		};
+		);
+		if (response) {
+			return pick(response, ["wakeUpInterval", "controllerNodeId"]);
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -119,16 +119,18 @@ export class WakeUpCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<WakeUpCCIntervalCapabilitiesReport>(
+		const response = await this.driver.sendCommand<WakeUpCCIntervalCapabilitiesReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			defaultWakeUpInterval: response.defaultWakeUpInterval,
-			minWakeUpInterval: response.minWakeUpInterval,
-			maxWakeUpInterval: response.maxWakeUpInterval,
-			wakeUpIntervalSteps: response.wakeUpIntervalSteps,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"defaultWakeUpInterval",
+				"minWakeUpInterval",
+				"maxWakeUpInterval",
+				"wakeUpIntervalSteps",
+			]);
+		}
 	}
 
 	public async setInterval(

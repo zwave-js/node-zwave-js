@@ -13,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -102,15 +102,17 @@ export class CentralSceneCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<CentralSceneCCSupportedReport>(
+		const response = await this.driver.sendCommand<CentralSceneCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			sceneCount: response.sceneCount,
-			supportsSlowRefresh: response.supportsSlowRefresh,
-			supportedKeyAttributes: response.supportedKeyAttributes,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"sceneCount",
+				"supportsSlowRefresh",
+				"supportedKeyAttributes",
+			]);
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -124,13 +126,13 @@ export class CentralSceneCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<CentralSceneCCConfigurationReport>(
+		const response = await this.driver.sendCommand<CentralSceneCCConfigurationReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			slowRefresh: response.slowRefresh,
-		};
+		);
+		if (response) {
+			return pick(response, ["slowRefresh"]);
+		}
 	}
 
 	public async setConfiguration(slowRefresh: boolean): Promise<void> {

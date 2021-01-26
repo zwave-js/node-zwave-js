@@ -250,7 +250,7 @@ export class IndicatorCCAPI extends CCAPI {
 
 	public async get(
 		indicatorId?: number,
-	): Promise<number | IndicatorObject[]> {
+	): Promise<number | IndicatorObject[] | undefined> {
 		this.assertSupportsCommand(IndicatorCommand, IndicatorCommand.Get);
 
 		const cc = new IndicatorCCGet(this.driver, {
@@ -258,10 +258,11 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = (await this.driver.sendCommand<IndicatorCCReport>(
+		const response = await this.driver.sendCommand<IndicatorCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
+		);
+		if (!response) return;
 		if (response.values) return response.values;
 		return response.value!;
 	}
@@ -288,11 +289,14 @@ export class IndicatorCCAPI extends CCAPI {
 
 	public async getSupported(
 		indicatorId: number,
-	): Promise<{
-		indicatorId?: number;
-		supportedProperties: readonly number[];
-		nextIndicatorId: number;
-	}> {
+	): Promise<
+		| {
+				indicatorId?: number;
+				supportedProperties: readonly number[];
+				nextIndicatorId: number;
+		  }
+		| undefined
+	> {
 		this.assertSupportsCommand(
 			IndicatorCommand,
 			IndicatorCommand.SupportedGet,
@@ -303,18 +307,20 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = (await this.driver.sendCommand<IndicatorCCSupportedReport>(
+		const response = await this.driver.sendCommand<IndicatorCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			// Include the actual indicator ID if 0x00 was requested
-			...(indicatorId === 0x00
-				? { indicatorId: response.indicatorId }
-				: undefined),
-			supportedProperties: response.supportedProperties,
-			nextIndicatorId: response.nextIndicatorId,
-		};
+		);
+		if (response) {
+			return {
+				// Include the actual indicator ID if 0x00 was requested
+				...(indicatorId === 0x00
+					? { indicatorId: response.indicatorId }
+					: undefined),
+				supportedProperties: response.supportedProperties,
+				nextIndicatorId: response.nextIndicatorId,
+			};
+		}
 	}
 
 	/**

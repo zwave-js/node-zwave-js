@@ -121,7 +121,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			/** Whether the received nonce should be stored as "free". Default: false */
 			storeAsFreeNonce?: boolean;
 		} = {},
-	): Promise<Buffer> {
+	): Promise<Buffer | undefined> {
 		this.assertSupportsCommand(SecurityCommand, SecurityCommand.NonceGet);
 
 		const { standalone = false, storeAsFreeNonce = false } = options;
@@ -130,7 +130,7 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<SecurityCCNonceReport>(
+		const response = await this.driver.sendCommand<SecurityCCNonceReport>(
 			cc,
 			{
 				...this.commandOptions,
@@ -144,10 +144,11 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				// The "real" transaction will do that for us
 				changeNodeStatusOnMissingACK: standalone,
 			},
-		))!;
+		);
+
+		if (!response) return;
 
 		const nonce = response.nonce;
-
 		if (storeAsFreeNonce) {
 			const secMan = this.driver.securityManager!;
 			secMan.setNonce(
@@ -288,11 +289,13 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<SecurityCCCommandsSupportedReport>(
+		const response = await this.driver.sendCommand<SecurityCCCommandsSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return pick(response, ["supportedCCs", "controlledCCs"]);
+		);
+		if (response) {
+			return pick(response, ["supportedCCs", "controlledCCs"]);
+		}
 	}
 }
 

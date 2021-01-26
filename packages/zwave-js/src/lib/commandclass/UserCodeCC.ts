@@ -445,7 +445,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		}
 	};
 
-	public async getUsersCount(): Promise<number> {
+	public async getUsersCount(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UsersNumberGet,
@@ -455,21 +455,23 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCUsersNumberReport>(
+		const response = await this.driver.sendCommand<UserCodeCCUsersNumberReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedUsers;
+		);
+		return response?.supportedUsers;
 	}
 
 	public async get(
 		userId: number,
 		multiple?: false,
-	): Promise<Pick<UserCode, "userIdStatus" | "userCode">>;
+	): Promise<Pick<UserCode, "userIdStatus" | "userCode"> | undefined>;
 	public async get(
 		userId: number,
 		multiple: true,
-	): Promise<{ userCodes: readonly UserCode[]; nextUserId: number }>;
+	): Promise<
+		{ userCodes: readonly UserCode[]; nextUserId: number } | undefined
+	>;
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(userId: number, multiple: boolean = false) {
 		if (userId > 255 || multiple) {
@@ -484,11 +486,13 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				userId,
 				reportMore: multiple,
 			});
-			const response = (await this.driver.sendCommand<UserCodeCCExtendedUserCodeReport>(
+			const response = await this.driver.sendCommand<UserCodeCCExtendedUserCodeReport>(
 				cc,
 				this.commandOptions,
-			))!;
-			if (multiple) {
+			);
+			if (!response) {
+				return;
+			} else if (multiple) {
 				return pick(response, ["userCodes", "nextUserId"]);
 			} else {
 				return pick(response.userCodes[0], [
@@ -504,11 +508,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				endpoint: this.endpoint.index,
 				userId,
 			});
-			const response = (await this.driver.sendCommand<UserCodeCCReport>(
+			const response = await this.driver.sendCommand<UserCodeCCReport>(
 				cc,
 				this.commandOptions,
-			))!;
-			return pick(response, ["userIdStatus", "userCode"]);
+			);
+			if (response) return pick(response, ["userIdStatus", "userCode"]);
 		}
 	}
 
@@ -592,23 +596,25 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCCapabilitiesReport>(
+		const response = await this.driver.sendCommand<UserCodeCCCapabilitiesReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return pick(response, [
-			"supportsMasterCode",
-			"supportsMasterCodeDeactivation",
-			"supportsUserCodeChecksum",
-			"supportsMultipleUserCodeReport",
-			"supportsMultipleUserCodeSet",
-			"supportedUserIDStatuses",
-			"supportedKeypadModes",
-			"supportedASCIIChars",
-		]);
+		);
+		if (response) {
+			return pick(response, [
+				"supportsMasterCode",
+				"supportsMasterCodeDeactivation",
+				"supportsUserCodeChecksum",
+				"supportsMultipleUserCodeReport",
+				"supportsMultipleUserCodeSet",
+				"supportedUserIDStatuses",
+				"supportedKeypadModes",
+				"supportedASCIIChars",
+			]);
+		}
 	}
 
-	public async getKeypadMode(): Promise<KeypadMode> {
+	public async getKeypadMode(): Promise<KeypadMode | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.KeypadModeGet,
@@ -618,11 +624,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCKeypadModeReport>(
+		const response = await this.driver.sendCommand<UserCodeCCKeypadModeReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.keypadMode;
+		);
+		return response?.keypadMode;
 	}
 
 	public async setKeypadMode(keypadMode: KeypadMode): Promise<void> {
@@ -643,7 +649,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		await this.getKeypadMode();
 	}
 
-	public async getMasterCode(): Promise<string> {
+	public async getMasterCode(): Promise<string | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.MasterCodeGet,
@@ -653,11 +659,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCMasterCodeReport>(
+		const response = await this.driver.sendCommand<UserCodeCCMasterCodeReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.masterCode;
+		);
+		return response?.masterCode;
 	}
 
 	public async setMasterCode(masterCode: string): Promise<void> {
@@ -678,7 +684,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		await this.getMasterCode();
 	}
 
-	public async getUserCodeChecksum(): Promise<number> {
+	public async getUserCodeChecksum(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UserCodeChecksumGet,
@@ -688,11 +694,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCUserCodeChecksumReport>(
+		const response = await this.driver.sendCommand<UserCodeCCUserCodeChecksumReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.userCodeChecksum;
+		);
+		return response?.userCodeChecksum;
 	}
 }
 

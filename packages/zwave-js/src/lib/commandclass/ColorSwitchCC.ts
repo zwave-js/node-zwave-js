@@ -177,7 +177,9 @@ export class ColorSwitchCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async getSupported(): Promise<readonly ColorComponent[]> {
+	public async getSupported(): Promise<
+		readonly ColorComponent[] | undefined
+	> {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,
 			ColorSwitchCommand.SupportedGet,
@@ -187,11 +189,11 @@ export class ColorSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ColorSwitchCCSupportedReport>(
+		const response = await this.driver.sendCommand<ColorSwitchCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedColorComponents;
+		);
+		return response?.supportedColorComponents;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -203,15 +205,13 @@ export class ColorSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			colorComponent: component,
 		});
-		const response = (await this.driver.sendCommand<ColorSwitchCCReport>(
+		const response = await this.driver.sendCommand<ColorSwitchCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			currentValue: response.currentValue,
-			targetValue: response.targetValue,
-			duration: response.duration,
-		};
+		);
+		if (response) {
+			return pick(response, ["currentValue", "targetValue", "duration"]);
+		}
 	}
 
 	public async set(options: ColorSwitchCCSetOptions): Promise<void> {

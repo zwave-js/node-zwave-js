@@ -10,7 +10,7 @@ import {
 	ValueID,
 	ValueMetadata,
 } from "@zwave-js/core";
-import type { AllOrNone } from "@zwave-js/shared";
+import { AllOrNone, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -113,15 +113,13 @@ export class BasicCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BasicCCReport>(
+		const response = await this.driver.sendCommand<BasicCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			currentValue: response.currentValue,
-			targetValue: response.targetValue,
-			duration: response.duration,
-		};
+		);
+		if (response) {
+			return pick(response, ["currentValue", "targetValue", "duration"]);
+		}
 	}
 
 	private refreshTimeout: NodeJS.Timeout | undefined;

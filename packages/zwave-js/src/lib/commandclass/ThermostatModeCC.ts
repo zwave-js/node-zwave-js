@@ -13,7 +13,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
+import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -120,14 +120,13 @@ export class ThermostatModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ThermostatModeCCReport>(
+		const response = await this.driver.sendCommand<ThermostatModeCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			mode: response.mode,
-			manufacturerData: response.manufacturerData,
-		};
+		);
+		if (response) {
+			return pick(response, ["mode", "manufacturerData"]);
+		}
 	}
 
 	public async set(
@@ -164,7 +163,9 @@ export class ThermostatModeCCAPI extends CCAPI {
 		}
 	}
 
-	public async getSupportedModes(): Promise<readonly ThermostatMode[]> {
+	public async getSupportedModes(): Promise<
+		readonly ThermostatMode[] | undefined
+	> {
 		this.assertSupportsCommand(
 			ThermostatModeCommand,
 			ThermostatModeCommand.SupportedGet,
@@ -174,11 +175,11 @@ export class ThermostatModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ThermostatModeCCSupportedReport>(
+		const response = await this.driver.sendCommand<ThermostatModeCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedModes;
+		);
+		return response?.supportedModes;
 	}
 }
 

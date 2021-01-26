@@ -1,6 +1,6 @@
 import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import { CommandClasses, validatePayload } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -103,17 +103,19 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ZWavePlusCCReport>(
+		const response = await this.driver.sendCommand<ZWavePlusCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			zwavePlusVersion: response.zwavePlusVersion,
-			nodeType: response.nodeType,
-			roleType: response.roleType,
-			installerIcon: response.installerIcon,
-			userIcon: response.userIcon,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"zwavePlusVersion",
+				"nodeType",
+				"roleType",
+				"installerIcon",
+				"userIcon",
+			]);
+		}
 	}
 }
 

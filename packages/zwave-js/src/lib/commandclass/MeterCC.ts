@@ -16,7 +16,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -200,18 +200,20 @@ export class MeterCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		const response = (await this.driver.sendCommand<MeterCCReport>(
+		const response = await this.driver.sendCommand<MeterCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			type: response.type,
-			scale: response.scale,
-			value: response.value,
-			previousValue: response.previousValue,
-			rateType: response.rateType,
-			deltaTime: response.deltaTime,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"type",
+				"scale",
+				"value",
+				"previousValue",
+				"rateType",
+				"deltaTime",
+			]);
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -235,17 +237,17 @@ export class MeterCCAPI extends PhysicalCCAPI {
 			const ret = [];
 			for (const rateType of rateTypes) {
 				for (const scale of supportedScales) {
-					ret.push(
-						await this.get({
-							scale,
-							rateType,
-						}),
-					);
+					const response = await this.get({
+						scale,
+						rateType,
+					});
+					if (response) ret.push(response);
 				}
 			}
 			return ret;
 		} else {
-			return [await this.get()];
+			const response = await this.get();
+			return response ? [response] : [];
 		}
 	}
 
@@ -257,16 +259,18 @@ export class MeterCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<MeterCCSupportedReport>(
+		const response = await this.driver.sendCommand<MeterCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			type: response.type,
-			supportsReset: response.supportsReset,
-			supportedScales: response.supportedScales,
-			supportedRateTypes: response.supportedRateTypes,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"type",
+				"supportsReset",
+				"supportedScales",
+				"supportedRateTypes",
+			]);
+		}
 	}
 
 	public async reset(options: MeterCCResetOptions): Promise<void> {

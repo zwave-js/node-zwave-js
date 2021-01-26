@@ -11,7 +11,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -214,10 +214,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			setpointType,
 		});
-		const response = (await this.driver.sendCommand<ThermostatSetpointCCReport>(
+		const response = await this.driver.sendCommand<ThermostatSetpointCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
+		);
+		if (!response) return;
 		return response.type === ThermostatSetpointType["N/A"]
 			? // not supported
 			  undefined
@@ -265,16 +266,18 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			setpointType,
 		});
-		const response = (await this.driver.sendCommand<ThermostatSetpointCCCapabilitiesReport>(
+		const response = await this.driver.sendCommand<ThermostatSetpointCCCapabilitiesReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			minValue: response.minValue,
-			maxValue: response.maxValue,
-			minValueScale: response.minValueScale,
-			maxValueScale: response.maxValueScale,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"minValue",
+				"maxValue",
+				"minValueScale",
+				"maxValueScale",
+			]);
+		}
 	}
 
 	/**
@@ -283,7 +286,7 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 	 * during node interview.
 	 */
 	public async getSupportedSetpointTypes(): Promise<
-		readonly ThermostatSetpointType[]
+		readonly ThermostatSetpointType[] | undefined
 	> {
 		this.assertSupportsCommand(
 			ThermostatSetpointCommand,
@@ -294,11 +297,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ThermostatSetpointCCSupportedReport>(
+		const response = await this.driver.sendCommand<ThermostatSetpointCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedSetpointTypes;
+		);
+		return response?.supportedSetpointTypes;
 	}
 }
 
