@@ -99,37 +99,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Key Held Down",
-					"value": 32
-				},
-				{
-					"label": "Key Released",
-					"value": 64
-				},
-				{
-					"label": "Key Pressed 1 time",
-					"value": 1
-				},
-				{
-					"label": "Key Pressed 2 times",
-					"value": 2
-				},
-				{
-					"label": "Key Pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key Pressed 4 times",
-					"value": 8
-				},
-				{
-					"label": "Key Pressed 5 times",
-					"value": 16
-				}
-			]
+			"allowManualEntry": true
 		},
 		"3": {
 			"label": "Associations in Z-Wave network security mode",
@@ -509,37 +479,7 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Key Pressed 1 time",
-					"value": 1
-				},
-				{
-					"label": "Key Pressed 2 times",
-					"value": 2
-				},
-				{
-					"label": "Key Pressed 3 times",
-					"value": 4
-				},
-				{
-					"label": "Key Pressed 4 times",
-					"value": 8
-				},
-				{
-					"label": "Key Pressed 5 times",
-					"value": 16
-				},
-				{
-					"label": "Key Held Down",
-					"value": 32
-				},
-				{
-					"label": "Key Released",
-					"value": 64
-				}
-			]
+			"allowManualEntry": true
 		}
 	},
 	"metadata": {
