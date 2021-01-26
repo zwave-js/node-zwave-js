@@ -2196,7 +2196,7 @@ ${handlers.length} left`,
 		options: SendSupervisedCommandOptions = {
 			requestStatusUpdates: false,
 		},
-	): Promise<SupervisionResult> {
+	): Promise<SupervisionResult | undefined> {
 		// Check if the target supports this command
 		if (!command.getNode()?.supportsCC(CommandClasses.Supervision)) {
 			throw new ZWaveError(
@@ -2214,10 +2214,12 @@ ${handlers.length} left`,
 			options.requestStatusUpdates,
 		);
 
-		const resp = (await this.sendCommand<SupervisionCCReport>(
+		const resp = await this.sendCommand<SupervisionCCReport>(
 			command,
 			options,
-		))!;
+		);
+		if (!resp) return;
+
 		// If future updates are expected, listen for them
 		if (options.requestStatusUpdates && resp.moreUpdatesFollow) {
 			this.supervisionSessions.set(
