@@ -179,11 +179,13 @@ export class ZWaveNode extends Endpoint {
 		deviceClass?: DeviceClass,
 		supportedCCs: CommandClasses[] = [],
 		controlledCCs: CommandClasses[] = [],
+		valueDB?: ValueDB,
 	) {
 		// Define this node's intrinsic endpoint as the root device (0)
 		super(id, driver, 0);
 
-		this._valueDB = new ValueDB(id, driver.valueDB!, driver.metadataDB!);
+		this._valueDB =
+			valueDB ?? new ValueDB(id, driver.valueDB!, driver.metadataDB!);
 		for (const event of [
 			"value added",
 			"value updated",

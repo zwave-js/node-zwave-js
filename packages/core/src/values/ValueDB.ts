@@ -151,20 +151,43 @@ export interface SetValueOptions {
  */
 export class ValueDB extends EventEmitter {
 	// This is a wrapper around the driver's on-disk value and metadata key value stores
+
+	/**
+	 * @param nodeId The ID of the node this Value DB belongs to
+	 * @param valueDB The DB instance which stores values
+	 * @param metadataDB The DB instance which stores metadata
+	 * @param ownKeys An optional pre-created index of this ValueDB's own keys
+	 */
 	public constructor(
 		nodeId: number,
 		valueDB: JsonlDB,
 		metadataDB: JsonlDB<ValueMetadata>,
+		ownKeys?: Set<string>,
 	) {
 		super();
 		this.nodeId = nodeId;
 		this._db = valueDB;
 		this._metadata = metadataDB;
+
+		this._index = ownKeys ?? this.buildIndex();
 	}
 
 	private nodeId: number;
 	private _db: JsonlDB<unknown>;
 	private _metadata: JsonlDB<ValueMetadata>;
+	private _index: Set<string>;
+
+	private buildIndex(): Set<string> {
+		const ret = new Set<string>();
+		for (const key of this._db.keys()) {
+			if (compareDBKeyFast(key, this.nodeId)) ret.add(key);
+		}
+		for (const key of this._metadata.keys()) {
+			if (!ret.has(key) && compareDBKeyFast(key, this.nodeId))
+				ret.add(key);
+		}
+		return ret;
+	}
 
 	private valueIdToDBKey(valueID: ValueID): string {
 		return JSON.stringify({
@@ -219,6 +242,7 @@ export class ValueDB extends EventEmitter {
 				event = "value added";
 			}
 
+			this._index.add(dbKey);
 			this._db.set(dbKey, value);
 			if (options.noEvent !== true) {
 				this.emit(event, cbArg);
@@ -240,6 +264,9 @@ export class ValueDB extends EventEmitter {
 		options: SetValueOptions = {},
 	): boolean {
 		const dbKey: string = this.valueIdToDBKey(valueId);
+		if (!this._metadata.has(dbKey)) {
+			this._index.delete(dbKey);
+		}
 		if (this._db.has(dbKey)) {
 			const prevValue = this._db.get(dbKey);
 			this._db.delete(dbKey);
@@ -277,9 +304,9 @@ export class ValueDB extends EventEmitter {
 		predicate: (id: ValueID) => boolean,
 	): (ValueID & { value: unknown })[] {
 		const ret: ReturnType<ValueDB["findValues"]> = [];
-		for (const key of this._db.keys()) {
+		for (const key of this._index) {
+			if (!this._db.has(key)) continue;
 			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-			if (nodeId !== this.nodeId) continue;
 
 			if (predicate(valueId)) {
 				ret.push({ ...valueId, value: this._db.get(key) });
@@ -291,49 +318,47 @@ export class ValueDB extends EventEmitter {
 	/** Returns all values that are stored for a given CC */
 	public getValues(forCC: CommandClasses): (ValueID & { value: unknown })[] {
 		const ret: ReturnType<ValueDB["getValues"]> = [];
-		this._db.forEach((value, key) => {
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-			if (nodeId !== this.nodeId) return;
-
-			if (forCC === valueId.commandClass) ret.push({ ...valueId, value });
-		});
+		for (const key of this._index) {
+			if (
+				compareDBKeyFast(key, this.nodeId, { commandClass: forCC }) &&
+				this._db.has(key)
+			) {
+				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+				const value = this._db.get(key);
+				ret.push({ ...valueId, value });
+			}
+		}
 		return ret;
 	}
 
 	/** Clears all values from the value DB */
 	public clear(options: SetValueOptions = {}): void {
-		const oldValues = [...this._db].filter(([key]) => {
-			const { nodeId } = this.dbKeyToValueId(key);
-			return nodeId === this.nodeId;
-		});
-		const oldMetadataKeys = [...this._metadata.keys()].filter((key) => {
-			const { nodeId } = this.dbKeyToValueId(key);
-			return nodeId === this.nodeId;
-		});
-
-		oldValues.forEach(([key, prevValue]) => {
+		for (const key of this._index) {
 			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-			this._db.delete(key);
-			if (options.noEvent !== true) {
-				const cbArg: ValueRemovedArgs = {
-					...valueId,
-					prevValue,
-				};
-				this.emit("value removed", cbArg);
+			if (this._db.has(key)) {
+				const prevValue = this._db.get(key);
+				this._db.delete(key);
+				if (options.noEvent !== true) {
+					const cbArg: ValueRemovedArgs = {
+						...valueId,
+						prevValue,
+					};
+					this.emit("value removed", cbArg);
+				}
 			}
-		});
-		oldMetadataKeys.forEach((key) => {
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-			this._metadata.delete(key);
+			if (this._metadata.has(key)) {
+				this._metadata.delete(key);
 
-			if (options.noEvent !== true) {
-				const cbArg: MetadataUpdatedArgs = {
-					...valueId,
-					metadata: undefined,
-				};
-				this.emit("metadata updated", cbArg);
+				if (options.noEvent !== true) {
+					const cbArg: MetadataUpdatedArgs = {
+						...valueId,
+						metadata: undefined,
+					};
+					this.emit("metadata updated", cbArg);
+				}
 			}
-		});
+		}
+		this._index.clear();
 	}
 
 	/**
@@ -360,8 +385,12 @@ export class ValueDB extends EventEmitter {
 		}
 
 		if (metadata) {
+			this._index.add(dbKey);
 			this._metadata.set(dbKey, metadata);
 		} else {
+			if (!this._db.has(dbKey)) {
+				this._index.delete(dbKey);
+			}
 			this._metadata.delete(dbKey);
 		}
 
@@ -397,13 +426,16 @@ export class ValueDB extends EventEmitter {
 		metadata: ValueMetadata;
 	})[] {
 		const ret: ReturnType<ValueDB["getAllMetadata"]> = [];
-		this._metadata.forEach((meta, key) => {
-			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-			if (nodeId !== this.nodeId) return;
-
-			if (forCC === valueId.commandClass)
-				ret.push({ ...valueId, metadata: meta });
-		});
+		for (const key of this._index) {
+			if (
+				compareDBKeyFast(key, this.nodeId, { commandClass: forCC }) &&
+				this._metadata.has(key)
+			) {
+				const { nodeId, ...valueId } = this.dbKeyToValueId(key);
+				const metadata = this._metadata.get(key)!;
+				ret.push({ ...valueId, metadata });
+			}
+		}
 		return ret;
 	}
 
@@ -414,9 +446,9 @@ export class ValueDB extends EventEmitter {
 		metadata: ValueMetadata;
 	})[] {
 		const ret: ReturnType<ValueDB["findMetadata"]> = [];
-		for (const key of this._metadata.keys()) {
+		for (const key of this._index) {
+			if (!this._metadata.has(key)) continue;
 			const { nodeId, ...valueId } = this.dbKeyToValueId(key);
-			if (nodeId !== this.nodeId) continue;
 
 			if (predicate(valueId)) {
 				ret.push({ ...valueId, metadata: this._metadata.get(key)! });
@@ -522,4 +554,65 @@ export function dbKeyToValueIdFast(key: string): { nodeId: number } & ValueID {
 			property,
 		};
 	}
+}
+
+/** Used to filter DB entries without JSON parsing */
+function compareDBKeyFast(
+	key: string,
+	nodeId: number,
+	valueId?: Partial<ValueID>,
+): boolean {
+	if (-1 === key.indexOf(`{"nodeId":${nodeId},`)) return false;
+	if (!valueId) return true;
+
+	if ("commandClass" in valueId) {
+		if (-1 === key.indexOf(`,"commandClass":${valueId.commandClass},`))
+			return false;
+	}
+	if ("endpoint" in valueId) {
+		if (-1 === key.indexOf(`,"endpoint":${valueId.endpoint},`))
+			return false;
+	}
+	if (typeof valueId.property === "string") {
+		if (-1 === key.indexOf(`,"property":"${valueId.property}"`))
+			return false;
+	} else if (typeof valueId.property === "number") {
+		if (-1 === key.indexOf(`,"property":${valueId.property}`)) return false;
+	}
+	if (typeof valueId.propertyKey === "string") {
+		if (-1 === key.indexOf(`,"propertyKey":"${valueId.propertyKey}"`))
+			return false;
+	} else if (typeof valueId.propertyKey === "number") {
+		if (-1 === key.indexOf(`,"propertyKey":${valueId.propertyKey}`))
+			return false;
+	}
+	return true;
+}
+
+/** Extracts an index for each node from one or more JSONL DBs */
+export function indexDBsByNode(databases: JsonlDB[]): Map<number, Set<string>> {
+	const indexes = new Map<number, Set<string>>();
+	for (const db of databases) {
+		for (const key of db.keys()) {
+			const nodeId = extractNodeIdFromDBKeyFast(key);
+			if (!indexes.has(nodeId)) {
+				indexes.set(nodeId, new Set());
+			}
+			indexes.get(nodeId)!.add(key);
+		}
+	}
+	return indexes;
+}
+
+function extractNodeIdFromDBKeyFast(key: string): number {
+	const start = 10; // {"nodeId":
+	if (key.charCodeAt(start - 1) !== 58) {
+		console.error(key.slice(start - 1));
+		throw new Error("Invalid input format!");
+	}
+	let end = start + 1;
+	const len = key.length;
+
+	while (end < len && key.charCodeAt(end) !== 44) end++;
+	return parseInt(key.slice(start, end));
 }

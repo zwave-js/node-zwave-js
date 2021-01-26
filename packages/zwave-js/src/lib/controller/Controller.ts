@@ -1,7 +1,9 @@
 import {
 	actuatorCCs,
 	CommandClasses,
+	indexDBsByNode,
 	NODE_ID_BROADCAST,
+	ValueDB,
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
@@ -454,9 +456,28 @@ export class ZWaveController extends EventEmitter {
   controller supports timers: ${this._supportsTimers}
   nodes in the network:       ${initData.nodeIds.join(", ")}`,
 		);
+		// Index the value DB for optimal performance
+		const valueDBIndexes = indexDBsByNode([
+			this.driver.valueDB!,
+			this.driver.metadataDB!,
+		]);
 		// create an empty entry in the nodes map so we can initialize them afterwards
 		for (const nodeId of initData.nodeIds) {
-			this._nodes.set(nodeId, new ZWaveNode(nodeId, this.driver));
+			this._nodes.set(
+				nodeId,
+				new ZWaveNode(
+					nodeId,
+					this.driver,
+					undefined,
+					undefined,
+					undefined,
+					// Use the previously created index to avoid doing extra work when creating the value DB
+					this.createValueDBForNode(
+						nodeId,
+						valueDBIndexes.get(nodeId),
+					),
+				),
+			);
 		}
 
 		// Now try to deserialize all nodes from the cache
@@ -552,6 +573,15 @@ export class ZWaveController extends EventEmitter {
 		// }
 
 		this.driver.controllerLog.print("Interview completed");
+	}
+
+	private createValueDBForNode(nodeId: number, ownKeys?: Set<string>) {
+		return new ValueDB(
+			nodeId,
+			this.driver.valueDB!,
+			this.driver.metadataDB!,
+			ownKeys,
+		);
 	}
 
 	/**
@@ -901,6 +931,12 @@ export class ZWaveController extends EventEmitter {
 					),
 					msg.statusContext!.supportedCCs,
 					msg.statusContext!.controlledCCs,
+					// Create an empty value DB and specify that it contains no values
+					// to avoid indexing the existing values
+					this.createValueDBForNode(
+						msg.statusContext!.nodeId,
+						new Set(),
+					),
 				);
 				// TODO: According to INS13954-7, there are several more steps and different timeouts when including a controller
 				// For now do the absolute minimum - that is include the controller
@@ -1024,6 +1060,15 @@ export class ZWaveController extends EventEmitter {
 					const newNode = new ZWaveNode(
 						this._nodePendingReplace.id,
 						this.driver,
+						undefined,
+						undefined,
+						undefined,
+						// Create an empty value DB and specify that it contains no values
+						// to avoid indexing the existing values
+						this.createValueDBForNode(
+							this._nodePendingReplace.id,
+							new Set(),
+						),
 					);
 					this._nodePendingReplace = undefined;
 					this._nodes.set(newNode.id, newNode);
