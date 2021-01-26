@@ -599,6 +599,8 @@ export function createSendThreadMachine(
 							new ZWaveError(
 								reducerResult.message,
 								reducerResult.code,
+								undefined,
+								transaction.stack,
 							),
 						);
 						drop.push(transaction);

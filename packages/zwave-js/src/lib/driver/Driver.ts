@@ -2129,7 +2129,8 @@ ${handlers.length} left`,
 	// wotan-enable no-misused-generics
 
 	/**
-	 * Sends a command to a Z-Wave node.
+	 * Sends a command to a Z-Wave node. If the node returns a command in response, that command will be the return value.
+	 * If the command expects no response **or** the response times out, nothing will be returned
 	 * @param command The command to send. It will be encapsulated in a SendData[Multicast]Request.
 	 * @param options (optional) Options regarding the message transmission
 	 */
@@ -2157,12 +2158,31 @@ ${handlers.length} left`,
 		// Automatically encapsulate commands before sending
 		this.encapsulateCommands(msg);
 
-		const resp = await this.sendMessage(msg, options);
+		try {
+			const resp = await this.sendMessage(msg, options);
 
-		// And unwrap the response if there was any
-		if (isCommandClassContainer(resp)) {
-			this.unwrapCommands(resp);
-			return resp.command as TResponse;
+			// And unwrap the response if there was any
+			if (isCommandClassContainer(resp)) {
+				this.unwrapCommands(resp);
+				return resp.command as TResponse;
+			}
+		} catch (e: unknown) {
+			// A timeout always has to be expected. In this case return nothing.
+			if (
+				e instanceof ZWaveError &&
+				e.code === ZWaveErrorCodes.Controller_NodeTimeout
+			) {
+				if (command.isSinglecast()) {
+					this.controllerLog.logNode(
+						command.nodeId,
+						e.message,
+						"warn",
+					);
+				}
+			} else {
+				// We don't want to swallow any other errors
+				throw e;
+			}
 		}
 	}
 
