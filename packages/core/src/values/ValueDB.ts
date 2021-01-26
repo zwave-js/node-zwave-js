@@ -527,26 +527,28 @@ function compareDBKeyFast(
 	nodeId: number,
 	valueId?: Partial<ValueID>,
 ): boolean {
-	if (!key.includes(`{"nodeId":${nodeId},`)) return false;
+	if (-1 === key.indexOf(`{"nodeId":${nodeId},`)) return false;
 	if (!valueId) return true;
 
 	if ("commandClass" in valueId) {
-		if (!key.includes(`,"commandClass":${valueId.commandClass},`))
+		if (-1 === key.indexOf(`,"commandClass":${valueId.commandClass},`))
 			return false;
 	}
 	if ("endpoint" in valueId) {
-		if (!key.includes(`,"endpoint":${valueId.endpoint},`)) return false;
+		if (-1 === key.indexOf(`,"endpoint":${valueId.endpoint},`))
+			return false;
 	}
 	if (typeof valueId.property === "string") {
-		if (!key.includes(`,"property":"${valueId.property}"`)) return false;
+		if (-1 === key.indexOf(`,"property":"${valueId.property}"`))
+			return false;
 	} else if (typeof valueId.property === "number") {
-		if (!key.includes(`,"property":${valueId.property}`)) return false;
+		if (-1 === key.indexOf(`,"property":${valueId.property}`)) return false;
 	}
 	if (typeof valueId.propertyKey === "string") {
-		if (!key.includes(`,"propertyKey":"${valueId.propertyKey}"`))
+		if (-1 === key.indexOf(`,"propertyKey":"${valueId.propertyKey}"`))
 			return false;
 	} else if (typeof valueId.propertyKey === "number") {
-		if (!key.includes(`,"propertyKey":${valueId.propertyKey}`))
+		if (-1 === key.indexOf(`,"propertyKey":${valueId.propertyKey}`))
 			return false;
 	}
 	return true;
