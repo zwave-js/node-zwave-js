@@ -66,29 +66,6 @@ async function hasChangedDeviceFiles(
 	return false;
 }
 
-// export async function hashFiles(files: string[]): Promise<Buffer> {
-// 	// Just to be sure
-// 	files.sort();
-
-// 	const hash = createHash("sha1");
-// 	// Hash all files in sequence
-// 	const tasks = files.map((file) => () =>
-// 		new Promise<void>((resolve) => {
-// 			const strm = createReadStream(file, { encoding: "utf8" });
-// 			strm.once("end", () => {
-// 				strm.close();
-// 				resolve();
-// 			});
-// 			strm.pipe(hash, { end: false });
-// 		}),
-// 	);
-// 	for (const task of tasks) await task();
-
-// 	const ret = hash.digest();
-// 	hash.destroy();
-// 	return ret;
-// }
-
 /**
  * @internal
  * Loads the index file to quickly access the device configs.
@@ -97,19 +74,11 @@ async function hasChangedDeviceFiles(
 export async function loadDeviceIndexInternal(
 	forceWrite?: boolean,
 ): Promise<DeviceConfigIndex> {
-	// We need to enumerate the files to hash them and/or generate the index
-	const configFiles = await enumFilesRecursive(
-		devicesDir,
-		(file) => file.endsWith(".json") && !file.endsWith("index.json"),
-	);
-
 	// The index file needs to be regenerated if it does not exist
 	let needsUpdate = !(await pathExists(indexPath));
 	let index: DeviceConfigIndex | undefined;
 	let mtimeIndex: Date | undefined;
-	// let hash: string | undefined;
-	// let fileHash: string | undefined;
-	// ...or if cannot be parsed or is in an old format
+	// ...or if cannot be parsed
 	if (!needsUpdate) {
 		try {
 			const fileContents = await readFile(indexPath, "utf8");
@@ -119,7 +88,7 @@ export async function loadDeviceIndexInternal(
 			// console.error("Error while parsing index file - regenerating...");
 			needsUpdate = true;
 		} finally {
-			if (!index || !mtimeIndex || Number.isNaN(mtimeIndex.valueOf())) {
+			if (!index) {
 				// console.error("Index file was malformed - regenerating...");
 				needsUpdate = true;
 			}
@@ -133,6 +102,11 @@ export async function loadDeviceIndexInternal(
 
 	if (needsUpdate) {
 		index = [];
+
+		const configFiles = await enumFilesRecursive(
+			devicesDir,
+			(file) => file.endsWith(".json") && !file.endsWith("index.json"),
+		);
 
 		for (const file of configFiles) {
 			const relativePath = path
