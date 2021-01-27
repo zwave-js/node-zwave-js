@@ -22,7 +22,9 @@ stale:
     - 'external'
     - 'wontfix'
     - 'working as intended ✔'
-  afterDays: 3
+  # How long issues with these labels may stay open
+  afterDays: 7
+  # What to comment when an issue gets closed
   comment: |
-    This issue hasn't seen any recent activity and was marked as ${label}.
+    This issue hasn't seen any recent activity and was marked as "${label}".
     Closing for housekeeping purposes... 🧹
