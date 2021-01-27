@@ -126,15 +126,16 @@ export class ThermostatOperatingStateCC extends CommandClass {
 		});
 
 		const state = await api.get();
-
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: `received current thermostat operating state: ${getEnumMemberName(
-				ThermostatOperatingState,
-				state,
-			)}`,
-			direction: "inbound",
-		});
+		if (state) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `received current thermostat operating state: ${getEnumMemberName(
+					ThermostatOperatingState,
+					state,
+				)}`,
+				direction: "inbound",
+			});
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
