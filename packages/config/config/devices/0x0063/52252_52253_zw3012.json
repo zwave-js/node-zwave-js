@@ -1,0 +1,221 @@
+// GE/Jasco 52252/52253/ZW3012
+// Enbrighten Z-Wave Plus In-Wall Smart Dimmer, No Neutral, LED-CFL, White and Light Almond Paddles, 700S
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "52252/52253/ZW3012",
+	"description": "Enbrighten Z-Wave Plus In-Wall Smart Dimmer, No Neutral, LED-CFL, White and Light Almond Paddles, 700S",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3333",
+			"zwaveAllianceId": 3987
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED On when light is turned On",
+					"value": 1
+				},
+				{
+					"label": "LED always ON",
+					"value": 2
+				},
+				{
+					"label": "LED always OFF",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "Reverse the default On/Off rocker setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled- Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Enabled- Invert Switch",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Dim up/down rate",
+			"description": "Enable/Disable slow dim rate",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dim up/down quickly",
+					"value": 0
+				},
+				{
+					"label": "Dim up/down slowly",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Switch Mode",
+			"description": "Set control mode:0 dim mode,1 switch mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Switch Mode",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "Enables alternate method for excluding the device to prevent accidental removal",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press any button on the switch",
+					"value": 0
+				},
+				{
+					"label": "Press two times ON button and two time OFF button, LED will flash 5 times if successful",
+					"value": 1
+				}
+			]
+		},
+		"30": {
+			"label": "Minimum Dim Threshold",
+			"description": "Set the minimum dimmer threshold when manually or remotely controlled",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "Maximum Dim Threshold",
+			"description": "Set the maximum dim threshold when manually or remotely controlled",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Brightness Level",
+			"description": "Dimmer will turn ON to this level",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"84": {
+			"label": "Reset factory default",
+			"description": "Reset Switch to Factory Defaults",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Enabled Reset",
+					"value": 1
+				}
+			]
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top or bottom of the smart dimmer (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release the top or bottom of the smart dimmer (rocker)",
+		"reset": "1. Quickly press ON (top) button three times, then immediately press the OFF (bottom) button three times. The LED will flash ON/OFF five times when completed successfully"
+	}
+}

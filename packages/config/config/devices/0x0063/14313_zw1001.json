@@ -1,0 +1,71 @@
+// GE/Jasco 14313/ZW1001
+// In-Wall Smart Outlet
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14313/ZW1001",
+	"description": "In-Wall Smart Outlet",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3039",
+			"zwaveAllianceId": [1371, 1935]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED Light off when Z-Wave turned On",
+					"value": 0
+				},
+				{
+					"label": "LED Light on when Z-Wave turned On",
+					"value": 1
+				},
+				{
+					"label": "LED Always Off",
+					"value": 2
+				}
+			]
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-wave certified\ncontroller to include a device to the Z-wave network.\n2. Once the controller is ready to include your device, press and\nrelease the Program Button to include it in the network.\n3. Once your controller has confirmed that the device has been\nincluded, refresh the Z-wave network to optimize performance",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to\nexclude a device from the Z-wave network.\n2. Once the controller is ready to Exclude your device, press and\nrelease the manual/program button on the smart dimmer to\nexclude it from the network",
+		"reset": "1. Press and hold the button for at least 3 seconds. The LED light\nwill blink 5 times to confirm.\nNote: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable"
+	}
+}

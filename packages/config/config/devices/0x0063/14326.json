@@ -1,0 +1,165 @@
+// GE/Jasco 14326
+// In-Wall Smart Dimmer (1000W)
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14326",
+	"description": "In-Wall Smart Dimmer (1000W)",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3136",
+			"zwaveAllianceId": [1375, 2041]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED On when light is turned On",
+					"value": 1
+				},
+				{
+					"label": "LED light at all times",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"description": "Invert the default On/Off rocker settings.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Invert",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Dim Rate Steps (Z-Wave)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Dim Rate Timing (Z-Wave)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Dime Rate Steps (Manual)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dim Rate Timing (Manual)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Dim Rate Steps (All-On/All-Off)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Dim Rate Timing (All-On/All-Off)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "Adding your device to a Z-wave network\n1. Follow the instructions for your Z-wave certified controller to include a device to the Z-wave\nnetwork.\n2. Once the controller is ready to include your device, press and release the top or bottom of the\nwireless smart switch(rocker) to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh the Z-wave network\nto optimize performance.\nPlease reference the controller’s manual for instructions.\nNow you have complete control to turn your fixture ON/OFFaccording to groups, scenes, schedules\nand interactive automations programmed by your controller.\nIf your Z-wave certified controller features Remote Access, you can now control your fixture from\nyour mobile devices",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave\nnetwork.\n2. Once the controller is ready to Exclude your device, press and release the top or bottom of the\nwireless smart dimmer (rocker) to exclude it from the network",
+		"reset": "To return your switch to factory defaults:\nQuickly press ON (Top) button three (3) times then immediately press the OFF (Bottom) button three\n(3) times. The LED will flash ON/OFF 5 times when completed successfully.\nNote: This should only be used in the event your networks’ primary controller is\nmissing or otherwise inoperable"
+	}
+}
