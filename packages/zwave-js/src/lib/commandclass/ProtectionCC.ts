@@ -373,6 +373,10 @@ export class ProtectionCC extends CommandClass {
 
 		const valueDB = this.getValueDB();
 
+		// We need to do some queries after a potential timeout
+		// In this case, do now mark this CC as interviewed completely
+		let hadCriticalTimeout = false;
+
 		// First find out what the device supports
 		if (complete && this.version >= 2) {
 			this.driver.controllerLog.logNode(node.id, {
@@ -380,21 +384,27 @@ export class ProtectionCC extends CommandClass {
 				direction: "outbound",
 			});
 			const resp = await api.getSupported();
-			const logMessage = `received protection capabilities:
+			if (resp) {
+				const logMessage = `received protection capabilities:
 exclusive control:       ${resp.supportsExclusiveControl}
 timeout:                 ${resp.supportsTimeout}
 local protection states: ${resp.supportedLocalStates
-				.map((local) => getEnumMemberName(LocalProtectionState, local))
-				.map((str) => `\n· ${str}`)
-				.join("")}
+					.map((local) =>
+						getEnumMemberName(LocalProtectionState, local),
+					)
+					.map((str) => `\n· ${str}`)
+					.join("")}
 RF protection states:    ${resp.supportedRFStates
-				.map((local) => getEnumMemberName(RFProtectionState, local))
-				.map((str) => `\n· ${str}`)
-				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
-				message: logMessage,
-				direction: "inbound",
-			});
+					.map((local) => getEnumMemberName(RFProtectionState, local))
+					.map((str) => `\n· ${str}`)
+					.join("")}`;
+				this.driver.controllerLog.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+			} else {
+				hadCriticalTimeout = true;
+			}
 		}
 
 		const supportsExclusiveControl = !!valueDB.getValue<boolean>(
@@ -410,16 +420,18 @@ RF protection states:    ${resp.supportedRFStates
 			direction: "outbound",
 		});
 		const protectionResp = await api.get();
-		let logMessage = `received protection status:
+		if (protectionResp) {
+			let logMessage = `received protection status:
 local: ${getEnumMemberName(LocalProtectionState, protectionResp.local)}`;
-		if (protectionResp.rf != undefined) {
-			logMessage += `
+			if (protectionResp.rf != undefined) {
+				logMessage += `
 rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
+			}
+			this.driver.controllerLog.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
 		}
-		this.driver.controllerLog.logNode(node.id, {
-			message: logMessage,
-			direction: "inbound",
-		});
 
 		if (supportsTimeout) {
 			// Query the current timeout
@@ -428,10 +440,12 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 				direction: "outbound",
 			});
 			const timeout = await api.getTimeout();
-			this.driver.controllerLog.logNode(node.id, {
-				message: `received timeout: ${timeout.toString()}`,
-				direction: "inbound",
-			});
+			if (timeout) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `received timeout: ${timeout.toString()}`,
+					direction: "inbound",
+				});
+			}
 		}
 
 		if (supportsExclusiveControl) {
@@ -441,17 +455,19 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 				direction: "outbound",
 			});
 			const nodeId = await api.getExclusiveControl();
-			this.driver.controllerLog.logNode(node.id, {
-				message:
-					(nodeId !== 0
-						? `Node ${padStart(nodeId.toString(), 3, "0")}`
-						: `no node`) + ` has exclusive control`,
-				direction: "inbound",
-			});
+			if (nodeId != undefined) {
+				this.driver.controllerLog.logNode(node.id, {
+					message:
+						(nodeId !== 0
+							? `Node ${padStart(nodeId.toString(), 3, "0")}`
+							: `no node`) + ` has exclusive control`,
+					direction: "inbound",
+				});
+			}
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		if (!hadCriticalTimeout) this.interviewComplete = true;
 	}
 }
 
