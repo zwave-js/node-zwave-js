@@ -738,7 +738,6 @@ export class ZWaveNode extends Endpoint {
 			);
 		}
 		// And call it
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		return (api.pollValue as PollValueImplementation<T>)({
 			property: valueId.property,
 			propertyKey: valueId.propertyKey,
@@ -2525,6 +2524,12 @@ version:               ${this.version}`;
 
 		// Check if this update is possible
 		const meta = await api.getMetaData();
+		if (!meta) {
+			throw new ZWaveError(
+				`The node did not respond in time`,
+				ZWaveErrorCodes.Controller_NodeTimeout,
+			);
+		}
 		if (target === 0 && !meta.firmwareUpgradable) {
 			throw new ZWaveError(
 				`The Z-Wave chip firmware is not upgradable`,
