@@ -10,3 +10,16 @@ offerLintFix:
 
 # Check whether the resulting squash-commit will be semantic
 semanticSquash: true
+
+# Configure closing stale issues
+stale:
+  labels:
+    - 'cannot fix ❌'
+    - 'duplicate'
+    - 'external'
+    - 'wontfix'
+    - 'working as intended ✔'
+  afterDays: 3
+  comment: |
+    This issue hasn't seen any recent activity and was marked as ${label}.
+    Closing for housekeeping purposes... 🧹
