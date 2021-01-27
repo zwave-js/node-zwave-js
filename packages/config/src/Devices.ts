@@ -11,6 +11,7 @@ import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import { CompatConfig } from "./CompatConfig";
+import type { ConfigLogger } from "./Logger";
 import {
 	configDir,
 	enumFilesRecursive,
@@ -72,6 +73,7 @@ async function hasChangedDeviceFiles(
  * Transparently handles updating the index if necessary
  */
 export async function loadDeviceIndexInternal(
+	logger?: ConfigLogger,
 	forceWrite?: boolean,
 ): Promise<DeviceConfigIndex> {
 	// The index file needs to be regenerated if it does not exist
@@ -85,11 +87,17 @@ export async function loadDeviceIndexInternal(
 			index = JSON5.parse(fileContents);
 			mtimeIndex = (await fs.stat(indexPath)).mtime;
 		} catch {
-			// console.error("Error while parsing index file - regenerating...");
+			logger?.print(
+				"Error while parsing index file - regenerating...",
+				"warn",
+			);
 			needsUpdate = true;
 		} finally {
 			if (!index) {
-				// console.error("Index file was malformed - regenerating...");
+				logger?.print(
+					"Index file was malformed - regenerating...",
+					"warn",
+				);
 				needsUpdate = true;
 			}
 		}
@@ -98,6 +106,10 @@ export async function loadDeviceIndexInternal(
 	// ...or if there were any changes in the file system
 	if (!needsUpdate) {
 		needsUpdate = await hasChangedDeviceFiles(devicesDir, mtimeIndex!);
+		logger?.print(
+			"Device configuration files on disk changed - regenerating index...",
+			"verbose",
+		);
 	}
 
 	if (needsUpdate) {
@@ -137,7 +149,7 @@ ${stringify(index, "\t")}
 `,
 				"utf8",
 			);
-			console.log(`Device index regenerated`);
+			logger?.print("Device index regenerated", "verbose");
 		}
 	}
 

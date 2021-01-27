@@ -413,7 +413,7 @@ export class ConfigManager {
 
 	public async loadDeviceIndex(): Promise<void> {
 		try {
-			this.index = await loadDeviceIndexInternal();
+			this.index = await loadDeviceIndexInternal(this.logger);
 		} catch (e: unknown) {
 			// If the index file is missing or invalid, don't try to find it again
 			if (
