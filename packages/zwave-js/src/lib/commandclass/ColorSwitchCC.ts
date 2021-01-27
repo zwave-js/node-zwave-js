@@ -20,7 +20,6 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
-	ignoreTimeout,
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
@@ -400,14 +399,24 @@ export class ColorSwitchCC extends CommandClass {
 			direction: "none",
 		});
 
-		let supportedColors: readonly ColorComponent[];
+		let supportedColors: readonly ColorComponent[] | undefined;
 		if (complete) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: "querying Color Switch CC supported colors...",
+				message: "querying supported colors...",
 				direction: "outbound",
 			});
 			supportedColors = await api.getSupported();
+			if (!supportedColors) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying supported colors timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
+
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received supported colors:${supportedColors
@@ -441,7 +450,7 @@ export class ColorSwitchCC extends CommandClass {
 				ColorComponent.Red,
 				ColorComponent.Green,
 				ColorComponent.Blue,
-			].every((c) => supportedColors.includes(c));
+			].every((c) => supportedColors!.includes(c));
 			valueDB.setValue(
 				getSupportsHexColorValueID(this.endpointIndex),
 				supportsHex,
@@ -461,24 +470,13 @@ export class ColorSwitchCC extends CommandClass {
 		}
 
 		for (const color of supportedColors) {
-			await ignoreTimeout(
-				async () => {
-					const colorName = getEnumMemberName(ColorComponent, color);
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `querying current color state (${colorName})`,
-						direction: "outbound",
-					});
-					await api.get(color);
-				},
-				() => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `Current color query timed out - skipping because it is not critical...`,
-						level: "warn",
-					});
-				},
-			);
+			const colorName = getEnumMemberName(ColorComponent, color);
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `querying current color state (${colorName})`,
+				direction: "outbound",
+			});
+			await api.get(color);
 		}
 
 		// Remember that the interview is complete
