@@ -121,17 +121,19 @@ export class ClockCC extends CommandClass {
 			direction: "outbound",
 		});
 		const response = await api.get();
-		const logMessage = `received current clock setting: ${
-			response.weekday !== Weekday.Unknown
-				? Weekday[response.weekday] + ", "
-				: ""
-		}${response.hour < 10 ? "0" : ""}${response.hour}:${
-			response.minute < 10 ? "0" : ""
-		}${response.minute}`;
-		this.driver.controllerLog.logNode(node.id, {
-			message: logMessage,
-			direction: "inbound",
-		});
+		if (response) {
+			const logMessage = `received current clock setting: ${
+				response.weekday !== Weekday.Unknown
+					? Weekday[response.weekday] + ", "
+					: ""
+			}${response.hour < 10 ? "0" : ""}${response.hour}:${
+				response.minute < 10 ? "0" : ""
+			}${response.minute}`;
+			this.driver.controllerLog.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
