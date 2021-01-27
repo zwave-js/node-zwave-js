@@ -19,7 +19,6 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
-	ignoreTimeout,
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
@@ -258,34 +257,22 @@ export class CentralSceneCC extends CommandClass {
 				}
 			}
 
-			let ccSupported:
-				| {
-						sceneCount: number;
-						supportsSlowRefresh: boolean;
-						supportedKeyAttributes: ReadonlyMap<
-							number,
-							readonly CentralSceneKeys[]
-						>;
-				  }
-				| undefined;
-			if (
-				!(await ignoreTimeout(async () => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "Querying supported scenes...",
-						direction: "outbound",
-					});
-					ccSupported = await api.getSupported();
-					const logMessage = `received supported scenes:
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "Querying supported scenes...",
+				direction: "outbound",
+			});
+			const ccSupported = await api.getSupported();
+			if (ccSupported) {
+				const logMessage = `received supported scenes:
 # of scenes:           ${ccSupported.sceneCount}
 supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				}))
-			) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			} else {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
