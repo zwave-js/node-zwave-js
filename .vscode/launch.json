@@ -6,6 +6,27 @@
 	"configurations": [
 		{
 			"type": "node",
+			"name": "importConfig.ts",
+			"request": "launch",
+			"program": "${workspaceFolder}/maintenance/importConfig.ts",
+			"args": ["--runInBand"],
+			"cwd": "${workspaceFolder}",
+			"runtimeArgs": [
+				"--async-stack-traces",
+				"--inspect-brk=9229",
+				"-r",
+				"ts-node/register/transpile-only",
+				"-r",
+				"tsconfig-paths/register",
+				"${workspaceFolder}/maintenance/importConfig.ts",
+				"-dm -s zwa"
+			],
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			"disableOptimisticBPs": true
+		},
+		{
+			"type": "node",
 			"name": "vscode-jest-tests",
 			"request": "launch",
 			"program": "${workspaceFolder}/node_modules/jest/bin/jest",
