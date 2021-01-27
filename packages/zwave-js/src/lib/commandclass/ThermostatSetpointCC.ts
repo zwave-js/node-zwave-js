@@ -366,7 +366,17 @@ export class ThermostatSetpointCC extends CommandClass {
 					message: "retrieving supported setpoint types...",
 					direction: "outbound",
 				});
-				setpointTypes = [...(await api.getSupportedSetpointTypes())];
+				const resp = await api.getSupportedSetpointTypes();
+				if (!resp) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Querying supported setpoint types timed out, skipping interview...",
+						level: "warn",
+					});
+					return;
+				}
+				setpointTypes = [...resp];
 				interpretation = undefined; // we don't know yet which interpretation the device uses
 			} else {
 				setpointTypes =
@@ -497,37 +507,32 @@ export class ThermostatSetpointCC extends CommandClass {
 			// If we haven't yet, query the supported setpoint types
 			let setpointTypes: ThermostatSetpointType[] = [];
 			if (complete) {
-				if (
-					!(await ignoreTimeout(async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: "retrieving supported setpoint types...",
-							direction: "outbound",
-						});
-						setpointTypes = [
-							...(await api.getSupportedSetpointTypes()),
-						];
-						const logMessage =
-							"received supported setpoint types:\n" +
-							setpointTypes
-								.map((type) =>
-									getEnumMemberName(
-										ThermostatSetpointType,
-										type,
-									),
-								)
-								.map((name) => `· ${name}`)
-								.join("\n");
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: logMessage,
-							direction: "inbound",
-						});
-					}))
-				) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "retrieving supported setpoint types...",
+					direction: "outbound",
+				});
+				const resp = await api.getSupportedSetpointTypes();
+				if (resp) {
+					setpointTypes = [...resp];
+					const logMessage =
+						"received supported setpoint types:\n" +
+						setpointTypes
+							.map((type) =>
+								getEnumMemberName(ThermostatSetpointType, type),
+							)
+							.map((name) => `· ${name}`)
+							.join("\n");
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message: `supported setpoint type query timed out - skipping interview...`,
+						message: logMessage,
+						direction: "inbound",
+					});
+				} else {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Querying supported setpoint types timed out, skipping interview...",
 						level: "warn",
 					});
 					return;
@@ -554,56 +559,42 @@ export class ThermostatSetpointCC extends CommandClass {
 						direction: "outbound",
 					});
 					const setpointCaps = await api.getCapabilities(type);
-					const minValueUnit = getSetpointUnit(
-						this.driver.configManager,
-						setpointCaps.minValueScale,
-					);
-					const maxValueUnit = getSetpointUnit(
-						this.driver.configManager,
-						setpointCaps.maxValueScale,
-					);
-					const logMessage = `received capabilities for setpoint ${setpointName}:
+					if (setpointCaps) {
+						const minValueUnit = getSetpointUnit(
+							this.driver.configManager,
+							setpointCaps.minValueScale,
+						);
+						const maxValueUnit = getSetpointUnit(
+							this.driver.configManager,
+							setpointCaps.maxValueScale,
+						);
+						const logMessage = `received capabilities for setpoint ${setpointName}:
 minimum value: ${setpointCaps.minValue} ${minValueUnit}
 maximum value: ${setpointCaps.maxValue} ${maxValueUnit}`;
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: logMessage,
+							direction: "inbound",
+						});
+					}
+				}
+				// Every time, query the current value
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `querying current value of setpoint ${setpointName}...`,
+					direction: "outbound",
+				});
+				const setpoint = await api.get(type);
+				if (setpoint) {
+					const logMessage = `received current value of setpoint ${setpointName}: ${
+						setpoint.value
+					} ${setpoint.scale.unit ?? ""}`;
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message: logMessage,
 						direction: "inbound",
 					});
 				}
-				// Every time, query the current value
-				await ignoreTimeout(
-					async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `querying current value of setpoint ${setpointName}...`,
-							direction: "outbound",
-						});
-						const setpoint = await api.get(type);
-						let logMessage: string;
-						if (setpoint) {
-							logMessage = `received current value of setpoint ${setpointName}: ${
-								setpoint.value
-							} ${setpoint.scale.unit ?? ""}`;
-						} else {
-							// This shouldn't happen since we used getSupported
-							// But better be sure we don't crash
-							logMessage = `Setpoint ${setpointName} is not supported`;
-						}
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: logMessage,
-							direction: "inbound",
-						});
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Setpoint ${setpointName} query timed out - skipping because it is not critical...`,
-							level: "warn",
-						});
-					},
-				);
 			}
 		}
 
