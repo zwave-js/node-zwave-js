@@ -148,18 +148,19 @@ export class ZWavePlusCC extends CommandClass {
 			});
 
 			const zwavePlusResponse = await api.get();
-
-			const logMessage = `received response for Z-Wave+ information:
+			if (zwavePlusResponse) {
+				const logMessage = `received response for Z-Wave+ information:
 Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}
 role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
 node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
 installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
 user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
 		}
 
 		// Remember that the interview is complete
