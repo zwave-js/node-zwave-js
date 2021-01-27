@@ -20,7 +20,6 @@ import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
-	ignoreTimeout,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -349,44 +348,42 @@ export class MeterCC extends CommandClass {
 			);
 
 			if (complete || storedType == undefined) {
-				if (
-					!(await ignoreTimeout(async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: "querying meter support...",
-							direction: "outbound",
-						});
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "querying meter support...",
+					direction: "outbound",
+				});
 
-						({
-							type,
-							supportsReset,
-							supportedScales,
-							supportedRateTypes,
-						} = await api.getSupported());
-						const logMessage = `received meter support:
+				const suppResp = await api.getSupported();
+				if (suppResp) {
+					type = suppResp.type;
+					supportsReset = suppResp.supportsReset;
+					supportedScales = suppResp.supportedScales;
+					supportedRateTypes = suppResp.supportedRateTypes;
+
+					const logMessage = `received meter support:
 type:                 ${getMeterTypeName(this.driver.configManager, type)}
 supported scales:     ${supportedScales
-							.map(
-								(s) =>
-									this.driver.configManager.lookupMeterScale(
-										type,
-										s,
-									).label,
-							)
-							.map((label) => `\n· ${label}`)
-							.join("")}
+						.map(
+							(s) =>
+								this.driver.configManager.lookupMeterScale(
+									type,
+									s,
+								).label,
+						)
+						.map((label) => `\n· ${label}`)
+						.join("")}
 supported rate types: ${supportedRateTypes
-							.map((rt) => getEnumMemberName(RateType, rt))
-							.map((label) => `\n· ${label}`)
-							.join("")}
+						.map((rt) => getEnumMemberName(RateType, rt))
+						.map((label) => `\n· ${label}`)
+						.join("")}
 supports reset:       ${supportsReset}`;
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: logMessage,
-							direction: "inbound",
-						});
-					}))
-				) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				} else {
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
@@ -411,60 +408,32 @@ supports reset:       ${supportsReset}`;
 					) ?? [];
 			}
 
-			if (
-				supportedRateTypes == undefined ||
-				supportedScales == undefined
-			) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Cannot continue meter interview - the information is incomplete!",
-					level: "warn",
-				});
-				return;
-			}
-
 			const rateTypes = supportedRateTypes.length
 				? supportedRateTypes
 				: [undefined];
 			for (const rateType of rateTypes) {
 				for (const scale of supportedScales) {
-					await ignoreTimeout(
-						async () => {
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message: `querying meter value (type = ${getMeterTypeName(
-									this.driver.configManager,
-									type,
-								)}, scale = ${
-									this.driver.configManager.lookupMeterScale(
-										type,
-										scale,
-									).label
-								}${
-									rateType != undefined
-										? `, rate type = ${getEnumMemberName(
-												RateType,
-												rateType,
-										  )}`
-										: ""
-								})...`,
-								direction: "outbound",
-							});
-							await api.get({
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `querying meter value (type = ${getMeterTypeName(
+							this.driver.configManager,
+							type,
+						)}, scale = ${
+							this.driver.configManager.lookupMeterScale(
+								type,
 								scale,
-								rateType,
-							});
-						},
-						() => {
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message:
-									"Meter query timed out - skipping because it is not critical...",
-								level: "warn",
-							});
-						},
-					);
+							).label
+						}${
+							rateType != undefined
+								? `, rate type = ${getEnumMemberName(
+										RateType,
+										rateType,
+								  )}`
+								: ""
+						})...`,
+						direction: "outbound",
+					});
+					await api.get({ scale, rateType });
 				}
 			}
 		} else {
@@ -473,19 +442,7 @@ supports reset:       ${supportsReset}`;
 				message: `querying default meter value...`,
 				direction: "outbound",
 			});
-			await ignoreTimeout(
-				async () => {
-					await api.get();
-				},
-				() => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Default meter query timed out - skipping because it is not critical...",
-						level: "warn",
-					});
-				},
-			);
+			await api.get();
 		}
 
 		// Remember that the interview is complete
