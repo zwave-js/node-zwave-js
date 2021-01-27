@@ -15,7 +15,6 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
-	ignoreTimeout,
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
@@ -320,48 +319,61 @@ export class SoundSwitchCC extends CommandClass {
 			direction: "none",
 		});
 
+		this.driver.controllerLog.logNode(node.id, {
+			message: "requesting current sound configuration...",
+			direction: "outbound",
+		});
+		const config = await api.getConfiguration();
+		if (config) {
+			const logMessage = `received current sound configuration:
+default tone ID: ${config.defaultToneId}
+default volume: ${config.defaultVolume}`;
+			this.driver.controllerLog.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
+
 		if (complete) {
 			this.driver.controllerLog.logNode(node.id, {
 				message: "requesting tone count...",
 				direction: "outbound",
 			});
 			const toneCount = await api.getToneCount();
-			const logMessage = `supports ${toneCount} tones`;
-			this.driver.controllerLog.logNode(node.id, {
-				message: logMessage,
-				direction: "inbound",
-			});
+			if (toneCount != undefined) {
+				const logMessage = `supports ${toneCount} tones`;
+				this.driver.controllerLog.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying tone count timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
 
 			const metadataStates: Record<number, string> = {
 				0: "off",
 			};
 			for (let toneId = 1; toneId <= toneCount; toneId++) {
-				await ignoreTimeout(
-					async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							message: `requesting info for tone #${toneId}`,
-							direction: "outbound",
-						});
-						const info = await api.getToneInfo(toneId);
-						const logMessage = `received info for tone #${toneId}:
+				this.driver.controllerLog.logNode(node.id, {
+					message: `requesting info for tone #${toneId}`,
+					direction: "outbound",
+				});
+				const info = await api.getToneInfo(toneId);
+				if (!info) continue;
+				const logMessage = `received info for tone #${toneId}:
 name:     ${info.name}
 duration: ${info.duration} seconds`;
-						this.driver.controllerLog.logNode(node.id, {
-							message: logMessage,
-							direction: "inbound",
-						});
-						metadataStates[
-							toneId
-						] = `${info.name} (${info.duration} sec)`;
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Tone info query timed out - skipping because it is not critical...`,
-							level: "warn",
-						});
-					},
-				);
+				this.driver.controllerLog.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+				metadataStates[toneId] = `${info.name} (${info.duration} sec)`;
 			}
 			metadataStates[0xff] = "default";
 
@@ -374,19 +386,6 @@ duration: ${info.duration} seconds`;
 				label: "Play Tone",
 			});
 		}
-
-		this.driver.controllerLog.logNode(node.id, {
-			message: "requesting current sound configuration...",
-			direction: "outbound",
-		});
-		const config = await api.getConfiguration();
-		const logMessage = `received current sound configuration:
-default tone ID: ${config.defaultToneId}
-default volume: ${config.defaultVolume}`;
-		this.driver.controllerLog.logNode(node.id, {
-			message: logMessage,
-			direction: "inbound",
-		});
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
