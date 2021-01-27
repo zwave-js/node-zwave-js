@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Restore Factory Defaults : Using a paper clip or similar object, press the Reset button for at least 5 seconds then release to restore factory defaults. \n\nFactory Reset: Resets all Z-Wave information and removes all Z-Wave\ndevices from the Bridge. If this Bridge is the primary controller for your\nnetwork, resetting it will result in all the devices in your network being\nremoved. Following the reset, it will be necessary to remove and then\nadd all of the devices back to your network.\n\nBridge Information: If this Bridge is being used as a secondary or\ninclusion controller in the network, please reset the Bridge only in the\nevent that the primary controller is missing or otherwise inoperable"
+		"reset": "Restore Factory Defaults : Using a paper clip or similar object, press the Reset button for at least 5 seconds then release to restore factory defaults. Factory Reset: Resets all Z-Wave information and removes all Z-Wavedevices from the Bridge. If this Bridge is the primary controller for yournetwork, resetting it will result in all the devices in your network beingremoved. Following the reset, it will be necessary to remove and thenadd all of the devices back to your network.Bridge Information: If this Bridge is being used as a secondary orinclusion controller in the network, please reset the Bridge only in theevent that the primary controller is missing or otherwise inoperable."
 	}
 }

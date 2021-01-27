@@ -24,10 +24,10 @@
 	},
 	"paramInformation": {
 		"0": {
-			"label": "Switch Binary",
+			"label": "switch binary",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 100,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -44,7 +44,7 @@
 			]
 		},
 		"2": {
-			"label": "Dimming",
+			"label": "dimming",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -64,7 +64,7 @@
 			]
 		},
 		"3": {
-			"label": "Dimming",
+			"label": "dimming",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,

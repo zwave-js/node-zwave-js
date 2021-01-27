@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "When the controller is in add mode, press and hold the button for 3 seconds until the RED LED indicator blinks",
-		"exclusion": "When the controller is in remove mode, press and hold the button for 3 seconds until the RED LED indicator flashes. When the P-M-O unit is disconnected from the Z-Wave network, the RED LED indicator will be toggled every second",
-		"reset": "Press and hold button for 10 seconds until green and red led indicators blink. \nP-M-O will be initialized and send a device reset locally notification to the controller. Use this function only if the primary controller is lost or otherwise inoperable."
+		"inclusion": "When the controller is in add mode, press and hold the button for 3 seconds until the RED LED indicator blinks.",
+		"exclusion": "When the controller is in remove mode, press and hold the button for 3 seconds until the RED LED indicator flashes. When the P-M-O unit is disconnected from the Z-Wave network, the RED LED indicator will be toggled every second.",
+		"reset": "Press and hold button for 10 seconds until green and red led indicators blink. P-M-O will be initialized and send a device reset locally notification to the controller. Use this function only if the primary controller is lost or otherwise inoperable."
 	}
 }

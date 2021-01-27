@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Device ADD for Inclusion\n- Click [Add] icon in Z-Wave Controller .\n- Press the Net_Button 3 times within 1.5s, Green LED is Blinking 3 times within 1 second.\n- If Inclusion Process is successful, Green led will turn off.",
-		"exclusion": "Device Remove for Exclusion\n- Click [Remove] icon in Z-Wave Controller\n- Press the Net_Button 3 times within 1.5s \n- If Exclusion Process is successful, Green led is Blinking 6 times, then turn off.",
-		"reset": "Device Factory Reset\n--Long press Net_Button at least 10 seconds in the product. \n- Device Reset Locally notification is Transmitted.\n. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"inclusion": "Device ADD for Inclusion- Click [Add] icon in Z-Wave Controller .- Press the Net_Button 3 times within 1.5s, Green LED is Blinking 3 times within 1 second.- If Inclusion Process is successful, Green led will turn off.",
+		"exclusion": "Device Remove for Exclusion- Click [Remove] icon in Z-Wave Controller- Press the Net_Button 3 times within 1.5s - If Exclusion Process is successful, Green led is Blinking 6 times, then turn off.",
+		"reset": "Device Factory Reset--Long press Net_Button at least 10 seconds in the product. - Device Reset Locally notification is Transmitted.. Please use this procedure only when the network primary controller is missing or otherwise inoperable."
 	}
 }

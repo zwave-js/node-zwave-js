@@ -8,8 +8,7 @@
 	"devices": [
 		{
 			"productType": "0x0004",
-			"productId": "0x0005",
-			"zwaveAllianceId": 979
+			"productId": "0x0005"
 		}
 	],
 	"firmwareVersion": {
@@ -45,6 +44,7 @@
 		"2": {
 			"label": "Send Basic Command to Group 2",
 			"description": "Configure the unit to send command to other devices in Grouping 2",
+			"unit": "integer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -78,7 +78,7 @@
 		"4": {
 			"label": "Meter Report Period (kWh)",
 			"description": "How often the meter should report load (kWh).",
-			"unit": "minutes",
+			"unit": "1min",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 10080,

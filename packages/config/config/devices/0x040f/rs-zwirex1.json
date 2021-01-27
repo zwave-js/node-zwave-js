@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "To add or include the RS-ZWIREX1 into a Z-Wave network using Z-wave Learn mode button\n1. Set the controller in inclusion mode\n2. Push the Learn mode button once\n3. Wait about 15 seconds",
-		"exclusion": "To remove or exclude the RS-ZWIREX1 into a Z-Wave network \n1. Set the controller in exclusion mode \n2. Push Z-Wave Learn mode button once\n3. Wait about 5 seconds.",
-		"reset": "The RS-ZWIREX1 can be set to factory settings by pushing Z-wave Learn mode button for 5 seconds. \nPlease use this procedure only when the primary controller is missing or otherwise inoperable"
+		"inclusion": "To add or include the RS-ZWIREX1 into a Z-Wave network using Z-wave Learn mode button1.Set the controller in inclusion mode2.Push the Learn mode button once3.Wait about 15 seconds",
+		"exclusion": "To remove or exclude the RS-ZWIREX1 into a Z-Wave network 1.Set the controller in exclusion mode 2.Push Z-Wave Learn mode button once3.Wait about 5 seconds.",
+		"reset": "The RS-ZWIREX1 can be set to factory settings by pushing Z-wave Learn mode button for 5 seconds. Please use this procedure only when the primary controller is missing or otherwise inoperable."
 	}
 }

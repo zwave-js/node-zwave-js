@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Use this procedure only in the event that the network primary controller is lost or otherwise inoperable.\n\nAt the back of the box, look for \"Reset\" mark. Use a sharp pin to press inside the hole above the mark for more than 4s."
+		"reset": "Use this procedure only in the event that the network primary controller is lost or otherwise inoperable.At the back of the box, look for \"Reset\" mark. Use a sharp pin to press inside the hole above the mark for more than 4s."
 	}
 }

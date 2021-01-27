@@ -1,15 +1,14 @@
-// AEON Labs DSC26103-ZW
+// AEON Labs DSC26
 // Micro Switch G2
 {
 	"manufacturer": "AEON Labs",
 	"manufacturerId": "0x0086",
-	"label": "DSC26103-ZW",
+	"label": "DSC26",
 	"description": "Micro Switch G2",
 	"devices": [
 		{
 			"productType": "0x0003",
-			"productId": "0x001a",
-			"zwaveAllianceId": [709, 768, 776]
+			"productId": "0x001a"
 		}
 	],
 	"firmwareVersion": {
@@ -33,7 +32,7 @@
 			"description": "Notification on Status Change",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -124,7 +123,7 @@
 			"label": "External Button Type",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 255,
 			"defaultValue": 255,
 			"unsigned": true,
 			"readOnly": false,
@@ -149,7 +148,7 @@
 			"label": "Partner ID",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -182,7 +181,7 @@
 			"label": "Enable/disable Lock Configuration",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 255,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
@@ -224,6 +223,7 @@
 		"2[0xff]": {
 			"label": "LED blink repeat",
 			"description": "Number of times LED should blink",
+			"unit": "cycles",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
