@@ -1,4 +1,3 @@
-import { ZWaveError } from "@zwave-js/core";
 import {
 	JSONObject,
 	ObjectKeyMap,
@@ -7,10 +6,12 @@ import {
 } from "@zwave-js/shared";
 import { entries } from "alcalzone-shared/objects";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
+import * as fs from "fs-extra";
 import { pathExists, readFile, writeFile } from "fs-extra";
 import JSON5 from "json5";
 import path from "path";
 import { CompatConfig } from "./CompatConfig";
+import type { ConfigLogger } from "./Logger";
 import {
 	configDir,
 	enumFilesRecursive,
@@ -41,66 +42,118 @@ export const devicesDir = path.join(configDir, "devices");
 export const indexPath = path.join(devicesDir, "index.json");
 export type DeviceConfigIndex = DeviceConfigIndexEntry[];
 
-/** @internal */
-export async function loadDeviceIndexInternal(): Promise<DeviceConfigIndex> {
-	if (!(await pathExists(indexPath))) {
-		return generateDeviceIndex();
-	}
-	try {
-		const fileContents = await readFile(indexPath, "utf8");
-		return JSON5.parse(fileContents);
-	} catch (e: unknown) {
-		if (e instanceof ZWaveError) {
-			throw e;
-		} else {
-			throwInvalidConfig("devices");
+async function hasChangedDeviceFiles(
+	dir: string,
+	lastChange: Date,
+): Promise<boolean> {
+	// Check if there are any files BUT index.json that were changed
+	// or directories that were modified
+	const filesAndDirs = await fs.readdir(dir);
+	for (const f of filesAndDirs) {
+		const fullPath = path.join(dir, f);
+
+		const stat = await fs.stat(fullPath);
+		if (
+			(dir !== devicesDir || f !== "index.json") &&
+			(stat.isFile() || stat.isDirectory()) &&
+			stat.mtime > lastChange
+		) {
+			return true;
+		} else if (stat.isDirectory()) {
+			// we need to go deeper!
+			if (await hasChangedDeviceFiles(fullPath, lastChange)) return true;
 		}
 	}
+	return false;
 }
 
-/** Generates an index for all device config files */
-async function generateDeviceIndex(): Promise<DeviceConfigIndex> {
-	const configFiles = await enumFilesRecursive(
-		devicesDir,
-		(file) => file.endsWith(".json") && !file.endsWith("index.json"),
-	);
+/**
+ * @internal
+ * Loads the index file to quickly access the device configs.
+ * Transparently handles updating the index if necessary
+ */
+export async function loadDeviceIndexInternal(
+	logger?: ConfigLogger,
+	forceWrite?: boolean,
+): Promise<DeviceConfigIndex> {
+	// The index file needs to be regenerated if it does not exist
+	let needsUpdate = !(await pathExists(indexPath));
+	let index: DeviceConfigIndex | undefined;
+	let mtimeIndex: Date | undefined;
+	// ...or if cannot be parsed
+	if (!needsUpdate) {
+		try {
+			const fileContents = await readFile(indexPath, "utf8");
+			index = JSON5.parse(fileContents);
+			mtimeIndex = (await fs.stat(indexPath)).mtime;
+		} catch {
+			logger?.print(
+				"Error while parsing index file - regenerating...",
+				"warn",
+			);
+			needsUpdate = true;
+		} finally {
+			if (!index) {
+				logger?.print(
+					"Index file was malformed - regenerating...",
+					"warn",
+				);
+				needsUpdate = true;
+			}
+		}
+	}
 
-	const index: DeviceConfigIndex = [];
-
-	for (const file of configFiles) {
-		const relativePath = path
-			.relative(devicesDir, file)
-			.replace(/\\/g, "/");
-		const fileContents = await readFile(file, "utf8");
-		// Try parsing the file
-		const config = new DeviceConfig(relativePath, fileContents);
-		// Add the file to the index
-		index.push(
-			...config.devices.map((dev: any) => ({
-				manufacturerId: formatId(config.manufacturerId.toString(16)),
-				...dev,
-				firmwareVersion: config.firmwareVersion,
-				filename: relativePath,
-			})),
+	// ...or if there were any changes in the file system
+	if (!needsUpdate) {
+		needsUpdate = await hasChangedDeviceFiles(devicesDir, mtimeIndex!);
+		logger?.print(
+			"Device configuration files on disk changed - regenerating index...",
+			"verbose",
 		);
 	}
 
-	if (!!process.env.CI || process.env.NODE_ENV !== "test") {
-		// Write the index (but not during tests)
-		await writeFile(
-			path.join(devicesDir, "index.json"),
-			`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
-	${stringify(index, "\t")}
-	`,
-			"utf8",
+	if (needsUpdate) {
+		index = [];
+
+		const configFiles = await enumFilesRecursive(
+			devicesDir,
+			(file) => file.endsWith(".json") && !file.endsWith("index.json"),
 		);
+
+		for (const file of configFiles) {
+			const relativePath = path
+				.relative(devicesDir, file)
+				.replace(/\\/g, "/");
+			const fileContents = await readFile(file, "utf8");
+			// Try parsing the file
+			const config = new DeviceConfig(relativePath, fileContents);
+			// Add the file to the index
+			index.push(
+				...config.devices.map((dev: any) => ({
+					manufacturerId: formatId(
+						config.manufacturerId.toString(16),
+					),
+					...dev,
+					firmwareVersion: config.firmwareVersion,
+					filename: relativePath,
+				})),
+			);
+		}
+
+		if (forceWrite || process.env.NODE_ENV !== "test") {
+			// Save the index to disk (but not during unit tests)
+			await writeFile(
+				path.join(devicesDir, "index.json"),
+				`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
+${stringify(index, "\t")}
+`,
+				"utf8",
+			);
+			logger?.print("Device index regenerated", "verbose");
+		}
 	}
 
-	return index;
-}
-
-export async function saveDeviceIndex(index: DeviceConfigIndex): Promise<void> {
-	await writeFile(indexPath, stringify(index));
+	return index!;
 }
 
 function isHexKeyWith4Digits(val: any): val is string {
