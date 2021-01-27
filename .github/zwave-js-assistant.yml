@@ -13,6 +13,9 @@ semanticSquash: true
 
 # Configure closing stale issues
 stale:
+  # Which job name to look for
+  jobName: stale
+  # Which labels mark an issue as closeable
   labels:
     - 'cannot fix ❌'
     - 'duplicate'
