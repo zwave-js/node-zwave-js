@@ -139,6 +139,24 @@ export function getResetValueId(endpoint: number, type?: number): ValueID {
 	};
 }
 
+function getValueLabel(
+	configManager: ConfigManager,
+	meterType: number,
+	scale: MeterScale,
+	rateType: RateType,
+	suffix?: string,
+): string {
+	let ret = getMeterTypeName(configManager, meterType);
+	if (rateType !== RateType.Unspecified) {
+		ret += ` ${getEnumMemberName(RateType, rateType)}`;
+	}
+	ret += ` [${scale.label}]`;
+	if (suffix) {
+		ret += ` (${suffix})`;
+	}
+	return ret;
+}
+
 @API(CommandClasses.Meter)
 export class MeterCCAPI extends PhysicalCCAPI {
 	public supportsCommand(cmd: MeterCommand): Maybe<boolean> {
@@ -613,14 +631,12 @@ export class MeterCCReport extends MeterCC {
 		if (!valueDB.hasMetadata(valueValueId)) {
 			valueDB.setMetadata(valueValueId, {
 				...ValueMetadata.ReadOnlyNumber,
-				label: `Value (${getMeterTypeName(
+				label: getValueLabel(
 					this.driver.configManager,
 					this._type,
-				)}${
-					this._rateType
-						? `, ${getEnumMemberName(RateType, this._rateType)}`
-						: ""
-				})`,
+					this._scale,
+					this._rateType,
+				),
 				unit: this._scale.label,
 				ccSpecific,
 			});
@@ -628,14 +644,13 @@ export class MeterCCReport extends MeterCC {
 		if (this.version >= 2 && !valueDB.hasMetadata(previousValueValueID)) {
 			valueDB.setMetadata(previousValueValueID, {
 				...ValueMetadata.ReadOnlyNumber,
-				label: `Previous value (${getMeterTypeName(
+				label: getValueLabel(
 					this.driver.configManager,
 					this._type,
-				)}${
-					this._rateType
-						? `, ${getEnumMemberName(RateType, this._rateType)}`
-						: ""
-				})`,
+					this._scale,
+					this._rateType,
+					"prev. value",
+				),
 				unit: this._scale.label,
 				ccSpecific,
 			});
@@ -645,7 +660,13 @@ export class MeterCCReport extends MeterCC {
 				{ ...valueIdBase, property: "deltaTime" },
 				{
 					...ValueMetadata.ReadOnlyNumber,
-					label: `Time since the previous reading`,
+					label: getValueLabel(
+						this.driver.configManager,
+						this._type,
+						this._scale,
+						this._rateType,
+						"prev. time delta",
+					),
 					unit: "s",
 					ccSpecific,
 				},
