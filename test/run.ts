@@ -2,8 +2,8 @@
 
 require("reflect-metadata");
 
-process.on("unhandledRejection", (r) => {
-	debugger;
+process.on("unhandledRejection", (_r) => {
+	// debugger;
 });
 
 import { MultilevelSensorCCGet } from "../packages/zwave-js/src/lib/commandclass/MultilevelSensorCC";

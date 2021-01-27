@@ -22,7 +22,7 @@ import { JSONObject, num2hex, pick } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { ignoreTimeout, PhysicalCCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -502,30 +502,19 @@ export class NotificationCC extends CommandClass {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
 
-					await ignoreTimeout(
-						async () => {
-							// Always query each notification for its current status
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message: `querying notification status for ${name}...`,
-								direction: "outbound",
-							});
-							const response = await api.getInternal({
-								notificationType: type,
-							});
-							// NotificationReports don't store their values themselves,
-							// because the behaviour is too complex and spans the lifetime
-							// of several reports. Thus we handle it in the Node instance
-							if (response) await node.handleCommand(response);
-						},
-						() => {
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message: `querying notification status for ${name} timed out - skipping because it is not critical...`,
-								level: "warn",
-							});
-						},
-					);
+					// Always query each notification for its current status
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `querying notification status for ${name}...`,
+						direction: "outbound",
+					});
+					const response = await api.getInternal({
+						notificationType: type,
+					});
+					// NotificationReports don't store their values themselves,
+					// because the behaviour is too complex and spans the lifetime
+					// of several reports. Thus we handle it in the Node instance
+					if (response) await node.handleCommand(response);
 				}
 			} /* if (notificationMode === "push") */ else {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {

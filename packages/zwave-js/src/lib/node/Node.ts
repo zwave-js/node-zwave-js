@@ -36,11 +36,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
-import {
-	CCAPI,
-	ignoreTimeout,
-	PollValueImplementation,
-} from "../commandclass/API";
+import { CCAPI, PollValueImplementation } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import {
 	BasicCC,
@@ -1296,16 +1292,7 @@ version:               ${this.version}`;
 			}
 
 			try {
-				const task = () =>
-					instance.interview(!instance.interviewComplete);
-				if (actuatorCCs.includes(cc) || sensorCCs.includes(cc)) {
-					// Ignore missing node responses for sensor and actuator CCs
-					// because they sometimes don't respond to stuff they should respond to
-					await ignoreTimeout(task);
-				} else {
-					// For all other CCs, abort the node interview since we're very likely missing critical information
-					await task();
-				}
+				await instance.interview(!instance.interviewComplete);
 			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&

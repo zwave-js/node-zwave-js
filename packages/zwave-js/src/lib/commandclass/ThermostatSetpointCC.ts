@@ -16,7 +16,6 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
-	ignoreTimeout,
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
@@ -437,16 +436,8 @@ export class ThermostatSetpointCC extends CommandClass {
 					direction: "outbound",
 				});
 
-				let setpoint:
-					| {
-							value: number;
-							scale: Scale;
-					  }
-					| undefined;
-				await ignoreTimeout(async () => {
-					setpoint = await api.get(type);
-					// If the node did not respond, assume the setpoint type is not supported
-				});
+				const setpoint = await api.get(type);
+				// If the node did not respond, assume the setpoint type is not supported
 
 				let logMessage: string;
 				if (setpoint) {
