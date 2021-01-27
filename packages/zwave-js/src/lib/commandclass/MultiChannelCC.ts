@@ -16,7 +16,7 @@ import {
 import { num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { CCAPI, ignoreTimeout } from "./API";
+import { CCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -305,6 +305,15 @@ export class MultiChannelCC extends CommandClass {
 			direction: "outbound",
 		});
 		const multiResponse = await api.getEndpoints();
+		if (!multiResponse) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message:
+					"Querying device endpoint information timed out, skipping interview...",
+				level: "warn",
+			});
+			return;
+		}
 
 		let logMessage = `received response for device endpoints:
 endpoint count (individual): ${multiResponse.individualEndpointCount}
@@ -333,44 +342,31 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 		};
 		if (api.supportsCommand(MultiChannelCommand.EndPointFind)) {
 			// Step 2a: Find all endpoints
-			await ignoreTimeout(
-				async () => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "querying all endpoints...",
-						direction: "outbound",
-					});
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "querying all endpoints...",
+				direction: "outbound",
+			});
 
-					endpointsToQuery.push(
-						...(await api.findEndpoints(0xff, 0xff)),
-					);
-					if (!endpointsToQuery.length) {
-						// Create a sequential list of endpoints
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Endpoint query returned no results, assuming that endpoints are sequential`,
-							direction: "inbound",
-						});
-						addSequentialEndpoints();
-					} else {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `received endpoints: ${endpointsToQuery
-								.map(String)
-								.join(", ")}`,
-							direction: "inbound",
-						});
-					}
-				},
-				() => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `Did not respond to endpoint query, assuming that endpoints are sequential`,
-						level: "warn",
-					});
-					addSequentialEndpoints();
-				},
-			);
+			const foundEndpoints = await api.findEndpoints(0xff, 0xff);
+			if (foundEndpoints) endpointsToQuery.push(...foundEndpoints);
+			if (!endpointsToQuery.length) {
+				// Create a sequential list of endpoints
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `Endpoint query returned no results, assuming that endpoints are sequential`,
+					direction: "inbound",
+				});
+				addSequentialEndpoints();
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `received endpoints: ${endpointsToQuery
+						.map(String)
+						.join(", ")}`,
+					direction: "inbound",
+				});
+			}
 		} else {
 			// Step 2b: Assume that the endpoints are in sequential order
 			this.driver.controllerLog.logNode(node.id, {
@@ -395,13 +391,15 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 					direction: "outbound",
 				});
 				const members = await api.getAggregatedMembers(endpoint);
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `aggregated endpoint #${endpoint} has members ${members
-						.map(String)
-						.join(", ")}`,
-					direction: "inbound",
-				});
+				if (members) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `aggregated endpoint #${endpoint} has members ${members
+							.map(String)
+							.join(", ")}`,
+						direction: "inbound",
+					});
+				}
 			}
 
 			// When the device reports identical capabilities for all endpoints,
@@ -424,28 +422,29 @@ identical capabilities:      ${multiResponse.identicalCapabilities}`;
 				continue;
 			}
 
-			// TODO: When security is implemented, we need to change stuff here
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `querying capabilities for endpoint #${endpoint}...`,
 				direction: "outbound",
 			});
 			const caps = await api.getEndpointCapabilities(endpoint);
-			hasQueriedCapabilities = true;
-			logMessage = `received response for endpoint capabilities (#${endpoint}):
+			if (caps) {
+				hasQueriedCapabilities = true;
+				logMessage = `received response for endpoint capabilities (#${endpoint}):
 generic device class:  ${caps.generic.label}
 specific device class: ${caps.specific.label}
 is dynamic end point:  ${caps.isDynamic}
 supported CCs:`;
-			for (const cc of caps.supportedCCs) {
-				const ccName = CommandClasses[cc];
-				logMessage += `\n  · ${ccName ? ccName : num2hex(cc)}`;
+				for (const cc of caps.supportedCCs) {
+					const ccName = CommandClasses[cc];
+					logMessage += `\n  · ${ccName ? ccName : num2hex(cc)}`;
+				}
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
 			}
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
 		}
 
 		// Remember that the interview is complete
@@ -478,14 +477,16 @@ supported CCs:`;
 					direction: "outbound",
 				});
 				const endpointCount = await api.getEndpointCountV1(ccId);
-				endpointCounts.set(ccId, endpointCount);
+				if (endpointCount != undefined) {
+					endpointCounts.set(ccId, endpointCount);
 
-				this.driver.controllerLog.logNode(node.id, {
-					message: `CommandClass ${getCCName(
-						ccId,
-					)} has ${endpointCount} endpoints`,
-					direction: "inbound",
-				});
+					this.driver.controllerLog.logNode(node.id, {
+						message: `CommandClass ${getCCName(
+							ccId,
+						)} has ${endpointCount} endpoints`,
+						direction: "inbound",
+					});
+				}
 			}
 
 			// Store the collected information
