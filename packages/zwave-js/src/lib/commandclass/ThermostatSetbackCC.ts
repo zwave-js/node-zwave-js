@@ -148,14 +148,16 @@ export class ThermostatSetbackCC extends CommandClass {
 			direction: "outbound",
 		});
 		const setbackResp = await api.get();
-		const logMessage = `received current state:
+		if (setbackResp) {
+			const logMessage = `received current state:
 setback type:  ${getEnumMemberName(SetbackType, setbackResp.setbackType)}
 setback state: ${setbackResp.setbackState}`;
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: logMessage,
-			direction: "inbound",
-		});
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
