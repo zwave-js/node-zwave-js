@@ -13,7 +13,6 @@ import type { ZWaveNode } from "../node/Node";
 import { NodeStatus } from "../node/Types";
 import {
 	CCAPI,
-	ignoreTimeout,
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
@@ -210,6 +209,10 @@ export class WakeUpCC extends CommandClass {
 			direction: "none",
 		});
 
+		// We need to do some queries after a potential timeout
+		// In this case, do now mark this CC as interviewed completely
+		let hadCriticalTimeout = false;
+
 		if (node.isControllerNode()) {
 			this.driver.controllerLog.logNode(
 				node.id,
@@ -225,34 +228,27 @@ export class WakeUpCC extends CommandClass {
 			if (complete) {
 				// This information does not change
 				if (this.version >= 2) {
-					await ignoreTimeout(
-						async () => {
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message:
-									"retrieving wakeup capabilities from the device...",
-								direction: "outbound",
-							});
-							const wakeupCaps = await api.getIntervalCapabilities();
-							const logMessage = `received wakeup capabilities:
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"retrieving wakeup capabilities from the device...",
+						direction: "outbound",
+					});
+					const wakeupCaps = await api.getIntervalCapabilities();
+					if (wakeupCaps) {
+						const logMessage = `received wakeup capabilities:
 default wakeup interval: ${wakeupCaps.defaultWakeUpInterval} seconds
 minimum wakeup interval: ${wakeupCaps.minWakeUpInterval} seconds
 maximum wakeup interval: ${wakeupCaps.maxWakeUpInterval} seconds
 wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message: logMessage,
-								direction: "inbound",
-							});
-						},
-						() => {
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message:
-									"Wakeup capability query timed out - skipping because it is not critical...",
-							});
-						},
-					);
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: logMessage,
+							direction: "inbound",
+						});
+					} else {
+						hadCriticalTimeout = true;
+					}
 				}
 			}
 
@@ -266,33 +262,39 @@ wakeup interval steps:   ${wakeupCaps.wakeUpIntervalSteps} seconds`;
 				direction: "outbound",
 			});
 			const wakeupResp = await api.getInterval();
-			const logMessage = `received wakeup configuration:
+			if (wakeupResp) {
+				const logMessage = `received wakeup configuration:
 wakeup interval: ${wakeupResp.wakeUpInterval} seconds
 controller node: ${wakeupResp.controllerNodeId}`;
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
-
-			const ownNodeId = this.driver.controller.ownNodeId!;
-			// Only change the destination if necessary
-			if (wakeupResp.controllerNodeId !== ownNodeId) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: "configuring wakeup destination node",
-					direction: "outbound",
+					message: logMessage,
+					direction: "inbound",
 				});
-				await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
-				this.driver.controllerLog.logNode(
-					node.id,
-					"wakeup destination node changed!",
-				);
+
+				const ownNodeId = this.driver.controller.ownNodeId!;
+				// Only change the destination if necessary
+				if (wakeupResp.controllerNodeId !== ownNodeId) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: "configuring wakeup destination node",
+						direction: "outbound",
+					});
+					await api.setInterval(wakeupResp.wakeUpInterval, ownNodeId);
+					this.driver.controllerLog.logNode(
+						node.id,
+						"wakeup destination node changed!",
+					);
+				}
+			} else {
+				// TODO: Change destination as the first thing during bootstrapping a node
+				// and make it non-critical here
+				hadCriticalTimeout = true;
 			}
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		if (!hadCriticalTimeout) this.interviewComplete = true;
 	}
 }
 
