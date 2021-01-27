@@ -180,14 +180,9 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 			);
 		}
 
-		// If a compat option requires the nonces to stick around, disable the expire feature
-		const keepUntilNext = !!this.endpoint.getNodeUnsafe()?.deviceConfig
-			?.compat?.keepS0NonceUntilNext;
-		const expire = !keepUntilNext;
 		const nonce = this.driver.securityManager.generateNonce(
 			this.endpoint.nodeId,
 			HALF_NONCE_SIZE,
-			expire,
 		);
 		const nonceId = this.driver.securityManager.getNonceId(nonce);
 
@@ -221,13 +216,6 @@ export class SecurityCCAPI extends PhysicalCCAPI {
 				// Pass other errors through
 				throw e;
 			}
-		} finally {
-			// We transmitted a new nonce - whether it was received by the target node
-			// or not, the old ones should not be used anymore
-			this.driver.securityManager.deleteAllNoncesForReceiver(
-				cc.nodeId,
-				nonceId,
-			);
 		}
 		return true;
 	}
@@ -507,10 +495,8 @@ export class SecurityCCCommandEncapsulation extends SecurityCC {
 					nonceId,
 				)} expired, cannot decode security encapsulated command.`,
 			)(!!nonce);
-			// and mark the nonce as used - except if a config flag forbids it
-			if (!this.getNode()?.deviceConfig?.compat?.keepS0NonceUntilNext) {
-				this.driver.securityManager.deleteNonce(nonceId);
-			}
+			// and mark the nonce as used
+			this.driver.securityManager.deleteNonce(nonceId);
 
 			this.authKey = this.driver.securityManager.authKey;
 			this.encryptionKey = this.driver.securityManager.encryptionKey;
