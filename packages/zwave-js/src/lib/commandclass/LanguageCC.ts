@@ -102,14 +102,17 @@ export class LanguageCC extends CommandClass {
 			message: "requesting language setting...",
 			direction: "outbound",
 		});
-		const { language, country } = await api.get();
-		const logMessage = `received current language setting: ${language}${
-			country != undefined ? `-${country}` : ""
-		}`;
-		this.driver.controllerLog.logNode(node.id, {
-			message: logMessage,
-			direction: "inbound",
-		});
+		const resp = await api.get();
+		if (resp) {
+			const { language, country } = resp;
+			const logMessage = `received current language setting: ${language}${
+				country != undefined ? `-${country}` : ""
+			}`;
+			this.driver.controllerLog.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
