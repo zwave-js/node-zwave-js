@@ -38,7 +38,7 @@
 			"description": "Invert the default On/Off rocker settings.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 0,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
