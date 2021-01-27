@@ -140,21 +140,23 @@ export class FirmwareUpdateMetaDataCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<FirmwareUpdateMetaDataCCMetaDataReport>(
+		const response = await this.driver.sendCommand<FirmwareUpdateMetaDataCCMetaDataReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return pick(response, [
-			"manufacturerId",
-			"firmwareId",
-			"checksum",
-			"firmwareUpgradable",
-			"maxFragmentSize",
-			"additionalFirmwareIDs",
-			"hardwareVersion",
-			"continuesToFunction",
-			"supportsActivation",
-		]);
+		);
+		if (response) {
+			return pick(response, [
+				"manufacturerId",
+				"firmwareId",
+				"checksum",
+				"firmwareUpgradable",
+				"maxFragmentSize",
+				"additionalFirmwareIDs",
+				"hardwareVersion",
+				"continuesToFunction",
+				"supportsActivation",
+			]);
+		}
 	}
 
 	/**

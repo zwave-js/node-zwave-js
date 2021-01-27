@@ -11,7 +11,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -143,15 +143,13 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSwitchCCReport>(
+		const response = await this.driver.sendCommand<MultilevelSwitchCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			currentValue: response.currentValue,
-			targetValue: response.targetValue,
-			duration: response.duration,
-		};
+		);
+		if (response) {
+			return pick(response, ["currentValue", "targetValue", "duration"]);
+		}
 	}
 
 	private refreshTimeout: NodeJS.Timeout | undefined;
@@ -309,7 +307,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		}
 	}
 
-	public async getSupported(): Promise<SwitchType> {
+	public async getSupported(): Promise<SwitchType | undefined> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.SupportedGet,
@@ -319,11 +317,11 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSwitchCCSupportedReport>(
+		const response = await this.driver.sendCommand<MultilevelSwitchCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.switchType;
+		);
+		return response?.switchType;
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -432,14 +430,16 @@ export class MultilevelSwitchCC extends CommandClass {
 					direction: "outbound",
 				});
 				const switchType = await api.getSupported();
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `has switch type ${getEnumMemberName(
-						SwitchType,
-						switchType,
-					)}`,
-					direction: "inbound",
-				});
+				if (switchType != undefined) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `has switch type ${getEnumMemberName(
+							SwitchType,
+							switchType,
+						)}`,
+						direction: "inbound",
+					});
+				}
 			} else {
 				// requesting the switch type automatically creates the up/down actions
 				// We need to do this manually for V1 and V2

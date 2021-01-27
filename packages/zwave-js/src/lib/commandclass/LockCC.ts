@@ -49,18 +49,18 @@ export class LockCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async get(): Promise<boolean> {
+	public async get(): Promise<boolean | undefined> {
 		this.assertSupportsCommand(LockCommand, LockCommand.Get);
 
 		const cc = new LockCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<LockCCReport>(
+		const response = await this.driver.sendCommand<LockCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.locked;
+		);
+		return response?.locked;
 	}
 
 	/**

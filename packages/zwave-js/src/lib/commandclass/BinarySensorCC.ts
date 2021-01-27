@@ -13,7 +13,6 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
-	ignoreTimeout,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -118,7 +117,9 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 	 * Retrieves the current value from this sensor
 	 * @param sensorType The (optional) sensor type to retrieve the value for
 	 */
-	public async get(sensorType?: BinarySensorType): Promise<boolean> {
+	public async get(
+		sensorType?: BinarySensorType,
+	): Promise<boolean | undefined> {
 		this.assertSupportsCommand(
 			BinarySensorCommand,
 			BinarySensorCommand.Get,
@@ -129,12 +130,12 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = (await this.driver.sendCommand<BinarySensorCCReport>(
+		const response = await this.driver.sendCommand<BinarySensorCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
+		);
 		// We don't want to repeat the sensor type
-		return response.value;
+		return response?.value;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -148,12 +149,12 @@ export class BinarySensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BinarySensorCCSupportedReport>(
+		const response = await this.driver.sendCommand<BinarySensorCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
+		);
 		// We don't want to repeat the sensor type
-		return response.supportedSensorTypes;
+		return response?.supportedSensorTypes;
 	}
 }
 
@@ -180,27 +181,23 @@ export class BinarySensorCC extends CommandClass {
 		// Find out which sensor types this sensor supports
 		let supportedSensorTypes: readonly BinarySensorType[] | undefined;
 		if (complete && this.version >= 2) {
-			if (
-				!(await ignoreTimeout(async () => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "querying supported sensor types...",
-						direction: "outbound",
-					});
-					supportedSensorTypes = await api.getSupportedSensorTypes();
-					const logMessage = `received supported sensor types: ${supportedSensorTypes
-						.map((type) =>
-							getEnumMemberName(BinarySensorType, type),
-						)
-						.map((name) => `\n· ${name}`)
-						.join("")}`;
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				}))
-			) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "querying supported sensor types...",
+				direction: "outbound",
+			});
+			supportedSensorTypes = await api.getSupportedSensorTypes();
+			if (supportedSensorTypes) {
+				const logMessage = `received supported sensor types: ${supportedSensorTypes
+					.map((type) => getEnumMemberName(BinarySensorType, type))
+					.map((name) => `\n· ${name}`)
+					.join("")}`;
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			} else {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
@@ -217,54 +214,35 @@ export class BinarySensorCC extends CommandClass {
 
 		// Always query (all of) the sensor's current value(s)
 		if (this.version === 1) {
-			await ignoreTimeout(
-				async () => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "querying current value...",
-						direction: "outbound",
-					});
-					const currentValue = await api.get();
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `received current value: ${currentValue}`,
-						direction: "inbound",
-					});
-				},
-				() => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Current value query timed out - skipping because it is not critical...",
-						level: "warn",
-					});
-				},
-			);
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "querying current value...",
+				direction: "outbound",
+			});
+			const currentValue = await api.get();
+			if (currentValue != undefined) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `received current value: ${currentValue}`,
+					direction: "inbound",
+				});
+			}
 		} else if (supportedSensorTypes) {
 			for (const type of supportedSensorTypes) {
 				const sensorName = getEnumMemberName(BinarySensorType, type);
-				await ignoreTimeout(
-					async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `querying current value for ${sensorName}...`,
-							direction: "outbound",
-						});
-						const currentValue = await api.get(type);
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `received current value for ${sensorName}: ${currentValue}`,
-							direction: "inbound",
-						});
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Current value query for ${sensorName} timed out - skipping because it is not critical...`,
-							level: "warn",
-						});
-					},
-				);
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `querying current value for ${sensorName}...`,
+					direction: "outbound",
+				});
+				const currentValue = await api.get(type);
+				if (currentValue != undefined) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `received current value for ${sensorName}: ${currentValue}`,
+						direction: "inbound",
+					});
+				}
 			}
 		}
 

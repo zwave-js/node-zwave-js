@@ -15,7 +15,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -225,14 +225,13 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ProtectionCCReport>(
+		const response = await this.driver.sendCommand<ProtectionCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			local: response.local,
-			rf: response.rf,
-		};
+		);
+		if (response) {
+			return pick(response, ["local", "rf"]);
+		}
 	}
 
 	public async set(
@@ -266,19 +265,21 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ProtectionCCSupportedReport>(
+		const response = await this.driver.sendCommand<ProtectionCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			supportsExclusiveControl: response.supportsExclusiveControl,
-			supportsTimeout: response.supportsTimeout,
-			supportedLocalStates: response.supportedLocalStates,
-			supportedRFStates: response.supportedRFStates,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"supportsExclusiveControl",
+				"supportsTimeout",
+				"supportedLocalStates",
+				"supportedRFStates",
+			]);
+		}
 	}
 
-	public async getExclusiveControl(): Promise<number> {
+	public async getExclusiveControl(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.ExclusiveControlGet,
@@ -288,11 +289,11 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ProtectionCCExclusiveControlReport>(
+		const response = await this.driver.sendCommand<ProtectionCCExclusiveControlReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.exclusiveControlNodeId;
+		);
+		return response?.exclusiveControlNodeId;
 	}
 
 	public async setExclusiveControl(nodeId: number): Promise<void> {
@@ -314,7 +315,7 @@ export class ProtectionCCAPI extends CCAPI {
 		}
 	}
 
-	public async getTimeout(): Promise<Timeout> {
+	public async getTimeout(): Promise<Timeout | undefined> {
 		this.assertSupportsCommand(
 			ProtectionCommand,
 			ProtectionCommand.TimeoutGet,
@@ -324,11 +325,11 @@ export class ProtectionCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ProtectionCCTimeoutReport>(
+		const response = await this.driver.sendCommand<ProtectionCCTimeoutReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.timeout;
+		);
+		return response?.timeout;
 	}
 
 	public async setTimeout(timeout: Timeout): Promise<void> {
@@ -372,6 +373,10 @@ export class ProtectionCC extends CommandClass {
 
 		const valueDB = this.getValueDB();
 
+		// We need to do some queries after a potential timeout
+		// In this case, do now mark this CC as interviewed completely
+		let hadCriticalTimeout = false;
+
 		// First find out what the device supports
 		if (complete && this.version >= 2) {
 			this.driver.controllerLog.logNode(node.id, {
@@ -379,21 +384,27 @@ export class ProtectionCC extends CommandClass {
 				direction: "outbound",
 			});
 			const resp = await api.getSupported();
-			const logMessage = `received protection capabilities:
+			if (resp) {
+				const logMessage = `received protection capabilities:
 exclusive control:       ${resp.supportsExclusiveControl}
 timeout:                 ${resp.supportsTimeout}
 local protection states: ${resp.supportedLocalStates
-				.map((local) => getEnumMemberName(LocalProtectionState, local))
-				.map((str) => `\n· ${str}`)
-				.join("")}
+					.map((local) =>
+						getEnumMemberName(LocalProtectionState, local),
+					)
+					.map((str) => `\n· ${str}`)
+					.join("")}
 RF protection states:    ${resp.supportedRFStates
-				.map((local) => getEnumMemberName(RFProtectionState, local))
-				.map((str) => `\n· ${str}`)
-				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
-				message: logMessage,
-				direction: "inbound",
-			});
+					.map((local) => getEnumMemberName(RFProtectionState, local))
+					.map((str) => `\n· ${str}`)
+					.join("")}`;
+				this.driver.controllerLog.logNode(node.id, {
+					message: logMessage,
+					direction: "inbound",
+				});
+			} else {
+				hadCriticalTimeout = true;
+			}
 		}
 
 		const supportsExclusiveControl = !!valueDB.getValue<boolean>(
@@ -409,16 +420,18 @@ RF protection states:    ${resp.supportedRFStates
 			direction: "outbound",
 		});
 		const protectionResp = await api.get();
-		let logMessage = `received protection status:
+		if (protectionResp) {
+			let logMessage = `received protection status:
 local: ${getEnumMemberName(LocalProtectionState, protectionResp.local)}`;
-		if (protectionResp.rf != undefined) {
-			logMessage += `
+			if (protectionResp.rf != undefined) {
+				logMessage += `
 rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
+			}
+			this.driver.controllerLog.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
 		}
-		this.driver.controllerLog.logNode(node.id, {
-			message: logMessage,
-			direction: "inbound",
-		});
 
 		if (supportsTimeout) {
 			// Query the current timeout
@@ -427,10 +440,12 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 				direction: "outbound",
 			});
 			const timeout = await api.getTimeout();
-			this.driver.controllerLog.logNode(node.id, {
-				message: `received timeout: ${timeout.toString()}`,
-				direction: "inbound",
-			});
+			if (timeout) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `received timeout: ${timeout.toString()}`,
+					direction: "inbound",
+				});
+			}
 		}
 
 		if (supportsExclusiveControl) {
@@ -440,17 +455,19 @@ rf     ${getEnumMemberName(RFProtectionState, protectionResp.rf)}`;
 				direction: "outbound",
 			});
 			const nodeId = await api.getExclusiveControl();
-			this.driver.controllerLog.logNode(node.id, {
-				message:
-					(nodeId !== 0
-						? `Node ${padStart(nodeId.toString(), 3, "0")}`
-						: `no node`) + ` has exclusive control`,
-				direction: "inbound",
-			});
+			if (nodeId != undefined) {
+				this.driver.controllerLog.logNode(node.id, {
+					message:
+						(nodeId !== 0
+							? `Node ${padStart(nodeId.toString(), 3, "0")}`
+							: `no node`) + ` has exclusive control`,
+					direction: "inbound",
+				});
+			}
 		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		if (!hadCriticalTimeout) this.interviewComplete = true;
 	}
 }
 

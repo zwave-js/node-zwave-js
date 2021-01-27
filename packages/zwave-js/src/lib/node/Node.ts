@@ -36,11 +36,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
-import {
-	CCAPI,
-	ignoreTimeout,
-	PollValueImplementation,
-} from "../commandclass/API";
+import type { CCAPI, PollValueImplementation } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import {
 	BasicCC,
@@ -1290,16 +1286,7 @@ version:               ${this.version}`;
 			}
 
 			try {
-				const task = () =>
-					instance.interview(!instance.interviewComplete);
-				if (actuatorCCs.includes(cc) || sensorCCs.includes(cc)) {
-					// Ignore missing node responses for sensor and actuator CCs
-					// because they sometimes don't respond to stuff they should respond to
-					await ignoreTimeout(task);
-				} else {
-					// For all other CCs, abort the node interview since we're very likely missing critical information
-					await task();
-				}
+				await instance.interview(!instance.interviewComplete);
 			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&
@@ -2494,6 +2481,12 @@ version:               ${this.version}`;
 
 		// Check if this update is possible
 		const meta = await api.getMetaData();
+		if (!meta) {
+			throw new ZWaveError(
+				`The node did not respond in time`,
+				ZWaveErrorCodes.Controller_NodeTimeout,
+			);
+		}
 		if (target === 0 && !meta.firmwareUpgradable) {
 			throw new ZWaveError(
 				`The Z-Wave chip firmware is not upgradable`,

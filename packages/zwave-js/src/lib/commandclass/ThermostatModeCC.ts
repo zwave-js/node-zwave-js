@@ -13,12 +13,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { buffer2hex, getEnumMemberName } from "@zwave-js/shared";
+import { buffer2hex, getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
-	ignoreTimeout,
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
@@ -120,14 +119,13 @@ export class ThermostatModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ThermostatModeCCReport>(
+		const response = await this.driver.sendCommand<ThermostatModeCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			mode: response.mode,
-			manufacturerData: response.manufacturerData,
-		};
+		);
+		if (response) {
+			return pick(response, ["mode", "manufacturerData"]);
+		}
 	}
 
 	public async set(
@@ -164,7 +162,9 @@ export class ThermostatModeCCAPI extends CCAPI {
 		}
 	}
 
-	public async getSupportedModes(): Promise<readonly ThermostatMode[]> {
+	public async getSupportedModes(): Promise<
+		readonly ThermostatMode[] | undefined
+	> {
 		this.assertSupportsCommand(
 			ThermostatModeCommand,
 			ThermostatModeCommand.SupportedGet,
@@ -174,11 +174,11 @@ export class ThermostatModeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ThermostatModeCCSupportedReport>(
+		const response = await this.driver.sendCommand<ThermostatModeCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedModes;
+		);
+		return response?.supportedModes;
 	}
 }
 
@@ -211,41 +211,44 @@ export class ThermostatModeCC extends CommandClass {
 			});
 
 			const supportedModes = await api.getSupportedModes();
-
-			const logMessage = `received supported thermostat modes:${supportedModes
-				.map((mode) => `\n· ${getEnumMemberName(ThermostatMode, mode)}`)
-				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
-		}
-
-		if (
-			!(await ignoreTimeout(async () => {
-				// Always query the actual status
+			if (supportedModes) {
+				const logMessage = `received supported thermostat modes:${supportedModes
+					.map(
+						(mode) =>
+							`\n· ${getEnumMemberName(ThermostatMode, mode)}`,
+					)
+					.join("")}`;
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: "querying current thermostat mode...",
-					direction: "outbound",
+					message: logMessage,
+					direction: "inbound",
 				});
-				const currentStatus = await api.get();
+			} else {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
-						"received current thermostat mode: " +
-						getEnumMemberName(ThermostatMode, currentStatus.mode),
-					direction: "inbound",
+						"Querying supported thermostat modes timed out, skipping interview...",
+					level: "warn",
 				});
-			}))
-		) {
+				return;
+			}
+		}
+
+		// Always query the actual status
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying current thermostat mode...",
+			direction: "outbound",
+		});
+		const currentStatus = await api.get();
+		if (currentStatus) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `Thermostat mode query timed out - skipping interview...`,
-				level: "warn",
+				message:
+					"received current thermostat mode: " +
+					getEnumMemberName(ThermostatMode, currentStatus.mode),
+				direction: "inbound",
 			});
-			return;
 		}
 
 		// Remember that the interview is complete

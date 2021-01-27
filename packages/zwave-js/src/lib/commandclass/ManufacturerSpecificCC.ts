@@ -6,7 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -107,20 +107,22 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ManufacturerSpecificCCReport>(
+		const response = await this.driver.sendCommand<ManufacturerSpecificCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			manufacturerId: response.manufacturerId,
-			productType: response.productType,
-			productId: response.productId,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"manufacturerId",
+				"productType",
+				"productId",
+			]);
+		}
 	}
 
 	public async deviceSpecificGet(
 		deviceIdType: DeviceIdType,
-	): Promise<string> {
+	): Promise<string | undefined> {
 		this.assertSupportsCommand(
 			ManufacturerSpecificCommand,
 			ManufacturerSpecificCommand.DeviceSpecificGet,
@@ -131,11 +133,11 @@ export class ManufacturerSpecificCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			deviceIdType,
 		});
-		const response = (await this.driver.sendCommand<ManufacturerSpecificCCDeviceSpecificReport>(
+		const response = await this.driver.sendCommand<ManufacturerSpecificCCDeviceSpecificReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.deviceId;
+		);
+		return response?.deviceId;
 	}
 }
 
@@ -178,18 +180,20 @@ export class ManufacturerSpecificCC extends CommandClass {
 					direction: "outbound",
 				});
 				const mfResp = await api.get();
-				const logMessage = `received response for manufacturer information:
+				if (mfResp) {
+					const logMessage = `received response for manufacturer information:
   manufacturer: ${
 		this.driver.configManager.lookupManufacturer(mfResp.manufacturerId) ||
 		"unknown"
   } (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				}
 			}
 		}
 

@@ -20,7 +20,6 @@ import {
 	pick,
 } from "@zwave-js/shared";
 import {
-	ignoreTimeout,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -445,7 +444,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		}
 	};
 
-	public async getUsersCount(): Promise<number> {
+	public async getUsersCount(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UsersNumberGet,
@@ -455,21 +454,23 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCUsersNumberReport>(
+		const response = await this.driver.sendCommand<UserCodeCCUsersNumberReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedUsers;
+		);
+		return response?.supportedUsers;
 	}
 
 	public async get(
 		userId: number,
 		multiple?: false,
-	): Promise<Pick<UserCode, "userIdStatus" | "userCode">>;
+	): Promise<Pick<UserCode, "userIdStatus" | "userCode"> | undefined>;
 	public async get(
 		userId: number,
 		multiple: true,
-	): Promise<{ userCodes: readonly UserCode[]; nextUserId: number }>;
+	): Promise<
+		{ userCodes: readonly UserCode[]; nextUserId: number } | undefined
+	>;
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(userId: number, multiple: boolean = false) {
 		if (userId > 255 || multiple) {
@@ -484,11 +485,13 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				userId,
 				reportMore: multiple,
 			});
-			const response = (await this.driver.sendCommand<UserCodeCCExtendedUserCodeReport>(
+			const response = await this.driver.sendCommand<UserCodeCCExtendedUserCodeReport>(
 				cc,
 				this.commandOptions,
-			))!;
-			if (multiple) {
+			);
+			if (!response) {
+				return;
+			} else if (multiple) {
 				return pick(response, ["userCodes", "nextUserId"]);
 			} else {
 				return pick(response.userCodes[0], [
@@ -504,11 +507,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				endpoint: this.endpoint.index,
 				userId,
 			});
-			const response = (await this.driver.sendCommand<UserCodeCCReport>(
+			const response = await this.driver.sendCommand<UserCodeCCReport>(
 				cc,
 				this.commandOptions,
-			))!;
-			return pick(response, ["userIdStatus", "userCode"]);
+			);
+			if (response) return pick(response, ["userIdStatus", "userCode"]);
 		}
 	}
 
@@ -592,23 +595,25 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCCapabilitiesReport>(
+		const response = await this.driver.sendCommand<UserCodeCCCapabilitiesReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return pick(response, [
-			"supportsMasterCode",
-			"supportsMasterCodeDeactivation",
-			"supportsUserCodeChecksum",
-			"supportsMultipleUserCodeReport",
-			"supportsMultipleUserCodeSet",
-			"supportedUserIDStatuses",
-			"supportedKeypadModes",
-			"supportedASCIIChars",
-		]);
+		);
+		if (response) {
+			return pick(response, [
+				"supportsMasterCode",
+				"supportsMasterCodeDeactivation",
+				"supportsUserCodeChecksum",
+				"supportsMultipleUserCodeReport",
+				"supportsMultipleUserCodeSet",
+				"supportedUserIDStatuses",
+				"supportedKeypadModes",
+				"supportedASCIIChars",
+			]);
+		}
 	}
 
-	public async getKeypadMode(): Promise<KeypadMode> {
+	public async getKeypadMode(): Promise<KeypadMode | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.KeypadModeGet,
@@ -618,11 +623,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCKeypadModeReport>(
+		const response = await this.driver.sendCommand<UserCodeCCKeypadModeReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.keypadMode;
+		);
+		return response?.keypadMode;
 	}
 
 	public async setKeypadMode(keypadMode: KeypadMode): Promise<void> {
@@ -643,7 +648,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		await this.getKeypadMode();
 	}
 
-	public async getMasterCode(): Promise<string> {
+	public async getMasterCode(): Promise<string | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.MasterCodeGet,
@@ -653,11 +658,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCMasterCodeReport>(
+		const response = await this.driver.sendCommand<UserCodeCCMasterCodeReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.masterCode;
+		);
+		return response?.masterCode;
 	}
 
 	public async setMasterCode(masterCode: string): Promise<void> {
@@ -678,7 +683,7 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		await this.getMasterCode();
 	}
 
-	public async getUserCodeChecksum(): Promise<number> {
+	public async getUserCodeChecksum(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			UserCodeCommand,
 			UserCodeCommand.UserCodeChecksumGet,
@@ -688,11 +693,11 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<UserCodeCCUserCodeChecksumReport>(
+		const response = await this.driver.sendCommand<UserCodeCCUserCodeChecksumReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.userCodeChecksum;
+		);
+		return response?.userCodeChecksum;
 	}
 }
 
@@ -719,18 +724,19 @@ export class UserCodeCC extends CommandClass {
 		let supportsMasterCode = false;
 		let supportsUserCodeChecksum = false;
 		let supportedKeypadModes: readonly KeypadMode[] = [];
-		let supportedUsers: number;
+		let supportedUsers: number | undefined;
 		if (complete) {
 			if (this.version >= 2) {
 				this.driver.controllerLog.logNode(node.id, {
 					message: "querying capabilities...",
 					direction: "outbound",
 				});
-				({
-					supportsMasterCode,
-					supportsUserCodeChecksum,
-					supportedKeypadModes,
-				} = await api.getCapabilities());
+				const caps = await api.getCapabilities();
+				if (caps) {
+					supportsMasterCode = caps.supportsMasterCode;
+					supportsUserCodeChecksum = caps.supportsUserCodeChecksum;
+					supportedKeypadModes = caps.supportedKeypadModes;
+				}
 			}
 
 			this.driver.controllerLog.logNode(node.id, {
@@ -738,6 +744,15 @@ export class UserCodeCC extends CommandClass {
 				direction: "outbound",
 			});
 			supportedUsers = await api.getUsersCount();
+			if (supportedUsers == undefined) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying number of user codes timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
 		} else {
 			supportsMasterCode =
 				node.getValue<boolean>(
@@ -777,7 +792,7 @@ export class UserCodeCC extends CommandClass {
 				node.getValue<number>(
 					getUserCodeChecksumValueID(this.endpointIndex),
 				) ?? 0;
-			let currentUserCodeChecksum = 0;
+			let currentUserCodeChecksum: number | undefined = 0;
 			if (supportsUserCodeChecksum) {
 				this.driver.controllerLog.logNode(node.id, {
 					message: "retrieving current user code checksum...",
@@ -796,7 +811,17 @@ export class UserCodeCC extends CommandClass {
 				});
 				let nextUserId = 1;
 				while (nextUserId > 0 && nextUserId <= supportedUsers) {
-					({ nextUserId } = await api.get(nextUserId, true));
+					const response = await api.get(nextUserId, true);
+					if (response) {
+						nextUserId = response.nextUserId;
+					} else {
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Querying user code #${nextUserId} timed out, skipping the remaining interview...`,
+							level: "warn",
+						});
+						break;
+					}
 				}
 			}
 		} else {
@@ -805,20 +830,9 @@ export class UserCodeCC extends CommandClass {
 				message: "querying all user codes...",
 				direction: "outbound",
 			});
-			await ignoreTimeout(
-				async () => {
-					for (let userId = 1; userId <= supportedUsers; userId++) {
-						await api.get(userId);
-					}
-				},
-				() => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"User code query timed out - skipping because it is not critical...",
-					});
-				},
-			);
+			for (let userId = 1; userId <= supportedUsers; userId++) {
+				await api.get(userId);
+			}
 		}
 
 		// Remember that the interview is complete

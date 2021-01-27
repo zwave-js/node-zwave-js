@@ -80,7 +80,7 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 		}
 	};
 
-	public async get(): Promise<ThermostatOperatingState> {
+	public async get(): Promise<ThermostatOperatingState | undefined> {
 		this.assertSupportsCommand(
 			ThermostatOperatingStateCommand,
 			ThermostatOperatingStateCommand.Get,
@@ -90,11 +90,11 @@ export class ThermostatOperatingStateCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ThermostatOperatingStateCCReport>(
+		const response = await this.driver.sendCommand<ThermostatOperatingStateCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.state;
+		);
+		return response?.state;
 	}
 }
 
@@ -126,15 +126,16 @@ export class ThermostatOperatingStateCC extends CommandClass {
 		});
 
 		const state = await api.get();
-
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: `received current thermostat operating state: ${getEnumMemberName(
-				ThermostatOperatingState,
-				state,
-			)}`,
-			direction: "inbound",
-		});
+		if (state) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `received current thermostat operating state: ${getEnumMemberName(
+					ThermostatOperatingState,
+					state,
+				)}`,
+				direction: "inbound",
+			});
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;
