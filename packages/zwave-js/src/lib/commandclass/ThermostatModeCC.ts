@@ -18,7 +18,6 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
-	ignoreTimeout,
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
@@ -212,41 +211,44 @@ export class ThermostatModeCC extends CommandClass {
 			});
 
 			const supportedModes = await api.getSupportedModes();
-
-			const logMessage = `received supported thermostat modes:${supportedModes
-				.map((mode) => `\n· ${getEnumMemberName(ThermostatMode, mode)}`)
-				.join("")}`;
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
-		}
-
-		if (
-			!(await ignoreTimeout(async () => {
-				// Always query the actual status
+			if (supportedModes) {
+				const logMessage = `received supported thermostat modes:${supportedModes
+					.map(
+						(mode) =>
+							`\n· ${getEnumMemberName(ThermostatMode, mode)}`,
+					)
+					.join("")}`;
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: "querying current thermostat mode...",
-					direction: "outbound",
+					message: logMessage,
+					direction: "inbound",
 				});
-				const currentStatus = await api.get();
+			} else {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
-						"received current thermostat mode: " +
-						getEnumMemberName(ThermostatMode, currentStatus.mode),
-					direction: "inbound",
+						"Querying supported thermostat modes timed out, skipping interview...",
+					level: "warn",
 				});
-			}))
-		) {
+				return;
+			}
+		}
+
+		// Always query the actual status
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying current thermostat mode...",
+			direction: "outbound",
+		});
+		const currentStatus = await api.get();
+		if (currentStatus) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: `Thermostat mode query timed out - skipping interview...`,
-				level: "warn",
+				message:
+					"received current thermostat mode: " +
+					getEnumMemberName(ThermostatMode, currentStatus.mode),
+				direction: "inbound",
 			});
-			return;
 		}
 
 		// Remember that the interview is complete
