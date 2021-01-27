@@ -307,7 +307,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 		}
 	}
 
-	public async getSupported(): Promise<SwitchType> {
+	public async getSupported(): Promise<SwitchType | undefined> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.SupportedGet,
@@ -321,7 +321,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			cc,
 			this.commandOptions,
 		);
-		return response.switchType;
+		return response?.switchType;
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -430,14 +430,16 @@ export class MultilevelSwitchCC extends CommandClass {
 					direction: "outbound",
 				});
 				const switchType = await api.getSupported();
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `has switch type ${getEnumMemberName(
-						SwitchType,
-						switchType,
-					)}`,
-					direction: "inbound",
-				});
+				if (switchType != undefined) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `has switch type ${getEnumMemberName(
+							SwitchType,
+							switchType,
+						)}`,
+						direction: "inbound",
+					});
+				}
 			} else {
 				// requesting the switch type automatically creates the up/down actions
 				// We need to do this manually for V1 and V2
