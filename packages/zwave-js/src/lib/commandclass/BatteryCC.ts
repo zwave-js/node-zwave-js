@@ -15,7 +15,6 @@ import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
-	ignoreTimeout,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -163,84 +162,60 @@ export class BatteryCC extends CommandClass {
 			direction: "none",
 		});
 
-		await ignoreTimeout(
-			async () => {
-				// always query the status
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "querying battery status...",
-					direction: "outbound",
-				});
+		// always query the status
+		this.driver.controllerLog.logNode(node.id, {
+			endpoint: this.endpointIndex,
+			message: "querying battery status...",
+			direction: "outbound",
+		});
 
-				const batteryStatus = await api.get();
-
-				let logMessage = `received response for battery information:
+		const batteryStatus = await api.get();
+		if (batteryStatus) {
+			let logMessage = `received response for battery information:
 level:                           ${batteryStatus.level}${
-					batteryStatus.isLow ? " (low)" : ""
-				}`;
-				if (this.version >= 2) {
-					logMessage += `
+				batteryStatus.isLow ? " (low)" : ""
+			}`;
+			if (this.version >= 2) {
+				logMessage += `
 status:                          ${
-						BatteryChargingStatus[batteryStatus.chargingStatus!]
-					}
+					BatteryChargingStatus[batteryStatus.chargingStatus!]
+				}
 rechargeable:                    ${batteryStatus.rechargeable}
 is backup:                       ${batteryStatus.backup}
 is overheating:                  ${batteryStatus.overheating}
 fluid is low:                    ${batteryStatus.lowFluid}
 needs to be replaced or charged: ${
-						BatteryReplacementStatus[
-							batteryStatus.rechargeOrReplace!
-						]
-					}
+					BatteryReplacementStatus[batteryStatus.rechargeOrReplace!]
+				}
 is low temperature               ${batteryStatus.lowTemperatureStatus}
 is disconnected:                 ${batteryStatus.disconnected}`;
-				}
+			}
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
+
+		if (this.version >= 2) {
+			// always query the health
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "querying battery health...",
+				direction: "outbound",
+			});
+
+			const batteryHealth = await api.getHealth();
+			if (batteryHealth) {
+				const logMessage = `received response for battery health:
+max. capacity: ${batteryHealth.maximumCapacity} %
+temperature:   ${batteryHealth.temperature} °C`;
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message: logMessage,
 					direction: "inbound",
 				});
-			},
-			() => {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Battery status query timed out - skipping because it is not critical...",
-					level: "warn",
-				});
-			},
-		);
-
-		if (this.version >= 2) {
-			await ignoreTimeout(
-				async () => {
-					// always query the health
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "querying battery health...",
-						direction: "outbound",
-					});
-
-					const batteryHealth = await api.getHealth();
-
-					const logMessage = `received response for battery health:
-max. capacity: ${batteryHealth.maximumCapacity} %
-temperature:   ${batteryHealth.temperature} °C`;
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				},
-				() => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Battery health query timed out - skipping because it is not critical...",
-						level: "warn",
-					});
-				},
-			);
+			}
 		}
 
 		// Remember that the interview is complete
