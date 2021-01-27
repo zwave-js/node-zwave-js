@@ -20,7 +20,6 @@ import {
 	pick,
 } from "@zwave-js/shared";
 import {
-	ignoreTimeout,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -725,18 +724,19 @@ export class UserCodeCC extends CommandClass {
 		let supportsMasterCode = false;
 		let supportsUserCodeChecksum = false;
 		let supportedKeypadModes: readonly KeypadMode[] = [];
-		let supportedUsers: number;
+		let supportedUsers: number | undefined;
 		if (complete) {
 			if (this.version >= 2) {
 				this.driver.controllerLog.logNode(node.id, {
 					message: "querying capabilities...",
 					direction: "outbound",
 				});
-				({
-					supportsMasterCode,
-					supportsUserCodeChecksum,
-					supportedKeypadModes,
-				} = await api.getCapabilities());
+				const caps = await api.getCapabilities();
+				if (caps) {
+					supportsMasterCode = caps.supportsMasterCode;
+					supportsUserCodeChecksum = caps.supportsUserCodeChecksum;
+					supportedKeypadModes = caps.supportedKeypadModes;
+				}
 			}
 
 			this.driver.controllerLog.logNode(node.id, {
@@ -744,6 +744,15 @@ export class UserCodeCC extends CommandClass {
 				direction: "outbound",
 			});
 			supportedUsers = await api.getUsersCount();
+			if (supportedUsers == undefined) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying number of user codes timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
 		} else {
 			supportsMasterCode =
 				node.getValue<boolean>(
@@ -783,7 +792,7 @@ export class UserCodeCC extends CommandClass {
 				node.getValue<number>(
 					getUserCodeChecksumValueID(this.endpointIndex),
 				) ?? 0;
-			let currentUserCodeChecksum = 0;
+			let currentUserCodeChecksum: number | undefined = 0;
 			if (supportsUserCodeChecksum) {
 				this.driver.controllerLog.logNode(node.id, {
 					message: "retrieving current user code checksum...",
@@ -802,7 +811,17 @@ export class UserCodeCC extends CommandClass {
 				});
 				let nextUserId = 1;
 				while (nextUserId > 0 && nextUserId <= supportedUsers) {
-					({ nextUserId } = await api.get(nextUserId, true));
+					const response = await api.get(nextUserId, true);
+					if (response) {
+						nextUserId = response.nextUserId;
+					} else {
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Querying user code #${nextUserId} timed out, skipping the remaining interview...`,
+							level: "warn",
+						});
+						break;
+					}
 				}
 			}
 		} else {
@@ -811,20 +830,9 @@ export class UserCodeCC extends CommandClass {
 				message: "querying all user codes...",
 				direction: "outbound",
 			});
-			await ignoreTimeout(
-				async () => {
-					for (let userId = 1; userId <= supportedUsers; userId++) {
-						await api.get(userId);
-					}
-				},
-				() => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"User code query timed out - skipping because it is not critical...",
-					});
-				},
-			);
+			for (let userId = 1; userId <= supportedUsers; userId++) {
+				await api.get(userId);
+			}
 		}
 
 		// Remember that the interview is complete
