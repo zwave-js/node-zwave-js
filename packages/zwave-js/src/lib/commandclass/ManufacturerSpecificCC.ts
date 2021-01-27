@@ -180,18 +180,20 @@ export class ManufacturerSpecificCC extends CommandClass {
 					direction: "outbound",
 				});
 				const mfResp = await api.get();
-				const logMessage = `received response for manufacturer information:
+				if (mfResp) {
+					const logMessage = `received response for manufacturer information:
   manufacturer: ${
 		this.driver.configManager.lookupManufacturer(mfResp.manufacturerId) ||
 		"unknown"
   } (${num2hex(mfResp.manufacturerId)})
   product type: ${num2hex(mfResp.productType)}
   product id:   ${num2hex(mfResp.productId)}`;
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				}
 			}
 		}
 
