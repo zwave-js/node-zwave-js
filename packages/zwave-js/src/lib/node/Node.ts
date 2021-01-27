@@ -80,11 +80,6 @@ import {
 	NotificationCCReport,
 } from "../commandclass/NotificationCC";
 import {
-	getDimmingDurationValueID,
-	getSceneIdValueID,
-	SceneActivationCCSet,
-} from "../commandclass/SceneActivationCC";
-import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
 } from "../commandclass/SecurityCC";
@@ -240,7 +235,6 @@ export class ZWaveNode extends Endpoint {
 
 		// Remove all timeouts
 		for (const timeout of [
-			this.sceneActivationResetTimeout,
 			this.centralSceneKeyHeldDownContext?.timeout,
 			...this.notificationIdleTimeouts.values(),
 			...this.manualRefreshTimers.values(),
@@ -738,7 +732,6 @@ export class ZWaveNode extends Endpoint {
 			);
 		}
 		// And call it
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
 		return (api.pollValue as PollValueImplementation<T>)({
 			property: valueId.property,
 			propertyKey: valueId.propertyKey,
@@ -1807,8 +1800,6 @@ version:               ${this.version}`;
 			return this.handleWakeUpNotification();
 		} else if (command instanceof NotificationCCReport) {
 			return this.handleNotificationReport(command);
-		} else if (command instanceof SceneActivationCCSet) {
-			return this.handleSceneActivationSet(command);
 		} else if (command instanceof ClockCCReport) {
 			return this.handleClockReport(command);
 		} else if (command instanceof SecurityCCNonceGet) {
@@ -2414,28 +2405,6 @@ version:               ${this.version}`;
 			this.valueDB.setValue(valueId, command.notificationEvent);
 			// We don't know what this notification refers to, so we don't force a reset
 		}
-	}
-
-	private sceneActivationResetTimeout: NodeJS.Timeout | undefined;
-	/** Handles the receipt of a SceneActivation Set and the automatic reset of the value */
-	private handleSceneActivationSet(command: SceneActivationCCSet): void {
-		if (this.sceneActivationResetTimeout) {
-			clearTimeout(this.sceneActivationResetTimeout);
-		}
-		// Schedule a reset of the CC values
-		this.sceneActivationResetTimeout = setTimeout(() => {
-			this.sceneActivationResetTimeout = undefined;
-			// Reset scene and duration to undefined
-			this.valueDB.setValue(
-				getSceneIdValueID(command.endpointIndex),
-				undefined,
-			);
-			this.valueDB.setValue(
-				getDimmingDurationValueID(command.endpointIndex),
-				undefined,
-			);
-		}, command.dimmingDuration?.toMilliseconds() ?? 0).unref();
-		// Unref'ing long running timeouts allows to quit the application before the timeout elapses
 	}
 
 	private handleClockReport(command: ClockCCReport): void {
