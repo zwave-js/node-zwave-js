@@ -346,11 +346,11 @@ export class NotificationCC extends CommandClass {
 			// Enable the event and request the status
 			await api.set(type, true);
 			try {
-				const { notificationStatus } = await api.get({
+				const resp = await api.get({
 					notificationType: type,
 					notificationEvent: events[0],
 				});
-				switch (notificationStatus) {
+				switch (resp?.notificationStatus) {
 					case 0xff:
 						return "push";
 					case 0xfe:
@@ -409,7 +409,18 @@ export class NotificationCC extends CommandClass {
 					direction: "outbound",
 				});
 
-				({ supportedNotificationTypes } = await api.getSupported());
+				const suppResponse = await api.getSupported();
+				if (!suppResponse) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Querying supported notification types timed out, skipping interview...",
+						level: "warn",
+					});
+					return;
+				}
+				supportedNotificationTypes =
+					suppResponse.supportedNotificationTypes;
 				supportedNotificationNames = lookupNotificationNames();
 
 				const logMessage = `received supported notification types:${supportedNotificationNames
@@ -439,14 +450,19 @@ export class NotificationCC extends CommandClass {
 						const supportedEvents = await api.getSupportedEvents(
 							type,
 						);
-						supportedNotificationEvents.set(type, supportedEvents);
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `received supported notification events for ${name}: ${supportedEvents
-								.map(String)
-								.join(", ")}`,
-							direction: "inbound",
-						});
+						if (supportedEvents) {
+							supportedNotificationEvents.set(
+								type,
+								supportedEvents,
+							);
+							this.driver.controllerLog.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message: `received supported notification events for ${name}: ${supportedEvents
+									.map(String)
+									.join(", ")}`,
+								direction: "inbound",
+							});
+						}
 					}
 				}
 			} else {
@@ -500,7 +516,7 @@ export class NotificationCC extends CommandClass {
 							// NotificationReports don't store their values themselves,
 							// because the behaviour is too complex and spans the lifetime
 							// of several reports. Thus we handle it in the Node instance
-							await node.handleCommand(response);
+							if (response) await node.handleCommand(response);
 						},
 						() => {
 							this.driver.controllerLog.logNode(node.id, {
