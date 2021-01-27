@@ -36,7 +36,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
-import { CCAPI, PollValueImplementation } from "../commandclass/API";
+import type { CCAPI, PollValueImplementation } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import {
 	BasicCC,
