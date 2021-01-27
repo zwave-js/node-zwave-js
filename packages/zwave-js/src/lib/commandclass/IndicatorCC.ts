@@ -18,7 +18,6 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
-	ignoreTimeout,
 	PollValueImplementation,
 	POLL_VALUE,
 	SetValueImplementation,
@@ -386,24 +385,12 @@ export class IndicatorCC extends CommandClass {
 		});
 
 		if (this.version === 1) {
-			await ignoreTimeout(
-				async () => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "requesting current indicator value...",
-						direction: "outbound",
-					});
-					await api.get();
-				},
-				() => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Current value query timed out - skipping because it is not critical...",
-						level: "warn",
-					});
-				},
-			);
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "requesting current indicator value...",
+				direction: "outbound",
+			});
+			await api.get();
 		} else {
 			let supportedIndicatorIds: number[];
 			if (complete) {
@@ -417,12 +404,23 @@ export class IndicatorCC extends CommandClass {
 				supportedIndicatorIds = [];
 				do {
 					const supportedResponse = await api.getSupported(curId);
+					if (!supportedResponse) {
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message:
+								"Time out while scanning supported indicator IDs, skipping interview...",
+							level: "warn",
+						});
+						return;
+					}
+
 					supportedIndicatorIds.push(
 						supportedResponse.indicatorId ?? curId,
 					);
 					curId = supportedResponse.nextIndicatorId;
 				} while (curId !== 0x00);
-				// The IDs are not stored by the report CCs
+
+				// The IDs are not stored by the report CCs so store them here once we have all of them
 				this.getValueDB().setValue(
 					getSupportedIndicatorIDsValueID(this.endpointIndex),
 					supportedIndicatorIds,
@@ -443,27 +441,14 @@ export class IndicatorCC extends CommandClass {
 			}
 
 			for (const indicatorId of supportedIndicatorIds) {
-				await ignoreTimeout(
-					async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `requesting current indicator value (id = ${num2hex(
-								indicatorId,
-							)})...`,
-							direction: "outbound",
-						});
-						await api.get(indicatorId);
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Querying indicator value (id = ${num2hex(
-								indicatorId,
-							)}) timed out - skipping because it is not critical...`,
-							level: "warn",
-						});
-					},
-				);
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `requesting current indicator value (id = ${num2hex(
+						indicatorId,
+					)})...`,
+					direction: "outbound",
+				});
+				await api.get(indicatorId);
 			}
 		}
 
