@@ -187,8 +187,8 @@ export class VersionCC extends CommandClass {
 	declare ccCommand: VersionCommand;
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
-		// VersionCC must be the 2nd CC after ManufacturerSpecificCC
-		return [CommandClasses["Manufacturer Specific"]];
+		// VersionCC must be the 2nd CC after Z-Wave+ CC
+		return [CommandClasses["Z-Wave Plus Info"]];
 	}
 
 	public skipEndpointInterview(): boolean {

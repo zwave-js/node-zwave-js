@@ -147,8 +147,8 @@ export class ManufacturerSpecificCC extends CommandClass {
 	declare ccCommand: ManufacturerSpecificCommand;
 
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
-		// The Manufacturer Specific CC MUST be interviewed first
-		return [];
+		// The Manufacturer Specific CC MUST be interviewed after the Version CC
+		return [CommandClasses.Version];
 	}
 
 	public async interview(complete: boolean = true): Promise<void> {

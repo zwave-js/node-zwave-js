@@ -124,6 +124,11 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 export class ZWavePlusCC extends CommandClass {
 	declare ccCommand: ZWavePlusCommand;
 
+	public determineRequiredCCInterviews(): readonly CommandClasses[] {
+		// The Z-Wave+ CC MUST be interviewed first (sets up Lifeline)
+		return [];
+	}
+
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
@@ -140,7 +145,22 @@ export class ZWavePlusCC extends CommandClass {
 		});
 
 		if (complete) {
-			// This information does not change
+			if (this.endpointIndex === 0) {
+				// SDS11846: The Z-Wave+ lifeline must be assigned to a node as the very first thing
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Configuring Z-Wave+ Lifeline association...`,
+					direction: "none",
+				});
+				const ownNodeId = this.driver.controller.ownNodeId!;
+
+				if (node.supportsCC(CommandClasses.Association)) {
+					await node.commandClasses.Association.addNodeIds(
+						1,
+						ownNodeId,
+					);
+				}
+			}
+
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying Z-Wave+ information...",
