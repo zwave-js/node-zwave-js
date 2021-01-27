@@ -23,12 +23,12 @@ import {
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
+import { distinct } from "alcalzone-shared/arrays";
 import { composeObject } from "alcalzone-shared/objects";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
-	ignoreTimeout,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -556,53 +556,69 @@ export class ConfigurationCC extends CommandClass {
 				direction: "none",
 			});
 
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: "finding first configuration parameter...",
-				direction: "outbound",
-			});
-			let { nextParameter: param } = await api.getProperties(0);
-			if (param === 0) {
+			if (complete) {
+				// Only scan all parameters during complete interviews
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message: `didn't report any config params, trying #1 just to be sure...`,
-					direction: "inbound",
-				});
-				param = 1;
-			}
-
-			while (param > 0) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: `querying parameter #${param} information...`,
+					message: "finding first configuration parameter...",
 					direction: "outbound",
 				});
-
-				// Query properties and the next param
-				const {
-					nextParameter,
-					...properties
-				} = await api.getProperties(param);
-
-				let logMessage: string;
-				if (properties.valueSize === 0) {
-					logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
-				} else {
-					// Query name and info only if the parameter is supported
-					let name = "(unknown)";
-					await ignoreTimeout(async () => {
-						name = await api.getName(param);
-					});
-					// Skip the info query for bugged devices
-					if (
-						!node.deviceConfig?.compat?.skipConfigurationInfoQuery
-					) {
-						await ignoreTimeout(async () => {
-							await api.getInfo(param);
+				const param0props = await api.getProperties(0);
+				let param: number;
+				if (param0props) {
+					param = param0props.nextParameter;
+					if (param === 0) {
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `didn't report any config params, trying #1 just to be sure...`,
+							direction: "inbound",
 						});
+						param = 1;
 					}
+				} else {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Finding first configuration parameter timed out, skipping interview...",
+						level: "warn",
+					});
+					return;
+				}
 
-					logMessage = `received information for parameter #${param}:
+				while (param > 0) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `querying parameter #${param} information...`,
+						direction: "outbound",
+					});
+
+					// Query properties and the next param
+					const props = await api.getProperties(param);
+					if (!props) {
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: `Querying parameter #${param} information timed out, skipping interview...`,
+							level: "warn",
+						});
+						return;
+					}
+					const { nextParameter, ...properties } = props;
+
+					let logMessage: string;
+					if (properties.valueSize === 0) {
+						logMessage = `Parameter #${param} is unsupported. Next parameter: ${nextParameter}`;
+					} else {
+						// Query name and info only if the parameter is supported
+						const name = (await api.getName(param)) ?? "(unknown)";
+						// Skip the info query for bugged devices
+						if (
+							!node.deviceConfig?.compat
+								?.skipConfigurationInfoQuery
+						) {
+							await api.getInfo(param);
+						}
+
+						logMessage = `received information for parameter #${param}:
 parameter name:      ${name}
 value format:        ${getEnumMemberName(ValueFormat, properties.valueFormat)}
 value size:          ${properties.valueSize} bytes
@@ -613,24 +629,30 @@ is read-only:        ${!!properties.isReadonly}
 is advanced (UI):    ${!!properties.isAdvanced}
 has bulk support:    ${!properties.noBulkSupport}
 alters capabilities: ${!!properties.altersCapabilities}`;
-				}
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
-
-				// Query the current value if the parameter is supported
-				if (properties.valueSize !== 0) {
+					}
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
-						message: `querying parameter #${param} value...`,
-						direction: "outbound",
+						message: logMessage,
+						direction: "inbound",
 					});
-					await api.get(param);
-				}
 
-				param = nextParameter;
+					param = nextParameter;
+				}
+			}
+
+			// Query the values of supported parameters during every interview
+			const parameters = distinct(
+				this.getDefinedValueIDs()
+					.map((v) => v.property)
+					.filter((p): p is number => typeof p === "number"),
+			);
+			for (const param of parameters) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `querying parameter #${param} value...`,
+					direction: "outbound",
+				});
+				await api.get(param);
 			}
 		}
 
