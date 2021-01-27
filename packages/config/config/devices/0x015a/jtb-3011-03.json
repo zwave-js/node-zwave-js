@@ -17,8 +17,8 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"inclusion": "Start master controller add device mode as instruction, press and hold the channel 1 touch icon (located on leftmost) for 2 second, RF icon LED on right bottom flashindicator inclusion processing until included or 60 seconds timeout no detect any master controller.",
-		"exclusion": "Start master controller remove device mode as instruction, press and hold the channel 1 touch icon (located on leftmost) for 2 second, RF icon LED on right bottom flash indicator inclusion processing until included or 15 seconds timeout no detect any master controller.LED flash slowly indicated has no included any controller.",
-		"reset": "The factory default settings are restored when the device is removed from the network.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"inclusion": "Start master controller add device mode as instruction, press and hold the channel 1 touch icon (located on leftmost) for 2 second, RF icon LED on right bottom flash\nindicator inclusion processing until included or 60 seconds timeout no detect any master controller",
+		"exclusion": "Start master controller remove device mode as instruction, press and hold the channel 1 touch icon (located on leftmost) for 2 second, RF icon LED on right bottom flash indicator inclusion processing until included or 15 seconds timeout no detect any master controller.\nLED flash slowly indicated has no included any controller",
+		"reset": "The factory default settings are restored when the device is removed from the network.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

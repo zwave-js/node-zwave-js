@@ -188,7 +188,7 @@
 		},
 		"13": {
 			"label": "External Relay and Operating State update interval",
-			"description": "Set time on how often the devices sends Binary Switch State and thermostat mode. Value 0: Sends only when changed (Default). 1 to 240 minutes + When changed",
+			"description": "Set time on how often the devices sends Binary Switch State and thermostat mode. Value 0: Sends only when changed. 1 to 240 minutes + When changed",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 240,

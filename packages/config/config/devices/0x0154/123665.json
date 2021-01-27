@@ -86,7 +86,7 @@
 					"value": 0
 				},
 				{
-					"label": "Last Switch State (Default)",
+					"label": "Last Switch State",
 					"value": 1
 				},
 				{
@@ -110,7 +110,7 @@
 					"value": 0
 				},
 				{
-					"label": "Enabled (Default)",
+					"label": "Enabled",
 					"value": 1
 				}
 			]

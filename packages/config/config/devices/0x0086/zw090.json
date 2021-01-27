@@ -8,15 +8,18 @@
 	"devices": [
 		{
 			"productType": "0x0001",
-			"productId": "0x005a"
+			"productId": "0x005a",
+			"zwaveAllianceId": 1355
 		},
 		{
 			"productType": "0x0101",
-			"productId": "0x005a"
+			"productId": "0x005a",
+			"zwaveAllianceId": 1345
 		},
 		{
 			"productType": "0x0201",
-			"productId": "0x005a"
+			"productId": "0x005a",
+			"zwaveAllianceId": 1351
 		}
 	],
 	"firmwareVersion": {
@@ -33,11 +36,46 @@
 	"paramInformation": {
 		"81": {
 			"label": "Enable/disable the LED indicator",
-			"description": "This parameter is used to enable/disable the LED indicator.",
+			"description": "This parameter is used to enable/disable the LED indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Enable",
+					"value": 1
+				},
+				{
+					"label": "Disable",
+					"value": 0
+				}
+			]
+		},
+		"220": {
+			"label": "Configure the RF power level",
+			"description": "There are 10 levels can be configured for the RF power level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"242": {
+			"label": "Enable/disable Security network",
+			"description": "This parameter is used to enable/disable security network",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -52,71 +90,42 @@
 				}
 			]
 		},
-		"220": {
-			"label": "RF power level",
-			"description": "RF power level",
+		"252": {
+			"label": "Enable/disable the configuration parameters to be locked",
+			"description": "This parameter is used to Enable/disable the configuration parameters to be locked.",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 10,
-			"defaultValue": 10,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset the configuration parameter to default factory setting",
+			"description": "Resets all configuration parameters to default setting",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
-		},
-		"242": {
-			"label": "Security network enabled",
-			"description": "Security network enabled",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
-		},
-		// This parameter has an invalid valueSize
-		//"243": {
-		//	"label": "Security Network Key",
-		//	"description": "Security Network Key",
-		//	"unit": "key",
-		//	"valueSize": 16,
-		//	"minValue": 0,
-		//	"maxValue": 0,
-		//	"defaultValue": 0,
-		//	"readOnly": false,
-		//	"writeOnly": false,
-		//	"allowManualEntry": true
-		// },
-		"252": {
-			"label": "Lock Configuration",
-			"description": "Configuration lock. 1=enable, 0=disable",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
 		}
+	},
+	"metadata": {
+		"reset": "Use this procedure only in the event that the primary controller is missing or otherwise inoperable.\n\nPress and hold the Action Button on Z-Stick for 20 seconds and then release"
 	}
 }

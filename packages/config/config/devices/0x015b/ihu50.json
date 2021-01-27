@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Select ‘setDefault’ in [Command List] Click Send(Default) button."
+		"reset": "Select ‘setDefault’ in [Command List]\n Click Send(Default) button."
 	}
 }

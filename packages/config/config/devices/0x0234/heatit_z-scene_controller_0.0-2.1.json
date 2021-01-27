@@ -29,7 +29,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (toggle mode). (Default)",
+					"label": "Separate mode (toggle mode).",
 					"value": 0
 				},
 				{
@@ -50,7 +50,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (toggle mode). (Default)",
+					"label": "Separate mode (toggle mode).",
 					"value": 0
 				},
 				{
@@ -71,7 +71,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Separate mode (toggle mode). (Default)",
+					"label": "Separate mode (toggle mode).",
 					"value": 0
 				},
 				{
@@ -428,7 +428,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "House Cleaning Mode is enabled (Default)",
+					"label": "House Cleaning Mode is enabled",
 					"value": 0
 				},
 				{

@@ -1,11 +1,16 @@
-// BeNext Energy Switch +
+// BeNext ENERGY SWITCH
 // Energy Switch +
 {
 	"manufacturer": "BeNext",
 	"manufacturerId": "0x008a",
-	"label": "Energy Switch +",
+	"label": "ENERGY SWITCH",
 	"description": "Energy Switch +",
 	"devices": [
+		{
+			"productType": "0x0006",
+			"productId": "0x0100",
+			"zwaveAllianceId": 73
+		},
 		{
 			"productType": "0x0020",
 			"productId": "0x0001"

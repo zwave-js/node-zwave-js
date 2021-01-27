@@ -64,7 +64,7 @@
 				}
 			]
 		},
-		"37[0xff]": {
+		"37[0xff00]": {
 			"label": "Siren Sound",
 			"valueSize": 2,
 			"minValue": 0,
@@ -100,7 +100,7 @@
 				}
 			]
 		},
-		"37[0xff00]": {
+		"37[0xff]": {
 			"label": "Siren Volume",
 			"valueSize": 2,
 			"minValue": 0,

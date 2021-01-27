@@ -1,22 +1,60 @@
-// Fibargroup FGPB101
+// Fibargroup FGPB-101
 // A real push button (switch) available in several colors.
 {
 	"manufacturer": "Fibargroup",
 	"manufacturerId": "0x010f",
-	"label": "FGPB101",
+	"label": "FGPB-101",
 	"description": "A real push button (switch) available in several colors.",
 	"devices": [
 		{
 			"productType": "0x0f01",
-			"productId": "0x1000"
+			"productId": "0x1000",
+			"zwaveAllianceId": 1944
 		},
 		{
 			"productType": "0x0f01",
-			"productId": "0x2000"
+			"productId": "0x2000",
+			"zwaveAllianceId": 2017
 		},
 		{
 			"productType": "0x0f01",
-			"productId": "0x3000"
+			"productId": "0x3000",
+			"zwaveAllianceId": 2018
+		},
+		{
+			"productType": "0x0f01",
+			"productId": "0x4000",
+			"zwaveAllianceId": 2132
+		},
+		{
+			"productType": "0x0f01",
+			"productId": "0x6000",
+			"zwaveAllianceId": 2133
+		},
+		{
+			"productType": "0x0f01",
+			"productId": "0x7000",
+			"zwaveAllianceId": 3484
+		},
+		{
+			"productType": "0x0f01",
+			"productId": "0x8000",
+			"zwaveAllianceId": 3485
+		},
+		{
+			"productType": "0x0f01",
+			"productId": "0x9000",
+			"zwaveAllianceId": 3483
+		},
+		{
+			"productType": "0x0f01",
+			"productId": "0xa000",
+			"zwaveAllianceId": 3293
+		},
+		{
+			"productType": "0x0f01",
+			"productId": "0xb000",
+			"zwaveAllianceId": 3486
 		},
 		{
 			"productType": "0xfb10",
@@ -51,181 +89,542 @@
 		}
 	},
 	"paramInformation": {
-		"1": {
-			"label": "Scenes sent to the controller",
-			"description": "This parameter determines which actions result in sending scene IDs to them.",
+		"1[0x01]": {
+			"label": "Scenes sent to the controller: Key Pressed 1 time",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 127,
-			"defaultValue": 127,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"3": {
-			"label": "Associations in Z-Wave network Security Mode",
-			"description": "This parameter defines how commands are sent in specified association groups",
+		"1[0x02]": {
+			"label": "Scenes sent to the controller: Key Pressed 2 times",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 7,
-			"defaultValue": 7,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1[0x04]": {
+			"label": "Scenes sent to the controller: Key Pressed 3 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1[0x08]": {
+			"label": "Scenes sent to the controller: Key Pressed 4 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1[0x10]": {
+			"label": "Scenes sent to the controller: Key Pressed 5 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1[0x20]": {
+			"label": "Scenes sent to the controller: Key Held Down",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"1[0x40]": {
+			"label": "Scenes sent to the controller: Key Released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3[0x01]": {
+			"label": "Associations: Send secure commands to 2nd group",
+			"description": "This is only active when the node is included securely",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3[0x02]": {
+			"label": "Associations: Send secure commands to 3rd group",
+			"description": "This is only active when the node is included securely",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3[0x04]": {
+			"label": "Associations: Send secure commands to 4th group",
+			"description": "This is only active when the node is included securely",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Key Pressed 1 time – command sent to 2nd group",
-			"description": "Associated in 2nd association group after a single click.",
+			"label": "Key Pressed 1 time – command sent to 2nd association group",
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a single click.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Switch On",
+					"value": 1
+				},
+				{
+					"label": "Switch Off",
+					"value": 2
+				},
+				{
+					"label": "Toggle Switch On/Off",
+					"value": 3
+				}
+			]
 		},
 		"11": {
-			"label": "Key Pressed 1 time – value ON sent to 2nd group",
-			"description": "Value of SWITCH ON command sent to devices in 2nd association group",
+			"label": "Key Pressed 1 time – value of SWITCH ON command sent to 2nd association group",
+			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Max Brightness",
+					"value": 99
+				},
+				{
+					"label": "Last State",
+					"value": 255
+				}
+			]
 		},
 		"12": {
-			"label": "Key Pressed 2 times – command sent to 2nd group",
-			"description": "Commands sent to devices associated in 2nd association group",
+			"label": "Key Pressed 2 times – command sent to 2nd association group",
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a double click.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Switch On",
+					"value": 1
+				},
+				{
+					"label": "Switch Off",
+					"value": 2
+				},
+				{
+					"label": "Toggle Switch On/Off",
+					"value": 3
+				}
+			]
 		},
 		"13": {
-			"label": "Key Pressed 2 times – value ON sent to 2nd group",
-			"description": "SWITCH ON command in 2nd association group after double click",
+			"label": "Key Pressed 2 times – value of SWITCH ON command sent to 2nd association group",
+			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 99,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Max Brightness",
+					"value": 99
+				},
+				{
+					"label": "Last State",
+					"value": 255
+				}
+			]
 		},
 		"14": {
-			"label": "Key Pressed 3 times 2nd group command",
-			"description": "Commands associated in 2nd association group after a triple click.",
+			"label": "Key Pressed 3 times – command sent to 2nd association group",
+			"description": "This parameter defines commands sent to devices associated in 2nd association group after a triple click.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Switch On",
+					"value": 1
+				},
+				{
+					"label": "Switch Off",
+					"value": 2
+				},
+				{
+					"label": "Toggle Switch On/Off",
+					"value": 3
+				}
+			]
 		},
 		"15": {
-			"label": "Key Pressed 3 times – value ON to 2nd group",
-			"description": "SWITCH ON sent in 2nd association group after 3 presses",
+			"label": "Key Pressed 3 times – value of SWITCH ON command sent to 2nd association group",
+			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Max Brightness",
+					"value": 99
+				},
+				{
+					"label": "Last State",
+					"value": 255
+				}
+			]
 		},
 		"20": {
-			"label": "Key Pressed 1 time – command sent to 3rd group",
-			"description": "Ssent to devices associated in 3rd association group after a single click.",
+			"label": "Key Pressed 1 time – command sent to 3rd association group",
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a single click.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Switch On",
+					"value": 1
+				},
+				{
+					"label": "Switch Off",
+					"value": 2
+				},
+				{
+					"label": "Toggle Switch On/Off",
+					"value": 3
+				}
+			]
 		},
 		"21": {
-			"label": "Key Pressed 1 time – value ON sent to 3rd group",
-			"description": "Value of SWITCH ON command sent in 3rd association group after a single click.",
+			"label": "Key Pressed 1 time – value of SWITCH ON command sent to 3rd association group",
+			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Max Brightness",
+					"value": 99
+				},
+				{
+					"label": "Last State",
+					"value": 255
+				}
+			]
 		},
 		"22": {
-			"label": "Key Pressed 2 times – command sent to 3rd group",
-			"description": "Sent to associated in 3rd association group after a double click.",
+			"label": "Key Pressed 2 times – command sent to 3rd association group",
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a double click.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Switch On",
+					"value": 1
+				},
+				{
+					"label": "Switch Off",
+					"value": 2
+				},
+				{
+					"label": "Toggle Switch On/Off",
+					"value": 3
+				}
+			]
 		},
 		"23": {
-			"label": "Key Pressed 2 times – value ON sent to 3rd group",
-			"description": "Value of SWITCH ON command sent in 3rd association group after a double click.",
+			"label": "Key Pressed 2 times – value of SWITCH ON command sent to 3rd association group",
+			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 99,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Max Brightness",
+					"value": 99
+				},
+				{
+					"label": "Last State",
+					"value": 255
+				}
+			]
 		},
 		"24": {
-			"label": "Key Pressed 3 times – command sent to 3rd group",
-			"description": "Sent to devices associated in 3rd association group after a triple click.",
+			"label": "Key Pressed 3 times – command sent to 3rd association group",
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after a triple click.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Switch On",
+					"value": 1
+				},
+				{
+					"label": "Switch Off",
+					"value": 2
+				},
+				{
+					"label": "Toggle Switch On/Off",
+					"value": 3
+				}
+			]
 		},
 		"25": {
-			"label": "Key Pressed 3 times – value ON sent to 3rd group",
-			"description": "Value SWITCH ON command sent in 3rd association group after a triple click.",
+			"label": "Key Pressed 3 times – value of SWITCH ON command sent to 3rd association group",
+			"description": "1-99 Set Level; 255 Last State",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
 			"defaultValue": 255,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Max Brightness",
+					"value": 99
+				},
+				{
+					"label": "Last State",
+					"value": 255
+				}
+			]
 		},
 		"29": {
-			"label": "Key Held Down – command sent to 3rd group",
-			"description": "Sent associated in 3rd association group after holding the button down.",
+			"label": "Key Held Down – command sent to 3rd association group",
+			"description": "This parameter defines commands sent to devices associated in 3rd association group after holding the button down.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
 			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "No Action",
+					"value": 0
+				},
+				{
+					"label": "Dim Level Up (Brightening)",
+					"value": 1
+				},
+				{
+					"label": "Dim Level Down (Dimming)",
+					"value": 2
+				},
+				{
+					"label": "Alternate Brightening / Dimming",
+					"value": 3
+				}
+			]
+		},
+		"30[0x01]": {
+			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 1 time",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"30": {
-			"label": "Alarm frame triggers",
-			"description": "Which actions result in sending alarm frames to 4th association group.",
+		"30[0x02]": {
+			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 2 times",
 			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 127,
-			"defaultValue": 127,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x04]": {
+			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 3 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x08]": {
+			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 4 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x10]": {
+			"label": "Send Alarm Frame to 4th Association Group: Key Pressed 5 times",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x20]": {
+			"label": "Send Alarm Frame to 4th Association Group: Key Held Down",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30[0x40]": {
+			"label": "Send Alarm Frame to 4th Association Group: Key Released",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "1) Place the Button within the direct range of your Z-Wave controller.\n2) Set the main controller in (security/non-security) add mode (see the controller’s manual).\n3) Click the Button at least six times.\n4) Wait for the adding process to end.\n5) Successful adding will be confirmed by the Z-Wave controller’s message.",
+		"exclusion": "1) Place the Button within the direct range of your Z-Wave controller.\n2) Set the main controller in remove mode (see the controller’s manual).\n3) Click the Button at least six times.\n4) Wait for the removing process to end.\n5) Successful removing will be confirmed by the Z-Wave controller’s message.",
+		"reset": "Reset procedure allows to restore the device back to its factory settings, which means all information about the Z-Wave controller and user configuration will be deleted. In order to reset the device:\n1) Click the Button exactly five times.\n2) Press and hold the Button for at least 5 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }
