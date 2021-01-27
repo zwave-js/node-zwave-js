@@ -19,7 +19,6 @@ import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
-	ignoreTimeout,
 	PhysicalCCAPI,
 	PollValueImplementation,
 	POLL_VALUE,
@@ -358,6 +357,10 @@ export class DoorLockCC extends CommandClass {
 			direction: "none",
 		});
 
+		// We need to do some queries after a potential timeout
+		// In this case, do now mark this CC as interviewed completely
+		let hadCriticalTimeout = false;
+
 		if (complete && this.version >= 4) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
@@ -365,44 +368,51 @@ export class DoorLockCC extends CommandClass {
 				direction: "outbound",
 			});
 			const resp = await api.getCapabilities();
-			const logMessage = `received lock capabilities:
+			if (resp) {
+				const logMessage = `received lock capabilities:
 supported operation types: ${resp.supportedOperationTypes
-				.map((t) => getEnumMemberName(DoorLockOperationType, t))
-				.join(", ")}
+					.map((t) => getEnumMemberName(DoorLockOperationType, t))
+					.join(", ")}
 supported door lock modes: ${resp.supportedDoorLockModes
-				.map((t) => getEnumMemberName(DoorLockMode, t))
-				.map((str) => `\n· ${str}`)
-				.join(", ")}
+					.map((t) => getEnumMemberName(DoorLockMode, t))
+					.map((str) => `\n· ${str}`)
+					.join(", ")}
 supported outside handles: ${resp.supportedOutsideHandles
-				.map(String)
-				.join(", ")}
+					.map(String)
+					.join(", ")}
 supported inside handles:  ${resp.supportedInsideHandles.map(String).join(", ")}
 supports auto-relock:      ${resp.autoRelockSupported}
 supports hold-and-release: ${resp.holdAndReleaseSupported}
 supports twist assist:     ${resp.twistAssistSupported}
 supports block to block:   ${resp.blockToBlockSupported}`;
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
 
-			// Update metadata of settable states
-			const valueDB = this.getValueDB();
-			valueDB.setMetadata(getTargetModeValueId(this.endpointIndex), {
-				...ValueMetadata.UInt8,
-				states: enumValuesToMetadataStates(
-					DoorLockMode,
-					resp.supportedDoorLockModes,
-				),
-			});
-			valueDB.setMetadata(getOperationTypeValueId(this.endpointIndex), {
-				...ValueMetadata.UInt8,
-				states: enumValuesToMetadataStates(
-					DoorLockOperationType,
-					resp.supportedOperationTypes,
-				),
-			});
+				// Update metadata of settable states
+				const valueDB = this.getValueDB();
+				valueDB.setMetadata(getTargetModeValueId(this.endpointIndex), {
+					...ValueMetadata.UInt8,
+					states: enumValuesToMetadataStates(
+						DoorLockMode,
+						resp.supportedDoorLockModes,
+					),
+				});
+				valueDB.setMetadata(
+					getOperationTypeValueId(this.endpointIndex),
+					{
+						...ValueMetadata.UInt8,
+						states: enumValuesToMetadataStates(
+							DoorLockOperationType,
+							resp.supportedOperationTypes,
+						),
+					},
+				);
+			} else {
+				hadCriticalTimeout = true;
+			}
 		}
 
 		this.driver.controllerLog.logNode(node.id, {
@@ -411,77 +421,70 @@ supports block to block:   ${resp.blockToBlockSupported}`;
 			direction: "outbound",
 		});
 		const config = await api.getConfiguration();
-		let logMessage = `received lock configuration:
+		if (config) {
+			let logMessage = `received lock configuration:
 operation type:                ${getEnumMemberName(
-			DoorLockOperationType,
-			config.operationType,
-		)}`;
-		if (config.operationType === DoorLockOperationType.Timed) {
-			logMessage += `
+				DoorLockOperationType,
+				config.operationType,
+			)}`;
+			if (config.operationType === DoorLockOperationType.Timed) {
+				logMessage += `
 lock timeout:                  ${config.lockTimeoutConfiguration} seconds
 `;
-		}
-		logMessage += `
-outside handles can open door: ${config.outsideHandlesCanOpenDoorConfiguration
-			.map(String)
-			.join(", ")}
-inside handles can open door:  ${config.insideHandlesCanOpenDoorConfiguration
-			.map(String)
-			.join(", ")}`;
-		if (this.version >= 4) {
+			}
 			logMessage += `
+outside handles can open door: ${config.outsideHandlesCanOpenDoorConfiguration
+				.map(String)
+				.join(", ")}
+inside handles can open door:  ${config.insideHandlesCanOpenDoorConfiguration
+				.map(String)
+				.join(", ")}`;
+			if (this.version >= 4) {
+				logMessage += `
 auto-relock time               ${config.autoRelockTime ?? "-"} seconds
 hold-and-release time          ${config.holdAndReleaseTime ?? "-"} seconds
 twist assist                   ${!!config.twistAssist}
 block to block                 ${!!config.blockToBlock}`;
+			}
+
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
 		}
 
 		this.driver.controllerLog.logNode(node.id, {
 			endpoint: this.endpointIndex,
-			message: logMessage,
-			direction: "inbound",
+			message: "requesting current lock status...",
+			direction: "outbound",
 		});
-
-		await ignoreTimeout(
-			async () => {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: "requesting current lock status...",
-					direction: "outbound",
-				});
-				const status = await api.get();
-				logMessage = `received lock status:
+		const status = await api.get();
+		if (status) {
+			let logMessage = `received lock status:
 current mode:       ${getEnumMemberName(DoorLockMode, status.currentMode)}`;
-				if (status.targetMode != undefined) {
-					logMessage += `
+			if (status.targetMode != undefined) {
+				logMessage += `
 target mode:        ${getEnumMemberName(DoorLockMode, status.targetMode)}
 remaining duration: ${status.duration?.toString() ?? "undefined"}`;
-				}
-				if (status.lockTimeout != undefined) {
-					logMessage += `
-lock timeout:       ${status.lockTimeout} seconds`;
-				}
+			}
+			if (status.lockTimeout != undefined) {
 				logMessage += `
+lock timeout:       ${status.lockTimeout} seconds`;
+			}
+			logMessage += `
 door status:        ${status.doorStatus}
 bolt status:        ${status.boltStatus}
 latch status:       ${status.latchStatus}`;
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message: logMessage,
-					direction: "inbound",
-				});
-			},
-			() => {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Lock status query timed out - skipping because it is not critical...",
-				});
-			},
-		);
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
 
 		// Remember that the interview is complete
-		this.interviewComplete = true;
+		if (!hadCriticalTimeout) this.interviewComplete = true;
 	}
 }
 
