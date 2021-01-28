@@ -1,10 +1,10 @@
-// GE/Jasco ZW5303
-// GE 45633 Z-Wave Wireless Lighting Control Advanced Remote
+// GE/Jasco 45633 / ZW5303
+// Wireless Lighting Control Advanced Remote
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "ZW5303",
-	"description": "GE 45633 Z-Wave Wireless Lighting Control Advanced Remote",
+	"label": "45633 / ZW5303",
+	"description": "Wireless Lighting Control Advanced Remote",
 	"devices": [
 		{
 			"productType": "0x8009",

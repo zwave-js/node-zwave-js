@@ -1,0 +1,71 @@
+// GE/Jasco 28176 / ZW4105
+// Plug-in Dual Smart Switch
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "28176 / ZW4105",
+	"description": "Plug-in Dual Smart Switch",
+	"devices": [
+		{
+			"productType": "0x5052",
+			"productId": "0x3131",
+			"zwaveAllianceId": 2191
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED On when load is Off",
+					"value": 1
+				},
+				{
+					"label": "LED Light Always On",
+					"value": 2
+				}
+			]
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to\nadd the device to the Z-wave network.\n2. Once the controller is ready to add your smart switch,\nsingle press and release the manual/program button on the\nsmart switch to add it in the network.\n3. Once your controller has confirmed that the smart switch\nhas been added, refresh the Z-wave network to optimize\nperformance.",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to\nremove a device from the Z-wave network.\n2. Once the controller is ready to remove your device, press and\nrelease the manual/program button on the smart switch to\nremove it from the network",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle.\n2. Press and hold the top button for at least 3 seconds while you\nplug the switch into a receptacle.\nNote: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable"
+	}
+}

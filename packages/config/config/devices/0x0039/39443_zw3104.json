@@ -1,15 +1,15 @@
-// Honeywell 39339 / 39446 / ZW3107
-// Z-Wave Plug-in Smart Dimmer
+// Honeywell 39443 / ZW3104
+// Plug-in Dimmer (Single Plug)
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
-	"label": "39339 / 39446 / ZW3107",
-	"description": "Z-Wave Plug-in Smart Dimmer",
+	"label": "39443 / ZW3104",
+	"description": "Plug-in Dimmer (Single Plug)",
 	"devices": [
 		{
 			"productType": "0x5044",
-			"productId": "0x3033",
-			"zwaveAllianceId": [2728, 3739, 3830]
+			"productId": "0x3038",
+			"zwaveAllianceId": [2681, 3743]
 		}
 	],
 	"firmwareVersion": {
@@ -60,8 +60,8 @@
 			]
 		},
 		"6": {
-			"label": "Dim Rate",
-			"description": "Dim up/down the light to the specified level quickly or slowly.",
+			"label": "Dim up/down rate",
+			"description": "Number of steps or levels",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -72,11 +72,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Dim Fast",
+					"label": "Dim up/down quickly",
 					"value": 0
 				},
 				{
-					"label": "Dim Slow",
+					"label": "Dim up/down slowly",
 					"value": 1
 				}
 			]
@@ -156,6 +156,40 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
+		},
+		"16": {
+			"label": "Enable/disable switch mode",
+			"description": "Enable and disable switch mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "Minimum dim level",
+			"description": "Number of Steps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
 		}
 	},
 	"compat": {
@@ -164,6 +198,6 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add\nthe smart dimmer to the Z-Wave network.\n2. Once the controller is ready to add your smart dimmer, single\npress and release the manual/program button on the smart\ndimmer to add it in the network.\nPlease reference the controller/gateway’s manual for instructions",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\nremove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and\nrelease the manual/program button on the smart dimmer to\nremove it from the network",
-		"reset": "To return your dimmer to factory defaults:\n1. If plugged in, unplug the dimmer from the receptacle.\n2. Press and hold the top button for at least 3 seconds while you\nplug the dimmer into a receptacle.\nNote: This should only be used in the event your networks’ primary\ncontroller is missing or otherwise inoperable"
+		"reset": "To return your dimmer to factory defaults:\n1. If plugged in, unplug the device from the receptacle.\n2. Press and hold the top button, plug the device in, and continue to hold for at least 3 seconds.\nNote: This should only be used in the event your networks’ primary\ncontroller is missing or otherwise inoperable"
 	}
 }

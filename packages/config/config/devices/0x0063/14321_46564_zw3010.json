@@ -1,15 +1,15 @@
-// Honeywell 39351 / ZW3010
+// GE/Jasco 14321 / 46564 / ZW3010
 // In-Wall Smart Dimmer
 {
-	"manufacturer": "Honeywell",
-	"manufacturerId": "0x0039",
-	"label": "39351 / ZW3010",
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14321 / 46564 / ZW3010",
 	"description": "In-Wall Smart Dimmer",
 	"devices": [
 		{
 			"productType": "0x4944",
-			"productId": "0x3235",
-			"zwaveAllianceId": 3600
+			"productId": "0x3236",
+			"zwaveAllianceId": 3358
 		}
 	],
 	"firmwareVersion": {
@@ -34,7 +34,7 @@
 	},
 	"paramInformation": {
 		"3": {
-			"label": "LED Light",
+			"label": "LED Indication Configuration",
 			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -54,7 +54,7 @@
 					"value": 1
 				},
 				{
-					"label": "LED always Off",
+					"label": "LED always OFF",
 					"value": 2
 				},
 				{
@@ -63,29 +63,9 @@
 				}
 			]
 		},
-		"4": {
-			"label": "Invert Switch",
-			"description": "Switch orientation.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normal Orientation",
-					"value": 0
-				},
-				{
-					"label": "Invert Switch",
-					"value": 1
-				}
-			]
-		},
 		"6": {
-			"label": "Dim Up/Down Rate",
+			"label": "Dim up/down rate",
+			"description": "Adjust the speed at which the ramps to a specific value other than 0 and FF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -96,17 +76,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Dim quickly",
+					"label": "Dim up/down quickly",
 					"value": 0
 				},
 				{
-					"label": "Dim slowly",
+					"label": "Dim up/down slowly",
 					"value": 1
 				}
 			]
 		},
 		"16": {
-			"label": "Enable/Disable Switch Mode",
+			"label": "Switch Mode",
+			"description": "Turn your dimmer into an On/Off switch with switch mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -117,17 +98,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable",
+					"label": "Normal Operation",
 					"value": 0
 				},
 				{
-					"label": "Enable",
+					"label": "Switch Mode",
 					"value": 1
 				}
 			]
 		},
 		"19": {
 			"label": "Alternate Exclusion",
+			"description": "Never accidentally remove a device during with alternate exclusion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -138,11 +120,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Press any button on the switch",
+					"label": "Normal operation, press any button on the device",
 					"value": 0
 				},
 				{
-					"label": "Press two times ON button and two times OFF button, LED will flash 5 times if exclusion succeed",
+					"label": "Press two times ON button and two times OFF button, LED will flash 5 times if exclusion is successful",
 					"value": 1
 				}
 			]
@@ -163,7 +145,7 @@
 			"label": "Maximum Brightness Threshold",
 			"description": "Set the maximum brightness threshold when manually or remotely controlled",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 99,
 			"unsigned": true,
@@ -173,7 +155,7 @@
 		},
 		"32": {
 			"label": "Default Brightness Level",
-			"description": "Set the default brightness level that the dimmer will turn on when being turned on manually",
+			"description": "Set the default brightness level that the dimmer will turn on when being controlled manually",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -188,8 +170,8 @@
 		"treatBasicSetAsEvent": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top or bottom of the wireless smart dimmer (rocker) to add it in the network.\nIf prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release the top or bottom of the wireless smart dimmer (rocker) to remove it from the network",
-		"reset": "Quickly press ON (top) button 3 times, then, immediately press the OFF (bottom) button 3 times. The LED will flash 5 times when completed successfully.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release\nthe top or bottom of the wireless smart dimmer (rocker)",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller\nto remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and\nrelease the top or bottom of the wireless smart dimmer (rocker)",
+		"reset": "1. Quickly press ON (top) button three times, then immediately\npress the OFF (Bottom) button three times. The LED will\nflash ON/OFF five times when completed successfully.\nNote: This should only be used if your network’s primary\ncontroller is missing or otherwise inoperable"
 	}
 }

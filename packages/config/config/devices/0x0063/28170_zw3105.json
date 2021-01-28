@@ -1,43 +1,60 @@
-// GE/Jasco 28175 / ZW3106
-// Plug-In Dual Smart Dimmer
+// GE/Jasco 28170 / ZW3105
+// Plug-in Smart Dimmer (Dual Plug)
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "28175  / ZW3106",
-	"description": "Plug-In Dual Smart Dimmer",
+	"label": "28170 / ZW3105",
+	"description": "Plug-in Smart Dimmer (Dual Plug)",
 	"devices": [
 		{
 			"productType": "0x5044",
-			"productId": "0x3132"
+			"productId": "0x3039",
+			"zwaveAllianceId": [1268, 2106, 2172]
 		}
 	],
 	"firmwareVersion": {
-		"min": "5.23",
-		"max": "5.23"
+		"min": "0.0",
+		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
 	"paramInformation": {
 		"3": {
 			"label": "LED Light",
-			"description": "Adjust Button LED Light",
+			"description": "LED status when device on or off.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED ON / Device OFF",
+					"label": "LED ON when load is OFF",
 					"value": 0
 				},
 				{
-					"label": "LED ON / Device ON",
+					"label": "LED On when light is turned On",
 					"value": 1
 				},
 				{
-					"label": "Disable LED",
+					"label": "LED always OFF",
 					"value": 2
 				}
 			]
@@ -117,27 +134,14 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
-		},
-		"29": {
-			"label": "load sensing",
-			"description": "turn ON when new bulb is sensed",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "disable (default)",
-					"value": 0
-				},
-				{
-					"label": "enable",
-					"value": 1
-				}
-			]
 		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-wave certified controller to include the device to the Z-wave network.\n2. Once the controller is ready to include your smart switch, single press and release the manual/program button on the smart dimmer to include it in the network.\n3. Once your controller has confirmed that the smart switch has been included, refresh the Z-wave network to optimize performance",
+		"exclusion": "1. Follow the instructions for your Z-wave certified controller to exclude a device from the Z-wave network.\n2. Once the controller is ready to Exclude your device, press and release the manual/program button on the smart switch to exclude it from the network",
+		"reset": "1. If plugged in, unplug the Switch from the receptacle.\n2. Press and hold the top button for at least 3 seconds while you plug the switch into a receptacle.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
 	}
 }

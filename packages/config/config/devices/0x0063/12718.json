@@ -29,7 +29,8 @@
 		},
 		"8": {
 			"label": "Time between dimmer steps",
-			"description": "Timing of the steps (10ms increments)",
+			"description": "Timing of the steps",
+			"unit": "10ms",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
