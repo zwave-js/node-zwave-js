@@ -1,9 +1,9 @@
-// GE/Jasco 14322/46565/ZW3011
+// GE/Jasco 14322 / 46565 / ZW3011
 // In-Wall Smart Toggle Dimmer
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14322/46565/ZW3011",
+	"label": "14322 / 46565 / ZW3011",
 	"description": "In-Wall Smart Toggle Dimmer",
 	"devices": [
 		{
@@ -159,7 +159,7 @@
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 99,
+			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,

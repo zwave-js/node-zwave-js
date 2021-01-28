@@ -3,7 +3,7 @@
 {
 	"manufacturer": "Honeywell",
 	"manufacturerId": "0x0039",
-	"label": "39357/ZW3011",
+	"label": "39357 / ZW3011",
 	"description": "In-Wall Smart Toggle Dimmer",
 	"devices": [
 		{
@@ -154,9 +154,9 @@
 			"label": "Default Brightness Level",
 			"description": "Set the default brightness level that the dimmer will turn on when being turned on manually",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
+			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,

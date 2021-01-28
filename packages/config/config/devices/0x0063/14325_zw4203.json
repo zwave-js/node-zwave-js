@@ -1,9 +1,9 @@
-// GE/Jasco 14325/ZW4203
+// GE/Jasco 14325 / ZW4203
 // Plug-in Outdoor Smart Switch
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14325/ZW4203",
+	"label": "14325 / ZW4203",
 	"description": "Plug-in Outdoor Smart Switch",
 	"devices": [
 		{

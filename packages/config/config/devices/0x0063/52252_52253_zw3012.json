@@ -1,9 +1,9 @@
-// GE/Jasco 52252/52253/ZW3012
+// GE/Jasco 52252 / 52253 / ZW3012
 // Enbrighten Z-Wave Plus In-Wall Smart Dimmer, No Neutral, LED-CFL, White and Light Almond Paddles, 700S
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "52252/52253/ZW3012",
+	"label": "52252 / 52253 / ZW3012",
 	"description": "Enbrighten Z-Wave Plus In-Wall Smart Dimmer, No Neutral, LED-CFL, White and Light Almond Paddles, 700S",
 	"devices": [
 		{
@@ -109,7 +109,7 @@
 		},
 		"16": {
 			"label": "Switch Mode",
-			"description": "Set control mode:0 dim mode,1 switch mode",
+			"description": "Turn your dimmer into an On/Off switch with switch mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -179,9 +179,9 @@
 			"label": "Brightness Level",
 			"description": "Dimmer will turn ON to this level",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
+			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,

@@ -1,9 +1,9 @@
-// GE/Jasco 28172/28713 (ZW4104)
+// GE/Jasco 28172 / 28713 / ZW4104
 // Plug-in Smart Switch (Dual Plug)
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "28172/28713 (ZW4104)",
+	"label": "28172 / 28713 / ZW4104",
 	"description": "Plug-in Smart Switch (Dual Plug)",
 	"devices": [
 		{

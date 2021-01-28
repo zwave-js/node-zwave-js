@@ -1,9 +1,9 @@
-// GE/Jasco 14313/ZW1001
+// GE/Jasco 14313 / ZW1001
 // In-Wall Smart Outlet
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14313/ZW1001",
+	"label": "14313 / ZW1001",
 	"description": "In-Wall Smart Outlet",
 	"devices": [
 		{

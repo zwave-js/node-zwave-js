@@ -1,9 +1,9 @@
-// GE/Jasco 14321/46564/ZW3010
+// GE/Jasco 14321 / 46564 / ZW3010
 // In-Wall Smart Dimmer
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14321/46564/ZW3010",
+	"label": "14321 / 46564 / ZW3010",
 	"description": "In-Wall Smart Dimmer",
 	"devices": [
 		{
@@ -159,7 +159,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
+			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,

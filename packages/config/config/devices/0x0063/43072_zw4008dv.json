@@ -1,9 +1,9 @@
-// GE/Jasco 43072/ZW4008DV
+// GE/Jasco 43072 / ZW4008DV
 // In-Wall Smart Switch (120/277VAC)
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "43072/ZW4008DV",
+	"label": "43072 / ZW4008DV",
 	"description": "In-Wall Smart Switch (120/277VAC)",
 	"devices": [
 		{

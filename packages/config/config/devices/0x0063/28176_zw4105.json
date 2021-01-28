@@ -1,10 +1,10 @@
-// GE/Jasco 28176/ZW4105
-// Plug-in Dual Smart Switch, Independant Control With USB Charging
+// GE/Jasco 28176 / ZW4105
+// Plug-in Dual Smart Switch
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "28176/ZW4105",
-	"description": "Plug-in Dual Smart Switch, Independant Control With USB Charging",
+	"label": "28176 / ZW4105",
+	"description": "Plug-in Dual Smart Switch",
 	"devices": [
 		{
 			"productType": "0x5052",

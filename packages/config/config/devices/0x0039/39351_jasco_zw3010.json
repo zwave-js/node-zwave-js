@@ -177,17 +177,11 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 99,
+			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true,
-			"options": [
-				{
-					"label": "Set the default brightness level that the dimmer will turn on when being turned on manually",
-					"value": 99
-				}
-			]
+			"allowManualEntry": true
 		}
 	},
 	"compat": {

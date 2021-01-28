@@ -16,7 +16,7 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "5.0",
+		"min": "0.0",
 		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
