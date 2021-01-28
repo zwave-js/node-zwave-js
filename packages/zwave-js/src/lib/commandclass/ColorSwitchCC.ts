@@ -331,6 +331,7 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 			if (this.isSinglecast()) {
 				// Refresh the current value
+				// TODO: #1521, #1321
 				await this.get(propertyKey);
 			}
 		} else if (property === "hexColor") {

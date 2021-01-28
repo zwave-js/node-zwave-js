@@ -130,6 +130,18 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 				);
 			}
 			await this.set(value);
+
+			// Refresh the current value after a delay
+			// TODO: #1321, #1521
+			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+			setTimeout(async () => {
+				this.refreshTimeout = undefined;
+				try {
+					await this.get();
+				} catch {
+					/* ignore */
+				}
+			}, this.driver.options.timeouts.refreshValue).unref();
 		} else if (
 			typeof property === "string" &&
 			configurationSetParameters.includes(property as any)
@@ -164,6 +176,10 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			}
 
 			await this.setConfiguration(config);
+
+			// Refresh the current value
+			// TODO: #1321, #1521
+			await this.getConfiguration();
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -275,17 +291,6 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			mode,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		// Refresh the current value after a delay
-		if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-		setTimeout(async () => {
-			this.refreshTimeout = undefined;
-			try {
-				await this.get();
-			} catch {
-				/* ignore */
-			}
-		}, this.driver.options.timeouts.refreshValue).unref();
 	}
 
 	public async setConfiguration(
@@ -302,9 +307,6 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			...configuration,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		// Refresh the current value
-		await this.getConfiguration();
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

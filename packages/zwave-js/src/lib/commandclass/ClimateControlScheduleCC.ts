@@ -85,11 +85,6 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			switchPoints,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get(weekday);
-		}
 	}
 
 	public async get(
@@ -168,11 +163,6 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			overrideState: state,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.getOverride();
-		}
 	}
 }
 

@@ -89,7 +89,22 @@ export class BasicCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.set(value);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value after a delay
+			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+			setTimeout(async () => {
+				this.refreshTimeout = undefined;
+				try {
+					await this.get();
+				} catch {
+					/* ignore */
+				}
+			}, this.driver.options.timeouts.refreshValue).unref();
+		}
 	};
+
+	private refreshTimeout: NodeJS.Timeout | undefined;
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
 		property,
@@ -121,8 +136,6 @@ export class BasicCCAPI extends CCAPI {
 		}
 	}
 
-	private refreshTimeout: NodeJS.Timeout | undefined;
-
 	public async set(targetValue: number): Promise<void> {
 		this.assertSupportsCommand(BasicCommand, BasicCommand.Set);
 
@@ -142,19 +155,6 @@ export class BasicCCAPI extends CCAPI {
 				);
 		}
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value after a delay
-			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-			setTimeout(async () => {
-				this.refreshTimeout = undefined;
-				try {
-					await this.get();
-				} catch {
-					/* ignore */
-				}
-			}, this.driver.options.timeouts.refreshValue).unref();
-		}
 	}
 }
 

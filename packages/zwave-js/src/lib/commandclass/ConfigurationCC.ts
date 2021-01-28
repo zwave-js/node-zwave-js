@@ -222,6 +222,7 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 		await this.set(property, targetValue, valueSize as any);
 
 		// Refresh the current value and ignore potential timeouts
+		// TODO: #1321, #1521
 		void this.get(property).catch(() => {
 			/* ignore */
 		});

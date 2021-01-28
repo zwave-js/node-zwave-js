@@ -349,6 +349,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				);
 			}
 			await this.setKeypadMode(value);
+
+			// Refresh the current value
+			await this.getKeypadMode();
 		} else if (property === "masterCode") {
 			if (typeof value !== "string") {
 				throwWrongValueType(
@@ -359,6 +362,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				);
 			}
 			await this.setMasterCode(value);
+
+			// Refresh the current value
+			await this.getMasterCode();
 		} else if (property === "userIdStatus") {
 			if (propertyKey == undefined) {
 				throwMissingPropertyKey(this.ccId, property);
@@ -385,6 +391,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				);
 				await this.set(propertyKey, value, userCode!);
 			}
+
+			// Refresh the current value
+			await this.get(propertyKey);
 		} else if (property === "userCode") {
 			if (propertyKey == undefined) {
 				throwMissingPropertyKey(this.ccId, property);
@@ -412,6 +421,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				userIdStatus = UserIDStatus.Enabled;
 			}
 			await this.set(propertyKey, userIdStatus as any, value);
+
+			// Refresh the current value
+			await this.get(propertyKey);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -539,9 +551,6 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		// Refresh the current value
-		await this.get(userId);
 	}
 
 	/** Configures multiple user codes */
@@ -579,9 +588,6 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			});
 			await this.driver.sendCommand(cc, this.commandOptions);
 		}
-
-		// Refresh the current value
-		await this.get(userId);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -643,9 +649,6 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		// Refresh the current value
-		await this.getKeypadMode();
 	}
 
 	public async getMasterCode(): Promise<string | undefined> {
@@ -678,9 +681,6 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		// Refresh the current value
-		await this.getMasterCode();
 	}
 
 	public async getUserCodeChecksum(): Promise<number | undefined> {

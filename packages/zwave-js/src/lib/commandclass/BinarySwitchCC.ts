@@ -119,19 +119,6 @@ export class BinarySwitchCCAPI extends CCAPI {
 				);
 		}
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value after a delay
-			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-			setTimeout(async () => {
-				this.refreshTimeout = undefined;
-				try {
-					await this.get();
-				} catch {
-					/* ignore */
-				}
-			}, duration?.toMilliseconds() ?? 1000).unref();
-		}
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -145,6 +132,22 @@ export class BinarySwitchCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.set(value);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value after a delay
+			// TODO: #1321
+			const duration = undefined as Duration | undefined;
+
+			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+			setTimeout(async () => {
+				this.refreshTimeout = undefined;
+				try {
+					await this.get();
+				} catch {
+					/* ignore */
+				}
+			}, duration?.toMilliseconds() ?? 1000).unref();
+		}
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

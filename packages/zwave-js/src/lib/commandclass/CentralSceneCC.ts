@@ -146,11 +146,6 @@ export class CentralSceneCCAPI extends CCAPI {
 			slowRefresh,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.getConfiguration();
-		}
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -164,6 +159,12 @@ export class CentralSceneCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.setConfiguration(value);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			// TODO: #1521
+			await this.getConfiguration();
+		}
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

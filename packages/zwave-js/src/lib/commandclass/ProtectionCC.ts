@@ -174,6 +174,11 @@ export class ProtectionCCAPI extends CCAPI {
 				getRFStateValueID(this.endpoint.index),
 			);
 			await this.set(value, rf);
+
+			if (this.isSinglecast()) {
+				// Refresh the current value
+				await this.get();
+			}
 		} else if (property === "rf") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -188,6 +193,11 @@ export class ProtectionCCAPI extends CCAPI {
 				getLocalStateValueID(this.endpoint.index),
 			);
 			await this.set(local ?? LocalProtectionState.Unprotected, value);
+
+			if (this.isSinglecast()) {
+				// Refresh the current value
+				await this.get();
+			}
 		} else if (property === "exclusiveControlNodeId") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -198,6 +208,11 @@ export class ProtectionCCAPI extends CCAPI {
 				);
 			}
 			await this.setExclusiveControl(value);
+
+			if (this.isSinglecast()) {
+				// Refresh the status
+				await this.getExclusiveControl();
+			}
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -247,11 +262,6 @@ export class ProtectionCCAPI extends CCAPI {
 			rf,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get();
-		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -308,11 +318,6 @@ export class ProtectionCCAPI extends CCAPI {
 			exclusiveControlNodeId: nodeId,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the status
-			await this.getExclusiveControl();
-		}
 	}
 
 	public async getTimeout(): Promise<Timeout | undefined> {
@@ -344,11 +349,6 @@ export class ProtectionCCAPI extends CCAPI {
 			timeout,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the status
-			await this.getTimeout();
-		}
 	}
 }
 

@@ -77,6 +77,11 @@ export class WakeUpCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.setInterval(value, this.driver.controller.ownNodeId ?? 1);
+
+		if (this.isSinglecast()) {
+			// Refresh the current value
+			await this.getInterval();
+		}
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -145,11 +150,6 @@ export class WakeUpCCAPI extends CCAPI {
 			controllerNodeId,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.getInterval();
-		}
 	}
 
 	public async sendNoMoreInformation(): Promise<void> {
