@@ -34,8 +34,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "On Off Status After Power Failure",
-			"description": "On Off Status After Power Failure.  Default: all relays restore to previous state",
+			"label": "Status After Power Failure",
+			"description": "The state to set after a power failure. ",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -46,30 +46,30 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "all relays forced off",
+					"label": "All relays - Off",
 					"value": 0
 				},
 				{
-					"label": "all relays restore to previous state",
+					"label": "All relays - Previous state",
 					"value": 1
 				},
 				{
-					"label": "all relays forced on",
+					"label": "All relays - On",
 					"value": 2
 				},
 				{
-					"label": "relays 1/2 restore, 3/4 forced off",
+					"label": "Relays 1/2 - Previous state; Relays 3/4 - Off",
 					"value": 3
 				},
 				{
-					"label": "relays 1/2 restore, 3/4 forced on",
+					"label": "Relays 1/2 - Previous state, Relays 3/4 - On",
 					"value": 4
 				}
 			]
 		},
 		"2": {
 			"label": "Switch Type for Relay 1 (Sw1)",
-			"description": "Switch Type for Relay 1 (Sw1).  Choose the wall switch type you want to connect to the Sw1 terminal.  Default: toggle switch (state changes whenever the switch is toggled)",
+			"description": "Choose the wall switch type you want to connect to the Sw1 terminal.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -80,26 +80,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "momentary switch",
+					"label": "Momentary Switch",
 					"value": 0
 				},
 				{
-					"label": "toggle switch (light on when switch is up/off when down)",
+					"label": "Toggle switch (follow switch)",
 					"value": 1
 				},
 				{
-					"label": "toggle switch (state changes whenever the switch is toggled)",
+					"label": "Toggle switch (change state on toggle)",
 					"value": 2
 				},
 				{
-					"label": "garage door (momentary mode for Z-Wave control)",
+					"label": "Garage door (momentary mMode for Z-Wave control)",
 					"value": 3
 				}
 			]
 		},
 		"3": {
 			"label": "Switch Type for Relay 2 (Sw2)",
-			"description": "Switch Type for Relay 2 (Sw2).  Choose the wall switch type you want to connect to the Sw2 terminal.  Default: toggle switch (state changes whenever the switch is toggled)",
+			"description": "Choose the wall switch type you want to connect to the Sw2 terminal.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -110,26 +110,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "momentary switch",
+					"label": "Momentary Switch",
 					"value": 0
 				},
 				{
-					"label": "toggle switch (light on when switch is up/off when down)",
+					"label": "Toggle switch (follow switch)",
 					"value": 1
 				},
 				{
-					"label": "toggle switch (state changes whenever the switch is toggled)",
+					"label": "Toggle switch (change state on toggle)",
 					"value": 2
 				},
 				{
-					"label": "garage door (momentary mode for Z-Wave control)",
+					"label": "Garage door (momentary mMode for Z-Wave control)",
 					"value": 3
 				}
 			]
 		},
 		"4": {
 			"label": "Switch Type for Relay 3 (Sw3)",
-			"description": "Switch Type for Relay 3 (Sw3).  Choose the wall switch type you want to connect to the Sw3 terminal.  Default: toggle switch (state changes whenever the switch is toggled)",
+			"description": "Choose the wall switch type you want to connect to the Sw3 terminal.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -140,26 +140,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "momentary switch",
+					"label": "Momentary Switch",
 					"value": 0
 				},
 				{
-					"label": "toggle switch (light on when switch is up/off when down)",
+					"label": "Toggle switch (follow switch)",
 					"value": 1
 				},
 				{
-					"label": "toggle switch (state changes whenever the switch is toggled)",
+					"label": "Toggle switch (change state on toggle)",
 					"value": 2
 				},
 				{
-					"label": "garage door (momentary mode for Z-Wave control)",
+					"label": "Garage door (momentary mMode for Z-Wave control)",
 					"value": 3
 				}
 			]
 		},
 		"5": {
 			"label": "LED Indicator Control",
-			"description": "LED Indicator Control.  Choose if you want the LED indicator to turn on when any of the relays are on or if all of them are off, or if you want it to remain on or off at all times.  Default: On when all relays are off",
+			"description": "Choose the LED indicator behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -174,24 +174,24 @@
 					"value": 0
 				},
 				{
-					"label": "On when any relays are on",
+					"label": "On when any relays is on",
 					"value": 1
 				},
 				{
-					"label": "Always Off",
+					"label": "Always off",
 					"value": 2
 				},
 				{
-					"label": "Always On",
+					"label": "Always on",
 					"value": 3
 				}
 			]
 		},
 		"6": {
 			"label": "Auto Turn-Off Timer for Relay 1",
-			"description": "Auto Turn-Off Timer for Relay 1.  Sets the time (in minutes) after which you want relay 1 to automatically turn off once it has been turned on.  Range: 1-65535.  Default: 0 (disabled)",
+			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on.",
 			"valueSize": 4,
-			"unit": "minutes",
+			"unit": "minutes (unless changd by parameter 15)",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
@@ -202,9 +202,9 @@
 		},
 		"7": {
 			"label": "Auto Turn-On Timer for Relay 1",
-			"description": "Auto Turn-On Timer for Relay 1.  Sets the time (in minutes) after which you want relay 1 to automatically turn on once it has been turned off.  Range: 1-65535.  Default: 0 (disabled)",
+			"description": "Sets the time after which you want relay 1 to automatically turn on once it has been turned off.",
 			"valueSize": 4,
-			"unit": "minutes",
+			"unit": "minutes (unless changd by parameter 16)",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
@@ -215,9 +215,9 @@
 		},
 		"8": {
 			"label": "Auto Turn-Off Timer for Relay 2",
-			"description": "Auto Turn-Off Timer for Relay 2.  Sets the time (in minutes) after which you want relay 2 to automatically turn off once it has been turned on.  Range: 1-65535.  Default: 0 (disabled)",
+			"description": "Sets the time after which you want relay 2 to automatically turn off once it has been turned on.",
 			"valueSize": 4,
-			"unit": "minutes",
+			"unit": "minutes(unless changd by parameter 17)",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
@@ -228,9 +228,9 @@
 		},
 		"9": {
 			"label": "Auto Turn-On Timer for Relay 2",
-			"description": "Auto Turn-On Timer for Relay 2.  Sets the time (in minutes) after which you want relay 2 to automatically turn on once it has been turned off.  Range: 1-65535.  Default: 0 (disabled)",
+			"description": "Sets the time after which you want relay 2 to automatically turn on once it has been turned off.",
 			"valueSize": 4,
-			"unit": "minutes",
+			"unit": "minutes (unless changd by parameter 18)",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
@@ -241,9 +241,9 @@
 		},
 		"10": {
 			"label": "Auto Turn-Off Timer for Relay 3",
-			"description": "Auto Turn-Off Timer for Relay 3.  Sets the time (in minutes) after which you want relay 3 to automatically turn off once it has been turned on.  Range: 1-65535.  Default: 0 (disabled)",
+			"description": "Sets the time after which you want relay 3 to automatically turn off once it has been turned on.",
 			"valueSize": 4,
-			"unit": "minutes",
+			"unit": "minutes (unless changd by parameter 19)",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
@@ -254,9 +254,9 @@
 		},
 		"11": {
 			"label": "Auto Turn-On Timer for Relay 3",
-			"description": "Auto Turn-On Timer for Relay 3.  Sets the time (in minutes) after which you want relay 3 to automatically turn on once it has been turned off.  Range: 1-65535.  Default: 0 (disabled)",
+			"description": "Sets the time after which you want relay 3 to automatically turn on once it has been turned off.",
 			"valueSize": 4,
-			"unit": "minutes",
+			"unit": "minutes (unless changd by parameter 20)",
 			"minValue": 0,
 			"maxValue": 65535,
 			"defaultValue": 0,
@@ -267,7 +267,7 @@
 		},
 		"12": {
 			"label": "Enable/Disable Manual Control for SW1",
-			"description": "Enable/Disable Manual Control for SW1.  Default: enabled",
+			"description": "Determine whether you can control the indicated switch manually.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -278,22 +278,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "enabled",
+					"label": "Enabled",
 					"value": 1
 				},
 				{
-					"label": "local control disabled with enable on/off reports",
+					"label": "Local control disabled with enable on/off reports",
 					"value": 2
 				}
 			]
 		},
 		"13": {
 			"label": "Enable/Disable Manual Control for SW2",
-			"description": "Enable/Disable Manual Control for SW2.  Default: enabled",
+			"description": "Determine whether you can control the indicated switch manually.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -304,22 +304,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "enabled",
+					"label": "Enabled",
 					"value": 1
 				},
 				{
-					"label": "local control disabled with enable on/off reports",
+					"label": "Local control disabled with enable on/off reports",
 					"value": 2
 				}
 			]
 		},
 		"14": {
 			"label": "Enable/Disable Manual Control for SW3",
-			"description": "Enable/Disable Manual Control for SW3.  Default: enabled",
+			"description": "Determine whether you can control the indicated switch manually.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -330,22 +330,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "enabled",
+					"label": "Enabled",
 					"value": 1
 				},
 				{
-					"label": "local control disabled with enable on/off reports",
+					"label": "Local control disabled with enable on/off reports",
 					"value": 2
 				}
 			]
 		},
 		"15": {
 			"label": "Auto Turn-Off Timer Unit for Relay 1",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-Off time for Relay 1.  Default: minutes",
+			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-Off time for Relay 1.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -356,22 +356,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "minutes",
+					"label": "Minutes",
 					"value": 0
 				},
 				{
-					"label": "seconds",
+					"label": "Seconds",
 					"value": 1
 				},
 				{
-					"label": "hours",
+					"label": "Hours",
 					"value": 2
 				}
 			]
 		},
 		"16": {
 			"label": "Auto Turn-On Timer Unit for Relay 1",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 1.  Default: minutes",
+			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 1.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -382,15 +382,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "minutes",
+					"label": "Minutes",
 					"value": 0
 				},
 				{
-					"label": "seconds",
+					"label": "Seconds",
 					"value": 1
 				},
 				{
-					"label": "hours",
+					"label": "Hours",
 					"value": 2
 				}
 			]
@@ -408,22 +408,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "minutes",
+					"label": "Minutes",
 					"value": 0
 				},
 				{
-					"label": "seconds",
+					"label": "Seconds",
 					"value": 1
 				},
 				{
-					"label": "hours",
+					"label": "Hours",
 					"value": 2
 				}
 			]
 		},
 		"18": {
 			"label": "Auto Turn-On Timer Unit for Relay 2",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 2.  Default: minutes",
+			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 2.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -434,22 +434,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "minutes",
+					"label": "Minutes",
 					"value": 0
 				},
 				{
-					"label": "seconds",
+					"label": "Seconds",
 					"value": 1
 				},
 				{
-					"label": "hours",
+					"label": "Hours",
 					"value": 2
 				}
 			]
 		},
 		"19": {
 			"label": "Auto Turn-Off Timer Unit for Relay 3",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-Off time for Relay 3.  Default: minutes",
+			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-Off time for Relay 3.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -460,22 +460,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "minutes",
+					"label": "Minutes",
 					"value": 0
 				},
 				{
-					"label": "seconds",
+					"label": "Seconds",
 					"value": 1
 				},
 				{
-					"label": "hours",
+					"label": "Hours",
 					"value": 2
 				}
 			]
 		},
 		"20": {
 			"label": "Auto Turn-On Timer Unit for Relay 3",
-			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 3.  Default: minutes",
+			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 3.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -486,22 +486,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "minutes",
+					"label": "Minutes",
 					"value": 0
 				},
 				{
-					"label": "seconds",
+					"label": "Seconds",
 					"value": 1
 				},
 				{
-					"label": "hours",
+					"label": "Hours",
 					"value": 2
 				}
 			]
 		},
 		"21": {
-			"label": "Normally open/close for Relay 1",
-			"description": "Decide whether you'd like Relay 1 to be normally open (NO) or normally closed (NC). Default normally open.",
+			"label": "Normally open/close state for Relay 1",
+			"description": "Decide whether you'd like Relay 1 to be normally open (NO) or normally closed (NC).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -512,22 +512,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "normally open (relay reports off when it's open / switch is off and on when it's closed / switch is on)",
+					"label": "Normally open (reports off when switch is off / on when switch is on)",
 					"value": 0
 				},
 				{
-					"label": "normally closed (relay reports off when it's open / switch is on and on when it's closed / switch is off)",
+					"label": "Normally closed (reports off when is on / on when switch is off)",
 					"value": 1
 				},
 				{
-					"label": "normally closed (relay reports off when it's closed / switch is off and on when it's open / switch is on)",
+					"label": "Normally closed (reports off when switch is off / on when switch is on)",
 					"value": 2
 				}
 			]
 		},
 		"22": {
-			"label": "Normally open/close for Relay 2",
-			"description": "Decide whether you'd like Relay 2 to be normally open (NO) or normally closed (NC). Default normally open.",
+			"label": "Normally open/close state for Relay 2",
+			"description": "Decide whether you'd like Relay 2 to be normally open (NO) or normally closed (NC).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -538,22 +538,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "normally open (relay reports off when it's open / switch is off and on when it's closed / switch is on)",
+					"label": "Normally open (reports off when switch is off / on when switch is on)",
 					"value": 0
 				},
 				{
-					"label": "normally closed (relay reports off when it's open / switch is on and on when it's closed / switch is off)",
+					"label": "Normally closed (reports off when is on / on when switch is off)",
 					"value": 1
 				},
 				{
-					"label": "normally closed (relay reports off when it's closed / switch is off and on when it's open / switch is on)",
+					"label": "Normally closed (reports off when switch is off / on when switch is on)",
 					"value": 2
 				}
 			]
 		},
 		"23": {
-			"label": "Normally open/close for Relay 3",
-			"description": "Decide whether you'd like Relay 3 to be normally open (NO) or normally closed (NC). Default normally open.",
+			"label": "Normally open/close state for Relay 3",
+			"description": "Decide whether you'd like Relay 3 to be normally open (NO) or normally closed (NC).",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -564,22 +564,22 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "normally open (relay reports off when it's open / switch is off and on when it's closed / switch is on)",
+					"label": "Normally open (reports off when switch is off / on when switch is on)",
 					"value": 0
 				},
 				{
-					"label": "normally closed (relay reports off when it's open / switch is on and on when it's closed / switch is off)",
+					"label": "Normally closed (reports off when is on / on when switch is off)",
 					"value": 1
 				},
 				{
-					"label": "normally closed (relay reports off when it's closed / switch is off and on when it's open / switch is on)",
+					"label": "Normally closed (reports off when switch is off / on when switch is on)",
 					"value": 2
 				}
 			]
 		},
 		"24": {
 			"label": "DC Motor Mode",
-			"description": "Sync Relay 1 and Relay 2 together to prevent them from being activated at the same time. Default disabled.",
+			"description": "When enabled only one relay may be on at a time, the other relay is automatically turned off.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -590,11 +590,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "DC motor mode disabled (relays will always turn on whenever activated)",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "DC motor mode enabled (relay checks the status of the other relay after being triggered and shuts the other relay off before activating so that only one of the relays is on at a time)",
+					"label": "Enabled",
 					"value": 1
 				}
 			]
