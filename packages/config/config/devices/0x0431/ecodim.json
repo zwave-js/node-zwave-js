@@ -107,7 +107,7 @@
 		},
 		"5": {
 			"label": "Enable or Disable external switch to pair network",
-			"description": "Enable or Disable external switch to pair network. Default value: 0.",
+			"description": "Enable or Disable external switch to pair network.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
