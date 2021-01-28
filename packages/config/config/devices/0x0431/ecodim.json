@@ -1,11 +1,15 @@
-// EcoDim 0.7 Basic
-// ECO-DIM.07 Z-Wave Led dimmer Basic push/rotary 0-200W
+// EcoDim ECO-DIM
+// ECO-DIM Z-Wave Led dimmer
 {
 	"manufacturer": "EcoDim",
 	"manufacturerId": "0x0431",
-	"label": "ECO-DIM.07 Basic",
-	"description": "ECO-DIM.07 Z-Wave Led dimmer Basic push/rotary 0-200W",
+	"label": "ECO-DIM",
+	"description": "ECO-DIM Z-Wave Led dimmer",
 	"devices": [
+		{
+			"productType": "0x0202",
+			"productId": "0x0001"
+		},
 		{
 			"productType": "0x0202",
 			"productId": "0x0002"
@@ -15,6 +19,7 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
+	"supportsZWavePlus": true,
 	"associations": {
 		"1": {
 			"label": "LifeLine",
@@ -36,8 +41,8 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "State after power restore",
-			"description": "State After Power Restored: The state the switch should return to once power is restored after power failure. Default value: 0.",
+			"label": "State After Power Restored",
+			"description": "The state the switch should return to once power is restored after power failure.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -56,17 +61,17 @@
 					"value": 1
 				},
 				{
-					"label": "Returns to level before power outage",
+					"label": "Returns to level before Power Outage",
 					"value": 2
 				}
 			]
 		},
 		"2": {
 			"label": "Notification when Load status change",
-			"description": "Notification when Load status change: The Dimmer will send notification to associated device (Group Lifeline) when the status of Dimmer load is changed. Default value: 1.",
+			"description": "The Dimmer will send notification to associated device (Group Lifeline) when the status of Dimmer load is changed.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
@@ -78,13 +83,17 @@
 					"value": 0
 				},
 				{
-					"label": "Send switch multilevel report",
+					"label": "Send Switch Multilevel Report",
 					"value": 1
+				},
+				{
+					"label": "Send Switch Multilevel Report only when Load status is not changed by Z-WAVE Command",
+					"value": 2
 				}
 			]
 		},
 		"3": {
-			"label": "Dimming speed",
+			"label": "Default dimming speed",
 			"description": "Default dimming speed，unit is second. Valid values: 0-100. Default value: 5 0 - Instanly. 1 - Fast. ... 100 - Slow.",
 			"valueSize": 1,
 			"unit": "seconds",
@@ -101,29 +110,29 @@
 			"description": "Enable or Disable external switch to pair network. Default value: 0.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
-			"defaultValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enabled",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"6": {
 			"label": "Dimming algorithm",
-			"description": "Setting dimming way. Default value: 0.",
+			"description": "Setting dimming way.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 255,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"unsigned": true,
 			"readOnly": false,
