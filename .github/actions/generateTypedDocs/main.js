@@ -18,17 +18,13 @@ const assignees = [
 
 (async function main() {
 	// check if our local working copy has any changes in the docs directory
-	const isChanged = !(await exec.exec(
+	const isChanged = !!(await exec.exec(
 		"git",
 		["diff", "--exit-code", "--", "docs/"],
 		{
 			ignoreReturnCode: true,
 		},
 	));
-	if (isChanged) {
-		console.log(`We have no local changes, exiting...`);
-		return;
-	}
 
 	// Check if a PR already exists
 	const PRs = await octokit.pulls.list({
@@ -48,19 +44,26 @@ const assignees = [
 		},
 	));
 
+	if (!isChanged && !branchExists) {
+		console.log(
+			`We have no local changes and no remote branch exists, exiting...`,
+		);
+		return;
+	}
+
 	// create new branch for PR
 	await exec.exec("git", ["checkout", "-b", `${branchName}`]);
 
 	if (branchExists) {
 		// check if our local working copy is different from the remote branch
-		const isChanged = !(await exec.exec(
+		const isChanged = !!(await exec.exec(
 			"git",
 			["diff", "--exit-code", `origin/${branchName}`, "--", "docs/"],
 			{
 				ignoreReturnCode: true,
 			},
 		));
-		if (isChanged && !!prNumber) {
+		if (!isChanged && !!prNumber) {
 			console.log(
 				`We have no local changes compared to the remote branch and PR exists, exiting...`,
 			);
