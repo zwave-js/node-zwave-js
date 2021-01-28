@@ -92,19 +92,11 @@ export type MultilevelSwitchLevelChangeMetadata = ValueMetadata & {
 	};
 };
 
-function getCurrentValueValueID(endpoint: number): ValueID {
+function getCurrentValueValueId(endpoint: number): ValueID {
 	return {
 		commandClass: CommandClasses["Multilevel Switch"],
 		endpoint,
 		property: "currentValue",
-	};
-}
-
-function getTargetValueValueId(endpoint?: number): ValueID {
-	return {
-		commandClass: CommandClasses["Multilevel Switch"],
-		endpoint,
-		property: "targetValue",
 	};
 }
 
@@ -158,9 +150,12 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 	 * Sets the switch to a new value
 	 * @param targetValue The new target value for the switch
 	 * @param duration The optional duration to reach the target value. Available in V2+
+	 * @returns A promise indicating whether the command was completed
 	 */
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async set(targetValue: number, duration?: Duration) {
+	public async set(
+		targetValue: number,
+		duration?: Duration,
+	): Promise<boolean> {
 		this.assertSupportsCommand(
 			MultilevelSwitchCommand,
 			MultilevelSwitchCommand.Set,
@@ -172,16 +167,6 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
-		if (this.isSinglecast()) {
-			// remember the value in case the device does not respond with a target value
-			this.endpoint
-				.getNodeUnsafe()
-				?.valueDB.setValue(
-					getTargetValueValueId(this.endpoint.index),
-					targetValue,
-					{ noEvent: true },
-				);
-		}
 
 		// Multilevel Switch commands may take some time to be executed.
 		// Therefore we try to supervise the command execution
@@ -202,24 +187,10 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			},
 		);
 
-		// Refresh the current value
-		if (
+		return (
 			!supervisionResult ||
 			supervisionResult.status === SupervisionStatus.Success
-		) {
-			if (this.isSinglecast()) {
-				// Refresh the current value after a delay
-				if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-				setTimeout(async () => {
-					this.refreshTimeout = undefined;
-					try {
-						await this.get();
-					} catch {
-						/* ignore */
-					}
-				}, duration?.toMilliseconds() ?? this.driver.options.timeouts.refreshValue).unref();
-			}
-		}
+		);
 	}
 
 	public async startLevelChange(
@@ -337,7 +308,37 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			await this.set(value);
+			const completed = await this.set(value);
+
+			// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+			// so UIs have immediate feedback
+			if (this.isSinglecast() && completed) {
+				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+				valueDB?.setValue(
+					getCurrentValueValueId(this.endpoint.index),
+					value,
+				);
+
+				// Verify the current value after a delay if the node does not support Supervision
+				if (
+					!this.endpoint
+						.getNodeUnsafe()
+						?.supportsCC(CommandClasses.Supervision)
+				) {
+					if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+					// TODO: #1321
+					const duration = undefined as Duration | undefined;
+
+					setTimeout(async () => {
+						this.refreshTimeout = undefined;
+						try {
+							await this.get();
+						} catch {
+							/* ignore */
+						}
+					}, duration?.toMilliseconds() ?? this.driver.options.timeouts.refreshValue).unref();
+				}
+			}
 		} else if (switchTypeProperties.includes(property as string)) {
 			// Since the switch only supports one of the switch types, we would
 			// need to check if the correct one is used. But since the names are
@@ -363,7 +364,7 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 				const startLevel = this.endpoint
 					.getNodeUnsafe()
 					?.getValue<number>(
-						getCurrentValueValueID(this.endpoint.index),
+						getCurrentValueValueId(this.endpoint.index),
 					);
 				// And perform the level change
 				await this.startLevelChange({

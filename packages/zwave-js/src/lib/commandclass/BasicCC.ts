@@ -90,8 +90,16 @@ export class BasicCCAPI extends CCAPI {
 		}
 		await this.set(value);
 
+		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
-			// Refresh the current value after a delay
+			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+			valueDB?.setValue(
+				getCurrentValueValueId(this.endpoint.index),
+				value,
+			);
+
+			// and verify the current value after a delay
 			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
 			setTimeout(async () => {
 				this.refreshTimeout = undefined;
@@ -144,16 +152,6 @@ export class BasicCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			targetValue,
 		});
-		if (this.isSinglecast()) {
-			// remember the value in case the device does not respond with a target value
-			this.endpoint
-				.getNodeUnsafe()
-				?.valueDB.setValue(
-					getTargetValueValueId(this.endpoint.index),
-					targetValue,
-					{ noEvent: true },
-				);
-		}
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 }

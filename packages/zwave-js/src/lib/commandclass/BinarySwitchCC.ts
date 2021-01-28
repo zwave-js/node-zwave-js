@@ -37,11 +37,11 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 
-function getTargetValueValueId(endpoint?: number): ValueID {
+function getCurrentValueValueId(endpoint?: number): ValueID {
 	return {
 		commandClass: CommandClasses["Binary Switch"],
 		endpoint,
-		property: "targetValue",
+		property: "currentValue",
 	};
 }
 
@@ -108,16 +108,6 @@ export class BinarySwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
-		if (this.isSinglecast()) {
-			// remember the value in case the device does not respond with a target value
-			this.endpoint
-				.getNodeUnsafe()
-				?.valueDB.setValue(
-					getTargetValueValueId(this.endpoint.index),
-					targetValue,
-					{ noEvent: true },
-				);
-		}
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
@@ -133,8 +123,16 @@ export class BinarySwitchCCAPI extends CCAPI {
 		}
 		await this.set(value);
 
+		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
-			// Refresh the current value after a delay
+			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+			valueDB?.setValue(
+				getCurrentValueValueId(this.endpoint.index),
+				value,
+			);
+
+			// Verify the current value after a delay
 			// TODO: #1321
 			const duration = undefined as Duration | undefined;
 
