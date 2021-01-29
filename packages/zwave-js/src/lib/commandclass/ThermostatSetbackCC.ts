@@ -113,11 +113,6 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 			setbackState,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get();
-		}
 	}
 }
 

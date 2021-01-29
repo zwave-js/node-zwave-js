@@ -37,11 +37,11 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 
-function getTargetValueValueId(endpoint?: number): ValueID {
+function getCurrentValueValueId(endpoint?: number): ValueID {
 	return {
 		commandClass: CommandClasses["Binary Switch"],
 		endpoint,
-		property: "targetValue",
+		property: "currentValue",
 	};
 }
 
@@ -108,30 +108,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			targetValue,
 			duration,
 		});
-		if (this.isSinglecast()) {
-			// remember the value in case the device does not respond with a target value
-			this.endpoint
-				.getNodeUnsafe()
-				?.valueDB.setValue(
-					getTargetValueValueId(this.endpoint.index),
-					targetValue,
-					{ noEvent: true },
-				);
-		}
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value after a delay
-			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-			setTimeout(async () => {
-				this.refreshTimeout = undefined;
-				try {
-					await this.get();
-				} catch {
-					/* ignore */
-				}
-			}, duration?.toMilliseconds() ?? 1000).unref();
-		}
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -145,6 +122,21 @@ export class BinarySwitchCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.set(value);
+
+		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+		// so UIs have immediate feedback
+		if (this.isSinglecast()) {
+			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+			valueDB?.setValue(
+				getCurrentValueValueId(this.endpoint.index),
+				value,
+			);
+
+			// Verify the current value after a delay
+			// TODO: #1321
+			const duration = undefined as Duration | undefined;
+			this.schedulePoll({ property }, duration?.toMilliseconds() ?? 1000);
+		}
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

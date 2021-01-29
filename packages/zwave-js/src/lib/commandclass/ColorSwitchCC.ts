@@ -224,7 +224,9 @@ export class ColorSwitchCCAPI extends CCAPI {
 
 		await this.driver.sendCommand(cc, this.commandOptions);
 
-		// Assume it worked and update currentColor
+		// If the command did not fail, assume that it succeeded and update the values accordingly
+		// TODO: The API methods should not modify the value DB directly, but to do so
+		// this requires a nicer way of synchronizing hexColor with the others
 		if (this.isSinglecast()) {
 			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
 			if (valueDB) {
@@ -330,8 +332,13 @@ export class ColorSwitchCCAPI extends CCAPI {
 			await this.set({ [propertyKey]: value });
 
 			if (this.isSinglecast()) {
-				// Refresh the current value
-				await this.get(propertyKey);
+				// Verify the current value after a delay
+				// TODO: #1321
+				const duration = undefined as Duration | undefined;
+				this.schedulePoll(
+					{ property, propertyKey },
+					duration?.toMilliseconds(),
+				);
 			}
 		} else if (property === "hexColor") {
 			// No property key, this is the hex color #rrggbb

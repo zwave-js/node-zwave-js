@@ -89,7 +89,22 @@ export class BasicCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.set(value);
+
+		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
+		// so UIs have immediate feedback
+		if (this.isSinglecast()) {
+			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+			valueDB?.setValue(
+				getCurrentValueValueId(this.endpoint.index),
+				value,
+			);
+
+			// and verify the current value after a delay
+			this.schedulePoll({ property });
+		}
 	};
+
+	private refreshTimeout: NodeJS.Timeout | undefined;
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
 		property,
@@ -121,8 +136,6 @@ export class BasicCCAPI extends CCAPI {
 		}
 	}
 
-	private refreshTimeout: NodeJS.Timeout | undefined;
-
 	public async set(targetValue: number): Promise<void> {
 		this.assertSupportsCommand(BasicCommand, BasicCommand.Set);
 
@@ -131,30 +144,7 @@ export class BasicCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			targetValue,
 		});
-		if (this.isSinglecast()) {
-			// remember the value in case the device does not respond with a target value
-			this.endpoint
-				.getNodeUnsafe()
-				?.valueDB.setValue(
-					getTargetValueValueId(this.endpoint.index),
-					targetValue,
-					{ noEvent: true },
-				);
-		}
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value after a delay
-			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-			setTimeout(async () => {
-				this.refreshTimeout = undefined;
-				try {
-					await this.get();
-				} catch {
-					/* ignore */
-				}
-			}, this.driver.options.timeouts.refreshValue).unref();
-		}
 	}
 }
 

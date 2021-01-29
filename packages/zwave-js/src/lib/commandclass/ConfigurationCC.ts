@@ -221,10 +221,8 @@ export class ConfigurationCCAPI extends PhysicalCCAPI {
 
 		await this.set(property, targetValue, valueSize as any);
 
-		// Refresh the current value and ignore potential timeouts
-		void this.get(property).catch(() => {
-			/* ignore */
-		});
+		// Verify the current value after a delay
+		this.schedulePoll({ property, propertyKey }, 1000);
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

@@ -122,8 +122,9 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 			// unsupported property key, ignore...
 			return;
 		}
-		// Refresh the current value
-		await this.fibaroVenetianBlindsGet();
+
+		// Verify the current value after a delay
+		this.schedulePoll({ property });
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

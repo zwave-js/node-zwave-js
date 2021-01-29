@@ -415,6 +415,9 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
+
+		// Verify the current value after a delay
+		this.schedulePoll({ property, propertyKey });
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -539,9 +542,6 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		// Refresh the current value
-		await this.get(userId);
 	}
 
 	/** Configures multiple user codes */
@@ -579,9 +579,6 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 			});
 			await this.driver.sendCommand(cc, this.commandOptions);
 		}
-
-		// Refresh the current value
-		await this.get(userId);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -643,9 +640,6 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		// Refresh the current value
-		await this.getKeypadMode();
 	}
 
 	public async getMasterCode(): Promise<string | undefined> {
@@ -678,9 +672,6 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		// Refresh the current value
-		await this.getMasterCode();
 	}
 
 	public async getUserCodeChecksum(): Promise<number | undefined> {

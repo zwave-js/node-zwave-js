@@ -141,11 +141,6 @@ export class SoundSwitchCCAPI extends CCAPI {
 			defaultVolume,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.getConfiguration();
-		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -188,11 +183,6 @@ export class SoundSwitchCCAPI extends CCAPI {
 			volume,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.getPlaying();
-		}
 	}
 
 	public async stopPlaying(): Promise<void> {
@@ -208,11 +198,6 @@ export class SoundSwitchCCAPI extends CCAPI {
 			volume: 0x00,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.getPlaying();
-		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -276,6 +261,10 @@ export class SoundSwitchCCAPI extends CCAPI {
 				await this.play(value, volume);
 			} else {
 				await this.stopPlaying();
+			}
+			if (this.isSinglecast()) {
+				// Verify the current value after a delay
+				this.schedulePoll({ property });
 			}
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
