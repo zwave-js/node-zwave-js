@@ -10,8 +10,8 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "1.03",
-		"max": "255.255"
+		"min": "1.01",
+		"max": "1."
 	},
 	"associations": {
 		"1": {
@@ -90,10 +90,6 @@
 				{
 					"label": "Toggle switch (change state on toggle)",
 					"value": 2
-				},
-				{
-					"label": "Garage door (momentary mMode for Z-Wave control)",
-					"value": 3
 				}
 			]
 		},
@@ -120,10 +116,6 @@
 				{
 					"label": "Toggle switch (change state on toggle)",
 					"value": 2
-				},
-				{
-					"label": "Garage door (momentary mode for Z-Wave control)",
-					"value": 3
 				}
 			]
 		},
@@ -150,10 +142,6 @@
 				{
 					"label": "Toggle switch (change state on toggle)",
 					"value": 2
-				},
-				{
-					"label": "Garage door (momentary mMode for Z-Wave control)",
-					"value": 3
 				}
 			]
 		},
@@ -278,10 +266,6 @@
 				{
 					"label": "Enabled",
 					"value": 1
-				},
-				{
-					"label": "Local control disabled with enable on/off reports",
-					"value": 2
 				}
 			]
 		},
@@ -304,10 +288,6 @@
 				{
 					"label": "Enabled",
 					"value": 1
-				},
-				{
-					"label": "Local control disabled with enable on/off reports",
-					"value": 2
 				}
 			]
 		},
@@ -330,10 +310,6 @@
 				{
 					"label": "Enabled",
 					"value": 1
-				},
-				{
-					"label": "Local control disabled with enable on/off reports",
-					"value": 2
 				}
 			]
 		},
@@ -490,106 +466,6 @@
 				{
 					"label": "Hours",
 					"value": 2
-				}
-			]
-		},
-		"21": {
-			"label": "Normally open/close state for Relay 1",
-			"description": "Decide whether you'd like Relay 1 to be normally open (NO) or normally closed (NC).",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normally open (reports off when switch is off / on when switch is on)",
-					"value": 0
-				},
-				{
-					"label": "Normally closed (reports off when is on / on when switch is off)",
-					"value": 1
-				},
-				{
-					"label": "Normally closed (reports off when switch is off / on when switch is on)",
-					"value": 2
-				}
-			]
-		},
-		"22": {
-			"label": "Normally open/close state for Relay 2",
-			"description": "Decide whether you'd like Relay 2 to be normally open (NO) or normally closed (NC).",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normally open (reports off when switch is off / on when switch is on)",
-					"value": 0
-				},
-				{
-					"label": "Normally closed (reports off when is on / on when switch is off)",
-					"value": 1
-				},
-				{
-					"label": "Normally closed (reports off when switch is off / on when switch is on)",
-					"value": 2
-				}
-			]
-		},
-		"23": {
-			"label": "Normally open/close state for Relay 3",
-			"description": "Decide whether you'd like Relay 3 to be normally open (NO) or normally closed (NC).",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Normally open (reports off when switch is off / on when switch is on)",
-					"value": 0
-				},
-				{
-					"label": "Normally closed (reports off when is on / on when switch is off)",
-					"value": 1
-				},
-				{
-					"label": "Normally closed (reports off when switch is off / on when switch is on)",
-					"value": 2
-				}
-			]
-		},
-		"24": {
-			"label": "DC Motor Mode",
-			"description": "When enabled only one relay may be on at a time, the other relay is automatically turned off.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
 				}
 			]
 		}

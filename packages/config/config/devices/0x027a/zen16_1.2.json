@@ -10,8 +10,8 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "1.01",
-		"max": "1.01"
+		"min": "1.2.",
+		"max": "1.2"
 	},
 	"associations": {
 		"1": {
@@ -90,6 +90,10 @@
 				{
 					"label": "Toggle switch (change state on toggle)",
 					"value": 2
+				},
+				{
+					"label": "Garage door (momentary mMode for Z-Wave control)",
+					"value": 3
 				}
 			]
 		},
@@ -116,6 +120,10 @@
 				{
 					"label": "Toggle switch (change state on toggle)",
 					"value": 2
+				},
+				{
+					"label": "Garage door (momentary mode for Z-Wave control)",
+					"value": 3
 				}
 			]
 		},
@@ -142,6 +150,10 @@
 				{
 					"label": "Toggle switch (change state on toggle)",
 					"value": 2
+				},
+				{
+					"label": "Garage door (momentary mMode for Z-Wave control)",
+					"value": 3
 				}
 			]
 		},
@@ -266,6 +278,10 @@
 				{
 					"label": "Enabled",
 					"value": 1
+				},
+				{
+					"label": "Local control disabled with enable on/off reports",
+					"value": 2
 				}
 			]
 		},
@@ -288,6 +304,10 @@
 				{
 					"label": "Enabled",
 					"value": 1
+				},
+				{
+					"label": "Local control disabled with enable on/off reports",
+					"value": 2
 				}
 			]
 		},
@@ -310,6 +330,10 @@
 				{
 					"label": "Enabled",
 					"value": 1
+				},
+				{
+					"label": "Local control disabled with enable on/off reports",
+					"value": 2
 				}
 			]
 		},
