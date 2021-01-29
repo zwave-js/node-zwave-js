@@ -390,14 +390,14 @@ export class CommandClass {
 
 	/** Determines which CC interviews must be performed before this CC can be interviewed */
 	public determineRequiredCCInterviews(): readonly CommandClasses[] {
-		// The interview order is determined automatically
-		// At the start, the following interviews must happen in this order:
-		// 1. Z-Wave+ CC (sets up lifelines)
-		// 2. Version CC
-		// 3. Manufacturer Specific CC
+		// By default, all CCs require the VersionCC interview
 
-		// All other CCs depend on the Manufacturer Specific CC (and possibly more)
-		return [CommandClasses["Manufacturer Specific"]];
+		// There are two exceptions to this rule:
+		// * ManufacturerSpecific must be interviewed first
+		// * VersionCC itself must be done after that
+		// These exceptions are defined in the overrides of this method of each corresponding CC
+
+		return [CommandClasses.Version];
 	}
 
 	/**

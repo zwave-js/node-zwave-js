@@ -124,11 +124,6 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 export class ZWavePlusCC extends CommandClass {
 	declare ccCommand: ZWavePlusCommand;
 
-	public determineRequiredCCInterviews(): readonly CommandClasses[] {
-		// The Z-Wave+ CC MUST be interviewed first (sets up Lifeline)
-		return [];
-	}
-
 	public async interview(complete: boolean = true): Promise<void> {
 		const node = this.getNode()!;
 		const endpoint = this.getEndpoint()!;
