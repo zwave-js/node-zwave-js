@@ -960,9 +960,10 @@ export class UserCodeCCReport extends UserCodeCC {
 
 		if (
 			this.payload.length === 2 &&
-			this.userIdStatus === UserIDStatus.Available
+			(this.userIdStatus === UserIDStatus.Available ||
+				this.userIdStatus === UserIDStatus.StatusNotAvailable)
 		) {
-			// The user code is not set and this report contains no user code
+			// The user code is not set or not available and this report contains no user code
 			this.userCode = "";
 		} else {
 			// The specs require the user code to be at least 4 digits
