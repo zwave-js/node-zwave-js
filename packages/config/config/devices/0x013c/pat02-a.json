@@ -41,7 +41,7 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"5[0x01]": {
+		"5[0x00]": {
 			"label": "Flood Sensor Function",
 			"description": "Enable or disable the flood function.",
 			"valueSize": 1,
@@ -54,11 +54,11 @@
 			"options": [
 				{
 					"label": "Disabled",
-					"value": 0
+					"value": 1
 				},
 				{
 					"label": "Enabled",
-					"value": 1
+					"value": 0
 				}
 			]
 		},
@@ -96,11 +96,32 @@
 			"options": [
 				{
 					"label": "Disabled",
-					"value": 0
+					"value": 1
 				},
 				{
 					"label": "Enabled",
+					"value": 0
+				}
+			]
+		},
+		"6[0x06]": {
+			"label": "Humidity Report When Triggered",
+			"description": "Determines whether a temperature report is sent after an event is triggered.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
 					"value": 1
+				},
+				{
+					"label": "Enabled",
+					"value": 0
 				}
 			]
 		},
@@ -117,11 +138,11 @@
 			"options": [
 				{
 					"label": "Disabled",
-					"value": 0
+					"value": 1
 				},
 				{
 					"label": "Enabled",
-					"value": 1
+					"value": 0
 				}
 			]
 		},
@@ -159,11 +180,11 @@
 			"options": [
 				{
 					"label": "Disabled",
-					"value": 0
+					"value": 1
 				},
 				{
 					"label": "Enabled",
-					"value": 1
+					"value": 0
 				}
 			]
 		},
@@ -180,11 +201,11 @@
 			"options": [
 				{
 					"label": "Disabled",
-					"value": 0
+					"value": 1
 				},
 				{
 					"label": "Enabled",
-					"value": 1
+					"value": 0
 				}
 			]
 		},
