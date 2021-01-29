@@ -251,9 +251,6 @@
 					"minProperties": 1,
 					"additionalProperties": false
 				},
-				"keepS0NonceUntilNext": {
-					"const": true
-				},
 				"preserveRootApplicationCCValueIDs": {
 					"const": true
 				},

@@ -441,39 +441,25 @@ export class ConfigManager {
 	 * @param productId The product id of the device
 	 * @param firmwareVersion If known, configuration for a specific firmware version can be loaded.
 	 * If this is `undefined` or not given, the first matching file with a defined firmware range will be returned.
-	 * If this is `false`, **only** the first matching file without a firmware version (`firmwareVersion: false`) will be returned.
 	 */
 	public async lookupDevice(
 		manufacturerId: number,
 		productType: number,
 		productId: number,
-		firmwareVersion?: string | false,
+		firmwareVersion?: string,
 	): Promise<DeviceConfig | undefined> {
 		// Load/regenerate the index if necessary
 		if (!this.index) await this.loadDeviceIndex();
 
 		// Look up the device in the index
-		let indexEntry: DeviceConfigIndexEntry | undefined;
-		if (firmwareVersion === false) {
-			// A config file with no firmware version is explicitly requested
-			const predicate = getDeviceEntryPredicate(
+		const indexEntry = this.index!.find(
+			getDeviceEntryPredicate(
 				manufacturerId,
 				productType,
 				productId,
-			);
-			indexEntry = this.index!.find(
-				(e) => e.firmwareVersion === false && predicate(e),
-			);
-		} else {
-			indexEntry = this.index!.find(
-				getDeviceEntryPredicate(
-					manufacturerId,
-					productType,
-					productId,
-					firmwareVersion,
-				),
-			);
-		}
+				firmwareVersion,
+			),
+		);
 
 		if (indexEntry) {
 			const filePath = path.join(

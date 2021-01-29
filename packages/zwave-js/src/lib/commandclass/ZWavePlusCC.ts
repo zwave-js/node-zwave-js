@@ -140,7 +140,6 @@ export class ZWavePlusCC extends CommandClass {
 		});
 
 		if (complete) {
-			// This information does not change
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying Z-Wave+ information...",

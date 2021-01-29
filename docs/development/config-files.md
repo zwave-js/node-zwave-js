@@ -191,11 +191,6 @@ If a device does not report some CCs in its NIF, this can be used to add them. T
 
 By default, received `Basic` commands are mapped to a more appropriate CC. Setting `disableBasicMapping` to `true` disables this feature.
 
-### `keepS0NonceUntilNext`
-
-Secure nonces must only be used once and expired when a new one is requested. However there are devices that reuse nonces **until** they have requested and received a new one.
-In order to communicate with these devices, nonces must be preserved until the receipt of the nonce was confirmed. This can be done by setting `keepS0NonceUntilNext` to `true`.
-
 ### `preserveRootApplicationCCValueIDs`
 
 The Z-Wave+ specs mandate that the root endpoint must **mirror** the application functionality of endpoint 1 (and potentially others). For this reason, `zwave-js` hides these superfluous values. However, some legacy devices offer additional functionality through the root endpoint, which should not be hidden. To achive this, set `preserveRootApplicationCCValueIDs` to `true`.

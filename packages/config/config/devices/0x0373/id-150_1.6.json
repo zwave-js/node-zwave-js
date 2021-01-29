@@ -269,11 +269,5 @@
 				}
 			]
 		}
-	},
-	"compat": {
-		// This device has a firmware bug where it will reuse previous nonces after
-		// an unencrypted request. In order to be able to use it, we must not invalidate
-		// nonces until it requests a new one itself
-		"keepS0NonceUntilNext": true
 	}
 }

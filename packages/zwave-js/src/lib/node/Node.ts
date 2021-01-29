@@ -1214,11 +1214,8 @@ version:               ${this.version}`;
 
 	/**
 	 * Loads the device configuration for this node from a config file
-	 * @param withFirmwareVersion Whether the firmware version should be considered while looking up the file
 	 */
-	protected async loadDeviceConfig(
-		withFirmwareVersion: boolean = true,
-	): Promise<void> {
+	protected async loadDeviceConfig(): Promise<void> {
 		// But the configuration definitions might change
 		if (
 			this.manufacturerId != undefined &&
@@ -1234,7 +1231,7 @@ version:               ${this.version}`;
 				this.manufacturerId,
 				this.productType,
 				this.productId,
-				withFirmwareVersion ? this.firmwareVersion : false,
+				this.firmwareVersion,
 			);
 			if (this._deviceConfig) {
 				this.driver.controllerLog.logNode(
@@ -1304,17 +1301,7 @@ version:               ${this.version}`;
 			}
 
 			try {
-				if (
-					cc === CommandClasses["Manufacturer Specific"] &&
-					endpoint.index === 0
-				) {
-					// After the manufacturer specific interview we have enough info to load
-					// fallback config files without firmware version
-					await this.loadDeviceConfig(false);
-				} else if (
-					cc === CommandClasses.Version &&
-					endpoint.index === 0
-				) {
+				if (cc === CommandClasses.Version && endpoint.index === 0) {
 					// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
 					await this.loadDeviceConfig();
 					if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
@@ -1864,13 +1851,8 @@ version:               ${this.version}`;
 			return;
 		}
 
-		// Delete all previous nonces we sent the node, since they
-		// should no longer be used - except if a config flag forbids it
-		// Devices using this flag may only delete the old nonce after the new one was acknowledged
-		const keepUntilNext = !!this.deviceConfig?.compat?.keepS0NonceUntilNext;
-		if (!keepUntilNext) {
-			this.driver.securityManager.deleteAllNoncesForReceiver(this.id);
-		}
+		// Delete all previous nonces we sent the node, since they should no longer be used
+		this.driver.securityManager.deleteAllNoncesForReceiver(this.id);
 
 		// Now send the current nonce
 		try {
