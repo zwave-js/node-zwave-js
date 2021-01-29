@@ -1,0 +1,301 @@
+{
+	"manufacturer": "Inovelli",
+	"manufacturerId": "0x031e",
+	"label": "LZW45",
+	"description": "Light Strip",
+	"devices": [
+		{
+			"productType": "0x000a",
+			"productId": "0x0001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic_Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Switch_MultiLevel_Set",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Switch_MultiLevel_Start/Stop",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Number of Pixels",
+			"description": "When individually addressable LEDs are used, this parameter tells the controller the number of pixels that are attached. \n      0: Automatic recognition of pixels\n      Range 1 - 130: Set the fixed value of the pixel bit\n      Default: 0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 130,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Dimming Speed",
+			"description": "This changes the speed in which the light strip dims up or down. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed.\n      Range 0 - 98: Set the dimming speed\n      Default: 4",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 98,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Ramp Rate",
+			"description": "This changes the speed in which the light strip turns on or off. For example, when a user sends the switch a basicSet(value: 0xFF) or basicSet(value: 0x00), this is the speed in which those actions take place. A setting of 0 should turn the light immediately on or off (almost like an on/off switch). Increasing the value should slow down the transition speed. A setting of 99 should keep this in sync with parameter 2.\n      Range 0 - 98: Set the Ramp Rate\n      99: Keep in sync with parameter 2\n      Default: 99",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "Minimum Level",
+			"description": "The minimum level that the strip can be dimmed to. Useful when the user has an LED strip that does not turn on or flickers at a lower level.\n      Range: 1 - 45\n      Default: 1",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 45,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5": {
+			"label": "Maximum Level",
+			"description": "The maximum level that the strip can be dimmed to. Useful when the user has an LED strip that reaches its maximum level before the dimmer value of 99.\n      Range: 55 - 99\n      Default: 99",
+			"valueSize": 1,
+			"minValue": 55,
+			"maxValue": 99,
+			"defaultValue": 99,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Auto Off Timer",
+			"description": "Automatically turns the strip off after this many seconds. When the strip is turned on a timer is started that is the duration of this setting. When the timer expires, the strip is turned off.\n      0 - Auto off is disabled\n      Range: 0 - 32767",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Default Level (Local)",
+			"description": "Default level for the strip when it is powered on from the local switch. A setting of 0 means that the switch will return to the level that it was on before it was turned off.\n      Range 0 - 99\n      Default: 0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Default Level (Z-Wave)",
+			"description": "Default level for the dimmer when it is powered on from a Z-Wave command (i.e. BasicSet(0xFF)). A setting of 0 means that the switch will return to the level that it was on before it was turned off.\n      Range: 0-99\n      Default: 0",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Default Color",
+			"description": "Byte(3-2): Values between 2700-6500 represent a color temperature. \n      Byte(1-0): Values between 0-361, represent the color on the Hue color wheel. The value of 361 represents a random color.\n      Range: 0 - 425984362\n      Default: 262144000",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 425984362,
+			"defaultValue": 262144000,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "State after power Restored",
+			"description": "The state the switch should return to once power is restored after power failure.\n      0 - Off\n      1 - Default Color / Level (Parameter 9)\n      2 - Previous\n      Default: Previous",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "Default Color/Level",
+					"value": 1
+				},
+				{
+					"label": "Previous",
+					"value": 2
+				}
+			]
+		},
+		"17": {
+			"label": "Active Power Reports",
+			"description": "The power level change that will result in a new power report being sent. The value is a percentage of the previous report. 0 = disabled.\n      Range: 0 - 100\n      Default: 10",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 100,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"18": {
+			"label": "Periodic Power & Energy Reports",
+			"description": "Time period between consecutive power & energy reports being sent (in seconds). The timer is reset after each report is sent.\n      Range: 0, 30 - 32767\n      Default: 3600",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 3600,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"19": {
+			"label": "Energy Reports",
+			"description": "The energy level change that will result in a new energy report being sent (in kWh)\n\t  0 = 0.01kWh, 10=0.1kWh, 100=1kWh\n      Range:0-127\n      Default: 10",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 10,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "Quick Strip Effect",
+			"description": "See website for details\n      *  Sending Basic, Binary Switch, Multilevel, and Color SET will automatically disable the strip effect.\n      *  Toggling OFF -> ON will cancel effect mode set on LED Strip and change the LED Strip back to the Previous color.\n      Range: 0 - 2147483647\n      Default: 0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "Custom Strip Effect Parameter 1",
+			"description": "See website for details.\n      Range: 0 - 2147483647\n      Default: 0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"23": {
+			"label": "Custom Strip Effect Parameter 2",
+			"description": "See website for details.\n      Range: 0 - 2147483647\n      Default: 0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"24": {
+			"label": "Custom Strip Effect Parameter 3",
+			"description": "See website for details.\n      Range: 0 - 2147483647\n      Default: 0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 2147483647,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"30": {
+			"label": "Custom Strip Effect Parameter 4",
+			"description": "See website for details.\n      Range: 0 - 197375\n      Default: 0",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 197375,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"31": {
+			"label": "Pixel Effect",
+			"description": "Byte 1 - Level\n      Byte 0 - Effect\n      See website for details.\n      Default: 0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"51": {
+			"label": "Disable Physical On/Off Delay",
+			"description": "The 700ms delay that occurs after pressing the physical button to turn the switch on/off is removed. Consequently this also removes the following scenes: 2x, 3x, 4x, 5x tap. Still working are the 1x tap, held, released, and the level up/down scenes. (firmware 1.36+)\n      0 - 700ms delay disabled (some scenes will not work)\n      1 - 700ms delay enabled (All scenes work)\n      Default: 700ms delay enabled",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "700ms delay disabled",
+					"value": 0
+				},
+				{
+					"label": "700ms delay enabled",
+					"value": 1
+				}
+			]
+		}
+	}
+}
