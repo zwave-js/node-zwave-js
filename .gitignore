@@ -24,7 +24,6 @@ zwave-js-*.tgz
 .tmp
 .tmpoh/
 .tmpozw/
-.tmpzwa/
 
 # Compiled source files
 **/build
