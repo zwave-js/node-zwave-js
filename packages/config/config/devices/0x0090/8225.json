@@ -1,0 +1,952 @@
+// Baldwin 8225
+// Minneapolis 10 Touchscreen Electronic Deadbolt
+{
+	"manufacturer": "Baldwin",
+	"manufacturerId": "0x0090",
+	"label": "8225",
+	"description": "Minneapolis 10 Touchscreen Electronic Deadbolt",
+	"devices": [
+		{
+			"productType": "0x0009",
+			"productId": "0x0642",
+			"zwaveAllianceId": [3330, 3353]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Group 1",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Group 2",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "User Code 1 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"2": {
+			"label": "User Code 2 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"3": {
+			"label": "User Code 3 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"4": {
+			"label": "User Code 4 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"5": {
+			"label": "User Code 5 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"6": {
+			"label": "User Code 6 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"7": {
+			"label": "User Code 7 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"8": {
+			"label": "User Code 8 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"9": {
+			"label": "User Code 9 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"10": {
+			"label": "User Code 10 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"11": {
+			"label": "User Code 11 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"12": {
+			"label": "User Code 12 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"13": {
+			"label": "User Code 13 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"14": {
+			"label": "User Code 14 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"15": {
+			"label": "User Code 15 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"16": {
+			"label": "User Code 16 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"17": {
+			"label": "User Code 17 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"18": {
+			"label": "User Code 18 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"19": {
+			"label": "User Code 19 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"20": {
+			"label": "User Code 20 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"21": {
+			"label": "User Code 21 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"22": {
+			"label": "User Code 22 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"23": {
+			"label": "User Code 23 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"24": {
+			"label": "User Code 24 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"25": {
+			"label": "User Code 25 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"26": {
+			"label": "User Code 26 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"27": {
+			"label": "User Code 27 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"28": {
+			"label": "User Code 28 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"29": {
+			"label": "User Code 29 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"30": {
+			"label": "User Code 30 Type",
+			"description": "Set the type of user for their corresponding user code. Guests and Workers will require schedules attached to them in order for those types to be assigned",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Owner",
+					"value": 1
+				},
+				{
+					"label": "Guest",
+					"value": 3
+				},
+				{
+					"label": "Worker",
+					"value": 4
+				}
+			]
+		},
+		"31[0x01]": {
+			"label": "Dipswitch setting: Lock Status LED",
+			"description": "State of the Lock Status LED dipswitch on the rear panel of the door lock.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"31[0x02]": {
+			"label": "Dipswitch setting: Autolock",
+			"description": "State of the Autolock dipswitch on the rear panel of the door lock.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"31[0x04]": {
+			"label": "Dipswitch setting: Buzzer",
+			"description": "State of the Buzzer dipswitch on the rear panel of the door lock.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"31[0x08]": {
+			"label": "Dipswitch setting: Secure Screen",
+			"description": "State of the Secure Screen dipswitch on the rear panel of the door lock.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"33": {
+			"label": "SKU number, 1st 4 bytes",
+			"description": "All printable characters",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"34": {
+			"label": "SKU number, last 4 bytes",
+			"description": "All printable characters",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 0,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": true,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"40": {
+			"label": "Reset to Default",
+			"description": "Force Factory Reset",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Factory Reset",
+					"value": 1
+				}
+			]
+		}
+	},
+	"metadata": {
+		"inclusion": "Initiate the process to add the lock to your system at your smart home controller.\nWhen prompted by your smart home system to add the lock, press button “A” on the lock interior one time. The red LED will illuminate when the lock enters Add Mode.\nPlease allow time for the controller to add the lock to your system",
+		"exclusion": "Follow your smart home system’s instructions to remove the lock from the network. When prompted by the system, press button A” on the lock interior once. The red LED will illuminate when the lock enters Remove mode.",
+		"reset": "A factory reset will delete all user codes associated with the lock and will remove itself from your smart home system.\nPlease only perform a factory reset when the primary controller is missing or inoperable.\n\nTo perform a factory reset, please perform the following: \n1. Remove the battery pack\n2. Press and HOLD the Program button while reinserting the battery pack.\n3. Keep holding the button for 30 seconds until the lock beeps and the status LED flashes red.\n4. Press the Program button once more. The status LED will flash green and red several times.\n5. After a few seconds, the lock will initiate the door handing process"
+	}
+}

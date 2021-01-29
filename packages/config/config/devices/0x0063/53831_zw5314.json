@@ -1,0 +1,67 @@
+// GE/Jasco 53831 / ZW5314
+// Portable Remote, 4 Button
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "53831 / ZW5314",
+	"description": "Portable Remote, 4 Button",
+	"devices": [
+		{
+			"productType": "0x4843",
+			"productId": "0x3138",
+			"zwaveAllianceId": 3959
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"2": {
+			"label": "Control Groups 2 & 3",
+			"description": "Determines whether Groups 2 & 3 are operational.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal operation",
+					"value": 0
+				},
+				{
+					"label": "Disable Groups 2 and 3",
+					"value": 1
+				}
+			]
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified hub to add a device tothe Z-Wave network.\n2. Once the hub is ready to add your device, press and hold either button for three seconds.\n3. The LED will flash two times when the remote sends add notification (NIF).\n4. The LED will keep lighting up for one minute if inclusion is successful.\n5. Following the instructions for your Z-Wave certified hub, assign actions for each button press. An action can be many combinations of scenes, groups or events, and is greatly dependent on the hub capabilities.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified hub to remove a device from the Z-Wave network.\n2. Once the hub is ready to remove your device, press and hold either button for three seconds.\n3. The LED will flash two times when the remote sends remove notification (NIF)",
+		"reset": "1. Press and release button 1 10 times quickly. All button presses must be within six seconds.\n2. The LED will flash five times when completed successfully."
+	}
+}

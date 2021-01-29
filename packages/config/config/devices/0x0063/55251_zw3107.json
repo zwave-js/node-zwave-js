@@ -1,0 +1,146 @@
+// GE/Jasco 55251 / ZW3107
+// Plug-in Smart Dimmer (Dual Plug with Simultaneous Control)
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "55251 / ZW3107",
+	"description": "Plug-in Smart Dimmer (Dual Plug with Simultaneous Control)",
+	"devices": [
+		{
+			"productType": "0x5044",
+			"productId": "0x3133",
+			"zwaveAllianceId": 3974
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is Off",
+					"value": 0
+				},
+				{
+					"label": "LED On when light is turned On",
+					"value": 1
+				},
+				{
+					"label": "LED always Off",
+					"value": 2
+				}
+			]
+		},
+		"7": {
+			"label": "Dim Rate Steps (Z-Wave)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Dim Rate Timing (Z-Wave)",
+			"description": "Timing of steps",
+			"unit": "10ms",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Dime Rate Steps (Manual)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dim Rate Timing (Manual)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Dim Rate Steps (All-On/All-Off)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Dim Rate Timing (All-On/All-Off)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your smart dimmer, single press and release the manual/program button on\nthe smart dimmer",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave\nnetwork.\n2. Once the controller is ready to remove your device, press and release the manual/program button on the smart dimmer",
+		"reset": "1. If plugged in, unplug the dimmer from the receptacle.\n2. Press and hold the top button for at least three seconds while you plug the dimmer into a receptacle.\n3. The LED will flash five times when completed successfully"
+	}
+}
