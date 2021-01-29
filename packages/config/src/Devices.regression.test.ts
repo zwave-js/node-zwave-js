@@ -3,6 +3,9 @@ import { ConfigManager } from "./ConfigManager";
 describe("lib/config/Devices", () => {
 	describe("lookupDevice (regression tests)", () => {
 		it("Z-TRM3 with commandClasses.add compat should work", async () => {
+			// This test might take a while
+			jest.setTimeout(60000);
+
 			const configManager = new ConfigManager();
 			const config = await configManager.lookupDevice(
 				0x019b,
