@@ -94,7 +94,7 @@
 		},
 		"3": {
 			"label": "Default dimming speed",
-			"description": "Default dimming speed，unit is second. Valid values: 0-100. Default value: 5 0 - Instanly. 1 - Fast. ... 100 - Slow.",
+			"description": "Configure the default dimming speed: 0 = Instantly, 1 = Fast, 100 = Slow",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -151,7 +151,7 @@
 		},
 		"7": {
 			"label": "Default brightness",
-			"description": "Setting default brightness when turn on the dimmer from off status. Setting of 0 means that the dimmer will use parameter 1. Default value: 0 Valid values: 0-99",
+			"description": "Setting default brightness when turn on the dimmer from off status. 0 means that the dimmer will use parameter 1.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -163,7 +163,7 @@
 		},
 		"8": {
 			"label": "Turn off delay",
-			"description": "Setting delay time when turn off, unit is second. Default value: 0 Valid values: 0-60",
+			"description": "Setting delay time when turn off",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
