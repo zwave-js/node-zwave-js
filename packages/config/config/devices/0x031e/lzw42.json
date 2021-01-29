@@ -23,7 +23,7 @@
 	"paramInformation": {
 		"2": {
 			"label": "State after Power Loss",
-			"description": "This state will be chosen when the power is restored",
+			"description": "The state to enter after a power loss",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -34,7 +34,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Previous",
+					"label": "Previous state",
 					"value": 0
 				},
 				{
@@ -51,7 +51,7 @@
 			"label": "Color Adjustment (Warm White)",
 			"description": "Changes the color temperature for warm white",
 			"valueSize": 2,
-			"minValue": 1387,
+			"minValue": 2700,
 			"maxValue": 4999,
 			"defaultValue": 2700,
 			"unit": "K",
