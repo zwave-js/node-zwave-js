@@ -23,7 +23,7 @@
 	"paramInformation": {
 		"2": {
 			"label": "State after Power Loss",
-			"description": "The state to enter after a power loss",
+			"description": "This state will be chosen when the power is restored",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
