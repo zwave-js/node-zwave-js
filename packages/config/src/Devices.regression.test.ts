@@ -2,14 +2,8 @@ import { ConfigManager } from "./ConfigManager";
 
 describe("lib/config/Devices", () => {
 	describe("lookupDevice (regression tests)", () => {
-		let configManager: ConfigManager;
-
-		beforeAll(async () => {
-			configManager = new ConfigManager();
-			await configManager.loadDeviceIndex();
-		}, 60000);
-
 		it("Z-TRM3 with commandClasses.add compat should work", async () => {
+			const configManager = new ConfigManager();
 			const config = await configManager.lookupDevice(
 				0x019b,
 				0x0003,
