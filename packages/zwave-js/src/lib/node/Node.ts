@@ -1683,6 +1683,21 @@ version:               ${this.version}`;
 					}
 				}
 			}
+			// And remove those that it marks as unsupported
+			const removeCCs = this.deviceConfig.compat?.removeCCs;
+			if (removeCCs) {
+				for (const [cc, endpoints] of removeCCs) {
+					if (endpoints === "*") {
+						for (const ep of this.getAllEndpoints()) {
+							ep.removeCC(cc);
+						}
+					} else {
+						for (const ep of endpoints) {
+							this.getEndpoint(ep)?.removeCC(cc);
+						}
+					}
+				}
+			}
 		}
 
 		await this.setInterviewStage(InterviewStage.OverwriteConfig);

@@ -228,6 +228,31 @@
 								}
 							},
 							"additionalProperties": false
+						},
+						"remove": {
+							"type": "object",
+							"patternProperties": {
+								"^(0x)?[0-9a-f]+$": {
+									"type": "object",
+									"properties": {
+										"endpoints": {
+											"anyOf": [
+												{ "const": "*" },
+												{
+													"type": "array",
+													"items": {
+														"type": "integer",
+														"minimum": 0
+													},
+													"minItems": 1
+												}
+											]
+										}
+									},
+									"additionalProperties": false
+								}
+							},
+							"additionalProperties": false
 						}
 					},
 					"additionalProperties": false

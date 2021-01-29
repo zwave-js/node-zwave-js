@@ -187,6 +187,27 @@ If a device does not report some CCs in its NIF, this can be used to add them. T
 }
 ```
 
+### `commandClasses.remove`
+
+If a device reports support for a CCs but does not correctly support it, this can be used to remove them. This property has the following shape:
+
+```json
+"compat": {
+	"commandClasses": {
+		"remove": {
+			// Removes the CC Anti-Theft from the node and all endpoints
+			"0x5d": {
+				"endpoints": "*"
+			},
+			// Removes the CC Battery from the node (endpoint 0) and endpoint 2
+			"0x80": {
+				"endpoints": [0, 2]
+			}
+		}
+	}
+}
+```
+
 ### `disableBasicMapping`
 
 By default, received `Basic` commands are mapped to a more appropriate CC. Setting `disableBasicMapping` to `true` disables this feature.
