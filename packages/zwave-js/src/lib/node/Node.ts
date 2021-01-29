@@ -1851,10 +1851,7 @@ version:               ${this.version}`;
 			return;
 		}
 
-		// Delete all previous nonces we sent the node, since they should no longer be used
-		this.driver.securityManager.deleteAllNoncesForReceiver(this.id);
-
-		// Now send the current nonce
+		// And send the current nonce
 		try {
 			await this.commandClasses.Security.sendNonce();
 		} catch (e) {
