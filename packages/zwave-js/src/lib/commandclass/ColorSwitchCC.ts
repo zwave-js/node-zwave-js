@@ -332,9 +332,13 @@ export class ColorSwitchCCAPI extends CCAPI {
 			await this.set({ [propertyKey]: value });
 
 			if (this.isSinglecast()) {
-				// Refresh the current value
-				// TODO: #1521, #1321
-				await this.get(propertyKey);
+				// Verify the current value after a delay
+				// TODO: #1321
+				const duration = undefined as Duration | undefined;
+				this.schedulePoll(
+					{ property, propertyKey },
+					duration?.toMilliseconds(),
+				);
 			}
 		} else if (property === "hexColor") {
 			// No property key, this is the hex color #rrggbb

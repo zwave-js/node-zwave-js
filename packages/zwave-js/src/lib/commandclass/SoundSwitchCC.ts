@@ -234,11 +234,6 @@ export class SoundSwitchCCAPI extends CCAPI {
 				);
 			}
 			await this.setConfiguration(value, 0xff /* keep current volume */);
-
-			if (this.isSinglecast()) {
-				// Refresh the current value
-				await this.getConfiguration();
-			}
 		} else if (property === "defaultVolume") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -249,11 +244,6 @@ export class SoundSwitchCCAPI extends CCAPI {
 				);
 			}
 			await this.setConfiguration(0x00 /* keep current tone */, value);
-
-			if (this.isSinglecast()) {
-				// Refresh the current value
-				await this.getConfiguration();
-			}
 		} else if (property === "toneId") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -272,10 +262,9 @@ export class SoundSwitchCCAPI extends CCAPI {
 			} else {
 				await this.stopPlaying();
 			}
-
 			if (this.isSinglecast()) {
-				// Refresh the current value
-				await this.getPlaying();
+				// Verify the current value after a delay
+				this.schedulePoll({ property });
 			}
 		} else {
 			throwUnsupportedProperty(this.ccId, property);

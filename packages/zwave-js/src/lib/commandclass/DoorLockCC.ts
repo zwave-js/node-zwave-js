@@ -131,17 +131,8 @@ export class DoorLockCCAPI extends PhysicalCCAPI {
 			}
 			await this.set(value);
 
-			// Refresh the current value after a delay
-			// TODO: #1321, #1521
-			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-			setTimeout(async () => {
-				this.refreshTimeout = undefined;
-				try {
-					await this.get();
-				} catch {
-					/* ignore */
-				}
-			}, this.driver.options.timeouts.refreshValue).unref();
+			// Verify the current value after a delay
+			this.schedulePoll({ property });
 		} else if (
 			typeof property === "string" &&
 			configurationSetParameters.includes(property as any)

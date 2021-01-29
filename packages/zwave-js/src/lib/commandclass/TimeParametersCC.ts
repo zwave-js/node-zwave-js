@@ -124,11 +124,6 @@ export class TimeParametersCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "date", typeof value);
 		}
 		await this.set(value);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get();
-		}
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

@@ -96,8 +96,8 @@ export class ThermostatModeCCAPI extends CCAPI {
 		await this.set(value);
 
 		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get();
+			// Verify the current value after a delay
+			this.schedulePoll({ property });
 		}
 	};
 

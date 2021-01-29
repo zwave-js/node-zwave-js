@@ -100,15 +100,7 @@ export class BasicCCAPI extends CCAPI {
 			);
 
 			// and verify the current value after a delay
-			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-			setTimeout(async () => {
-				this.refreshTimeout = undefined;
-				try {
-					await this.get();
-				} catch {
-					/* ignore */
-				}
-			}, this.driver.options.timeouts.refreshValue).unref();
+			this.schedulePoll({ property });
 		}
 	};
 

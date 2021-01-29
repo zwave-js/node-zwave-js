@@ -174,11 +174,6 @@ export class ProtectionCCAPI extends CCAPI {
 				getRFStateValueID(this.endpoint.index),
 			);
 			await this.set(value, rf);
-
-			if (this.isSinglecast()) {
-				// Refresh the current value
-				await this.get();
-			}
 		} else if (property === "rf") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -193,11 +188,6 @@ export class ProtectionCCAPI extends CCAPI {
 				getLocalStateValueID(this.endpoint.index),
 			);
 			await this.set(local ?? LocalProtectionState.Unprotected, value);
-
-			if (this.isSinglecast()) {
-				// Refresh the current value
-				await this.get();
-			}
 		} else if (property === "exclusiveControlNodeId") {
 			if (typeof value !== "number") {
 				throwWrongValueType(
@@ -208,11 +198,6 @@ export class ProtectionCCAPI extends CCAPI {
 				);
 			}
 			await this.setExclusiveControl(value);
-
-			if (this.isSinglecast()) {
-				// Refresh the status
-				await this.getExclusiveControl();
-			}
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}

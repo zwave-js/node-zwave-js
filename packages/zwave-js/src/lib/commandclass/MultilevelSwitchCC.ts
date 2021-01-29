@@ -325,18 +325,9 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 						.getNodeUnsafe()
 						?.supportsCC(CommandClasses.Supervision)
 				) {
-					if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
 					// TODO: #1321
 					const duration = undefined as Duration | undefined;
-
-					setTimeout(async () => {
-						this.refreshTimeout = undefined;
-						try {
-							await this.get();
-						} catch {
-							/* ignore */
-						}
-					}, duration?.toMilliseconds() ?? this.driver.options.timeouts.refreshValue).unref();
+					this.schedulePoll({ property }, duration?.toMilliseconds());
 				}
 			}
 		} else if (switchTypeProperties.includes(property as string)) {

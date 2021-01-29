@@ -159,12 +159,6 @@ export class CentralSceneCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.setConfiguration(value);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			// TODO: #1521
-			await this.getConfiguration();
-		}
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

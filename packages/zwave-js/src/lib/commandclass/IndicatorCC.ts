@@ -203,9 +203,6 @@ export class IndicatorCCAPI extends CCAPI {
 				);
 			}
 			await this.set(value);
-
-			// Refresh the current value
-			await this.get();
 		} else if (
 			typeof property === "number" &&
 			typeof propertyKey === "number"
@@ -234,9 +231,6 @@ export class IndicatorCCAPI extends CCAPI {
 					value: value as any,
 				},
 			]);
-
-			// Refresh the current value
-			await this.get(property);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}

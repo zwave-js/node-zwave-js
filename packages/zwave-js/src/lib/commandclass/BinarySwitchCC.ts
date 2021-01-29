@@ -135,16 +135,7 @@ export class BinarySwitchCCAPI extends CCAPI {
 			// Verify the current value after a delay
 			// TODO: #1321
 			const duration = undefined as Duration | undefined;
-
-			if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
-			setTimeout(async () => {
-				this.refreshTimeout = undefined;
-				try {
-					await this.get();
-				} catch {
-					/* ignore */
-				}
-			}, duration?.toMilliseconds() ?? 1000).unref();
+			this.schedulePoll({ property }, duration?.toMilliseconds() ?? 1000);
 		}
 	};
 

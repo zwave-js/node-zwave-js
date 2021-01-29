@@ -349,9 +349,6 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				);
 			}
 			await this.setKeypadMode(value);
-
-			// Refresh the current value
-			await this.getKeypadMode();
 		} else if (property === "masterCode") {
 			if (typeof value !== "string") {
 				throwWrongValueType(
@@ -362,9 +359,6 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				);
 			}
 			await this.setMasterCode(value);
-
-			// Refresh the current value
-			await this.getMasterCode();
 		} else if (property === "userIdStatus") {
 			if (propertyKey == undefined) {
 				throwMissingPropertyKey(this.ccId, property);
@@ -391,9 +385,6 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				);
 				await this.set(propertyKey, value, userCode!);
 			}
-
-			// Refresh the current value
-			await this.get(propertyKey);
 		} else if (property === "userCode") {
 			if (propertyKey == undefined) {
 				throwMissingPropertyKey(this.ccId, property);
@@ -421,12 +412,12 @@ export class UserCodeCCAPI extends PhysicalCCAPI {
 				userIdStatus = UserIDStatus.Enabled;
 			}
 			await this.set(propertyKey, userIdStatus as any, value);
-
-			// Refresh the current value
-			await this.get(propertyKey);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
+
+		// Verify the current value after a delay
+		this.schedulePoll({ property, propertyKey });
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

@@ -77,13 +77,10 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		switch (property) {
 			case "name":
 				await this.setName(value);
-				// Refresh the current value
-				await this.getName();
 				break;
 			case "location":
 				await this.setLocation(value);
-				// Refresh the current value
-				await this.getLocation();
+				break;
 		}
 	};
 

@@ -7,24 +7,26 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, ObjectKeyMap } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver, SendCommandOptions } from "../driver/Driver";
 import type { Endpoint } from "../node/Endpoint";
 import { VirtualEndpoint } from "../node/VirtualEndpoint";
 import { getCommandClass } from "./CommandClass";
 
+export type ValueIDProperties = Pick<ValueID, "property" | "propertyKey">;
+
 /** Used to identify the method on the CC API class that handles setting values on nodes directly */
 export const SET_VALUE: unique symbol = Symbol.for("CCAPI_SET_VALUE");
 export type SetValueImplementation = (
-	property: Pick<ValueID, "property" | "propertyKey">,
+	property: ValueIDProperties,
 	value: unknown,
 ) => Promise<void>;
 
 /** Used to identify the method on the CC API class that handles polling values from nodes */
 export const POLL_VALUE: unique symbol = Symbol.for("CCAPI_POLL_VALUE");
 export type PollValueImplementation<T extends unknown = unknown> = (
-	property: Pick<ValueID, "property" | "propertyKey">,
+	property: ValueIDProperties,
 ) => Promise<T | undefined>;
 
 // Since the setValue API is called from a point with very generic parameters,
@@ -82,6 +84,7 @@ export class CCAPI {
 		protected readonly endpoint: Endpoint | VirtualEndpoint,
 	) {
 		this.ccId = getCommandClass(this);
+		this.scheduledPolls = new ObjectKeyMap();
 	}
 
 	/**
@@ -105,7 +108,45 @@ export class CCAPI {
 	 */
 	public get pollValue(): PollValueImplementation | undefined {
 		// wotan-disable-next-line no-restricted-property-access
-		return this[POLL_VALUE];
+		const implementation = this[POLL_VALUE]?.bind(this);
+		if (!implementation) return;
+		// Polling manually should cancel scheduled polls to avoid polling too often
+		// Therefore return a wrapper which takes care of that
+		return (property) => {
+			// Cancel any scheduled polls
+			if (this.scheduledPolls.has(property)) {
+				clearTimeout(this.scheduledPolls.get(property)!);
+				this.scheduledPolls.delete(property);
+			}
+			// Call the implementation
+			return implementation(property);
+		};
+	}
+
+	protected scheduledPolls: ObjectKeyMap<ValueIDProperties, NodeJS.Timeout>;
+	/**
+	 * Schedules a value to be polled after a given time. Schedules are eduplicated on a per-property basis.
+	 * @returns `true` if the poll was scheduled, `false` otherwise
+	 */
+	protected schedulePoll(
+		property: ValueIDProperties,
+		timeoutMs: number = this.driver.options.timeouts.refreshValue,
+	): boolean {
+		if (this.scheduledPolls.has(property)) return false;
+		// wotan-disable-next-line no-restricted-property-access
+		if (!this[POLL_VALUE]) return false;
+
+		this.scheduledPolls.set(
+			property,
+			setTimeout(async () => {
+				try {
+					await this.pollValue!(property);
+				} catch {
+					/* ignore */
+				}
+			}, timeoutMs).unref(),
+		);
+		return true;
 	}
 
 	/**
