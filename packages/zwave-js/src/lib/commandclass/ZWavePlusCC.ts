@@ -145,22 +145,6 @@ export class ZWavePlusCC extends CommandClass {
 		});
 
 		if (complete) {
-			if (this.endpointIndex === 0) {
-				// SDS11846: The Z-Wave+ lifeline must be assigned to a node as the very first thing
-				this.driver.controllerLog.logNode(node.id, {
-					message: `Configuring Z-Wave+ Lifeline association...`,
-					direction: "none",
-				});
-				const ownNodeId = this.driver.controller.ownNodeId!;
-
-				if (node.supportsCC(CommandClasses.Association)) {
-					await node.commandClasses.Association.addNodeIds(
-						1,
-						ownNodeId,
-					);
-				}
-			}
-
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: "querying Z-Wave+ information...",
