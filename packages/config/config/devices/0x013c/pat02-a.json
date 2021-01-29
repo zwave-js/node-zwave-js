@@ -1,0 +1,317 @@
+// Philio Technology Corp PAT02-A
+// Flood Sensor
+{
+	"manufacturer": "Philio Technology Corp",
+	"manufacturerId": "0x013c",
+	"label": "PAT02-A",
+	"description": "Flood Sensor",
+	"devices": [
+		{
+			"productType": "0x0002",
+			"productId": "0x001f"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "Basic Set Dim Level (Off)",
+			"description": "When the flood trigger is off, send this dim level via the Basic CC to Group 2.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Basic Set Dim Level (On)",
+			"description": "When the flood trigger is on, send this dim level via the Basic CC to Group 2.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"5[0x01]": {
+			"label": "Flood Sensor Function",
+			"description": "Enable or disable the flood function.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"5[0x03]": {
+			"label": "Temperature Scale",
+			"description": "Configure the temperature scale reported by the device.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Fahrenheit",
+					"value": 0
+				},
+				{
+					"label": "Celsius",
+					"value": 1
+				}
+			]
+		},
+		"5[0x05]": {
+			"label": "Temperature Report When Triggered",
+			"description": "Determines whether a temperature report is sent after an event is triggered.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x03]": {
+			"label": "Disable Basic Off after flood",
+			"description": "Determines whether a Basic Off event is sent after a flood event is cleared.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x04]": {
+			"label": "Notification Type",
+			"description": "Determines the type of report sent.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Notification report",
+					"value": 0
+				},
+				{
+					"label": "Sensor binary report",
+					"value": 1
+				}
+			]
+		},
+		"7[0x05]": {
+			"label": "Send Multi CC Reports",
+			"description": "Determines whether a Multi CC report is sent when sending the automatic report.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x06]": {
+			"label": "Report Battery State When Triggered",
+			"description": "Determines whether the battery state is reported when the device is triggered.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"10": {
+			"label": "Auto Report Battery Time",
+			"description": "The time interval upon which to report the battery level.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"13": {
+			"label": "Auto Report Temperature Time",
+			"description": "The time interval upon which to report the temperature.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"14": {
+			"label": "Auto Report Humidity Time",
+			"description": "The time interval upon which to report the humidity.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"15": {
+			"label": "Auto Report Flood Time",
+			"description": "The time interval upon which to report the flood state.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"20": {
+			"label": "Auto Report Time Unit",
+			"description": "Determines the time unit used by parameters 10 & 13-15 (time interval * time unit).",
+			"unit": "minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 30,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disable all auto reports",
+					"value": 0
+				}
+			]
+		},
+		"21": {
+			"label": "Temperature Differential Report",
+			"description": "Determines the temperature differential that will trigger a report.",
+			"unit": "°F",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		},
+		"23": {
+			"label": "Humidity Differential Report",
+			"description": "Determines the humidity differential that will trigger a report.",
+			"unit": "%",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 60,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				}
+			]
+		}
+	}
+}
