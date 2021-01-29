@@ -125,7 +125,7 @@ export class CCAPI {
 
 	protected scheduledPolls: ObjectKeyMap<ValueIDProperties, NodeJS.Timeout>;
 	/**
-	 * Schedules a value to be polled after a given time. Schedules are eduplicated on a per-property basis.
+	 * Schedules a value to be polled after a given time. Schedules are deduplicated on a per-property basis.
 	 * @returns `true` if the poll was scheduled, `false` otherwise
 	 */
 	protected schedulePoll(
