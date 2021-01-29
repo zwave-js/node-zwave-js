@@ -643,5 +643,16 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"commandClasses": {
+			"remove": {
+				"0x6c": {
+					// The device reports that it supports Supervision, but it does not support all
+					// commands supervision-encapsulated
+					"endpoints": "*"
+				}
+			}
+		}
 	}
 }
