@@ -57,7 +57,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Stacking (Default)",
+					"label": "Stacking",
 					"value": 0
 				},
 				{

@@ -13,7 +13,7 @@ import {
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { ignoreTimeout, PhysicalCCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -125,11 +125,11 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = (await this.driver.sendCommand<AlarmSensorCCReport>(
+		const response = await this.driver.sendCommand<AlarmSensorCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return pick(response, ["state", "severity", "duration"]);
+		);
+		if (response) return pick(response, ["state", "severity", "duration"]);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -143,11 +143,11 @@ export class AlarmSensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<AlarmSensorCCSupportedReport>(
+		const response = await this.driver.sendCommand<AlarmSensorCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedSensorTypes;
+		);
+		if (response) return response.supportedSensorTypes;
 	}
 }
 
@@ -186,25 +186,23 @@ export class AlarmSensorCC extends CommandClass {
 		// Find out which sensor types this sensor supports
 		let supportedSensorTypes: readonly AlarmSensorType[] | undefined;
 		if (complete) {
-			if (
-				!(await ignoreTimeout(async () => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "querying supported sensor types...",
-						direction: "outbound",
-					});
-					supportedSensorTypes = await api.getSupportedSensorTypes();
-					const logMessage = `received supported sensor types: ${supportedSensorTypes
-						.map((type) => getEnumMemberName(AlarmSensorType, type))
-						.map((name) => `\n· ${name}`)
-						.join("")}`;
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				}))
-			) {
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "querying supported sensor types...",
+				direction: "outbound",
+			});
+			supportedSensorTypes = await api.getSupportedSensorTypes();
+			if (supportedSensorTypes) {
+				const logMessage = `received supported sensor types: ${supportedSensorTypes
+					.map((type) => getEnumMemberName(AlarmSensorType, type))
+					.map((name) => `\n· ${name}`)
+					.join("")}`;
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			} else {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:
@@ -221,43 +219,31 @@ export class AlarmSensorCC extends CommandClass {
 		}
 
 		// Always query (all of) the sensor's current value(s)
-		if (supportedSensorTypes) {
-			for (const type of supportedSensorTypes) {
-				const sensorName = getEnumMemberName(AlarmSensorType, type);
+		for (const type of supportedSensorTypes) {
+			const sensorName = getEnumMemberName(AlarmSensorType, type);
 
-				await ignoreTimeout(
-					async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `querying current value for ${sensorName}...`,
-							direction: "outbound",
-						});
-						const currentValue = await api.get(type);
-						let message = `received current value for ${sensorName}: 
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `querying current value for ${sensorName}...`,
+				direction: "outbound",
+			});
+			const currentValue = await api.get(type);
+			if (currentValue) {
+				let message = `received current value for ${sensorName}: 
 state:    ${currentValue.state}`;
-						if (currentValue.severity != undefined) {
-							message += `
+				if (currentValue.severity != undefined) {
+					message += `
 severity: ${currentValue.severity}`;
-						}
-						if (currentValue.duration != undefined) {
-							message += `
+				}
+				if (currentValue.duration != undefined) {
+					message += `
 duration: ${currentValue.duration}`;
-						}
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message,
-							direction: "inbound",
-						});
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message:
-								"Current value query timed out - skipping because it is not critical...",
-							level: "warn",
-						});
-					},
-				);
+				}
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message,
+					direction: "inbound",
+				});
 			}
 		}
 

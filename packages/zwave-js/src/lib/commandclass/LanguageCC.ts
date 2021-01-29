@@ -6,6 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { CCAPI } from "./API";
@@ -51,14 +52,13 @@ export class LanguageCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<LanguageCCReport>(
+		const response = await this.driver.sendCommand<LanguageCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			language: response.language,
-			country: response.country,
-		};
+		);
+		if (response) {
+			return pick(response, ["language", "country"]);
+		}
 	}
 
 	public async set(language: string, country?: string): Promise<void> {
@@ -102,14 +102,17 @@ export class LanguageCC extends CommandClass {
 			message: "requesting language setting...",
 			direction: "outbound",
 		});
-		const { language, country } = await api.get();
-		const logMessage = `received current language setting: ${language}${
-			country != undefined ? "-" + country : ""
-		}`;
-		this.driver.controllerLog.logNode(node.id, {
-			message: logMessage,
-			direction: "inbound",
-		});
+		const resp = await api.get();
+		if (resp) {
+			const { language, country } = resp;
+			const logMessage = `received current language setting: ${language}${
+				country != undefined ? `-${country}` : ""
+			}`;
+			this.driver.controllerLog.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;

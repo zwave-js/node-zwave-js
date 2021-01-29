@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "If your Wi-Fi hub is frozen and unresponsive, inset a pin into the Reset hole. If you want to clear the location, Tap My Devices and Scroll the screen to the left or right to select a location. Tap →Edit and use the following option. Location name→REMOVE PLACE. If you reset the Wi-Fi hub, you should exclude the Z-Wave device and re-include it. For instructions on how to exclude Z-Wave devices, refer respective Z-Wave device’s user manual."
+		"reset": "1. Tap the menu\n2. Tap the gear icon beside the Location with the Hub you wish to reset\n3. Tap Remove Location\n4. Confirm deletion by tapping Delete (IMPORTANT: deleting a Location cannot be undone)\n\nNOTE: Resetting the Hub will restore factory settings. All device connections, automations, rules and configurations associated with that Hub will be lost in the reset. All devices connected to your Hub will have to be reset or excluded before they can be reconnected. The steps for resetting and reconnecting each smart device differ. After resetting, you can visit our Things category, find the devices you wish to set up, and follow the guides provided. Remember that you will likely need to reset or “exclude” every device before connecting."
 	}
 }

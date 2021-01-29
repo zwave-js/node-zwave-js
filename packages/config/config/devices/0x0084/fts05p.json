@@ -1,12 +1,15 @@
+// FortrezZ LLC FTS05P
+// FTS05P Flood and Temperature Sensor
 {
-	"manufacturer": "FortrezZ",
+	"manufacturer": "FortrezZ LLC",
 	"manufacturerId": "0x0084",
 	"label": "FTS05P",
 	"description": "FTS05P Flood and Temperature Sensor",
 	"devices": [
 		{
 			"productType": "0x00a3",
-			"productId": "0x020a"
+			"productId": "0x020a",
+			"zwaveAllianceId": 2458
 		},
 		{
 			"productType": "0x00a3",
@@ -81,7 +84,7 @@
 		},
 		"3": {
 			"label": "Normally Wet vs Normally Dry",
-			"description": "Default is set as a Normally DRY sensor. Use this to switch to Normally WET sensor. The device only accepts one of two possible values: 0 (0x00) - Normally Dry (default). 240 (0xF0) - Normally Wet.",
+			"description": "Default is set as a Normally DRY sensor. Use this to switch to Normally WET sensor.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 240,
@@ -89,11 +92,21 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normally Dry",
+					"value": 0
+				},
+				{
+					"label": "Normally Wet",
+					"value": 240
+				}
+			]
 		},
 		"4": {
 			"label": "Water Alarm Association Mode",
-			"description": "Use this to send basic set ON or Basic Set OFF when an alarm is detected. The device only accepts one of two possible values: 0 (0x00) - For sending basic set OFF when alarm detected. 240 (0xF0) - For sending basic Set ON (default) when alarm detected.",
+			"description": "Use this to send basic set ON or Basic Set OFF when an alarm is detected.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 240,
@@ -101,7 +114,22 @@
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Send Basic Set Off",
+					"value": 0
+				},
+				{
+					"label": "Send Basic Set On",
+					"value": 240
+				}
+			]
 		}
+	},
+	"metadata": {
+		"inclusion": "1) Set up the Add/Inclusion mode at the controller; 2) Briefly press the switch once and the controller will indicate the unit has been added into the network. Also, the LED will blink 2 quick blinks when complete.",
+		"exclusion": "1) Set up the Remove/Exclusion mode at the controller; 2) Press and hold the switch for approx. 2 seconds and then release. The controller will indicates the unit has been removed from the network. The LED will blink 4 quick blinks when complete",
+		"reset": "Reset the device to factory Defaults - Press and hold the program button for longer than 15 seconds. When complete, the LED will flash approx. 30 times. This can be done while the device is either in or out of a network. Please use this procedure only when the network primary controller is missing or otherwise inoperable. Caution – When this is done in-network, the device will no longer be in the network and all configurations and associations will be set to default."
 	}
 }

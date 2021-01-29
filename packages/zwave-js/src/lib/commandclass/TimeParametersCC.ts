@@ -10,6 +10,8 @@ import { MessagePriority } from "../message/Constants";
 import type { Endpoint } from "../node/Endpoint";
 import {
 	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -124,7 +126,18 @@ export class TimeParametersCCAPI extends CCAPI {
 		await this.set(value);
 	};
 
-	public async get(): Promise<Date> {
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "dateAndTime":
+				return this.get();
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	public async get(): Promise<Date | undefined> {
 		this.assertSupportsCommand(
 			TimeParametersCommand,
 			TimeParametersCommand.Get,
@@ -134,11 +147,11 @@ export class TimeParametersCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<TimeParametersCCReport>(
+		const response = await this.driver.sendCommand<TimeParametersCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.dateAndTime;
+		);
+		return response?.dateAndTime;
 	}
 
 	public async set(dateAndTime: Date): Promise<void> {

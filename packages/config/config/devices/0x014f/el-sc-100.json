@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "1. Navigation to the Communication Device: ELAN Z-Wave Network page under Security, Climate, Lighting or Input/Output Tabs in Configurator2. Management View: Network Management3. Network Action: Reset4. Execute (button to right of Network action)"
+		"reset": "1. Navigation to the Communication Device: ELAN Z-Wave Network page under Security, Climate, Lighting or Input/Output Tabs in Configurator\n\n2. Management View: Network Management\n\n3. Network Action: Reset\n\n4. Execute (button to right of Network action)"
 	}
 }

@@ -116,7 +116,7 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (Default)",
+					"label": "Yes",
 					"value": 1
 				}
 			]
@@ -137,7 +137,7 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (Default)",
+					"label": "Yes",
 					"value": 1
 				}
 			]
@@ -247,7 +247,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disabled (Default)",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
@@ -308,7 +308,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off (Default)",
+					"label": "Switch off",
 					"value": 0
 				},
 				{

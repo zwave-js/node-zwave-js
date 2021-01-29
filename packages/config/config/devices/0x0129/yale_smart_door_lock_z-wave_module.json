@@ -1,14 +1,20 @@
-// ASSA ABLOY Yale Smart Door Lock Z-Wave Module
+// Yale Smart Door Lock
 // The Yale Smart Door Lock Z-Wave module allows you to control your Yale Connected Smart Door Lock from anywhere in the world when linked to a leading Z
 {
-	"manufacturer": "ASSA ABLOY",
+	"manufacturer": "Yale",
 	"manufacturerId": "0x0129",
-	"label": "Yale Smart Door Lock Z-Wave Module",
+	"label": "Smart Door Lock",
 	"description": "The Yale Smart Door Lock Z-Wave module allows you to control your Yale Connected Smart Door Lock from anywhere in the world when linked to a leading Z",
 	"devices": [
 		{
 			"productType": "0x0007",
-			"productId": "0x0000"
+			"productId": "0x0000",
+			"zwaveAllianceId": 1399
+		},
+		{
+			"productType": "0x0007",
+			"productId": "0x0001",
+			"zwaveAllianceId": 2576
 		}
 	],
 	"firmwareVersion": {
@@ -21,5 +27,85 @@
 			"maxNodes": 4,
 			"isLifeline": true
 		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Volume",
+			"description": "Volume of product during operation",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 3,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Silent",
+					"value": 1
+				},
+				{
+					"label": "Low Volume",
+					"value": 2
+				},
+				{
+					"label": "High Volume",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "Auto Relock",
+			"description": "Auto relock On/Off",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 255,
+			"defaultValue": 255,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Off",
+					"value": 0
+				},
+				{
+					"label": "On",
+					"value": 255
+				}
+			]
+		},
+		"3": {
+			"label": "Relock Time",
+			"description": "Amount of time (secs)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 7,
+			"defaultValue": 7,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"6": {
+			"label": "Remote Relock Time",
+			"description": "Amount of time (secs)",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 10,
+			"defaultValue": 10,
+			"unit": "seconds",
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "Put the Z-Wave controller into add mode\n\nEnter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 1 button followed by #\n\nRefer to the operation manual of the Z-Wave controller to complete the add/inclusion process\n\nFor more information on this please visit:\nwww.yale.co.uk/smart-living",
+		"exclusion": "Put the Z-Wave controller into remove mode\n\nEnter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 3 button followed by #\n\nRefer to the operation manual of the Z-Wave controller to complete the remove/exclusion process\n\nFor more information on this please visit:\nwww.yale.co.uk/smart-living",
+		"reset": "Enter the Master code on the lock, followed by #\n\nPress the 4 button, followed by #\n\nPress the 0 button followed by #\n\nPlease use this procedure only when the network controller is missing or inoperable"
 	}
 }

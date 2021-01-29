@@ -58,7 +58,7 @@
 					"value": 2
 				},
 				{
-					"label": "Operated by Indicator Command Class (Default)",
+					"label": "Operated by Indicator Command Class",
 					"value": 3
 				}
 			]
@@ -81,14 +81,14 @@
 			"description": "Defines how to interpret RF Off command.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 3,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch off (Default)",
+					"label": "Switch off",
 					"value": 0
 				},
 				{
@@ -117,7 +117,7 @@
 					"value": 0
 				},
 				{
-					"label": "Yes (Default)",
+					"label": "Yes",
 					"value": 1
 				}
 			]
@@ -160,7 +160,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No (Default)",
+					"label": "No",
 					"value": 0
 				},
 				{
@@ -175,17 +175,17 @@
 		},
 		"11": {
 			"label": "Invert Buttons",
-			"description": "",
+			"description": "Invert Buttons",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "No (Default)",
+					"label": "No",
 					"value": 0
 				},
 				{

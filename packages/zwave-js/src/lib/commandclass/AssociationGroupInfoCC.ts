@@ -13,7 +13,7 @@ import {
 import { getEnumMemberName, num2hex } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { ignoreTimeout, PhysicalCCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import type { AssociationCC } from "./AssociationCC";
 import {
 	API,
@@ -285,7 +285,7 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async getGroupName(groupId: number): Promise<string> {
+	public async getGroupName(groupId: number): Promise<string | undefined> {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
 			AssociationGroupInfoCommand.NameGet,
@@ -296,11 +296,11 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = (await this.driver.sendCommand<AssociationGroupInfoCCNameReport>(
+		const response = await this.driver.sendCommand<AssociationGroupInfoCCNameReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.name;
+		);
+		if (response) return response.name;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -316,22 +316,26 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			groupId,
 			refreshCache,
 		});
-		const response = (await this.driver.sendCommand<AssociationGroupInfoCCInfoReport>(
+		const response = await this.driver.sendCommand<AssociationGroupInfoCCInfoReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		// SDS13782: If List Mode is set to 0, the Group Count field MUST be set to 1.
-		const { groupId: _, ...info } = response.groups[0];
-		return {
-			hasDynamicInfo: response.hasDynamicInfo,
-			...info,
-		};
+		);
+		if (response) {
+			// SDS13782: If List Mode is set to 0, the Group Count field MUST be set to 1.
+			const { groupId: _, ...info } = response.groups[0];
+			return {
+				hasDynamicInfo: response.hasDynamicInfo,
+				...info,
+			};
+		}
 	}
 
 	public async getCommands(
 		groupId: number,
 		allowCache: boolean = true,
-	): Promise<AssociationGroupInfoCCCommandListReport["commands"]> {
+	): Promise<
+		AssociationGroupInfoCCCommandListReport["commands"] | undefined
+	> {
 		this.assertSupportsCommand(
 			AssociationGroupInfoCommand,
 			AssociationGroupInfoCommand.CommandListGet,
@@ -343,11 +347,11 @@ export class AssociationGroupInfoCCAPI extends PhysicalCCAPI {
 			groupId,
 			allowCache,
 		});
-		const response = (await this.driver.sendCommand<AssociationGroupInfoCCCommandListReport>(
+		const response = await this.driver.sendCommand<AssociationGroupInfoCCCommandListReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.commands;
+		);
+		if (response) return response.commands;
 	}
 }
 
@@ -460,30 +464,21 @@ export class AssociationGroupInfoCC extends CommandClass {
 
 		for (let groupId = 1; groupId <= associationGroupCount; groupId++) {
 			if (complete) {
-				await ignoreTimeout(
-					async () => {
-						// First get the group's name
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Association group #${groupId}: Querying name...`,
-							direction: "outbound",
-						});
-						const name = await api.getGroupName(groupId);
-						const logMessage = `Association group #${groupId} has name "${name}"`;
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: logMessage,
-							direction: "inbound",
-						});
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Querying name of association group #${groupId} timed out - skipping because it is not critical...`,
-							level: "warn",
-						});
-					},
-				);
+				// First get the group's name
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `Association group #${groupId}: Querying name...`,
+					direction: "outbound",
+				});
+				const name = await api.getGroupName(groupId);
+				if (name) {
+					const logMessage = `Association group #${groupId} has name "${name}"`;
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				}
 			}
 
 			// Even if this is a partial interview, we need to refresh information
@@ -497,59 +492,36 @@ export class AssociationGroupInfoCC extends CommandClass {
 			}
 
 			if (complete || hasDynamicInfo) {
-				await ignoreTimeout(
-					async () => {
-						// Then its information
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Association group #${groupId}: Querying info...`,
-							direction: "outbound",
-						});
-						const info = await api.getGroupInfo(
-							groupId,
-							!!hasDynamicInfo,
-						);
-						const logMessage = `Received info for association group #${groupId}:
+				// Then its information
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `Association group #${groupId}: Querying info...`,
+					direction: "outbound",
+				});
+				const info = await api.getGroupInfo(groupId, !!hasDynamicInfo);
+				if (info) {
+					const logMessage = `Received info for association group #${groupId}:
 info is dynamic: ${info.hasDynamicInfo}
 profile:         ${getEnumMemberName(
-							AssociationGroupInfoProfile,
-							info.profile,
-						)}`;
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: logMessage,
-							direction: "inbound",
-						});
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Querying info for association group #${groupId} timed out - skipping because it is not critical...`,
-							level: "warn",
-						});
-					},
-				);
+						AssociationGroupInfoProfile,
+						info.profile,
+					)}`;
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				}
 			}
 
 			if (complete) {
-				await ignoreTimeout(
-					async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Association group #${groupId}: Querying command list...`,
-							direction: "outbound",
-						});
-						await api.getCommands(groupId);
-						// Not sure how to log this
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Querying command list for association group #${groupId} timed out - skipping because it is not critical...`,
-							level: "warn",
-						});
-					},
-				);
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `Association group #${groupId}: Querying command list...`,
+					direction: "outbound",
+				});
+				await api.getCommands(groupId);
+				// Not sure how to log this
 			}
 		}
 

@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Restores the remote back to a factorystate by removing all memory of shadeand remote pairings from the remote.1. On the remote, press and hold theMENU/RIGHT button to enter the menu.2. Select ZWAVE > RESET.3. With LIKE NEW? selected, press andhold the MENU/RIGHT button until thescreen no longer tells you to wait.Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"reset": "Restores the remote back to a factory\nstate by removing all memory of shade\nand remote pairings from the remote.\n1. On the remote, press and hold the\nMENU/RIGHT button to enter the menu.\n2. Select ZWAVE > RESET.\n3. With LIKE NEW? selected, press and\nhold the MENU/RIGHT button until the\nscreen no longer tells you to wait.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
 	}
 }

@@ -136,22 +136,21 @@ export class FibaroVenetianBlindCC extends FibaroCC {
 			message: "Requesting venetian blind position and tilt...",
 			direction: "outbound",
 		});
-		const {
-			position,
-			tilt,
-		} = (await this.driver.sendCommand<FibaroVenetianBlindCCReport>(
+		const resp = await this.driver.sendCommand<FibaroVenetianBlindCCReport>(
 			new FibaroVenetianBlindCCGet(this.driver, {
 				nodeId: this.nodeId,
 				endpoint: this.endpointIndex,
 			}),
-		))!;
-		const logMessage = `received venetian blind state:
-position: ${position}
-tilt:     ${tilt}`;
-		this.driver.controllerLog.logNode(node.id, {
-			message: logMessage,
-			direction: "inbound",
-		});
+		);
+		if (resp) {
+			const logMessage = `received venetian blind state:
+position: ${resp.position}
+tilt:     ${resp.tilt}`;
+			this.driver.controllerLog.logNode(node.id, {
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;

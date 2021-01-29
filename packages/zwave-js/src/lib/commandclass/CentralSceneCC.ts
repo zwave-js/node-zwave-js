@@ -13,13 +13,14 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
-	ignoreTimeout,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -100,15 +101,17 @@ export class CentralSceneCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<CentralSceneCCSupportedReport>(
+		const response = await this.driver.sendCommand<CentralSceneCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			sceneCount: response.sceneCount,
-			supportsSlowRefresh: response.supportsSlowRefresh,
-			supportedKeyAttributes: response.supportedKeyAttributes,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"sceneCount",
+				"supportsSlowRefresh",
+				"supportedKeyAttributes",
+			]);
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -122,13 +125,13 @@ export class CentralSceneCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<CentralSceneCCConfigurationReport>(
+		const response = await this.driver.sendCommand<CentralSceneCCConfigurationReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			slowRefresh: response.slowRefresh,
-		};
+		);
+		if (response) {
+			return pick(response, ["slowRefresh"]);
+		}
 	}
 
 	public async setConfiguration(slowRefresh: boolean): Promise<void> {
@@ -161,6 +164,15 @@ export class CentralSceneCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.setConfiguration(value);
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		if (property === "slowRefresh") {
+			return (await this.getConfiguration())?.[property];
+		}
+		throwUnsupportedProperty(this.ccId, property);
 	};
 }
 
@@ -245,34 +257,22 @@ export class CentralSceneCC extends CommandClass {
 				}
 			}
 
-			let ccSupported:
-				| {
-						sceneCount: number;
-						supportsSlowRefresh: boolean;
-						supportedKeyAttributes: ReadonlyMap<
-							number,
-							readonly CentralSceneKeys[]
-						>;
-				  }
-				| undefined;
-			if (
-				!(await ignoreTimeout(async () => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "Querying supported scenes...",
-						direction: "outbound",
-					});
-					ccSupported = await api.getSupported();
-					const logMessage = `received supported scenes:
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "Querying supported scenes...",
+				direction: "outbound",
+			});
+			const ccSupported = await api.getSupported();
+			if (ccSupported) {
+				const logMessage = `received supported scenes:
 # of scenes:           ${ccSupported.sceneCount}
 supports slow refresh: ${ccSupported.supportsSlowRefresh}`;
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				}))
-			) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			} else {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
 					message:

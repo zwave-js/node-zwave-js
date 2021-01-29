@@ -17,7 +17,12 @@ import {
 } from "@zwave-js/core";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { ignoreTimeout, PhysicalCCAPI } from "./API";
+import {
+	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	throwUnsupportedProperty,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -76,8 +81,33 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async get(): Promise<MultilevelSensorValue & { type: number }>;
-	public async get(sensorType: number, scale: number): Promise<number>;
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		// Look up the necessary information
+		const valueId: ValueID = {
+			commandClass: CommandClasses["Multilevel Sensor"],
+			endpoint: this.endpoint.index,
+			property,
+		};
+		const ccSpecific = this.endpoint
+			.getNodeUnsafe()
+			?.valueDB.getMetadata(valueId)?.ccSpecific;
+		if (!ccSpecific) {
+			throwUnsupportedProperty(this.ccId, property);
+		}
+
+		const { sensorType, scale } = ccSpecific;
+		return this.get(sensorType, scale);
+	};
+
+	public async get(): Promise<
+		(MultilevelSensorValue & { type: number }) | undefined
+	>;
+	public async get(
+		sensorType: number,
+		scale: number,
+	): Promise<number | undefined>;
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(sensorType?: number, scale?: number) {
 		this.assertSupportsCommand(
@@ -91,10 +121,11 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			sensorType,
 			scale,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSensorCCReport>(
+		const response = await this.driver.sendCommand<MultilevelSensorCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
+		);
+		if (!response) return;
 
 		if (sensorType === undefined) {
 			// Overload #1: return the full response
@@ -109,7 +140,9 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 		}
 	}
 
-	public async getSupportedSensorTypes(): Promise<readonly number[]> {
+	public async getSupportedSensorTypes(): Promise<
+		readonly number[] | undefined
+	> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.GetSupportedSensor,
@@ -119,16 +152,16 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSensorCCSupportedSensorReport>(
+		const response = await this.driver.sendCommand<MultilevelSensorCCSupportedSensorReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedSensorTypes;
+		);
+		return response?.supportedSensorTypes;
 	}
 
 	public async getSupportedScales(
 		sensorType: number,
-	): Promise<readonly number[]> {
+	): Promise<readonly number[] | undefined> {
 		this.assertSupportsCommand(
 			MultilevelSensorCommand,
 			MultilevelSensorCommand.GetSupportedScale,
@@ -139,11 +172,11 @@ export class MultilevelSensorCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			sensorType,
 		});
-		const response = (await this.driver.sendCommand<MultilevelSensorCCSupportedScaleReport>(
+		const response = await this.driver.sendCommand<MultilevelSensorCCSupportedScaleReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.sensorSupportedScales;
+		);
+		return response?.sensorSupportedScales;
 	}
 
 	public async sendReport(
@@ -189,68 +222,54 @@ export class MultilevelSensorCC extends CommandClass {
 
 		if (this.version <= 4) {
 			// Sensors up to V4 only support a single value
-			// This is to be requested every time
-			if (
-				!(await ignoreTimeout(async () => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "querying current sensor reading...",
-						direction: "outbound",
-					});
-					const mlsResponse = await api.get();
-					const sensorScale = this.driver.configManager.lookupSensorScale(
-						mlsResponse.type,
-						mlsResponse.scale.key,
-					);
-					const logMessage = `received current sensor reading:
+			// This needs to be requested every time
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "querying current sensor reading...",
+				direction: "outbound",
+			});
+			const mlsResponse = await api.get();
+			if (mlsResponse) {
+				const sensorScale = this.driver.configManager.lookupSensorScale(
+					mlsResponse.type,
+					mlsResponse.scale.key,
+				);
+				const logMessage = `received current sensor reading:
 sensor type: ${this.driver.configManager.getSensorTypeName(mlsResponse.type)}
 value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				}))
-			) {
 				this.driver.controllerLog.logNode(node.id, {
 					endpoint: this.endpointIndex,
-					message:
-						"Querying current sensor reading timed out, skipping interview...",
-					level: "warn",
+					message: logMessage,
+					direction: "inbound",
 				});
-				return;
 			}
 		} else {
 			// V5+
 
 			// If we haven't yet, query the supported sensor types
-			let sensorTypes: readonly number[];
+			let sensorTypes: readonly number[] | undefined;
 			if (complete) {
-				if (
-					!(await ignoreTimeout(async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: "retrieving supported sensor types...",
-							direction: "outbound",
-						});
-						sensorTypes = await api.getSupportedSensorTypes();
-						const logMessage =
-							"received supported sensor types:\n" +
-							sensorTypes
-								.map((t) =>
-									this.driver.configManager.getSensorTypeName(
-										t,
-									),
-								)
-								.map((name) => `· ${name}`)
-								.join("\n");
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: logMessage,
-							direction: "inbound",
-						});
-					}))
-				) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "retrieving supported sensor types...",
+					direction: "outbound",
+				});
+				sensorTypes = await api.getSupportedSensorTypes();
+				if (sensorTypes) {
+					const logMessage =
+						"received supported sensor types:\n" +
+						sensorTypes
+							.map((t) =>
+								this.driver.configManager.getSensorTypeName(t),
+							)
+							.map((name) => `· ${name}`)
+							.join("\n");
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				} else {
 					this.driver.controllerLog.logNode(node.id, {
 						endpoint: this.endpointIndex,
 						message:
@@ -268,39 +287,37 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 					}) || [];
 			}
 
-			for (const type of sensorTypes!) {
+			for (const type of sensorTypes) {
 				// If we haven't yet, query the supported scales for each sensor
-				let sensorScales: readonly number[];
+				let sensorScales: readonly number[] | undefined;
 				if (complete) {
-					if (
-						!(await ignoreTimeout(async () => {
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message: `querying supported scales for ${this.driver.configManager.getSensorTypeName(
-									type,
-								)} sensor`,
-								direction: "outbound",
-							});
-							sensorScales = await api.getSupportedScales(type);
-							const logMessage =
-								"received supported scales:\n" +
-								sensorScales
-									.map(
-										(s) =>
-											this.driver.configManager.lookupSensorScale(
-												type,
-												s,
-											).label,
-									)
-									.map((name) => `· ${name}`)
-									.join("\n");
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message: logMessage,
-								direction: "inbound",
-							});
-						}))
-					) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `querying supported scales for ${this.driver.configManager.getSensorTypeName(
+							type,
+						)} sensor`,
+						direction: "outbound",
+					});
+					sensorScales = await api.getSupportedScales(type);
+					if (sensorScales) {
+						const logMessage =
+							"received supported scales:\n" +
+							sensorScales
+								.map(
+									(s) =>
+										this.driver.configManager.lookupSensorScale(
+											type,
+											s,
+										).label,
+								)
+								.map((name) => `· ${name}`)
+								.join("\n");
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message: logMessage,
+							direction: "inbound",
+						});
+					} else {
 						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
 							message:
@@ -320,40 +337,29 @@ value:       ${mlsResponse.value} ${sensorScale.unit || ""}`;
 				}
 
 				// Always query the current sensor reading
-				await ignoreTimeout(
-					async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `querying ${this.driver.configManager.getSensorTypeName(
-								type,
-							)} sensor reading...`,
-							direction: "outbound",
-						});
-						// TODO: Add some way to select the scale. For now use the first available one
-						const value = await api.get(type, sensorScales[0]);
-						const scale = this.driver.configManager.lookupSensorScale(
-							type,
-							sensorScales[0],
-						);
-						const logMessage = `received current ${this.driver.configManager.getSensorTypeName(
-							type,
-						)} sensor reading: ${value} ${scale.unit || ""}`;
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: logMessage,
-							direction: "inbound",
-						});
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Query of ${this.driver.configManager.getSensorTypeName(
-								type,
-							)} sensor timed out - skipping because it is not critical...`,
-							level: "warn",
-						});
-					},
-				);
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `querying ${this.driver.configManager.getSensorTypeName(
+						type,
+					)} sensor reading...`,
+					direction: "outbound",
+				});
+				// TODO: Add some way to select the scale. For now use the first available one
+				const value = await api.get(type, sensorScales[0]);
+				if (value != undefined) {
+					const scale = this.driver.configManager.lookupSensorScale(
+						type,
+						sensorScales[0],
+					);
+					const logMessage = `received current ${this.driver.configManager.getSensorTypeName(
+						type,
+					)} sensor reading: ${value} ${scale.unit || ""}`;
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: logMessage,
+						direction: "inbound",
+					});
+				}
 			}
 		}
 

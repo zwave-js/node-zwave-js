@@ -20,7 +20,8 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
-	ignoreTimeout,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
@@ -175,7 +176,9 @@ export class ColorSwitchCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async getSupported(): Promise<readonly ColorComponent[]> {
+	public async getSupported(): Promise<
+		readonly ColorComponent[] | undefined
+	> {
 		this.assertSupportsCommand(
 			ColorSwitchCommand,
 			ColorSwitchCommand.SupportedGet,
@@ -185,11 +188,11 @@ export class ColorSwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ColorSwitchCCSupportedReport>(
+		const response = await this.driver.sendCommand<ColorSwitchCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedColorComponents;
+		);
+		return response?.supportedColorComponents;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -201,15 +204,13 @@ export class ColorSwitchCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			colorComponent: component,
 		});
-		const response = (await this.driver.sendCommand<ColorSwitchCCReport>(
+		const response = await this.driver.sendCommand<ColorSwitchCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			currentValue: response.currentValue,
-			targetValue: response.targetValue,
-			duration: response.duration,
-		};
+		);
+		if (response) {
+			return pick(response, ["currentValue", "targetValue", "duration"]);
+		}
 	}
 
 	public async set(options: ColorSwitchCCSetOptions): Promise<void> {
@@ -348,6 +349,28 @@ export class ColorSwitchCCAPI extends CCAPI {
 			throwUnsupportedProperty(this.ccId, property);
 		}
 	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		if (propertyKey == undefined) {
+			throwMissingPropertyKey(this.ccId, property);
+		} else if (typeof propertyKey !== "number") {
+			throwUnsupportedPropertyKey(this.ccId, property, propertyKey);
+		}
+
+		switch (property) {
+			case "currentColor":
+				return (await this.get(propertyKey))?.currentValue;
+			case "targetColor":
+				return (await this.get(propertyKey))?.targetValue;
+			case "duration":
+				return (await this.get(propertyKey))?.duration;
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
 }
 
 @commandClass(CommandClasses["Color Switch"])
@@ -376,14 +399,24 @@ export class ColorSwitchCC extends CommandClass {
 			direction: "none",
 		});
 
-		let supportedColors: readonly ColorComponent[];
+		let supportedColors: readonly ColorComponent[] | undefined;
 		if (complete) {
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
-				message: "querying Color Switch CC supported colors...",
+				message: "querying supported colors...",
 				direction: "outbound",
 			});
 			supportedColors = await api.getSupported();
+			if (!supportedColors) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying supported colors timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
+
 			this.driver.controllerLog.logNode(node.id, {
 				endpoint: this.endpointIndex,
 				message: `received supported colors:${supportedColors
@@ -417,7 +450,7 @@ export class ColorSwitchCC extends CommandClass {
 				ColorComponent.Red,
 				ColorComponent.Green,
 				ColorComponent.Blue,
-			].every((c) => supportedColors.includes(c));
+			].every((c) => supportedColors!.includes(c));
 			valueDB.setValue(
 				getSupportsHexColorValueID(this.endpointIndex),
 				supportsHex,
@@ -437,24 +470,13 @@ export class ColorSwitchCC extends CommandClass {
 		}
 
 		for (const color of supportedColors) {
-			await ignoreTimeout(
-				async () => {
-					const colorName = getEnumMemberName(ColorComponent, color);
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `querying current color state (${colorName})`,
-						direction: "outbound",
-					});
-					await api.get(color);
-				},
-				() => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `Current color query timed out - skipping because it is not critical...`,
-						level: "warn",
-					});
-				},
-			);
+			const colorName = getEnumMemberName(ColorComponent, color);
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: `querying current color state (${colorName})`,
+				direction: "outbound",
+			});
+			await api.get(color);
 		}
 
 		// Remember that the interview is complete
