@@ -74,7 +74,6 @@ async function hasChangedDeviceFiles(
  */
 export async function loadDeviceIndexInternal(
 	logger?: ConfigLogger,
-	forceWrite?: boolean,
 ): Promise<DeviceConfigIndex> {
 	// The index file needs to be regenerated if it does not exist
 	let needsUpdate = !(await pathExists(indexPath));
@@ -106,10 +105,12 @@ export async function loadDeviceIndexInternal(
 	// ...or if there were any changes in the file system
 	if (!needsUpdate) {
 		needsUpdate = await hasChangedDeviceFiles(devicesDir, mtimeIndex!);
-		logger?.print(
-			"Device configuration files on disk changed - regenerating index...",
-			"verbose",
-		);
+		if (needsUpdate) {
+			logger?.print(
+				"Device configuration files on disk changed - regenerating index...",
+				"verbose",
+			);
+		}
 	}
 
 	if (needsUpdate) {
@@ -140,17 +141,15 @@ export async function loadDeviceIndexInternal(
 			);
 		}
 
-		if (forceWrite || process.env.NODE_ENV !== "test") {
-			// Save the index to disk (but not during unit tests)
-			await writeFile(
-				path.join(devicesDir, "index.json"),
-				`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
+		// Save the index to disk (but not during unit tests)
+		await writeFile(
+			path.join(indexPath),
+			`// This file is auto-generated. DO NOT edit it by hand if you don't know what you're doing!"
 ${stringify(index, "\t")}
 `,
-				"utf8",
-			);
-			logger?.print("Device index regenerated", "verbose");
-		}
+			"utf8",
+		);
+		logger?.print("Device index regenerated", "verbose");
 	}
 
 	return index!;
