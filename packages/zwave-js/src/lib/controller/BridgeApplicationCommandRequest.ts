@@ -1,4 +1,9 @@
-import { NODE_ID_BROADCAST } from "@zwave-js/core";
+import {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	NODE_ID_BROADCAST,
+} from "@zwave-js/core";
+import { getEnumMemberName } from "@zwave-js/shared";
 import { CommandClass, SinglecastCC } from "../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
@@ -99,4 +104,30 @@ export class BridgeApplicationCommandRequest
 
 	// This needs to be writable or unwrapping MultiChannelCCs crashes
 	public command: SinglecastCC;
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {};
+		if (this.frameType !== "singlecast") {
+			message.type = this.frameType;
+		}
+		if (this.targetNodeId !== this.driver.controller.ownNodeId) {
+			message["target node"] =
+				typeof this.targetNodeId === "number"
+					? this.targetNodeId
+					: this.targetNodeId.join(", ");
+		}
+		switch (true) {
+			case this.rssi === RSSIValue.ReceiverSaturated:
+			case this.rssi === RSSIValue.NoSignalDetected:
+				message.rssi = getEnumMemberName(RSSIValue, this.rssi);
+				break;
+			case this.rssi < RSSI_RESERVED_START:
+				message.rssi = `${this.rssi} dBms`;
+				break;
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
+	}
 }
