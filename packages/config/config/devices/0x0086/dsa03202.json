@@ -365,5 +365,16 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"commandClasses": {
+			"add": {
+				"0x84": {
+					// To fix issue #1536
+					"isSupported": true,
+					"version": 1
+				}
+			}
+		}
 	}
 }
