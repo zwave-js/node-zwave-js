@@ -2041,10 +2041,10 @@ ${handlers.length} left`,
 			!!node &&
 			// Pings can be used to check if a node is really asleep, so they should be sent regardless
 			!messageIsPing(msg) &&
-			// Nodes that are asleep should have their messages queued for wakeup
-			// Nodes that can sleep should use the WakeUp priority so their messages
+			// Nodes that support the Wake Up CC should have their messages queued for wakeup
+			// If a sleeping node is currently awake, we should use the WakeUp priority so the message
 			// get handled immediately
-			node.canSleep &&
+			node.supportsCC(CommandClasses["Wake Up"]) &&
 			// If we move multicasts to the wakeup queue, it is unlikely
 			// that there is ever a points where all targets are awake
 			!(msg instanceof SendDataMulticastRequest) &&
