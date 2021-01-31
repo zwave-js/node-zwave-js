@@ -8,6 +8,7 @@ import {
 	ZWaveLogContainer,
 	ZWaveLoggerBase,
 } from "@zwave-js/core";
+import { getEnumMemberName } from "@zwave-js/shared";
 import type { SortedList } from "alcalzone-shared/sorted-list";
 import type { CommandClass } from "../commandclass/CommandClass";
 import { isEncapsulatingCommandClass } from "../commandclass/EncapsulatingCommandClass";
@@ -19,6 +20,7 @@ import {
 	MessageType,
 } from "../message/Constants";
 import type { Message, ResponseRole } from "../message/Message";
+import { NodeStatus } from "../node/Types";
 
 export const DRIVER_LABEL = "DRIVER";
 const DRIVER_LOGLEVEL = "verbose";
@@ -205,9 +207,10 @@ export class DriverLogger extends ZWaveLoggerBase {
 						: "[RES]";
 				const postfix =
 					node != undefined
-						? ` [Node ${node.id}, ${
-								node.isAwake() ? "awake" : "asleep"
-						  }]`
+						? ` [Node ${node.id}, ${getEnumMemberName(
+								NodeStatus,
+								node.status,
+						  )}]`
 						: "";
 				const command = isCommandClassContainer(trns.message)
 					? ` (${trns.message.command.constructor.name})`

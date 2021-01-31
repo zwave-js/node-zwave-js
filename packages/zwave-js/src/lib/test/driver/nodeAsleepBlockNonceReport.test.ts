@@ -48,7 +48,8 @@ describe("regression tests", () => {
 		}
 		driver["lastCallbackId"] = 2;
 
-		node44.addCC(CommandClasses["Wake Up"], { isSupported: true });
+		node44["_isListening"] = false;
+		node44["_isFrequentListening"] = false;
 		node44.addCC(CommandClasses.Security, { isSupported: true });
 		node44.markAsAsleep();
 		expect(node44.status).toBe(NodeStatus.Asleep);

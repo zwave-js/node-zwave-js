@@ -1,4 +1,3 @@
-import { CommandClasses } from "@zwave-js/core";
 import { Interpreter, Machine, StateMachine } from "xstate";
 import type { ZWaveNode } from "./Node";
 import { NodeStatus } from "./Types";
@@ -57,19 +56,19 @@ export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
 					on: {
 						DEAD: {
 							target: "dead",
-							cond: "notSupportsWakeup",
+							cond: "cannotSleep",
 						},
 						ALIVE: {
 							target: "alive",
-							cond: "notSupportsWakeup",
+							cond: "cannotSleep",
 						},
 						ASLEEP: {
 							target: "asleep",
-							cond: "supportsWakeup",
+							cond: "canSleep",
 						},
 						AWAKE: {
 							target: "awake",
-							cond: "supportsWakeup",
+							cond: "canSleep",
 						},
 					},
 				},
@@ -85,7 +84,7 @@ export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
 						// it was previously detected as a non-sleeping device
 						ASLEEP: {
 							target: "asleep",
-							cond: "supportsWakeup",
+							cond: "canSleep",
 						},
 					},
 				},
@@ -102,17 +101,10 @@ export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
 			},
 		},
 		{
-			services: {
-				// send: (ctx) => sendData(ctx.data),
-			},
 			guards: {
-				supportsWakeup: () =>
-					node.supportsCC(CommandClasses["Wake Up"]),
-				notSupportsWakeup: () =>
-					!node.supportsCC(CommandClasses["Wake Up"]),
-				// mayRetry: (ctx) => ctx.attempts < ctx.maxAttempts,
+				canSleep: () => !!node.canSleep,
+				cannotSleep: () => !node.canSleep,
 			},
-			delays: {},
 		},
 	);
 }

@@ -1,4 +1,3 @@
-import { CommandClasses } from "@zwave-js/core";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { wait } from "alcalzone-shared/async";
 import type { Driver } from "../../driver/Driver";
@@ -42,7 +41,8 @@ describe("regression tests", () => {
 			driver["addNodeEventHandlers"](node);
 		}
 
-		node10.addCC(CommandClasses["Wake Up"], { isSupported: true });
+		node10["_isListening"] = false;
+		node10["_isFrequentListening"] = false;
 		node10.markAsAwake();
 		expect(node10.status).toBe(NodeStatus.Awake);
 

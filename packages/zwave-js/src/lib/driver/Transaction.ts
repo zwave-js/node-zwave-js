@@ -8,6 +8,7 @@ import {
 import type { DeferredPromise } from "alcalzone-shared/deferred-promise";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
+import { NodeStatus } from "../node/Types";
 import type { Driver } from "./Driver";
 
 /**
@@ -54,8 +55,8 @@ export class Transaction implements Comparable<Transaction> {
 			// We don't require existence of the node object
 			// If any transaction is not for a node, it targets the controller
 			// which is always awake
-			const thisIsAsleep = thisNode?.isAwake() === false;
-			const otherIsAsleep = otherNode?.isAwake() === false;
+			const thisIsAsleep = thisNode?.status === NodeStatus.Asleep;
+			const otherIsAsleep = otherNode?.status === NodeStatus.Asleep;
 
 			// If both nodes are asleep, the conventional order applies
 			// Asleep nodes always have the lowest priority
