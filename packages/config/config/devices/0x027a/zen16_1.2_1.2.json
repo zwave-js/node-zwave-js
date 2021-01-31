@@ -1,0 +1,497 @@
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN16",
+	"description": "Multirelay",
+	"devices": [
+		{
+			"productType": "0xa000",
+			"productId": "0xa00a"
+		}
+	],
+	"firmwareVersion": {
+		"min": "1.2",
+		"max": "1.2"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Relay 1 Status",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Relay 2 Status",
+			"maxNodes": 5
+		},
+		"4": {
+			"label": "Relay 3 Status",
+			"maxNodes": 5
+		}
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Status After Power Failure",
+			"description": "The state to set after a power failure. ",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 4,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "All relays - Off",
+					"value": 0
+				},
+				{
+					"label": "All relays - Previous state",
+					"value": 1
+				},
+				{
+					"label": "All relays - On",
+					"value": 2
+				},
+				{
+					"label": "Relays 1/2 - Previous state; Relays 3/4 - Off",
+					"value": 3
+				},
+				{
+					"label": "Relays 1/2 - Previous state, Relays 3/4 - On",
+					"value": 4
+				}
+			]
+		},
+		"2": {
+			"label": "Switch Type for Relay 1 (Sw1)",
+			"description": "Choose the wall switch type you want to connect to the Sw1 terminal.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary Switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (follow switch)",
+					"value": 1
+				},
+				{
+					"label": "Toggle switch (change state on toggle)",
+					"value": 2
+				},
+				{
+					"label": "Garage door (momentary mMode for Z-Wave control)",
+					"value": 3
+				}
+			]
+		},
+		"3": {
+			"label": "Switch Type for Relay 2 (Sw2)",
+			"description": "Choose the wall switch type you want to connect to the Sw2 terminal.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary Switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (follow switch)",
+					"value": 1
+				},
+				{
+					"label": "Toggle switch (change state on toggle)",
+					"value": 2
+				},
+				{
+					"label": "Garage door (momentary mode for Z-Wave control)",
+					"value": 3
+				}
+			]
+		},
+		"4": {
+			"label": "Switch Type for Relay 3 (Sw3)",
+			"description": "Choose the wall switch type you want to connect to the Sw3 terminal.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 2,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Momentary Switch",
+					"value": 0
+				},
+				{
+					"label": "Toggle switch (follow switch)",
+					"value": 1
+				},
+				{
+					"label": "Toggle switch (change state on toggle)",
+					"value": 2
+				},
+				{
+					"label": "Garage door (momentary mMode for Z-Wave control)",
+					"value": 3
+				}
+			]
+		},
+		"5": {
+			"label": "LED Indicator Control",
+			"description": "Choose the LED indicator behavior",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "On when all relays are off",
+					"value": 0
+				},
+				{
+					"label": "On when any relays is on",
+					"value": 1
+				},
+				{
+					"label": "Always off",
+					"value": 2
+				},
+				{
+					"label": "Always on",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Auto Turn-Off Timer for Relay 1",
+			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on, using the unit defined in parameter 15.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"7": {
+			"label": "Auto Turn-On Timer for Relay 1",
+			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on, using the unit defined in parameter 16.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Auto Turn-Off Timer for Relay 2",
+			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on, using the unit defined in parameter 17.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Auto Turn-On Timer for Relay 2",
+			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on, using the unit defined in parameter 18.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Auto Turn-Off Timer for Relay 3",
+			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on, using the unit defined in parameter 19.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Auto Turn-On Timer for Relay 3",
+			"description": "Sets the time after which you want relay 1 to automatically turn off once it has been turned on, using the unit defined in parameter 20.",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 65535,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Enable/Disable Manual Control for SW1",
+			"description": "Determine whether you can control the indicated switch manually.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				},
+				{
+					"label": "Local control disabled with enable on/off reports",
+					"value": 2
+				}
+			]
+		},
+		"13": {
+			"label": "Enable/Disable Manual Control for SW2",
+			"description": "Determine whether you can control the indicated switch manually.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				},
+				{
+					"label": "Local control disabled with enable on/off reports",
+					"value": 2
+				}
+			]
+		},
+		"14": {
+			"label": "Enable/Disable Manual Control for SW3",
+			"description": "Determine whether you can control the indicated switch manually.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				},
+				{
+					"label": "Local control disabled with enable on/off reports",
+					"value": 2
+				}
+			]
+		},
+		"15": {
+			"label": "Auto Turn-Off Timer Unit for Relay 1",
+			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-Off time for Relay 1.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Minutes",
+					"value": 0
+				},
+				{
+					"label": "Seconds",
+					"value": 1
+				},
+				{
+					"label": "Hours",
+					"value": 2
+				}
+			]
+		},
+		"16": {
+			"label": "Auto Turn-On Timer Unit for Relay 1",
+			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 1.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Minutes",
+					"value": 0
+				},
+				{
+					"label": "Seconds",
+					"value": 1
+				},
+				{
+					"label": "Hours",
+					"value": 2
+				}
+			]
+		},
+		"17": {
+			"label": "Auto Turn-Off Timer Unit for Relay 2",
+			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-Off time for Relay 2.  Default: minutes",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Minutes",
+					"value": 0
+				},
+				{
+					"label": "Seconds",
+					"value": 1
+				},
+				{
+					"label": "Hours",
+					"value": 2
+				}
+			]
+		},
+		"18": {
+			"label": "Auto Turn-On Timer Unit for Relay 2",
+			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 2.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Minutes",
+					"value": 0
+				},
+				{
+					"label": "Seconds",
+					"value": 1
+				},
+				{
+					"label": "Hours",
+					"value": 2
+				}
+			]
+		},
+		"19": {
+			"label": "Auto Turn-Off Timer Unit for Relay 3",
+			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-Off time for Relay 3.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Minutes",
+					"value": 0
+				},
+				{
+					"label": "Seconds",
+					"value": 1
+				},
+				{
+					"label": "Hours",
+					"value": 2
+				}
+			]
+		},
+		"20": {
+			"label": "Auto Turn-On Timer Unit for Relay 3",
+			"description": "Choose between second, minutes, and hours as the unit for Auto Turn-On time for Relay 3.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Minutes",
+					"value": 0
+				},
+				{
+					"label": "Seconds",
+					"value": 1
+				},
+				{
+					"label": "Hours",
+					"value": 2
+				}
+			]
+		}
+	}
+}
