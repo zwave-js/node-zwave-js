@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Direction",
-			"description": "Direction",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -44,7 +43,6 @@
 		},
 		"2": {
 			"label": "Speed (Torque)",
-			"description": "Speed (Torque)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 5,
@@ -77,7 +75,6 @@
 		},
 		"3": {
 			"label": "Mode",
-			"description": "Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -102,7 +99,6 @@
 		},
 		"4": {
 			"label": "Turn degrees",
-			"description": "Turn degrees",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -113,7 +109,6 @@
 		},
 		"5": {
 			"label": "Auto Latch time",
-			"description": "Auto Latch time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 60,
@@ -124,7 +119,6 @@
 		},
 		"6": {
 			"label": "Sound",
-			"description": "Sound",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -145,7 +139,6 @@
 		},
 		"7": {
 			"label": "Battery Type",
-			"description": "Battery Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -181,7 +174,6 @@
 		},
 		"9": {
 			"label": "TurnAndGo",
-			"description": "TurnAndGo",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

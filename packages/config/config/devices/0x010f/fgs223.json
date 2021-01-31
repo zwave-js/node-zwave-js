@@ -60,7 +60,6 @@
 	"paramInformation": {
 		"9": {
 			"label": "Restore state after power failure",
-			"description": "Restore state after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

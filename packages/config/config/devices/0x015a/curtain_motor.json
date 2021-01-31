@@ -25,7 +25,6 @@
 	"paramInformation": {
 		"17": {
 			"label": "Motor Open, Go to Direction B",
-			"description": "Motor Open, Go to Direction B",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -37,7 +36,6 @@
 		},
 		"18": {
 			"label": "Motor Stop",
-			"description": "Motor Stop",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -49,7 +47,6 @@
 		},
 		"19": {
 			"label": "Motor Close, Go to Direction A",
-			"description": "Motor Close, Go to Direction A",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -72,7 +69,6 @@
 		},
 		"22": {
 			"label": "Motor revert direction",
-			"description": "Motor revert direction",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -84,7 +80,6 @@
 		},
 		"23": {
 			"label": "Clear motor lead tail endpoint setting",
-			"description": "Clear motor lead tail endpoint setting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -96,7 +91,6 @@
 		},
 		"32": {
 			"label": "Return motor status flag",
-			"description": "Return motor status flag",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -108,7 +102,6 @@
 		},
 		"33": {
 			"label": "Enable manual pulling function",
-			"description": "Enable manual pulling function",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -120,7 +113,6 @@
 		},
 		"34": {
 			"label": "Disable manual pulling function",
-			"description": "Disable manual pulling function",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,

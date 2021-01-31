@@ -29,7 +29,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "configure LED light state",
-			"description": "configure LED light state",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

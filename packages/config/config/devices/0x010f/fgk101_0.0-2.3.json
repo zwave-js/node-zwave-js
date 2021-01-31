@@ -188,7 +188,6 @@
 		},
 		"12": {
 			"label": "Sensitivity to temperature changes",
-			"description": "Sensitivity to temperature changes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

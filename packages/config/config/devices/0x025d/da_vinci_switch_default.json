@@ -18,7 +18,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "EP 1 Type",
-			"description": "EP 1 Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -29,7 +28,6 @@
 		},
 		"2": {
 			"label": "EP 1 Partner Id",
-			"description": "EP 1 Partner Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -40,7 +38,6 @@
 		},
 		"3": {
 			"label": "EP 1 Blind Duration",
-			"description": "EP 1 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -51,7 +48,6 @@
 		},
 		"4": {
 			"label": "EP 1 Output",
-			"description": "EP 1 Output",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -62,7 +58,6 @@
 		},
 		"5": {
 			"label": "EP 1 Button attribute",
-			"description": "EP 1 Button attribute",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -73,7 +68,6 @@
 		},
 		"6": {
 			"label": "EP 2 Type",
-			"description": "EP 2 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -84,7 +78,6 @@
 		},
 		"7": {
 			"label": "EP 2 Partner Id",
-			"description": "EP 2 Partner Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -95,7 +88,6 @@
 		},
 		"8": {
 			"label": "EP 2 Blind Duration",
-			"description": "EP 2 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -106,7 +98,6 @@
 		},
 		"11": {
 			"label": "EP 3 Type",
-			"description": "EP 3 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -117,7 +108,6 @@
 		},
 		"12": {
 			"label": "EP 3 Partner-Id",
-			"description": "EP 3 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -128,7 +118,6 @@
 		},
 		"13": {
 			"label": "EP 3 Blind Duration",
-			"description": "EP 3 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -139,7 +128,6 @@
 		},
 		"16": {
 			"label": "EP 4 Type",
-			"description": "EP 4 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -150,7 +138,6 @@
 		},
 		"17": {
 			"label": "EP 4 Partner-Id",
-			"description": "EP 4 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -161,7 +148,6 @@
 		},
 		"18": {
 			"label": "EP 4 Blind Duration",
-			"description": "EP 4 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -172,7 +158,6 @@
 		},
 		"21": {
 			"label": "EP 5 Type",
-			"description": "EP 5 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -183,7 +168,6 @@
 		},
 		"22": {
 			"label": "EP 5 Partner-Id",
-			"description": "EP 5 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -194,7 +178,6 @@
 		},
 		"23": {
 			"label": "EP 5 Blind Duration",
-			"description": "EP 5 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -205,7 +188,6 @@
 		},
 		"26": {
 			"label": "EP 6 Type",
-			"description": "EP 6 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -216,7 +198,6 @@
 		},
 		"27": {
 			"label": "EP 6 Partner-Id",
-			"description": "EP 6 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -227,7 +208,6 @@
 		},
 		"28": {
 			"label": "EP 6 Blind Duration",
-			"description": "EP 6 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -238,7 +218,6 @@
 		},
 		"31": {
 			"label": "EP 7 Type",
-			"description": "EP 7 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -249,7 +228,6 @@
 		},
 		"32": {
 			"label": "EP 7 Partner-Id",
-			"description": "EP 7 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -260,7 +238,6 @@
 		},
 		"33": {
 			"label": "EP 7 Blind Duration",
-			"description": "EP 7 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -271,7 +248,6 @@
 		},
 		"36": {
 			"label": "EP 8 Type",
-			"description": "EP 8 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -282,7 +258,6 @@
 		},
 		"37": {
 			"label": "EP 8 Partner-Id",
-			"description": "EP 8 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -293,7 +268,6 @@
 		},
 		"38": {
 			"label": "EP 8 Blind Duration",
-			"description": "EP 8 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -304,7 +278,6 @@
 		},
 		"41": {
 			"label": "EP 9 Type",
-			"description": "EP 9 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -315,7 +288,6 @@
 		},
 		"42": {
 			"label": "EP 9 Partner-Id",
-			"description": "EP 9 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -326,7 +298,6 @@
 		},
 		"43": {
 			"label": "EP 9 Blind Duration",
-			"description": "EP 9 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

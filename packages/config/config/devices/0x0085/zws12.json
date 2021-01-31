@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"7": {
 			"label": "Motor speed 1",
-			"description": "Motor speed 1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,

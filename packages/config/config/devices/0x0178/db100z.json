@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Send Battery Report with Notification Report",
-			"description": "Send Battery Report with Notification Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

@@ -189,7 +189,6 @@
 		},
 		"22": {
 			"label": "Status mode LED 2 color",
-			"description": "Status mode LED 2 color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -234,7 +233,6 @@
 		},
 		"23": {
 			"label": "Status mode LED 3 color",
-			"description": "Status mode LED 3 color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -279,7 +277,6 @@
 		},
 		"24": {
 			"label": "Status mode LED 4 color",
-			"description": "Status mode LED 4 color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -383,7 +380,6 @@
 		},
 		"31[0x02]": {
 			"label": "LED 2 Blink Status",
-			"description": "LED 2 Blink Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -404,7 +400,6 @@
 		},
 		"31[0x04]": {
 			"label": "LED 3 Blink Status",
-			"description": "LED 3 Blink Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -425,7 +420,6 @@
 		},
 		"31[0x08]": {
 			"label": "LED 4 Blink Status",
-			"description": "LED 4 Blink Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

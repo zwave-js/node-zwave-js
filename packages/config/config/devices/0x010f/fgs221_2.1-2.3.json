@@ -71,7 +71,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Activate / deactivate functions ALL ON / ALL OFF",
-			"description": "Activate / deactivate functions ALL ON / ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -101,7 +100,6 @@
 		},
 		"3": {
 			"label": "Auto off relay after specified time",
-			"description": "Auto off relay after specified time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -149,7 +147,6 @@
 		},
 		"6": {
 			"label": "Sending commands to group 1 devices",
-			"description": "Sending commands to group 1 devices",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -175,7 +172,6 @@
 		},
 		"7": {
 			"label": "Sending commands to group 2 devices",
-			"description": "Sending commands to group 2 devices",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -201,7 +197,6 @@
 		},
 		"13": {
 			"label": "Assigns bistable key status to the device status",
-			"description": "Assigns bistable key status to the device status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -245,7 +240,6 @@
 		},
 		"15": {
 			"label": "Operation of the Dimmer/Roller Shutter Controller",
-			"description": "Operation of the Dimmer/Roller Shutter Controller",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

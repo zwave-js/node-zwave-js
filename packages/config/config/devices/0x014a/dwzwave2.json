@@ -32,7 +32,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Sending Basic Sets to Association group 2",
-			"description": "Sending Basic Sets to Association group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -54,7 +53,6 @@
 		},
 		"2": {
 			"label": "Sending sensor binary report",
-			"description": "Sending sensor binary report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

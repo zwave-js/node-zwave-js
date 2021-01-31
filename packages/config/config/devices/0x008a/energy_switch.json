@@ -64,7 +64,6 @@
 		},
 		"4": {
 			"label": "Start up with last known socket status",
-			"description": "Start up with last known socket status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -38,7 +38,6 @@
 	"paramInformation": {
 		"32": {
 			"label": "Toggle send report on color change",
-			"description": "Toggle send report on color change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -59,7 +58,6 @@
 		},
 		"34": {
 			"label": "Allow external switch to toggle bulb",
-			"description": "Allow external switch to toggle bulb",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -80,7 +78,6 @@
 		},
 		"35": {
 			"label": "Allow external switch to change color",
-			"description": "Allow external switch to change color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -178,7 +175,6 @@
 		},
 		"37[0xff]": {
 			"label": "Colour Residence Time",
-			"description": "Colour Residence Time",
 			"unit": "1/10th sec",
 			"valueSize": 4,
 			"minValue": 0,
@@ -196,7 +192,6 @@
 		},
 		"37[0xff00]": {
 			"label": "Colour Change Speed",
-			"description": "Colour Change Speed",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -213,7 +208,6 @@
 		},
 		"37[0xff0000]": {
 			"label": "Cycle count",
-			"description": "Cycle count",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,

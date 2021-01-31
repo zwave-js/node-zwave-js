@@ -27,7 +27,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Ignore start level bit",
-			"description": "Ignore start level bit",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

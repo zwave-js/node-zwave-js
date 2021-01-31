@@ -71,7 +71,6 @@
 		},
 		"11": {
 			"label": "Command to control Group A",
-			"description": "Command to control Group A",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -121,7 +120,6 @@
 		},
 		"12": {
 			"label": "Command to control Group B",
-			"description": "Command to control Group B",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -171,7 +169,6 @@
 		},
 		"13": {
 			"label": "Command to control Group C",
-			"description": "Command to control Group C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -221,7 +218,6 @@
 		},
 		"14": {
 			"label": "Command to control Group D",
-			"description": "Command to control Group D",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

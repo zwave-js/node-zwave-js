@@ -243,7 +243,6 @@
 		},
 		"16": {
 			"label": "Saving state before power failure",
-			"description": "Saving state before power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

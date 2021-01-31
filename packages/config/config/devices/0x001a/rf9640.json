@@ -139,7 +139,6 @@
 		},
 		"9": {
 			"label": "Reset max/min levels to factory default",
-			"description": "Reset max/min levels to factory default",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,

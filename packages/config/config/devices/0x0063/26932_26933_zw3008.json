@@ -284,7 +284,6 @@
 		},
 		"15": {
 			"label": "Reset Cycle",
-			"description": "Reset Cycle",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 110,

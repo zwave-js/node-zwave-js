@@ -45,7 +45,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Group 1 Level",
-			"description": "Group 1 Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -57,7 +56,6 @@
 		},
 		"2": {
 			"label": "Group 2 Level",
-			"description": "Group 2 Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -69,7 +67,6 @@
 		},
 		"3": {
 			"label": "Group 3 Level",
-			"description": "Group 3 Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -81,7 +78,6 @@
 		},
 		"4": {
 			"label": "Group 4 Level",
-			"description": "Group 4 Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -93,7 +89,6 @@
 		},
 		"5": {
 			"label": "Group 5 Level",
-			"description": "Group 5 Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,

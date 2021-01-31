@@ -84,7 +84,6 @@
 		},
 		"48": {
 			"label": "Enable/Disable Sensor report",
-			"description": "Enable/Disable Sensor report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -169,7 +168,6 @@
 		},
 		"88": {
 			"label": "Basic Set sent to association group 3",
-			"description": "Basic Set sent to association group 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -194,7 +192,6 @@
 		},
 		"89": {
 			"label": "Basic Set sent to association group 4",
-			"description": "Basic Set sent to association group 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -252,7 +249,6 @@
 		},
 		"135": {
 			"label": "Sensor reports for non multichannel devices",
-			"description": "Sensor reports for non multichannel devices",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -295,7 +291,6 @@
 		},
 		"255": {
 			"label": "Reset device to factory default",
-			"description": "Reset device to factory default",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 1431655765,
@@ -327,7 +322,6 @@
 		},
 		"10[0xff00]": {
 			"label": "Time of buzzer keeping ON state",
-			"description": "Time of buzzer keeping ON state",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -338,7 +332,6 @@
 		},
 		"10[0x7fff0000]": {
 			"label": "Time of buzzer keeping OFF state",
-			"description": "Time of buzzer keeping OFF state",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -370,7 +363,6 @@
 		},
 		"49[0x7fff0000]": {
 			"label": "Temperature value",
-			"description": "Temperature value",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -402,7 +394,6 @@
 		},
 		"50[0x7fff0000]": {
 			"label": "Temperature limit value",
-			"description": "Temperature limit value",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -473,7 +464,6 @@
 		},
 		"201[0x0f]": {
 			"label": "Temperature unit",
-			"description": "Temperature unit",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1,
@@ -494,7 +484,6 @@
 		},
 		"201[0xff00]": {
 			"label": "Calibration value",
-			"description": "Calibration value",
 			"valueSize": 2,
 			"minValue": -128,
 			"maxValue": 127,

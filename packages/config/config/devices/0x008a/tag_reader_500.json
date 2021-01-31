@@ -73,7 +73,6 @@
 		},
 		"5": {
 			"label": "Always awake mode",
-			"description": "Always awake mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -95,7 +94,6 @@
 		},
 		"7": {
 			"label": "Operation mode",
-			"description": "Operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -116,7 +114,6 @@
 		},
 		"8": {
 			"label": "Gateway confirmation",
-			"description": "Gateway confirmation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

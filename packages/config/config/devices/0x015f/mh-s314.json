@@ -49,7 +49,6 @@
 	"paramInformation": {
 		"2": {
 			"label": "Switch state saved or not when power failure",
-			"description": "Switch state saved or not when power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -60,7 +59,6 @@
 		},
 		"3": {
 			"label": "ALL ON/ALL OFF",
-			"description": "ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

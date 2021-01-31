@@ -54,7 +54,6 @@
 		},
 		"9": {
 			"label": "Relay delay time",
-			"description": "Relay delay time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

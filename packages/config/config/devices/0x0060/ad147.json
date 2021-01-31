@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Basic Set Command value",
-			"description": "Basic Set Command value",
 			"unit": "Percentage",
 			"valueSize": 2,
 			"minValue": 0,
@@ -55,7 +54,6 @@
 		},
 		"3": {
 			"label": "Remember the last status",
-			"description": "Remember the last status",
 			"unit": "binary",
 			"valueSize": 1,
 			"minValue": 0,
@@ -67,7 +65,6 @@
 		},
 		"4": {
 			"label": "Output mode setting: Dimming, On/Off",
-			"description": "Output mode setting: Dimming, On/Off",
 			"unit": "binary",
 			"valueSize": 1,
 			"minValue": 0,

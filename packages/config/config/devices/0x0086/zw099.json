@@ -355,7 +355,6 @@
 		},
 		"254": {
 			"label": "Device Tag",
-			"description": "Device Tag",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -367,7 +366,6 @@
 		},
 		"255": {
 			"label": "Reset to Factory Default Settings",
-			"description": "Reset to Factory Default Settings",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

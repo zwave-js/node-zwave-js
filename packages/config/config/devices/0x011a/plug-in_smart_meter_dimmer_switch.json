@@ -36,7 +36,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Synchronization of load power and LED indicator",
-			"description": "Synchronization of load power and LED indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -57,7 +56,6 @@
 		},
 		"8": {
 			"label": "Autosend Interval (METER_REPORT)",
-			"description": "Autosend Interval (METER_REPORT)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -69,7 +67,6 @@
 		},
 		"9": {
 			"label": "Autosend interval (SENSOR_MULTILEVEL_REPORT)",
-			"description": "Autosend interval (SENSOR_MULTILEVEL_REPORT)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -81,7 +78,6 @@
 		},
 		"10": {
 			"label": "Accumulated Autosend Interval ( METER_REPORT)",
-			"description": "Accumulated Autosend Interval ( METER_REPORT)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -93,7 +89,6 @@
 		},
 		"11": {
 			"label": "Enable automatic notifications",
-			"description": "Enable automatic notifications",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -122,7 +117,6 @@
 		},
 		"12": {
 			"label": "Minimum change in wattage report",
-			"description": "Minimum change in wattage report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

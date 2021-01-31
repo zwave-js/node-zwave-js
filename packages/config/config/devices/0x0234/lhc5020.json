@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Diode control",
-			"description": "Diode control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -48,7 +47,6 @@
 		},
 		"2": {
 			"label": "Turn on/off voltage on input terminal 1",
-			"description": "Turn on/off voltage on input terminal 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -69,7 +67,6 @@
 		},
 		"3": {
 			"label": "Turn on/off voltage on input terminal 2",
-			"description": "Turn on/off voltage on input terminal 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -90,7 +87,6 @@
 		},
 		"4": {
 			"label": "Turn on/off voltage on input terminal 3",
-			"description": "Turn on/off voltage on input terminal 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -111,7 +107,6 @@
 		},
 		"5": {
 			"label": "Turn on/off voltage on input terminal 4",
-			"description": "Turn on/off voltage on input terminal 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -144,7 +139,6 @@
 		},
 		"7": {
 			"label": "Threshold for triggering input",
-			"description": "Threshold for triggering input",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -156,7 +150,6 @@
 		},
 		"8": {
 			"label": "Threshold time for triggering input",
-			"description": "Threshold time for triggering input",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -168,7 +161,6 @@
 		},
 		"9": {
 			"label": "Function for input terminal 1",
-			"description": "Function for input terminal 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -179,7 +171,6 @@
 		},
 		"10": {
 			"label": "Function for input terminal 2",
-			"description": "Function for input terminal 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -190,7 +181,6 @@
 		},
 		"11": {
 			"label": "Function for input terminal 3",
-			"description": "Function for input terminal 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -201,7 +191,6 @@
 		},
 		"12": {
 			"label": "Function for input terminal 4",
-			"description": "Function for input terminal 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -212,7 +201,6 @@
 		},
 		"13": {
 			"label": "Central Scene notification",
-			"description": "Central Scene notification",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

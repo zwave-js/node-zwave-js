@@ -174,7 +174,6 @@
 		},
 		"11": {
 			"label": "Readout manual setpoint thermostat",
-			"description": "Readout manual setpoint thermostat",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

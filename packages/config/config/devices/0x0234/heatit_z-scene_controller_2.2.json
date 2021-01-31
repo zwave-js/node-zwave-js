@@ -463,7 +463,6 @@
 		},
 		"19": {
 			"label": "Association groups for button 1",
-			"description": "Association groups for button 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -484,7 +483,6 @@
 		},
 		"20": {
 			"label": "Association groups for button 2",
-			"description": "Association groups for button 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -505,7 +503,6 @@
 		},
 		"21": {
 			"label": "Association groups for button 3",
-			"description": "Association groups for button 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -526,7 +523,6 @@
 		},
 		"22": {
 			"label": "Association groups for button 4",
-			"description": "Association groups for button 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -547,7 +543,6 @@
 		},
 		"23": {
 			"label": "Association groups for button 5",
-			"description": "Association groups for button 5",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -568,7 +563,6 @@
 		},
 		"24": {
 			"label": "Association groups for button 6",
-			"description": "Association groups for button 6",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

@@ -25,7 +25,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "System Type",
-			"description": "System Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -46,7 +45,6 @@
 		},
 		"2": {
 			"label": "Fan Type",
-			"description": "Fan Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -67,7 +65,6 @@
 		},
 		"3": {
 			"label": "Change Over Type",
-			"description": "Change Over Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -88,7 +85,6 @@
 		},
 		"4": {
 			"label": "C/F Type",
-			"description": "C/F Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -109,7 +105,6 @@
 		},
 		"9": {
 			"label": "Display Lock",
-			"description": "Display Lock",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -152,7 +147,6 @@
 		},
 		"12": {
 			"label": "H Delta Stage 1 On",
-			"description": "H Delta Stage 1 On",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -163,7 +157,6 @@
 		},
 		"13": {
 			"label": "H Delta Stage 1 Off",
-			"description": "H Delta Stage 1 Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -174,7 +167,6 @@
 		},
 		"14": {
 			"label": "H Delta Stage 2 On",
-			"description": "H Delta Stage 2 On",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -185,7 +177,6 @@
 		},
 		"15": {
 			"label": "H Delta Stage 2 Off",
-			"description": "H Delta Stage 2 Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -196,7 +187,6 @@
 		},
 		"16": {
 			"label": "H Delta Stage 3 On",
-			"description": "H Delta Stage 3 On",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -207,7 +197,6 @@
 		},
 		"17": {
 			"label": "H Delta Stage 3 Off",
-			"description": "H Delta Stage 3 Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -218,7 +207,6 @@
 		},
 		"18": {
 			"label": "C Delta Stage 1 On",
-			"description": "C Delta Stage 1 On",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -229,7 +217,6 @@
 		},
 		"19": {
 			"label": "C Delta Stage 1 Off",
-			"description": "C Delta Stage 1 Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -240,7 +227,6 @@
 		},
 		"20": {
 			"label": "C Delta Stage 2 On",
-			"description": "C Delta Stage 2 On",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -251,7 +237,6 @@
 		},
 		"21": {
 			"label": "C Delta Stage 2 Off",
-			"description": "C Delta Stage 2 Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -283,7 +268,6 @@
 		},
 		"69": {
 			"label": "Service Mode (Test)",
-			"description": "Service Mode (Test)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -304,7 +288,6 @@
 		},
 		"75": {
 			"label": "Fan Cycler ON Time",
-			"description": "Fan Cycler ON Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
@@ -315,7 +298,6 @@
 		},
 		"76": {
 			"label": "Fan Cycler OFF Time",
-			"description": "Fan Cycler OFF Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
@@ -326,7 +308,6 @@
 		},
 		"77": {
 			"label": "2nd Stage Heat Enable",
-			"description": "2nd Stage Heat Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -347,7 +328,6 @@
 		},
 		"78": {
 			"label": "Aux Heat Enable",
-			"description": "Aux Heat Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -368,7 +348,6 @@
 		},
 		"79": {
 			"label": "2nd Stage Cool Enable",
-			"description": "2nd Stage Cool Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

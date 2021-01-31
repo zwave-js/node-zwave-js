@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Watt meter report period",
-			"description": "Watt meter report period",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,

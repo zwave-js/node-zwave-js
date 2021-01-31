@@ -30,7 +30,6 @@
 	"paramInformation": {
 		"99": {
 			"label": "Toggle sending clear message to group 2",
-			"description": "Toggle sending clear message to group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

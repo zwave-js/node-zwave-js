@@ -22,7 +22,6 @@
 	"paramInformation": {
 		"10": {
 			"label": "Minimum Off Time",
-			"description": "Minimum Off Time",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 9,
@@ -33,7 +32,6 @@
 		},
 		"11": {
 			"label": "Minimum Run Time",
-			"description": "Minimum Run Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 9,
@@ -44,7 +42,6 @@
 		},
 		"12": {
 			"label": "Heating Delta Stage 1 ON",
-			"description": "Heating Delta Stage 1 ON",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -55,7 +52,6 @@
 		},
 		"13": {
 			"label": "Heating Delta Stage 1 OFF",
-			"description": "Heating Delta Stage 1 OFF",
 			"unit": "degrees",
 			"valueSize": 1,
 			"minValue": 0,

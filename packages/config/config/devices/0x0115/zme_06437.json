@@ -55,7 +55,6 @@
 		},
 		"3": {
 			"label": "Function of RF off command",
-			"description": "Function of RF off command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -85,7 +84,6 @@
 		},
 		"5": {
 			"label": "Restore switch state after power cycle",
-			"description": "Restore switch state after power cycle",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -107,7 +105,6 @@
 		},
 		"20": {
 			"label": "Energy consumption",
-			"description": "Energy consumption",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1800,

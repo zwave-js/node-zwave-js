@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "User Code 1 Type",
-			"description": "User Code 1 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

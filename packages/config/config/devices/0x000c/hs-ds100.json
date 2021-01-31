@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"14": {
 			"label": "Enable / Disable BASIC SET command",
-			"description": "Enable / Disable BASIC SET command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -60,7 +59,6 @@
 		},
 		"32": {
 			"label": "Defines value of LOW BATTERY",
-			"description": "Defines value of LOW BATTERY",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,

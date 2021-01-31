@@ -27,13 +27,11 @@
 	"associations": {
 		"1": {
 			"label": "Click, press and hold of up/down buttons",
-			"description": "Click, press and hold of up/down buttons",
 			"maxNodes": 10,
 			"isLifeline": true
 		},
 		"2": {
 			"label": "Send Reports on blind state change",
-			"description": "Send Reports on blind state change",
 			"maxNodes": 10
 		}
 	},
@@ -121,7 +119,6 @@
 		},
 		"5": {
 			"label": "Invert buttons",
-			"description": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -232,7 +229,6 @@
 		},
 		"13": {
 			"label": "Protected command",
-			"description": "Protected command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

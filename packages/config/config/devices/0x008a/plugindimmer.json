@@ -43,7 +43,6 @@
 		},
 		"4": {
 			"label": "Enable dimming",
-			"description": "Enable dimming",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -65,7 +64,6 @@
 		},
 		"6": {
 			"label": "Maximum powerload",
-			"description": "Maximum powerload",
 			"valueSize": 2,
 			"minValue": 25,
 			"maxValue": 150,
@@ -76,7 +74,6 @@
 		},
 		"7": {
 			"label": "Dimming speed",
-			"description": "Dimming speed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -88,7 +85,6 @@
 		},
 		"8": {
 			"label": "Fading up speed",
-			"description": "Fading up speed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -100,7 +96,6 @@
 		},
 		"11": {
 			"label": "Auto meter report: percentage",
-			"description": "Auto meter report: percentage",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -112,7 +107,6 @@
 		},
 		"12": {
 			"label": "Auto meter report: watt",
-			"description": "Auto meter report: watt",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -124,7 +118,6 @@
 		},
 		"13": {
 			"label": "Auto meter report: time",
-			"description": "Auto meter report: time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -136,7 +129,6 @@
 		},
 		"14": {
 			"label": "Last known status",
-			"description": "Last known status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -148,7 +140,6 @@
 		},
 		"15": {
 			"label": "Fading down speed",
-			"description": "Fading down speed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

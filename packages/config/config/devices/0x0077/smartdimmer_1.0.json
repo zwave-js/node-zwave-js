@@ -29,7 +29,6 @@
 	"paramInformation": {
 		"0": {
 			"label": "Maximum dim level",
-			"description": "Maximum dim level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -96,7 +95,6 @@
 		},
 		"4": {
 			"label": "Dimming level duration",
-			"description": "Dimming level duration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -120,7 +118,6 @@
 		},
 		"6": {
 			"label": "Long dim duration",
-			"description": "Long dim duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -132,7 +129,6 @@
 		},
 		"7": {
 			"label": "Touch press time",
-			"description": "Touch press time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -156,7 +152,6 @@
 		},
 		"9": {
 			"label": "Touch Hold Time",
-			"description": "Touch Hold Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -168,7 +163,6 @@
 		},
 		"10": {
 			"label": "Network Update Interval",
-			"description": "Network Update Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

@@ -67,7 +67,6 @@
 		},
 		"4": {
 			"label": "load caution threshold",
-			"description": "load caution threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10000,

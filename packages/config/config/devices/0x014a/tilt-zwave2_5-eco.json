@@ -41,7 +41,6 @@
 		},
 		"2": {
 			"label": "Send Reports",
-			"description": "Send Reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

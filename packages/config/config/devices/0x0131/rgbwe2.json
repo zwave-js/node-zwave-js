@@ -29,7 +29,6 @@
 		},
 		"2": {
 			"label": "Strobe light interval",
-			"description": "Strobe light interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 25,
@@ -40,7 +39,6 @@
 		},
 		"3": {
 			"label": "Strobe light pulse count",
-			"description": "Strobe light pulse count",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -57,7 +55,6 @@
 		},
 		"4": {
 			"label": "Random strobe pulse colors",
-			"description": "Random strobe pulse colors",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -78,7 +75,6 @@
 		},
 		"255": {
 			"label": "Reset bulb to factory settings",
-			"description": "Reset bulb to factory settings",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 255,

@@ -360,7 +360,6 @@
 	"paramInformation": {
 		"0": {
 			"label": "Button Press Time",
-			"description": "Button Press Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -372,7 +371,6 @@
 		},
 		"1": {
 			"label": "Button Multiple Press Time",
-			"description": "Button Multiple Press Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -384,7 +382,6 @@
 		},
 		"2": {
 			"label": "Button Hold Time",
-			"description": "Button Hold Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -396,7 +393,6 @@
 		},
 		"3": {
 			"label": "Network Update Interval",
-			"description": "Network Update Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

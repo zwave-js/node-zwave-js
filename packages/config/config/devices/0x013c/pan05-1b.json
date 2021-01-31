@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Mode",
-			"description": "Mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -44,7 +43,6 @@
 		},
 		"2": {
 			"label": "Restore switch state mode",
-			"description": "Restore switch state mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -69,7 +67,6 @@
 		},
 		"3": {
 			"label": "Manual On/Off mode",
-			"description": "Manual On/Off mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -90,7 +87,6 @@
 		},
 		"4": {
 			"label": "LED indication mode",
-			"description": "LED indication mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -115,7 +111,6 @@
 		},
 		"5": {
 			"label": "Auto off timer",
-			"description": "Auto off timer",
 			"unit": "second",
 			"valueSize": 2,
 			"minValue": 0,
@@ -127,7 +122,6 @@
 		},
 		"6": {
 			"label": "RF Off command mode",
-			"description": "RF Off command mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

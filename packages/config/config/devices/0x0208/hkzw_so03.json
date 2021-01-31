@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"20": {
 			"label": "Overload Protection",
-			"description": "Overload Protection",
 			"unit": "decimal",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +40,6 @@
 		},
 		"21": {
 			"label": "On/Off Status Recovery After Power Failure",
-			"description": "On/Off Status Recovery After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -66,7 +64,6 @@
 		},
 		"24": {
 			"label": "On/Off Status Change Notifications",
-			"description": "On/Off Status Change Notifications",
 			"unit": "decimal",
 			"valueSize": 1,
 			"minValue": 0,
@@ -92,7 +89,6 @@
 		},
 		"27": {
 			"label": "Led Indicator Control",
-			"description": "Led Indicator Control",
 			"unit": "decimal",
 			"valueSize": 1,
 			"minValue": 0,

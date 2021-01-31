@@ -111,7 +111,6 @@
 		},
 		"15": {
 			"label": "Light Zone Control Mode",
-			"description": "Light Zone Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 30,
@@ -203,7 +202,6 @@
 		},
 		"40": {
 			"label": "Temperature Sensor Select",
-			"description": "Temperature Sensor Select",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -214,7 +212,6 @@
 		},
 		"44": {
 			"label": "Cold Start Minimum Level",
-			"description": "Cold Start Minimum Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,

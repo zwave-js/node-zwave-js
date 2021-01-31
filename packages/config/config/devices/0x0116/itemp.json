@@ -76,7 +76,6 @@
 		},
 		"5": {
 			"label": "Operating Mode",
-			"description": "Operating Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -98,7 +97,6 @@
 		},
 		"6": {
 			"label": "Temperature Offset",
-			"description": "Temperature Offset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 15300,

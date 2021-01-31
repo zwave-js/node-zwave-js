@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Analog gas/heat port mode",
-			"description": "Analog gas/heat port mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -44,7 +43,6 @@
 		},
 		"2": {
 			"label": "Analog gas/heat port resolution",
-			"description": "Analog gas/heat port resolution",
 			"valueSize": 4,
 			"minValue": 120,
 			"maxValue": 40000,
@@ -55,7 +53,6 @@
 		},
 		"3": {
 			"label": "Analog electricity port mode",
-			"description": "Analog electricity port mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -80,7 +77,6 @@
 		},
 		"4": {
 			"label": "Analog electricity port resolution",
-			"description": "Analog electricity port resolution",
 			"valueSize": 4,
 			"minValue": 120,
 			"maxValue": 40000,
@@ -91,7 +87,6 @@
 		},
 		"5": {
 			"label": "Digital port mode",
-			"description": "Digital port mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -102,7 +97,6 @@
 		},
 		"255": {
 			"label": "Restart device",
-			"description": "Restart device",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

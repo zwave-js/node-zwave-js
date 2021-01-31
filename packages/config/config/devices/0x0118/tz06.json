@@ -123,7 +123,6 @@
 		},
 		"5": {
 			"label": "RF Command Mode",
-			"description": "RF Command Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -152,7 +151,6 @@
 		},
 		"6": {
 			"label": "Existence of Endpoint 3",
-			"description": "Existence of Endpoint 3",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,

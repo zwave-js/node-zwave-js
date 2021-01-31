@@ -64,7 +64,6 @@
 		},
 		"3": {
 			"label": "Measurement frequency",
-			"description": "Measurement frequency",
 			"unit": "min",
 			"valueSize": 1,
 			"minValue": 1,
@@ -76,7 +75,6 @@
 		},
 		"4": {
 			"label": "Level of sensitivity for day",
-			"description": "Level of sensitivity for day",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
@@ -88,7 +86,6 @@
 		},
 		"5": {
 			"label": "Temperature",
-			"description": "Temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -99,7 +96,6 @@
 		},
 		"6": {
 			"label": "Level of sensitivity for night",
-			"description": "Level of sensitivity for night",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,

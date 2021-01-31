@@ -131,7 +131,6 @@
 		},
 		"7": {
 			"label": "Restore switch state mode",
-			"description": "Restore switch state mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -157,7 +156,6 @@
 		},
 		"8": {
 			"label": "Auto Off Timer",
-			"description": "Auto Off Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -169,7 +167,6 @@
 		},
 		"9": {
 			"label": "RF off command mode",
-			"description": "RF off command mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -199,7 +196,6 @@
 		},
 		"10": {
 			"label": "Endpoint 3",
-			"description": "Endpoint 3",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,

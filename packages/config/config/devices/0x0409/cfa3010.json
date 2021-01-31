@@ -164,7 +164,6 @@
 		},
 		"250": {
 			"label": "Lock status",
-			"description": "Lock status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

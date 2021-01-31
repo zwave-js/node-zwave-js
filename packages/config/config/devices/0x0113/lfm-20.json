@@ -17,7 +17,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Night Light",
-			"description": "Night Light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

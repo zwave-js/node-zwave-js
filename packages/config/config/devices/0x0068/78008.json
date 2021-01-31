@@ -68,7 +68,6 @@
 		},
 		"4": {
 			"label": "Delay time to enter standby after wake up",
-			"description": "Delay time to enter standby after wake up",
 			"unit": "Seconds",
 			"valueSize": 1,
 			"minValue": 1,
@@ -81,7 +80,6 @@
 		},
 		"5": {
 			"label": "Set waiting exclusion time",
-			"description": "Set waiting exclusion time",
 			"unit": "Seconds",
 			"valueSize": 1,
 			"minValue": 1,

@@ -18,7 +18,6 @@
 	"paramInformation": {
 		"4": {
 			"label": "Invert switch",
-			"description": "Invert switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -39,7 +38,6 @@
 		},
 		"29": {
 			"label": "Load Sensing",
-			"description": "Load Sensing",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

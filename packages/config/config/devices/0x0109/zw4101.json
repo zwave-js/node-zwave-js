@@ -18,7 +18,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Up output time",
-			"description": "Up output time",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 1,
@@ -31,7 +30,6 @@
 		},
 		"2": {
 			"label": "Stop output time",
-			"description": "Stop output time",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 1,
@@ -44,7 +42,6 @@
 		},
 		"3": {
 			"label": "Down output time",
-			"description": "Down output time",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 1,

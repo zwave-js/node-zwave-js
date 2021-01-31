@@ -41,7 +41,6 @@
 		},
 		"4": {
 			"label": "Vacation Mode",
-			"description": "Vacation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

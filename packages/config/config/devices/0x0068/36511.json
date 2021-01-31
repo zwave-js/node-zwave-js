@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Input IN1",
-			"description": "Input IN1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 9,
@@ -30,7 +29,6 @@
 		},
 		"2": {
 			"label": "Input IN2",
-			"description": "Input IN2",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 9,
@@ -41,7 +39,6 @@
 		},
 		"3": {
 			"label": "Input IN3",
-			"description": "Input IN3",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 9,
@@ -52,7 +49,6 @@
 		},
 		"4": {
 			"label": "Input IN4",
-			"description": "Input IN4",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 9,
@@ -63,7 +59,6 @@
 		},
 		"5": {
 			"label": "Auto Scene Mode Set",
-			"description": "Auto Scene Mode Set",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -74,7 +69,6 @@
 		},
 		"6": {
 			"label": "Auto Scene Mode Duration",
-			"description": "Auto Scene Mode Duration",
 			"unit": "2",
 			"valueSize": 2,
 			"minValue": 1,
@@ -97,7 +91,6 @@
 		},
 		"10": {
 			"label": "Max Dimming Value",
-			"description": "Max Dimming Value",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -108,7 +101,6 @@
 		},
 		"11": {
 			"label": "Min Dimming Value",
-			"description": "Min Dimming Value",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
@@ -119,7 +111,6 @@
 		},
 		"12": {
 			"label": "Dimming Time Soft ON/OFF",
-			"description": "Dimming Time Soft ON/OFF",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 25,
@@ -130,7 +121,6 @@
 		},
 		"13": {
 			"label": "Dimming Time when key pressed",
-			"description": "Dimming Time when key pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -141,7 +131,6 @@
 		},
 		"14": {
 			"label": "Dimmer Mode",
-			"description": "Dimmer Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

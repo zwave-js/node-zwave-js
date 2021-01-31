@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Temperature Low Threshold",
-			"description": "Temperature Low Threshold",
 			"unit": "Degrees Celsius",
 			"valueSize": 1,
 			"minValue": -10,
@@ -31,7 +30,6 @@
 		},
 		"2": {
 			"label": "Temperature High Threshold",
-			"description": "Temperature High Threshold",
 			"unit": "Degrees Celsius",
 			"valueSize": 1,
 			"minValue": -9,
@@ -43,7 +41,6 @@
 		},
 		"3": {
 			"label": "Meter Count",
-			"description": "Meter Count",
 			"unit": "Tenths of Gallons",
 			"valueSize": 4,
 			"minValue": 0,
@@ -55,7 +52,6 @@
 		},
 		"4": {
 			"label": "Meter Report Interval",
-			"description": "Meter Report Interval",
 			"unit": "10s of Seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -68,7 +64,6 @@
 		},
 		"5": {
 			"label": "Meter Leak Threshold",
-			"description": "Meter Leak Threshold",
 			"unit": "Tenths of Gallons",
 			"valueSize": 2,
 			"minValue": 0,

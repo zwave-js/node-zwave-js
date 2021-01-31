@@ -40,7 +40,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Input 1 switch type",
-			"description": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -62,7 +61,6 @@
 		},
 		"2": {
 			"label": "Input 2 contact type",
-			"description": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -84,7 +82,6 @@
 		},
 		"3": {
 			"label": "Input 3 contact type",
-			"description": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -136,7 +133,6 @@
 		},
 		"11": {
 			"label": "Automatic turning off relay after set time",
-			"description": "Automatic turning off relay after set time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -148,7 +144,6 @@
 		},
 		"30": {
 			"label": "Relay state after a power failure",
-			"description": "Relay state after a power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -170,7 +165,6 @@
 		},
 		"40": {
 			"label": "Power reporting in Watts on percentage change",
-			"description": "Power reporting in Watts on percentage change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -182,7 +176,6 @@
 		},
 		"42": {
 			"label": "Power reporting in Watts on power change",
-			"description": "Power reporting in Watts on power change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

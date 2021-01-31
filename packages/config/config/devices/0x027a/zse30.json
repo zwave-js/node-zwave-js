@@ -86,7 +86,6 @@
 		},
 		"6": {
 			"label": "Enable/Disable Water Detection",
-			"description": "Enable/Disable Water Detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

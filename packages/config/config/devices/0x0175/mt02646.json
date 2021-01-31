@@ -168,7 +168,6 @@
 		},
 		"9": {
 			"label": "RF off command mode",
-			"description": "RF off command mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

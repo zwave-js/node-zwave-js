@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Input 1 Switch Type",
-			"description": "Input 1 Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

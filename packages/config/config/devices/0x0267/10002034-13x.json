@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Association LED",
-			"description": "Association LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

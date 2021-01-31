@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"14": {
 			"label": "Enabe/Disable BASIC SET command",
-			"description": "Enabe/Disable BASIC SET command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,7 +39,6 @@
 		},
 		"15": {
 			"label": "Value of the BASIC SET",
-			"description": "Value of the BASIC SET",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -61,7 +59,6 @@
 		},
 		"17": {
 			"label": "Set flooding alarm interval (Minute)",
-			"description": "Set flooding alarm interval (Minute)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -73,7 +70,6 @@
 		},
 		"18": {
 			"label": "Enabe/Disable shock alarm",
-			"description": "Enabe/Disable shock alarm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -94,7 +90,6 @@
 		},
 		"19": {
 			"label": "Temperature report time (minute)",
-			"description": "Temperature report time (minute)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -106,7 +101,6 @@
 		},
 		"20": {
 			"label": "Set the high temperature alarm trigger value",
-			"description": "Set the high temperature alarm trigger value",
 			"valueSize": 2,
 			"minValue": -670,
 			"maxValue": 2570,
@@ -117,7 +111,6 @@
 		},
 		"22": {
 			"label": "Set the low temperature alarm trigger value",
-			"description": "Set the low temperature alarm trigger value",
 			"valueSize": 2,
 			"minValue": -670,
 			"maxValue": 2570,
@@ -128,7 +121,6 @@
 		},
 		"24": {
 			"label": "Enable/Disable blinking alarm LED",
-			"description": "Enable/Disable blinking alarm LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -149,7 +141,6 @@
 		},
 		"32": {
 			"label": "Level of low battery",
-			"description": "Level of low battery",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,

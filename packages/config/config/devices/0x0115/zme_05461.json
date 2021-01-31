@@ -70,7 +70,6 @@
 		},
 		"3": {
 			"label": "Function of RF off command on first channel",
-			"description": "Function of RF off command on first channel",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -100,7 +99,6 @@
 		},
 		"4": {
 			"label": "Switch on/off by holding buttons",
-			"description": "Switch on/off by holding buttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -130,7 +128,6 @@
 		},
 		"5": {
 			"label": "Restore switch state after power cycle",
-			"description": "Restore switch state after power cycle",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -182,7 +179,6 @@
 		},
 		"12": {
 			"label": "Switch by buttons (first channel)",
-			"description": "Switch by buttons (first channel)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -208,7 +204,6 @@
 		},
 		"13": {
 			"label": "Action on button single press or hold",
-			"description": "Action on button single press or hold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -238,7 +233,6 @@
 		},
 		"14": {
 			"label": "Action on button double press or hold",
-			"description": "Action on button double press or hold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -268,7 +262,6 @@
 		},
 		"16": {
 			"label": "What to do on button Down press (both)",
-			"description": "What to do on button Down press (both)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -294,7 +287,6 @@
 		},
 		"20": {
 			"label": "Energy consumption for first channel",
-			"description": "Energy consumption for first channel",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1800,
@@ -323,7 +315,6 @@
 		},
 		"23": {
 			"label": "Function of RF off command on second channel",
-			"description": "Function of RF off command on second channel",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -353,7 +344,6 @@
 		},
 		"32": {
 			"label": "Switch by buttons (second channel)",
-			"description": "Switch by buttons (second channel)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -379,7 +369,6 @@
 		},
 		"40": {
 			"label": "Energy consumption for second channel",
-			"description": "Energy consumption for second channel",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1800,

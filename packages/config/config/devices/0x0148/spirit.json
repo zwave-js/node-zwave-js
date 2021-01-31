@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "LCD Invert",
-			"description": "LCD Invert",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -44,7 +43,6 @@
 		},
 		"2": {
 			"label": "LCD Timeout",
-			"description": "LCD Timeout",
 			"unit": "s",
 			"valueSize": 1,
 			"minValue": 0,
@@ -62,7 +60,6 @@
 		},
 		"3": {
 			"label": "Backlight",
-			"description": "Backlight",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -83,7 +80,6 @@
 		},
 		"4": {
 			"label": "Battery report",
-			"description": "Battery report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -104,7 +100,6 @@
 		},
 		"5": {
 			"label": "Measured Temperature report",
-			"description": "Measured Temperature report",
 			"unit": "°C",
 			"valueSize": 1,
 			"minValue": 0,
@@ -116,7 +111,6 @@
 		},
 		"6": {
 			"label": "Valve opening percentage report",
-			"description": "Valve opening percentage report",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -128,7 +122,6 @@
 		},
 		"7": {
 			"label": "Window open detection",
-			"description": "Window open detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

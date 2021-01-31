@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "OnTime",
-			"description": "OnTime",
 			"unit": "Minutes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -43,7 +42,6 @@
 		},
 		"2": {
 			"label": "OnLevel",
-			"description": "OnLevel",
 			"unit": "Percent",
 			"valueSize": 1,
 			"minValue": -1,
@@ -55,7 +53,6 @@
 		},
 		"3": {
 			"label": "LiteMin",
-			"description": "LiteMin",
 			"unit": "Minutes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -79,7 +76,6 @@
 		},
 		"5": {
 			"label": "TempAdj",
-			"description": "TempAdj",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,

@@ -143,7 +143,6 @@
 		},
 		"7": {
 			"label": "Input 1 calibration",
-			"description": "Input 1 calibration",
 			"valueSize": 1,
 			"minValue": -40,
 			"maxValue": 40,
@@ -165,7 +164,6 @@
 		},
 		"9": {
 			"label": "Input 3 calibration",
-			"description": "Input 3 calibration",
 			"valueSize": 1,
 			"minValue": -40,
 			"maxValue": 40,
@@ -176,7 +174,6 @@
 		},
 		"10": {
 			"label": "Input 4 calibration",
-			"description": "Input 4 calibration",
 			"valueSize": 1,
 			"minValue": -40,
 			"maxValue": 40,

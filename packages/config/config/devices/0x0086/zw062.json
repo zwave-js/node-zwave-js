@@ -258,7 +258,6 @@
 		},
 		"37[0xff]": {
 			"label": "Disable opening alarm",
-			"description": "Disable opening alarm",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -279,7 +278,6 @@
 		},
 		"37[0xff00]": {
 			"label": "Opening alarm volume",
-			"description": "Opening alarm volume",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 10,
@@ -301,7 +299,6 @@
 		},
 		"37[0x0f000000]": {
 			"label": "Opening alarm LED mode",
-			"description": "Opening alarm LED mode",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 10,
@@ -312,7 +309,6 @@
 		},
 		"38[0xff]": {
 			"label": "Disable closing alarm",
-			"description": "Disable closing alarm",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,
@@ -333,7 +329,6 @@
 		},
 		"38[0xff00]": {
 			"label": "Closing alarm volume",
-			"description": "Closing alarm volume",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 10,
@@ -355,7 +350,6 @@
 		},
 		"38[0x0f000000]": {
 			"label": "Closing alarm LED mode",
-			"description": "Closing alarm LED mode",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 10,

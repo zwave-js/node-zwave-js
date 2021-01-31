@@ -30,7 +30,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Group 2 BASIC SET",
-			"description": "Group 2 BASIC SET",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -52,7 +51,6 @@
 		},
 		"2": {
 			"label": "Sensor Binary Reports",
-			"description": "Sensor Binary Reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

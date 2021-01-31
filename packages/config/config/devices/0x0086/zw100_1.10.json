@@ -48,7 +48,6 @@
 		},
 		"3": {
 			"label": "Motion Sensor reset timeout",
-			"description": "Motion Sensor reset timeout",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 3600,
@@ -243,7 +242,6 @@
 		},
 		"51": {
 			"label": "Upper limit value of humidity sensor",
-			"description": "Upper limit value of humidity sensor",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -255,7 +253,6 @@
 		},
 		"52": {
 			"label": "Lower limit value of humidity sensor",
-			"description": "Lower limit value of humidity sensor",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -267,7 +264,6 @@
 		},
 		"53": {
 			"label": "Upper limit value of Lighting sensor",
-			"description": "Upper limit value of Lighting sensor",
 			"unit": "Lux",
 			"valueSize": 2,
 			"minValue": 0,
@@ -279,7 +275,6 @@
 		},
 		"54": {
 			"label": "Lower limit value of Lighting sensor",
-			"description": "Lower limit value of Lighting sensor",
 			"unit": "Lux",
 			"valueSize": 2,
 			"minValue": 0,
@@ -291,7 +286,6 @@
 		},
 		"55": {
 			"label": "Upper limit value of ultraviolet sensor",
-			"description": "Upper limit value of ultraviolet sensor",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 11,
@@ -302,7 +296,6 @@
 		},
 		"56": {
 			"label": "Lower limit value of ultraviolet sensor",
-			"description": "Lower limit value of ultraviolet sensor",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 11,
@@ -313,7 +306,6 @@
 		},
 		"57": {
 			"label": "Recover limit value of temperature sensor",
-			"description": "Recover limit value of temperature sensor",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -325,7 +317,6 @@
 		},
 		"58": {
 			"label": "Recover limit value of humidity sensor",
-			"description": "Recover limit value of humidity sensor",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
@@ -337,7 +328,6 @@
 		},
 		"59": {
 			"label": "Recover limit value of Lighting sensor.",
-			"description": "Recover limit value of Lighting sensor.",
 			"unit": "Lux",
 			"valueSize": 1,
 			"minValue": 1,
@@ -350,7 +340,6 @@
 		},
 		"60": {
 			"label": "Recover limit value of Ultraviolet sensor",
-			"description": "Recover limit value of Ultraviolet sensor",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 5,
@@ -361,7 +350,6 @@
 		},
 		"61": {
 			"label": "Out-of-limit state of the Sensors",
-			"description": "Out-of-limit state of the Sensors",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -373,7 +361,6 @@
 		},
 		"64": {
 			"label": "Default unit of the automatic temperature report",
-			"description": "Default unit of the automatic temperature report",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
@@ -585,7 +572,6 @@
 		},
 		"110": {
 			"label": "Set parameters 111-113 to default.",
-			"description": "Set parameters 111-113 to default.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -607,7 +593,6 @@
 		},
 		"112": {
 			"label": "Group 2 Report Interval",
-			"description": "Group 2 Report Interval",
 			"valueSize": 4,
 			"minValue": 5,
 			"maxValue": 2678400,
@@ -618,7 +603,6 @@
 		},
 		"113": {
 			"label": "Group 3 Report Interval",
-			"description": "Group 3 Report Interval",
 			"valueSize": 4,
 			"minValue": 5,
 			"maxValue": 2678400,
@@ -629,7 +613,6 @@
 		},
 		"202": {
 			"label": "Humidity Sensor Calibration",
-			"description": "Humidity Sensor Calibration",
 			"valueSize": 1,
 			"minValue": -50,
 			"maxValue": 50,
@@ -640,7 +623,6 @@
 		},
 		"203": {
 			"label": "Luminance Sensor Calibration",
-			"description": "Luminance Sensor Calibration",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
@@ -651,7 +633,6 @@
 		},
 		"204": {
 			"label": "Ultraviolet Sensor Calibration",
-			"description": "Ultraviolet Sensor Calibration",
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 10,

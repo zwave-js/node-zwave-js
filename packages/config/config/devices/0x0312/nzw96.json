@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "LED Invert/Off",
-			"description": "LED Invert/Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

@@ -260,7 +260,6 @@
 		},
 		"252": {
 			"label": "Lock configuration",
-			"description": "Lock configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

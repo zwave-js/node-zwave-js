@@ -85,7 +85,6 @@
 		},
 		"6": {
 			"label": "Associations command class choice",
-			"description": "Associations command class choice",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -234,7 +233,6 @@
 		},
 		"30": {
 			"label": "Alarm response",
-			"description": "Alarm response",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -334,7 +332,6 @@
 		},
 		"45": {
 			"label": "Reporting energy consumption changes",
-			"description": "Reporting energy consumption changes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

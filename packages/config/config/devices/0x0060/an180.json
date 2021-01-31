@@ -48,7 +48,6 @@
 		},
 		"3": {
 			"label": "Remember the last status",
-			"description": "Remember the last status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

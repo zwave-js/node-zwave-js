@@ -27,7 +27,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "System Type",
-			"description": "System Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -48,7 +47,6 @@
 		},
 		"2": {
 			"label": "Fan Type",
-			"description": "Fan Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -69,7 +67,6 @@
 		},
 		"3": {
 			"label": "Change Over Type",
-			"description": "Change Over Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -90,7 +87,6 @@
 		},
 		"4": {
 			"label": "2nd Stage Heat Enable",
-			"description": "2nd Stage Heat Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -111,7 +107,6 @@
 		},
 		"5": {
 			"label": "Aux Heat Enable",
-			"description": "Aux Heat Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -132,7 +127,6 @@
 		},
 		"6": {
 			"label": "2nd Stage Cool Enable",
-			"description": "2nd Stage Cool Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -153,7 +147,6 @@
 		},
 		"7": {
 			"label": "Temperature Unit",
-			"description": "Temperature Unit",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -174,7 +167,6 @@
 		},
 		"8": {
 			"label": "Minimum Off Time",
-			"description": "Minimum Off Time",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 5,
@@ -186,7 +178,6 @@
 		},
 		"9": {
 			"label": "Minimum Run Time",
-			"description": "Minimum Run Time",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 3,
@@ -198,7 +189,6 @@
 		},
 		"10": {
 			"label": "Setpoint H/C Delta",
-			"description": "Setpoint H/C Delta",
 			"unit": "fahrenheit",
 			"valueSize": 1,
 			"minValue": 3,
@@ -210,7 +200,6 @@
 		},
 		"11": {
 			"label": "H Delta Stage 1 ON",
-			"description": "H Delta Stage 1 ON",
 			"unit": "fahrenheit",
 			"valueSize": 1,
 			"minValue": 1,
@@ -222,7 +211,6 @@
 		},
 		"12": {
 			"label": "H Delta Stage 1 OFF",
-			"description": "H Delta Stage 1 OFF",
 			"unit": "fahrenheit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -234,7 +222,6 @@
 		},
 		"13": {
 			"label": "H Delta Stage 2 ON",
-			"description": "H Delta Stage 2 ON",
 			"unit": "fahrenheit",
 			"valueSize": 1,
 			"minValue": 2,
@@ -246,7 +233,6 @@
 		},
 		"14": {
 			"label": "H Delta Stage 2 OFF",
-			"description": "H Delta Stage 2 OFF",
 			"unit": "fahrenheit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -258,7 +244,6 @@
 		},
 		"15": {
 			"label": "H Delta Aux ON",
-			"description": "H Delta Aux ON",
 			"unit": "fahrenheit",
 			"valueSize": 1,
 			"minValue": 3,
@@ -270,7 +255,6 @@
 		},
 		"16": {
 			"label": "H Delta Stage 3 OFF",
-			"description": "H Delta Stage 3 OFF",
 			"unit": "fahrenheit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -282,7 +266,6 @@
 		},
 		"17": {
 			"label": "C Delta Stage 1 ON",
-			"description": "C Delta Stage 1 ON",
 			"unit": "fahrenheit",
 			"valueSize": 1,
 			"minValue": 1,
@@ -294,7 +277,6 @@
 		},
 		"18": {
 			"label": "C Delta Stage 1 OFF",
-			"description": "C Delta Stage 1 OFF",
 			"unit": "fahrenheit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -306,7 +288,6 @@
 		},
 		"19": {
 			"label": "C Delta Stage 2 ON",
-			"description": "C Delta Stage 2 ON",
 			"unit": "fahrenheit",
 			"valueSize": 1,
 			"minValue": 2,
@@ -318,7 +299,6 @@
 		},
 		"20": {
 			"label": "C Delta Stage 2 OFF",
-			"description": "C Delta Stage 2 OFF",
 			"unit": "fahrenheit",
 			"valueSize": 1,
 			"minValue": 0,
@@ -330,7 +310,6 @@
 		},
 		"23": {
 			"label": "Lifeline Association Group Report To Send",
-			"description": "Lifeline Association Group Report To Send",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -341,7 +320,6 @@
 		},
 		"24": {
 			"label": "Display Lock",
-			"description": "Display Lock",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -362,7 +340,6 @@
 		},
 		"26": {
 			"label": "Backlight Timer",
-			"description": "Backlight Timer",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 10,
@@ -374,7 +351,6 @@
 		},
 		"33": {
 			"label": "Max Heat Setpoint",
-			"description": "Max Heat Setpoint",
 			"valueSize": 1,
 			"minValue": 30,
 			"maxValue": 109,
@@ -385,7 +361,6 @@
 		},
 		"34": {
 			"label": "Min Cool Setpoint",
-			"description": "Min Cool Setpoint",
 			"valueSize": 1,
 			"minValue": 33,
 			"maxValue": 112,
@@ -396,7 +371,6 @@
 		},
 		"38": {
 			"label": "Schedule Enable",
-			"description": "Schedule Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -417,7 +391,6 @@
 		},
 		"39": {
 			"label": "Run/Hold Mode",
-			"description": "Run/Hold Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -438,7 +411,6 @@
 		},
 		"40": {
 			"label": "Setback Mode",
-			"description": "Setback Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -459,7 +431,6 @@
 		},
 		"41": {
 			"label": "Un-Occupied HSP",
-			"description": "Un-Occupied HSP",
 			"valueSize": 1,
 			"minValue": 30,
 			"maxValue": 109,
@@ -470,7 +441,6 @@
 		},
 		"42": {
 			"label": "Un-Occupied CSP",
-			"description": "Un-Occupied CSP",
 			"valueSize": 1,
 			"minValue": 33,
 			"maxValue": 112,
@@ -481,7 +451,6 @@
 		},
 		"43": {
 			"label": "Remote Sensor 1 Node Number",
-			"description": "Remote Sensor 1 Node Number",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 252,
@@ -493,7 +462,6 @@
 		},
 		"46": {
 			"label": "Remote Sensor 1 Temperature",
-			"description": "Remote Sensor 1 Temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 112,
@@ -504,7 +472,6 @@
 		},
 		"48": {
 			"label": "Internal Sensor Temp Offset",
-			"description": "Internal Sensor Temp Offset",
 			"valueSize": 1,
 			"minValue": -7,
 			"maxValue": 7,
@@ -515,7 +482,6 @@
 		},
 		"49": {
 			"label": "R1 Sensor Temp Offset",
-			"description": "R1 Sensor Temp Offset",
 			"valueSize": 1,
 			"minValue": -7,
 			"maxValue": 7,
@@ -526,7 +492,6 @@
 		},
 		"54": {
 			"label": "Heat Timer",
-			"description": "Heat Timer",
 			"unit": "hours",
 			"valueSize": 2,
 			"minValue": 0,
@@ -538,7 +503,6 @@
 		},
 		"55": {
 			"label": "Cool Timer",
-			"description": "Cool Timer",
 			"unit": "hours",
 			"valueSize": 2,
 			"minValue": 0,
@@ -550,7 +514,6 @@
 		},
 		"61": {
 			"label": "Fan Purge Heat",
-			"description": "Fan Purge Heat",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -562,7 +525,6 @@
 		},
 		"62": {
 			"label": "Fan Purge Cool",
-			"description": "Fan Purge Cool",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,

@@ -30,7 +30,6 @@
 	"paramInformation": {
 		"2": {
 			"label": "Basic Set Level",
-			"description": "Basic Set Level",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 100,
@@ -41,7 +40,6 @@
 		},
 		"3": {
 			"label": "PIR Sensitivity",
-			"description": "PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -52,7 +50,6 @@
 		},
 		"4": {
 			"label": "Light Threshold",
-			"description": "Light Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -63,7 +60,6 @@
 		},
 		"5": {
 			"label": "Operation Mode",
-			"description": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -74,7 +70,6 @@
 		},
 		"6": {
 			"label": "Multi-Sensor Function Switch",
-			"description": "Multi-Sensor Function Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -85,7 +80,6 @@
 		},
 		"8": {
 			"label": "PIR Re-Detect Interval Time",
-			"description": "PIR Re-Detect Interval Time",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 127,
@@ -96,7 +90,6 @@
 		},
 		"9": {
 			"label": "Turn Off Light Time",
-			"description": "Turn Off Light Time",
 			"valueSize": 1,
 			"minValue": 4,
 			"maxValue": 127,
@@ -107,7 +100,6 @@
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
-			"description": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -118,7 +110,6 @@
 		},
 		"11": {
 			"label": "Auto Report Door/Window State Time",
-			"description": "Auto Report Door/Window State Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -129,7 +120,6 @@
 		},
 		"12": {
 			"label": "Auto Report Illumination Time",
-			"description": "Auto Report Illumination Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -140,7 +130,6 @@
 		},
 		"13": {
 			"label": "Auto Report Temperature Time",
-			"description": "Auto Report Temperature Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,

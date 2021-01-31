@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"10": {
 			"label": "Activate/deactivate functions ALL ON / ALL OFF",
-			"description": "Activate/deactivate functions ALL ON / ALL OFF",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -49,7 +48,6 @@
 		},
 		"40": {
 			"label": "Power report (Watts) on power change for Q1 or Q2",
-			"description": "Power report (Watts) on power change for Q1 or Q2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -60,7 +58,6 @@
 		},
 		"42": {
 			"label": "Power report (Watts) by time interval for Q1 or Q2",
-			"description": "Power report (Watts) by time interval for Q1 or Q2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -71,7 +68,6 @@
 		},
 		"71": {
 			"label": "Operating modes",
-			"description": "Operating modes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -93,7 +89,6 @@
 		},
 		"72": {
 			"label": "Slats tilting full turn time",
-			"description": "Slats tilting full turn time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -104,7 +99,6 @@
 		},
 		"73": {
 			"label": "Slats position",
-			"description": "Slats position",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -126,7 +120,6 @@
 		},
 		"74": {
 			"label": "Motor moving up/down time",
-			"description": "Motor moving up/down time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -137,7 +130,6 @@
 		},
 		"76": {
 			"label": "Motor operation detection",
-			"description": "Motor operation detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -148,7 +140,6 @@
 		},
 		"78": {
 			"label": "Forced Shutter DC calibration",
-			"description": "Forced Shutter DC calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -170,7 +161,6 @@
 		},
 		"85": {
 			"label": "Power consumption max delay time",
-			"description": "Power consumption max delay time",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 50,
@@ -181,7 +171,6 @@
 		},
 		"86": {
 			"label": "Power consumption at limit switch delay time",
-			"description": "Power consumption at limit switch delay time",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 50,
@@ -192,7 +181,6 @@
 		},
 		"90": {
 			"label": "Time delay for next motor movement",
-			"description": "Time delay for next motor movement",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 30,
@@ -203,7 +191,6 @@
 		},
 		"110": {
 			"label": "Temperature sensor offset settings",
-			"description": "Temperature sensor offset settings",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32536,
@@ -214,7 +201,6 @@
 		},
 		"120": {
 			"label": "Digital temperature sensor reporting",
-			"description": "Digital temperature sensor reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Paddle Functions",
-			"description": "Paddle Functions",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,7 +39,6 @@
 		},
 		"2": {
 			"label": "LED Indicator Function",
-			"description": "LED Indicator Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -61,7 +59,6 @@
 		},
 		"3": {
 			"label": "Enable / Disable LED",
-			"description": "Enable / Disable LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

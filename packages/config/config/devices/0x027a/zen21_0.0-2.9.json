@@ -40,7 +40,6 @@
 		},
 		"2": {
 			"label": "LED Indicator Control",
-			"description": "LED Indicator Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

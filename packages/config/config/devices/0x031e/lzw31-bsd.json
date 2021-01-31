@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Dimming Speed",
-			"description": "Dimming Speed",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -31,7 +30,6 @@
 		},
 		"2": {
 			"label": "Dimming Speed (Z-Wave)",
-			"description": "Dimming Speed (Z-Wave)",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -43,7 +41,6 @@
 		},
 		"3": {
 			"label": "Ramp Rate",
-			"description": "Ramp Rate",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -55,7 +52,6 @@
 		},
 		"4": {
 			"label": "Ramp Rate (Z-Wave)",
-			"description": "Ramp Rate (Z-Wave)",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -67,7 +63,6 @@
 		},
 		"5": {
 			"label": "Minimum Dim Level",
-			"description": "Minimum Dim Level",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
@@ -79,7 +74,6 @@
 		},
 		"6": {
 			"label": "Maximum Dim Level",
-			"description": "Maximum Dim Level",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 55,
@@ -91,7 +85,6 @@
 		},
 		"7": {
 			"label": "Invert Switch",
-			"description": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -112,7 +105,6 @@
 		},
 		"8": {
 			"label": "Auto Off Timer",
-			"description": "Auto Off Timer",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -124,7 +116,6 @@
 		},
 		"9": {
 			"label": "Default Level (Local)",
-			"description": "Default Level (Local)",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -136,7 +127,6 @@
 		},
 		"10": {
 			"label": "Default Level (Z-Wave)",
-			"description": "Default Level (Z-Wave)",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -148,7 +138,6 @@
 		},
 		"11": {
 			"label": "Power On State",
-			"description": "Power On State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 101,
@@ -159,7 +148,6 @@
 		},
 		"13": {
 			"label": "LED Indicator Color",
-			"description": "LED Indicator Color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -171,7 +159,6 @@
 		},
 		"14": {
 			"label": "LED Indicator Intensity",
-			"description": "LED Indicator Intensity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -182,7 +169,6 @@
 		},
 		"15": {
 			"label": "LED Indicator Intensity (When Off)",
-			"description": "LED Indicator Intensity (When Off)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -193,7 +179,6 @@
 		},
 		"16": {
 			"label": "LED Strip Effect",
-			"description": "LED Strip Effect",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 83823359,
@@ -204,7 +189,6 @@
 		},
 		"17": {
 			"label": "LED Indicator Timeout",
-			"description": "LED Indicator Timeout",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -216,7 +200,6 @@
 		},
 		"18": {
 			"label": "Active Power Reports",
-			"description": "Active Power Reports",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -228,7 +211,6 @@
 		},
 		"19": {
 			"label": "Periodic Power & Energy Reports",
-			"description": "Periodic Power & Energy Reports",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -240,7 +222,6 @@
 		},
 		"20": {
 			"label": "Energy Reports",
-			"description": "Energy Reports",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -252,7 +233,6 @@
 		},
 		"21": {
 			"label": "AC Power Type",
-			"description": "AC Power Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -273,7 +253,6 @@
 		},
 		"22": {
 			"label": "Switch Type",
-			"description": "Switch Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

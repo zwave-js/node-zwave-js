@@ -143,7 +143,6 @@
 		},
 		"121[0xff]": {
 			"label": "Configuration Value 4(LSB) SENSOR BINARY",
-			"description": "Configuration Value 4(LSB) SENSOR BINARY",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,

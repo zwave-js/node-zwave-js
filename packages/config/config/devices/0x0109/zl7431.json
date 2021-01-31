@@ -30,7 +30,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Indicator Light",
-			"description": "Indicator Light",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,

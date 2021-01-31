@@ -317,7 +317,6 @@
 		},
 		"25": {
 			"label": "Blocks wake up even when Wake Up Interval is set",
-			"description": "Blocks wake up even when Wake Up Interval is set",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -338,7 +337,6 @@
 		},
 		"30": {
 			"label": "Send unsolicited Battery Report on Wake Up",
-			"description": "Send unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

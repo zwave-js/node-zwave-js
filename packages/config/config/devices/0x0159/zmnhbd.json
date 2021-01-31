@@ -54,7 +54,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Input 1 switch type",
-			"description": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -76,7 +75,6 @@
 		},
 		"2": {
 			"label": "Input 2 switch type",
-			"description": "Input 2 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -302,7 +300,6 @@
 		},
 		"120": {
 			"label": "Digital temperature sensor reporting",
-			"description": "Digital temperature sensor reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

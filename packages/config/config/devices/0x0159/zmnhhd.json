@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "In-wall Switch Type for Load to control I1",
-			"description": "In-wall Switch Type for Load to control I1",
 			"unit": "/",
 			"valueSize": 1,
 			"minValue": 0,
@@ -41,7 +40,6 @@
 		},
 		"5": {
 			"label": "Working mode",
-			"description": "Working mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -62,7 +60,6 @@
 		},
 		"11": {
 			"label": "Turn Load 1 Off Automatically with Timer",
-			"description": "Turn Load 1 Off Automatically with Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
@@ -73,7 +70,6 @@
 		},
 		"12": {
 			"label": "Turn Load 1 On Automatically with Timer",
-			"description": "Turn Load 1 On Automatically with Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32536,
@@ -84,7 +80,6 @@
 		},
 		"21": {
 			"label": "Enable/Disable the Double click function",
-			"description": "Enable/Disable the Double click function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -105,7 +100,6 @@
 		},
 		"30": {
 			"label": "Restore on/off status for load after power failure",
-			"description": "Restore on/off status for load after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -126,7 +120,6 @@
 		},
 		"40": {
 			"label": "Power Consumption Threshold",
-			"description": "Power Consumption Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -137,7 +130,6 @@
 		},
 		"42": {
 			"label": "Power Consumption Threshold (time)",
-			"description": "Power Consumption Threshold (time)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -148,7 +140,6 @@
 		},
 		"60": {
 			"label": "Minimum dimming value",
-			"description": "Minimum dimming value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
@@ -159,7 +150,6 @@
 		},
 		"61": {
 			"label": "Maximum dimming value",
-			"description": "Maximum dimming value",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -170,7 +160,6 @@
 		},
 		"65": {
 			"label": "Dimming time when key pressed",
-			"description": "Dimming time when key pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -181,7 +170,6 @@
 		},
 		"66": {
 			"label": "Dimming time when key hold",
-			"description": "Dimming time when key hold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 127,
@@ -192,7 +180,6 @@
 		},
 		"67": {
 			"label": "Ignore start level",
-			"description": "Ignore start level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -213,7 +200,6 @@
 		},
 		"68": {
 			"label": "Dimming duration",
-			"description": "Dimming duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -224,7 +210,6 @@
 		},
 		"70": {
 			"label": "Overload safety switch",
-			"description": "Overload safety switch",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 200,
@@ -235,7 +220,6 @@
 		},
 		"71": {
 			"label": "Calibration trigger",
-			"description": "Calibration trigger",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -260,7 +244,6 @@
 		},
 		"72": {
 			"label": "Calibration status (read only)",
-			"description": "Calibration status (read only)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
@@ -281,7 +264,6 @@
 		},
 		"73": {
 			"label": "Alarm/Notification events",
-			"description": "Alarm/Notification events",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -292,7 +274,6 @@
 		},
 		"74": {
 			"label": "Alarm/Notification time interval",
-			"description": "Alarm/Notification time interval",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 125,

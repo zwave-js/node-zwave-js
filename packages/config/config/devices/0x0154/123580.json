@@ -65,7 +65,6 @@
 		},
 		"3": {
 			"label": "RF Off command",
-			"description": "RF Off command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -114,7 +113,6 @@
 		},
 		"5": {
 			"label": "Speed for fast dimming",
-			"description": "Speed for fast dimming",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -126,7 +124,6 @@
 		},
 		"6": {
 			"label": "Speed for slow dimming",
-			"description": "Speed for slow dimming",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -138,7 +135,6 @@
 		},
 		"7": {
 			"label": "Behavior when ON received",
-			"description": "Behavior when ON received",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -163,7 +159,6 @@
 		},
 		"8": {
 			"label": "Baby dimming time",
-			"description": "Baby dimming time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -218,7 +213,6 @@
 		},
 		"19": {
 			"label": "Dim Level on 'Switch On'",
-			"description": "Dim Level on 'Switch On'",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -229,7 +223,6 @@
 		},
 		"51": {
 			"label": "Pause before pulse",
-			"description": "Pause before pulse",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
@@ -240,7 +233,6 @@
 		},
 		"52": {
 			"label": "Pause after pulse",
-			"description": "Pause after pulse",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
@@ -251,7 +243,6 @@
 		},
 		"53": {
 			"label": "Pulse width",
-			"description": "Pulse width",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 20,

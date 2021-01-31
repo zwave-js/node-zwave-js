@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"31": {
 			"label": "Dipswitch Settings",
-			"description": "Dipswitch Settings",
 			"unit": "Dipswitch Settings",
 			"valueSize": 1,
 			"minValue": 0,

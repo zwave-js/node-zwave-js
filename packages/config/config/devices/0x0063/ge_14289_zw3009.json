@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Adjust Button LED Light",
-			"description": "Adjust Button LED Light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -44,7 +43,6 @@
 		},
 		"4": {
 			"label": "Invert Switch",
-			"description": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

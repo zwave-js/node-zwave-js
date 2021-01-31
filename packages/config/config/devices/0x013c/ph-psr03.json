@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"2": {
 			"label": "Basic Set Level",
-			"description": "Basic Set Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -31,7 +30,6 @@
 		},
 		"7": {
 			"label": "Customer Function",
-			"description": "Customer Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -43,7 +41,6 @@
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
-			"description": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

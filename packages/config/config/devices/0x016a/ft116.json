@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Current Overload Protection",
-			"description": "Current Overload Protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,7 +39,6 @@
 		},
 		"4": {
 			"label": "Overheat protection",
-			"description": "Overheat protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -228,7 +226,6 @@
 		},
 		"90": {
 			"label": "Enables/disables parameter 91 and 92",
-			"description": "Enables/disables parameter 91 and 92",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -497,7 +494,6 @@
 		},
 		"252": {
 			"label": "Lock/unlock configuration parameters",
-			"description": "Lock/unlock configuration parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

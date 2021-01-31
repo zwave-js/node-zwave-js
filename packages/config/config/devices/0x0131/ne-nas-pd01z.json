@@ -42,7 +42,6 @@
 		},
 		"3": {
 			"label": "BASIC SET Level",
-			"description": "BASIC SET LEVEL",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,

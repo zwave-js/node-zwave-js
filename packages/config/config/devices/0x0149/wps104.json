@@ -48,7 +48,6 @@
 		},
 		"20": {
 			"label": "Device status upon receipt of a Basic Set command",
-			"description": "Device status upon receipt of a Basic Set command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,

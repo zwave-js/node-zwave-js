@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"10": {
 			"label": "Low Battery Alarm Level",
-			"description": "Low Battery Alarm Level",
 			"unit": "percent",
 			"valueSize": 1,
 			"minValue": 10,
@@ -31,7 +30,6 @@
 		},
 		"12": {
 			"label": "PIR sensitivity",
-			"description": "PIR sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -48,7 +46,6 @@
 		},
 		"13": {
 			"label": "Waiting time between two PIR triggers",
-			"description": "Waiting time between two PIR triggers",
 			"unit": "seconda",
 			"valueSize": 2,
 			"minValue": 5,
@@ -60,7 +57,6 @@
 		},
 		"14": {
 			"label": "BASIC SET Command after PIR triggering",
-			"description": "BASIC SET Command after PIR triggering",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -81,7 +77,6 @@
 		},
 		"15": {
 			"label": "Exchange of BASIC SET value and PIR status",
-			"description": "Exchange of BASIC SET value and PIR status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -102,7 +97,6 @@
 		},
 		"100": {
 			"label": "Reset parameters 101-104 to factory defaults",
-			"description": "Reset parameters 101-104 to factory defaults",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -119,7 +113,6 @@
 		},
 		"101": {
 			"label": "Temperature report Time",
-			"description": "Temperature report Time",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -136,7 +129,6 @@
 		},
 		"102": {
 			"label": "Humidity report Time",
-			"description": "Humidity report Time",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -153,7 +145,6 @@
 		},
 		"103": {
 			"label": "Brightness report Time",
-			"description": "Brightness report Time",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -164,7 +155,6 @@
 		},
 		"104": {
 			"label": "Battery report Time",
-			"description": "Battery report Time",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -181,7 +171,6 @@
 		},
 		"110": {
 			"label": "Enable/Disable Report 111-114",
-			"description": "Enable/Disable Report 111-114",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -202,7 +191,6 @@
 		},
 		"111": {
 			"label": "Temperature report Threshold",
-			"description": "Temperature report Threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 500,
@@ -213,7 +201,6 @@
 		},
 		"112": {
 			"label": "Humidity report Threshold",
-			"description": "Humidity report Threshold",
 			"unit": "percent",
 			"valueSize": 1,
 			"minValue": 1,
@@ -225,7 +212,6 @@
 		},
 		"113": {
 			"label": "Brightness report Threshold",
-			"description": "Brightness report Threshold",
 			"unit": "Lux",
 			"valueSize": 2,
 			"minValue": 1,
@@ -238,7 +224,6 @@
 		},
 		"114": {
 			"label": "Battery report Threshold",
-			"description": "Battery report Threshold",
 			"unit": "percent",
 			"valueSize": 1,
 			"minValue": 1,

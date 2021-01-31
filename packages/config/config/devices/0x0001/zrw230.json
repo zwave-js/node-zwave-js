@@ -167,7 +167,6 @@
 		},
 		"19": {
 			"label": "LED Transmission Indication",
-			"description": "LED Transmission Indication",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

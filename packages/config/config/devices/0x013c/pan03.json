@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Watt Meter Report Period",
-			"description": "Watt Meter Report Period",
 			"unit": "5",
 			"valueSize": 2,
 			"minValue": 1,
@@ -55,7 +54,6 @@
 		},
 		"4": {
 			"label": "Threshold of KWh for Load caution",
-			"description": "Threshold of KWh for Load caution",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 10000,
@@ -66,7 +64,6 @@
 		},
 		"5": {
 			"label": "Restore switch state mode",
-			"description": "Restore switch state mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -91,7 +88,6 @@
 		},
 		"6": {
 			"label": "Manual On/Off mode",
-			"description": "Manual On/Off mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -112,7 +108,6 @@
 		},
 		"7": {
 			"label": "LED indication mode",
-			"description": "LED indication mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -137,7 +132,6 @@
 		},
 		"8": {
 			"label": "Auto off timer",
-			"description": "Auto off timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -148,7 +142,6 @@
 		},
 		"9": {
 			"label": "RF off command mode",
-			"description": "RF off command mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -202,7 +195,6 @@
 		},
 		"11": {
 			"label": "Manual Switch Report mode",
-			"description": "Manual Switch Report mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

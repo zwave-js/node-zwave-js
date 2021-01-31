@@ -34,7 +34,6 @@
 	"paramInformation": {
 		"200": {
 			"label": "Partner ID",
-			"description": "Partner ID",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,

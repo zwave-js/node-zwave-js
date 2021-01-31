@@ -45,7 +45,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Input 1 switch type",
-			"description": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -67,7 +66,6 @@
 		},
 		"2": {
 			"label": "Input 2 switch type",
-			"description": "Input 2 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -89,7 +87,6 @@
 		},
 		"3": {
 			"label": "Input 3 switch type",
-			"description": "Input 3 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -183,7 +180,6 @@
 		},
 		"11": {
 			"label": "Set point set by I2",
-			"description": "Set point set by I2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -195,7 +191,6 @@
 		},
 		"12": {
 			"label": "Set point set by I3",
-			"description": "Set point set by I3",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -207,7 +202,6 @@
 		},
 		"30": {
 			"label": "Saving the state after a power failure",
-			"description": "Saving the state after a power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -253,7 +247,6 @@
 		},
 		"43": {
 			"label": "Hysteresis On",
-			"description": "Hysteresis On",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -265,7 +258,6 @@
 		},
 		"44": {
 			"label": "Hysteresis Off",
-			"description": "Hysteresis Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -289,7 +281,6 @@
 		},
 		"60": {
 			"label": "Too low temperature limit",
-			"description": "Too low temperature limit",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -301,7 +292,6 @@
 		},
 		"61": {
 			"label": "Too high temperature limit",
-			"description": "Too high temperature limit",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

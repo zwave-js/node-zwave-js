@@ -26,7 +26,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Delayed off",
-			"description": "Delayed off",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
@@ -37,7 +36,6 @@
 		},
 		"2": {
 			"label": "Panic On Time",
-			"description": "Panic On Time",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
@@ -48,7 +46,6 @@
 		},
 		"3": {
 			"label": "Panic Off Time",
-			"description": "Panic Off Time",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
@@ -59,7 +56,6 @@
 		},
 		"5": {
 			"label": "Power Up State",
-			"description": "Power Up State",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -84,7 +80,6 @@
 		},
 		"6": {
 			"label": "Panic Mode Enable",
-			"description": "Panic Mode Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

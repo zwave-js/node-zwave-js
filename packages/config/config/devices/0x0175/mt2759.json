@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "(I1) Input 1 switch type",
-			"description": "(I1) Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,7 +39,6 @@
 		},
 		"2": {
 			"label": "(I2) Input 2 contact type",
-			"description": "(I2) Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -61,7 +59,6 @@
 		},
 		"3": {
 			"label": "(I3) Input 3 contact type",
-			"description": "(I3) Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -222,7 +219,6 @@
 		},
 		"63": {
 			"label": "Output Switch selection",
-			"description": "Output Switch selection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -325,7 +321,6 @@
 		},
 		"110": {
 			"label": "Temperature sensor offset settings",
-			"description": "Temperature sensor offset settings",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32536,
@@ -336,7 +331,6 @@
 		},
 		"120": {
 			"label": "Temperature sensor reporting",
-			"description": "Temperature sensor reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

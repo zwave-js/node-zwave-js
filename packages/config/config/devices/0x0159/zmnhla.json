@@ -45,7 +45,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Input 1 switch type",
-			"description": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -67,7 +66,6 @@
 		},
 		"2": {
 			"label": "Input 2 switch type",
-			"description": "Input 2 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -89,7 +87,6 @@
 		},
 		"3": {
 			"label": "Input 3 switch type",
-			"description": "Input 3 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -111,7 +108,6 @@
 		},
 		"4": {
 			"label": "Input 1 contact type",
-			"description": "Input 1 contact type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -133,7 +129,6 @@
 		},
 		"5": {
 			"label": "Input 2 contact type",
-			"description": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -155,7 +150,6 @@
 		},
 		"6": {
 			"label": "Input 3 contact type",
-			"description": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -207,7 +201,6 @@
 		},
 		"11": {
 			"label": "I1 Functionality Selection",
-			"description": "I1 Functionality Selection",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65535,
@@ -219,7 +212,6 @@
 		},
 		"12": {
 			"label": "I2 Functionality Selection",
-			"description": "I2 Functionality Selection",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65535,
@@ -231,7 +223,6 @@
 		},
 		"13": {
 			"label": "I3 Functionality Selection",
-			"description": "I3 Functionality Selection",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65535,
@@ -243,7 +234,6 @@
 		},
 		"40": {
 			"label": "Power reporting in Watts on power change",
-			"description": "Power reporting in Watts on power change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -254,7 +244,6 @@
 		},
 		"42": {
 			"label": "Power reporting in Watts by timer interval",
-			"description": "Power reporting in Watts by timer interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -265,7 +254,6 @@
 		},
 		"45": {
 			"label": "Antifreeze",
-			"description": "Antifreeze",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -277,7 +265,6 @@
 		},
 		"50": {
 			"label": "PWM Maximum Value",
-			"description": "PWM Maximum Value",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 100,
@@ -288,7 +275,6 @@
 		},
 		"51": {
 			"label": "PWM Minimum Value",
-			"description": "PWM Minimum Value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -299,7 +285,6 @@
 		},
 		"52": {
 			"label": "PWM Cycle Duration",
-			"description": "PWM Cycle Duration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -310,7 +295,6 @@
 		},
 		"53": {
 			"label": "PID Value Inside Deadband",
-			"description": "PID Value Inside Deadband",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -332,7 +316,6 @@
 		},
 		"54": {
 			"label": "PID Deadband",
-			"description": "PID Deadband",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -343,7 +326,6 @@
 		},
 		"55": {
 			"label": "Integral Sampling Time",
-			"description": "Integral Sampling Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -408,7 +390,6 @@
 		},
 		"60": {
 			"label": "Too low temperature limit",
-			"description": "Too low temperature limit",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
@@ -419,7 +400,6 @@
 		},
 		"61": {
 			"label": "Too high temperature limit",
-			"description": "Too high temperature limit",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
@@ -451,7 +431,6 @@
 		},
 		"70": {
 			"label": "Input 1 Status on delay",
-			"description": "Input 1 Status on delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -462,7 +441,6 @@
 		},
 		"71": {
 			"label": "Input 1 Status off delay",
-			"description": "Input 1 Status off delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -473,7 +451,6 @@
 		},
 		"72": {
 			"label": "Input 2 Status on delay",
-			"description": "Input 2 Status on delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -484,7 +461,6 @@
 		},
 		"73": {
 			"label": "Input 2 Status off delay",
-			"description": "Input 2 Status off delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -495,7 +471,6 @@
 		},
 		"74": {
 			"label": "Input 3 Status on delay",
-			"description": "Input 3 Status on delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -506,7 +481,6 @@
 		},
 		"75": {
 			"label": "Input 3 Status off delay",
-			"description": "Input 3 Status off delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,

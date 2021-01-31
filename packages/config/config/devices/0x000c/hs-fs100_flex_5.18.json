@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Light Sensitvity",
-			"description": "Light Sensitvity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -30,7 +29,6 @@
 		},
 		"2": {
 			"label": "Water Detecton beep frequency",
-			"description": "Water Detecton beep frequency",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -41,7 +39,6 @@
 		},
 		"3": {
 			"label": "Temperature reportng interval when on line power",
-			"description": "Temperature reportng interval when on line power",
 			"valueSize": 1,
 			"minValue": 30,
 			"maxValue": 255,
@@ -53,7 +50,6 @@
 		},
 		"4": {
 			"label": "Enable Notfcaton Buzzer",
-			"description": "Enable Notfcaton Buzzer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -64,7 +60,6 @@
 		},
 		"5": {
 			"label": "Flashing LED detection delay",
-			"description": "Flashing LED detection delay",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 20,

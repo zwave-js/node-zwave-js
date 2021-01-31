@@ -104,7 +104,6 @@
 		},
 		"30": {
 			"label": "Restore state on power failure",
-			"description": "Restore state on power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -125,7 +124,6 @@
 		},
 		"50": {
 			"label": "Enable/disable beeper",
-			"description": "Enable/disable beeper",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

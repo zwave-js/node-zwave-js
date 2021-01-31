@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Up/Down Button Swap Enable",
-			"description": "Up/Down Button Swap Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,7 +39,6 @@
 		},
 		"2": {
 			"label": "Motor Rotation Direction Swap Enable",
-			"description": "Motor Rotation Direction Swap Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -61,7 +59,6 @@
 		},
 		"3": {
 			"label": "Backlight Enable",
-			"description": "Backlight Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -82,7 +79,6 @@
 		},
 		"4": {
 			"label": "Curtain Moving Indicate Enable",
-			"description": "Curtain Moving Indicate Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -103,7 +99,6 @@
 		},
 		"5": {
 			"label": "Button Switch",
-			"description": "Button Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

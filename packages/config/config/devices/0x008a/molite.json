@@ -42,7 +42,6 @@
 		},
 		"2": {
 			"label": "Mode timeout",
-			"description": "Mode timeout",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 900,
@@ -53,7 +52,6 @@
 		},
 		"3": {
 			"label": "Switch off time",
-			"description": "Switch off time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2700,
@@ -111,7 +109,6 @@
 		},
 		"7": {
 			"label": "Light table 100 %",
-			"description": "Light table 100 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 17,
@@ -122,7 +119,6 @@
 		},
 		"8": {
 			"label": "Light table 90 %",
-			"description": "Light table 90 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 38,
@@ -133,7 +129,6 @@
 		},
 		"9": {
 			"label": "Light table 80 %",
-			"description": "Light table 80 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 85,
@@ -144,7 +139,6 @@
 		},
 		"10": {
 			"label": "Light table 70 %",
-			"description": "Light table 70 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 186,
@@ -155,7 +149,6 @@
 		},
 		"11": {
 			"label": "Light table 60 %",
-			"description": "Light table 60 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 407,
@@ -166,7 +159,6 @@
 		},
 		"12": {
 			"label": "Light table 50 %",
-			"description": "Light table 50 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 891,
@@ -177,7 +169,6 @@
 		},
 		"13": {
 			"label": "Light table 40 %",
-			"description": "Light table 40 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1949,
@@ -188,7 +179,6 @@
 		},
 		"14": {
 			"label": "Light table 30 %",
-			"description": "Light table 30 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 4265,
@@ -199,7 +189,6 @@
 		},
 		"15": {
 			"label": "Light table 20 %",
-			"description": "Light table 20 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 9332,
@@ -210,7 +199,6 @@
 		},
 		"16": {
 			"label": "Light table 10 %",
-			"description": "Light table 10 %",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 20417,

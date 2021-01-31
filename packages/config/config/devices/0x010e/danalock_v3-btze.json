@@ -89,7 +89,6 @@
 		},
 		"5": {
 			"label": "BLE Always Allowed",
-			"description": "BLE Always Allowed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

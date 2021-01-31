@@ -265,7 +265,6 @@
 		},
 		"6[0x08]": {
 			"label": "device and lighting in same room",
-			"description": "device and lighting in same room",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -454,7 +453,6 @@
 		},
 		"8": {
 			"label": "PIR motion re-trigger min interval",
-			"description": "PIR motion re-trigger min interval",
 			"unit": "8s ticks",
 			"valueSize": 1,
 			"minValue": 0,
@@ -478,7 +476,6 @@
 		},
 		"10": {
 			"label": "battery level auto-report interval",
-			"description": "battery level auto-report interval",
 			"unit": "ticks",
 			"valueSize": 1,
 			"minValue": 0,
@@ -490,7 +487,6 @@
 		},
 		"11": {
 			"label": "door state report interval",
-			"description": "door state report interval",
 			"unit": "ticks",
 			"valueSize": 1,
 			"minValue": 0,
@@ -502,7 +498,6 @@
 		},
 		"12": {
 			"label": "illumination auto report interval",
-			"description": "illumination auto report interval",
 			"unit": "ticks",
 			"valueSize": 1,
 			"minValue": 0,
@@ -514,7 +509,6 @@
 		},
 		"13": {
 			"label": "temperature report interval",
-			"description": "temperature report interval",
 			"unit": "ticks",
 			"valueSize": 1,
 			"minValue": 0,
@@ -526,7 +520,6 @@
 		},
 		"21": {
 			"label": "temperature differential to report",
-			"description": "temperature differential to report",
 			"unit": "Fahrenheit",
 			"valueSize": 1,
 			"minValue": 0,

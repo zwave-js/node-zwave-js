@@ -63,7 +63,6 @@
 		},
 		"4": {
 			"label": "IR Pulse Width",
-			"description": "IR Pulse Width",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -75,7 +74,6 @@
 		},
 		"5": {
 			"label": "Poll / Wake up frequency",
-			"description": "Poll / Wake up frequency",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 50,
@@ -145,7 +143,6 @@
 		},
 		"11": {
 			"label": "Real-time mode",
-			"description": "Real-time mode",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -189,7 +186,6 @@
 		},
 		"15": {
 			"label": "Calibration status",
-			"description": "Calibration status",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,

@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Power On State",
-			"description": "Power On State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -44,7 +43,6 @@
 		},
 		"2": {
 			"label": "Invert Switch",
-			"description": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -65,7 +63,6 @@
 		},
 		"3": {
 			"label": "Auto Off Timer",
-			"description": "Auto Off Timer",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -77,7 +74,6 @@
 		},
 		"4": {
 			"label": "Association Behavior",
-			"description": "Association Behavior",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -88,7 +84,6 @@
 		},
 		"5": {
 			"label": "LED Indicator Color",
-			"description": "LED Indicator Color",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -133,7 +128,6 @@
 		},
 		"6": {
 			"label": "LED Indicator Intensity",
-			"description": "LED Indicator Intensity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -190,7 +184,6 @@
 		},
 		"7": {
 			"label": "LED Indicator Intensity (When Off)",
-			"description": "LED Indicator Intensity (When Off)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -247,7 +240,6 @@
 		},
 		"9": {
 			"label": "LED Strip Timeout",
-			"description": "LED Strip Timeout",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -305,7 +297,6 @@
 		},
 		"10": {
 			"label": "Active Power Reports",
-			"description": "Active Power Reports",
 			"unit": "percent",
 			"valueSize": 1,
 			"minValue": 0,
@@ -317,7 +308,6 @@
 		},
 		"11": {
 			"label": "Periodic Power & Energy Reports",
-			"description": "Periodic Power & Energy Reports",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -329,7 +319,6 @@
 		},
 		"12": {
 			"label": "Energy Reports",
-			"description": "Energy Reports",
 			"unit": "percent",
 			"valueSize": 1,
 			"minValue": 0,
@@ -341,7 +330,6 @@
 		},
 		"8[0xff]": {
 			"label": "LED Strip Effect (Color)",
-			"description": "LED Strip Effect (Color)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -386,7 +374,6 @@
 		},
 		"8[0xff00]": {
 			"label": "LED Strip Effect (Brightness)",
-			"description": "LED Strip Effect (Brightness)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 10,
@@ -443,7 +430,6 @@
 		},
 		"8[0xff0000]": {
 			"label": "LED Strip Effect (Duration)",
-			"description": "LED Strip Effect (Duration)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -454,7 +440,6 @@
 		},
 		"8[0x7f000000]": {
 			"label": "LED Strip Effect (Effect)",
-			"description": "LED Strip Effect (Effect)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4,

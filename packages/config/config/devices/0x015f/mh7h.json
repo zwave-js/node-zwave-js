@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Upload temperature format automatically",
-			"description": "Upload temperature format automatically",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -56,7 +55,6 @@
 		},
 		"2": {
 			"label": "Upload temperature and humidity automatically",
-			"description": "Upload temperature and humidity automatically",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

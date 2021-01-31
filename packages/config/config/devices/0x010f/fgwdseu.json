@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Remember device state",
-			"description": "Remember device state",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,7 +39,6 @@
 		},
 		"2": {
 			"label": "First channel – overload safety switch",
-			"description": "First channel – overload safety switch",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 45000,
@@ -51,7 +49,6 @@
 		},
 		"3": {
 			"label": "Second channel – overload safety switch",
-			"description": "Second channel – overload safety switch",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 36200,
@@ -73,7 +70,6 @@
 		},
 		"11": {
 			"label": "LED frame – colour when ON",
-			"description": "LED frame – colour when ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -126,7 +122,6 @@
 		},
 		"12": {
 			"label": "LED frame – colour when OFF",
-			"description": "LED frame – colour when OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -171,7 +166,6 @@
 		},
 		"13": {
 			"label": "LED frame – brightness",
-			"description": "LED frame – brightness",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 102,
@@ -182,7 +176,6 @@
 		},
 		"20": {
 			"label": "Buttons operation",
-			"description": "Buttons operation",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
@@ -193,7 +186,6 @@
 		},
 		"24": {
 			"label": "Buttons orientation",
-			"description": "Buttons orientation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -235,7 +227,6 @@
 		},
 		"30": {
 			"label": "Alarm configuration - 1st slot",
-			"description": "Alarm configuration - 1st slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -246,7 +237,6 @@
 		},
 		"31": {
 			"label": "Alarm configuration - 2nd slot",
-			"description": "Alarm configuration - 2nd slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -257,7 +247,6 @@
 		},
 		"32": {
 			"label": "Alarm configuration - 3rd slot",
-			"description": "Alarm configuration - 3rd slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -268,7 +257,6 @@
 		},
 		"33": {
 			"label": "Alarm configuration - 4th slot",
-			"description": "Alarm configuration - 4th slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -279,7 +267,6 @@
 		},
 		"34": {
 			"label": "Alarm configuration - 5th slot",
-			"description": "Alarm configuration - 5th slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -290,7 +277,6 @@
 		},
 		"35": {
 			"label": "Alarm configuration – duration",
-			"description": "Alarm configuration – duration",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -301,7 +287,6 @@
 		},
 		"40": {
 			"label": "First button – scenes sent",
-			"description": "First button – scenes sent",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -330,7 +315,6 @@
 		},
 		"41": {
 			"label": "Second button – scenes sent",
-			"description": "Second button – scenes sent",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -359,7 +343,6 @@
 		},
 		"60": {
 			"label": "Power reports – include self-consumption",
-			"description": "Power reports – include self-consumption",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -380,7 +363,6 @@
 		},
 		"61": {
 			"label": "Power reports for first channel – on change",
-			"description": "Power reports for first channel – on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -391,7 +373,6 @@
 		},
 		"62": {
 			"label": "Power reports for first channel – periodic",
-			"description": "Power reports for first channel – periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -402,7 +383,6 @@
 		},
 		"63": {
 			"label": "Power reports for second channel – on change",
-			"description": "Power reports for second channel – on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -413,7 +393,6 @@
 		},
 		"64": {
 			"label": "Power reports for second channel – periodic",
-			"description": "Power reports for second channel – periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -424,7 +403,6 @@
 		},
 		"65": {
 			"label": "Energy reports for first channel – on change",
-			"description": "Energy reports for first channel – on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -435,7 +413,6 @@
 		},
 		"66": {
 			"label": "Energy reports for first channel – periodic",
-			"description": "Energy reports for first channel – periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -446,7 +423,6 @@
 		},
 		"67": {
 			"label": "Energy reports for second channel – on change",
-			"description": "Energy reports for second channel – on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -457,7 +433,6 @@
 		},
 		"68": {
 			"label": "Energy reports for second channel – periodic",
-			"description": "Energy reports for second channel – periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -468,7 +443,6 @@
 		},
 		"150": {
 			"label": "First channel – operating mode",
-			"description": "First channel – operating mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -493,7 +467,6 @@
 		},
 		"151": {
 			"label": "Second channel – operating mode",
-			"description": "Second channel – operating mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

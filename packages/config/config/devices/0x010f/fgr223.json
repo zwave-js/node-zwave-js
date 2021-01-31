@@ -22,7 +22,6 @@
 	"paramInformation": {
 		"20": {
 			"label": "Switch type",
-			"description": "Switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -47,7 +46,6 @@
 		},
 		"24": {
 			"label": "Inputs orientation",
-			"description": "Inputs orientation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -68,7 +66,6 @@
 		},
 		"25": {
 			"label": "Outputs orientation",
-			"description": "Outputs orientation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -177,7 +174,6 @@
 		},
 		"60": {
 			"label": "Measuring power consumed by the device itself",
-			"description": "Measuring power consumed by the device itself",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -198,7 +194,6 @@
 		},
 		"61": {
 			"label": "Power reports - on change",
-			"description": "Power reports - on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -209,7 +204,6 @@
 		},
 		"62": {
 			"label": "Power reports - periodic",
-			"description": "Power reports - periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -220,7 +214,6 @@
 		},
 		"65": {
 			"label": "Energy reports - on change",
-			"description": "Energy reports - on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -231,7 +224,6 @@
 		},
 		"66": {
 			"label": "Energy reports - periodic",
-			"description": "Energy reports - periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -242,7 +234,6 @@
 		},
 		"150": {
 			"label": "Force calibration",
-			"description": "Force calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -267,7 +258,6 @@
 		},
 		"151": {
 			"label": "Operating mode",
-			"description": "Operating mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -304,7 +294,6 @@
 		},
 		"152": {
 			"label": "Venetian blind - time of full turn of the slats",
-			"description": "Venetian blind - time of full turn of the slats",
 			"unit": "1/100 sec",
 			"valueSize": 4,
 			"minValue": 0,
@@ -316,7 +305,6 @@
 		},
 		"153": {
 			"label": "Set slats back to previous position",
-			"description": "Set slats back to previous position",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -365,7 +353,6 @@
 		},
 		"156": {
 			"label": "Time of up movement",
-			"description": "Time of up movement",
 			"unit": "1/100 sec",
 			"valueSize": 4,
 			"minValue": 0,
@@ -377,7 +364,6 @@
 		},
 		"157": {
 			"label": "Time of down movement",
-			"description": "Time of down movement",
 			"unit": "1/100 sec",
 			"valueSize": 4,
 			"minValue": 0,

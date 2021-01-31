@@ -30,7 +30,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "All On/All Off",
-			"description": "All On/All Off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -60,7 +59,6 @@
 		},
 		"5": {
 			"label": "Switch state after power failure",
-			"description": "Switch state after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -81,7 +79,6 @@
 		},
 		"13": {
 			"label": "Double click option",
-			"description": "Double click option",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -102,7 +99,6 @@
 		},
 		"17": {
 			"label": "Dimming time frame",
-			"description": "Dimming time frame",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
@@ -114,7 +110,6 @@
 		},
 		"18": {
 			"label": "Maximum Dimmer level control",
-			"description": "Maximum Dimmer level control",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -125,7 +120,6 @@
 		},
 		"19": {
 			"label": "Minimum Dimmer level control",
-			"description": "Minimum Dimmer level control",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,

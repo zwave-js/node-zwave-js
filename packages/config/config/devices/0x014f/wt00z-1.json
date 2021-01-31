@@ -59,7 +59,6 @@
 		},
 		"2": {
 			"label": "Suspend Group 4",
-			"description": "Suspend Group 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -125,7 +124,6 @@
 		},
 		"5": {
 			"label": "Ignore start level when recieving dim commands",
-			"description": "Ignore start level when recieving dim commands",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -216,7 +214,6 @@
 		},
 		"13": {
 			"label": "Disable group 4 during a dim command",
-			"description": "Disable group 4 during a dim command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -304,7 +301,6 @@
 		},
 		"19": {
 			"label": "LED Transmission Indication",
-			"description": "LED Transmission Indication",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

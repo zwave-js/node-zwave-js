@@ -129,7 +129,6 @@
 		},
 		"45": {
 			"label": "Reset Power counters",
-			"description": "Reset Power counters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -191,7 +190,6 @@
 		},
 		"110": {
 			"label": "Maximum Power auto off",
-			"description": "Maximum Power auto off",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 15000,
@@ -212,7 +210,6 @@
 		},
 		"111": {
 			"label": "Delay overpower off",
-			"description": "Delay overpower off",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -224,7 +221,6 @@
 		},
 		"112": {
 			"label": "Relay to power off",
-			"description": "Relay to power off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

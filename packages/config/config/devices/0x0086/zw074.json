@@ -113,7 +113,6 @@
 		},
 		"40": {
 			"label": "Enable/disable the selective reporting",
-			"description": "Enable/disable the selective reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -135,7 +134,6 @@
 		},
 		"41": {
 			"label": "Temperature threshold to trigger a report.",
-			"description": "Temperature threshold to trigger a report.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -159,7 +157,6 @@
 		},
 		"43": {
 			"label": "luminance report threshold",
-			"description": "luminance report threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -170,7 +167,6 @@
 		},
 		"44": {
 			"label": "Battery level to induce an automatic report.",
-			"description": "Battery level to induce an automatic report.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -182,7 +178,6 @@
 		},
 		"46": {
 			"label": "Enable/disable low temperature alarm report",
-			"description": "Enable/disable low temperature alarm report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -204,7 +199,6 @@
 		},
 		"101": {
 			"label": "Reports sent automatically for group 1",
-			"description": "Reports sent automatically for group 1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -215,7 +209,6 @@
 		},
 		"102": {
 			"label": "Reports sent automatically for group 2",
-			"description": "Reports sent automatically for group 2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -226,7 +219,6 @@
 		},
 		"103": {
 			"label": "Reports sent automatically for group 3",
-			"description": "Reports sent automatically for group 3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,

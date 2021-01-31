@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Current Overload Protection.",
-			"description": "Current Overload Protection.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -44,7 +43,6 @@
 		},
 		"4": {
 			"label": "Overheat protection",
-			"description": "Overheat protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -65,7 +63,6 @@
 		},
 		"20": {
 			"label": "Configure the output status after re-power on it.",
-			"description": "Configure the output status after re-power on it.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -161,7 +158,6 @@
 		},
 		"90": {
 			"label": "Enables/disables parameter 91 and 92 below",
-			"description": "Enables/disables parameter 91 and 92 below",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -182,7 +178,6 @@
 		},
 		"91": {
 			"label": "Set the threshold value of wattage.",
-			"description": "Set the threshold value of wattage.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -277,7 +272,6 @@
 		},
 		"102": {
 			"label": "Reports sent to Report group 2.",
-			"description": "Reports sent to Report group 2.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1776399,
@@ -338,7 +332,6 @@
 		},
 		"103": {
 			"label": "Reports sent to Report group 3",
-			"description": "Reports sent to Report group 3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1776399,
@@ -399,7 +392,6 @@
 		},
 		"110": {
 			"label": "Set parameter 111-113 to default value.",
-			"description": "Set parameter 111-113 to default value.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -410,7 +402,6 @@
 		},
 		"111": {
 			"label": "Automatic report interval for Report group 1.",
-			"description": "Automatic report interval for Report group 1.",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -421,7 +412,6 @@
 		},
 		"112": {
 			"label": "Automatic report interval for Report group 2",
-			"description": "Automatic report interval for Report group 2",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -432,7 +422,6 @@
 		},
 		"113": {
 			"label": "Automatic report interval for Report group 3",
-			"description": "Automatic report interval for Report group 3",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -443,7 +432,6 @@
 		},
 		"120": {
 			"label": "Configure the external switch mode for S1",
-			"description": "Configure the external switch mode for S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -472,7 +460,6 @@
 		},
 		"121": {
 			"label": "Configure the external switch mode for S2.",
-			"description": "Configure the external switch mode for S2.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -501,7 +488,6 @@
 		},
 		"122": {
 			"label": "Set the control destination for external switch",
-			"description": "Set the control destination for external switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -526,7 +512,6 @@
 		},
 		"252": {
 			"label": "Lock/unlock configuration parameters",
-			"description": "Lock/unlock configuration parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -547,7 +532,6 @@
 		},
 		"255": {
 			"label": "Reset the Dual Nano Switch",
-			"description": "Reset the Dual Nano Switch",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1431655765,

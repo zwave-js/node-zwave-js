@@ -48,7 +48,6 @@
 		},
 		"2": {
 			"label": "Favorite level for ON position",
-			"description": "Favorite level for ON position",
 			"valueSize": 1,
 			"minValue": 50,
 			"maxValue": 100,
@@ -59,7 +58,6 @@
 		},
 		"3": {
 			"label": "Favorite level for OFF position",
-			"description": "Favorite level for OFF position",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 49,
@@ -70,7 +68,6 @@
 		},
 		"4": {
 			"label": "Value for Group 2 with 1 click on UP button",
-			"description": "Value for Group 2 with 1 click on UP button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
@@ -81,7 +78,6 @@
 		},
 		"5": {
 			"label": "Value for Group 2 with 1 click on DOWN button",
-			"description": "Value for Group 2 with 1 click on DOWN button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
@@ -92,7 +88,6 @@
 		},
 		"6": {
 			"label": "Value for Group 3 with 2 clicks on UP button",
-			"description": "Value for Group 3 with 2 clicks on UP button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
@@ -103,7 +98,6 @@
 		},
 		"7": {
 			"label": "Value for Group 3 with 2 clicks on DOWN button",
-			"description": "Value for Group 3 with 2 clicks on DOWN button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
@@ -114,7 +108,6 @@
 		},
 		"8": {
 			"label": "Value for Group 4 with 3 clicks on UP button",
-			"description": "Value for Group 4 with 3 clicks on UP button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
@@ -125,7 +118,6 @@
 		},
 		"9": {
 			"label": "Value for Group 4 with 3 clicks on DOWN button",
-			"description": "Value for Group 4 with 3 clicks on DOWN button",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
@@ -147,7 +139,6 @@
 		},
 		"21": {
 			"label": "Motor idle state definition",
-			"description": "Motor idle state definition",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3000,
@@ -158,7 +149,6 @@
 		},
 		"22": {
 			"label": "Limit switch recognition",
-			"description": "Limit switch recognition",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

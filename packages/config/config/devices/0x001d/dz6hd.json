@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Fade On Time",
-			"description": "Fade on time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 253,
@@ -31,7 +30,6 @@
 		},
 		"2": {
 			"label": "Fade Off Time",
-			"description": "Fade off time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 253,
@@ -43,7 +41,6 @@
 		},
 		"3": {
 			"label": "Minimum Light Level",
-			"description": "Minimum light level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -54,7 +51,6 @@
 		},
 		"4": {
 			"label": "Maximum Light Level",
-			"description": "Maximum light level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -65,7 +61,6 @@
 		},
 		"5": {
 			"label": "Preset Light Level",
-			"description": "Preset light level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -76,7 +71,6 @@
 		},
 		"6": {
 			"label": "LED Dim Level Indicator Timeout",
-			"description": "LED dim level indicator timeout",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -88,7 +82,6 @@
 		},
 		"7": {
 			"label": "Locator LED Status",
-			"description": "Locator LED status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -100,7 +93,6 @@
 		},
 		"8": {
 			"label": "Load Type",
-			"description": "Load type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

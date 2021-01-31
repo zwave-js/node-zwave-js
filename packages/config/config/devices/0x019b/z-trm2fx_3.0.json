@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Operation mode",
-			"description": "Operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 11,
@@ -48,7 +47,6 @@
 		},
 		"2": {
 			"label": "Sensor mode",
-			"description": "Sensor mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -73,7 +71,6 @@
 		},
 		"3": {
 			"label": "Floor sensor type",
-			"description": "Floor sensor type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -110,7 +107,6 @@
 		},
 		"4": {
 			"label": "Temperature control hysteresis (DIFF I)",
-			"description": "Temperature control hysteresis (DIFF I)",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 30,
@@ -121,7 +117,6 @@
 		},
 		"5": {
 			"label": "Floor minimum temperature limit (FLo)",
-			"description": "Floor minimum temperature limit (FLo)",
 			"unit": "oC",
 			"valueSize": 2,
 			"minValue": 50,
@@ -133,7 +128,6 @@
 		},
 		"6": {
 			"label": "Floor maximum temperature (FHi)",
-			"description": "Floor maximum temperature (FHi)",
 			"unit": "oC",
 			"valueSize": 2,
 			"minValue": 50,
@@ -145,7 +139,6 @@
 		},
 		"7": {
 			"label": "Air (A2) minimum temperature limit (ALo)",
-			"description": "Air (A2) minimum temperature limit (ALo)",
 			"unit": "oC",
 			"valueSize": 2,
 			"minValue": 50,
@@ -157,7 +150,6 @@
 		},
 		"8": {
 			"label": "Air (A2) maximum temperature limit (AHi)",
-			"description": "Air (A2) maximum temperature limit (AHi)",
 			"unit": "oC",
 			"valueSize": 2,
 			"minValue": 50,
@@ -169,7 +161,6 @@
 		},
 		"9": {
 			"label": "Heating mode setpoint (CO)",
-			"description": "Heating mode setpoint (CO)",
 			"unit": "oC",
 			"valueSize": 2,
 			"minValue": 50,
@@ -181,7 +172,6 @@
 		},
 		"10": {
 			"label": "Energy saving mode setpoint (ECO)",
-			"description": "Energy saving mode setpoint (ECO)",
 			"unit": "oC",
 			"valueSize": 2,
 			"minValue": 50,
@@ -193,7 +183,6 @@
 		},
 		"11": {
 			"label": "Cooling setpoint (COOL)",
-			"description": "Cooling setpoint (COOL)",
 			"unit": "oC",
 			"valueSize": 2,
 			"minValue": 50,
@@ -205,7 +194,6 @@
 		},
 		"12": {
 			"label": "Floor sensor calibration",
-			"description": "Floor sensor calibration",
 			"unit": "oC",
 			"valueSize": 1,
 			"minValue": -40,
@@ -217,7 +205,6 @@
 		},
 		"13": {
 			"label": "External sensor calibration",
-			"description": "External sensor calibration",
 			"unit": "oC",
 			"valueSize": 1,
 			"minValue": -40,
@@ -229,7 +216,6 @@
 		},
 		"14": {
 			"label": "Temperature display",
-			"description": "Temperature display",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -250,7 +236,6 @@
 		},
 		"15": {
 			"label": "Button brightness - dimmed state",
-			"description": "Button brightness - dimmed state",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -262,7 +247,6 @@
 		},
 		"16": {
 			"label": "Button brightness - active state",
-			"description": "Button brightness - active state",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -274,7 +258,6 @@
 		},
 		"17": {
 			"label": "Display brightness - dimmed state",
-			"description": "Display brightness - dimmed state",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -286,7 +269,6 @@
 		},
 		"18": {
 			"label": "Display brightness - active state",
-			"description": "Display brightness - active state",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -298,7 +280,6 @@
 		},
 		"19": {
 			"label": "Temperature report interval",
-			"description": "Temperature report interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -310,7 +291,6 @@
 		},
 		"20": {
 			"label": "Temperature report hysteresis",
-			"description": "Temperature report hysteresis",
 			"unit": "oC",
 			"valueSize": 1,
 			"minValue": 1,
@@ -322,7 +302,6 @@
 		},
 		"21": {
 			"label": "Meter report interval",
-			"description": "Meter report interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -334,7 +313,6 @@
 		},
 		"22": {
 			"label": "Meter report delta value",
-			"description": "Meter report delta value",
 			"unit": "kWh/10",
 			"valueSize": 1,
 			"minValue": 0,

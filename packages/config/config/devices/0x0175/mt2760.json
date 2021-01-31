@@ -260,7 +260,6 @@
 		},
 		"30": {
 			"label": "Saving the state after a power failure",
-			"description": "Saving the state after a power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -495,7 +494,6 @@
 		},
 		"250": {
 			"label": "Unsecure / Secure Inclusion",
-			"description": "Unsecure / Secure Inclusion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

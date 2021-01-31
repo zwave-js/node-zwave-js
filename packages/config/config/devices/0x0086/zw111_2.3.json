@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Current Overload Protection",
-			"description": "Current Overload Protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -52,7 +51,6 @@
 		},
 		"4": {
 			"label": "Overheat protection",
-			"description": "Overheat protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -73,7 +71,6 @@
 		},
 		"20": {
 			"label": "Configure the output status after re-power on it",
-			"description": "Configure the output status after re-power on it",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -98,7 +95,6 @@
 		},
 		"64": {
 			"label": "WallSwipe button color",
-			"description": "WallSwipe button color",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -109,7 +105,6 @@
 		},
 		"65": {
 			"label": "WallSwipe LED Up gesture action",
-			"description": "WallSwipe LED Up gesture action",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -120,7 +115,6 @@
 		},
 		"66": {
 			"label": "WallSwipe LED Down gesture action",
-			"description": "WallSwipe LED Down gesture action",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -131,7 +125,6 @@
 		},
 		"67": {
 			"label": "WallSwipe LED Left gesture action",
-			"description": "WallSwipe LED Left gesture action",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -142,7 +135,6 @@
 		},
 		"68": {
 			"label": "WallSwipe LED Right gesture action",
-			"description": "WallSwipe LED Right gesture action",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -153,7 +145,6 @@
 		},
 		"69": {
 			"label": "WallSwipe Night light",
-			"description": "WallSwipe Night light",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -251,7 +242,6 @@
 		},
 		"83": {
 			"label": "LED status",
-			"description": "LED status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -276,7 +266,6 @@
 		},
 		"84": {
 			"label": "Time set for Night light mode",
-			"description": "Time set for Night light mode",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,
@@ -287,7 +276,6 @@
 		},
 		"85": {
 			"label": "Set appointment 1",
-			"description": "Set appointment 1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16843197,
@@ -298,7 +286,6 @@
 		},
 		"86": {
 			"label": "Set appointment 2",
-			"description": "Set appointment 2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16843197,
@@ -454,7 +441,6 @@
 		},
 		"120": {
 			"label": "Configure the external switch mode for S1",
-			"description": "Configure the external switch mode for S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -487,7 +473,6 @@
 		},
 		"121": {
 			"label": "Configure the external switch mode for S2",
-			"description": "Configure the external switch mode for S2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -520,7 +505,6 @@
 		},
 		"122": {
 			"label": "Get the state of touch panel port",
-			"description": "Get the state of touch panel port",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -566,7 +550,6 @@
 		},
 		"124": {
 			"label": "Set the control destination for external switch S2",
-			"description": "Set the control destination for external switch S2",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -603,7 +586,6 @@
 		},
 		"128": {
 			"label": "Get the current working mode",
-			"description": "Get the current working mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -628,7 +610,6 @@
 		},
 		"129": {
 			"label": "Set the dimming principle",
-			"description": "Set the dimming principle",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -700,7 +681,6 @@
 		},
 		"247": {
 			"label": "Working way for S1/S2",
-			"description": "Working way for S1/S2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -712,7 +692,6 @@
 		},
 		"248": {
 			"label": "Function of S1/S2",
-			"description": "Function of S1/S2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -724,7 +703,6 @@
 		},
 		"249": {
 			"label": "Set the recognition way of load",
-			"description": "Set the recognition way of load",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -749,7 +727,6 @@
 		},
 		"252": {
 			"label": "Lock/unlock configuration parameters",
-			"description": "Lock/unlock configuration parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -770,7 +747,6 @@
 		},
 		"255": {
 			"label": "Reset the Nano Dimmer",
-			"description": "Reset the Nano Dimmer",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1431655765,
@@ -854,7 +830,6 @@
 		},
 		"21[0x0f000000]": {
 			"label": "WallSwipe IR sensor",
-			"description": "WallSwipe IR sensor",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1,

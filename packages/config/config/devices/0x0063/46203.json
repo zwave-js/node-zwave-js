@@ -36,7 +36,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "LED Status",
-			"description": "LED Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

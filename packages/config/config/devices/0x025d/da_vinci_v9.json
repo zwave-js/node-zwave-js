@@ -169,7 +169,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Button 1 Type",
-			"description": "button 1 Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -210,7 +209,6 @@
 		},
 		"2": {
 			"label": "Button 1 Partner-Id",
-			"description": "Button 1 Partner-Id",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 9,
@@ -263,7 +261,6 @@
 		},
 		"3": {
 			"label": "Button 1 Blind Duration",
-			"description": "Button 1 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -300,7 +297,6 @@
 		},
 		"4": {
 			"label": "Button 1 Output",
-			"description": "Button 1 Output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -341,7 +337,6 @@
 		},
 		"5": {
 			"label": "Button 1 attributes",
-			"description": "Button 1 attributes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -367,7 +362,6 @@
 		},
 		"6": {
 			"label": "Button 2 Type",
-			"description": "Button 2 Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -404,7 +398,6 @@
 		},
 		"7": {
 			"label": "Button 2 Partner-Id",
-			"description": "Button 2 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -457,7 +450,6 @@
 		},
 		"8": {
 			"label": "Button 2 Blind Duration",
-			"description": "Button 2 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -494,7 +486,6 @@
 		},
 		"9": {
 			"label": "Button 2 Output",
-			"description": "Button 2 Output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -535,7 +526,6 @@
 		},
 		"10": {
 			"label": "Button 2 attributes",
-			"description": "Button 2 attributes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -561,7 +551,6 @@
 		},
 		"11": {
 			"label": "Button 3 Type",
-			"description": "Button 3 Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -598,7 +587,6 @@
 		},
 		"12": {
 			"label": "Button 3 Partner-Id",
-			"description": "Button 3 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -651,7 +639,6 @@
 		},
 		"13": {
 			"label": "Button 3 Blind Duration",
-			"description": "Button 3 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -684,7 +671,6 @@
 		},
 		"14": {
 			"label": "Button 3 Output",
-			"description": "Button 3 Output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -725,7 +711,6 @@
 		},
 		"15": {
 			"label": "Button 3 attributes",
-			"description": "Button 3 attributes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -751,7 +736,6 @@
 		},
 		"16": {
 			"label": "Button 4 Type",
-			"description": "Button 4 Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -788,7 +772,6 @@
 		},
 		"17": {
 			"label": "Button 4 Partner-Id",
-			"description": "Button 4 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -841,7 +824,6 @@
 		},
 		"18": {
 			"label": "Button 4 Blind Duration",
-			"description": "Button 4 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -874,7 +856,6 @@
 		},
 		"19": {
 			"label": "Button 4 Output",
-			"description": "Button 4 Output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -915,7 +896,6 @@
 		},
 		"20": {
 			"label": "Button 4 attributes",
-			"description": "Button 4 attributes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -941,7 +921,6 @@
 		},
 		"21": {
 			"label": "Button 5 Type",
-			"description": "Button 5 Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -978,7 +957,6 @@
 		},
 		"22": {
 			"label": "Button 5 Partner-Id",
-			"description": "Button 5 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -1031,7 +1009,6 @@
 		},
 		"23": {
 			"label": "Button 5 Blind Duration",
-			"description": "Button 5 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -1064,7 +1041,6 @@
 		},
 		"24": {
 			"label": "Button 5 Output",
-			"description": "Button 5 Output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -1105,7 +1081,6 @@
 		},
 		"25": {
 			"label": "Button 5 attributes",
-			"description": "Button 5 attributes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -1131,7 +1106,6 @@
 		},
 		"26": {
 			"label": "Button 6 Type",
-			"description": "Button 6 Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -1168,7 +1142,6 @@
 		},
 		"27": {
 			"label": "Button 6 Partner-Id",
-			"description": "Button 6 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -1221,7 +1194,6 @@
 		},
 		"28": {
 			"label": "Button 6 Blind Duration",
-			"description": "Button 6 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -1254,7 +1226,6 @@
 		},
 		"29": {
 			"label": "Button 6 Output",
-			"description": "Button 6 Output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -1295,7 +1266,6 @@
 		},
 		"30": {
 			"label": "Button 6 attributes",
-			"description": "Button 6 attributes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -1321,7 +1291,6 @@
 		},
 		"31": {
 			"label": "Button 7 Type",
-			"description": "Button 7 Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -1358,7 +1327,6 @@
 		},
 		"32": {
 			"label": "Button 7 Partner-Id",
-			"description": "Button 7 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -1411,7 +1379,6 @@
 		},
 		"33": {
 			"label": "Button 7 Blind Duration",
-			"description": "Button 7 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -1444,7 +1411,6 @@
 		},
 		"34": {
 			"label": "Button 7 Output",
-			"description": "Button 7 Output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -1485,7 +1451,6 @@
 		},
 		"35": {
 			"label": "Button 7 attribute",
-			"description": "Button 7 attribute",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -1511,7 +1476,6 @@
 		},
 		"36": {
 			"label": "Button 8 Type",
-			"description": "Button 8 Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -1548,7 +1512,6 @@
 		},
 		"37": {
 			"label": "Button 8 Partner-Id",
-			"description": "Button 8 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -1601,7 +1564,6 @@
 		},
 		"38": {
 			"label": "Button 8 Blind Duration",
-			"description": "Button 8 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -1634,7 +1596,6 @@
 		},
 		"39": {
 			"label": "Button 8 Output",
-			"description": "Button 8 Output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -1675,7 +1636,6 @@
 		},
 		"40": {
 			"label": "Button 8 attribute",
-			"description": "Button 8 attribute",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -1701,7 +1661,6 @@
 		},
 		"41": {
 			"label": "Button 9 Type",
-			"description": "Button 9 Type",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 6,
@@ -1738,7 +1697,6 @@
 		},
 		"42": {
 			"label": "Button 9 Partner-Id",
-			"description": "Button 9 Partner-Id",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -1791,7 +1749,6 @@
 		},
 		"43": {
 			"label": "Button 9 Blind Duration",
-			"description": "Button 9 Blind Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -1824,7 +1781,6 @@
 		},
 		"44": {
 			"label": "Button 9 Output",
-			"description": "Button 9 Output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -1865,7 +1821,6 @@
 		},
 		"45": {
 			"label": "Button 9 attributes",
-			"description": "Button 9 attributes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -1891,7 +1846,6 @@
 		},
 		"46": {
 			"label": "Device Led on intensity",
-			"description": "Device Led on intensity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -1902,7 +1856,6 @@
 		},
 		"47": {
 			"label": "Device Led off intensity",
-			"description": "Device Led off intensity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -1913,7 +1866,6 @@
 		},
 		"48": {
 			"label": "Device Toggle or Pulse the output",
-			"description": "Device Toggle or Pulse the output",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -1924,7 +1876,6 @@
 		},
 		"49": {
 			"label": "Device Background LEDs Timeout",
-			"description": "Device Background LEDs Timeout",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -1936,7 +1887,6 @@
 		},
 		"50": {
 			"label": "Device touch sensitivity",
-			"description": "Device touch sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -1947,7 +1897,6 @@
 		},
 		"51": {
 			"label": "Save and Reset",
-			"description": "Save and Reset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

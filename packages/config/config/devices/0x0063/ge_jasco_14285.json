@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Product State after Power Reset",
-			"description": "Product State after Power Reset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -48,7 +47,6 @@
 		},
 		"2": {
 			"label": "Energy Report Mode",
-			"description": "Energy Report Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -73,7 +71,6 @@
 		},
 		"3": {
 			"label": "Energy Report Frequency",
-			"description": "Energy Report Frequency",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 60,
@@ -84,7 +81,6 @@
 		},
 		"19": {
 			"label": "Alternate Exclusion",
-			"description": "Alternate Exclusion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

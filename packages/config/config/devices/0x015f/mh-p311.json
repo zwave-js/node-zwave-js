@@ -30,7 +30,6 @@
 		},
 		"2": {
 			"label": "Beep",
-			"description": "Beep",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -41,7 +40,6 @@
 		},
 		"3": {
 			"label": "LED Backlit Brightness Level",
-			"description": "LED Backlit Brightness Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -52,7 +50,6 @@
 		},
 		"4": {
 			"label": "ALL ON/ALL OFF",
-			"description": "ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -64,7 +61,6 @@
 		},
 		"5": {
 			"label": "Minimum brightness level",
-			"description": "Minimum brightness level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
@@ -75,7 +71,6 @@
 		},
 		"6": {
 			"label": "Maximum brightness level",
-			"description": "Maximum brightness level",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -86,7 +81,6 @@
 		},
 		"7": {
 			"label": "Single dimming step time(Manual)",
-			"description": "Single dimming step time(Manual)",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 2550,
@@ -108,7 +102,6 @@
 		},
 		"9": {
 			"label": "Single dimming step time (Auto)",
-			"description": "Single dimming step time (Auto)",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 2550,
@@ -119,7 +112,6 @@
 		},
 		"10": {
 			"label": "Single dimming step size (Auto)",
-			"description": "Single dimming step size (Auto)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -130,7 +122,6 @@
 		},
 		"11": {
 			"label": "Timer function (Auto-off)",
-			"description": "Timer function (Auto-off)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -141,7 +132,6 @@
 		},
 		"13": {
 			"label": "One click of S1",
-			"description": "One click of S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -152,7 +142,6 @@
 		},
 		"14": {
 			"label": "Double click of S1",
-			"description": "Double click of S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -187,7 +176,6 @@
 		},
 		"19": {
 			"label": "Scene ID sent to AG1 when one click of S1",
-			"description": "Scene ID sent to AG1 when one click of S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -199,7 +187,6 @@
 		},
 		"20": {
 			"label": "Scene ID sent to AG1 when double click of S1",
-			"description": "Scene ID sent to AG1 when double click of S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -211,7 +198,6 @@
 		},
 		"21": {
 			"label": "Scene ID sent to AG1 when hold S1",
-			"description": "Scene ID sent to AG1 when hold S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -223,7 +209,6 @@
 		},
 		"255": {
 			"label": "Factory setting",
-			"description": "Factory setting",
 			"valueSize": 1,
 			"minValue": 85,
 			"maxValue": 85,

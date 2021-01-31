@@ -50,7 +50,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Button 1 and 3 pair mode",
-			"description": "Button 1 and 3 pair mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -76,7 +75,6 @@
 		},
 		"2": {
 			"label": "Button 2 and 4 pair mode",
-			"description": "Button 2 and 4 pair mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -102,7 +100,6 @@
 		},
 		"11": {
 			"label": "Action on group A",
-			"description": "Action on group A",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -144,7 +141,6 @@
 		},
 		"12": {
 			"label": "Action on group B",
-			"description": "Action on group B",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -186,7 +182,6 @@
 		},
 		"13": {
 			"label": "Action on group C",
-			"description": "Action on group C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -228,7 +223,6 @@
 		},
 		"14": {
 			"label": "Action on group D",
-			"description": "Action on group D",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
