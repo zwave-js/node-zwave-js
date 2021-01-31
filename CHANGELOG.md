@@ -3,6 +3,30 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* `Scene Activation CC` scene IDs are no longer auto-reset to `undefined`. This is unnecessary since they are value events
+* All **get**-type commands may now timeout and return `undefined` without throwing
+* Value labels for the Meter CC were improved to be unique
+* `UserCodeReport` with status `NotAvailable` are now parsed correctly
+* The interview procedure after inclusion now correctly implements the *Z-Wave+ Role Type Specs*, resolving weird issues with some secure devices
+* `currentValue` and similar values are now updated immediately when a **set**-type command succeeds. Verification is done after a short delay.
+
+### Config file changes
+* Added several config files for new Honeywell/GE devices
+* Added several config files for remaining GE devices, misc deadbolts
+* Added Innovelli LZW42
+* Added EcoDim dimmers
+* Added Zooz Zen16
+* Added a compatibility flag to remove support of CCs from devices
+* Added Philio PAT02-A Flood Sensor
+* Removed the (now invalid) compat flag `keepS0NonceUntilNext`
+* Disable `Supervision CC` report for HomeSeer WD200+
+* Force Basic CC to be supported for Vision Security ZD2102-5 to work around unreliable Notification Reports
+
+### Changes under the hood
+* The frame type and RSSI of incoming commands are now logged if applicable
+
 ## 6.1.0 (2021-01-26)
 ### Features
 * Added a `pollValue` method to `ZWaveNode` to perform get request for a specific ValueID
