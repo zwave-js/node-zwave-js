@@ -6,6 +6,7 @@ import { SendDataRequest } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import { getDefaultPriority, Message } from "../message/Message";
 import type { ZWaveNode } from "../node/Node";
+import { NodeStatus } from "../node/Types";
 import type { Driver } from "./Driver";
 import { Transaction } from "./Transaction";
 
@@ -20,8 +21,8 @@ function createTransactionWithPriority(priority: MessagePriority): Transaction {
 
 interface MockNode {
 	id: number;
-	isAwake(): boolean;
-	supportsCC: ZWaveNode["supportsCC"];
+	canSleep: boolean;
+	status: NodeStatus;
 	isCCSecure: ZWaveNode["isCCSecure"];
 	getEndpoint: ZWaveNode["getEndpoint"];
 }
@@ -202,10 +203,9 @@ describe("lib/driver/Transaction => ", () => {
 						1,
 						{
 							id: 1,
-							isAwake() {
-								return true;
-							},
-							supportsCC,
+							// non-sleeping
+							canSleep: false,
+							status: NodeStatus.Alive,
 							isCCSecure: () => false,
 							getEndpoint: () => undefined as any,
 						},
@@ -215,10 +215,9 @@ describe("lib/driver/Transaction => ", () => {
 						2,
 						{
 							id: 2,
-							isAwake() {
-								return false;
-							},
-							supportsCC,
+							// sleeping
+							canSleep: true,
+							status: NodeStatus.Asleep,
 							isCCSecure: () => false,
 							getEndpoint: () => undefined as any,
 						},
@@ -297,11 +296,9 @@ describe("lib/driver/Transaction => ", () => {
 						1,
 						{
 							id: 1,
-							isAwake() {
-								return true;
-							},
 							// non-sleeping
-							supportsCC: () => false,
+							canSleep: false,
+							status: NodeStatus.Alive,
 							isCCSecure: () => false,
 							getEndpoint: () => undefined as any,
 						},
@@ -311,12 +308,9 @@ describe("lib/driver/Transaction => ", () => {
 						2,
 						{
 							id: 2,
-							isAwake() {
-								return false;
-							},
-							supportsCC(cc: CommandClasses) {
-								return cc === CommandClasses["Wake Up"];
-							},
+							// sleeping
+							canSleep: true,
+							status: NodeStatus.Asleep,
 							isCCSecure: () => false,
 							getEndpoint: () => undefined as any,
 						},

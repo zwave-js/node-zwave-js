@@ -2,7 +2,6 @@ import {
 	assertZWaveError,
 	CommandClasses,
 	CommandClassInfo,
-	NodeUpdatePayload,
 	unknownBoolean,
 	ValueDB,
 	ValueID,
@@ -16,10 +15,6 @@ import {
 } from "../commandclass/BinarySwitchCC";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { WakeUpCC, WakeUpCommand } from "../commandclass/WakeUpCC";
-import {
-	ApplicationUpdateRequest,
-	ApplicationUpdateTypes,
-} from "../controller/ApplicationUpdateRequest";
 import {
 	GetNodeProtocolInfoRequest,
 	GetNodeProtocolInfoResponse,
@@ -297,7 +292,7 @@ describe("lib/node/Node", () => {
 					});
 					await node["queryProtocolInfo"]();
 
-					expect(node.isAwake()).toBeTrue();
+					// expect(node.isAwake()).toBeTrue();
 					expect(node.supportsCC(CommandClasses["Wake Up"])).toBe(
 						supportsWakeup,
 					);
@@ -371,37 +366,37 @@ describe("lib/node/Node", () => {
 				expect(request.getNodeId()).toBe(node.id);
 			});
 
-			it.todo("Test the behavior when the request failed");
+			// it.todo("Test the behavior when the request failed");
 
-			// TODO: We need a real payload for this test
-			it.skip("should update its node information with the received data and mark the node as awake", async () => {
-				const nodeUpdate: NodeUpdatePayload = {
-					basic: 0x01,
-					generic: 0x03,
-					specific: 0x01,
-					supportedCCs: [CommandClasses["User Code"]],
-					controlledCCs: [CommandClasses["Window Covering"]],
-					nodeId: 2,
-				};
-				const expected = new ApplicationUpdateRequest(
-					fakeDriver as any,
-					{} as any,
-				);
-				(expected as any)._updateType =
-					ApplicationUpdateTypes.NodeInfo_Received;
-				(expected as any)._nodeInformation = nodeUpdate;
-				fakeDriver.sendMessage.mockResolvedValue(expected);
+			// // TODO: We need a real payload for this test
+			// it.skip("should update its node information with the received data and mark the node as awake", async () => {
+			// 	const nodeUpdate: NodeUpdatePayload = {
+			// 		basic: 0x01,
+			// 		generic: 0x03,
+			// 		specific: 0x01,
+			// 		supportedCCs: [CommandClasses["User Code"]],
+			// 		controlledCCs: [CommandClasses["Window Covering"]],
+			// 		nodeId: 2,
+			// 	};
+			// 	const expected = new ApplicationUpdateRequest(
+			// 		fakeDriver as any,
+			// 		{} as any,
+			// 	);
+			// 	(expected as any)._updateType =
+			// 		ApplicationUpdateTypes.NodeInfo_Received;
+			// 	(expected as any)._nodeInformation = nodeUpdate;
+			// 	fakeDriver.sendMessage.mockResolvedValue(expected);
 
-				await node["queryNodeInfo"]();
-				for (const cc of nodeUpdate.supportedCCs) {
-					expect(node.supportsCC(cc)).toBeTrue();
-				}
-				for (const cc of nodeUpdate.controlledCCs) {
-					expect(node.controlsCC(cc)).toBeTrue();
-				}
+			// 	await node["queryNodeInfo"]();
+			// 	for (const cc of nodeUpdate.supportedCCs) {
+			// 		expect(node.supportsCC(cc)).toBeTrue();
+			// 	}
+			// 	for (const cc of nodeUpdate.controlledCCs) {
+			// 		expect(node.controlsCC(cc)).toBeTrue();
+			// 	}
 
-				expect(node.isAwake()).toBeTrue();
-			});
+			// 	expect(node.isAwake()).toBeTrue();
+			// });
 		});
 
 		describe(`interviewCCs()`, () => {
@@ -606,66 +601,67 @@ describe("lib/node/Node", () => {
 		});
 	});
 
-	describe("isAwake() / setAwake()", () => {
-		const fakeDriver = createEmptyMockDriver();
+	// describe("isAwake() / setAwake()", () => {
+	// 	const fakeDriver = createEmptyMockDriver();
 
-		function makeNode(supportsWakeUp: boolean = false): ZWaveNode {
-			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
-			if (supportsWakeUp)
-				node.addCC(CommandClasses["Wake Up"], { isSupported: true });
-			fakeDriver.controller.nodes.set(node.id, node);
-			return node;
-		}
+	// 	function makeNode(supportsWakeUp: boolean = false): ZWaveNode {
+	// 		const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
+	// 		if (supportsWakeUp)
+	// 			node.addCC(CommandClasses["Wake Up"], { isSupported: true });
+	// 		fakeDriver.controller.nodes.set(node.id, node);
+	// 		return node;
+	// 	}
 
-		it("newly created nodes should be assumed awake", () => {
-			const node = makeNode();
-			expect(node.isAwake()).toBeTrue();
-			node.destroy();
-		});
+	// 	it("newly created nodes should be assumed awake", () => {
+	// 		const node = makeNode();
+	// 		expect(node.isAwake()).toBeTrue();
+	// 		node.destroy();
+	// 	});
 
-		it("setAwake() should NOT throw if the node does not support Wake Up", () => {
-			const node = makeNode();
-			expect(() => node.markAsAwake()).not.toThrow();
-			node.destroy();
-		});
+	// 	it("setAwake() should NOT throw if the node does not support Wake Up", () => {
+	// 		const node = makeNode();
+	// 		expect(() => node.markAsAwake()).not.toThrow();
+	// 		node.destroy();
+	// 	});
 
-		it("isAwake() should return the status set by setAwake()", () => {
-			const node = makeNode(true);
-			node.markAsAsleep();
-			expect(node.isAwake()).toBeFalse();
-			node.markAsAwake();
-			expect(node.isAwake()).toBeTrue();
-			node.destroy();
-		});
+	// 	it("isAwake() should return the status set by setAwake()", () => {
+	// 		const node = makeNode(true);
+	// 		node.markAsAsleep();
+	// 		expect(node.isAwake()).toBeFalse();
+	// 		node.markAsAwake();
+	// 		expect(node.isAwake()).toBeTrue();
+	// 		node.destroy();
+	// 	});
 
-		it(`setAwake() should emit the "wake up" event when the node wakes up and "sleep" when it goes to sleep`, () => {
-			const node = makeNode(true);
-			const wakeupSpy = jest.fn();
-			const sleepSpy = jest.fn();
-			node.on("wake up", wakeupSpy).on("sleep", sleepSpy);
-			for (const { state, expectWakeup, expectSleep } of [
-				{ state: false, expectSleep: true, expectWakeup: false },
-				{ state: true, expectSleep: false, expectWakeup: true },
-				{ state: true, expectSleep: false, expectWakeup: false },
-				{ state: false, expectSleep: true, expectWakeup: false },
-			]) {
-				wakeupSpy.mockClear();
-				sleepSpy.mockClear();
-				state ? node.markAsAwake() : node.markAsAsleep();
-				expect(wakeupSpy).toBeCalledTimes(expectWakeup ? 1 : 0);
-				expect(sleepSpy).toBeCalledTimes(expectSleep ? 1 : 0);
-			}
-			node.destroy();
-		});
-	});
+	// 	it(`setAwake() should emit the "wake up" event when the node wakes up and "sleep" when it goes to sleep`, () => {
+	// 		const node = makeNode(true);
+	// 		const wakeupSpy = jest.fn();
+	// 		const sleepSpy = jest.fn();
+	// 		node.on("wake up", wakeupSpy).on("sleep", sleepSpy);
+	// 		for (const { state, expectWakeup, expectSleep } of [
+	// 			{ state: false, expectSleep: true, expectWakeup: false },
+	// 			{ state: true, expectSleep: false, expectWakeup: true },
+	// 			{ state: true, expectSleep: false, expectWakeup: false },
+	// 			{ state: false, expectSleep: true, expectWakeup: false },
+	// 		]) {
+	// 			wakeupSpy.mockClear();
+	// 			sleepSpy.mockClear();
+	// 			state ? node.markAsAwake() : node.markAsAsleep();
+	// 			expect(wakeupSpy).toBeCalledTimes(expectWakeup ? 1 : 0);
+	// 			expect(sleepSpy).toBeCalledTimes(expectSleep ? 1 : 0);
+	// 		}
+	// 		node.destroy();
+	// 	});
+	// });
 
 	describe("updateNodeInfo()", () => {
 		const fakeDriver = createEmptyMockDriver();
 
-		function makeNode(supportsWakeUp: boolean = false): ZWaveNode {
+		function makeNode(canSleep: boolean = false): ZWaveNode {
 			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
-			if (supportsWakeUp)
-				node.addCC(CommandClasses["Wake Up"], { isSupported: true });
+			node["_isListening"] = !canSleep;
+			node["_isFrequentListening"] = false;
+			// node.addCC(CommandClasses["Wake Up"], { isSupported: true });
 			fakeDriver.controller.nodes.set(node.id, node);
 			return node;
 		}
@@ -680,14 +676,13 @@ describe("lib/node/Node", () => {
 			node.markAsAsleep();
 
 			node.updateNodeInfo(emptyNodeInfo as any);
-			expect(node.isAwake()).toBeTrue();
+			expect(node.status).toBe(NodeStatus.Awake);
 			node.destroy();
 		});
 
 		it("does not throw when called on a non-sleeping node", () => {
 			const node = makeNode(false);
 			node.updateNodeInfo(emptyNodeInfo as any);
-			expect(node.isAwake()).toBeTrue();
 			node.destroy();
 		});
 
@@ -726,9 +721,10 @@ describe("lib/node/Node", () => {
 	describe(`sendNoMoreInformation()`, () => {
 		const fakeDriver = createEmptyMockDriver();
 
-		function makeNode(/*supportsWakeUp: boolean = false*/): ZWaveNode {
+		function makeNode(): ZWaveNode {
 			const node = new ZWaveNode(2, (fakeDriver as unknown) as Driver);
-			// if (supportsWakeUp)
+			node["_isListening"] = false;
+			node["_isFrequentListening"] = false;
 			node.addCC(CommandClasses["Wake Up"], { isSupported: true });
 			fakeDriver.controller.nodes.set(node.id, node);
 			return node;
@@ -766,6 +762,7 @@ describe("lib/node/Node", () => {
 		it("should send a WakeupCC.NoMoreInformation otherwise", async () => {
 			const node = makeNode();
 			node.interviewStage = InterviewStage.Complete;
+			node.markAsAwake();
 			expect(await node.sendNoMoreInformation()).toBeTrue();
 			expect(fakeDriver.sendMessage).toBeCalled();
 

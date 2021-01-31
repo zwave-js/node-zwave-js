@@ -82,7 +82,6 @@ import {
 import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
 import {
 	getWakeUpIntervalValueId,
-	WakeUpCC,
 	WakeUpCCWakeUpNotification,
 } from "../commandclass/WakeUpCC";
 import {
@@ -445,6 +444,12 @@ export class ZWaveNode extends Endpoint {
 	private _isFrequentListening: boolean | undefined;
 	public get isFrequentListening(): boolean | undefined {
 		return this._isFrequentListening;
+	}
+
+	public get canSleep(): boolean | undefined {
+		if (this._isListening == undefined) return undefined;
+		if (this._isFrequentListening == undefined) return undefined;
+		return !this._isListening && !this._isFrequentListening;
 	}
 
 	private _isRouting: boolean | undefined;
@@ -3118,14 +3123,6 @@ version:               ${this.version}`;
 		await this.loadDeviceConfig();
 	}
 
-	/** Returns whether the node is currently assumed awake */
-	public isAwake(): boolean {
-		const isAsleep =
-			this.supportsCC(CommandClasses["Wake Up"]) &&
-			!WakeUpCC.isAwake(this);
-		return !isAsleep;
-	}
-
 	/**
 	 * Whether the node should be kept awake when there are no pending messages.
 	 */
@@ -3145,7 +3142,10 @@ version:               ${this.version}`;
 		this.isSendingNoMoreInformation = true;
 
 		let msgSent = false;
-		if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
+		if (
+			this.status === NodeStatus.Awake &&
+			this.interviewStage === InterviewStage.Complete
+		) {
 			this.driver.controllerLog.logNode(this.id, {
 				message: "Sending node back to sleep...",
 				direction: "outbound",

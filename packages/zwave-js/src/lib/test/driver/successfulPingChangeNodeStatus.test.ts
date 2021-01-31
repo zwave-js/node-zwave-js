@@ -1,4 +1,3 @@
-import { CommandClasses } from "@zwave-js/core";
 import { MessageHeaders, MockSerialPort } from "@zwave-js/serial";
 import { getEnumMemberName } from "@zwave-js/shared";
 import { wait } from "alcalzone-shared/async";
@@ -32,20 +31,20 @@ describe("When a ping succeeds, the node should be marked awake/alive", () => {
 		NodeStatus.Asleep,
 		NodeStatus.Dead,
 	]) {
-		for (const supportsWakeUp of [true, false]) {
+		for (const canSleep of [true, false]) {
 			// Exclude tests that make no sense
 			if (
-				(initialStatus === NodeStatus.Asleep && !supportsWakeUp) ||
-				(supportsWakeUp && initialStatus === NodeStatus.Dead)
+				(initialStatus === NodeStatus.Asleep && !canSleep) ||
+				(canSleep && initialStatus === NodeStatus.Dead)
 			) {
 				continue;
 			}
 
-			const expectedStatus = supportsWakeUp
+			const expectedStatus = canSleep
 				? NodeStatus.Awake
 				: NodeStatus.Alive;
 
-			it(`Wake Up: ${supportsWakeUp}, initial status: ${getEnumMemberName(
+			it(`Can sleep: ${canSleep}, initial status: ${getEnumMemberName(
 				NodeStatus,
 				initialStatus,
 			)}`, async () => {
@@ -62,11 +61,14 @@ describe("When a ping succeeds, the node should be marked awake/alive", () => {
 					driver["addNodeEventHandlers"](node);
 				}
 
-				if (supportsWakeUp) {
-					node4.addCC(CommandClasses["Wake Up"], {
-						isSupported: true,
-					});
+				if (canSleep) {
+					node4["_isListening"] = false;
+					node4["_isFrequentListening"] = false;
+				} else {
+					node4["_isListening"] = true;
+					node4["_isFrequentListening"] = false;
 				}
+
 				if (initialStatus === NodeStatus.Asleep) {
 					node4.markAsAsleep();
 				} else if (initialStatus === NodeStatus.Dead) {
