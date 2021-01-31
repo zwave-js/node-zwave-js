@@ -104,12 +104,12 @@
 				}
 			]
 		},
-		"6[0x40]": {
+		"6": {
 			"label": "Humidity Report When Triggered",
 			"description": "Determines whether a temperature report is sent after an event is triggered.",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 64,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -117,7 +117,7 @@
 			"options": [
 				{
 					"label": "Disabled",
-					"value": 1
+					"value": 64
 				},
 				{
 					"label": "Enabled",
