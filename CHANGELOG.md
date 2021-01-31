@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.1.1 (2021-01-31)
 ### Bugfixes
 * `Scene Activation CC` scene IDs are no longer auto-reset to `undefined`. This is unnecessary since they are value events
 * All **get**-type commands may now timeout and return `undefined` without throwing
