@@ -486,6 +486,9 @@ describe("lib/node/ValueDB => ", () => {
 				(valueDB as any)._db.set(JSON.stringify(valueId), value);
 			}
 
+			// we're bypassing the index, so we need to fix that
+			valueDB["_index"] = valueDB["buildIndex"]();
+
 			const actual = valueDB.getValues(requestedCC);
 			expect(actual).toHaveLength(expected.length);
 			expect(actual).toContainAllValues(expected);
@@ -604,6 +607,9 @@ describe("lib/node/ValueDB => ", () => {
 			for (const { value, ...valueId } of values) {
 				(valueDB as any)._db.set(JSON.stringify(valueId), value);
 			}
+
+			// we're bypassing the index, so we need to fix that
+			valueDB["_index"] = valueDB["buildIndex"]();
 
 			// The node has nodeID 2
 			const { nodeId, ...expected } = values[1];
@@ -728,6 +734,9 @@ describe("lib/node/ValueDB => ", () => {
 						meta,
 					);
 				}
+
+				// we're bypassing the index, so we need to fix that
+				valueDB["_index"] = valueDB["buildIndex"]();
 
 				const actual = valueDB.getAllMetadata(requestedCC);
 				expect(actual).toHaveLength(expected.length);
@@ -857,6 +866,9 @@ describe("lib/node/ValueDB => ", () => {
 			for (const { meta, ...valueId } of metadata) {
 				(valueDB as any)._metadata.set(JSON.stringify(valueId), meta);
 			}
+
+			// we're bypassing the index, so we need to fix that
+			valueDB["_index"] = valueDB["buildIndex"]();
 
 			// The node has nodeID 2
 			const expectedMeta = metadata[1];

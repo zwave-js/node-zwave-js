@@ -29,7 +29,7 @@
 			"allowManualEntry": true,
 			"options": [
 				{
-					"label": "CENTRAL_SCENE (Default)",
+					"label": "CENTRAL_SCENE",
 					"value": 0
 				},
 				{
@@ -54,7 +54,7 @@
 					"value": 0
 				},
 				{
-					"label": "Controlled Devices (Default)",
+					"label": "Controlled Devices",
 					"value": 1
 				}
 			]

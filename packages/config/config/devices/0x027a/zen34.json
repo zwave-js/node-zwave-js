@@ -1,0 +1,147 @@
+// Zooz ZEN34
+// Z-Wave Plus 700 Series Remote Switch
+{
+	"manufacturer": "Zooz",
+	"manufacturerId": "0x027a",
+	"label": "ZEN34",
+	"description": "Z-Wave Plus 700 Series Remote Switch",
+	"devices": [
+		{
+			"productType": "0x7000",
+			"productId": "0xf001"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Switch Multilevel",
+			"maxNodes": 5
+		}
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "LED Indicator Mode",
+			"description": "Choose LED indicator mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED always off",
+					"value": 0
+				},
+				{
+					"label": "LED on when button is pressed",
+					"value": 1
+				},
+				{
+					"label": "LED always on in color specified in parameter 2",
+					"value": 2
+				},
+				{
+					"label": "LED always on in color specified in parameter 3",
+					"value": 3
+				}
+			]
+		},
+		"2": {
+			"label": "LED Color for Upper Paddle",
+			"description": "Choose LED color for when upper paddle is pressed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "White",
+					"value": 0
+				},
+				{
+					"label": "Blue",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Red",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				}
+			]
+		},
+		"3": {
+			"label": "LED Color for Lower Paddle",
+			"description": "Choose LED color for when upper paddle is pressed",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 6,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "White",
+					"value": 0
+				},
+				{
+					"label": "Blue",
+					"value": 1
+				},
+				{
+					"label": "Green",
+					"value": 2
+				},
+				{
+					"label": "Red",
+					"value": 3
+				},
+				{
+					"label": "Magenta",
+					"value": 4
+				},
+				{
+					"label": "Yellow",
+					"value": 5
+				},
+				{
+					"label": "Cyan",
+					"value": 6
+				}
+			]
+		}
+	}
+}

@@ -6,7 +6,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
@@ -14,7 +14,12 @@ import {
 	encodeSetbackState,
 	SetbackState,
 } from "../values/SetbackState";
-import { CCAPI } from "./API";
+import {
+	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
+	throwUnsupportedProperty,
+} from "./API";
 import {
 	API,
 	CCCommand,
@@ -59,6 +64,19 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 		return super.supportsCommand(cmd);
 	}
 
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "setbackType":
+			case "setbackState":
+				return (await this.get())?.[property];
+
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get() {
 		this.assertSupportsCommand(
@@ -70,14 +88,13 @@ export class ThermostatSetbackCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ThermostatSetbackCCReport>(
+		const response = await this.driver.sendCommand<ThermostatSetbackCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			setbackType: response.setbackType,
-			setbackState: response.setbackState,
-		};
+		);
+		if (response) {
+			return pick(response, ["setbackType", "setbackState"]);
+		}
 	}
 
 	public async set(
@@ -131,14 +148,16 @@ export class ThermostatSetbackCC extends CommandClass {
 			direction: "outbound",
 		});
 		const setbackResp = await api.get();
-		const logMessage = `received current state:
+		if (setbackResp) {
+			const logMessage = `received current state:
 setback type:  ${getEnumMemberName(SetbackType, setbackResp.setbackType)}
 setback state: ${setbackResp.setbackState}`;
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: logMessage,
-			direction: "inbound",
-		});
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
+		}
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;

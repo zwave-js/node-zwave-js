@@ -1,0 +1,13 @@
+name: 'Z-Wave Bot: Scheduled actions'
+
+on:
+  schedule:
+    # every 12 hours
+    - cron:  '0 */12 * * *'
+
+jobs:
+  stale:
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Trigger Stale App
+        run: echo "Trigger Stale App!"

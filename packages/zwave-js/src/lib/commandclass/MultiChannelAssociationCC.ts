@@ -10,6 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { PhysicalCCAPI } from "./API";
 import {
@@ -194,7 +195,7 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 	 * Returns the number of association groups a node supports.
 	 * Association groups are consecutive, starting at 1.
 	 */
-	public async getGroupCount(): Promise<number> {
+	public async getGroupCount(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			MultiChannelAssociationCommand,
 			MultiChannelAssociationCommand.SupportedGroupingsGet,
@@ -207,11 +208,11 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 				endpoint: this.endpoint.index,
 			},
 		);
-		const response = (await this.driver.sendCommand<MultiChannelAssociationCCSupportedGroupingsReport>(
+		const response = await this.driver.sendCommand<MultiChannelAssociationCCSupportedGroupingsReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.groupCount;
+		);
+		return response?.groupCount;
 	}
 
 	/**
@@ -229,15 +230,13 @@ export class MultiChannelAssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = (await this.driver.sendCommand<MultiChannelAssociationCCReport>(
+		const response = await this.driver.sendCommand<MultiChannelAssociationCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			maxNodes: response.maxNodes,
-			nodeIds: response.nodeIds,
-			endpoints: response.endpoints,
-		};
+		);
+		if (response) {
+			return pick(response, ["maxNodes", "nodeIds", "endpoints"]);
+		}
 	}
 
 	/**
@@ -413,7 +412,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 			direction: "none",
 		});
 
-		let mcGroupCount: number;
+		let mcGroupCount: number | undefined;
 		if (complete) {
 			// First find out how many groups are supported as multi channel
 			this.driver.controllerLog.logNode(node.id, {
@@ -423,11 +422,21 @@ export class MultiChannelAssociationCC extends CommandClass {
 				direction: "outbound",
 			});
 			mcGroupCount = await mcAPI.getGroupCount();
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `supports ${mcGroupCount} multi channel association groups`,
-				direction: "inbound",
-			});
+			if (mcGroupCount != undefined) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `supports ${mcGroupCount} multi channel association groups`,
+					direction: "inbound",
+				});
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying multi channel association groups timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
 		} else {
 			// Partial interview, read the information from cache
 			mcGroupCount =
@@ -447,6 +456,7 @@ export class MultiChannelAssociationCC extends CommandClass {
 				direction: "outbound",
 			});
 			const group = await mcAPI.getGroup(groupId);
+			if (!group) continue;
 			const logMessage = `received information for multi channel association group #${groupId}:
 maximum # of nodes:           ${group.maxNodes}
 currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}
@@ -484,6 +494,7 @@ currently assigned endpoints: ${group.endpoints
 					direction: "outbound",
 				});
 				const group = await assocAPI.getGroup(groupId);
+				if (!group) continue;
 				const logMessage = `received information for association group #${groupId}:
 maximum # of nodes:           ${group.maxNodes}
 currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
@@ -568,8 +579,10 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 						nodeIds: [ownNodeId],
 					});
 					// refresh the associations - don't trust that it worked
-					const { nodeIds } = await mcAPI.getGroup(group);
-					didMCAssignmentWork = nodeIds.includes(ownNodeId);
+					const groupReport = await mcAPI.getGroup(group);
+					didMCAssignmentWork = !!groupReport?.nodeIds.includes(
+						ownNodeId,
+					);
 				} else if (
 					this.version >= 3 &&
 					!mustUseNodeAssociation &&
@@ -594,8 +607,8 @@ currently assigned nodes:     ${group.nodeIds.map(String).join(", ")}`;
 						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
 					});
 					// and refresh the associations - don't trust that it worked
-					const { endpoints } = await mcAPI.getGroup(group);
-					didMCAssignmentWork = !!endpoints.find(
+					const groupReport = await mcAPI.getGroup(group);
+					didMCAssignmentWork = !!groupReport?.endpoints.some(
 						(a) => a.nodeId === ownNodeId && a.endpoint === 0,
 					);
 				}

@@ -8,7 +8,8 @@
 	"devices": [
 		{
 			"productType": "0x201f",
-			"productId": "0x1f10"
+			"productId": "0x1f10",
+			"zwaveAllianceId": [1566, 2480]
 		}
 	],
 	"firmwareVersion": {
@@ -24,17 +25,19 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Temperature unit",
+			"label": "Temperature Unit Selection",
+			"description": "Choose °C or °F",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
 			"defaultValue": 0,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Celsius (default)",
+					"label": "Celsius",
 					"value": 0
 				},
 				{
@@ -44,39 +47,48 @@
 			]
 		},
 		"2": {
-			"label": "Temperature Reporting Threshold",
-			"description": "Set up from 0.1C to 5C",
+			"label": "Auto Temperature Report Interval",
+			"description": "Auto Temperature Report Interval from 0.1°C to 5°C",
 			"valueSize": 1,
-			"minValue": 1,
+			"unit": "0.1 °C",
+			"minValue": 0,
 			"maxValue": 50,
-			"defaultValue": 1,
+			"defaultValue": 10,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Humidity Reporting Threshold",
-			"description": "Set up from 1%-50%",
-			"unit": "%",
+			"label": "Auto Humidity Report Interval",
+			"description": "Auto Humidity Report Interval from 1% to 50%",
 			"valueSize": 1,
-			"minValue": 1,
+			"unit": "%",
+			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 10,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "Luminance Reporting Threshold",
-			"description": "Set up from 5%-50%",
-			"unit": "%",
+			"label": "Auto Light Report Interval",
+			"description": "Auto Light Report Interval from Off or 5% to 50%",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 50,
 			"defaultValue": 10,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		}
+	},
+	"metadata": {
+		"inclusion": "For “Inclusion” in (adding to) a network: Put the Z-Wave™ Interface Controller into “inclusion” mode, and following its instruction to add the ZD2301 to your controller, to get in the “inclusion” mode. Press the program switch of ZD2301 for sending the NIF. After sending NIF, Z-Wave will send the auto inclusion; otherwise, ZD2301 will go to sleep after 20 seconds",
+		"exclusion": "For “Exclusion” from (removing from) a network: Put the Z-Wave™ Interface Controller into “exclusion” mode, and following its instruction to delete the ZD2301 from your controller. Press the program switch of ZD2301 for 1 second at least to be excluded",
+		"reset": "Factory Default Reset: \n*Open the rear cover to send the Alarm Report and then press the program switch 10 times in 10 seconds, ZD2301 will send the “Device Reset Locally” command and reset to the factory default. \n* Please use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
 	}
 }

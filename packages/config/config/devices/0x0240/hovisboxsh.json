@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "* Navigate to Z-Wave network management tools* Click the “Z-WAVE RESET” button and follow onscreen instructions."
+		"reset": "* Navigate to Z-Wave network management tools\n* Click the “Z-WAVE RESET” button and follow onscreen instructions."
 	}
 }

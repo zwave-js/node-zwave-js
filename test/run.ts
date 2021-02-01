@@ -1,7 +1,13 @@
 /* wotan-disable async-function-assignability */
 
 require("reflect-metadata");
-import { Driver } from "../packages/zwave-js/src";
+
+process.on("unhandledRejection", (_r) => {
+	// debugger;
+});
+
+import { MultilevelSensorCCGet } from "../packages/zwave-js/src/lib/commandclass/MultilevelSensorCC";
+import { Driver } from "../packages/zwave-js/src/lib/driver/Driver";
 
 const driver = new Driver("COM4", {
 	// prettier-ignore
@@ -11,6 +17,18 @@ const driver = new Driver("COM4", {
 })
 	.on("error", console.error)
 	.once("driver ready", async () => {
+		await require("alcalzone-shared/async").wait(2000);
+
+		const node = driver.controller.nodes.get(22)!;
+		const resp = await driver.sendCommand(
+			new MultilevelSensorCCGet(driver, {
+				nodeId: node.id,
+				sensorType: 1,
+				scale: 2,
+			}),
+		);
+		console.dir(resp);
+
 		// const cc = new CommandClass(driver, {
 		// 	nodeId: 24,
 		// 	ccId: 0x5d,

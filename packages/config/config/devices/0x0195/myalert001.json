@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "On the GUI, we need to go to the Advanced setting screen then on Zwave configuration then push the 'reset' button."
+		"reset": "On the GUI, we need to go to the Advanced setting screen then on Zwave configuration then push the 'reset' button"
 	}
 }

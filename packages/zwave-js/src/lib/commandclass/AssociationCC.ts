@@ -128,7 +128,7 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 	 * Returns the number of association groups a node supports.
 	 * Association groups are consecutive, starting at 1.
 	 */
-	public async getGroupCount(): Promise<number> {
+	public async getGroupCount(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			AssociationCommand,
 			AssociationCommand.SupportedGroupingsGet,
@@ -138,11 +138,11 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<AssociationCCSupportedGroupingsReport>(
+		const response = await this.driver.sendCommand<AssociationCCSupportedGroupingsReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.groupCount;
+		);
+		if (response) return response.groupCount;
 	}
 
 	/**
@@ -157,14 +157,16 @@ export class AssociationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			groupId,
 		});
-		const response = (await this.driver.sendCommand<AssociationCCReport>(
+		const response = await this.driver.sendCommand<AssociationCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			maxNodes: response.maxNodes,
-			nodeIds: response.nodeIds,
-		};
+		);
+		if (response) {
+			return {
+				maxNodes: response.maxNodes,
+				nodeIds: response.nodeIds,
+			};
+		}
 	}
 
 	/**
@@ -310,7 +312,7 @@ export class AssociationCC extends CommandClass {
 		// Even if Multi Channel Association is supported, we still need to query the number of
 		// normal association groups since some devices report more association groups than
 		// multi channel association groups
-		let groupCount: number;
+		let groupCount: number | undefined;
 		if (complete) {
 			// First find out how many groups are supported
 			this.driver.controllerLog.logNode(node.id, {
@@ -319,11 +321,21 @@ export class AssociationCC extends CommandClass {
 				direction: "outbound",
 			});
 			groupCount = await api.getGroupCount();
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: `supports ${groupCount} association groups`,
-				direction: "inbound",
-			});
+			if (groupCount != undefined) {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `supports ${groupCount} association groups`,
+					direction: "inbound",
+				});
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message:
+						"Querying association groups timed out, skipping interview...",
+					level: "warn",
+				});
+				return;
+			}
 		} else {
 			// Partial interview, read the information from cache
 			groupCount = this.getGroupCountCached();
@@ -350,14 +362,16 @@ export class AssociationCC extends CommandClass {
 				direction: "outbound",
 			});
 			const group = await api.getGroup(groupId);
-			const logMessage = `received information for association group #${groupId}:
+			if (group != undefined) {
+				const logMessage = `received information for association group #${groupId}:
 maximum # of nodes: ${group.maxNodes}
 currently assigned nodes: ${group.nodeIds.map(String).join(", ")}`;
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
 		}
 
 		// Assign the controller to all lifeline groups

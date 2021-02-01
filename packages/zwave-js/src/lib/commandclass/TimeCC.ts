@@ -10,6 +10,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
+import { pick } from "@zwave-js/shared";
 import { padStart } from "alcalzone-shared/strings";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
@@ -63,15 +64,13 @@ export class TimeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<TimeCCTimeReport>(
+		const response = await this.driver.sendCommand<TimeCCTimeReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			hour: response.hour,
-			minute: response.minute,
-			second: response.second,
-		};
+		);
+		if (response) {
+			return pick(response, ["hour", "minute", "second"]);
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -82,15 +81,13 @@ export class TimeCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<TimeCCDateReport>(
+		const response = await this.driver.sendCommand<TimeCCDateReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			day: response.day,
-			month: response.month,
-			year: response.year,
-		};
+		);
+		if (response) {
+			return pick(response, ["day", "month", "year"]);
+		}
 	}
 
 	public async setTimezone(timezone: DSTInfo): Promise<void> {
@@ -112,23 +109,25 @@ export class TimeCCAPI extends CCAPI {
 		}
 	}
 
-	public async getTimezone(): Promise<DSTInfo> {
+	public async getTimezone(): Promise<DSTInfo | undefined> {
 		this.assertSupportsCommand(TimeCommand, TimeCommand.TimeOffsetGet);
 
 		const cc = new TimeCCTimeOffsetGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<TimeCCTimeOffsetReport>(
+		const response = await this.driver.sendCommand<TimeCCTimeOffsetReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			standardOffset: response.standardOffset,
-			dstOffset: response.dstOffset,
-			startDate: response.dstStartDate,
-			endDate: response.dstEndDate,
-		};
+		);
+		if (response) {
+			return {
+				standardOffset: response.standardOffset,
+				dstOffset: response.dstOffset,
+				startDate: response.dstStartDate,
+				endDate: response.dstEndDate,
+			};
+		}
 	}
 }
 

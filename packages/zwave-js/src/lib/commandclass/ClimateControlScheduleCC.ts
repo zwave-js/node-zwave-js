@@ -92,7 +92,9 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 		}
 	}
 
-	public async get(weekday: Weekday): Promise<readonly Switchpoint[]> {
+	public async get(
+		weekday: Weekday,
+	): Promise<readonly Switchpoint[] | undefined> {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.Get,
@@ -103,14 +105,14 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			weekday,
 		});
-		const response = (await this.driver.sendCommand<ClimateControlScheduleCCReport>(
+		const response = await this.driver.sendCommand<ClimateControlScheduleCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.switchPoints;
+		);
+		return response?.switchPoints;
 	}
 
-	public async getChangeCounter(): Promise<number> {
+	public async getChangeCounter(): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			ClimateControlScheduleCommand,
 			ClimateControlScheduleCommand.ChangedGet,
@@ -120,11 +122,11 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ClimateControlScheduleCCChangedReport>(
+		const response = await this.driver.sendCommand<ClimateControlScheduleCCChangedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.changeCounter;
+		);
+		return response?.changeCounter;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -138,14 +140,16 @@ export class ClimateControlScheduleCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ClimateControlScheduleCCOverrideReport>(
+		const response = await this.driver.sendCommand<ClimateControlScheduleCCOverrideReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			type: response.overrideType,
-			state: response.overrideState,
-		};
+		);
+		if (response) {
+			return {
+				type: response.overrideType,
+				state: response.overrideState,
+			};
+		}
 	}
 
 	public async setOverride(

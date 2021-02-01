@@ -11,11 +11,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import { ZWaveLibraryTypes } from "../controller/ZWaveLibraryTypes";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { ignoreTimeout, PhysicalCCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -96,19 +96,23 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<VersionCCReport>(
+		const response = await this.driver.sendCommand<VersionCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			libraryType: response.libraryType,
-			protocolVersion: response.protocolVersion,
-			firmwareVersions: response.firmwareVersions,
-			hardwareVersion: response.hardwareVersion,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"libraryType",
+				"protocolVersion",
+				"firmwareVersions",
+				"hardwareVersion",
+			]);
+		}
 	}
 
-	public async getCCVersion(requestedCC: CommandClasses): Promise<number> {
+	public async getCCVersion(
+		requestedCC: CommandClasses,
+	): Promise<number | undefined> {
 		this.assertSupportsCommand(
 			VersionCommand,
 			VersionCommand.CommandClassGet,
@@ -119,11 +123,11 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			requestedCC,
 		});
-		const response = (await this.driver.sendCommand<VersionCCCommandClassReport>(
+		const response = await this.driver.sendCommand<VersionCCCommandClassReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.ccVersion;
+		);
+		return response?.ccVersion;
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -137,13 +141,13 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<VersionCCCapabilitiesReport>(
+		const response = await this.driver.sendCommand<VersionCCCapabilitiesReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			supportsZWaveSoftwareGet: response.supportsZWaveSoftwareGet,
-		};
+		);
+		if (response) {
+			return pick(response, ["supportsZWaveSoftwareGet"]);
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -157,23 +161,23 @@ export class VersionCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<VersionCCZWaveSoftwareReport>(
+		const response = await this.driver.sendCommand<VersionCCZWaveSoftwareReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			sdkVersion: response.sdkVersion,
-			applicationFrameworkAPIVersion:
-				response.applicationFrameworkAPIVersion,
-			applicationFrameworkBuildNumber:
-				response.applicationFrameworkBuildNumber,
-			hostInterfaceVersion: response.hostInterfaceVersion,
-			hostInterfaceBuildNumber: response.hostInterfaceBuildNumber,
-			zWaveProtocolVersion: response.zWaveProtocolVersion,
-			zWaveProtocolBuildNumber: response.zWaveProtocolBuildNumber,
-			applicationVersion: response.applicationVersion,
-			applicationBuildNumber: response.applicationBuildNumber,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"sdkVersion",
+				"applicationFrameworkAPIVersion",
+				"applicationFrameworkBuildNumber",
+				"hostInterfaceVersion",
+				"hostInterfaceBuildNumber",
+				"zWaveProtocolVersion",
+				"zWaveProtocolBuildNumber",
+				"applicationVersion",
+				"applicationBuildNumber",
+			]);
+		}
 	}
 }
 
@@ -216,36 +220,27 @@ export class VersionCC extends CommandClass {
 		// Version information should not change (except for firmware updates)
 		if (complete) {
 			// Step 1: Query node versions
-			await ignoreTimeout(
-				async () => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "querying node versions...",
-						direction: "outbound",
-					});
-					const versionGetResponse = await api.get();
-					// prettier-ignore
-					let logMessage = `received response for node versions:
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "querying node versions...",
+				direction: "outbound",
+			});
+			const versionGetResponse = await api.get();
+			if (versionGetResponse) {
+				// prettier-ignore
+				let logMessage = `received response for node versions:
   library type:      ${ZWaveLibraryTypes[versionGetResponse.libraryType]} (${num2hex(versionGetResponse.libraryType)})
   protocol version:  ${versionGetResponse.protocolVersion}
   firmware versions: ${versionGetResponse.firmwareVersions.join(", ")}`;
-					if (versionGetResponse.hardwareVersion != undefined) {
-						logMessage += `\n  hardware version:  ${versionGetResponse.hardwareVersion}`;
-					}
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: logMessage,
-						direction: "inbound",
-					});
-				},
-				() => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: `Node version query timed out - skipping because it is not critical...`,
-						level: "warn",
-					});
-				},
-			);
+				if (versionGetResponse.hardwareVersion != undefined) {
+					logMessage += `\n  hardware version:  ${versionGetResponse.hardwareVersion}`;
+				}
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
 
 			// Step 2: Query all CC versions
 			this.driver.controllerLog.logNode(node.id, {
@@ -266,43 +261,42 @@ export class VersionCC extends CommandClass {
 					continue;
 				}
 
-				await ignoreTimeout(
-					async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `  querying the CC version for ${getCCName(
-								cc,
-							)}...`,
-							direction: "outbound",
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `  querying the CC version for ${getCCName(
+						cc,
+					)}...`,
+					direction: "outbound",
+				});
+				// query the CC version
+				const supportedVersion = await api.getCCVersion(cc);
+				if (supportedVersion != undefined) {
+					// Remember which CC version this endpoint supports
+					let logMessage: string;
+					if (supportedVersion > 0) {
+						endpoint.addCC(cc, {
+							version: supportedVersion,
 						});
-						// query the CC version
-						const supportedVersion = await api.getCCVersion(cc);
-						// Remember which CC version this endpoint supports
-						let logMessage: string;
-						if (supportedVersion > 0) {
-							endpoint.addCC(cc, { version: supportedVersion });
-							logMessage = `  supports CC ${
-								CommandClasses[cc]
-							} (${num2hex(cc)}) in version ${supportedVersion}`;
-						} else {
-							// We were lied to - the NIF said this CC is supported, now the node claims it isn't
-							endpoint.removeCC(cc);
-							logMessage = `  does NOT support CC ${
-								CommandClasses[cc]
-							} (${num2hex(cc)})`;
-						}
-						this.driver.controllerLog.logNode(node.id, logMessage);
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `CC version query for ${getCCName(
-								cc,
-							)} timed out - assuming the node supports version 1...`,
-							level: "warn",
-						});
-					},
-				);
+						logMessage = `  supports CC ${
+							CommandClasses[cc]
+						} (${num2hex(cc)}) in version ${supportedVersion}`;
+					} else {
+						// We were lied to - the NIF said this CC is supported, now the node claims it isn't
+						endpoint.removeCC(cc);
+						logMessage = `  does NOT support CC ${
+							CommandClasses[cc]
+						} (${num2hex(cc)})`;
+					}
+					this.driver.controllerLog.logNode(node.id, logMessage);
+				} else {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `CC version query for ${getCCName(
+							cc,
+						)} timed out - assuming the node supports version 1...`,
+						level: "warn",
+					});
+				}
 			}
 
 			// Step 3: Query VersionCC capabilities
@@ -314,49 +308,38 @@ export class VersionCC extends CommandClass {
 					this.endpointIndex,
 				) >= 3
 			) {
-				await ignoreTimeout(
-					async () => {
-						// Step 3a: Support for SoftwareGet
+				// Step 3a: Support for SoftwareGet
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: "querying if Z-Wave Software Get is supported...",
+					direction: "outbound",
+				});
+				const capsResponse = await api.getCapabilities();
+				if (capsResponse) {
+					const { supportsZWaveSoftwareGet } = capsResponse;
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `Z-Wave Software Get is${
+							supportsZWaveSoftwareGet ? "" : " not"
+						} supported`,
+						direction: "inbound",
+					});
+
+					if (supportsZWaveSoftwareGet) {
+						// Step 3b: Query Z-Wave Software versions
 						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
-							message:
-								"querying if Z-Wave Software Get is supported...",
+							message: "querying Z-Wave software versions...",
 							direction: "outbound",
 						});
-						const {
-							supportsZWaveSoftwareGet,
-						} = await api.getCapabilities();
+						await api.getZWaveSoftware();
 						this.driver.controllerLog.logNode(node.id, {
 							endpoint: this.endpointIndex,
-							message: `Z-Wave Software Get is${
-								supportsZWaveSoftwareGet ? "" : " not"
-							} supported`,
+							message: "received Z-Wave software versions",
 							direction: "inbound",
 						});
-
-						if (supportsZWaveSoftwareGet) {
-							// Step 3b: Query Z-Wave Software versions
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message: "querying Z-Wave software versions...",
-								direction: "outbound",
-							});
-							await api.getZWaveSoftware();
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message: "received Z-Wave software versions",
-								direction: "inbound",
-							});
-						}
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Version capability or software version query timed out - skipping because this is not critical...`,
-							level: "warn",
-						});
-					},
-				);
+					}
+				}
 			}
 		}
 

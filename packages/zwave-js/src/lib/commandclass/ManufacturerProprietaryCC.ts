@@ -4,11 +4,13 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { staticExtends } from "@zwave-js/shared";
+import { pick, staticExtends } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import {
 	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -53,14 +55,13 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<FibaroVenetianBlindCCReport>(
+		const response = await this.driver.sendCommand<FibaroVenetianBlindCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			position: response.position,
-			tilt: response.tilt,
-		};
+		);
+		if (response) {
+			return pick(response, ["position", "tilt"]);
+		}
 	}
 
 	public async fibaroVenetianBlindsSetPosition(value: number): Promise<void> {
@@ -123,6 +124,18 @@ export class ManufacturerProprietaryCCAPI extends CCAPI {
 		}
 		// Refresh the current value
 		await this.fibaroVenetianBlindsGet();
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "position":
+			case "tilt":
+				return (await this.fibaroVenetianBlindsGet())?.[property];
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
 	};
 }
 

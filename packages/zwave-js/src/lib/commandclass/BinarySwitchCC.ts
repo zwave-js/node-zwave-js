@@ -16,6 +16,8 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -73,16 +75,18 @@ export class BinarySwitchCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BinarySwitchCCReport>(
+		const response = await this.driver.sendCommand<BinarySwitchCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			// interpret unknown values as false
-			currentValue: response.currentValue || false,
-			targetValue: response.targetValue,
-			duration: response.duration,
-		};
+		);
+		if (response) {
+			return {
+				// interpret unknown values as false
+				currentValue: response.currentValue || false,
+				targetValue: response.targetValue,
+				duration: response.duration,
+			};
+		}
 	}
 
 	private refreshTimeout: NodeJS.Timeout | undefined;
@@ -142,6 +146,19 @@ export class BinarySwitchCCAPI extends CCAPI {
 		}
 		await this.set(value);
 	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "currentValue":
+			case "targetValue":
+			case "duration":
+				return (await this.get())?.[property];
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
 }
 
 @commandClass(CommandClasses["Binary Switch"])
@@ -171,22 +188,21 @@ export class BinarySwitchCC extends CommandClass {
 			direction: "outbound",
 		});
 
-		const binarySwitchResponse = await api.get();
-
-		let logMessage = `received Binary Switch state:
-current value:      ${binarySwitchResponse.currentValue}`;
-		if (binarySwitchResponse.targetValue != undefined) {
-			logMessage += `
-target value:       ${binarySwitchResponse.targetValue}
-remaining duration: ${
-				binarySwitchResponse.duration?.toString() ?? "undefined"
-			}`;
+		const resp = await api.get();
+		if (resp) {
+			let logMessage = `received Binary Switch state:
+current value:      ${resp.currentValue}`;
+			if (resp.targetValue != undefined) {
+				logMessage += `
+target value:       ${resp.targetValue}
+remaining duration: ${resp.duration?.toString() ?? "undefined"}`;
+			}
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: logMessage,
+				direction: "inbound",
+			});
 		}
-		this.driver.controllerLog.logNode(node.id, {
-			endpoint: this.endpointIndex,
-			message: logMessage,
-			direction: "inbound",
-		});
 
 		// Remember that the interview is complete
 		this.interviewComplete = true;

@@ -331,7 +331,7 @@
 					"value": 0
 				},
 				{
-					"label": "Wakeup is not blocked (Default)",
+					"label": "Wakeup is not blocked",
 					"value": 1
 				}
 			]

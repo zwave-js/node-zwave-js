@@ -17,6 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "-Run ‘ZW_SET_DEFAULT’ in Setting, then click YES of UZB PoP UP-Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+		"reset": "- Run ‘ZW_SET_DEFAULT’ in Setting, then click YES of UZB PoP UP\n- Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
 	}
 }

@@ -36,7 +36,7 @@ import { padStart } from "alcalzone-shared/strings";
 import { isArray, isObject } from "alcalzone-shared/typeguards";
 import { randomBytes } from "crypto";
 import { EventEmitter } from "events";
-import { CCAPI, ignoreTimeout } from "../commandclass/API";
+import type { CCAPI, PollValueImplementation } from "../commandclass/API";
 import { getHasLifelineValueId } from "../commandclass/AssociationCC";
 import {
 	BasicCC,
@@ -75,11 +75,6 @@ import {
 	NotificationCC,
 	NotificationCCReport,
 } from "../commandclass/NotificationCC";
-import {
-	getDimmingDurationValueID,
-	getSceneIdValueID,
-	SceneActivationCCSet,
-} from "../commandclass/SceneActivationCC";
 import {
 	SecurityCCNonceGet,
 	SecurityCCNonceReport,
@@ -175,11 +170,13 @@ export class ZWaveNode extends Endpoint {
 		deviceClass?: DeviceClass,
 		supportedCCs: CommandClasses[] = [],
 		controlledCCs: CommandClasses[] = [],
+		valueDB?: ValueDB,
 	) {
 		// Define this node's intrinsic endpoint as the root device (0)
 		super(id, driver, 0);
 
-		this._valueDB = new ValueDB(id, driver.valueDB!, driver.metadataDB!);
+		this._valueDB =
+			valueDB ?? new ValueDB(id, driver.valueDB!, driver.metadataDB!);
 		for (const event of [
 			"value added",
 			"value updated",
@@ -234,7 +231,6 @@ export class ZWaveNode extends Endpoint {
 
 		// Remove all timeouts
 		for (const timeout of [
-			this.sceneActivationResetTimeout,
 			this.centralSceneKeyHeldDownContext?.timeout,
 			...this.notificationIdleTimeouts.values(),
 			...this.manualRefreshTimers.values(),
@@ -699,6 +695,43 @@ export class ZWaveNode extends Endpoint {
 			}
 			throw e;
 		}
+	}
+
+	/**
+	 * Requests a value for a given property of a given CommandClass by polling the node.
+	 * **Warning:** Some value IDs share a command, so make sure not to blindly call this for every property
+	 */
+	// wotan-disable-next-line no-misused-generics
+	public pollValue<T extends unknown = unknown>(
+		valueId: ValueID,
+	): Promise<T | undefined> {
+		// Try to retrieve the corresponding CC API
+		const endpointInstance = this.getEndpoint(valueId.endpoint || 0);
+		if (!endpointInstance) {
+			throw new ZWaveError(
+				`Endpoint ${valueId.endpoint} does not exist on Node ${this.id}`,
+				ZWaveErrorCodes.Argument_Invalid,
+			);
+		}
+
+		const api = (endpointInstance.commandClasses as any)[
+			valueId.commandClass
+		] as CCAPI;
+
+		// Check if the pollValue method is implemented
+		if (!api.pollValue) {
+			throw new ZWaveError(
+				`The pollValue API is not implemented for CC ${getCCName(
+					valueId.commandClass,
+				)}!`,
+				ZWaveErrorCodes.CC_NoAPI,
+			);
+		}
+		// And call it
+		return (api.pollValue as PollValueImplementation<T>)({
+			property: valueId.property,
+			propertyKey: valueId.propertyKey,
+		});
 	}
 
 	public get endpointCountIsDynamic(): boolean | undefined {
@@ -1253,16 +1286,7 @@ version:               ${this.version}`;
 			}
 
 			try {
-				const task = () =>
-					instance.interview(!instance.interviewComplete);
-				if (actuatorCCs.includes(cc) || sensorCCs.includes(cc)) {
-					// Ignore missing node responses for sensor and actuator CCs
-					// because they sometimes don't respond to stuff they should respond to
-					await ignoreTimeout(task);
-				} else {
-					// For all other CCs, abort the node interview since we're very likely missing critical information
-					await task();
-				}
+				await instance.interview(!instance.interviewComplete);
 			} catch (e: unknown) {
 				if (
 					e instanceof ZWaveError &&
@@ -1763,8 +1787,6 @@ version:               ${this.version}`;
 			return this.handleWakeUpNotification();
 		} else if (command instanceof NotificationCCReport) {
 			return this.handleNotificationReport(command);
-		} else if (command instanceof SceneActivationCCSet) {
-			return this.handleSceneActivationSet(command);
 		} else if (command instanceof ClockCCReport) {
 			return this.handleClockReport(command);
 		} else if (command instanceof SecurityCCNonceGet) {
@@ -2372,28 +2394,6 @@ version:               ${this.version}`;
 		}
 	}
 
-	private sceneActivationResetTimeout: NodeJS.Timeout | undefined;
-	/** Handles the receipt of a SceneActivation Set and the automatic reset of the value */
-	private handleSceneActivationSet(command: SceneActivationCCSet): void {
-		if (this.sceneActivationResetTimeout) {
-			clearTimeout(this.sceneActivationResetTimeout);
-		}
-		// Schedule a reset of the CC values
-		this.sceneActivationResetTimeout = setTimeout(() => {
-			this.sceneActivationResetTimeout = undefined;
-			// Reset scene and duration to undefined
-			this.valueDB.setValue(
-				getSceneIdValueID(command.endpointIndex),
-				undefined,
-			);
-			this.valueDB.setValue(
-				getDimmingDurationValueID(command.endpointIndex),
-				undefined,
-			);
-		}, command.dimmingDuration?.toMilliseconds() ?? 0).unref();
-		// Unref'ing long running timeouts allows to quit the application before the timeout elapses
-	}
-
 	private handleClockReport(command: ClockCCReport): void {
 		// A Z-Wave Plus node SHOULD issue a Clock Report Command via the Lifeline Association Group if they
 		// suspect to have inaccurate time and/or weekdays (e.g. after battery removal).
@@ -2481,6 +2481,12 @@ version:               ${this.version}`;
 
 		// Check if this update is possible
 		const meta = await api.getMetaData();
+		if (!meta) {
+			throw new ZWaveError(
+				`The node did not respond in time`,
+				ZWaveErrorCodes.Controller_NodeTimeout,
+			);
+		}
 		if (target === 0 && !meta.firmwareUpgradable) {
 			throw new ZWaveError(
 				`The Z-Wave chip firmware is not upgradable`,

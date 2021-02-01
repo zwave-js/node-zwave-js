@@ -1,6 +1,6 @@
 import type { Maybe, MessageOrCCLogEntry, ValueID } from "@zwave-js/core";
 import { CommandClasses, validatePayload } from "@zwave-js/core";
-import { getEnumMemberName, num2hex } from "@zwave-js/shared";
+import { getEnumMemberName, num2hex, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import { PhysicalCCAPI } from "./API";
@@ -103,17 +103,19 @@ export class ZWavePlusCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<ZWavePlusCCReport>(
+		const response = await this.driver.sendCommand<ZWavePlusCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			zwavePlusVersion: response.zwavePlusVersion,
-			nodeType: response.nodeType,
-			roleType: response.roleType,
-			installerIcon: response.installerIcon,
-			userIcon: response.userIcon,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"zwavePlusVersion",
+				"nodeType",
+				"roleType",
+				"installerIcon",
+				"userIcon",
+			]);
+		}
 	}
 }
 
@@ -146,18 +148,19 @@ export class ZWavePlusCC extends CommandClass {
 			});
 
 			const zwavePlusResponse = await api.get();
-
-			const logMessage = `received response for Z-Wave+ information:
+			if (zwavePlusResponse) {
+				const logMessage = `received response for Z-Wave+ information:
 Z-Wave+ version: ${zwavePlusResponse.zwavePlusVersion}
 role type:       ${ZWavePlusRoleType[zwavePlusResponse.roleType]}
 node type:       ${ZWavePlusNodeType[zwavePlusResponse.nodeType]}
 installer icon:  ${num2hex(zwavePlusResponse.installerIcon)}
 user icon:       ${num2hex(zwavePlusResponse.userIcon)}`;
-			this.driver.controllerLog.logNode(node.id, {
-				endpoint: this.endpointIndex,
-				message: logMessage,
-				direction: "inbound",
-			});
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: logMessage,
+					direction: "inbound",
+				});
+			}
 		}
 
 		// Remember that the interview is complete

@@ -18,7 +18,8 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
-	ignoreTimeout,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -235,9 +236,20 @@ export class IndicatorCCAPI extends CCAPI {
 		}
 	};
 
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		if (property === "value") return this.get();
+		if (typeof property === "number") {
+			return this.get(property);
+		}
+
+		throwUnsupportedProperty(this.ccId, property);
+	};
+
 	public async get(
 		indicatorId?: number,
-	): Promise<number | IndicatorObject[]> {
+	): Promise<number | IndicatorObject[] | undefined> {
 		this.assertSupportsCommand(IndicatorCommand, IndicatorCommand.Get);
 
 		const cc = new IndicatorCCGet(this.driver, {
@@ -245,10 +257,11 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = (await this.driver.sendCommand<IndicatorCCReport>(
+		const response = await this.driver.sendCommand<IndicatorCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
+		);
+		if (!response) return;
 		if (response.values) return response.values;
 		return response.value!;
 	}
@@ -275,11 +288,14 @@ export class IndicatorCCAPI extends CCAPI {
 
 	public async getSupported(
 		indicatorId: number,
-	): Promise<{
-		indicatorId?: number;
-		supportedProperties: readonly number[];
-		nextIndicatorId: number;
-	}> {
+	): Promise<
+		| {
+				indicatorId?: number;
+				supportedProperties: readonly number[];
+				nextIndicatorId: number;
+		  }
+		| undefined
+	> {
 		this.assertSupportsCommand(
 			IndicatorCommand,
 			IndicatorCommand.SupportedGet,
@@ -290,18 +306,20 @@ export class IndicatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			indicatorId,
 		});
-		const response = (await this.driver.sendCommand<IndicatorCCSupportedReport>(
+		const response = await this.driver.sendCommand<IndicatorCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			// Include the actual indicator ID if 0x00 was requested
-			...(indicatorId === 0x00
-				? { indicatorId: response.indicatorId }
-				: undefined),
-			supportedProperties: response.supportedProperties,
-			nextIndicatorId: response.nextIndicatorId,
-		};
+		);
+		if (response) {
+			return {
+				// Include the actual indicator ID if 0x00 was requested
+				...(indicatorId === 0x00
+					? { indicatorId: response.indicatorId }
+					: undefined),
+				supportedProperties: response.supportedProperties,
+				nextIndicatorId: response.nextIndicatorId,
+			};
+		}
 	}
 
 	/**
@@ -367,24 +385,12 @@ export class IndicatorCC extends CommandClass {
 		});
 
 		if (this.version === 1) {
-			await ignoreTimeout(
-				async () => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message: "requesting current indicator value...",
-						direction: "outbound",
-					});
-					await api.get();
-				},
-				() => {
-					this.driver.controllerLog.logNode(node.id, {
-						endpoint: this.endpointIndex,
-						message:
-							"Current value query timed out - skipping because it is not critical...",
-						level: "warn",
-					});
-				},
-			);
+			this.driver.controllerLog.logNode(node.id, {
+				endpoint: this.endpointIndex,
+				message: "requesting current indicator value...",
+				direction: "outbound",
+			});
+			await api.get();
 		} else {
 			let supportedIndicatorIds: number[];
 			if (complete) {
@@ -398,12 +404,23 @@ export class IndicatorCC extends CommandClass {
 				supportedIndicatorIds = [];
 				do {
 					const supportedResponse = await api.getSupported(curId);
+					if (!supportedResponse) {
+						this.driver.controllerLog.logNode(node.id, {
+							endpoint: this.endpointIndex,
+							message:
+								"Time out while scanning supported indicator IDs, skipping interview...",
+							level: "warn",
+						});
+						return;
+					}
+
 					supportedIndicatorIds.push(
 						supportedResponse.indicatorId ?? curId,
 					);
 					curId = supportedResponse.nextIndicatorId;
 				} while (curId !== 0x00);
-				// The IDs are not stored by the report CCs
+
+				// The IDs are not stored by the report CCs so store them here once we have all of them
 				this.getValueDB().setValue(
 					getSupportedIndicatorIDsValueID(this.endpointIndex),
 					supportedIndicatorIds,
@@ -424,27 +441,14 @@ export class IndicatorCC extends CommandClass {
 			}
 
 			for (const indicatorId of supportedIndicatorIds) {
-				await ignoreTimeout(
-					async () => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `requesting current indicator value (id = ${num2hex(
-								indicatorId,
-							)})...`,
-							direction: "outbound",
-						});
-						await api.get(indicatorId);
-					},
-					() => {
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `Querying indicator value (id = ${num2hex(
-								indicatorId,
-							)}) timed out - skipping because it is not critical...`,
-							level: "warn",
-						});
-					},
-				);
+				this.driver.controllerLog.logNode(node.id, {
+					endpoint: this.endpointIndex,
+					message: `requesting current indicator value (id = ${num2hex(
+						indicatorId,
+					)})...`,
+					direction: "outbound",
+				});
+				await api.get(indicatorId);
 			}
 		}
 

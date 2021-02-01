@@ -101,7 +101,7 @@
 					"value": 0
 				},
 				{
-					"label": "Trailing edge dimming. (Default)",
+					"label": "Trailing edge dimming.",
 					"value": 1
 				},
 				{
@@ -148,7 +148,7 @@
 					"value": 0
 				},
 				{
-					"label": "Notifications are enabled. (Default)",
+					"label": "Notifications are enabled.",
 					"value": 1
 				}
 			]
@@ -169,7 +169,7 @@
 					"value": 0
 				},
 				{
-					"label": "Double-activation sets light to 100%. (Default)",
+					"label": "Double-activation sets light to 100%.",
 					"value": 1
 				}
 			]
@@ -186,7 +186,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Enhanced LED control is disabled. (Default)",
+					"label": "Enhanced LED control is disabled.",
 					"value": 0
 				},
 				{

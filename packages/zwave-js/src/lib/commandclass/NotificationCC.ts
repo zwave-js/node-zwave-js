@@ -18,11 +18,11 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { JSONObject, num2hex } from "@zwave-js/shared";
+import { JSONObject, num2hex, pick } from "@zwave-js/shared";
 import { isArray } from "alcalzone-shared/typeguards";
 import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
-import { ignoreTimeout, PhysicalCCAPI } from "./API";
+import { PhysicalCCAPI } from "./API";
 import {
 	API,
 	CCCommand,
@@ -105,7 +105,7 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	 */
 	public async getInternal(
 		options: NotificationCCGetSpecificOptions,
-	): Promise<NotificationCCReport> {
+	): Promise<NotificationCCReport | undefined> {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.Get,
@@ -116,10 +116,10 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			...options,
 		});
-		return (await this.driver.sendCommand<NotificationCCReport>(
+		return this.driver.sendCommand<NotificationCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
+		);
 	}
 
 	public async sendReport(
@@ -141,14 +141,16 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public async get(options: NotificationCCGetSpecificOptions) {
 		const response = await this.getInternal(options);
-		return {
-			notificationStatus: response.notificationStatus,
-			notificationEvent: response.notificationEvent,
-			alarmLevel: response.alarmLevel,
-			zensorNetSourceNodeId: response.zensorNetSourceNodeId,
-			eventParameters: response.eventParameters,
-			sequenceNumber: response.sequenceNumber,
-		};
+		if (response) {
+			return pick(response, [
+				"notificationStatus",
+				"notificationEvent",
+				"alarmLevel",
+				"zensorNetSourceNodeId",
+				"eventParameters",
+				"sequenceNumber",
+			]);
+		}
 	}
 
 	public async set(
@@ -180,18 +182,21 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<NotificationCCSupportedReport>(
+		const response = await this.driver.sendCommand<NotificationCCSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			supportsV1Alarm: response.supportsV1Alarm,
-			supportedNotificationTypes: response.supportedNotificationTypes,
-		};
+		);
+		if (response) {
+			return pick(response, [
+				"supportsV1Alarm",
+				"supportedNotificationTypes",
+			]);
+		}
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getSupportedEvents(notificationType: number) {
+	public async getSupportedEvents(
+		notificationType: number,
+	): Promise<readonly number[] | undefined> {
 		this.assertSupportsCommand(
 			NotificationCommand,
 			NotificationCommand.EventSupportedGet,
@@ -202,11 +207,11 @@ export class NotificationCCAPI extends PhysicalCCAPI {
 			endpoint: this.endpoint.index,
 			notificationType,
 		});
-		const response = (await this.driver.sendCommand<NotificationCCEventSupportedReport>(
+		const response = await this.driver.sendCommand<NotificationCCEventSupportedReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedEvents;
+		);
+		return response?.supportedEvents;
 	}
 }
 
@@ -341,11 +346,11 @@ export class NotificationCC extends CommandClass {
 			// Enable the event and request the status
 			await api.set(type, true);
 			try {
-				const { notificationStatus } = await api.get({
+				const resp = await api.get({
 					notificationType: type,
 					notificationEvent: events[0],
 				});
-				switch (notificationStatus) {
+				switch (resp?.notificationStatus) {
 					case 0xff:
 						return "push";
 					case 0xfe:
@@ -404,7 +409,18 @@ export class NotificationCC extends CommandClass {
 					direction: "outbound",
 				});
 
-				({ supportedNotificationTypes } = await api.getSupported());
+				const suppResponse = await api.getSupported();
+				if (!suppResponse) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Querying supported notification types timed out, skipping interview...",
+						level: "warn",
+					});
+					return;
+				}
+				supportedNotificationTypes =
+					suppResponse.supportedNotificationTypes;
 				supportedNotificationNames = lookupNotificationNames();
 
 				const logMessage = `received supported notification types:${supportedNotificationNames
@@ -434,14 +450,19 @@ export class NotificationCC extends CommandClass {
 						const supportedEvents = await api.getSupportedEvents(
 							type,
 						);
-						supportedNotificationEvents.set(type, supportedEvents);
-						this.driver.controllerLog.logNode(node.id, {
-							endpoint: this.endpointIndex,
-							message: `received supported notification events for ${name}: ${supportedEvents
-								.map(String)
-								.join(", ")}`,
-							direction: "inbound",
-						});
+						if (supportedEvents) {
+							supportedNotificationEvents.set(
+								type,
+								supportedEvents,
+							);
+							this.driver.controllerLog.logNode(node.id, {
+								endpoint: this.endpointIndex,
+								message: `received supported notification events for ${name}: ${supportedEvents
+									.map(String)
+									.join(", ")}`,
+								direction: "inbound",
+							});
+						}
 					}
 				}
 			} else {
@@ -481,30 +502,19 @@ export class NotificationCC extends CommandClass {
 					const type = supportedNotificationTypes[i];
 					const name = supportedNotificationNames[i];
 
-					await ignoreTimeout(
-						async () => {
-							// Always query each notification for its current status
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message: `querying notification status for ${name}...`,
-								direction: "outbound",
-							});
-							const response = await api.getInternal({
-								notificationType: type,
-							});
-							// NotificationReports don't store their values themselves,
-							// because the behaviour is too complex and spans the lifetime
-							// of several reports. Thus we handle it in the Node instance
-							await node.handleCommand(response);
-						},
-						() => {
-							this.driver.controllerLog.logNode(node.id, {
-								endpoint: this.endpointIndex,
-								message: `querying notification status for ${name} timed out - skipping because it is not critical...`,
-								level: "warn",
-							});
-						},
-					);
+					// Always query each notification for its current status
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message: `querying notification status for ${name}...`,
+						direction: "outbound",
+					});
+					const response = await api.getInternal({
+						notificationType: type,
+					});
+					// NotificationReports don't store their values themselves,
+					// because the behaviour is too complex and spans the lifetime
+					// of several reports. Thus we handle it in the Node instance
+					if (response) await node.handleCommand(response);
 				}
 			} /* if (notificationMode === "push") */ else {
 				for (let i = 0; i < supportedNotificationTypes.length; i++) {

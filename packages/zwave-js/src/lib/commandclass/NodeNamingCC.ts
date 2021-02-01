@@ -4,6 +4,8 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -85,7 +87,20 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		}
 	};
 
-	public async getName(): Promise<string> {
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "name":
+				return this.getName();
+			case "location":
+				return this.getLocation();
+			default:
+				throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	public async getName(): Promise<string | undefined> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
 			NodeNamingAndLocationCommand.NameGet,
@@ -95,11 +110,11 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<NodeNamingAndLocationCCNameReport>(
+		const response = await this.driver.sendCommand<NodeNamingAndLocationCCNameReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.name;
+		);
+		return response?.name;
 	}
 
 	public async setName(name: string): Promise<void> {
@@ -116,7 +131,7 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getLocation(): Promise<string> {
+	public async getLocation(): Promise<string | undefined> {
 		this.assertSupportsCommand(
 			NodeNamingAndLocationCommand,
 			NodeNamingAndLocationCommand.LocationGet,
@@ -126,11 +141,11 @@ export class NodeNamingAndLocationCCAPI extends PhysicalCCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<NodeNamingAndLocationCCLocationReport>(
+		const response = await this.driver.sendCommand<NodeNamingAndLocationCCLocationReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.location;
+		);
+		return response?.location;
 	}
 
 	public async setLocation(location: string): Promise<void> {

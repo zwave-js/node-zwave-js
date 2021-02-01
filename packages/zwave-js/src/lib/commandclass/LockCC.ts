@@ -10,6 +10,8 @@ import type { Driver } from "../driver/Driver";
 import { MessagePriority } from "../message/Constants";
 import {
 	PhysicalCCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwUnsupportedProperty,
@@ -47,18 +49,18 @@ export class LockCCAPI extends PhysicalCCAPI {
 		return super.supportsCommand(cmd);
 	}
 
-	public async get(): Promise<boolean> {
+	public async get(): Promise<boolean | undefined> {
 		this.assertSupportsCommand(LockCommand, LockCommand.Get);
 
 		const cc = new LockCCGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<LockCCReport>(
+		const response = await this.driver.sendCommand<LockCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.locked;
+		);
+		return response?.locked;
 	}
 
 	/**
@@ -90,6 +92,13 @@ export class LockCCAPI extends PhysicalCCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.set(value);
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+	}): Promise<unknown> => {
+		if (property === "locked") return this.get();
+		throwUnsupportedProperty(this.ccId, property);
 	};
 }
 

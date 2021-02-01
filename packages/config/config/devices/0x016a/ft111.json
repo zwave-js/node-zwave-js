@@ -37,7 +37,7 @@
 					"value": 0
 				},
 				{
-					"label": "(Default) Enable",
+					"label": "Enable",
 					"value": 1
 				}
 			]
@@ -54,7 +54,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -75,7 +75,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Last status",
+					"label": "Last status",
 					"value": 0
 				},
 				{
@@ -100,7 +100,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Send Nothing",
+					"label": "Send Nothing",
 					"value": 0
 				},
 				{
@@ -137,7 +137,7 @@
 					"value": 0
 				},
 				{
-					"label": "(Default) Send Basic Set CC",
+					"label": "Send Basic Set CC",
 					"value": 1
 				}
 			]
@@ -158,7 +158,7 @@
 					"value": 0
 				},
 				{
-					"label": "(Default) Send Basic Set CC",
+					"label": "Send Basic Set CC",
 					"value": 1
 				}
 			]
@@ -197,7 +197,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Disable",
+					"label": "Disable",
 					"value": 0
 				},
 				{
@@ -342,7 +342,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Unknown mode",
+					"label": "Unknown mode",
 					"value": 0
 				},
 				{
@@ -375,7 +375,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Unknown mode",
+					"label": "Unknown mode",
 					"value": 0
 				},
 				{
@@ -408,7 +408,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) the touch panel is not connected.",
+					"label": "the touch panel is not connected.",
 					"value": 0
 				},
 				{
@@ -491,7 +491,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Unknown working mode",
+					"label": "Unknown working mode",
 					"value": 0
 				},
 				{
@@ -520,7 +520,7 @@
 					"value": 0
 				},
 				{
-					"label": "(Default) Leading edge mode",
+					"label": "Leading edge mode",
 					"value": 1
 				}
 			]
@@ -537,7 +537,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Unknown load",
+					"label": "Unknown load",
 					"value": 0
 				},
 				{
@@ -596,7 +596,7 @@
 					"value": 1
 				},
 				{
-					"label": "(Default) Recognize the load once power on",
+					"label": "Recognize the load once power on",
 					"value": 2
 				}
 			]
@@ -613,7 +613,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) Unlock",
+					"label": "Unlock",
 					"value": 0
 				},
 				{
@@ -634,7 +634,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "(Default) factory default",
+					"label": "factory default",
 					"value": 0
 				},
 				{
