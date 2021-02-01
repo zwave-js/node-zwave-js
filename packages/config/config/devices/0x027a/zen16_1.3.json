@@ -92,7 +92,7 @@
 					"value": 2
 				},
 				{
-					"label": "Garage door (momentary mMode for Z-Wave control)",
+					"label": "Garage door (momentary mode for Z-Wave control)",
 					"value": 3
 				}
 			]
@@ -152,7 +152,7 @@
 					"value": 2
 				},
 				{
-					"label": "Garage door (momentary mMode for Z-Wave control)",
+					"label": "Garage door (momentary mode for Z-Wave control)",
 					"value": 3
 				}
 			]
