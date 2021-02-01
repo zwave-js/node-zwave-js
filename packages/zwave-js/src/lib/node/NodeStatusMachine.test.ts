@@ -1,4 +1,3 @@
-import { CommandClasses } from "@zwave-js/core";
 import { interpret, Interpreter } from "xstate";
 // import { SimulatedClock } from "xstate/lib/SimulatedClock";
 import {
@@ -7,19 +6,8 @@ import {
 	NodeStatusStateSchema,
 } from "./NodeStatusMachine";
 
-const testNodeNoWakeup = {
-	supportsCC(cc: CommandClasses) {
-		if (cc === CommandClasses["Wake Up"]) return false;
-		return false;
-	},
-} as any;
-
-const testNodeWakeup = {
-	supportsCC(cc: CommandClasses) {
-		if (cc === CommandClasses["Wake Up"]) return true;
-		return false;
-	},
-} as any;
+const testNodeNonSleeping = { canSleep: false } as any;
+const testNodeSleeping = { canSleep: true } as any;
 
 describe("lib/driver/NodeStatusMachine", () => {
 	let service:
@@ -42,7 +30,7 @@ describe("lib/driver/NodeStatusMachine", () => {
 			start: keyof NodeStatusStateSchema["states"];
 			event: NodeStatusEvent["type"];
 			target: keyof NodeStatusStateSchema["states"];
-			supportsWakeup?: boolean;
+			canSleep?: boolean;
 		}[] = [
 			{
 				start: "unknown",
@@ -132,13 +120,13 @@ describe("lib/driver/NodeStatusMachine", () => {
 			{
 				start: "alive",
 				// See GH#1054 and description in NodeStatusMachine.ts
-				supportsWakeup: true,
+				canSleep: true,
 				event: "ASLEEP",
 				target: "asleep",
 			},
 			{
 				start: "alive",
-				supportsWakeup: false,
+				canSleep: false,
 				event: "ASLEEP",
 				target: "alive",
 			},
@@ -156,12 +144,8 @@ describe("lib/driver/NodeStatusMachine", () => {
 
 		for (const test of transitions) {
 			const prefix =
-				test.supportsWakeup != undefined
-					? `Node ${
-							test.supportsWakeup
-								? "supports"
-								: "does not support"
-					  } wakeup -> `
+				test.canSleep != undefined
+					? `Node ${test.canSleep ? "can sleep" : "can't sleep"} -> `
 					: "";
 			const name =
 				test.start === test.target
@@ -171,13 +155,13 @@ describe("lib/driver/NodeStatusMachine", () => {
 			it(name, () => {
 				// For these tests, assume that the node does or does not support Wakeup, whatever fits
 				const testNode =
-					test.supportsWakeup == undefined
+					test.canSleep == undefined
 						? test.event === "ASLEEP" || test.event === "AWAKE"
-							? testNodeWakeup
-							: testNodeNoWakeup
-						: test.supportsWakeup
-						? testNodeWakeup
-						: testNodeNoWakeup;
+							? testNodeSleeping
+							: testNodeNonSleeping
+						: test.canSleep
+						? testNodeSleeping
+						: testNodeNonSleeping;
 
 				const testMachine = createNodeStatusMachine(testNode);
 				testMachine.initial = test.start;
@@ -188,33 +172,33 @@ describe("lib/driver/NodeStatusMachine", () => {
 			});
 		}
 	});
-	describe("WakeUp CC support", () => {
-		it("A transition from unknown to awake should not happen if the node does not support the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(testNodeNoWakeup);
+	describe("Sleep support", () => {
+		it("A transition from unknown to awake should not happen if the node cannot sleep", () => {
+			const testMachine = createNodeStatusMachine(testNodeNonSleeping);
 
 			service = interpret(testMachine).start();
 			service.send("AWAKE");
 			expect(service.state.value).toBe("unknown");
 		});
 
-		it("A transition from unknown to asleep should not happen if the node does not support the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(testNodeNoWakeup);
+		it("A transition from unknown to asleep should not happen if the node cannot sleep", () => {
+			const testMachine = createNodeStatusMachine(testNodeNonSleeping);
 
 			service = interpret(testMachine).start();
 			service.send("ASLEEP");
 			expect(service.state.value).toBe("unknown");
 		});
 
-		it("A transition from unknown to alive should not happen if the node supports the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(testNodeWakeup);
+		it("A transition from unknown to alive should not happen if the node can sleep", () => {
+			const testMachine = createNodeStatusMachine(testNodeSleeping);
 
 			service = interpret(testMachine).start();
 			service.send("ALIVE");
 			expect(service.state.value).toBe("unknown");
 		});
 
-		it("A transition from unknown to dead should not happen if the node supports the Wake Up CC", () => {
-			const testMachine = createNodeStatusMachine(testNodeWakeup);
+		it("A transition from unknown to dead should not happen if the node can sleep", () => {
+			const testMachine = createNodeStatusMachine(testNodeSleeping);
 
 			service = interpret(testMachine).start();
 			service.send("DEAD");

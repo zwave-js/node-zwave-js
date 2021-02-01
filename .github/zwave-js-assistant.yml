@@ -28,3 +28,11 @@ stale:
   comment: |
     This issue hasn't seen any recent activity and was marked as "${label}".
     Closing for housekeeping purposes... 🧹
+
+# Configure auto-labeling
+autoLabel:
+  # Add one array entry for each rule
+  - pattern: 'packages\/config\/config\/(.*\/)?.+\.json|\.gitignore' # Regex to match filenames
+    only: true # Whether non-matching files should be allowed
+    remove: false # Whether to remove the label if the rule no longer applies
+    label: 'config ⚙' # Which label to add/remove

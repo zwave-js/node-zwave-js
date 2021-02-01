@@ -178,6 +178,11 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 				getSetpointScaleValueID(this.endpoint.index, propertyKey),
 			);
 		await this.set(propertyKey, value, preferredScale ?? 0);
+
+		if (this.isSinglecast()) {
+			// Verify the current value after a delay
+			this.schedulePoll({ property, propertyKey });
+		}
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -246,11 +251,6 @@ export class ThermostatSetpointCCAPI extends CCAPI {
 			scale,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get(setpointType);
-		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

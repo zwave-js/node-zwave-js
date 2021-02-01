@@ -1,0 +1,71 @@
+// GE/Jasco 55256 / ZW1002
+// In-Wall Tamper Resistant Smart Outlet
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "55256 / ZW1002",
+	"description": "In-Wall Tamper Resistant Smart Outlet",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3234",
+			"zwaveAllianceId": 3892
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is Off",
+					"value": 0
+				},
+				{
+					"label": "LED On when light is turned On",
+					"value": 1
+				},
+				{
+					"label": "LED always Off",
+					"value": 2
+				}
+			]
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the program button",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device to the Z-Wave network. 2. Once the controller is ready to add your device, press and release the manual/program button",
+		"reset": "Press the button three times, then press and hold the button for at least three seconds. The LED will blink five times to confirm"
+	}
+}

@@ -1,0 +1,97 @@
+// GE/Jasco 14325 / ZW4203
+// Plug-in Outdoor Smart Switch
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14325 / ZW4203",
+	"description": "Plug-in Outdoor Smart Switch",
+	"devices": [
+		{
+			"productType": "0x4f50",
+			"productId": "0x3035",
+			"zwaveAllianceId": 3407
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Association Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Association Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Indicator Configuration",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED On when light is turned On",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				},
+				{
+					"label": "LED always ON",
+					"value": 3
+				}
+			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "When enabled, press 3 times and hold on the last press to remove the device during exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add the smart switch to the Z-Wave network.\n2. Once the controller is ready to add your outdoor smart switch, press and release the manual/program button on the smart switch.\n3. The controller’s app will indicate if it has discovered the switch. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the side of the box or the QR code label on the product (see Figure 1). Enter the 5-digit code",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release the manual/program button on the smart switch to remove it from the network",
+		"reset": "1. If plugged in, unplug the switch from the receptacle.\n2. Press and hold the manual/program button for at least 3 seconds while you plug the switch into a receptacle.\nNote: This should only be used if your network’s primary controller is missing or otherwise inoperable"
+	}
+}

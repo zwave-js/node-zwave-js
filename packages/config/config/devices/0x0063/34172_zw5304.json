@@ -1,9 +1,9 @@
-// GE/Jasco 34172/ZW5304
+// GE/Jasco 34172 / ZW5304
 // 1 Scene Z-Wave controller
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "34172/ZW5304",
+	"label": "34172 / ZW5304",
 	"description": "1 Scene Z-Wave controller",
 	"devices": [
 		{

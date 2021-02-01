@@ -17,6 +17,7 @@ module.exports = {
 		"^@zwave-js/shared(.*)": "<rootDir>/packages/shared/src$1",
 		"^@zwave-js/testing(.*)": "<rootDir>/packages/testing/src$1",
 	},
+	globalSetup: "./test/jest.globalSetup.ts",
 	setupFilesAfterEnv: ["jest-extended"],
 	setupFiles: ["reflect-metadata", "./test/jest.setup.js"],
 	extraGlobals: ["Reflect"],

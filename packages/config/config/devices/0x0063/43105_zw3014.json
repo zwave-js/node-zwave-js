@@ -1,0 +1,165 @@
+// GE/Jasco 43105 / ZW3014
+// 0-10V In-Wall Smart Dimmer (ICP) (120/277)
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "43105 / ZW3014",
+	"description": "0-10V In-Wall Smart Dimmer (ICP) (120/277)",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3330",
+			"zwaveAllianceId": 4002
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Indication",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED ON when load is OFF",
+					"value": 0
+				},
+				{
+					"label": "LED On when light is turned On",
+					"value": 1
+				},
+				{
+					"label": "LED always OFF",
+					"value": 2
+				},
+				{
+					"label": "LED always ON",
+					"value": 3
+				}
+			]
+		},
+		"6": {
+			"label": "Dim Up/Down Rate",
+			"description": "Adjust the speed at which the ramps to a specific value other than 0 and FF",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Dim up/down quickly",
+					"value": 0
+				},
+				{
+					"label": "Dim up/down slowly",
+					"value": 1
+				}
+			]
+		},
+		"16": {
+			"label": "Switch Mode",
+			"description": "Turn your dimmer into an On/Off Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Switch Mode",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"description": "Enables alternate exclusion method to avoid accidental exclusion of device",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation, press any button to exclude device",
+					"value": 0
+				},
+				{
+					"label": "Press two times ON button and two times OFF button, LED will flash 5 times if device is successfully excluded",
+					"value": 1
+				}
+			]
+		},
+		"20": {
+			"label": "Minimum Dim Threshold",
+			"description": "Set the minimum dimmer threshold when manually or remotely controlled",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"32": {
+			"label": "Default Brightness Level",
+			"description": "Set the default brightness level that the dimmer will turn on when being controlled manually",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press up and release the top or bottom of the rocker.\n3. The controller’s app will indicate if it has discovered the switch. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the side of the box or the QR code label on the product (see Figure 1). Enter the 5-digit code",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press up and release the toggle",
+		"reset": "Quickly press ON (up) button three times then immediately press the OFF (down) button three times"
+	}
+}

@@ -119,16 +119,6 @@ describe("lib/security/Manager", () => {
 			expect(man.getNonce(nonceId)).toBeUndefined();
 		});
 
-		it("...except if this was explicitly forbidden", () => {
-			const man = new SecurityManager(options);
-			const nonce = man.generateNonce(2, 8, false);
-			const nonceId = nonce[0];
-			expect(man.getNonce(nonceId)).toEqual(nonce);
-
-			jest.advanceTimersByTime(options.nonceTimeout + 50);
-			expect(man.getNonce(nonceId)).not.toBeUndefined();
-		});
-
 		it(`the nonce should be marked as "reserved"`, () => {
 			const man = new SecurityManager(options);
 			man.generateNonce(2, 8);
@@ -289,21 +279,6 @@ describe("lib/security/Manager", () => {
 			expect(man.hasNonce(nonceId2)).toBeFalse();
 			expect(man.getNonce(nonceId3)).not.toBeUndefined();
 			expect(man.hasNonce(nonceId3)).not.toBeFalse();
-		});
-
-		it("should not delete the nonce with the given nonceId", () => {
-			const man = new SecurityManager(options);
-
-			const nonce1 = man.generateNonce(2, 8);
-			const nonceId1 = man.getNonceId(nonce1);
-			const nonce2 = man.generateNonce(2, 8);
-			const nonceId2 = man.getNonceId(nonce2);
-
-			man.deleteAllNoncesForReceiver(2, nonceId1);
-			expect(man.getNonce(nonceId1)).not.toBeUndefined();
-			expect(man.hasNonce(nonceId1)).not.toBeFalse();
-			expect(man.getNonce(nonceId2)).toBeUndefined();
-			expect(man.hasNonce(nonceId2)).toBeFalse();
 		});
 	});
 

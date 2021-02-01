@@ -76,9 +76,6 @@ export class LockCCAPI extends PhysicalCCAPI {
 			locked,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		// Refresh the current value
-		await this.get();
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
@@ -92,6 +89,9 @@ export class LockCCAPI extends PhysicalCCAPI {
 			throwWrongValueType(this.ccId, property, "boolean", typeof value);
 		}
 		await this.set(value);
+
+		// Verify the current value after a delay
+		this.schedulePoll({ property });
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({

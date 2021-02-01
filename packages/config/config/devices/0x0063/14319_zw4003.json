@@ -1,0 +1,67 @@
+// GE/Jasco 14319 / ZW4003
+// In-Wall Smart Toggle Switch
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14319 / ZW4003",
+	"description": "In-Wall Smart Toggle Switch",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3131",
+			"zwaveAllianceId": [1840, 2539]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"4": {
+			"label": "Invert Switch",
+			"description": "Invert the default On/Off rocker settings.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Invert",
+					"value": 1
+				}
+			]
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network. \n2. Once the controller is ready to include your device, press up and release on the toggle to include it in the network. \n3. Once your controller has confirmed that the device has been included, refresh the Z-Wave network to optimize performance.",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network. \n2. Once the controller is ready to exclude your device, press up and release on the toggle to exclude it from the network.",
+		"reset": "1. Quickly press ON (up) 3 times then immediately press the OFF (Down) button 3 times. Note: This should only be used in the event your networks primary controller is missing or otherwise inoperable."
+	}
+}

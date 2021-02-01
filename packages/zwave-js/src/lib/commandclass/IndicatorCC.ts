@@ -275,15 +275,6 @@ export class IndicatorCCAPI extends CCAPI {
 			...(typeof value === "number" ? { value } : { values: value }),
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			if (typeof value === "number") {
-				await this.get();
-			} else {
-				await this.get(value[0]?.indicatorId);
-			}
-		}
 	}
 
 	public async getSupported(

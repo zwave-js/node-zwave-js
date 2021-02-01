@@ -43,5 +43,16 @@
 				}
 			]
 		}
+	},
+	"compat": {
+		"commandClasses": {
+			"add": {
+				"0x20": {
+					// This device should send Notification Reports, but they seem to get lost often
+					// Basic Set comes through
+					"isSupported": true
+				}
+			}
+		}
 	}
 }

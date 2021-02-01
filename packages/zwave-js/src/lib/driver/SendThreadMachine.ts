@@ -23,6 +23,7 @@ import {
 } from "../controller/SendDataMessages";
 import { MessagePriority } from "../message/Constants";
 import type { Message } from "../message/Message";
+import { NodeStatus } from "../node/Types";
 import {
 	CommandQueueEvent,
 	CommandQueueInterpreter,
@@ -289,7 +290,7 @@ const guards: MachineOptions<SendThreadContext, SendThreadEvent>["guards"] = {
 
 		return (
 			!targetNode ||
-			targetNode.isAwake() ||
+			targetNode.status !== NodeStatus.Asleep ||
 			messageIsPing(message) ||
 			nextTransaction.priority === MessagePriority.Handshake
 		);

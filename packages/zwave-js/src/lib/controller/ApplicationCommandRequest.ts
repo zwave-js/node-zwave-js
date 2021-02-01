@@ -1,4 +1,9 @@
-import { ZWaveError, ZWaveErrorCodes } from "@zwave-js/core";
+import {
+	MessageOrCCLogEntry,
+	MessageRecord,
+	ZWaveError,
+	ZWaveErrorCodes,
+} from "@zwave-js/core";
 import { CommandClass, SinglecastCC } from "../commandclass/CommandClass";
 import type { ICommandClassContainer } from "../commandclass/ICommandClassContainer";
 import type { Driver } from "../driver/Driver";
@@ -131,5 +136,16 @@ export class ApplicationCommandRequest
 		]);
 
 		return super.serialize();
+	}
+
+	public toLogEntry(): MessageOrCCLogEntry {
+		const message: MessageRecord = {};
+		if (this.frameType !== "singlecast") {
+			message.type = this.frameType;
+		}
+		return {
+			...super.toLogEntry(),
+			message,
+		};
 	}
 }

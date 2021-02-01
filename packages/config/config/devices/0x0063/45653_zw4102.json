@@ -1,10 +1,10 @@
-// GE/Jasco 45653/ZW4102
-// GE Appliance Module 45653
+// GE/Jasco 45653 / ZW4102
+// GE Appliance Module
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "45653/ZW4102",
-	"description": "GE Appliance Module 45653",
+	"label": "45653 / ZW4102",
+	"description": "GE Appliance Module",
 	"devices": [
 		{
 			"productType": "0x5052",

@@ -3,7 +3,7 @@ name: Bug report
 about: Create a report to help us improve
 title: ''
 labels: bug
-assignees: AlCalzone
+assignees: 
 
 ---
 
@@ -17,8 +17,8 @@ assignees: AlCalzone
   https://zwave-js.github.io/node-zwave-js/#/development/troubleshooting?id=providing-the-necessary-information-for-an-issue
 
   If you are using zwavejs2mqtt, this is how you create the logfiles:
-  * Go to Settings, Zwave section
-  * select log level (preferably DEBUG or VERBOSE if the files are getting too large)
+  * Go to Settings, Z-Wave section
+  * select log level DEBUG
   * enable "log to file"
 -->
 
@@ -44,24 +44,24 @@ What are the node IDs?
     
 **Installation information**
 How did you install `node-zwave-js`?
-- [ ] Zwavejs2mqtt (latest) docker image
-- [ ] Zwavejs2mqtt (dev) docker image
+- [ ] `zwavejs2mqtt` (latest) docker image
+- [ ] `zwavejs2mqtt` (dev) docker image
 - [ ] ioBroker.zwave2 adapter
 - [ ] Pkg
-- [ ] Manual docker build
-    - Against which branch of `node-zwave-js`?
-    - With which branch of `zwavejs2mqtt`?
-- [ ] Other (describe)
-- [ ] Manually built (`git clone` - `yarn install` - `yarn run build:full`) 
+- [ ] Manual Docker build
+    - `node-zwave-js` branch: <!-- fill in -->
+    - `zwavejs2mqtt` branch: <!-- fill in -->
+- [ ] Manually built (as described in the [docs](https://zwave-js.github.io/node-zwave-js/#/development/installing-from-github)) 
+- [ ] Other: <!-- Please describe: -->
 
 **To Reproduce**
 Steps to reproduce the behavior:
 1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
+2. Click on '...'
+3. Scroll down to '...'
 4. See error
 
 **Additional context**
 Add any other context about the problem here.
 
-**Logfile:** <!-- attach `zwave-js` logfile with DEBUG or VERBOSE loglevel here -->
+**Logfile:** <!-- ATTACH(!) `zwave-js` logfile with DEBUG or VERBOSE loglevel here. Please no links or gists or embedded logs. -->

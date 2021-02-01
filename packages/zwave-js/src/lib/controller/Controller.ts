@@ -844,6 +844,78 @@ export class ZWaveController extends EventEmitter {
 		}
 	}
 
+	/** Ensures that the node knows where to reach the controller */
+	private async bootstrapLifelineAndWakeup(node: ZWaveNode): Promise<void> {
+		if (node.supportsCC(CommandClasses["Z-Wave Plus Info"])) {
+			// SDS11846: The Z-Wave+ lifeline must be assigned to a node as the very first thing
+			if (
+				node.supportsCC(CommandClasses.Association) ||
+				node.supportsCC(CommandClasses["Multi Channel Association"])
+			) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Configuring Z-Wave+ Lifeline association...`,
+					direction: "none",
+				});
+				const ownNodeId = this.driver.controller.ownNodeId!;
+
+				if (node.supportsCC(CommandClasses.Association)) {
+					await node.commandClasses.Association.addNodeIds(
+						1,
+						ownNodeId,
+					);
+				} else {
+					await node.commandClasses[
+						"Multi Channel Association"
+					].addDestinations({
+						groupId: 1,
+						endpoints: [{ nodeId: ownNodeId, endpoint: 0 }],
+					});
+				}
+			} else {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `Cannot configure Z-Wave+ Lifeline association: Node does not support associations...`,
+					direction: "none",
+					level: "warn",
+				});
+			}
+		}
+
+		if (node.supportsCC(CommandClasses["Wake Up"])) {
+			// Query the version, so we can setup the wakeup destination correctly
+			const supportedVersion = await node.commandClasses.Version.getCCVersion(
+				CommandClasses["Wake Up"],
+			);
+			if (supportedVersion != undefined && supportedVersion > 0) {
+				node.addCC(CommandClasses["Wake Up"], {
+					version: supportedVersion,
+				});
+				const instance = node.createCCInstance(
+					CommandClasses["Wake Up"],
+				)!;
+
+				try {
+					await instance.interview();
+				} catch (e: unknown) {
+					if (
+						e instanceof ZWaveError &&
+						(e.code === ZWaveErrorCodes.Controller_MessageDropped ||
+							e.code === ZWaveErrorCodes.Controller_CallbackNOK ||
+							e.code === ZWaveErrorCodes.Controller_ResponseNOK ||
+							e.code === ZWaveErrorCodes.Controller_NodeTimeout)
+					) {
+						this.driver.controllerLog.logNode(node.id, {
+							message: `Cannot configure wakeup destination: ${e.message}`,
+							direction: "none",
+							level: "warn",
+						});
+					}
+					// we want to pass all other errors through
+					throw e;
+				}
+			}
+		}
+	}
+
 	/**
 	 * Stops an active exclusion process. Resolves to true when the controller leaves exclusion mode,
 	 * and false if the inclusion was not active.
@@ -989,10 +1061,31 @@ export class ZWaveController extends EventEmitter {
 					this._nodes.set(newNode.id, newNode);
 					this._nodePendingInclusion = undefined;
 
+					// Assign return route to make sure the node's responses reach us
+					try {
+						this.driver.controllerLog.logNode(newNode.id, {
+							message: `Assigning return route to controller...`,
+							direction: "outbound",
+						});
+						await this.assignReturnRoute(
+							newNode.id,
+							this._ownNodeId!,
+						);
+					} catch (e) {
+						this.driver.controllerLog.logNode(
+							newNode.id,
+							`assigning return route failed: ${e.message}`,
+							"warn",
+						);
+					}
+
 					if (!this._includeNonSecure) {
 						await this.secureBootstrapS0(newNode);
 					}
 					this._includeController = false;
+
+					// Bootstrap the node's lifelines, so it knows where the controller is
+					await this.bootstrapLifelineAndWakeup(newNode);
 
 					// We're done adding this node, notify listeners
 					this.emit("node added", newNode);
@@ -1073,10 +1166,31 @@ export class ZWaveController extends EventEmitter {
 					this._nodePendingReplace = undefined;
 					this._nodes.set(newNode.id, newNode);
 
+					// Assign return route to make sure the node's responses reach us
+					try {
+						this.driver.controllerLog.logNode(newNode.id, {
+							message: `Assigning return route to controller...`,
+							direction: "outbound",
+						});
+						await this.assignReturnRoute(
+							newNode.id,
+							this._ownNodeId!,
+						);
+					} catch (e) {
+						this.driver.controllerLog.logNode(
+							newNode.id,
+							`assigning return route failed: ${e.message}`,
+							"warn",
+						);
+					}
+
 					// Try perform the security bootstrap process
 					if (!this._includeNonSecure) {
 						await this.secureBootstrapS0(newNode, true);
 					}
+
+					// Bootstrap the node's lifelines, so it knows where the controller is
+					await this.bootstrapLifelineAndWakeup(newNode);
 
 					// We're done adding this node, notify listeners. This also kicks off the node interview
 					this.emit("node added", newNode);
@@ -1469,6 +1583,17 @@ ${associatedNodes.join(", ")}`,
 		return true;
 	}
 
+	public async assignReturnRoute(
+		nodeId: number,
+		destinationNodeId: number,
+	): Promise<void> {
+		await this.driver.sendMessage(
+			new AssignReturnRouteRequest(this.driver, {
+				nodeId,
+				destinationNodeId,
+			}),
+		);
+	}
 	/**
 	 * Returns a dictionary of all association groups of this node and their information.
 	 * This only works AFTER the interview process

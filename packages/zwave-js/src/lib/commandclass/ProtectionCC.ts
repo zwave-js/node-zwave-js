@@ -247,11 +247,6 @@ export class ProtectionCCAPI extends CCAPI {
 			rf,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get();
-		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -308,11 +303,6 @@ export class ProtectionCCAPI extends CCAPI {
 			exclusiveControlNodeId: nodeId,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the status
-			await this.getExclusiveControl();
-		}
 	}
 
 	public async getTimeout(): Promise<Timeout | undefined> {
@@ -344,11 +334,6 @@ export class ProtectionCCAPI extends CCAPI {
 			timeout,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the status
-			await this.getTimeout();
-		}
 	}
 }
 

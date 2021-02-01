@@ -54,18 +54,6 @@ error in compat option queryOnWakeup`,
 			) as any;
 		}
 
-		if (definition.keepS0NonceUntilNext != undefined) {
-			if (definition.keepS0NonceUntilNext !== true) {
-				throwInvalidConfig(
-					"devices",
-					`config/devices/${filename}:
-error in compat option keepS0NonceUntilNext`,
-				);
-			}
-
-			this.keepS0NonceUntilNext = definition.keepS0NonceUntilNext;
-		}
-
 		if (definition.disableBasicMapping != undefined) {
 			if (definition.disableBasicMapping !== true) {
 				throwInvalidConfig(
@@ -234,16 +222,72 @@ All values in compat option commandClasses.add must be objects`,
 				}
 				this.addCCs = addCCs;
 			}
+
+			if (definition.commandClasses.remove != undefined) {
+				if (!isObject(definition.commandClasses.remove)) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+error in compat option commandClasses.remove`,
+					);
+				} else if (
+					!Object.keys(definition.commandClasses.remove).every((k) =>
+						hexKeyRegex2Digits.test(k),
+					)
+				) {
+					throwInvalidConfig(
+						"devices",
+						`config/devices/${filename}:
+All keys in compat option commandClasses.remove must be 2-digit hex numbers!`,
+					);
+				}
+
+				const removeCCs = new Map<
+					CommandClasses,
+					"*" | readonly number[]
+				>();
+				for (const [cc, info] of Object.entries(
+					definition.commandClasses.remove,
+				)) {
+					if (isObject(info) && "endpoints" in info) {
+						if (
+							info.endpoints === "*" ||
+							(isArray(info.endpoints) &&
+								info.endpoints.every(
+									(i) => typeof i === "number",
+								))
+						) {
+							removeCCs.set(parseInt(cc), info.endpoints as any);
+						} else {
+							throwInvalidConfig(
+								"devices",
+								`config/devices/${filename}:
+Compat option commandClasses.remove has an invalid "endpoints" property. Only "*" and numeric arrays are allowed!`,
+							);
+						}
+					} else {
+						throwInvalidConfig(
+							"devices",
+							`config/devices/${filename}:
+All values in compat option commandClasses.remove must be objects with an "endpoints" property!`,
+						);
+					}
+				}
+				this.removeCCs = removeCCs;
+			}
 		}
 	}
 
 	public readonly addCCs?: ReadonlyMap<CommandClasses, CompatAddCC>;
+	public readonly removeCCs?: ReadonlyMap<
+		CommandClasses,
+		"*" | readonly number[]
+	>;
 	public readonly disableBasicMapping?: boolean;
 	public readonly overrideFloatEncoding?: {
 		size?: number;
 		precision?: number;
 	};
-	public readonly keepS0NonceUntilNext?: boolean;
 	public readonly preserveRootApplicationCCValueIDs?: boolean;
 	public readonly skipConfigurationInfoQuery?: boolean;
 	public readonly treatBasicSetAsEvent?: boolean;

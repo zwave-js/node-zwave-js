@@ -1,9 +1,9 @@
-// GE/Jasco 14289 (ZW3009)
+// GE/Jasco 14289 / ZW3009
 // In-Wall Touch Sensing Dimmer
 {
 	"manufacturer": "GE/Jasco",
 	"manufacturerId": "0x0063",
-	"label": "14289 (ZW3009)",
+	"label": "14289 / ZW3009",
 	"description": "In-Wall Touch Sensing Dimmer",
 	"devices": [
 		{
@@ -64,67 +64,77 @@
 			]
 		},
 		"7": {
-			"label": "Dim Rate Steps (From Z-Wave Controller)",
-			"description": "Dim Rate Steps (From Z-Wave Controller)",
+			"label": "Dim Rate Steps (Z-Wave Command)",
+			"description": "Number of steps or levels",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 99,
-			"defaultValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Dim Rate Timing (From Z-Wave Controller)",
-			"description": "Dim Rate Timing (From Z-Wave Controller)",
+			"label": "Dim Rate Timing (Z-Wave)",
+			"description": "Timing of steps or levels",
 			"valueSize": 2,
+			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
+			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Dim Rate Steps (When Manually Controlled)",
-			"description": "Dim Rate Steps (When Manually Controlled)",
+			"label": "Dim Rate Steps (Manual)",
+			"description": "Number of steps or levels",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Dim Rate Timing (When Manually Controlled)",
-			"description": "Dim Rate Timing (When Manually Controlled)",
+			"label": "Dim Rate Timing (Manual)",
+			"description": "Timing of steps",
 			"valueSize": 2,
+			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
+			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "Dim Rate Steps (When Receiving All-On/Off Command)",
-			"description": "Dim Rate Steps (When Receiving All-On/Off Command)",
+			"label": "Dim Rate Steps (All-On/All-Off)",
+			"description": "Number of steps or levels",
 			"valueSize": 1,
+			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 99,
-			"defaultValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"12": {
-			"label": "Dim Rate Timing (All-On/Off Command)",
-			"description": "Dim Rate Timing (All-On/Off Command)",
+			"label": "Dim Rate Timing (All-On/All-Off)",
+			"description": "Timing of steps or levels",
 			"valueSize": 2,
+			"unit": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 1,
+			"defaultValue": 3,
+			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true

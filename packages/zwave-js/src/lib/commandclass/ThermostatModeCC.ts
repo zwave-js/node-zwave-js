@@ -94,6 +94,11 @@ export class ThermostatModeCCAPI extends CCAPI {
 			throwWrongValueType(this.ccId, property, "number", typeof value);
 		}
 		await this.set(value);
+
+		if (this.isSinglecast()) {
+			// Verify the current value after a delay
+			this.schedulePoll({ property });
+		}
 	};
 
 	protected [POLL_VALUE]: PollValueImplementation = async ({
@@ -155,11 +160,6 @@ export class ThermostatModeCCAPI extends CCAPI {
 			manufacturerData: manufacturerData as any,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get();
-		}
 	}
 
 	public async getSupportedModes(): Promise<

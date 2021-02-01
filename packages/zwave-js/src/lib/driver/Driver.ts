@@ -1507,7 +1507,7 @@ export class Driver extends EventEmitter {
 		if (!transaction.changeNodeStatusOnTimeout) {
 			// The sender of this transaction doesn't want it to change the status of the node
 			return false;
-		} else if (node.supportsCC(CommandClasses["Wake Up"])) {
+		} else if (node.canSleep) {
 			this.controllerLog.logNode(
 				node.id,
 				`The node did not respond after ${transaction.message.maxSendAttempts} attempts.
@@ -2041,11 +2041,10 @@ ${handlers.length} left`,
 			!!node &&
 			// Pings can be used to check if a node is really asleep, so they should be sent regardless
 			!messageIsPing(msg) &&
-			// Nodes that are asleep should have their messages queued for wakeup
-			(!node.isAwake() ||
-				// Nodes that can sleep should use the WakeUp priority so their messages
-				// get handled immediately
-				node.supportsCC(CommandClasses["Wake Up"])) &&
+			// Nodes that support the Wake Up CC should have their messages queued for wakeup
+			// If a sleeping node is currently awake, we should use the WakeUp priority so the message
+			// get handled immediately
+			node.supportsCC(CommandClasses["Wake Up"]) &&
 			// If we move multicasts to the wakeup queue, it is unlikely
 			// that there is ever a points where all targets are awake
 			!(msg instanceof SendDataMulticastRequest) &&
@@ -2097,7 +2096,7 @@ ${handlers.length} left`,
 			const ret = await promise;
 			if (expirationTimeout) clearTimeout(expirationTimeout);
 			if (node) {
-				if (node.supportsCC(CommandClasses["Wake Up"])) {
+				if (node.canSleep) {
 					// If the node is not meant to be kept awake, try to send it back to sleep
 					if (!node.keepAwake) {
 						this.debounceSendNodeToSleep(node);
@@ -2510,7 +2509,7 @@ ${handlers.length} left`,
 			}
 		};
 
-		// If a sleeping node has no messages pending, we may send it back to sleep
+		// If a sleeping node has no messages pending (and supports the Wake Up CC), we may send it back to sleep
 		if (
 			node.supportsCC(CommandClasses["Wake Up"]) &&
 			!this.hasPendingMessages(node)

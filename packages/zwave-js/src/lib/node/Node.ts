@@ -82,7 +82,6 @@ import {
 import { getFirmwareVersionsValueId } from "../commandclass/VersionCC";
 import {
 	getWakeUpIntervalValueId,
-	WakeUpCC,
 	WakeUpCCWakeUpNotification,
 } from "../commandclass/WakeUpCC";
 import {
@@ -447,6 +446,12 @@ export class ZWaveNode extends Endpoint {
 		return this._isFrequentListening;
 	}
 
+	public get canSleep(): boolean | undefined {
+		if (this._isListening == undefined) return undefined;
+		if (this._isFrequentListening == undefined) return undefined;
+		return !this._isListening && !this._isFrequentListening;
+	}
+
 	private _isRouting: boolean | undefined;
 	public get isRouting(): boolean | undefined {
 		return this._isRouting;
@@ -671,6 +676,9 @@ export class ZWaveNode extends Endpoint {
 				},
 				value,
 			);
+			// If the call did not throw, assume that the call was successful and remember the new value
+			this._valueDB.setValue(valueId, value, { noEvent: true });
+
 			return true;
 		} catch (e: unknown) {
 			// Define which errors during setValue are expected and won't crash
@@ -1214,11 +1222,8 @@ version:               ${this.version}`;
 
 	/**
 	 * Loads the device configuration for this node from a config file
-	 * @param withFirmwareVersion Whether the firmware version should be considered while looking up the file
 	 */
-	protected async loadDeviceConfig(
-		withFirmwareVersion: boolean = true,
-	): Promise<void> {
+	protected async loadDeviceConfig(): Promise<void> {
 		// But the configuration definitions might change
 		if (
 			this.manufacturerId != undefined &&
@@ -1234,7 +1239,7 @@ version:               ${this.version}`;
 				this.manufacturerId,
 				this.productType,
 				this.productId,
-				withFirmwareVersion ? this.firmwareVersion : false,
+				this.firmwareVersion,
 			);
 			if (this._deviceConfig) {
 				this.driver.controllerLog.logNode(
@@ -1304,17 +1309,7 @@ version:               ${this.version}`;
 			}
 
 			try {
-				if (
-					cc === CommandClasses["Manufacturer Specific"] &&
-					endpoint.index === 0
-				) {
-					// After the manufacturer specific interview we have enough info to load
-					// fallback config files without firmware version
-					await this.loadDeviceConfig(false);
-				} else if (
-					cc === CommandClasses.Version &&
-					endpoint.index === 0
-				) {
+				if (cc === CommandClasses.Version && endpoint.index === 0) {
 					// After the version CC interview of the root endpoint, we have enough info to load the correct device config file
 					await this.loadDeviceConfig();
 					if (this._deviceConfig?.compat?.treatBasicSetAsEvent) {
@@ -1683,6 +1678,21 @@ version:               ${this.version}`;
 					}
 				}
 			}
+			// And remove those that it marks as unsupported
+			const removeCCs = this.deviceConfig.compat?.removeCCs;
+			if (removeCCs) {
+				for (const [cc, endpoints] of removeCCs) {
+					if (endpoints === "*") {
+						for (const ep of this.getAllEndpoints()) {
+							ep.removeCC(cc);
+						}
+					} else {
+						for (const ep of endpoints) {
+							this.getEndpoint(ep)?.removeCC(cc);
+						}
+					}
+				}
+			}
 		}
 
 		await this.setInterviewStage(InterviewStage.OverwriteConfig);
@@ -1864,13 +1874,8 @@ version:               ${this.version}`;
 			return;
 		}
 
-		// Delete all previous nonces we sent the node, since they
-		// should no longer be used - except if a config flag forbids it
-		// Devices using this flag may only delete the old nonce after the new one was acknowledged
-		const keepUntilNext = !!this.deviceConfig?.compat?.keepS0NonceUntilNext;
-		if (!keepUntilNext) {
-			this.driver.securityManager.deleteAllNoncesForReceiver(this.id);
-		}
+		// Delete all previous nonces we sent the node, since they should no longer be used
+		this.driver.securityManager.deleteAllNoncesForReceiver(this.id);
 
 		// Now send the current nonce
 		try {
@@ -3118,14 +3123,6 @@ version:               ${this.version}`;
 		await this.loadDeviceConfig();
 	}
 
-	/** Returns whether the node is currently assumed awake */
-	public isAwake(): boolean {
-		const isAsleep =
-			this.supportsCC(CommandClasses["Wake Up"]) &&
-			!WakeUpCC.isAwake(this);
-		return !isAsleep;
-	}
-
 	/**
 	 * Whether the node should be kept awake when there are no pending messages.
 	 */
@@ -3145,7 +3142,10 @@ version:               ${this.version}`;
 		this.isSendingNoMoreInformation = true;
 
 		let msgSent = false;
-		if (this.isAwake() && this.interviewStage === InterviewStage.Complete) {
+		if (
+			this.status === NodeStatus.Awake &&
+			this.interviewStage === InterviewStage.Complete
+		) {
 			this.driver.controllerLog.logNode(this.id, {
 				message: "Sending node back to sleep...",
 				direction: "outbound",

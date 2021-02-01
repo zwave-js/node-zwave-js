@@ -1,0 +1,143 @@
+// GE/Jasco 14322
+// Jasco In-Wall Smart Dimmer (White Toggle)
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14322",
+	"description": "Jasco In-Wall Smart Dimmer (White Toggle)",
+	"devices": [
+		{
+			"productType": "0x4944",
+			"productId": "0x3137",
+			"zwaveAllianceId": [1372, 2123]
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Local Load",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"4": {
+			"label": "Invert Switch",
+			"description": "Invert the default On/Off rocker settings.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Operation",
+					"value": 0
+				},
+				{
+					"label": "Invert",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Dim Rate Steps (Z-Wave Command)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "Dim Rate Timing (Z-Wave)",
+			"description": "Timing of steps or levels",
+			"valueSize": 2,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Dim Rate Steps (Manual)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dim Rate Timing (Manual)",
+			"description": "Timing of steps",
+			"valueSize": 2,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "Dim Rate Steps (All-On/All-Off)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "Dim Rate Timing (All-On/All-Off)",
+			"description": "Timing of steps or levels",
+			"valueSize": 2,
+			"unit": "10ms",
+			"minValue": 1,
+			"maxValue": 255,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "Adding your device to a Z-wave network:\n1. Follow the instructions for your Z-wave certified controller to include a device to\nthe Z-wave network.\n2. Once the controller is ready to include your device, press up and release on the\ntoggle to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh\nthe Z-wave network to optimize performance.\nPlease reference the controller’s manual for instructions.\nNow you have complete control to turn your fixture ON/OFF or dim\naccording to groups, scenes, schedules and interactive automations\nprogrammed by your controller.\nIf your Z-wave certified controller features Remote Access, you can now control\nyour fixture from your mobile devices",
+		"exclusion": "To exclude and reset the device\n1. Follow the instructions for your Z-wave certified controller to exclude a device from\nthe Z-wave network.\n2. Once the controller is ready to Exclude your device, press up and release on the\ntoggle to exclude it from the network",
+		"reset": "To return your switch to factory defaults:\n1. Quickly press ON (Up) button three (3) times then immediately press the OFF\n(Down) button three (3) times. Note: This should only be used in the event your\nnetwork’s primary controller is missing or otherwise inoperable"
+	}
+}

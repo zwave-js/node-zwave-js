@@ -102,11 +102,6 @@ export class TimeCCAPI extends CCAPI {
 			dstEnd: timezone.endDate,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.getTimezone();
-		}
 	}
 
 	public async getTimezone(): Promise<DSTInfo | undefined> {
