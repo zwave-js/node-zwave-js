@@ -69,7 +69,6 @@
 		},
 		"4": {
 			"label": "Up Time",
-			"description": "Up Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
@@ -90,7 +89,6 @@
 		},
 		"5": {
 			"label": "Down Time",
-			"description": "Down Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 120,
@@ -111,7 +109,6 @@
 		},
 		"9": {
 			"label": "Calibration",
-			"description": "Calibration",
 			"valueSize": 1,
 			"minValue": 255,
 			"maxValue": 255,

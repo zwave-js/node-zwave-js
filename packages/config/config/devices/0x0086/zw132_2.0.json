@@ -69,7 +69,6 @@
 		},
 		"20": {
 			"label": "Configure the output status after re-power on it.",
-			"description": "Configure the output status after re-power on it.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -201,7 +200,6 @@
 		},
 		"90": {
 			"label": "Enables/disables parameter 91 and 92 below",
-			"description": "Enables/disables parameter 91 and 92 below",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -222,7 +220,6 @@
 		},
 		"91": {
 			"label": "Set the threshold value of wattage.",
-			"description": "Set the threshold value of wattage.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -439,7 +436,6 @@
 		},
 		"110": {
 			"label": "Set parameter 111-113 to default value.",
-			"description": "Set parameter 111-113 to default value.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -483,7 +479,6 @@
 		},
 		"120": {
 			"label": "Configure the external switch mode for S1",
-			"description": "Configure the external switch mode for S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -516,7 +511,6 @@
 		},
 		"121": {
 			"label": "Configure the external switch mode for S2.",
-			"description": "Configure the external switch mode for S2.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -549,7 +543,6 @@
 		},
 		"122": {
 			"label": "Set the control destination for external switch 1",
-			"description": "Set the control destination for external switch 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -574,7 +567,6 @@
 		},
 		"123": {
 			"label": "Set the control destination for external switch 2",
-			"description": "Set the control destination for external switch 2",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -599,7 +591,6 @@
 		},
 		"144": {
 			"label": "Get the connection state of WallSwipe",
-			"description": "Get the connection state of WallSwipe",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -649,7 +640,6 @@
 		},
 		"252": {
 			"label": "Lock/unlock configuration parameters",
-			"description": "Lock/unlock configuration parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -670,7 +660,6 @@
 		},
 		"255": {
 			"label": "Reset the Dual Nano Switch",
-			"description": "Reset the Dual Nano Switch",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1431655765,

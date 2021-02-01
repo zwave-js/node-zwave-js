@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Basic Set",
-			"description": "Basic Set",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -34,7 +33,6 @@
 		},
 		"2": {
 			"label": "Turn Off Light Time Configuration",
-			"description": "Turn Off Light Time Configuration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 120,
@@ -45,7 +43,6 @@
 		},
 		"3": {
 			"label": "PIR Sensor Alarm Elimination Time Configuration",
-			"description": "PIR Sensor Alarm Elimination Time Configuration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 120,

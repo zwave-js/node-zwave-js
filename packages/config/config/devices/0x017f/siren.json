@@ -74,7 +74,6 @@
 		},
 		"3": {
 			"label": "Secondary Notification Length",
-			"description": "Secondary Notification Length",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -132,7 +131,6 @@
 		},
 		"5": {
 			"label": "Primary Notification Sound",
-			"description": "Primary Notification Sound",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -185,7 +183,6 @@
 		},
 		"6": {
 			"label": "Secondary Notification Sound",
-			"description": "Secondary Notification Sound",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -238,7 +235,6 @@
 		},
 		"7": {
 			"label": "Toggle Secondary Chime",
-			"description": "Toggle Secondary Chime",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
@@ -259,7 +255,6 @@
 		},
 		"8": {
 			"label": "Power Level",
-			"description": "Power Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,

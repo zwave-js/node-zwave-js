@@ -107,7 +107,6 @@
 		},
 		"8": {
 			"label": "Operation Mode",
-			"description": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

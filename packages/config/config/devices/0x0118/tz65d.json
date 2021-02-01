@@ -58,7 +58,6 @@
 		},
 		"2": {
 			"label": "Suspend Group 4",
-			"description": "Suspend Group 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -121,7 +120,6 @@
 		},
 		"14": {
 			"label": "Enable Shade Control Group 2",
-			"description": "Enable Shade Control Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -142,7 +140,6 @@
 		},
 		"15": {
 			"label": "Enable Shade Control Group 3",
-			"description": "Enable Shade Control Group 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

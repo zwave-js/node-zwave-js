@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "LED Light",
-			"description": "LED Light",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
@@ -40,7 +39,6 @@
 		},
 		"4": {
 			"label": "Invert Switch",
-			"description": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

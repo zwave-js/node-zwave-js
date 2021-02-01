@@ -41,7 +41,6 @@
 		},
 		"2": {
 			"label": "Lux Trigger On Value",
-			"description": "Lux Trigger On Value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -52,7 +51,6 @@
 		},
 		"3": {
 			"label": "Lux Trigger Off Value",
-			"description": "Lux Trigger Off Value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -63,7 +61,6 @@
 		},
 		"4": {
 			"label": "Lux Trigger Off Timer Value.",
-			"description": "Lux Trigger Off Timer Value.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 480,
@@ -74,7 +71,6 @@
 		},
 		"5": {
 			"label": "Auto Report Time Interval",
-			"description": "Auto Report Time Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1439,
@@ -85,7 +81,6 @@
 		},
 		"6": {
 			"label": "Auto Report Lux Interval",
-			"description": "Auto Report Lux Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,

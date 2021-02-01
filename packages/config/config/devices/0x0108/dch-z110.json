@@ -75,7 +75,6 @@
 		},
 		"5": {
 			"label": "Operation Mode",
-			"description": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -92,7 +91,6 @@
 		},
 		"6": {
 			"label": "Multi-Sensor Function Switch",
-			"description": "Multi-Sensor Function Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -103,7 +101,6 @@
 		},
 		"8": {
 			"label": "PIR Re-Detect Interval Time",
-			"description": "PIR Re-Detect Interval Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -114,7 +111,6 @@
 		},
 		"9": {
 			"label": "Turn Off Light Time",
-			"description": "Turn Off Light Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -125,7 +121,6 @@
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
-			"description": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -136,7 +131,6 @@
 		},
 		"11": {
 			"label": "Auto Report Door/Window State Time",
-			"description": "Auto Report Door/Window State Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -147,7 +141,6 @@
 		},
 		"12": {
 			"label": "Auto Report Illumination Time",
-			"description": "Auto Report Illumination Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -158,7 +151,6 @@
 		},
 		"13": {
 			"label": "Auto Report Temperature Time",
-			"description": "Auto Report Temperature Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -169,7 +161,6 @@
 		},
 		"20": {
 			"label": "Auto Report Tick Interval",
-			"description": "Auto Report Tick Interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -181,7 +172,6 @@
 		},
 		"21": {
 			"label": "Temperature Differential Report",
-			"description": "Temperature Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -192,7 +182,6 @@
 		},
 		"22": {
 			"label": "Illumination Differential Report",
-			"description": "Illumination Differential Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,

@@ -42,7 +42,6 @@
 		},
 		"2": {
 			"label": "Custom consumption limit",
-			"description": "Custom consumption limit",
 			"unit": "HEXADECIMAL",
 			"valueSize": 2,
 			"minValue": 0,
@@ -93,7 +92,6 @@
 		},
 		"11": {
 			"label": "Activation TIME",
-			"description": "Activation TIME",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 254,
@@ -148,7 +146,6 @@
 		},
 		"16": {
 			"label": "Delay OFF",
-			"description": "Delay OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 254,
@@ -182,7 +179,6 @@
 		},
 		"19": {
 			"label": "Action When Pressing",
-			"description": "Action when pressing",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

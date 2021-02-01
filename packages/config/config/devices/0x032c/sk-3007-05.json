@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"4": {
 			"label": "Current Motor Position",
-			"description": "Current Motor Position",
 			"valueSize": 1,
 			"minValue": -127,
 			"maxValue": 99,
@@ -41,7 +40,6 @@
 		},
 		"7": {
 			"label": "Clear motor lead tail endpoint setting",
-			"description": "Clear motor lead tail endpoint setting",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
@@ -52,7 +50,6 @@
 		},
 		"8": {
 			"label": "Enable manual pull function",
-			"description": "Enable manual pull function",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,
@@ -63,7 +60,6 @@
 		},
 		"9": {
 			"label": "Disable manual pull function",
-			"description": "Disable manual pull function",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,

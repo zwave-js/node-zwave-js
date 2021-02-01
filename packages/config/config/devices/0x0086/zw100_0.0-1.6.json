@@ -62,7 +62,6 @@
 		},
 		"3": {
 			"label": "Motion Sensor reset timeout",
-			"description": "Motion Sensor reset timeout",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 3600,
@@ -420,7 +419,6 @@
 		},
 		"110": {
 			"label": "Set parameters 111-113 to default.",
-			"description": "Set parameters 111-113 to default.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -442,7 +440,6 @@
 		},
 		"112": {
 			"label": "Group 2 Report Interval",
-			"description": "Group 2 Report Interval",
 			"valueSize": 4,
 			"minValue": 5,
 			"maxValue": 2678400,
@@ -453,7 +450,6 @@
 		},
 		"113": {
 			"label": "Group 3 Report Interval",
-			"description": "Group 3 Report Interval",
 			"valueSize": 4,
 			"minValue": 5,
 			"maxValue": 2678400,
@@ -475,7 +471,6 @@
 		},
 		"202": {
 			"label": "Humidity Sensor Calibration",
-			"description": "Humidity Sensor Calibration",
 			"valueSize": 1,
 			"minValue": -50,
 			"maxValue": 50,
@@ -486,7 +481,6 @@
 		},
 		"203": {
 			"label": "Luminance Sensor Calibration",
-			"description": "Luminance Sensor Calibration",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
@@ -497,7 +491,6 @@
 		},
 		"204": {
 			"label": "Ultraviolet Sensor Calibration",
-			"description": "Ultraviolet Sensor Calibration",
 			"valueSize": 1,
 			"minValue": -10,
 			"maxValue": 10,

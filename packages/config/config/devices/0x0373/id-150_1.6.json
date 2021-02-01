@@ -48,7 +48,6 @@
 		},
 		"2": {
 			"label": "RFID Mode",
-			"description": "RFID Mode",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 9,

@@ -26,7 +26,6 @@
 	"paramInformation": {
 		"25": {
 			"label": "Location",
-			"description": "Location",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 22,

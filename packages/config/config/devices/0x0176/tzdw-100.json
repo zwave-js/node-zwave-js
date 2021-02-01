@@ -155,7 +155,6 @@
 		},
 		"7": {
 			"label": "LED-Indicator",
-			"description": "LED-Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

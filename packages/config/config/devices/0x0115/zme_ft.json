@@ -114,7 +114,6 @@
 		},
 		"6": {
 			"label": "Maximal allowed temperature",
-			"description": "Maximal allowed temperature",
 			"unit": "degree Celsus",
 			"valueSize": 1,
 			"minValue": 20,

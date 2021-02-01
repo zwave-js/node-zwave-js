@@ -202,7 +202,6 @@
 		},
 		"250": {
 			"label": "Unsecure / Secure Inclusion",
-			"description": "Unsecure / Secure Inclusion",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

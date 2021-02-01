@@ -26,7 +26,6 @@
 	"paramInformation": {
 		"2": {
 			"label": "Panic ON time",
-			"description": "Panic ON time",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": -128,
@@ -38,7 +37,6 @@
 		},
 		"3": {
 			"label": "Panic OFF time",
-			"description": "Panic OFF time",
 			"valueSize": 1,
 			"minValue": -128,
 			"maxValue": 127,

@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"2": {
 			"label": "Switch state saved or not when power failure",
-			"description": "Switch state saved or not when power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -30,7 +29,6 @@
 		},
 		"3": {
 			"label": "ALL ON/ALL OFF",
-			"description": "ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -42,7 +40,6 @@
 		},
 		"4": {
 			"label": "LED Backlit brightness level",
-			"description": "LED Backlit brightness level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -53,7 +50,6 @@
 		},
 		"5": {
 			"label": "Key Mode",
-			"description": "Key Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -64,7 +60,6 @@
 		},
 		"6": {
 			"label": "Key On duration",
-			"description": "Key On duration",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,

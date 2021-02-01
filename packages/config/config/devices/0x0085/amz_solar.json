@@ -37,7 +37,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Operation Mode",
-			"description": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -48,7 +47,6 @@
 		},
 		"2": {
 			"label": "Season",
-			"description": "Season",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
@@ -59,7 +57,6 @@
 		},
 		"3": {
 			"label": "Time",
-			"description": "Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 30,
@@ -70,7 +67,6 @@
 		},
 		"4": {
 			"label": "Sensitivity",
-			"description": "Sensitivity",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 100,
@@ -81,7 +77,6 @@
 		},
 		"12": {
 			"label": "Calibration",
-			"description": "Calibration",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
@@ -92,7 +87,6 @@
 		},
 		"13": {
 			"label": "Positioning",
-			"description": "Positioning",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,

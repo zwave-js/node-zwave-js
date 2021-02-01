@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"9": {
 			"label": "Restore state after power failure",
-			"description": "Restore state after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -136,7 +135,6 @@
 		},
 		"20": {
 			"label": "Switch type",
-			"description": "Switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -161,7 +159,6 @@
 		},
 		"21": {
 			"label": "Flashing mode - reports",
-			"description": "Flashing mode - reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -182,7 +179,6 @@
 		},
 		"27": {
 			"label": "Associations in Z-Wave network security mode",
-			"description": "Associations in Z-Wave network security mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -219,7 +215,6 @@
 		},
 		"28": {
 			"label": "S1 switch - scenes sent",
-			"description": "S1 switch - scenes sent",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -252,7 +247,6 @@
 		},
 		"29": {
 			"label": "S2 switch - scenes sent",
-			"description": "S2 switch - scenes sent",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -418,7 +412,6 @@
 		},
 		"40": {
 			"label": "Reaction to General Alarm",
-			"description": "Reaction to General Alarm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -447,7 +440,6 @@
 		},
 		"41": {
 			"label": "Reaction to Flood Alarm",
-			"description": "Reaction to Flood Alarm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -505,7 +497,6 @@
 		},
 		"43": {
 			"label": "Reaction to Heat Alarm",
-			"description": "Reaction to Heat Alarm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -534,7 +525,6 @@
 		},
 		"44": {
 			"label": "Flashing alarm duration",
-			"description": "Flashing alarm duration",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32000,

@@ -250,7 +250,6 @@
 		},
 		"24": {
 			"label": "SWITCH ON value - „On/Off” association groups",
-			"description": "SWITCH ON value - „On/Off” association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,

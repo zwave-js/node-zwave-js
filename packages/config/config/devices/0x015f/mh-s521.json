@@ -44,7 +44,6 @@
 		},
 		"3": {
 			"label": "ALL ON/ALL OFF",
-			"description": "ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -74,7 +73,6 @@
 		},
 		"4": {
 			"label": "LED Backlit brightness level",
-			"description": "LED Backlit brightness level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -85,7 +83,6 @@
 		},
 		"5": {
 			"label": "Key Mode",
-			"description": "Key Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -118,7 +115,6 @@
 		},
 		"6": {
 			"label": "Key On duration",
-			"description": "Key On duration",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -131,7 +127,6 @@
 		},
 		"8": {
 			"label": "Basic CC integration setting",
-			"description": "Basic CC integration setting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -142,7 +137,6 @@
 		},
 		"16": {
 			"label": "Scene respond",
-			"description": "Scene respond",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -153,7 +147,6 @@
 		},
 		"17": {
 			"label": "Key1 Scene Activate Mode Setting",
-			"description": "Key1 Scene Activate Mode Setting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -182,7 +175,6 @@
 		},
 		"18": {
 			"label": "Key1 Activate Scene ID",
-			"description": "Key1 Activate Scene ID",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -194,7 +186,6 @@
 		},
 		"19": {
 			"label": "Key1 Activate Scene Duration",
-			"description": "Key1 Activate Scene Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -206,7 +197,6 @@
 		},
 		"20": {
 			"label": "Key2 Scene Activate Mode Setting",
-			"description": "Key2 Scene Activate Mode Setting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -235,7 +225,6 @@
 		},
 		"21": {
 			"label": "Key2 Activate Scene ID",
-			"description": "Key2 Activate Scene ID",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -247,7 +236,6 @@
 		},
 		"22": {
 			"label": "Key2 Activate Scene Duration",
-			"description": "Key2 Activate Scene Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -259,7 +247,6 @@
 		},
 		"23": {
 			"label": "Key3 Scene Activate Mode Setting",
-			"description": "Key3 Scene Activate Mode Setting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -288,7 +275,6 @@
 		},
 		"24": {
 			"label": "Key3 Activate Scene ID",
-			"description": "Key3 Activate Scene ID",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -300,7 +286,6 @@
 		},
 		"25": {
 			"label": "Key3 Activate Scene Duration",
-			"description": "Key3 Activate Scene Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -312,7 +297,6 @@
 		},
 		"32": {
 			"label": "Scene respond ID 1-50",
-			"description": "Scene respond ID 1-50",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -324,7 +308,6 @@
 		},
 		"33": {
 			"label": "Scene respond ID 51-100",
-			"description": "Scene respond ID 51-100",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -336,7 +319,6 @@
 		},
 		"34": {
 			"label": "Scene respond ID 101-150",
-			"description": "Scene respond ID 101-150",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -348,7 +330,6 @@
 		},
 		"35": {
 			"label": "Scene respond ID 151-200",
-			"description": "Scene respond ID 151-200",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -360,7 +341,6 @@
 		},
 		"36": {
 			"label": "Scene respond ID 201-250",
-			"description": "Scene respond ID 201-250",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -372,7 +352,6 @@
 		},
 		"255": {
 			"label": "Factory Reset",
-			"description": "Factory Reset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -89,7 +89,6 @@
 		},
 		"6": {
 			"label": "User Slot Status",
-			"description": "User slot status",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,

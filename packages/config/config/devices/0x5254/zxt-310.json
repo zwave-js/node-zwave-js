@@ -40,7 +40,6 @@
 		},
 		"22": {
 			"label": "Download status register",
-			"description": "Download status register",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,

@@ -19,7 +19,6 @@
 	"paramInformation": {
 		/*"1": {
 			"label": "Operation mode",
-			"description": "Operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,7 +39,6 @@
 		},*/
 		"2": {
 			"label": "Sensor mode",
-			"description": "Sensor mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -73,7 +71,6 @@
 		},
 		"3": {
 			"label": "Floor sensor type",
-			"description": "Floor sensor type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -170,7 +167,6 @@
 		},
 		/*"9": {
 			"label": "Heating mode setpoint (CO)",
-			"description": "Heating mode setpoint (CO)",
 			"unit": "°C/10",
 			"valueSize": 2,
 			"minValue": 50,
@@ -236,7 +232,6 @@
 		},
 		"14": {
 			"label": "Button brightness - dimmed state",
-			"description": "Button brightness - dimmed state",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -248,7 +243,6 @@
 		},
 		"15": {
 			"label": "Button brightness - active state",
-			"description": "Button brightness - active state",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -260,7 +254,6 @@
 		},
 		"16": {
 			"label": "Display brightness - dimmed state",
-			"description": "Display brightness - dimmed state",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -272,7 +265,6 @@
 		},
 		"17": {
 			"label": "Display brightness - active state",
-			"description": "Display brightness - active state",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -284,7 +276,6 @@
 		},
 		"18": {
 			"label": "Temperature report interval",
-			"description": "Temperature report interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -296,7 +287,6 @@
 		},
 		"19": {
 			"label": "Temperature report hysteresis",
-			"description": "Temperature report hysteresis",
 			"unit": "°C/10",
 			"valueSize": 1,
 			"minValue": 1,
@@ -308,7 +298,6 @@
 		},
 		"20": {
 			"label": "Meter report interval",
-			"description": "Meter report interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -320,7 +309,6 @@
 		},
 		"21": {
 			"label": "Meter report delta value",
-			"description": "Meter report delta value",
 			"unit": "kWh/10",
 			"valueSize": 1,
 			"minValue": 0,

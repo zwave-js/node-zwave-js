@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Basic Set Level",
-			"description": "Basic Set Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -30,7 +29,6 @@
 		},
 		"3": {
 			"label": "Sensitivity Level",
-			"description": "Sensitivity Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -41,7 +39,6 @@
 		},
 		"4": {
 			"label": "Re-trigger Interval",
-			"description": "Re-trigger interval",
 			"unit": "Seconds",
 			"valueSize": 2,
 			"minValue": 5,
@@ -53,7 +50,6 @@
 		},
 		"5": {
 			"label": "Lux Level",
-			"description": "Lux Level",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
@@ -65,7 +61,6 @@
 		},
 		"6": {
 			"label": "On-Off Duration",
-			"description": "On-Off Duration",
 			"unit": "Secs",
 			"valueSize": 2,
 			"minValue": 5,

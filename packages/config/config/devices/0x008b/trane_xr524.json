@@ -18,7 +18,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "System Type",
-			"description": "System Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -39,7 +38,6 @@
 		},
 		"2": {
 			"label": "Fan Type",
-			"description": "Fan Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -60,7 +58,6 @@
 		},
 		"3": {
 			"label": "Change Over Type",
-			"description": "Change Over Type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -81,7 +78,6 @@
 		},
 		"4": {
 			"label": "Units",
-			"description": "Units",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -102,7 +98,6 @@
 		},
 		"9": {
 			"label": "Display Lock",
-			"description": "Display Lock",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -123,7 +118,6 @@
 		},
 		"10": {
 			"label": "Minimum Off Time",
-			"description": "Minimum Off Time",
 			"valueSize": 1,
 			"minValue": 5,
 			"maxValue": 9,
@@ -134,7 +128,6 @@
 		},
 		"11": {
 			"label": "Minimum Run Time",
-			"description": "Minimum Run Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 9,
@@ -145,7 +138,6 @@
 		},
 		"12": {
 			"label": "Heating Delta Stage 1 ON",
-			"description": "Heating Delta Stage 1 ON",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -156,7 +148,6 @@
 		},
 		"13": {
 			"label": "Heating Delta Stage 1 OFF",
-			"description": "Heating Delta Stage 1 OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -167,7 +158,6 @@
 		},
 		"14": {
 			"label": "Heating Delta Stage 2 ON",
-			"description": "Heating Delta Stage 2 ON",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -178,7 +168,6 @@
 		},
 		"15": {
 			"label": "Heating Delta Stage 2 OFF",
-			"description": "Heating Delta Stage 2 OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -189,7 +178,6 @@
 		},
 		"16": {
 			"label": "Heating Delta Stage 3 ON",
-			"description": "Heating Delta Stage 3 ON",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -200,7 +188,6 @@
 		},
 		"17": {
 			"label": "Heating Delta Stage 3 OFF",
-			"description": "Heating Delta Stage 3 OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -211,7 +198,6 @@
 		},
 		"18": {
 			"label": "Cooling Delta Stage 1 ON",
-			"description": "Cooling Delta Stage 1 ON",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -222,7 +208,6 @@
 		},
 		"19": {
 			"label": "Cooling Delta Stage 1 OFF",
-			"description": "Cooling Delta Stage 1 OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -233,7 +218,6 @@
 		},
 		"20": {
 			"label": "Cooling Delta Stage 2 ON",
-			"description": "Cooling Delta Stage 2 ON",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -244,7 +228,6 @@
 		},
 		"21": {
 			"label": "Cooling Delta Stage 2 OFF",
-			"description": "Cooling Delta Stage 2 OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 8,
@@ -255,7 +238,6 @@
 		},
 		"24": {
 			"label": "H/C Delta",
-			"description": "H/C Delta",
 			"unit": "degrees",
 			"valueSize": 1,
 			"minValue": 3,
@@ -267,7 +249,6 @@
 		},
 		"25": {
 			"label": "SetBack Mode",
-			"description": "SetBack Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -292,7 +273,6 @@
 		},
 		"29": {
 			"label": "ESM Setpoint--Heating",
-			"description": "ESM Setpoint--Heating",
 			"unit": "degrees",
 			"valueSize": 1,
 			"minValue": 0,
@@ -304,7 +284,6 @@
 		},
 		"30": {
 			"label": "ESM Setpoint--Cooling",
-			"description": "ESM Setpoint--Cooling",
 			"unit": "degrees",
 			"valueSize": 1,
 			"minValue": 0,
@@ -316,7 +295,6 @@
 		},
 		"75": {
 			"label": "Fan ON Time",
-			"description": "Fan ON Time",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -328,7 +306,6 @@
 		},
 		"76": {
 			"label": "Fan OFF Time",
-			"description": "Fan OFF Time",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 10,
@@ -340,7 +317,6 @@
 		},
 		"77": {
 			"label": "2nd Stage Heat Enable",
-			"description": "2nd Stage Heat Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -361,7 +337,6 @@
 		},
 		"78": {
 			"label": "Aux Heat Enable",
-			"description": "Aux Heat Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -382,7 +357,6 @@
 		},
 		"79": {
 			"label": "2nd Stage Cool Enable",
-			"description": "2nd Stage Cool Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -403,7 +377,6 @@
 		},
 		"132": {
 			"label": "Run Schedule",
-			"description": "Run Schedule",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -424,7 +397,6 @@
 		},
 		"137": {
 			"label": "Backlight Timeout",
-			"description": "Backlight Timeout",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -436,7 +408,6 @@
 		},
 		"141": {
 			"label": "Screen Timeout",
-			"description": "Screen Timeout",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,
@@ -447,7 +418,6 @@
 		},
 		"143": {
 			"label": "Sensor (Internal) Offset",
-			"description": "Sensor (Internal) Offset",
 			"valueSize": 1,
 			"minValue": -7,
 			"maxValue": 7,
@@ -458,7 +428,6 @@
 		},
 		"148": {
 			"label": "Screen Contrast",
-			"description": "Screen Contrast",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 20,
@@ -469,7 +438,6 @@
 		},
 		"185": {
 			"label": "Schedule Enable",
-			"description": "Schedule Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -480,7 +448,6 @@
 		},
 		"228": {
 			"label": "Schedule Sun-1",
-			"description": "Schedule Sun-1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -491,7 +458,6 @@
 		},
 		"229": {
 			"label": "Schedule Sun-2",
-			"description": "Schedule Sun-2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -502,7 +468,6 @@
 		},
 		"230": {
 			"label": "Schedule Sun-3",
-			"description": "Schedule Sun-3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -513,7 +478,6 @@
 		},
 		"231": {
 			"label": "Schedule Sun-4",
-			"description": "Schedule Sun-4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -524,7 +488,6 @@
 		},
 		"232": {
 			"label": "Schedule Mon-1",
-			"description": "Schedule Mon-1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -535,7 +498,6 @@
 		},
 		"233": {
 			"label": "Schedule Mon-2",
-			"description": "Schedule Mon-2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -546,7 +508,6 @@
 		},
 		"234": {
 			"label": "Schedule Mon-3",
-			"description": "Schedule Mon-3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -557,7 +518,6 @@
 		},
 		"235": {
 			"label": "Schedule Mon-4",
-			"description": "Schedule Mon-4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -568,7 +528,6 @@
 		},
 		"236": {
 			"label": "Schedule Tue-1",
-			"description": "Schedule Tue-1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -579,7 +538,6 @@
 		},
 		"237": {
 			"label": "Schedule Tue-2",
-			"description": "Schedule Tue-2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -590,7 +548,6 @@
 		},
 		"238": {
 			"label": "Schedule Tue-3",
-			"description": "Schedule Tue-3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -601,7 +558,6 @@
 		},
 		"239": {
 			"label": "Schedule Tue-4",
-			"description": "Schedule Tue-4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -612,7 +568,6 @@
 		},
 		"240": {
 			"label": "Schedule Wed-1",
-			"description": "Schedule Wed-1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -623,7 +578,6 @@
 		},
 		"241": {
 			"label": "Schedule Wed-2",
-			"description": "Schedule Wed-2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -634,7 +588,6 @@
 		},
 		"242": {
 			"label": "Schedule Wed-3",
-			"description": "Schedule Wed-3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -645,7 +598,6 @@
 		},
 		"243": {
 			"label": "Schedule Wed-4",
-			"description": "Schedule Wed-4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -656,7 +608,6 @@
 		},
 		"244": {
 			"label": "Schedule Thu-1",
-			"description": "Schedule Thu-1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -667,7 +618,6 @@
 		},
 		"246": {
 			"label": "Schedule Thu-3",
-			"description": "Schedule Thu-3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -678,7 +628,6 @@
 		},
 		"247": {
 			"label": "Schedule Thu-4",
-			"description": "Schedule Thu-4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -689,7 +638,6 @@
 		},
 		"248": {
 			"label": "Schedule Fri-1",
-			"description": "Schedule Fri-1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -700,7 +648,6 @@
 		},
 		"249": {
 			"label": "Schedule Fri-2",
-			"description": "Schedule Fri-2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -711,7 +658,6 @@
 		},
 		"250": {
 			"label": "Schedule Fri-3",
-			"description": "Schedule Fri-3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -722,7 +668,6 @@
 		},
 		"251": {
 			"label": "Schedule Fri-4",
-			"description": "Schedule Fri-4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -733,7 +678,6 @@
 		},
 		"252": {
 			"label": "Schedule Sat-1",
-			"description": "Schedule Sat-1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -744,7 +688,6 @@
 		},
 		"253": {
 			"label": "Schedule Sat-2",
-			"description": "Schedule Sat-2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -755,7 +698,6 @@
 		},
 		"254": {
 			"label": "Schedule Sat-3",
-			"description": "Schedule Sat-3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -766,7 +708,6 @@
 		},
 		"255": {
 			"label": "Schedule Sat-4",
-			"description": "Schedule Sat-4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,

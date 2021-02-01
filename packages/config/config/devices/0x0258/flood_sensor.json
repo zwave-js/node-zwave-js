@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Alarm Duration Time",
-			"description": "Alarm Duration Time",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -36,7 +35,6 @@
 		},
 		"2": {
 			"label": "Alarm Interval",
-			"description": "Alarm Interval",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 1,
@@ -48,7 +46,6 @@
 		},
 		"3": {
 			"label": "First Alarm On Time Duration",
-			"description": "First Alarm On Time Duration",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 10,
@@ -61,7 +58,6 @@
 		},
 		"4": {
 			"label": "Alarm on Time Duration",
-			"description": "Alarm on Time Duration",
 			"unit": "seconda",
 			"valueSize": 1,
 			"minValue": 5,
@@ -74,7 +70,6 @@
 		},
 		"5": {
 			"label": "Alarm Enable/Disable",
-			"description": "Alarm Enable/Disable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -95,7 +90,6 @@
 		},
 		"6": {
 			"label": "Water Leakage Detection",
-			"description": "Water Leakage Detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -116,7 +110,6 @@
 		},
 		"7": {
 			"label": "Basic Set Level",
-			"description": "Basic Set Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

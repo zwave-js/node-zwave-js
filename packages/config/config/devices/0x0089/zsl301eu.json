@@ -18,7 +18,6 @@
 	"paramInformation": {
 		"0": {
 			"label": "Last Status",
-			"description": "Last Status",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -43,7 +42,6 @@
 		},
 		"1": {
 			"label": "Night Light",
-			"description": "Night Light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -64,7 +62,6 @@
 		},
 		"2": {
 			"label": "Enable LED",
-			"description": "Enable LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -85,7 +82,6 @@
 		},
 		"3": {
 			"label": "Enable All ON/All OFF",
-			"description": "Enable All ON/All OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -115,7 +111,6 @@
 		},
 		"4": {
 			"label": "Button Protection",
-			"description": "Button Protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -140,7 +135,6 @@
 		},
 		"5": {
 			"label": "Delay In Time",
-			"description": "Delay In Time",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -152,7 +146,6 @@
 		},
 		"6": {
 			"label": "Delay Out Time",
-			"description": "Delay Out Time",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 0,

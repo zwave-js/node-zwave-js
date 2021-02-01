@@ -121,7 +121,6 @@
 		},
 		"8": {
 			"label": "Lux Level Function Enable",
-			"description": "Lux Level Function Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -132,7 +131,6 @@
 		},
 		"9": {
 			"label": "Ambient illumination Lux Level Report",
-			"description": "Ambient illumination Lux Level Report",
 			"unit": "Lux",
 			"valueSize": 2,
 			"minValue": 0,

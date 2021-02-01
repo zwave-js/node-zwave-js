@@ -66,7 +66,6 @@
 		},
 		"3": {
 			"label": "RF Off command",
-			"description": "RF Off command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -96,7 +95,6 @@
 		},
 		"5": {
 			"label": "Restore switch state after power cycle",
-			"description": "Restore switch state after power cycle",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

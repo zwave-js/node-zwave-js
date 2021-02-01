@@ -29,7 +29,6 @@
 	"paramInformation": {
 		"2": {
 			"label": "Basic Set Level",
-			"description": "Basic Set Level",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 100,
@@ -62,7 +61,6 @@
 		},
 		"5": {
 			"label": "Operation Mode",
-			"description": "Operation Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

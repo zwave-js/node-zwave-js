@@ -25,7 +25,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Re-trigger Wait Time",
-			"description": "Re-trigger Wait Time",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,

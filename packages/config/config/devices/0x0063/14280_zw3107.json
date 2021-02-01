@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "LED Light",
-			"description": "LED Light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

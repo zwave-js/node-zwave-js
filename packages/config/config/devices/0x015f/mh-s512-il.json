@@ -33,7 +33,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "State saved after pwr failure",
-			"description": "State saved after pwr failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -44,7 +43,6 @@
 		},
 		"3": {
 			"label": "LED Backlit brightness level",
-			"description": "LED Backlit brightness level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -55,7 +53,6 @@
 		},
 		"4": {
 			"label": "Scene respond",
-			"description": "Scene respond",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -66,7 +63,6 @@
 		},
 		"5": {
 			"label": "ALL ON/ALL OFF",
-			"description": "ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

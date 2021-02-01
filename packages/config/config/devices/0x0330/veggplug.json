@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"12": {
 			"label": "Percentage Threshold Level",
-			"description": "Percentage Threshold Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -31,7 +30,6 @@
 		},
 		"13": {
 			"label": "Absolute Value Threshold Level",
-			"description": "Absolute Value Threshold Level",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -43,7 +41,6 @@
 		},
 		"14": {
 			"label": "Time Interval Report Voltage",
-			"description": "Time Interval Report Voltage",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -54,7 +51,6 @@
 		},
 		"15": {
 			"label": "Time Interval Report Current",
-			"description": "Time Interval Report Current",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -65,7 +61,6 @@
 		},
 		"16": {
 			"label": "Time Interval Report Power",
-			"description": "Time Interval Report Power",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -76,7 +71,6 @@
 		},
 		"17": {
 			"label": "Time Interval Report Energy",
-			"description": "Time Interval Report Energy",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -87,7 +81,6 @@
 		},
 		"18": {
 			"label": "Saving load state before power failure",
-			"description": "Saving load state before power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -98,7 +91,6 @@
 		},
 		"19": {
 			"label": "Enable/Disable Switch Binary Report",
-			"description": "Enable/Disable Switch Binary Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -109,7 +101,6 @@
 		},
 		"20": {
 			"label": "Enable/Disable Current Protection Function",
-			"description": "Enable/Disable Current Protection Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

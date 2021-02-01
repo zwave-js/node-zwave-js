@@ -302,7 +302,6 @@
 		},
 		"22": {
 			"label": "ON indication RGB-saturation for pushbutton 1",
-			"description": "ON indication RGB-saturation for pushbutton 1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -314,7 +313,6 @@
 		},
 		"23": {
 			"label": "OFF indication RGB-saturation for pushbutton 1",
-			"description": "OFF indication RGB-saturation for pushbutton 1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -325,7 +323,6 @@
 		},
 		"24": {
 			"label": "Pushbutton 2 functionality",
-			"description": "Pushbutton 2 functionality",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -358,7 +355,6 @@
 		},
 		"25": {
 			"label": "Timer value for pushbutton 2",
-			"description": "Timer value for pushbutton 2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 43200,
@@ -370,7 +366,6 @@
 		},
 		"26": {
 			"label": "Multi-Level Switch Set values for pushbutton 2.",
-			"description": "Multi-Level Switch Set values for pushbutton 2.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -381,7 +376,6 @@
 		},
 		"27": {
 			"label": "Binary Switch Set support for pushbutton 2",
-			"description": "Binary Switch Set support for pushbutton 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -406,7 +400,6 @@
 		},
 		"28": {
 			"label": "Pushbutton 2 LED indication.",
-			"description": "Pushbutton 2 LED indication.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -451,7 +444,6 @@
 		},
 		"29": {
 			"label": "Colour commands for pushbutton 2 LED indication.",
-			"description": "Colour commands for pushbutton 2 LED indication.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -476,7 +468,6 @@
 		},
 		"30": {
 			"label": "ON indication RGB-saturation for pushbutton 2",
-			"description": "ON indication RGB-saturation for pushbutton 2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -488,7 +479,6 @@
 		},
 		"31": {
 			"label": "OFF indication RGB-saturation for pushbutton 2.",
-			"description": "OFF indication RGB-saturation for pushbutton 2.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -500,7 +490,6 @@
 		},
 		"32": {
 			"label": "Pushbutton 3 functionality",
-			"description": "Pushbutton 3 functionality",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -533,7 +522,6 @@
 		},
 		"33": {
 			"label": "Timer value for pushbutton 3",
-			"description": "Timer value for pushbutton 3",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 43200,
@@ -545,7 +533,6 @@
 		},
 		"34": {
 			"label": "Multi-Level Switch Set values for pushbutton 3",
-			"description": "Multi-Level Switch Set values for pushbutton 3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -557,7 +544,6 @@
 		},
 		"35": {
 			"label": "Binary Switch Set support for pushbutton 3",
-			"description": "Binary Switch Set support for pushbutton 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -582,7 +568,6 @@
 		},
 		"36": {
 			"label": "Pushbutton 3 LED indication",
-			"description": "Pushbutton 3 LED indication",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -627,7 +612,6 @@
 		},
 		"37": {
 			"label": "Colour commands for pushbutton 3 LED indication.",
-			"description": "Colour commands for pushbutton 3 LED indication.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -652,7 +636,6 @@
 		},
 		"38": {
 			"label": "ON indication RGB-saturation for pushbutton 3",
-			"description": "ON indication RGB-saturation for pushbutton 3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -664,7 +647,6 @@
 		},
 		"39": {
 			"label": "OFF indication RGB-saturation for pushbutton 3",
-			"description": "OFF indication RGB-saturation for pushbutton 3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -676,7 +658,6 @@
 		},
 		"40": {
 			"label": "Pushbutton 4 functionality.",
-			"description": "Pushbutton 4 functionality.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -709,7 +690,6 @@
 		},
 		"41": {
 			"label": "Timer value for pushbutton 4",
-			"description": "Timer value for pushbutton 4",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 43200,
@@ -721,7 +701,6 @@
 		},
 		"42": {
 			"label": "Multi-Level Switch Set values for pushbutton 4.",
-			"description": "Multi-Level Switch Set values for pushbutton 4.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -733,7 +712,6 @@
 		},
 		"43": {
 			"label": "Binary Switch Set support for pushbutton 4.",
-			"description": "Binary Switch Set support for pushbutton 4.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -758,7 +736,6 @@
 		},
 		"44": {
 			"label": "Pushbutton 4 LED indication",
-			"description": "Pushbutton 4 LED indication",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -803,7 +780,6 @@
 		},
 		"45": {
 			"label": "Colour commands for pushbutton 4 LED indication",
-			"description": "Colour commands for pushbutton 4 LED indication",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -828,7 +804,6 @@
 		},
 		"46": {
 			"label": "ON indication RGB-saturation for pushbutton 4.",
-			"description": "ON indication RGB-saturation for pushbutton 4.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -840,7 +815,6 @@
 		},
 		"47": {
 			"label": "OFF indication RGB-saturation for pushbutton 4.",
-			"description": "OFF indication RGB-saturation for pushbutton 4.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,

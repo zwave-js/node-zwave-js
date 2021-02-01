@@ -65,7 +65,6 @@
 		},
 		"4": {
 			"label": "Default fade time",
-			"description": "Default fade time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -138,7 +137,6 @@
 		},
 		"9": {
 			"label": "Added to and removed from a network",
-			"description": "Added to and removed from a network",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -184,7 +182,6 @@
 		},
 		"11": {
 			"label": "Wiring type",
-			"description": "Wiring type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -195,7 +192,6 @@
 		},
 		"12": {
 			"label": "Load type",
-			"description": "Load type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -227,7 +223,6 @@
 		},
 		"14": {
 			"label": "Threshold, unit is W",
-			"description": "Threshold, unit is W",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 100,
@@ -238,7 +233,6 @@
 		},
 		"15": {
 			"label": "Threshold, unit is %",
-			"description": "Threshold, unit is %",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -249,7 +243,6 @@
 		},
 		"21": {
 			"label": "Power metering time cycle",
-			"description": "Power metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -260,7 +253,6 @@
 		},
 		"22": {
 			"label": "Energy metering time cycle",
-			"description": "Energy metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2678400,
@@ -271,7 +263,6 @@
 		},
 		"23": {
 			"label": "Voltage metering time cycle",
-			"description": "Voltage metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -282,7 +273,6 @@
 		},
 		"24": {
 			"label": "Current metering time cycle",
-			"description": "Current metering time cycle",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,

@@ -59,7 +59,6 @@
 		},
 		"2": {
 			"label": "Input 2 contact type",
-			"description": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -81,7 +80,6 @@
 		},
 		"3": {
 			"label": "Input 3 contact type",
-			"description": "Input 3 contact type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -103,7 +101,6 @@
 		},
 		"10": {
 			"label": "Activate / deactivate functions ALL ON/ALL OFF",
-			"description": "Activate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -133,7 +130,6 @@
 		},
 		"30": {
 			"label": "State of the device after a power failure",
-			"description": "State of the device after a power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -166,7 +162,6 @@
 		},
 		"42": {
 			"label": "Power reporting in Watts by time interval",
-			"description": "Power reporting in Watts by time interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -178,7 +173,6 @@
 		},
 		"60": {
 			"label": "Minimum dimming value",
-			"description": "Minimum dimming value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 98,
@@ -189,7 +183,6 @@
 		},
 		"61": {
 			"label": "Maximum dimming value",
-			"description": "Maximum dimming value",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -200,7 +193,6 @@
 		},
 		"65": {
 			"label": "Dimming time (soft on/off)",
-			"description": "Dimming time (soft on/off)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -212,7 +204,6 @@
 		},
 		"66": {
 			"label": "Dimming time when key pressed",
-			"description": "Dimming time when key pressed",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,

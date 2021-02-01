@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Enable/Disable LED Indicator",
-			"description": "Enable/Disable LED Indicator",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,7 +39,6 @@
 		},
 		"2": {
 			"label": "Configure Open/Close Reports Sent",
-			"description": "Configure Open/Close Reports Sent",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -82,7 +80,6 @@
 		},
 		"4": {
 			"label": "Enable/Disable Temperature Sensor",
-			"description": "Enable/Disable Temperature Sensor",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -103,7 +100,6 @@
 		},
 		"5": {
 			"label": "Temperature offset",
-			"description": "Temperature offset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -114,7 +110,6 @@
 		},
 		"6": {
 			"label": "Temperature Units",
-			"description": "Temperature Units",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -135,7 +130,6 @@
 		},
 		"7": {
 			"label": "Basic Set Value (Group 2)",
-			"description": "Basic Set Value (Group 2)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -146,7 +140,6 @@
 		},
 		"8": {
 			"label": "Basic Set Value (Group 3)",
-			"description": "Basic Set Value (Group 3)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,
@@ -157,7 +150,6 @@
 		},
 		"9": {
 			"label": "Basic Set Value (Group 4)",
-			"description": "Basic Set Value (Group 4)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,

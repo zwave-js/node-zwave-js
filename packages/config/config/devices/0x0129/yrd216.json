@@ -66,7 +66,6 @@
 		},
 		"3": {
 			"label": "Auto Relock Time",
-			"description": "Auto Relock Time",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 180,
@@ -78,7 +77,6 @@
 		},
 		"4": {
 			"label": "Wrong code Entry Limit",
-			"description": "Wrong code Entry Limit",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 10,
@@ -89,7 +87,6 @@
 		},
 		"5": {
 			"label": "Language",
-			"description": "Language",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -126,7 +123,6 @@
 		},
 		"8": {
 			"label": "Operating mode",
-			"description": "Operating mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -151,7 +147,6 @@
 		},
 		"11": {
 			"label": "One touch locking",
-			"description": "One touch locking",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -163,7 +158,6 @@
 		},
 		"12": {
 			"label": "Privacy button",
-			"description": "Privacy button",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -175,7 +169,6 @@
 		},
 		"13": {
 			"label": "Lock status LED",
-			"description": "Lock status LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -187,7 +180,6 @@
 		},
 		"15": {
 			"label": "Reset to factory default",
-			"description": "Reset to factory default",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

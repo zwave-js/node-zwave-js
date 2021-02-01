@@ -37,7 +37,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Alarm Cancellation Delay",
-			"description": "Alarm Cancellation Delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3600,
@@ -48,7 +47,6 @@
 		},
 		"2": {
 			"label": "Alarm acoustic and visual signals",
-			"description": "Alarm acoustic and visual signals",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -78,7 +76,6 @@
 		},
 		"5": {
 			"label": "Type of alarm to 1st association group (SMOKE)",
-			"description": "Type of alarm to 1st association group (SMOKE)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -100,7 +97,6 @@
 		},
 		"7": {
 			"label": "Forced Level of Dimming group 1",
-			"description": "Forced Level of Dimming group 1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -112,7 +108,6 @@
 		},
 		"10": {
 			"label": "Interval between temperature readings",
-			"description": "Interval between temperature readings",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -133,7 +128,6 @@
 		},
 		"13": {
 			"label": "Frame broadcast mode",
-			"description": "Frame broadcast mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -163,7 +157,6 @@
 		},
 		"73": {
 			"label": "Temperature measurement compensation",
-			"description": "Temperature measurement compensation",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
@@ -174,7 +167,6 @@
 		},
 		"80": {
 			"label": "Z-Wave range test interval",
-			"description": "Z-Wave range test interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -186,7 +178,6 @@
 		},
 		"81": {
 			"label": "Temperature alarm threshold",
-			"description": "Temperature alarm threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -197,7 +188,6 @@
 		},
 		"82": {
 			"label": "Smoke Sensor sensitivity",
-			"description": "Smoke Sensor sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -222,7 +212,6 @@
 		},
 		"83": {
 			"label": "Black Box sensitivity level",
-			"description": "Black Box sensitivity level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -248,7 +237,6 @@
 		},
 		"84": {
 			"label": "Malfunction alarm",
-			"description": "Malfunction alarm",
 			"valueSize": 1,
 			"minValue": -126,
 			"maxValue": 127,
@@ -259,7 +247,6 @@
 		},
 		"85": {
 			"label": "Temperature alarm",
-			"description": "Temperature alarm",
 			"valueSize": 1,
 			"minValue": -126,
 			"maxValue": 127,
@@ -270,7 +257,6 @@
 		},
 		"86": {
 			"label": "Lack of the Z-Wave range alarm",
-			"description": "Lack of the Z-Wave range alarm",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 17280,
@@ -281,7 +267,6 @@
 		},
 		"87": {
 			"label": "Low battery alarm",
-			"description": "Low battery alarm",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 17280,
@@ -292,7 +277,6 @@
 		},
 		"88": {
 			"label": "Temperature measurement compensation for report",
-			"description": "Temperature measurement compensation for report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

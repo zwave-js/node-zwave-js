@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"2": {
 			"label": "Dwell Time",
-			"description": "Dwell Time",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 1,
@@ -31,7 +30,6 @@
 		},
 		"3": {
 			"label": "Pet Immunity",
-			"description": "Pet Immunity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -56,7 +54,6 @@
 		},
 		"4": {
 			"label": "Walk Test",
-			"description": "Walk Test",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

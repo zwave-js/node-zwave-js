@@ -140,7 +140,6 @@
 		},
 		"8": {
 			"label": "Operating Mode",
-			"description": "Operating Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

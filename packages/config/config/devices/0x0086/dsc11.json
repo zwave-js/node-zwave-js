@@ -256,7 +256,6 @@
 		},
 		"100": {
 			"label": "Reset 0x65~0x67 to default value",
-			"description": "Reset 0x65~0x67 to default value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -63,7 +63,6 @@
 		},
 		"2": {
 			"label": "Upload Temperature Automatically",
-			"description": "Upload Temperature Automatically",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -92,7 +91,6 @@
 		},
 		"3": {
 			"label": "Upload temperature difference",
-			"description": "Upload temperature difference",
 			"valueSize": 2,
 			"minValue": 3,
 			"maxValue": 1000,
@@ -115,7 +113,6 @@
 		},
 		"255": {
 			"label": "Factory Setting",
-			"description": "Factory Setting",
 			"valueSize": 1,
 			"minValue": 85,
 			"maxValue": 85,

@@ -53,7 +53,6 @@
 		},
 		"4": {
 			"label": "Configuration Bitmask",
-			"description": "Configuration Bitmask",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 2,
@@ -74,7 +73,6 @@
 		},
 		"5": {
 			"label": "Battery Reporting Interval",
-			"description": "Battery Reporting Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -85,7 +83,6 @@
 		},
 		"7": {
 			"label": "Temperature Reporting Interval",
-			"description": "Temperature Reporting Interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -96,7 +93,6 @@
 		},
 		"8": {
 			"label": "Temperature Calibration Offset",
-			"description": "Temperature Calibration Offset",
 			"valueSize": 2,
 			"minValue": -100,
 			"maxValue": 100,
@@ -107,7 +103,6 @@
 		},
 		"9": {
 			"label": "Mandatory Temperature Reporting Interval",
-			"description": "Mandatory Temperature Reporting Interval",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 60,

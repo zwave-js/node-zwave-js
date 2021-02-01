@@ -43,7 +43,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Current overload protection enable",
-			"description": "Current overload protection enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -196,7 +195,6 @@
 		},
 		"100": {
 			"label": "Set 101‐103 to default.",
-			"description": "Set 101‐103 to default.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -328,7 +326,6 @@
 		},
 		"110": {
 			"label": "Set 111‐113 to default.",
-			"description": "Set 111‐113 to default.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -416,7 +413,6 @@
 		},
 		"83[0xff]": {
 			"label": "Blue night light color value",
-			"description": "Blue night light color value",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
@@ -427,7 +423,6 @@
 		},
 		"83[0xff00]": {
 			"label": "Green night light color value",
-			"description": "Green night light color value",
 			"valueSize": 3,
 			"minValue": 0,
 			"maxValue": 255,
@@ -449,7 +444,6 @@
 		},
 		"84[0xff]": {
 			"label": "Green brightness in energy mode (%)",
-			"description": "Green brightness in energy mode (%)",
 			"unit": "percent",
 			"valueSize": 3,
 			"minValue": 0,
@@ -461,7 +455,6 @@
 		},
 		"84[0xff00]": {
 			"label": "Yellow brightness in energy mode (%)",
-			"description": "Yellow brightness in energy mode (%)",
 			"unit": "percent",
 			"valueSize": 3,
 			"minValue": 0,
@@ -473,7 +466,6 @@
 		},
 		"84[0xff0000]": {
 			"label": "Red brightness in energy mode (%)",
-			"description": "Red brightness in energy mode (%)",
 			"unit": "percent",
 			"valueSize": 3,
 			"minValue": 0,

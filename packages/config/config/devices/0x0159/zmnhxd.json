@@ -108,7 +108,6 @@
 		},
 		"100": {
 			"label": "Enable / Disable External IR relay (BICOM)",
-			"description": "Enable / Disable External IR relay (BICOM)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -133,7 +132,6 @@
 		},
 		"101": {
 			"label": "Enable / Disable External relay (IKA)",
-			"description": "Enable / Disable External relay (IKA)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -154,7 +152,6 @@
 		},
 		"106": {
 			"label": "maximum power threshold of all phases together",
-			"description": "maximum power threshold of all phases together",
 			"unit": "W",
 			"valueSize": 2,
 			"minValue": 0,
@@ -167,7 +164,6 @@
 		},
 		"112": {
 			"label": "Power threshold – Delay before power on",
-			"description": "Power threshold – Delay before power on",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,

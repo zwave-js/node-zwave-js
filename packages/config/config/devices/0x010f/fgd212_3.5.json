@@ -123,7 +123,6 @@
 		},
 		"9": {
 			"label": "Saving state before power failure",
-			"description": "Saving state before power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -611,7 +610,6 @@
 		},
 		"33": {
 			"label": "Dimmability of the load (read only)",
-			"description": "Dimmability of the load (read only)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -1057,7 +1055,6 @@
 		},
 		"59": {
 			"label": "Approximated power at the maximum brightness level",
-			"description": "Approximated power at the maximum brightness level",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,

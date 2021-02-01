@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Input I1 switch type",
-			"description": "Input I1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,7 +39,6 @@
 		},
 		"2": {
 			"label": "Input I2 switch type",
-			"description": "Input I2 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -61,7 +59,6 @@
 		},
 		"4": {
 			"label": "Input 1 contact type",
-			"description": "Input 1 contact type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -82,7 +79,6 @@
 		},
 		"5": {
 			"label": "Input 2 contact type",
-			"description": "Input 2 contact type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -103,7 +99,6 @@
 		},
 		"10": {
 			"label": "Activate / deactivate ALL ON/ALL OFF",
-			"description": "Activate / deactivate ALL ON/ALL OFF",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -132,7 +127,6 @@
 		},
 		"11": {
 			"label": "I1 Functionality selection",
-			"description": "I1 Functionality selection",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -157,7 +151,6 @@
 		},
 		"12": {
 			"label": "I2 Functionality selection",
-			"description": "I2 Functionality selection",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -178,7 +171,6 @@
 		},
 		"40": {
 			"label": "Watt Power Consumption Threshold for Q⬆",
-			"description": "Watt Power Consumption Threshold for Q⬆",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -196,7 +188,6 @@
 		},
 		"42": {
 			"label": "Watt Power Time Threshold for Q⬆",
-			"description": "Watt Power Time Threshold for Q⬆",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -208,7 +199,6 @@
 		},
 		"43": {
 			"label": "Hysteresis heating On",
-			"description": "Hysteresis heating On",
 			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 0,
@@ -230,7 +220,6 @@
 		},
 		"44": {
 			"label": "Hysteresis Heating Off",
-			"description": "Hysteresis Heating Off",
 			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 0,
@@ -252,7 +241,6 @@
 		},
 		"45": {
 			"label": "Hysteresis Cooling On",
-			"description": "Hysteresis Cooling On",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1255,
@@ -263,7 +251,6 @@
 		},
 		"46": {
 			"label": "Hysteresis Cooling Off",
-			"description": "Hysteresis Cooling Off",
 			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 0,
@@ -275,7 +262,6 @@
 		},
 		"47": {
 			"label": "Antifreeze",
-			"description": "Antifreeze",
 			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 0,
@@ -287,7 +273,6 @@
 		},
 		"60": {
 			"label": "Too low temperature limit",
-			"description": "Too low temperature limit",
 			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 1,
@@ -299,7 +284,6 @@
 		},
 		"61": {
 			"label": "Too high temperature limit",
-			"description": "Too high temperature limit",
 			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 1,
@@ -311,7 +295,6 @@
 		},
 		"64": {
 			"label": "Output Switch selection Q1",
-			"description": "Output Switch selection Q1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -332,7 +315,6 @@
 		},
 		"65": {
 			"label": "Output Switch selection Q2",
-			"description": "Output Switch selection Q2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -353,7 +335,6 @@
 		},
 		"70": {
 			"label": "Input I1 status on delay",
-			"description": "Input I1 status on delay",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -365,7 +346,6 @@
 		},
 		"71": {
 			"label": "Input I1 status off delay",
-			"description": "Input I1 status off delay",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -377,7 +357,6 @@
 		},
 		"72": {
 			"label": "Input I2 status on delay",
-			"description": "Input I2 status on delay",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -389,7 +368,6 @@
 		},
 		"73": {
 			"label": "Input I2 status off delay",
-			"description": "Input I2 status off delay",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -401,7 +379,6 @@
 		},
 		"76": {
 			"label": "group 2, 10 - reporting on time interval",
-			"description": "group 2, 10 - reporting on time interval",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -413,7 +390,6 @@
 		},
 		"77": {
 			"label": "group 10 delay before sending Basic Set ON",
-			"description": "group 10 delay before sending Basic Set ON",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -425,7 +401,6 @@
 		},
 		"78": {
 			"label": "Scale Selection",
-			"description": "Scale Selection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -446,7 +421,6 @@
 		},
 		"100": {
 			"label": "Endpoint I1 Enable/Disable or Type and Event",
-			"description": "Endpoint I1 Enable/Disable or Type and Event",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -491,7 +465,6 @@
 		},
 		"101": {
 			"label": "Enable/Disable Endpoint I2 or select type",
-			"description": "Enable/Disable Endpoint I2 or select type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 9,
@@ -536,7 +509,6 @@
 		},
 		"110": {
 			"label": "Temperature sensor offset settings",
-			"description": "Temperature sensor offset settings",
 			"unit": "°C",
 			"valueSize": 2,
 			"minValue": 0,
@@ -548,7 +520,6 @@
 		},
 		"120": {
 			"label": "Digital temperature sensor reporting",
-			"description": "Digital temperature sensor reporting",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -559,7 +530,6 @@
 		},
 		"121": {
 			"label": "Digital temperature sensor / setpoint selector",
-			"description": "Digital temperature sensor / setpoint selector",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -596,7 +566,6 @@
 		},
 		"122": {
 			"label": "Node Id of external battery powered sensor",
-			"description": "Node Id of external battery powered sensor",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 254,

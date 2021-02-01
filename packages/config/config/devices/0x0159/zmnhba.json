@@ -33,7 +33,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Input 1 switch type",
-			"description": "Input 1 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -55,7 +54,6 @@
 		},
 		"2": {
 			"label": "Input 2 switch type",
-			"description": "Input 2 switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -77,7 +75,6 @@
 		},
 		"10": {
 			"label": "Activate / deactivate functions ALL ON/ALL OFF",
-			"description": "Activate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -107,7 +104,6 @@
 		},
 		"11": {
 			"label": "Automatic turning off relay Q1 after set time",
-			"description": "Automatic turning off relay Q1 after set time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -119,7 +115,6 @@
 		},
 		"12": {
 			"label": "Automatic turning off relay Q2 after set time",
-			"description": "Automatic turning off relay Q2 after set time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -153,7 +148,6 @@
 		},
 		"40": {
 			"label": "Power reporting in Watts on power change for Q1",
-			"description": "Power reporting in Watts on power change for Q1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -165,7 +159,6 @@
 		},
 		"41": {
 			"label": "Power reporting in Watts on power change for Q2",
-			"description": "Power reporting in Watts on power change for Q2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -177,7 +170,6 @@
 		},
 		"42": {
 			"label": "Power reporting in Watts by time interval for Q1",
-			"description": "Power reporting in Watts by time interval for Q1",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -189,7 +181,6 @@
 		},
 		"43": {
 			"label": "Power reporting in Watts by time interval for Q2",
-			"description": "Power reporting in Watts by time interval for Q2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

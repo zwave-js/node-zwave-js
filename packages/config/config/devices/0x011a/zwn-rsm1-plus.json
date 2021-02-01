@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Unsolicited Report Configuration",
-			"description": "Unsolicited Report Configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

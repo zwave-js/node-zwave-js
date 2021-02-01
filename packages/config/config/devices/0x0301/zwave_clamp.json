@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"2": {
 			"label": "MEAS_PERIOD",
-			"description": "MEAS_PERIOD",
 			"unit": "s",
 			"valueSize": 1,
 			"minValue": 30,
@@ -31,7 +30,6 @@
 		},
 		"3": {
 			"label": "MAX_REP_INTERVAL",
-			"description": "MAX_REP_INTERVAL",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 60,
@@ -42,7 +40,6 @@
 		},
 		"4": {
 			"label": "RES_ACTIVE_POWER",
-			"description": "RES_ACTIVE_POWER",
 			"unit": "W",
 			"valueSize": 1,
 			"minValue": 1,
@@ -54,7 +51,6 @@
 		},
 		"5": {
 			"label": "RES_RMS_VOLTAGE",
-			"description": "RES_RMS_VOLTAGE",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
@@ -65,7 +61,6 @@
 		},
 		"6": {
 			"label": "RES_RMS_CURRENT",
-			"description": "RES_RMS_CURRENT",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1000,
@@ -76,7 +71,6 @@
 		},
 		"8": {
 			"label": "CLAMP_REVERSED",
-			"description": "CLAMP_REVERSED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -102,7 +96,6 @@
 		},
 		"9": {
 			"label": "ENABLE_CRC16",
-			"description": "ENABLE_CRC16",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -123,7 +116,6 @@
 		},
 		"10": {
 			"label": "AVG_PERIOD",
-			"description": "AVG_PERIOD",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,

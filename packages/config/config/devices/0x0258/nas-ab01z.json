@@ -43,7 +43,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Configure Alarm music volume",
-			"description": "Configure Alarm music volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -54,7 +53,6 @@
 		},
 		"2": {
 			"label": "Alarm music duration time",
-			"description": "Alarm music duration time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -66,7 +64,6 @@
 		},
 		"3": {
 			"label": "Door bell music duration time",
-			"description": "Door bell music duration time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -78,7 +75,6 @@
 		},
 		"4": {
 			"label": "Door bell music volume",
-			"description": "Door bell music volume",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -89,7 +85,6 @@
 		},
 		"5": {
 			"label": "Alarm music index",
-			"description": "Alarm music index",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -100,7 +95,6 @@
 		},
 		"6": {
 			"label": "Door bell music index",
-			"description": "Door bell music index",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -111,7 +105,6 @@
 		},
 		"7": {
 			"label": "Default Siren on mode",
-			"description": "Default Siren on mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,

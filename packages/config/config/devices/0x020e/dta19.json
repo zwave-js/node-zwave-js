@@ -33,7 +33,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Dim level when the bulb is turned on",
-			"description": "Dim level when the bulb is turned on",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -65,7 +64,6 @@
 		},
 		"10": {
 			"label": "Dimming / brightening step timing",
-			"description": "Dimming / brightening step timing",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,

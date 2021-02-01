@@ -29,7 +29,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "LED State",
-			"description": "LED State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

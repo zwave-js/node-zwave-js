@@ -27,7 +27,6 @@
 	"paramInformation": {
 		"4": {
 			"label": "Overheat protection",
-			"description": "Overheat protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -285,7 +284,6 @@
 		},
 		"252": {
 			"label": "Lock/unlock configuration parameters",
-			"description": "Lock/unlock configuration parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

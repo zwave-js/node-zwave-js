@@ -160,7 +160,6 @@
 		},
 		"8": {
 			"label": "All ON/OFF behaviour",
-			"description": "All ON/OFF behaviour",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -340,7 +339,6 @@
 		},
 		"50": {
 			"label": "Forced secure mode",
-			"description": "Forced secure mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

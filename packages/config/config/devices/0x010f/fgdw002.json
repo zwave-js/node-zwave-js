@@ -52,7 +52,6 @@
 		},
 		"3": {
 			"label": "Associations in Z-Wave network Security Mode",
-			"description": "Associations in Z-Wave network Security Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -81,7 +80,6 @@
 		},
 		"11": {
 			"label": "2nd association group triggers",
-			"description": "2nd association group triggers",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -128,7 +126,6 @@
 		},
 		"14": {
 			"label": "Association for opening - time delay",
-			"description": "Association for opening - time delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -139,7 +136,6 @@
 		},
 		"15": {
 			"label": "Association for closing - time delay",
-			"description": "Association for closing - time delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -150,7 +146,6 @@
 		},
 		"30": {
 			"label": "Tamper - alarm cancellation delay",
-			"description": "Tamper - alarm cancellation delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -161,7 +156,6 @@
 		},
 		"31": {
 			"label": "Tamper - reporting alarm cancellation",
-			"description": "Tamper - reporting alarm cancellation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -182,7 +176,6 @@
 		},
 		"50": {
 			"label": "Interval of temperature measurements",
-			"description": "Interval of temperature measurements",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -193,7 +186,6 @@
 		},
 		"51": {
 			"label": "Temperature reports threshold",
-			"description": "Temperature reports threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 300,
@@ -204,7 +196,6 @@
 		},
 		"52": {
 			"label": "Interval of temperature reports",
-			"description": "Interval of temperature reports",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -215,7 +206,6 @@
 		},
 		"53": {
 			"label": "Temperature offset",
-			"description": "Temperature offset",
 			"valueSize": 2,
 			"minValue": -1000,
 			"maxValue": 1000,
@@ -226,7 +216,6 @@
 		},
 		"54": {
 			"label": "Temperature alarm reports",
-			"description": "Temperature alarm reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -255,7 +244,6 @@
 		},
 		"55": {
 			"label": "High temperature alarm threshold",
-			"description": "High temperature alarm threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 600,
@@ -266,7 +254,6 @@
 		},
 		"56": {
 			"label": "Low temperature alarm threshold",
-			"description": "Low temperature alarm threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 599,
@@ -277,7 +264,6 @@
 		},
 		"2[0x01]": {
 			"label": "Visual LED indications - Open/close",
-			"description": "Visual LED indications - Open/close",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -298,7 +284,6 @@
 		},
 		"2[0x02]": {
 			"label": "Visual LED indications - wake up",
-			"description": "Visual LED indications - wake up",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -319,7 +304,6 @@
 		},
 		"2[0x04]": {
 			"label": "Visual LED indications - tampering",
-			"description": "Visual LED indications - tampering",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

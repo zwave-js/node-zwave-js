@@ -30,7 +30,6 @@
 	"paramInformation": {
 		"80": {
 			"label": "Notification on Status Change",
-			"description": "Notification on Status Change",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -56,7 +55,6 @@
 		},
 		"101": {
 			"label": "Group 1 report values to send",
-			"description": "Group 1 report values to send",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -67,7 +65,6 @@
 		},
 		"102": {
 			"label": "Group 2 report variables to send",
-			"description": "Group 2 report variables to send",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -78,7 +75,6 @@
 		},
 		"103": {
 			"label": "Group 3 report variables to send",
-			"description": "Group 3 report variables to send",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -89,7 +85,6 @@
 		},
 		"111": {
 			"label": "Interval to send out reports to group 1",
-			"description": "Interval to send out reports to group 1",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2678400,
@@ -100,7 +95,6 @@
 		},
 		"112": {
 			"label": "Interval to send out reports to group 2",
-			"description": "Interval to send out reports to group 2",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2678400,
@@ -111,7 +105,6 @@
 		},
 		"113": {
 			"label": "Interval to send out reports to group 3",
-			"description": "Interval to send out reports to group 3",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2678400,
@@ -168,7 +161,6 @@
 		},
 		"250": {
 			"label": "CHECK AND DELETE ME formerly parameter 2",
-			"description": "CHECK AND DELETE ME formerly parameter 2",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

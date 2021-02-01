@@ -110,7 +110,6 @@
 		},
 		"7": {
 			"label": "Overload Protection",
-			"description": "Overload Protection",
 			"unit": "Amps",
 			"valueSize": 1,
 			"minValue": 1,

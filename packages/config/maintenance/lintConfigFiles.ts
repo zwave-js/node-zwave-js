@@ -3,6 +3,7 @@ import { num2hex } from "@zwave-js/shared";
 import { distinct } from "alcalzone-shared/arrays";
 import { green, red, white } from "ansi-colors";
 import { readFile } from "fs-extra";
+import levenshtein from "js-levenshtein";
 import * as path from "path";
 import { reportProblem } from "../../../maintenance/tools";
 import { ConfigManager } from "../src/ConfigManager";
@@ -105,6 +106,28 @@ async function lintDevices(): Promise<void> {
 		// 		}
 
 		if (config.paramInformation?.size) {
+			for (const [
+				{ parameter },
+				{ label, description },
+			] of config.paramInformation.entries()) {
+				// Check if the description is too similar to the label
+				if (description != undefined) {
+					const normalizedDistance =
+						levenshtein(label, description) /
+						Math.max(label.length, description.length);
+					if (normalizedDistance < 0.5) {
+						addWarning(
+							file,
+							`Parameter #${parameter} has a very similar label and description (normalized distance ${normalizedDistance.toFixed(
+								2,
+							)}). Consider removing the description if it does not add any information:
+label:       ${label}
+description: ${description}`,
+						);
+					}
+				}
+			}
+
 			// Check if there are options when manual entry is forbidden
 			for (const [
 				{ parameter },

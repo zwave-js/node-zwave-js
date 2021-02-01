@@ -26,7 +26,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Condition after power failure",
-			"description": "Condition after power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

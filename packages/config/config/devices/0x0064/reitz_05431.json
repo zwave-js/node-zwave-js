@@ -75,7 +75,6 @@
 		},
 		"3": {
 			"label": "Function of RF off command",
-			"description": "Function of RF off command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -105,7 +104,6 @@
 		},
 		"4": {
 			"label": "Switch on dimming by buttons",
-			"description": "Switch on dimming by buttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -127,7 +125,6 @@
 		},
 		"5": {
 			"label": "restore switch state",
-			"description": "restore switch state",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -149,7 +146,6 @@
 		},
 		"10": {
 			"label": "Typical click timeout",
-			"description": "Typical click timeout",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -160,7 +156,6 @@
 		},
 		"11": {
 			"label": "Invert buttons",
-			"description": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -182,7 +177,6 @@
 		},
 		"12": {
 			"label": "Switch by buttons",
-			"description": "Switch by buttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -208,7 +202,6 @@
 		},
 		"13": {
 			"label": "Action on button single press or hold",
-			"description": "Action on button single press or hold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -246,7 +239,6 @@
 		},
 		"14": {
 			"label": "Action on button double press or hold",
-			"description": "Action on button double press or hold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -284,7 +276,6 @@
 		},
 		"15": {
 			"label": "Send the following switch all commands",
-			"description": "Send the following switch all commands",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

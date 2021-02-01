@@ -34,7 +34,6 @@
 		},
 		"2": {
 			"label": "External switch type",
-			"description": "External switch type",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -45,7 +44,6 @@
 		},
 		"3": {
 			"label": "2-state Switches",
-			"description": "2-state Switches",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -56,7 +54,6 @@
 		},
 		"4": {
 			"label": "ALL ON/ALL OFF",
-			"description": "ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -68,7 +65,6 @@
 		},
 		"5": {
 			"label": "Minimum brightness level",
-			"description": "Minimum brightness level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 98,
@@ -79,7 +75,6 @@
 		},
 		"6": {
 			"label": "Maximum brightness level",
-			"description": "Maximum brightness level",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 99,
@@ -90,7 +85,6 @@
 		},
 		"7": {
 			"label": "Single dimming step time(Manual)",
-			"description": "Single dimming step time(Manual)",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
@@ -101,7 +95,6 @@
 		},
 		"8": {
 			"label": "Single dimming step size (Manual)",
-			"description": "Single dimming step size (Manual)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -112,7 +105,6 @@
 		},
 		"9": {
 			"label": "Single dimming step time (Auto)",
-			"description": "Single dimming step time (Auto)",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 255,
@@ -123,7 +115,6 @@
 		},
 		"10": {
 			"label": "Single dimming step size (Auto)",
-			"description": "Single dimming step size (Auto)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -134,7 +125,6 @@
 		},
 		"11": {
 			"label": "Timer function (Auto-off)",
-			"description": "Timer function (Auto-off)",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -145,7 +135,6 @@
 		},
 		"13": {
 			"label": "One click of S1",
-			"description": "One click of S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -156,7 +145,6 @@
 		},
 		"14": {
 			"label": "Double click of S1",
-			"description": "Double click of S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -190,7 +178,6 @@
 		},
 		"17": {
 			"label": "Switch 2 function",
-			"description": "Switch 2 function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -214,7 +201,6 @@
 		},
 		"19": {
 			"label": "Scene ID sent to AG1 when one click of S2",
-			"description": "Scene ID sent to AG1 when one click of S2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -238,7 +224,6 @@
 		},
 		"21": {
 			"label": "Scene ID sent to AG1 when hold S2",
-			"description": "Scene ID sent to AG1 when hold S2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

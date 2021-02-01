@@ -36,7 +36,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Blue LED Night Light",
-			"description": "Blue LED Night Light",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

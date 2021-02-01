@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Default State",
-			"description": "Default State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 63,
@@ -44,7 +43,6 @@
 		},
 		"2": {
 			"label": "Power Failure",
-			"description": "Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 63,

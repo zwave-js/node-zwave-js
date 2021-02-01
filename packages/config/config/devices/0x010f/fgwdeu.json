@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"0": {
 			"label": "ON/OFF mode",
-			"description": "ON/OFF mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -372,7 +371,6 @@
 		},
 		"155": {
 			"label": "Automatic control – time of dimming step",
-			"description": "Automatic control – time of dimming step",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -383,7 +381,6 @@
 		},
 		"156": {
 			"label": "Manual control – dimming step size",
-			"description": "Manual control – dimming step size",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -394,7 +391,6 @@
 		},
 		"157": {
 			"label": "Manual control – time of dimming step",
-			"description": "Manual control – time of dimming step",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -405,7 +401,6 @@
 		},
 		"158": {
 			"label": "Auto-off functionality",
-			"description": "Auto-off functionality",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,
@@ -416,7 +411,6 @@
 		},
 		"159": {
 			"label": "Force auto-calibration",
-			"description": "Force auto-calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -438,7 +432,6 @@
 		},
 		"161": {
 			"label": "Burnt out bulb detection",
-			"description": "Burnt out bulb detection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -482,7 +475,6 @@
 		},
 		"165": {
 			"label": "Double click – set level",
-			"description": "Double click – set level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -493,7 +485,6 @@
 		},
 		"170": {
 			"label": "Load control mode",
-			"description": "Load control mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -529,7 +520,6 @@
 		},
 		"173": {
 			"label": "Dimmability of the load (read only)",
-			"description": "Dimmability of the load (read only)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -540,7 +530,6 @@
 		},
 		"174": {
 			"label": "Soft-start functionality",
-			"description": "Soft-start functionality",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -565,7 +554,6 @@
 		},
 		"175": {
 			"label": "Auto-calibration after power on",
-			"description": "Auto-calibration after power on",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -594,7 +582,6 @@
 		},
 		"176": {
 			"label": "Behaviour after OVERCURRENT or SURGE",
-			"description": "Behaviour after OVERCURRENT or SURGE",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -626,7 +613,6 @@
 		},
 		"178": {
 			"label": "Method of calculating the active power",
-			"description": "Method of calculating the active power",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

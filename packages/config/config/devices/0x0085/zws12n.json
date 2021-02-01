@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"7": {
 			"label": "Motor speed I",
-			"description": "Motor speed I",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
@@ -34,7 +33,6 @@
 		},
 		"8": {
 			"label": "1 Motor speed II (rain sensor)",
-			"description": "1 Motor speed II (rain sensor)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,

@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Current Overload Protection",
-			"description": "Current Overload Protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -44,7 +43,6 @@
 		},
 		"4": {
 			"label": "Overheat protection",
-			"description": "Overheat protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -65,7 +63,6 @@
 		},
 		"20": {
 			"label": "Configure the output status after re-power on it",
-			"description": "Configure the output status after re-power on it",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -165,7 +162,6 @@
 		},
 		"85": {
 			"label": "Set appointment 1",
-			"description": "Set appointment 1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16843197,
@@ -176,7 +172,6 @@
 		},
 		"86": {
 			"label": "Set appointment 2",
-			"description": "Set appointment 2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 16843197,
@@ -271,7 +266,6 @@
 		},
 		"103": {
 			"label": "Reports sent to Report group 3",
-			"description": "Reports sent to Report group 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -332,7 +326,6 @@
 		},
 		"120": {
 			"label": "Configure the external switch mode for S1",
-			"description": "Configure the external switch mode for S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -365,7 +358,6 @@
 		},
 		"121": {
 			"label": "Configure the external switch mode for S2",
-			"description": "Configure the external switch mode for S2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -398,7 +390,6 @@
 		},
 		"122": {
 			"label": "Get the state of touch panel port",
-			"description": "Get the state of touch panel port",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -419,7 +410,6 @@
 		},
 		"123": {
 			"label": "Set the control destination for external switch S1",
-			"description": "Set the control destination for external switch S1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -444,7 +434,6 @@
 		},
 		"124": {
 			"label": "Set the control destination for external switch S2",
-			"description": "Set the control destination for external switch S2",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -481,7 +470,6 @@
 		},
 		"128": {
 			"label": "Get the current working mode",
-			"description": "Get the current working mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -506,7 +494,6 @@
 		},
 		"129": {
 			"label": "Set the dimming principle",
-			"description": "Set the dimming principle",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -527,7 +514,6 @@
 		},
 		"130": {
 			"label": "Type of load the Dimmer is connected to",
-			"description": "Type of load the Dimmer is connected to",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -556,7 +542,6 @@
 		},
 		"131": {
 			"label": "Set the min brightness level",
-			"description": "Set the min brightness level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -567,7 +552,6 @@
 		},
 		"132": {
 			"label": "Set the max brightness level",
-			"description": "Set the max brightness level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -578,7 +562,6 @@
 		},
 		"249": {
 			"label": "Set the recognition way of load",
-			"description": "Set the recognition way of load",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -603,7 +586,6 @@
 		},
 		"252": {
 			"label": "Lock/unlock configuration parameters",
-			"description": "Lock/unlock configuration parameters",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -624,7 +606,6 @@
 		},
 		"255": {
 			"label": "Reset the Nano Dimmer",
-			"description": "Reset the Nano Dimmer",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1431655765,

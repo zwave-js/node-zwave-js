@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Siren alarm sequence interval",
-			"description": "Siren alarm sequence interval",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 129,
@@ -31,7 +30,6 @@
 		},
 		"2": {
 			"label": "Siren alarm tone length",
-			"description": "Siren alarm tone length",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -62,7 +60,6 @@
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
-			"description": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

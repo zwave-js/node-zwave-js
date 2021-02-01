@@ -26,7 +26,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Wall Meter Report Period",
-			"description": "Wall Meter Report Period",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -37,7 +36,6 @@
 		},
 		"2": {
 			"label": "KWH Meter Report Period",
-			"description": "KWH Meter Report Period",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -48,7 +46,6 @@
 		},
 		"3": {
 			"label": "Threshold of current for Load caution",
-			"description": "Threshold of current for Load caution",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 1300,
@@ -59,7 +56,6 @@
 		},
 		"4": {
 			"label": "Threshold of KWH for Load caution",
-			"description": "Threshold of KWH for Load caution",
 			"unit": "KWh",
 			"valueSize": 2,
 			"minValue": 1,
@@ -71,7 +67,6 @@
 		},
 		"5": {
 			"label": "Restore switch state mode",
-			"description": "Restore switch state mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -96,7 +91,6 @@
 		},
 		"6": {
 			"label": "Mode of Switch Off function",
-			"description": "Mode of Switch Off function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -117,7 +111,6 @@
 		},
 		"7": {
 			"label": "LED indication mode",
-			"description": "LED indication mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -142,7 +135,6 @@
 		},
 		"8": {
 			"label": "Auto off timer",
-			"description": "Auto off timer",
 			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
@@ -160,7 +152,6 @@
 		},
 		"9": {
 			"label": "RF off command mode",
-			"description": "RF off command mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

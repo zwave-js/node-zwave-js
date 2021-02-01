@@ -46,5 +46,8 @@
     "clean": "yarn run build -- --clean",
     "watch": "yarn run build -- --watch --pretty",
     "lint:config": "gulp lintConfigFiles"
+  },
+  "devDependencies": {
+    "@types/js-levenshtein": "^1.1.0"
   }
 }

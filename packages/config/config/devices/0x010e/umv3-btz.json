@@ -106,7 +106,6 @@
 		},
 		"8": {
 			"label": "Battery Sample Interval Seconds",
-			"description": "Battery Sample Interval Seconds",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 2147483647,

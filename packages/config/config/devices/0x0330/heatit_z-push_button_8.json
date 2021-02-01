@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "factory reset",
-			"description": "factory reset",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 21930,

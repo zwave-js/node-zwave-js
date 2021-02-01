@@ -18,13 +18,11 @@
 	"associations": {
 		"1": {
 			"label": "Click, press and hold of up/down buttons",
-			"description": "Click, press and hold of up/down buttons",
 			"maxNodes": 10,
 			"isLifeline": true
 		},
 		"2": {
 			"label": "Send Reports on blind state change",
-			"description": "Send Reports on blind state change",
 			"maxNodes": 10,
 			"isLifeline": true
 		}
@@ -73,7 +71,6 @@
 		},
 		"3": {
 			"label": "What to do on RF close command",
-			"description": "What to do on RF close command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -114,7 +111,6 @@
 		},
 		"5": {
 			"label": "Invert buttons",
-			"description": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -214,7 +210,6 @@
 		},
 		"12": {
 			"label": "Node Id of the blocking device",
-			"description": "Node Id of the blocking device",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 24,
@@ -225,7 +220,6 @@
 		},
 		"13": {
 			"label": "Blocking mode command",
-			"description": "Blocking mode command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -246,7 +240,6 @@
 		},
 		"14": {
 			"label": "Invert open and close relays",
-			"description": "Invert open and close relays",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

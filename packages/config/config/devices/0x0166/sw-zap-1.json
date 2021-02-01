@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Switch All",
-			"description": "Switch All",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

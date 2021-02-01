@@ -30,7 +30,6 @@
 	"paramInformation": {
 		"99": {
 			"label": "Fault Restore Report",
-			"description": "Fault Restore Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

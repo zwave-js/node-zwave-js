@@ -102,7 +102,6 @@
 		},
 		"5": {
 			"label": "Status after Power Failure",
-			"description": "Status after Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -123,7 +122,6 @@
 		},
 		"21": {
 			"label": "LED Color on OFF state",
-			"description": "LED Color on OFF state",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -148,7 +146,6 @@
 		},
 		"22": {
 			"label": "LED Color on ON state",
-			"description": "LED Color on ON state",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -173,7 +170,6 @@
 		},
 		"23": {
 			"label": "Voltage Report Threshold",
-			"description": "Voltage Report Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 250,
@@ -185,7 +181,6 @@
 		},
 		"24": {
 			"label": "Current Reporting Threshold",
-			"description": "Current Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -197,7 +192,6 @@
 		},
 		"25": {
 			"label": "Power Reporting Threshold",
-			"description": "Power Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -209,7 +203,6 @@
 		},
 		"26": {
 			"label": "Soft Circuit Breaker Threshold",
-			"description": "Soft Circuit Breaker Threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 3600,
@@ -220,7 +213,6 @@
 		},
 		"27": {
 			"label": "Soft Circuit Breaker Recovery Time",
-			"description": "Soft Circuit Breaker Recovery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -232,7 +224,6 @@
 		},
 		"28": {
 			"label": "Soft Circuit Breaker Delay Time",
-			"description": "Soft Circuit Breaker Delay Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

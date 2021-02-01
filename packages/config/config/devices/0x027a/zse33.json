@@ -42,7 +42,6 @@
 		},
 		"3": {
 			"label": "Chime Sound Duration",
-			"description": "Chime Sound Duration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -87,7 +86,6 @@
 		},
 		"7": {
 			"label": "Siren Alarm or Chime Mode",
-			"description": "Siren Alarm or Chime Mode",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 2,
@@ -98,7 +96,6 @@
 		},
 		"8": {
 			"label": "LED Notifications for Siren Alarm",
-			"description": "LED Notifications for Siren Alarm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -109,7 +106,6 @@
 		},
 		"9": {
 			"label": "LED Notifications for Chime",
-			"description": "LED Notifications for Chime",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

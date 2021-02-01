@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Basic Set OFF Level",
-			"description": "Basic Set OFF Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -31,7 +30,6 @@
 		},
 		"2": {
 			"label": "Basic Set ON Level",
-			"description": "Basic Set ON Level",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -43,7 +41,6 @@
 		},
 		"5": {
 			"label": "Disable the Flood function",
-			"description": "Disable the Flood function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -65,7 +62,6 @@
 		},
 		"7": {
 			"label": "Customer Function",
-			"description": "Customer Function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -77,7 +73,6 @@
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
-			"description": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -88,7 +83,6 @@
 		},
 		"15": {
 			"label": "Auto Report Flood Time",
-			"description": "Auto Report Flood Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -99,7 +93,6 @@
 		},
 		"20": {
 			"label": "Auto Report Tick Interval",
-			"description": "Auto Report Tick Interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

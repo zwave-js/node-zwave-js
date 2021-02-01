@@ -73,7 +73,6 @@
 		},
 		"3": {
 			"label": "Auto Turn-off enable/disable",
-			"description": "Auto Turn-off enable/disable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -94,7 +93,6 @@
 		},
 		"4": {
 			"label": "Auto Turn-off time",
-			"description": "Auto Turn-off time",
 			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 1,
@@ -106,7 +104,6 @@
 		},
 		"5": {
 			"label": "Auto Turn-on enable/disable",
-			"description": "Auto Turn-on enable/disable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -127,7 +124,6 @@
 		},
 		"6": {
 			"label": "Auto Turn-on time",
-			"description": "Auto Turn-on time",
 			"unit": "minutes",
 			"valueSize": 4,
 			"minValue": 1,
@@ -139,7 +135,6 @@
 		},
 		"8": {
 			"label": "Status after Power failure",
-			"description": "Status after Power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -164,7 +159,6 @@
 		},
 		"9": {
 			"label": "Dimmer Ramp Rate",
-			"description": "Dimmer Ramp Rate",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 1,
@@ -176,7 +170,6 @@
 		},
 		"10": {
 			"label": "Minimum brightness level",
-			"description": "Minimum brightness level",
 			"unit": "percent",
 			"valueSize": 1,
 			"minValue": 1,
@@ -188,7 +181,6 @@
 		},
 		"11": {
 			"label": "Maximum brightness level",
-			"description": "Maximum brightness level",
 			"unit": "percent",
 			"valueSize": 1,
 			"minValue": 1,
@@ -200,7 +192,6 @@
 		},
 		"12": {
 			"label": "Double Tap function",
-			"description": "Double Tap function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

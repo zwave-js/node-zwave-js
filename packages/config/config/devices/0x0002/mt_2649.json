@@ -26,7 +26,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Temperature Report threshold",
-			"description": "Temperature Report threshold",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 100,

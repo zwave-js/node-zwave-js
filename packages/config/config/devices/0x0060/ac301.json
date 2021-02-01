@@ -25,7 +25,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Temperature Auto Report period setting",
-			"description": "Temperature Auto Report period setting",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 1,
@@ -49,7 +48,6 @@
 		},
 		"3": {
 			"label": "Maximum Set point value",
-			"description": "Maximum Set point value",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 5,
@@ -61,7 +59,6 @@
 		},
 		"4": {
 			"label": "Minimum Set point value",
-			"description": "Minimum Set point value",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 5,
@@ -73,7 +70,6 @@
 		},
 		"5": {
 			"label": "Frost protection temperature",
-			"description": "Frost protection temperature",
 			"valueSize": 1,
 			"unit": "°C",
 			"minValue": 5,
@@ -85,7 +81,6 @@
 		},
 		"6": {
 			"label": "Open window detect function",
-			"description": "Open window detect function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -106,7 +101,6 @@
 		},
 		"7": {
 			"label": "Open window detect time period",
-			"description": "Open window detect time period",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 2,
@@ -150,7 +144,6 @@
 		},
 		"9": {
 			"label": "Open window detect delay time select",
-			"description": "Open window detect delay time select",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 10,

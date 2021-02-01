@@ -183,7 +183,6 @@
 		},
 		"12": {
 			"label": "Motion Event Report One Time Enable",
-			"description": "Motion Event Report One Time Enable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

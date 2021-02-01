@@ -84,7 +84,6 @@
 		},
 		"8": {
 			"label": "PIR Re-Detect Interval Time",
-			"description": "PIR Re-Detect Interval Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -95,7 +94,6 @@
 		},
 		"9": {
 			"label": "Turn Off Light Time",
-			"description": "Turn Off Light Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -106,7 +104,6 @@
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
-			"description": "Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -117,7 +114,6 @@
 		},
 		"11": {
 			"label": "Auto Report Door/Window State Time",
-			"description": "Auto Report Door/Window State Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

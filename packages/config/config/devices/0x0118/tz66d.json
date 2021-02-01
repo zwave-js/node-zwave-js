@@ -122,7 +122,6 @@
 		},
 		"14": {
 			"label": "Enable Shade Control Group 2",
-			"description": "Enable Shade Control Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -143,7 +142,6 @@
 		},
 		"15": {
 			"label": "Enable Shade Control Group 3",
-			"description": "Enable Shade Control Group 3",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -201,7 +199,6 @@
 		},
 		"22": {
 			"label": "Poll Group 2",
-			"description": "Poll Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

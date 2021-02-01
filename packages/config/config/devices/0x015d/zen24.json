@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Control Mode",
-			"description": "Control Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

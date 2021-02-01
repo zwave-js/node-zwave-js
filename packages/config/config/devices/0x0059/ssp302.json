@@ -193,7 +193,6 @@
 		},
 		"15": {
 			"label": "Relay and LED configuration",
-			"description": "Relay and LED configuration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -204,7 +203,6 @@
 		},
 		"16": {
 			"label": "Sleep Current Config",
-			"description": "Sleep Current Config",
 			"unit": "A",
 			"valueSize": 1,
 			"minValue": 0,

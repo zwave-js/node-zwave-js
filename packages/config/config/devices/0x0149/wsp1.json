@@ -44,7 +44,6 @@
 		},
 		"2": {
 			"label": "Level used to control group 4",
-			"description": "Level used to control group 4",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 100,
@@ -55,7 +54,6 @@
 		},
 		"3": {
 			"label": "Level used to control group 5",
-			"description": "Level used to control group 5",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 100,
@@ -66,7 +64,6 @@
 		},
 		"4": {
 			"label": "Overvoltage level",
-			"description": "Overvoltage level",
 			"valueSize": 2,
 			"minValue": 110,
 			"maxValue": 260,
@@ -77,7 +74,6 @@
 		},
 		"5": {
 			"label": "Overvoltage Timer",
-			"description": "Overvoltage Timer",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 3600,
@@ -88,7 +84,6 @@
 		},
 		"6": {
 			"label": "Overvoltage Alarm Reset",
-			"description": "Overvoltage Alarm Reset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -120,7 +115,6 @@
 		},
 		"8": {
 			"label": "Overcurrent level",
-			"description": "Overcurrent level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 12,
@@ -131,7 +125,6 @@
 		},
 		"9": {
 			"label": "Overcurrent Timer",
-			"description": "Overcurrent Timer",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 3600,
@@ -142,7 +135,6 @@
 		},
 		"10": {
 			"label": "Overcurrent Alarm Reset",
-			"description": "Overcurrent Alarm Reset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

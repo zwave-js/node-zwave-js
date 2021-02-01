@@ -301,7 +301,6 @@
 		},
 		"22": {
 			"label": "Invert buttons",
-			"description": "Invert buttons",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

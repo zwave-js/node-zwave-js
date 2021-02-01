@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Dim level when light is turned ON",
-			"description": "Dim level when light is turned ON",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -40,7 +39,6 @@
 		},
 		"9": {
 			"label": "Dimming/Brightening Step Level",
-			"description": "Dimming/Brightening Step Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -51,7 +49,6 @@
 		},
 		"10": {
 			"label": "Dimming/Brightening Step Timing",
-			"description": "Dimming/Brightening Step Timing",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,

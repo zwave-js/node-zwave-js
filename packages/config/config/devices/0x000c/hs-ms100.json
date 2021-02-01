@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"12": {
 			"label": "Motion sensor sensitivity",
-			"description": "Motion sensor sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 8,
@@ -30,7 +29,6 @@
 		},
 		"14": {
 			"label": "Enable/Disable BASIC SET command",
-			"description": "Enable/Disable BASIC SET command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -51,7 +49,6 @@
 		},
 		"15": {
 			"label": "Value of the BASIC SET",
-			"description": "Value of the BASIC SET",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -72,7 +69,6 @@
 		},
 		"17": {
 			"label": "Enable/ Disable shock alarm",
-			"description": "Enable/ Disable shock alarm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -93,7 +89,6 @@
 		},
 		"18": {
 			"label": "Motion timeout interval",
-			"description": "Motion timeout interval",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -105,7 +100,6 @@
 		},
 		"32": {
 			"label": "Level of low battery",
-			"description": "Level of low battery",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,

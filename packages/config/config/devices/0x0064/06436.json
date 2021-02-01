@@ -170,7 +170,6 @@
 		},
 		"7": {
 			"label": "Protected command",
-			"description": "Protected command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -218,7 +217,6 @@
 		},
 		"9": {
 			"label": "Invert open and close relays",
-			"description": "Invert open and close relays",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -240,7 +238,6 @@
 		},
 		"10": {
 			"label": "Typical click timeout",
-			"description": "Typical click timeout",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 100,
@@ -401,7 +398,6 @@
 		},
 		"16": {
 			"label": "What to do on button Down press",
-			"description": "What to do on button Down press",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

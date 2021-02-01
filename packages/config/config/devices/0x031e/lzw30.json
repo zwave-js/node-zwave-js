@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Power On State",
-			"description": "Power On State",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -44,7 +43,6 @@
 		},
 		"2": {
 			"label": "Invert Switch",
-			"description": "Invert Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -77,7 +75,6 @@
 		},
 		"4": {
 			"label": "Association Behaviour",
-			"description": "Association Behaviour",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 15,
@@ -88,7 +85,6 @@
 		},
 		"5": {
 			"label": "LED Indicator Color",
-			"description": "LED Indicator Color",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -133,7 +129,6 @@
 		},
 		"6": {
 			"label": "LED Indicator Intensity (when on)",
-			"description": "LED Indicator Intensity (when on)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -190,7 +185,6 @@
 		},
 		"7": {
 			"label": "LED Indicator Intensity (when Off)",
-			"description": "LED Indicator Intensity (when Off)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,

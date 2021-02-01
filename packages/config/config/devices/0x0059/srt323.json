@@ -64,7 +64,6 @@
 		},
 		"2": {
 			"label": "Temperature Scale",
-			"description": "Temperature Scale",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

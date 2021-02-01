@@ -50,7 +50,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Temperature Reporting Threshold",
-			"description": "Temperature Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -84,7 +83,6 @@
 		},
 		"3": {
 			"label": "Utility Lock Enable/Disable",
-			"description": "Utility Lock Enable/Disable",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -106,7 +104,6 @@
 		},
 		"5": {
 			"label": "Humidity Reporting Threshold",
-			"description": "Humidity Reporting Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -136,7 +133,6 @@
 		},
 		"6": {
 			"label": "Auxiliary/Emergency",
-			"description": "Auxiliary/Emergency",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -158,7 +154,6 @@
 		},
 		"7": {
 			"label": "Thermostat Swing Temperature",
-			"description": "Thermostat Swing Temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -184,7 +179,6 @@
 		},
 		"8": {
 			"label": "Thermostat Diff Temperature",
-			"description": "Thermostat Diff Temperature",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

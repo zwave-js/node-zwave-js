@@ -39,7 +39,6 @@
 		},
 		"20": {
 			"label": "Input 1 - operating mode",
-			"description": "Input 1 - operating mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -72,7 +71,6 @@
 		},
 		"21": {
 			"label": "Input 2 - operating mode",
-			"description": "Input 2 - operating mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -105,7 +103,6 @@
 		},
 		"22": {
 			"label": "Input 3 - operating mode",
-			"description": "Input 3 - operating mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -138,7 +135,6 @@
 		},
 		"23": {
 			"label": "Input 4 - operating mode",
-			"description": "Input 4 - operating mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -171,7 +167,6 @@
 		},
 		"40": {
 			"label": "Input 1 - sent scenes",
-			"description": "Input 1 - sent scenes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -182,7 +177,6 @@
 		},
 		"41": {
 			"label": "Input 2 - sent scenes",
-			"description": "Input 2 - sent scenes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -193,7 +187,6 @@
 		},
 		"42": {
 			"label": "Input 3 - sent scenes",
-			"description": "Input 3 - sent scenes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -204,7 +197,6 @@
 		},
 		"43": {
 			"label": "Input 4 - sent scenes",
-			"description": "Input 4 - sent scenes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -215,7 +207,6 @@
 		},
 		"62": {
 			"label": "Power reports - periodic",
-			"description": "Power reports - periodic",
 			"unit": "seconda",
 			"valueSize": 2,
 			"minValue": 0,
@@ -227,7 +218,6 @@
 		},
 		"63": {
 			"label": "Analog inputs output change on input change",
-			"description": "Analog inputs output change on input change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 100,
@@ -238,7 +228,6 @@
 		},
 		"64": {
 			"label": "Analog inputs reports - periodic",
-			"description": "Analog inputs reports - periodic",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -250,7 +239,6 @@
 		},
 		"65": {
 			"label": "Energy reports - on change",
-			"description": "Energy reports - on change",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,
@@ -261,7 +249,6 @@
 		},
 		"66": {
 			"label": "Energy reports - periodic",
-			"description": "Energy reports - periodic",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -272,7 +259,6 @@
 		},
 		"150": {
 			"label": "Inputs - LED colour control mode",
-			"description": "Inputs - LED colour control mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -293,7 +279,6 @@
 		},
 		"151": {
 			"label": "Local control - transition time",
-			"description": "Local control - transition time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
@@ -304,7 +289,6 @@
 		},
 		"152": {
 			"label": "Remote control - transition time",
-			"description": "Remote control - transition time",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 254,
@@ -315,7 +299,6 @@
 		},
 		"157": {
 			"label": "Start programmed sequence",
-			"description": "Start programmed sequence",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 10,
@@ -372,7 +355,6 @@
 		},
 		"30": {
 			"label": "Alarm configuration - 1st slot",
-			"description": "Alarm configuration - 1st slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -383,7 +365,6 @@
 		},
 		"31": {
 			"label": "Alarm configuration - 2nd slot",
-			"description": "Alarm configuration - 2nd slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -394,7 +375,6 @@
 		},
 		"32": {
 			"label": "Alarm configuration - 3rd slot",
-			"description": "Alarm configuration - 3rd slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -405,7 +385,6 @@
 		},
 		"33": {
 			"label": "Alarm configuration - 4th slot",
-			"description": "Alarm configuration - 4th slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -416,7 +395,6 @@
 		},
 		"34": {
 			"label": "Alarm configuration - 5th slot",
-			"description": "Alarm configuration - 5th slot",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -427,7 +405,6 @@
 		},
 		"35": {
 			"label": "Duration of alarm signalization",
-			"description": "Duration of alarm signalization",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32400,
@@ -444,7 +421,6 @@
 		},
 		"154[0xff]": {
 			"label": "ON frame value for single click IN1",
-			"description": "ON frame value for single click IN1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -455,7 +431,6 @@
 		},
 		"154[0xff00]": {
 			"label": "ON frame value for single click IN2",
-			"description": "ON frame value for single click IN2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -466,7 +441,6 @@
 		},
 		"154[0xff0000]": {
 			"label": "ON frame value for single click IN3",
-			"description": "ON frame value for single click IN3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -477,7 +451,6 @@
 		},
 		"154[0xff000000]": {
 			"label": "ON frame value for single click IN4",
-			"description": "ON frame value for single click IN4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -488,7 +461,6 @@
 		},
 		"155[0xff]": {
 			"label": "OFF frame value for single click IN1",
-			"description": "OFF frame value for single click IN1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -499,7 +471,6 @@
 		},
 		"155[0xff00]": {
 			"label": "OFF frame value for single click IN2",
-			"description": "OFF frame value for single click IN2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -510,7 +481,6 @@
 		},
 		"155[0xff0000]": {
 			"label": "OFF frame value for single click IN3",
-			"description": "OFF frame value for single click IN3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -521,7 +491,6 @@
 		},
 		"155[0xff000000]": {
 			"label": "OFF frame value for single click IN4",
-			"description": "OFF frame value for single click IN4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -532,7 +501,6 @@
 		},
 		"156[0xff]": {
 			"label": "ON frame value for double click IN1",
-			"description": "ON frame value for double click IN1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -543,7 +511,6 @@
 		},
 		"156[0xff00]": {
 			"label": "ON frame value for double click IN2",
-			"description": "ON frame value for double click IN2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -554,7 +521,6 @@
 		},
 		"156[0xff0000]": {
 			"label": "ON frame value for double click IN3",
-			"description": "ON frame value for double click IN3",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -565,7 +531,6 @@
 		},
 		"156[0xff000000]": {
 			"label": "ON frame value for double click IN4",
-			"description": "ON frame value for double click IN4",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
