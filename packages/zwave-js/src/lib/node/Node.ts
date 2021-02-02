@@ -1361,30 +1361,7 @@ version:               ${this.version}`;
 					this._hasEmittedNoNetworkKeyError = true;
 				}
 			} else {
-				const action = await interviewEndpoint(
-					this,
-					CommandClasses.Security,
-				);
-				if (this._isSecure === true && action === false) {
-					// The node is definitely included securely, but we got no response to the interview question
-					return false;
-				} else if (action === false || action === "continue") {
-					// Assume that the node is not actually included securely
-					this.driver.controllerLog.logNode(
-						this.nodeId,
-						`The node is not included securely. Continuing interview non-securely.`,
-					);
-					this._isSecure = false;
-				} else {
-					// We got a response, so we know the node is included securely
-					if (this._isSecure !== true) {
-						this.driver.controllerLog.logNode(
-							this.nodeId,
-							`The node is included securely.`,
-						);
-					}
-					this._isSecure = true;
-				}
+				await interviewEndpoint(this, CommandClasses.Security);
 			}
 		} else if (
 			!this.supportsCC(CommandClasses.Security) &&
