@@ -1,0 +1,40 @@
+// GE/Jasco 14292
+// In-Wall Toggle Switch
+{
+	"manufacturer": "GE/Jasco",
+	"manufacturerId": "0x0063",
+	"label": "14292",
+	"description": "In-Wall Toggle Switch",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3037"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "5.21"
+	},
+	"paramInformation": {
+		"4": {
+			"label": "Invert Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Switch Install",
+					"value": 0
+				},
+				{
+					"label": "Inverted Switch Install",
+					"value": 1
+				}
+			]
+		}
+	}
+}

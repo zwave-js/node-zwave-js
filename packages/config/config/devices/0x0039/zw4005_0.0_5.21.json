@@ -13,9 +13,8 @@
 	],
 	"firmwareVersion": {
 		"min": "0.0",
-		"max": "255.255"
+		"max": "5.21"
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"3": {
 			"label": "Night Light",
