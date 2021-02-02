@@ -28,6 +28,7 @@ import {
 	CCCommand,
 	CCCommandOptions,
 	ccValue,
+	ccValueMetadata,
 	CommandClass,
 	commandClass,
 	CommandClassDeserializationOptions,
@@ -672,8 +673,8 @@ export class NotificationCCReport extends NotificationCC {
 			// before the interview is complete
 			if (this.payload.length >= 7) {
 				// Ignore the legacy alarm bytes
-				this.alarmType = 0;
-				this.alarmLevel = 0;
+				this.alarmType = undefined;
+				this.alarmLevel = undefined;
 				this.notificationStatus = this.payload[3];
 				this.notificationType = this.payload[4];
 				this.notificationEvent = this.payload[5];
@@ -719,8 +720,8 @@ export class NotificationCCReport extends NotificationCC {
 						);
 						this.notificationType = this.alarmType;
 						this.notificationEvent = this.alarmLevel;
-						this.alarmType = 0;
-						this.alarmLevel = 0;
+						this.alarmType = undefined;
+						this.alarmLevel = undefined;
 					}
 				}
 			}
@@ -743,8 +744,19 @@ export class NotificationCCReport extends NotificationCC {
 	// @noCCValues TODO: This should actually be a huge key value pair
 	// Disable the lint error temporarily
 
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		label: "Alarm Type",
+	})
 	public alarmType: number | undefined;
+	@ccValue()
+	@ccValueMetadata({
+		...ValueMetadata.ReadOnlyUInt8,
+		label: "Alarm Level",
+	})
 	public alarmLevel: number | undefined;
+
 	public notificationType: number | undefined;
 	public notificationStatus: boolean | number | undefined;
 	public notificationEvent: number | undefined;
