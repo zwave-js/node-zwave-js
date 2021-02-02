@@ -5,6 +5,7 @@ import { NodeStatus } from "./Types";
 /* eslint-disable @typescript-eslint/ban-types */
 export interface NodeStatusStateSchema {
 	states: {
+		init: {};
 		unknown: {};
 		// non-sleeping nodes are either dead or alive
 		dead: {};
@@ -16,15 +17,15 @@ export interface NodeStatusStateSchema {
 }
 /* eslint-enable @typescript-eslint/ban-types */
 
-const statusDict: Record<keyof NodeStatusStateSchema["states"], NodeStatus> = {
+const statusDict = {
 	unknown: NodeStatus.Unknown,
 	dead: NodeStatus.Dead,
 	alive: NodeStatus.Alive,
 	asleep: NodeStatus.Asleep,
 	awake: NodeStatus.Awake,
-};
+} as const;
 export function nodeStatusMachineStateToNodeStatus(
-	state: keyof NodeStatusStateSchema["states"],
+	state: Exclude<keyof NodeStatusStateSchema["states"], "init">,
 ): NodeStatus {
 	return statusDict[state] ?? NodeStatus.Unknown;
 }
@@ -50,8 +51,14 @@ export function createNodeStatusMachine(node: ZWaveNode): NodeStatusMachine {
 	return Machine<any, NodeStatusStateSchema, NodeStatusEvent>(
 		{
 			id: "nodeStatus",
-			initial: "unknown",
+			initial: "init",
 			states: {
+				init: {
+					always: [
+						{ target: "asleep", cond: "canSleep" },
+						{ target: "unknown" },
+					],
+				},
 				unknown: {
 					on: {
 						DEAD: {
