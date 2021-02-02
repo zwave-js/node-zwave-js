@@ -12,14 +12,25 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
+		"min": "1.0",
+		"max": "1.0"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 1,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Basic Set",
+			"maxNodes": 5
+		}
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "Paddle Control",
-			"description": "Choose Paddle Functionality (Invert)",
+			"label": "Paddle Orientation",
+			"description": "Choose paddle orientation.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -29,18 +40,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top on, Bottom off",
+					"label": "Top on, bottom off",
 					"value": 0
 				},
 				{
-					"label": "Top off, Bottom on",
+					"label": "Top off, bottom on",
 					"value": 1
 				}
 			]
 		},
 		"2": {
 			"label": "LED Indicator Control",
-			"description": "Change behavior of the LED indicator",
+			"description": "Set behavior of the LED indicator.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -50,37 +61,59 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when switch off",
+					"label": "LED is on when switch is off",
 					"value": 0
 				},
 				{
-					"label": "LED on when switch on",
+					"label": "LED is on when switch is off",
 					"value": 1
 				},
 				{
-					"label": "LED off",
+					"label": "LED is always off",
 					"value": 2
 				},
 				{
-					"label": "LED on",
+					"label": "LED is always on",
 					"value": 3
 				}
 			]
 		},
 		"3": {
 			"label": "Auto Turn-Off Timer",
-			"description": "enable the Auto Turn-Off Timer",
-			"valueSize": 2,
+			"description": "Enable the auto turn-off timer.",
+			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 32767,
+			"maxValue": 1,
 			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Auto Turn-Off Timer Duration",
+			"description": "Set the number of seconds to automatically turn off switch once it has been turned on.",
+			"unit": "seconds",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		"5": {
-			"label": "On Off Status After Power Failure",
-			"description": "Set the on off status for the switch after power failure.",
+		"8": {
+			"label": "Switch State After Power Failure",
+			"description": "Set the power state for the switch after power failure.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -98,7 +131,7 @@
 					"value": 1
 				},
 				{
-					"label": "last state",
+					"label": "Previous State",
 					"value": 2
 				}
 			]
