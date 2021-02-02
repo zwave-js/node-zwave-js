@@ -40,11 +40,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Top on, Bottom off",
+					"label": "Top on, bottom off",
 					"value": 0
 				},
 				{
-					"label": "Top off, Bottom on",
+					"label": "Top off, bottom on",
 					"value": 1
 				},
 				{
@@ -55,7 +55,7 @@
 		},
 		"2": {
 			"label": "LED Indicator Control",
-			"description": "Choose behavior of the LED indicator.",
+			"description": "Set behavior of the LED indicator.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -65,26 +65,26 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED on when switch is off",
+					"label": "LED is on when switch is off",
 					"value": 0
 				},
 				{
-					"label": "LED on when switch is on",
+					"label": "LED is on when switch is off",
 					"value": 1
 				},
 				{
-					"label": "LED always off",
+					"label": "LED is always off",
 					"value": 2
 				},
 				{
-					"label": "LED always on",
+					"label": "LED is always on",
 					"value": 3
 				}
 			]
 		},
 		"14": {
 			"label": "LED Indicator Color",
-			"description": "Choose LED indicator color.",
+			"description": "Set the LED indicator color.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -113,7 +113,7 @@
 		},
 		"15": {
 			"label": "LED Indicator Brightness",
-			"description": "Choose LED indicator brightness.",
+			"description": "Set the LED indicator brightness.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -138,7 +138,7 @@
 		},
 		"3": {
 			"label": "Auto Turn-Off Timer",
-			"description": "Number of minutes to automatically turn off switch once it has been turned on (0 to disable).",
+			"description": "Set the number of minutes to automatically turn off switch once it has been turned on (0 to disable).",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -150,7 +150,7 @@
 		},
 		"5": {
 			"label": "Auto Turn-On Timer",
-			"description": "Number of minutes to automatically turn on switch once it has been turned off (0 to disable).",
+			"description": "Set the number of minutes to automatically turn on switch once it has been turned off (0 to disable).",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -161,7 +161,7 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "On Off Status After Power Failure",
+			"label": "Switch State After Power Failure",
 			"description": "Set the power state for the switch after a power failure.",
 			"valueSize": 1,
 			"minValue": 0,
@@ -180,14 +180,14 @@
 					"value": 1
 				},
 				{
-					"label": "Last State",
+					"label": "Previous State",
 					"value": 2
 				}
 			]
 		},
 		"10": {
 			"label": "Scene Control",
-			"description": "Enable or disable scene control functionality for quick double tap triggers.",
+			"description": "Enable or disable scene control.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -207,8 +207,8 @@
 			]
 		},
 		"12": {
-			"label": "Smart Bulb Mode",
-			"description": "Enable or disable local on/off control. If enabled, you’ll only be able to control the connected light via Z-Wave. Scenes and other functionality will still be available through paddles.",
+			"label": "Enable Local and Z-Wave Control",
+			"description": "Enable or disable local control at the switch and Z-Wave control.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -218,21 +218,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Physical paddle control disabled, Z-Wave control enabled",
+					"label": "Local control disabled, Z-Wave control enabled",
 					"value": 0
 				},
 				{
-					"label": "Physical paddle and Z-Wave control enabled",
+					"label": "Local control and Z-Wave control enabled",
 					"value": 1
 				},
 				{
-					"label": "Physical paddle and Z-Wave control disabled",
+					"label": "Local control and Z-Wave control disabled",
 					"value": 2
 				}
 			]
 		},
 		"13": {
-			"label": "Reporting Behavior for Disabled Physical Control",
+			"label": "Reporting Behavior When Physical Control Is Disabled",
 			"description": "Enable or disable reporting on/off status and changing LED indicator state even if physical and Z-Wave control is disabled.",
 			"valueSize": 1,
 			"minValue": 0,
