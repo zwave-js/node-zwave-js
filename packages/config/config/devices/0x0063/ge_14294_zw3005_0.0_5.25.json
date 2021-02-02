@@ -13,7 +13,7 @@
 	],
 	"firmwareVersion": {
 		"min": "0.0",
-		"max": "5.20"
+		"max": "5.25"
 	},
 	"paramInformation": {
 		"3": {
