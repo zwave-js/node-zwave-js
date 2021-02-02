@@ -12,10 +12,9 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
+		"min": "5.21",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		// One entry for each association group
 		"1": {
