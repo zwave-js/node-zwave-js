@@ -8,7 +8,7 @@ import {
 	ZWaveError,
 	ZWaveErrorCodes,
 } from "@zwave-js/core";
-import { getEnumMemberName } from "@zwave-js/shared";
+import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
 	CCAPI,
@@ -120,14 +120,13 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BarrierOperatorCCReport>(
+		const response = await this.driver.sendCommand<BarrierOperatorCCReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return {
-			state: response.state,
-			position: response.position,
-		};
+		);
+		if (response) {
+			return pick(response, ["state", "position"]);
+		}
 	}
 
 	public async set(
@@ -146,7 +145,9 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getSignalingCapabilities(): Promise<readonly SubsystemType[]> {
+	public async getSignalingCapabilities(): Promise<
+		readonly SubsystemType[] | undefined
+	> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.SignalingCapabilitiesGet,
@@ -156,16 +157,16 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BarrierOperatorCCSignalingCapabilitiesReport>(
+		const response = await this.driver.sendCommand<BarrierOperatorCCSignalingCapabilitiesReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.supportedsubsystemTypes;
+		);
+		return response?.supportedSubsystemTypes;
 	}
 
 	public async getEventSignaling(
 		subsystemType: SubsystemType,
-	): Promise<SubsystemState> {
+	): Promise<SubsystemState | undefined> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.EventSignalingGet,
@@ -176,11 +177,11 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			subsystemType,
 		});
-		const response = (await this.driver.sendCommand<BarrierOperatorCCEventSignalingReport>(
+		const response = await this.driver.sendCommand<BarrierOperatorCCEventSignalingReport>(
 			cc,
 			this.commandOptions,
-		))!;
-		return response.subsystemState;
+		);
+		return response?.subsystemState;
 	}
 
 	public async setEventSignaling(
@@ -389,7 +390,7 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
 
 	private _supportedsubsystemTypes: SubsystemType[];
 	@ccValue({ internal: true })
-	public get supportedsubsystemTypes(): readonly SubsystemType[] {
+	public get supportedSubsystemTypes(): readonly SubsystemType[] {
 		return this._supportedsubsystemTypes;
 	}
 
@@ -397,7 +398,7 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
 		return {
 			...super.toLogEntry(),
 			message: {
-				"supported types": this.supportedsubsystemTypes
+				"supported types": this.supportedSubsystemTypes
 					.map((t) => `\n· ${getEnumMemberName(SubsystemType, t)}`)
 					.join(""),
 			},
