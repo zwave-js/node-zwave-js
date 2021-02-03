@@ -148,11 +148,6 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			state,
 		});
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			// Refresh the current value
-			await this.get();
-		}
 	}
 
 	public async getCapabilities(): Promise<readonly SubsystemType[]> {
@@ -209,10 +204,6 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
-
-		if (this.isSinglecast()) {
-			await this.getEvent(subsystemType);
-		}
 	}
 
 	protected [SET_VALUE]: SetValueImplementation = async (
