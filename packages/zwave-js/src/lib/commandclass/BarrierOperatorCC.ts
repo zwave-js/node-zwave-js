@@ -12,6 +12,8 @@ import { getEnumMemberName } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
 import {
 	CCAPI,
+	PollValueImplementation,
+	POLL_VALUE,
 	SetValueImplementation,
 	SET_VALUE,
 	throwMissingPropertyKey,
@@ -231,6 +233,30 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			await this.setEventSignaling(propertyKey, value);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
+		}
+	};
+
+	protected [POLL_VALUE]: PollValueImplementation = async ({
+		property,
+		propertyKey,
+	}): Promise<unknown> => {
+		switch (property) {
+			case "state":
+			case "position":
+				return (await this.get())?.[property];
+			case "signalingState":
+				if (propertyKey == undefined) {
+					throwMissingPropertyKey(this.ccId, property);
+				} else if (typeof propertyKey !== "number") {
+					throwUnsupportedPropertyKey(
+						this.ccId,
+						property,
+						propertyKey,
+					);
+				}
+				return this.getEventSignaling(propertyKey);
+			default:
+				throwUnsupportedProperty(this.ccId, property);
 		}
 	};
 }
