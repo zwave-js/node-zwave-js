@@ -317,13 +317,22 @@ export class SecurityCC extends CommandClass {
 
 			const resp = await api.getSupportedCommands();
 			if (!resp) {
-				this.driver.controllerLog.logNode(node.id, {
-					endpoint: this.endpointIndex,
-					message:
-						"Querying securely supported commands timed out, skipping interview...",
-					level: "warn",
-				});
-				// TODO: Abort interview?
+				if (node.isSecure === true) {
+					this.driver.controllerLog.logNode(node.id, {
+						endpoint: this.endpointIndex,
+						message:
+							"Querying securely supported commands timed out, skipping Security interview...",
+						level: "warn",
+					});
+					// TODO: Abort interview?
+				} else {
+					// We didn't know if the node was secure, assume that it is not actually included securely
+					this.driver.controllerLog.logNode(
+						node.id,
+						`The node is not included securely. Continuing interview non-securely.`,
+					);
+					node.isSecure = false;
+				}
 				return;
 			}
 
@@ -355,6 +364,15 @@ export class SecurityCC extends CommandClass {
 					isControlled: true,
 					secure: true,
 				});
+			}
+
+			// We know for sure that the node is included securely
+			if (node.isSecure !== true) {
+				node.isSecure = true;
+				this.driver.controllerLog.logNode(
+					node.id,
+					`The node is included securely.`,
+				);
 			}
 
 			// Remember that the interview is complete
