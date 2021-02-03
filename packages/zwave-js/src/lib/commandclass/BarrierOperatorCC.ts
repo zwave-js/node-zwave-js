@@ -33,14 +33,6 @@ import {
 	implementedVersion,
 } from "./CommandClass";
 
-function getStateValueId(endpoint?: number): ValueID {
-	return {
-		commandClass: CommandClasses["Barrier Operator"],
-		endpoint,
-		property: "state",
-	};
-}
-
 // @publicAPI
 export enum SubsystemType {
 	Audible = 0x01,
