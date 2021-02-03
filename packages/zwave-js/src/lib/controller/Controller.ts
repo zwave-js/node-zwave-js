@@ -1634,6 +1634,7 @@ ${associatedNodes.join(", ")}`,
 				CommandClasses["Association Group Information"],
 			)!;
 			for (let group = 1; group <= groupCount; group++) {
+				const assocConfig = node.deviceConfig?.associations?.get(group);
 				const multiChannel = !!mcInstance && group <= mcGroupCount;
 				ret.set(group, {
 					maxNodes:
@@ -1644,7 +1645,11 @@ ${associatedNodes.join(", ")}`,
 					// AGI implies Z-Wave+ where group 1 is the lifeline
 					isLifeline: group === 1,
 					label:
+						// prefer the configured label if we have one
+						assocConfig?.label ??
+						// the ones reported by AGI are sometimes pretty bad
 						agiInstance.getGroupNameCached(group) ??
+						// but still better than "unnamed"
 						`Unnamed group ${group}`,
 					multiChannel,
 					profile: agiInstance.getGroupProfileCached(group),
