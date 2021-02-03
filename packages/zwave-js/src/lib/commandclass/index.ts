@@ -17,6 +17,11 @@ export type { AlarmSensorValueMetadata } from "./AlarmSensorCC";
 export { CCAPI } from "./API";
 export { AssociationGroupInfoProfile } from "./AssociationGroupInfoCC";
 export type { AssociationGroup } from "./AssociationGroupInfoCC";
+export {
+	BarrierState,
+	SubsystemState,
+	SubsystemType,
+} from "./BarrierOperatorCC";
 export { BatteryChargingStatus, BatteryReplacementStatus } from "./BatteryCC";
 export { BinarySensorType } from "./BinarySensorCC";
 export type { BinarySensorValueMetadata } from "./BinarySensorCC";
