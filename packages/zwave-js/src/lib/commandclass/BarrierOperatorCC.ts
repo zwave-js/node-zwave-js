@@ -85,9 +85,9 @@ export enum BarrierOperatorCommand {
 	Report = 0x03,
 	SignalingCapabilitiesGet = 0x04,
 	SignalingCapabilitiesReport = 0x05,
-	EventSet = 0x06,
-	EventGet = 0x07,
-	EventReport = 0x08,
+	EventSignalingSet = 0x06,
+	EventSignalingGet = 0x07,
+	EventSignalingReport = 0x08,
 }
 
 /**
@@ -108,8 +108,8 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			case BarrierOperatorCommand.Get:
 			case BarrierOperatorCommand.Set:
 			case BarrierOperatorCommand.SignalingCapabilitiesGet:
-			case BarrierOperatorCommand.EventGet:
-			case BarrierOperatorCommand.EventSet:
+			case BarrierOperatorCommand.EventSignalingGet:
+			case BarrierOperatorCommand.EventSignalingSet:
 				return true; // This is mandatory
 		}
 		return super.supportsCommand(cmd);
@@ -169,36 +169,36 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		return response.supportedsubsystemTypes;
 	}
 
-	public async getEvent(
+	public async getEventSignaling(
 		subsystemType: SubsystemType,
 	): Promise<SubsystemState> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
-			BarrierOperatorCommand.EventGet,
+			BarrierOperatorCommand.EventSignalingGet,
 		);
 
-		const cc = new BarrierOperatorCCEventGet(this.driver, {
+		const cc = new BarrierOperatorCCEventSignalingGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			subsystemType,
 		});
-		const response = (await this.driver.sendCommand<BarrierOperatorCCEventReport>(
+		const response = (await this.driver.sendCommand<BarrierOperatorCCEventSignalingReport>(
 			cc,
 			this.commandOptions,
 		))!;
 		return response.subsystemState;
 	}
 
-	public async setEvent(
+	public async setEventSignaling(
 		subsystemType: SubsystemType,
 		subsystemState: SubsystemState,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
-			BarrierOperatorCommand.EventSet,
+			BarrierOperatorCommand.EventSignalingSet,
 		);
 
-		const cc = new BarrierOperatorCCEventSet(this.driver, {
+		const cc = new BarrierOperatorCCEventSignalingSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 			subsystemType,
@@ -236,7 +236,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 					typeof value,
 				);
 			}
-			await this.setEvent(propertyKey, value);
+			await this.setEventSignaling(propertyKey, value);
 		} else {
 			throwUnsupportedProperty(this.ccId, property);
 		}
@@ -391,18 +391,18 @@ export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperato
 @expectedCCResponse(BarrierOperatorCCSignalingCapabilitiesReport)
 export class BarrierOperatorCCSignalingCapabilitiesGet extends BarrierOperatorCC {}
 
-interface BarrierOperatorCCEventSetOptions extends CCCommandOptions {
+interface BarrierOperatorCCEventSignalingSetOptions extends CCCommandOptions {
 	subsystemType: SubsystemType;
 	subsystemState: SubsystemState;
 }
 
-@CCCommand(BarrierOperatorCommand.EventSet)
-export class BarrierOperatorCCEventSet extends BarrierOperatorCC {
+@CCCommand(BarrierOperatorCommand.EventSignalingSet)
+export class BarrierOperatorCCEventSignalingSet extends BarrierOperatorCC {
 	public constructor(
 		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
-			| BarrierOperatorCCEventSetOptions,
+			| BarrierOperatorCCEventSignalingSetOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
@@ -441,8 +441,8 @@ export class BarrierOperatorCCEventSet extends BarrierOperatorCC {
 	}
 }
 
-@CCCommand(BarrierOperatorCommand.Report)
-export class BarrierOperatorCCEventReport extends BarrierOperatorCC {
+@CCCommand(BarrierOperatorCommand.EventSignalingReport)
+export class BarrierOperatorCCEventSignalingReport extends BarrierOperatorCC {
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -498,18 +498,18 @@ export class BarrierOperatorCCEventReport extends BarrierOperatorCC {
 	}
 }
 
-interface BarrierOperatorCCEventGetOptions extends CCCommandOptions {
+interface BarrierOperatorCCEventSignalingGetOptions extends CCCommandOptions {
 	subsystemType: SubsystemType;
 }
 
-@CCCommand(BarrierOperatorCommand.EventGet)
-@expectedCCResponse(BarrierOperatorCCEventReport)
-export class BarrierOperatorCCEventGet extends BarrierOperatorCC {
+@CCCommand(BarrierOperatorCommand.EventSignalingGet)
+@expectedCCResponse(BarrierOperatorCCEventSignalingReport)
+export class BarrierOperatorCCEventSignalingGet extends BarrierOperatorCC {
 	public constructor(
 		driver: Driver,
 		options:
 			| CommandClassDeserializationOptions
-			| BarrierOperatorCCEventGetOptions,
+			| BarrierOperatorCCEventSignalingGetOptions,
 	) {
 		super(driver, options);
 		if (gotDeserializationOptions(options)) {
