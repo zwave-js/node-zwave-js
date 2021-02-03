@@ -22,19 +22,17 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic Set",
+			"label": "On/Off Control",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Switch Multilevel",
+			"label": "Dimmer Control",
 			"maxNodes": 5
 		}
 	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "LED Indicator Mode",
-			"description": "Choose LED indicator mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -63,7 +61,6 @@
 		},
 		"2": {
 			"label": "LED Color for Upper Paddle",
-			"description": "Choose LED color for when upper paddle is pressed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -104,7 +101,6 @@
 		},
 		"3": {
 			"label": "LED Color for Lower Paddle",
-			"description": "Choose LED color for when upper paddle is pressed",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,

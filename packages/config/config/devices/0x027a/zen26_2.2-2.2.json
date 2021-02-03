@@ -1,19 +1,19 @@
-// Zooz ZEN76
-// Z-Wave Plus 700 Series S2 ON/OFF Switch
+// Zooz ZEN26
+// Z-Wave Plus S2 ON/OFF Switch
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN76",
-	"description": "Z-Wave Plus 700 Series S2 ON/OFF Switch",
+	"label": "ZEN26",
+	"description": "Z-Wave Plus S2 ON/OFF Switch",
 	"devices": [
 		{
-			"productType": "0x7000",
-			"productId": "0xa006"
+			"productType": "0xa000",
+			"productId": "0xa001"
 		}
 	],
 	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
+		"min": "2.2",
+		"max": "2.2"
 	},
 	"associations": {
 		"1": {
@@ -22,7 +22,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "On/Off",
+			"label": "On/Off Control",
 			"maxNodes": 5
 		}
 	},
@@ -31,7 +31,7 @@
 			"label": "Paddle Orientation",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 2,
+			"maxValue": 1,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -44,10 +44,6 @@
 				{
 					"label": "Top off, bottom on",
 					"value": 1
-				},
-				{
-					"label": "Toggle",
-					"value": 2
 				}
 			]
 		},
@@ -79,78 +75,64 @@
 				}
 			]
 		},
-		"14": {
-			"label": "LED Indicator Color",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 3,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "White",
-					"value": 0
-				},
-				{
-					"label": "Blue",
-					"value": 1
-				},
-				{
-					"label": "Green",
-					"value": 2
-				},
-				{
-					"label": "Red",
-					"value": 3
-				}
-			]
-		},
-		"15": {
-			"label": "LED Indicator Brightness",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 2,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "100%",
-					"value": 0
-				},
-				{
-					"label": "60%",
-					"value": 1
-				},
-				{
-					"label": "30%",
-					"value": 2
-				}
-			]
-		},
 		"3": {
 			"label": "Auto Turn-Off Timer",
-			"description": "Set the number of minutes to automatically turn off switch once it has been turned on (0 to disable).",
-			"valueSize": 4,
+			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 65535,
+			"maxValue": 1,
 			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"4": {
+			"label": "Auto Turn-Off Timer Duration",
 			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 60,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"5": {
 			"label": "Auto Turn-On Timer",
-			"description": "Set the number of minutes to automatically turn on switch once it has been turned off (0 to disable).",
-			"valueSize": 4,
+			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 65535,
+			"maxValue": 1,
 			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Auto Turn-On Timer Duration",
 			"unit": "minutes",
+			"valueSize": 4,
+			"minValue": 1,
+			"maxValue": 65535,
+			"defaultValue": 30,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -280,12 +262,12 @@
 				}
 			]
 		},
-		"12": {
+		"11": {
 			"label": "Enable Local and Z-Wave Control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": false,
@@ -321,27 +303,6 @@
 				},
 				{
 					"label": "Disabled",
-					"value": 1
-				}
-			]
-		},
-		"16": {
-			"label": "Association Reports",
-			"description": "Report type for paddle control.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Basic report",
-					"value": 0
-				},
-				{
-					"label": "Binary switch report",
 					"value": 1
 				}
 			]
