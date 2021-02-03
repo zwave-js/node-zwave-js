@@ -122,16 +122,6 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			endpoint: this.endpoint.index,
 			state,
 		});
-		if (this.isSinglecast()) {
-			// remember the value in case the device does not respond with a target value
-			this.endpoint
-				.getNodeUnsafe()
-				?.valueDB.setValue(
-					getStateValueId(this.endpoint.index),
-					state,
-					{ noEvent: true },
-				);
-		}
 		await this.driver.sendCommand(cc, this.commandOptions);
 
 		if (this.isSinglecast()) {
