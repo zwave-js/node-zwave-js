@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.1.2 (2021-02-03)
 ### Bugfixes
 * The driver now checks the `listening` flags of a node to determine whether a node can sleep instead of the `Wake Up CC`
 * The test whether a node is included securely was refactored to incorporate the timeout changes from `v6.1.1`. In addition, we now assume that a node is secure when it sends or requests nonces.
