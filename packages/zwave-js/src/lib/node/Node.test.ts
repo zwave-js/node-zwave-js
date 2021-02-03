@@ -257,33 +257,25 @@ describe("lib/node/Node", () => {
 				expect(node.interviewStage).toBe(InterviewStage.ProtocolInfo);
 			});
 
-			it("if the node is a sleeping device, assume that it is awake", async () => {
-				for (const {
-					isListening,
-					isFrequentListening,
-					supportsWakeup,
-				} of [
+			it("if the node is a sleeping device, assume that it is asleep", async () => {
+				for (const { isListening, isFrequentListening } of [
 					// Test 1-3: not sleeping
 					{
 						isListening: true,
 						isFrequentListening: true,
-						supportsWakeup: false,
 					},
 					{
 						isListening: false,
 						isFrequentListening: true,
-						supportsWakeup: false,
 					},
 					{
 						isListening: true,
 						isFrequentListening: false,
-						supportsWakeup: false,
 					},
 					// Test 4: sleeping
 					{
 						isListening: false,
 						isFrequentListening: false,
-						supportsWakeup: true,
 					},
 				]) {
 					Object.assign(expected, {
@@ -292,10 +284,9 @@ describe("lib/node/Node", () => {
 					});
 					await node["queryProtocolInfo"]();
 
-					// expect(node.isAwake()).toBeTrue();
-					expect(node.supportsCC(CommandClasses["Wake Up"])).toBe(
-						supportsWakeup,
-					);
+					if (node.canSleep) {
+						expect(node.status).toBe(NodeStatus.Asleep);
+					}
 				}
 			});
 		});

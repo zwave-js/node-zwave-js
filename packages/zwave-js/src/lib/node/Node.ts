@@ -971,9 +971,11 @@ export class ZWaveNode extends Endpoint {
 		}
 
 		if (this.interviewStage === InterviewStage.ProtocolInfo) {
-			// Ping node to check if it is alive/asleep/...
-			// TODO: #739, point 3 -> Do this automatically for the first message
-			await this.ping();
+			// We ping listening nodes to ensure that they are actually listening
+			// For all others, the messages are queued for wakeup anyways
+			if (this.isListening || this.isFrequentListening) {
+				await this.ping();
+			}
 			if (!(await tryInterviewStage(() => this.queryNodeInfo()))) {
 				return false;
 			}
@@ -984,9 +986,11 @@ export class ZWaveNode extends Endpoint {
 			// Mark listening nodes as potentially ready. The first message will determine if it is
 			this.readyMachine.send("RESTART_INTERVIEW_FROM_CACHE");
 
-			// Ping node to check if it is alive/asleep/...
-			// TODO: #739, point 3 -> Do this automatically for the first message
-			await this.ping();
+			// We ping listening nodes to ensure that they are actually listening
+			// For all others, the next messages are queued for wakeup anyways
+			if (this.isListening || this.isFrequentListening) {
+				await this.ping();
+			}
 		}
 
 		// At this point the basic interview of new nodes is done. Start here when re-interviewing known nodes
@@ -1108,16 +1112,8 @@ version:               ${this.version}`;
 			direction: "inbound",
 		});
 
-		if (!this.isListening && !this.isFrequentListening) {
-			// This is a "sleeping" device which must support the WakeUp CC.
-			// We are requesting the supported CCs later, but those commands may need to go into the
-			// wakeup queue. Thus we need to mark WakeUp as supported
-			this.addCC(CommandClasses["Wake Up"], {
-				isSupported: true,
-			});
-			// Assume the node is awake, after all we're communicating with it.
-			this.markAsAwake();
-		}
+		// Assume that sleeping nodes start asleep
+		if (this.canSleep) this.markAsAsleep();
 
 		await this.setInterviewStage(InterviewStage.ProtocolInfo);
 	}

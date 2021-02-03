@@ -19,11 +19,22 @@ describe("lib/driver/NodeStatusMachine", () => {
 	});
 
 	describe("default status changes", () => {
-		it(`The node should start in the unknown state`, () => {
-			const testMachine = createNodeStatusMachine(undefined as any);
+		it(`The node should start in the unknown state if it maybe cannot sleep`, () => {
+			const testMachine = createNodeStatusMachine({
+				canSleep: false,
+			} as any);
 
 			service = interpret(testMachine).start();
 			expect(service.state.value).toBe("unknown");
+		});
+
+		it(`The node should start in the asleep state if it can definitely sleep`, () => {
+			const testMachine = createNodeStatusMachine({
+				canSleep: true,
+			} as any);
+
+			service = interpret(testMachine).start();
+			expect(service.state.value).toBe("asleep");
 		});
 
 		const transitions: {
@@ -186,22 +197,6 @@ describe("lib/driver/NodeStatusMachine", () => {
 
 			service = interpret(testMachine).start();
 			service.send("ASLEEP");
-			expect(service.state.value).toBe("unknown");
-		});
-
-		it("A transition from unknown to alive should not happen if the node can sleep", () => {
-			const testMachine = createNodeStatusMachine(testNodeSleeping);
-
-			service = interpret(testMachine).start();
-			service.send("ALIVE");
-			expect(service.state.value).toBe("unknown");
-		});
-
-		it("A transition from unknown to dead should not happen if the node can sleep", () => {
-			const testMachine = createNodeStatusMachine(testNodeSleeping);
-
-			service = interpret(testMachine).start();
-			service.send("DEAD");
 			expect(service.state.value).toBe("unknown");
 		});
 	});
