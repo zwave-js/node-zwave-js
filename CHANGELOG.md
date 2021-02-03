@@ -9,11 +9,14 @@
 * The test whether a node is included securely was refactored to incorporate the timeout changes from `v6.1.1`. In addition, we now assume that a node is secure when it sends or requests nonces.
 * Configured association labels are now preferred over the ones reported by nodes
 * Non-listening nodes are now assumed to be asleep on startup and the initial ping no longer happens.
+* `currentValue` is now only overwritten with `targetValue` if that is a valid value
+* `V1 Alarm` frames are now treated as a normal report with two values
 
 ### Config file changes
 * Force Wake Up as supported for Aeon Labs Minimote
 * Correct typos in Zooz Zen16 option choices
 * Remove double tap support from small number of early GE devices
+* Add additional config parameters to Zooz Zen26 and Zen27 and update Zen76/77 parameter language
 
 ### Changes under the hood
 * Added a check for config parameter descriptions that are too similar to the label, documented best practices in this regard
