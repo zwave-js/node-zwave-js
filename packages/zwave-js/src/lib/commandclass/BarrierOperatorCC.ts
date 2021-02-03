@@ -265,40 +265,35 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 
 		validatePayload(this.payload.length >= 1);
 
-		/* 
-		  return values state and position value
-		  if state is 0 - 99 or FF (100%) return the appropriate values.
-		  if state is different just use the table and 
-		  return undefined position
-		*/
+		// return values state and position value
+		// if state is 0 - 99 or FF (100%) return the appropriate values.
+		// if state is different just use the table and
+		// return undefined position
+
 		const payloadValue = this.payload[0];
-		this._state = payloadValue;
-		this._position = undefined;
+		this.state = payloadValue;
+		this.position = undefined;
 		if (payloadValue <= 99) {
-			this._position = payloadValue;
+			this.position = payloadValue;
 			if (payloadValue > 0) {
-				this._state = undefined;
+				this.state = undefined;
 			}
 		} else if (payloadValue === 255) {
-			this._position = 100;
-			this._state = payloadValue;
+			this.position = 100;
+			this.state = payloadValue;
 		}
 
 		this.persistValues();
 	}
 
-	private _state: BarrierState | undefined;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Barrier State",
 		states: enumValuesToMetadataStates(BarrierState),
 	})
-	public get state(): BarrierState | undefined {
-		return this._state;
-	}
+	public readonly state: BarrierState | undefined;
 
-	private _position: number | undefined;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
@@ -306,9 +301,7 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 		unit: "%",
 		max: 100,
 	})
-	public get position(): number | undefined {
-		return this._position;
-	}
+	public readonly position: number | undefined;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
