@@ -15,7 +15,6 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"supportsZWavePlus": true,
 	"associations": {
 		// One entry for each association group
 		"1": {
