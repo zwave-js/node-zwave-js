@@ -22,7 +22,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic Set - On/Off",
+			"label": "On/Off",
 			"maxNodes": 5
 		}
 	},

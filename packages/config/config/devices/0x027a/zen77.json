@@ -22,11 +22,11 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic Set - On/Off",
+			"label": "On/Off Control",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Send Dim Level",
+			"label": "Dimmer Control",
 			"maxNodes": 5
 		}
 	},
