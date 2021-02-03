@@ -15,22 +15,9 @@
 		"min": "0.0",
 		"max": "255.255"
 	},
-	"associations": {
-		"1": {
-			"label": "Lifeline",
-			"maxNodes": 1,
-			"isLifeline": true
-		},
-		"2": {
-			"label": "Basic Set",
-			"maxNodes": 5
-		}
-	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Paddle Orientation",
-			"description": "Choose paddle orientation.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -55,7 +42,6 @@
 		},
 		"2": {
 			"label": "LED Indicator Control",
-			"description": "Set behavior of the LED indicator.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -84,7 +70,6 @@
 		},
 		"14": {
 			"label": "LED Indicator Color",
-			"description": "Set the LED indicator color.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -113,7 +98,6 @@
 		},
 		"15": {
 			"label": "LED Indicator Brightness",
-			"description": "Set the LED indicator brightness.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -160,9 +144,88 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"7[0x01]": {
+			"label": "Control Group 2 With Physical Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x02]": {
+			"label": "Control Group 2 With Connected 3-Way Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x04]": {
+			"label": "Control Group 2 With Z-Wave Commands",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x08]": {
+			"label": "Control Group 2 With On/Off Timers",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
 		"8": {
 			"label": "Switch State After Power Failure",
-			"description": "Set the power state for the switch after a power failure.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -187,7 +250,7 @@
 		},
 		"10": {
 			"label": "Scene Control",
-			"description": "Enable or disable scene control.",
+			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -208,7 +271,6 @@
 		},
 		"12": {
 			"label": "Enable Local and Z-Wave Control",
-			"description": "Enable or disable local control at the switch and Z-Wave control.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

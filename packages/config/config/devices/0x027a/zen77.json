@@ -11,10 +11,6 @@
 			"productId": "0xa007"
 		}
 	],
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
-	},
 	"associations": {
 		"1": {
 			"label": "Lifeline",
@@ -30,11 +26,13 @@
 			"maxNodes": 5
 		}
 	},
-	"supportsZWavePlus": true,
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
 	"paramInformation": {
 		"1": {
 			"label": "Paddle Orientation",
-			"description": "Choose paddle orientation.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -59,7 +57,6 @@
 		},
 		"2": {
 			"label": "LED Indicator Control",
-			"description": "Choose behavior of the LED indicator.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -88,7 +85,6 @@
 		},
 		"23": {
 			"label": "LED Indicator Color",
-			"description": "Choose LED indicator color.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -117,7 +113,6 @@
 		},
 		"24": {
 			"label": "LED Indicator Brightness",
-			"description": "Choose LED indicator brightness.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -164,9 +159,88 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"7[0x01]": {
+			"label": "Control Groups 2 and 3 With Physical Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x02]": {
+			"label": "Control Groups 2 and 3 With Connected 3-Way Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x04]": {
+			"label": "Control Groups 2 and 3 With Z-Wave Commands",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x08]": {
+			"label": "Control Groups 2 and 3 With On/Off Timers",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
 		"8": {
 			"label": "Dimmer State After Power Failure",
-			"description": "Set the power state for the dimmer after a power failure.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -203,7 +277,6 @@
 		},
 		"10": {
 			"label": "Minimum Brightness",
-			"description": "Set the minimum brightness level.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -215,7 +288,6 @@
 		},
 		"11": {
 			"label": "Maximum Brightness",
-			"description": "Set the maximum brightness level.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -256,7 +328,6 @@
 		},
 		"25": {
 			"label": "Single-Tap Upper Paddle Behavior",
-			"description": "Choose what you'd like the dimmer to do when you single-tap the upper paddle.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -285,7 +356,7 @@
 		},
 		"13": {
 			"label": "Scene Control",
-			"description": "Enable or disable scene control.",
+			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -306,7 +377,6 @@
 		},
 		"15": {
 			"label": "Enable Local and Z-Wave Control",
-			"description": "Enable or disable local control at the switch and Z-Wave control.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
