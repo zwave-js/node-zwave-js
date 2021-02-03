@@ -83,8 +83,8 @@ export enum BarrierOperatorCommand {
 	Set = 0x01,
 	Get = 0x02,
 	Report = 0x03,
-	CapabilitiesGet = 0x04,
-	CapabilitiesReport = 0x05,
+	SignalingCapabilitiesGet = 0x04,
+	SignalingCapabilitiesReport = 0x05,
 	EventSet = 0x06,
 	EventGet = 0x07,
 	EventReport = 0x08,
@@ -107,7 +107,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		switch (cmd) {
 			case BarrierOperatorCommand.Get:
 			case BarrierOperatorCommand.Set:
-			case BarrierOperatorCommand.CapabilitiesGet:
+			case BarrierOperatorCommand.SignalingCapabilitiesGet:
 			case BarrierOperatorCommand.EventGet:
 			case BarrierOperatorCommand.EventSet:
 				return true; // This is mandatory
@@ -152,17 +152,17 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		await this.driver.sendCommand(cc, this.commandOptions);
 	}
 
-	public async getCapabilities(): Promise<readonly SubsystemType[]> {
+	public async getSignalingCapabilities(): Promise<readonly SubsystemType[]> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
-			BarrierOperatorCommand.CapabilitiesGet,
+			BarrierOperatorCommand.SignalingCapabilitiesGet,
 		);
 
-		const cc = new BarrierOperatorCCCapabilitiesGet(this.driver, {
+		const cc = new BarrierOperatorCCSignalingCapabilitiesGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
 		});
-		const response = (await this.driver.sendCommand<BarrierOperatorCCCapabilitiesReport>(
+		const response = (await this.driver.sendCommand<BarrierOperatorCCSignalingCapabilitiesReport>(
 			cc,
 			this.commandOptions,
 		))!;
@@ -353,8 +353,8 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 @expectedCCResponse(BarrierOperatorCCReport)
 export class BarrierOperatorCCGet extends BarrierOperatorCC {}
 
-@CCCommand(BarrierOperatorCommand.CapabilitiesReport)
-export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
+@CCCommand(BarrierOperatorCommand.SignalingCapabilitiesReport)
+export class BarrierOperatorCCSignalingCapabilitiesReport extends BarrierOperatorCC {
 	public constructor(
 		driver: Driver,
 		options: CommandClassDeserializationOptions,
@@ -387,9 +387,9 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 	}
 }
 
-@CCCommand(BarrierOperatorCommand.CapabilitiesGet)
-@expectedCCResponse(BarrierOperatorCCCapabilitiesReport)
-export class BarrierOperatorCCCapabilitiesGet extends BarrierOperatorCC {}
+@CCCommand(BarrierOperatorCommand.SignalingCapabilitiesGet)
+@expectedCCResponse(BarrierOperatorCCSignalingCapabilitiesReport)
+export class BarrierOperatorCCSignalingCapabilitiesGet extends BarrierOperatorCC {}
 
 interface BarrierOperatorCCEventSetOptions extends CCCommandOptions {
 	subsystemType: SubsystemType;
