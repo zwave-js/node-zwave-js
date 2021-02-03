@@ -1753,6 +1753,8 @@ version:               ${this.version}`;
 			command.endpointIndex === 0 &&
 			command.constructor.name.endsWith("Report") &&
 			this.getEndpointCount() >= 1 &&
+			// skip the root to endpoint mapping if the root endpoint values are not meant to mirror endpoint 1
+			!this._deviceConfig?.compat?.preserveRootApplicationCCValueIDs &&
 			// Don't check for MCA support or devices without it won't be handled
 			// Instead rely on the version. If MCA is not supported, this will be 0
 			this.getCCVersion(CommandClasses["Multi Channel Association"]) < 3
