@@ -1,0 +1,113 @@
+// Resideo 39455 / ZW4008
+//  In-Wall Smart Switch
+{
+	"manufacturer": "Resideo",
+	"manufacturerId": "0x041b",
+	"label": "39455 / ZW4008",
+	"description": "In-Wall Smart Switch",
+	"devices": [
+		{
+			"productType": "0x4952",
+			"productId": "0x3036",
+			"zwaveAllianceId": 3835
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when load is off",
+					"value": 0
+				},
+				{
+					"label": "LED on when light is turned on",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				}
+			]
+		},
+		"4": {
+			"label": "Invert Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Normal Orientation",
+					"value": 0
+				},
+				{
+					"label": "Invert",
+					"value": 1
+				}
+			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press any button on the switch",
+					"value": 0
+				},
+				{
+					"label": "Press two times ON button and two times OFF button",
+					"value": 1
+				}
+			]
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a\ndevice to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top\nor bottom of the smart switch (rocker) to add it in the network.\nIf prompted by the controller to enter the S2 security code, refer to the\nQR code/security number on the back of the box, or the QR code label on\nthe product",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a\ndevice from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release\nthe top or bottom of the smart switch (rocker) to remove it from the\nnetwork",
+		"reset": "Quickly press ON (top) button three times, then, immediately press the OFF\n(bottom) button three times. The LED indicator will flash ON/OFF five times\nwhen completed successfully.\nNOTE: This should only be used in the event your network’s primary controller\nis missing or otherwise inoperable"
+	}
+}

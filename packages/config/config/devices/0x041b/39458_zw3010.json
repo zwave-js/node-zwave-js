@@ -1,15 +1,15 @@
-// Honeywell 39357 / ZW3011
-// In-Wall Smart Toggle Dimmer
+// Resideo 39458 / ZW3010
+// In-Wall Smart Dimmer
 {
-	"manufacturer": "Honeywell",
-	"manufacturerId": "0x0039",
-	"label": "39357 / ZW3011",
-	"description": "In-Wall Smart Toggle Dimmer",
+	"manufacturer": "Resideo",
+	"manufacturerId": "0x041b",
+	"label": "39458 / ZW3010",
+	"description": "In-Wall Smart Dimmer",
 	"devices": [
 		{
 			"productType": "0x4944",
-			"productId": "0x3237",
-			"zwaveAllianceId": 3601
+			"productId": "0x3038",
+			"zwaveAllianceId": 3750
 		}
 	],
 	"firmwareVersion": {
@@ -23,7 +23,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Local Load",
+			"label": "Single Press",
 			"maxNodes": 5
 		},
 		"3": {
@@ -39,7 +39,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -58,13 +58,14 @@
 					"value": 2
 				},
 				{
-					"label": "LED always on",
+					"label": "LED Always on",
 					"value": 3
 				}
 			]
 		},
 		"6": {
-			"label": "Dim Up/Down Rate",
+			"label": "Dim up/down rate",
+			"description": "Adjust the speed at which the ramps to a specific value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -75,11 +76,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Dim quickly",
+					"label": "Dim up/down quickly",
 					"value": 0
 				},
 				{
-					"label": "Dim slowly",
+					"label": "Dim up/down slowly",
 					"value": 1
 				}
 			]
@@ -117,11 +118,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Press any button on the switch",
+					"label": "Press any button on the Dimmer",
 					"value": 0
 				},
 				{
-					"label": "Press two times ON button and two times OFF button, LED will flash 5 times if exclusion succeed",
+					"label": "Press ON two times and OFF two times, LED will flash 5 times if exclusion was successful",
 					"value": 1
 				}
 			]
@@ -142,7 +143,7 @@
 			"label": "Maximum Brightness Threshold",
 			"valueSize": 1,
 			"unit": "%",
-			"minValue": 1,
+			"minValue": 99,
 			"maxValue": 99,
 			"defaultValue": 99,
 			"unsigned": true,
@@ -155,7 +156,7 @@
 			"description": "Set the default brightness level that the dimmer will turn on when being turned on manually",
 			"valueSize": 1,
 			"unit": "%",
-			"minValue": 1,
+			"minValue": 0,
 			"maxValue": 99,
 			"defaultValue": 0,
 			"unsigned": true,
@@ -168,8 +169,8 @@
 		"treatBasicSetAsEvent": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press up and release the toggle.\nIf prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press up and release the toggle",
-		"reset": "Quickly press UP button three times, then, immediately press the DOWN button three times.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+		"inclusion": "This dimmer is SmartStart enabled. If your controller supports SmartStart inclusion, this dimmer can be added into the Z-Wave network by following the instructions for your controller or hub and scanning the Z-Wave QR Code on the front or on the package when instructed. No further action is required, and the dimmer will be added automatically within 10 minutes of being powered up while in range Z-Wave network.",
+		"exclusion": "Press on 2 times and off 2 times. LED will flash 5 times if exclusion was successful.",
+		"reset": "Quickly press ON button 3 times then immediately press the Off button 3 times. The LED will flash ON/OFF 5 times when completed successfully"
 	}
 }
