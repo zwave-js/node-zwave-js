@@ -10,6 +10,7 @@ import {
 } from "@zwave-js/core";
 import { getEnumMemberName, pick } from "@zwave-js/shared";
 import type { Driver } from "../driver/Driver";
+import { MessagePriority } from "../message/Constants";
 import {
 	CCAPI,
 	PollValueImplementation,
@@ -69,6 +70,14 @@ function getSignalingStateMetadata(
 			subsystemType,
 		)})`,
 		states: enumValuesToMetadataStates(SubsystemState),
+	};
+}
+
+function getSupportedSubsystemTypesValueId(endpoint?: number): ValueID {
+	return {
+		commandClass: CommandClasses["Barrier Operator"],
+		endpoint,
+		property: "supportedSubsystemTypes",
 	};
 }
 
@@ -266,6 +275,75 @@ export class BarrierOperatorCCAPI extends CCAPI {
 @implementedVersion(1)
 export class BarrierOperatorCC extends CommandClass {
 	declare ccCommand: BarrierOperatorCommand;
+
+	public async interview(complete: boolean = true): Promise<void> {
+		const node = this.getNode()!;
+		const endpoint = this.getEndpoint()!;
+		const api = endpoint.commandClasses["Barrier Operator"].withOptions({
+			priority: MessagePriority.NodeQuery,
+		});
+
+		this.driver.controllerLog.logNode(node.id, {
+			message: `${this.constructor.name}: doing a ${
+				complete ? "complete" : "partial"
+			} interview...`,
+			direction: "none",
+		});
+
+		let supportedSubsystems: readonly SubsystemType[];
+		if (complete) {
+			this.driver.controllerLog.logNode(node.id, {
+				message: "querying signaling capabilities...",
+				direction: "outbound",
+			});
+			const resp = await api.getSignalingCapabilities();
+			supportedSubsystems = resp ?? [];
+			if (resp) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `received supported subsystem types: ${resp
+						.map(
+							(t) => `\n· ${getEnumMemberName(SubsystemType, t)}`,
+						)
+						.join("")}`,
+					direction: "inbound",
+				});
+			}
+		} else {
+			supportedSubsystems =
+				node.getValue<SubsystemType[]>(
+					getSupportedSubsystemTypesValueId(this.endpointIndex),
+				) ?? [];
+		}
+
+		for (const subsystemType of supportedSubsystems) {
+			this.driver.controllerLog.logNode(node.id, {
+				message: `querying event signaling state for subsystem ${getEnumMemberName(
+					SubsystemType,
+					subsystemType,
+				)}...`,
+				direction: "outbound",
+			});
+			const state = await api.getEventSignaling(subsystemType);
+			if (state != undefined) {
+				this.driver.controllerLog.logNode(node.id, {
+					message: `subsystem ${getEnumMemberName(
+						SubsystemType,
+						subsystemType,
+					)} has state ${getEnumMemberName(SubsystemState, state)}`,
+					direction: "inbound",
+				});
+			}
+		}
+
+		this.driver.controllerLog.logNode(node.id, {
+			message: "querying current barrier state...",
+			direction: "outbound",
+		});
+		await api.get();
+
+		// Remember that the interview is complete
+		this.interviewComplete = true;
+	}
 }
 
 interface BarrierOperatorCCSetOptions extends CCCommandOptions {
