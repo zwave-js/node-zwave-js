@@ -12,7 +12,7 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "5.26",
+		"min": "0.00",
 		"max": "255.255"
 	},
 	"associations": {
