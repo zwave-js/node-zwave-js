@@ -11,6 +11,10 @@
 			"productId": "0xa007"
 		}
 	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
 	"associations": {
 		"1": {
 			"label": "Lifeline",
@@ -18,17 +22,13 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic Set",
+			"label": "Basic Set - On/Off",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Switch Multilevel",
+			"label": "Send Dim Level",
 			"maxNodes": 5
 		}
-	},
-	"firmwareVersion": {
-		"min": "0.0",
-		"max": "255.255"
 	},
 	"paramInformation": {
 		"1": {

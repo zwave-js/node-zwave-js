@@ -12,7 +12,7 @@
 		}
 	],
 	"firmwareVersion": {
-		"min": "2.08",
+		"min": "2.8",
 		"max": "255.255"
 	},
 	"associations": {
@@ -22,11 +22,11 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Basic Set",
+			"label": "Basic Set - On/Off",
 			"maxNodes": 5
 		},
 		"3": {
-			"label": "Switch Multilevel",
+			"label": "Send Dim Level",
 			"maxNodes": 5
 		}
 	},
