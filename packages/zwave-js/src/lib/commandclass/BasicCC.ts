@@ -93,11 +93,14 @@ export class BasicCCAPI extends CCAPI {
 		// If the command did not fail, assume that it succeeded and update the currentValue accordingly
 		// so UIs have immediate feedback
 		if (this.isSinglecast()) {
-			const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
-			valueDB?.setValue(
-				getCurrentValueValueId(this.endpoint.index),
-				value,
-			);
+			// Only update currentValue for valid target values
+			if (value >= 0 && value <= 99) {
+				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+				valueDB?.setValue(
+					getCurrentValueValueId(this.endpoint.index),
+					value,
+				);
+			}
 
 			// and verify the current value after a delay
 			this.schedulePoll({ property });

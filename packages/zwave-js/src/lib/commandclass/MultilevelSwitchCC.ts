@@ -313,11 +313,14 @@ export class MultilevelSwitchCCAPI extends CCAPI {
 			// If the command did not fail, assume that it succeeded and update the currentValue accordingly
 			// so UIs have immediate feedback
 			if (this.isSinglecast() && completed) {
-				const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
-				valueDB?.setValue(
-					getCurrentValueValueId(this.endpoint.index),
-					value,
-				);
+				// Only update currentValue for valid target values
+				if (value >= 0 && value <= 99) {
+					const valueDB = this.endpoint.getNodeUnsafe()?.valueDB;
+					valueDB?.setValue(
+						getCurrentValueValueId(this.endpoint.index),
+						value,
+					);
+				}
 
 				// Verify the current value after a delay if the node does not support Supervision
 				if (
