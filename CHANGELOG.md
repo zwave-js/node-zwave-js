@@ -3,6 +3,22 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## __WORK IN PROGRESS__
+### Bugfixes
+* The driver now checks the `listening` flags of a node to determine whether a node can sleep instead of the `Wake Up CC`
+* The test whether a node is included securely was refactored to incorporate the timeout changes from `v6.1.1`. In addition, we now assume that a node is secure when it sends or requests nonces.
+* Configured association labels are now preferred over the ones reported by nodes
+* Non-listening nodes are now assumed to be asleep on startup and the initial ping no longer happens.
+
+### Config file changes
+* Force Wake Up as supported for Aeon Labs Minimote
+* Correct typos in Zooz Zen16 option choices
+* Remove double tap support from small number of early GE devices
+
+### Changes under the hood
+* Added a check for config parameter descriptions that are too similar to the label, documented best practices in this regard
+* Leading zeroes in firmware versions are now disallowed
+
 ## 6.1.1 (2021-01-31)
 ### Bugfixes
 * `Scene Activation CC` scene IDs are no longer auto-reset to `undefined`. This is unnecessary since they are value events

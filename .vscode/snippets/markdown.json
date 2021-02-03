@@ -1,0 +1,19 @@
+{
+	"New Changelog entry": {
+		"prefix": "wip",
+		"body": [
+			"## __WORK IN PROGRESS__",
+			"### Breaking changes",
+			"",
+			"### Features",
+			"",
+			"### Bugfixes",
+			"",
+			"### Config file changes",
+			"",
+			"### Changes under the hood",
+			"",
+			""
+		]
+	}
+}
