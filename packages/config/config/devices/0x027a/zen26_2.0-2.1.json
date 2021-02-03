@@ -1,19 +1,19 @@
-// Zooz ZEN27
-// Z-Wave Plus S2 Dimmer Light Switch
+// Zooz ZEN26
+// Z-Wave Plus S2 ON/OFF Switch
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
-	"label": "ZEN27",
-	"description": "Z-Wave Plus S2 Dimmer Light Switch",
+	"label": "ZEN26",
+	"description": "Z-Wave Plus S2 ON/OFF Switch",
 	"devices": [
 		{
 			"productType": "0xa000",
-			"productId": "0xa002"
+			"productId": "0xa001"
 		}
 	],
 	"firmwareVersion": {
-		"min": "1.0",
-		"max": "1.0"
+		"min": "2.0",
+		"max": "2.1"
 	},
 	"paramInformation": {
 		"1": {
@@ -126,8 +126,88 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"7[0x01]": {
+			"label": "Control Group 2 With Physical Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x02]": {
+			"label": "Control Group 2 With Connected 3-Way Switch",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x04]": {
+			"label": "Control Group 2 With Z-Wave Commands",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
+		"7[0x08]": {
+			"label": "Control Group 2 With On/Off Timers",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disabled",
+					"value": 0
+				},
+				{
+					"label": "Enabled",
+					"value": 1
+				}
+			]
+		},
 		"8": {
-			"label": "Dimmer State After Power Failure",
+			"label": "Switch State After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -150,43 +230,9 @@
 				}
 			]
 		},
-		"9": {
-			"label": "Ramp Rate Control",
-			"description": "Set the number of seconds for dimmer to reach full brightness or turn off when operated manually.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"unit": "seconds",
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
 		"10": {
-			"label": "Minimum Brightness",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 1,
-			"units": "%",
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"11": {
-			"label": "Maximum Brightness",
-			"valueSize": 1,
-			"minValue": 1,
-			"maxValue": 99,
-			"defaultValue": 99,
-			"units": "%",
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"12": {
-			"label": "Double-Tap Upper Paddle Behavior",
-			"description": "Set the brightness level after double-tapping the upper paddle.",
+			"label": "Scene Control",
+			"description": "Send scene commands to hub on physical paddle presses.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -196,12 +242,36 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Full brightness",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Configured maximum brightness",
+					"label": "Enabled",
 					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Enable Local and Z-Wave Control",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Local control disabled, Z-Wave control enabled",
+					"value": 0
+				},
+				{
+					"label": "Local control and Z-Wave control enabled",
+					"value": 1
+				},
+				{
+					"label": "Local control and Z-Wave control disabled",
+					"value": 2
 				}
 			]
 		}

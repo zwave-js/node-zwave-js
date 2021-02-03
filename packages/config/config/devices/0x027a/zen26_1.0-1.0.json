@@ -15,22 +15,9 @@
 		"min": "1.0",
 		"max": "1.0"
 	},
-	"associations": {
-		"1": {
-			"label": "Lifeline",
-			"maxNodes": 1,
-			"isLifeline": true
-		},
-		"2": {
-			"label": "Basic Set",
-			"maxNodes": 5
-		}
-	},
-	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
 			"label": "Paddle Orientation",
-			"description": "Choose paddle orientation.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -51,7 +38,6 @@
 		},
 		"2": {
 			"label": "LED Indicator Control",
-			"description": "Set behavior of the LED indicator.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -79,33 +65,12 @@
 			]
 		},
 		"3": {
-			"label": "Auto Turn-Off Timer",
-			"description": "Enable the auto turn-off timer.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disabled",
-					"value": 0
-				},
-				{
-					"label": "Enabled",
-					"value": 1
-				}
-			]
-		},
-		"4": {
 			"label": "Auto Turn-Off Timer Duration",
-			"description": "Set the number of seconds to automatically turn off switch once it has been turned on.",
+			"description": "Set the number of seconds to automatically turn off switch once it has been turned on (0 to disable).",
 			"unit": "seconds",
-			"valueSize": 4,
-			"minValue": 1,
-			"maxValue": 65535,
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
 			"defaultValue": 60,
 			"readOnly": false,
 			"writeOnly": false,
@@ -113,7 +78,6 @@
 		},
 		"8": {
 			"label": "Switch State After Power Failure",
-			"description": "Set the power state for the switch after power failure.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
