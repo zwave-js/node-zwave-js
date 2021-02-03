@@ -63,15 +63,15 @@ export enum BarrierState {
 }
 
 // @publicAPI
-export enum SignalType {
+export enum SubsystemType {
 	Audible = 0x01,
 	Visual = 0x02,
 }
 
 // @publicAPI
-export enum SignalState {
-	OFF = 0x00,
-	ON = 0xff,
+export enum SubsystemState {
+	Off = 0x00,
+	On = 0xff,
 }
 
 @API(CommandClasses["Barrier Operator"])
@@ -130,7 +130,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		}
 	}
 
-	public async getCapabilities(): Promise<readonly SignalType[]> {
+	public async getCapabilities(): Promise<readonly SubsystemType[]> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.CapabilitiesGet,
@@ -148,7 +148,7 @@ export class BarrierOperatorCCAPI extends CCAPI {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getEvent(signalType: SignalType) {
+	public async getEvent(signalType: SubsystemType) {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.EventGet,
@@ -157,20 +157,20 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		const cc = new BarrierOperatorCCEventGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			signalType,
+			subsystemType: signalType,
 		});
 		const response = (await this.driver.sendCommand<BarrierOperatorCCEventReport>(
 			cc,
 			this.commandOptions,
 		))!;
 		return {
-			signalState: getEnumMemberName(SignalState, response.state),
+			signalState: getEnumMemberName(SubsystemState, response.state),
 		};
 	}
 
 	public async setEvent(
-		signalType: SignalType,
-		signalState: SignalState,
+		signalType: SubsystemType,
+		signalState: SubsystemState,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
@@ -180,8 +180,8 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		const cc = new BarrierOperatorCCEventSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			signalType,
-			signalState,
+			subsystemType: signalType,
+			subsystemState: signalState,
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
@@ -331,15 +331,15 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 
 		this._supportedSignalTypes = parseBitMask(
 			this.payload,
-			SignalType.Audible,
+			SubsystemType.Audible,
 		);
 
 		this.persistValues();
 	}
 
-	private _supportedSignalTypes: SignalType[];
+	private _supportedSignalTypes: SubsystemType[];
 	@ccValue({ internal: true })
-	public get supportedSignalTypes(): readonly SignalType[] {
+	public get supportedSignalTypes(): readonly SubsystemType[] {
 		return this._supportedSignalTypes;
 	}
 
@@ -348,7 +348,7 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 			...super.toLogEntry(),
 			message: {
 				"supported types": this.supportedSignalTypes
-					.map((t) => `\n· ${getEnumMemberName(SignalType, t)}`)
+					.map((t) => `\n· ${getEnumMemberName(SubsystemType, t)}`)
 					.join(""),
 			},
 		};
@@ -360,8 +360,8 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 export class BarrierOperatorCCCapabilitiesGet extends BarrierOperatorCC {}
 
 interface BarrierOperatorCCEventSetOptions extends CCCommandOptions {
-	signalType: SignalType;
-	signalState: SignalState;
+	subsystemType: SubsystemType;
+	subsystemState: SubsystemState;
 }
 
 @CCCommand(BarrierOperatorCommand.EventSet)
@@ -380,15 +380,15 @@ export class BarrierOperatorCCEventSet extends BarrierOperatorCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.type = options.signalType;
-			this.state = options.signalState;
+			this.subsystemType = options.subsystemType;
+			this.subsystemState = options.subsystemState;
 		}
 	}
-	public type: SignalType;
-	public state: SignalState;
+	public subsystemType: SubsystemType;
+	public subsystemState: SubsystemState;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.type, this.state]);
+		this.payload = Buffer.from([this.subsystemType, this.subsystemState]);
 		return super.serialize();
 	}
 
@@ -396,8 +396,14 @@ export class BarrierOperatorCCEventSet extends BarrierOperatorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"signal type": getEnumMemberName(SignalType, this.type),
-				"signal state": getEnumMemberName(SignalState, this.state),
+				"subsystem type": getEnumMemberName(
+					SubsystemType,
+					this.subsystemType,
+				),
+				"subsystem state": getEnumMemberName(
+					SubsystemState,
+					this.subsystemState,
+				),
 			},
 		};
 	}
@@ -418,25 +424,25 @@ export class BarrierOperatorCCEventReport extends BarrierOperatorCC {
 		this.persistValues();
 	}
 
-	private _type: SignalType;
+	private _type: SubsystemType;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Event Signal Type",
-		states: enumValuesToMetadataStates(SignalType),
+		states: enumValuesToMetadataStates(SubsystemType),
 	})
-	public get type(): SignalType {
+	public get type(): SubsystemType {
 		return this._type;
 	}
 
-	private _state: SignalState;
+	private _state: SubsystemState;
 	@ccValue()
 	@ccValueMetadata({
 		...ValueMetadata.ReadOnlyUInt8,
 		label: "Event Signal State",
-		states: enumValuesToMetadataStates(SignalState),
+		states: enumValuesToMetadataStates(SubsystemState),
 	})
-	public get state(): SignalState {
+	public get state(): SubsystemState {
 		return this._state;
 	}
 
@@ -444,15 +450,18 @@ export class BarrierOperatorCCEventReport extends BarrierOperatorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"signal type": getEnumMemberName(SignalType, this.type),
-				"signal state": getEnumMemberName(SignalState, this.state),
+				"subsystem type": getEnumMemberName(SubsystemType, this.type),
+				"subsystem state": getEnumMemberName(
+					SubsystemState,
+					this.state,
+				),
 			},
 		};
 	}
 }
 
 interface BarrierOperatorCCEventGetOptions extends CCCommandOptions {
-	signalType: SignalType;
+	subsystemType: SubsystemType;
 }
 
 @CCCommand(BarrierOperatorCommand.EventGet)
@@ -472,14 +481,14 @@ export class BarrierOperatorCCEventGet extends BarrierOperatorCC {
 				ZWaveErrorCodes.Deserialization_NotImplemented,
 			);
 		} else {
-			this.signalType = options.signalType;
+			this.subsystemType = options.subsystemType;
 		}
 	}
 
-	public signalType: SignalType;
+	public subsystemType: SubsystemType;
 
 	public serialize(): Buffer {
-		this.payload = Buffer.from([this.signalType]);
+		this.payload = Buffer.from([this.subsystemType]);
 		return super.serialize();
 	}
 
@@ -487,7 +496,10 @@ export class BarrierOperatorCCEventGet extends BarrierOperatorCC {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"signal type": getEnumMemberName(SignalType, this.signalType),
+				"subsystem type": getEnumMemberName(
+					SubsystemType,
+					this.subsystemType,
+				),
 			},
 		};
 	}
