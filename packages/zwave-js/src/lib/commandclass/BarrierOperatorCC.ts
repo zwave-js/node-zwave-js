@@ -329,9 +329,6 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 	) {
 		super(driver, options);
 
-		validatePayload(this.payload.length >= 1);
-		const bitMaskLength = this.payload.length;
-		validatePayload(this.payload.length >= bitMaskLength);
 		this._supportedSignalTypes = parseBitMask(
 			this.payload,
 			SignalType.Audible,
