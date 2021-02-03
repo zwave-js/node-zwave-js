@@ -39,6 +39,43 @@ function getStateValueId(endpoint?: number): ValueID {
 	};
 }
 
+// @publicAPI
+export enum SubsystemType {
+	Audible = 0x01,
+	Visual = 0x02,
+}
+
+// @publicAPI
+export enum SubsystemState {
+	Off = 0x00,
+	On = 0xff,
+}
+
+function getSignalingStateValueId(
+	endpoint: number | undefined,
+	subsystemType: SubsystemType,
+): ValueID {
+	return {
+		commandClass: CommandClasses["Barrier Operator"],
+		endpoint,
+		property: "signalingState",
+		propertyKey: subsystemType,
+	};
+}
+
+function getSignalingStateMetadata(
+	subsystemType: SubsystemType,
+): ValueMetadata {
+	return {
+		...ValueMetadata.ReadOnlyUInt8,
+		label: `Signaling State (${getEnumMemberName(
+			SubsystemType,
+			subsystemType,
+		)})`,
+		states: enumValuesToMetadataStates(SubsystemState),
+	};
+}
+
 // All the supported commands
 export enum BarrierOperatorCommand {
 	Set = 0x01,
@@ -60,18 +97,6 @@ export enum BarrierState {
 	Stopped = 0xfd,
 	Opening = 0xfe,
 	Open = 0xff,
-}
-
-// @publicAPI
-export enum SubsystemType {
-	Audible = 0x01,
-	Visual = 0x02,
-}
-
-// @publicAPI
-export enum SubsystemState {
-	Off = 0x00,
-	On = 0xff,
 }
 
 @API(CommandClasses["Barrier Operator"])
@@ -144,11 +169,12 @@ export class BarrierOperatorCCAPI extends CCAPI {
 			cc,
 			this.commandOptions,
 		))!;
-		return response.supportedSignalTypes;
+		return response.supportedsubsystemTypes;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-	public async getEvent(signalType: SubsystemType) {
+	public async getEvent(
+		subsystemType: SubsystemType,
+	): Promise<SubsystemState> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
 			BarrierOperatorCommand.EventGet,
@@ -157,20 +183,18 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		const cc = new BarrierOperatorCCEventGet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			subsystemType: signalType,
+			subsystemType,
 		});
 		const response = (await this.driver.sendCommand<BarrierOperatorCCEventReport>(
 			cc,
 			this.commandOptions,
 		))!;
-		return {
-			signalState: getEnumMemberName(SubsystemState, response.state),
-		};
+		return response.subsystemState;
 	}
 
 	public async setEvent(
-		signalType: SubsystemType,
-		signalState: SubsystemState,
+		subsystemType: SubsystemType,
+		subsystemState: SubsystemState,
 	): Promise<void> {
 		this.assertSupportsCommand(
 			BarrierOperatorCommand,
@@ -180,14 +204,14 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		const cc = new BarrierOperatorCCEventSet(this.driver, {
 			nodeId: this.endpoint.nodeId,
 			endpoint: this.endpoint.index,
-			subsystemType: signalType,
-			subsystemState: signalState,
+			subsystemType,
+			subsystemState,
 		});
 
 		await this.driver.sendCommand(cc, this.commandOptions);
 
 		if (this.isSinglecast()) {
-			await this.getEvent(signalType);
+			await this.getEvent(subsystemType);
 		}
 	}
 
@@ -200,8 +224,8 @@ export class BarrierOperatorCCAPI extends CCAPI {
 		} else {
 			switch (property) {
 				case "state":
-				case "signalType":
-				case "signalState":
+				case "subsystemType":
+				case "subsystemState":
 					await this.set(value);
 					break;
 				default:
@@ -329,7 +353,7 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 	) {
 		super(driver, options);
 
-		this._supportedSignalTypes = parseBitMask(
+		this._supportedsubsystemTypes = parseBitMask(
 			this.payload,
 			SubsystemType.Audible,
 		);
@@ -337,17 +361,17 @@ export class BarrierOperatorCCCapabilitiesReport extends BarrierOperatorCC {
 		this.persistValues();
 	}
 
-	private _supportedSignalTypes: SubsystemType[];
+	private _supportedsubsystemTypes: SubsystemType[];
 	@ccValue({ internal: true })
-	public get supportedSignalTypes(): readonly SubsystemType[] {
-		return this._supportedSignalTypes;
+	public get supportedsubsystemTypes(): readonly SubsystemType[] {
+		return this._supportedsubsystemTypes;
 	}
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"supported types": this.supportedSignalTypes
+				"supported types": this.supportedsubsystemTypes
 					.map((t) => `\n· ${getEnumMemberName(SubsystemType, t)}`)
 					.join(""),
 			},
@@ -418,42 +442,48 @@ export class BarrierOperatorCCEventReport extends BarrierOperatorCC {
 		super(driver, options);
 
 		validatePayload(this.payload.length >= 2);
-		this._type = this.payload[0];
-		this._state = this.payload[1];
+		this.subsystemType = this.payload[0];
+		this.subsystemState = this.payload[1];
 
 		this.persistValues();
 	}
 
-	private _type: SubsystemType;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Event Signal Type",
-		states: enumValuesToMetadataStates(SubsystemType),
-	})
-	public get type(): SubsystemType {
-		return this._type;
+	public persistValues(): boolean {
+		if (!super.persistValues()) return false;
+
+		const valueId = getSignalingStateValueId(
+			this.endpointIndex,
+			this.subsystemType,
+		);
+		const valueDB = this.getValueDB();
+
+		// Create metadata if it does not exist
+		if (!valueDB.hasMetadata(valueId)) {
+			valueDB.setMetadata(
+				valueId,
+				getSignalingStateMetadata(this.subsystemType),
+			);
+		}
+
+		valueDB.setValue(valueId, this.subsystemState);
+
+		return true;
 	}
 
-	private _state: SubsystemState;
-	@ccValue()
-	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
-		label: "Event Signal State",
-		states: enumValuesToMetadataStates(SubsystemState),
-	})
-	public get state(): SubsystemState {
-		return this._state;
-	}
+	public readonly subsystemType: SubsystemType;
+	public readonly subsystemState: SubsystemState;
 
 	public toLogEntry(): MessageOrCCLogEntry {
 		return {
 			...super.toLogEntry(),
 			message: {
-				"subsystem type": getEnumMemberName(SubsystemType, this.type),
+				"subsystem type": getEnumMemberName(
+					SubsystemType,
+					this.subsystemType,
+				),
 				"subsystem state": getEnumMemberName(
 					SubsystemState,
-					this.state,
+					this.subsystemState,
 				),
 			},
 		};
