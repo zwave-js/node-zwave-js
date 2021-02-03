@@ -439,52 +439,64 @@ Did you mean to use ${opt.value >>> shiftAmount}?`,
 		}
 
 		// Validate firmware versions
-		if (typeof config.firmwareVersion === "boolean") {
-			if (config.firmwareVersion !== false) {
+
+		if (config.firmwareVersion.max === "255.0") {
+			addWarning(
+				file,
+				`The maximum firmware version is 255.0. Did you mean 255.255?`,
+			);
+		} else {
+			// Check for invalid version parts
+			const [minMajor, minMinor] = config.firmwareVersion.min
+				.split(".", 2)
+				.map((v) => parseInt(v, 10));
+			if (
+				minMajor < 0 ||
+				minMajor > 255 ||
+				minMinor < 0 ||
+				minMinor > 255
+			) {
 				addError(
 					file,
-					`Invalid firmware version ${
-						config.firmwareVersion as any
-					}. The firmware version must be an object with "min" and "max" properties or false.`,
+					`The minimum firmware version ${config.firmwareVersion.min} is invalid. Each version part must be between 0 and 255.`,
 				);
 			}
-		} else {
-			if (config.firmwareVersion.max === "255.0") {
-				addWarning(
-					file,
-					`The maximum firmware version is 255.0. Did you mean 255.255?`,
-				);
-			} else {
-				// Check for invalid version parts
-				const [minMajor, minMinor] = config.firmwareVersion.min
-					.split(".", 2)
-					.map((v) => parseInt(v, 10));
-				if (
-					minMajor < 0 ||
-					minMajor > 255 ||
-					minMinor < 0 ||
-					minMinor > 255
-				) {
-					addError(
-						file,
-						`The minimum firmware version ${config.firmwareVersion.min} is invalid. Each version part must be between 0 and 255.`,
-					);
-				}
 
-				const [maxMajor, maxMinor] = config.firmwareVersion.max
-					.split(".", 2)
-					.map((v) => parseInt(v, 10));
-				if (
-					maxMajor < 0 ||
-					maxMajor > 255 ||
-					maxMinor < 0 ||
-					maxMinor > 255
-				) {
-					addError(
-						file,
-						`The maximum firmware version ${config.firmwareVersion.max} is invalid. Each version part must be between 0 and 255.`,
-					);
-				}
+			const [maxMajor, maxMinor] = config.firmwareVersion.max
+				.split(".", 2)
+				.map((v) => parseInt(v, 10));
+			if (
+				maxMajor < 0 ||
+				maxMajor > 255 ||
+				maxMinor < 0 ||
+				maxMinor > 255
+			) {
+				addError(
+					file,
+					`The maximum firmware version ${config.firmwareVersion.max} is invalid. Each version part must be between 0 and 255.`,
+				);
+			}
+
+			// Check if one of the firmware versions has a leading zero
+			const leadingZeroMajor = /^0\d+\./;
+			const leadingZeroMinor = /\.0\d+$/;
+			if (
+				leadingZeroMajor.test(config.firmwareVersion.min) ||
+				leadingZeroMinor.test(config.firmwareVersion.min)
+			) {
+				addError(
+					file,
+					`The minimum firmware version ${config.firmwareVersion.min} is invalid. Leading zeroes are not permitted.`,
+				);
+			}
+			if (
+				leadingZeroMajor.test(config.firmwareVersion.max) ||
+				leadingZeroMinor.test(config.firmwareVersion.max)
+			) {
+				addError(
+					file,
+					`The maximum firmware version ${config.firmwareVersion.max} is invalid. Leading zeroes are not permitted.`,
+				);
 			}
 		}
 	}

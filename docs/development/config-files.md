@@ -51,7 +51,10 @@ Since different firmware versions of a device may have different config params, 
 ```
 
 The default `min` version is `0.0` and the default `max` version is `255.255`.
-All other firmware ranges should be reflected in the filename.
+All other firmware ranges should be reflected in the filename. This also means that `0.0-` and `-255.255` should not be part of the filename, as they are implied.
+
+> [!NOTE]
+> Although some manufacturers tend to display firmware versions with leading zeroes, firmwares are interpreted as two numbers. This means `2.01` is equivalent to `2.1`. Leading zeroes **must not** be used in config files to avoid confusion.
 
 ### `metadata`
 

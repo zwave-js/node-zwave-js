@@ -213,9 +213,7 @@ devices is malformed (not an object or type/id that is not a 4-digit hex key)`,
 			({ productType, productId }) => ({ productType, productId }),
 		);
 
-		if (definition.firmwareVersion === false) {
-			this.firmwareVersion = false;
-		} else if (
+		if (
 			!isObject(definition.firmwareVersion) ||
 			!isFirmwareVersion(definition.firmwareVersion.min) ||
 			!isFirmwareVersion(definition.firmwareVersion.max)
@@ -327,7 +325,7 @@ compat is not an object`,
 		productType: string;
 		productId: string;
 	}[];
-	public readonly firmwareVersion: FirmwareVersionRange | false;
+	public readonly firmwareVersion: FirmwareVersionRange;
 	public readonly associations?: ReadonlyMap<number, AssociationConfig>;
 	public readonly paramInformation?: ParamInfoMap;
 	/**

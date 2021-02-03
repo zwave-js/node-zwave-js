@@ -48,11 +48,10 @@ export function reportProblem({
 			}::${message.replace(/\n/g, "%0A")}\n`,
 		);
 	} else {
+		console[severity](`${filename}${line != undefined ? `:${line}` : ""}:`);
 		console[severity](
 			(severity === "warn" ? yellow : red)(
-				`${filename}${
-					line != undefined ? `:${line}` : ""
-				}:\n[${severity.toUpperCase()}] ${message}\n`,
+				`[${severity.toUpperCase()}] ${message}\n`,
 			),
 		);
 	}
