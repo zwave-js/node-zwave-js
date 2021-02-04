@@ -3,7 +3,7 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
-## __WORK IN PROGRESS__
+## 6.1.3 (2021-02-05)
 ### Bugfixes
 * The config lint step now correctly fails when a device file cannot be parsed
 * If `preserveRootApplicationCCValueIDs` is set, reports are no longer mapped from the root endpoint to endpoint 1.
