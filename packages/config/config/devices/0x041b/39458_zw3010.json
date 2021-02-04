@@ -122,7 +122,7 @@
 					"value": 0
 				},
 				{
-					"label": "Press ON two times and OFF two times, LED will flash 5 times if exclusion was successful",
+					"label": "Press on two times, then off two times",
 					"value": 1
 				}
 			]

@@ -79,7 +79,7 @@
 					"value": 0
 				},
 				{
-					"label": "Press two times ON button and two times OFF button, LED will flash 5 times if exclusion succeed",
+					"label": "Press on two times, then off two times",
 					"value": 1
 				}
 			]
