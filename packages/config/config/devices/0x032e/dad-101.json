@@ -118,8 +118,7 @@
 			"allowManualEntry": true
 		},
 		"7": {
-			"label": "Powerfail recovery",
-			"description": "Powerfail recovery mode",
+			"label": "Powerfail recovery mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

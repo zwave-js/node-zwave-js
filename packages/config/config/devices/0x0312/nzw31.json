@@ -61,8 +61,7 @@
 			]
 		},
 		"5": {
-			"label": "Countdown Timer",
-			"description": "Shutoff Timer",
+			"label": "Shutoff Timer",
 			"unit": "Seconds",
 			"valueSize": 2,
 			"minValue": 0,

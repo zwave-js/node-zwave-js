@@ -32,7 +32,7 @@
 		"2": {
 			"label": "KWH Meter Report Period",
 			"description": "6*10 min = 1 hour",
-			"unit": "10min",
+			"unit": "10 min",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -43,14 +43,27 @@
 		},
 		"3": {
 			"label": "Selected Relay",
-			"description": "1: Relay 1, 2: Relay 2, 3: Relay 1 & Relay 2",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
 			"defaultValue": 1,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": true
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Relay 1",
+					"value": 1
+				},
+				{
+					"label": "Relay 2",
+					"value": 2
+				},
+				{
+					"label": "Relay 1 & 2",
+					"value": 3
+				}
+			]
 		},
 		"4": {
 			"label": "Edge or Pulse mode or Edge-Toggle mode",

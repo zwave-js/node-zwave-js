@@ -145,8 +145,8 @@
 		},
 		"5": {
 			"label": "Minimum brightness level",
-			"description": "percentage brightness level",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 0,
 			"maxValue": 98,
 			"defaultValue": 1,
@@ -156,8 +156,8 @@
 		},
 		"6": {
 			"label": "Maximum brightness level",
-			"description": "2~99 percentage brightness level",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 2,
 			"maxValue": 99,
 			"defaultValue": 63,

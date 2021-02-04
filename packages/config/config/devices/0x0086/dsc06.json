@@ -90,6 +90,7 @@
 		},
 		"91": {
 			"label": "Minimum change in wattage to trigger event",
+			"description": "Minimum change in wattage to trigger event",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

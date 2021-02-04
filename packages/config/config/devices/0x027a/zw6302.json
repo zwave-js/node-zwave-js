@@ -51,9 +51,9 @@
 		"18": {
 			"label": "PIR Timeout Duration",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 1,
 			"maxValue": 255,
-			"unit": "min",
 			"defaultValue": 60,
 			"unsigned": true,
 			"readOnly": false,

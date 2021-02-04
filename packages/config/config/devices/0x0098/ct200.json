@@ -102,8 +102,7 @@
 			"allowManualEntry": true
 		},
 		"6": {
-			"label": "Auxiliary/Emergency",
-			"description": "Auxiliary / Emergency Heat Pump Mode",
+			"label": "Auxiliary/Emergency Heat Pump Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

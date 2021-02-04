@@ -118,9 +118,9 @@
 			]
 		},
 		"12": {
-			"label": "Minimum change to report",
-			"description": "Minimum change in wattage report",
+			"label": "Minimum change in wattage to report",
 			"valueSize": 1,
+			"unit": "W",
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 10,

@@ -60,8 +60,7 @@
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Current power mode (read only)",
-			"description": "Get the current power mode",
+			"label": "Current power mode",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 0,

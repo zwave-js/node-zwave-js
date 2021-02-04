@@ -80,6 +80,7 @@
 		"5": {
 			"label": "Dimming Step at Automatic Control",
 			"valueSize": 1,
+			"unit": "%",
 			"minValue": 1,
 			"maxValue": 99,
 			"defaultValue": 1,

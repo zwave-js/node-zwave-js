@@ -195,8 +195,7 @@
 			"allowManualEntry": true
 		},
 		"44": {
-			"label": "Battery Threshold",
-			"description": "Battery level threshold",
+			"label": "Battery Level Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -206,8 +205,7 @@
 			"allowManualEntry": true
 		},
 		"45": {
-			"label": "Ultraviolet Threshold",
-			"description": "Ultraviolet change threshold",
+			"label": "Ultraviolet Change Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -239,8 +237,7 @@
 			]
 		},
 		"100": {
-			"label": "Set parameters 101-103 to default.",
-			"description": "Reset 101-103 to defaults",
+			"label": "Reset parameters 101-103 to default.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

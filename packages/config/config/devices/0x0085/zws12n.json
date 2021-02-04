@@ -66,6 +66,7 @@
 		"15": {
 			"label": "Close after time",
 			"valueSize": 1,
+			"unit": "minutes",
 			"minValue": 0,
 			"maxValue": 120,
 			"defaultValue": 120,

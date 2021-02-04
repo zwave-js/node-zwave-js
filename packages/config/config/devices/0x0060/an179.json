@@ -48,6 +48,7 @@
 		},
 		"3": {
 			"label": "Remember last status after power loss",
+			"description": "Remember last status after power loss.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

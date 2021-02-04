@@ -64,8 +64,7 @@
 			]
 		},
 		"5": {
-			"label": "Countdown",
-			"description": "Countdown Timer",
+			"label": "Countdown Timer",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,

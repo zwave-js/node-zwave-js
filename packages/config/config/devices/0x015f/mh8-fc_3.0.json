@@ -101,6 +101,7 @@
 		"4": {
 			"label": "Upload time interval",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 10,
 			"maxValue": 65535,
 			"defaultValue": 30,

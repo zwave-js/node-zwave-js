@@ -444,8 +444,7 @@
 			]
 		},
 		"42": {
-			"label": "CO/CO2/Smoke Alarm",
-			"description": "Reaction to CO/CO2/Smoke Alarm",
+			"label": "Reaction to CO/CO2/Smoke Alarm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

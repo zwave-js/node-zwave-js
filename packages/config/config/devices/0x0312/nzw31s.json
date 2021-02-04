@@ -61,8 +61,7 @@
 			]
 		},
 		"5": {
-			"label": "Countdown Timer",
-			"description": "Shutoff Timer",
+			"label": "Shutoff Timer",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32767,

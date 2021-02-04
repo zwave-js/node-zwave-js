@@ -80,6 +80,7 @@
 		},
 		"7": {
 			"label": "Memeory Device Status at Power Cut",
+			"description": "Memeory Device Status at Power Cut",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
