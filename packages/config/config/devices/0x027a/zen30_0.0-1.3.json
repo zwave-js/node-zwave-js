@@ -312,7 +312,7 @@
 		},
 		"13": {
             "label": "Ramp Rate Control for Dimmer",
-            "description": "Number of seconds it take for the dimmer to reach full brightness or turn off when operated manually. 0 is instant.",
+            "description": "Number of seconds it takes for the dimmer to reach full brightness or turn off when operated manually. 0 is instant.",
 			"valueSize": 1,
 			"unit": "seconds",
 			"minValue": 0,
