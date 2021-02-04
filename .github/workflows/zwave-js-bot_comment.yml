@@ -77,7 +77,8 @@ jobs:
     if: |
       contains(github.event.issue.html_url, '/pull/') &&
       contains(github.event.comment.body, '@zwave-js-bot fix lint') &&
-      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]') &&
+      (github.event.comment.user.login == 'AlCalzone')
 
     runs-on: [ubuntu-latest]
     strategy:
@@ -216,7 +217,8 @@ jobs:
     if: |
       contains(github.event.issue.html_url, '/pull/') &&
       contains(github.event.comment.body, '@zwave-js-bot rebase') &&
-      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]') &&
+      (github.event.comment.user.login == 'AlCalzone')
 
     runs-on: [ubuntu-latest]
     strategy:
@@ -311,7 +313,8 @@ jobs:
     if: |
       contains(github.event.issue.html_url, '/pull/') &&
       contains(github.event.comment.body, '@zwave-js-bot rename commit') &&
-      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]') &&
+      (github.event.comment.user.login == 'AlCalzone')
 
     runs-on: [ubuntu-latest]
     strategy:
@@ -398,7 +401,8 @@ jobs:
     if: |
       contains(github.event.issue.html_url, '/issues/') &&
       contains(github.event.comment.body, '@zwave-js-bot import config') &&
-      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]')
+      (github.event.comment.user.login != 'zwave-js-bot' && github.event.comment.user.login != 'zwave-js-assistant[bot]') &&
+      (github.event.comment.user.login == 'AlCalzone')
 
     runs-on: [ubuntu-latest]
     strategy:
