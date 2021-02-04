@@ -29,15 +29,15 @@
       "allowManualEntry": false,
       "options": [
       {
-        "label": "Outlet on, led on",
+        "label": "Outlet on, LED on",
         "value": 0
       },
       {
-        "label": "Outlet on, led off",
+        "label": "Outlet on, LED off",
         "value": 1
       },
       {
-        "label": "led off",
+        "label": "LED off",
         "value": 2
       }
       ]
