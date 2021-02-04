@@ -19,9 +19,10 @@ assignees:
 Enter Manufacturer and Device name here
 
 **What are the IDs?**
-Manufacturer ID: 0x1234
-Product type: 0x4321
-Product ID: 0x0101
+
+Manufacturer ID: 0x1234  
+Product type: 0x4321  
+Product ID: 0x0101  
 
 **Did you check if we really don't have it?**
 
