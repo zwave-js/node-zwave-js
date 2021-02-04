@@ -420,15 +420,17 @@ export class ConfigManager {
 				e instanceof ZWaveError &&
 				e.code === ZWaveErrorCodes.Config_Invalid
 			) {
+				// Fall back to no index on production systems
+				if (!this.index) this.index = [];
 				if (process.env.NODE_ENV !== "test") {
 					this.logger.print(
 						`Could not load or regenerate device config index: ${e.message}`,
 						"error",
 					);
+					// and don't throw
+					return;
 				}
-				if (!this.index) this.index = [];
-			} else {
-				// This is an unexpected error
+				// But fail hard in tests
 				throw e;
 			}
 		}

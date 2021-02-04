@@ -40,6 +40,7 @@ async function lintIndicators(): Promise<void> {
 }
 
 async function lintDevices(): Promise<void> {
+	process.env.NODE_ENV = "test";
 	await configManager.loadDeviceIndex();
 	const index = configManager.getIndex()!;
 	// Device config files are lazy-loaded, so we need to parse them all
