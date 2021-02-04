@@ -144,7 +144,7 @@
 		},
 		"8": {
 			"label": "Temperature Delta Report Threshold (Group 1)",
-			"unit": "1/10th of degree",
+			"unit": "0.1°",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 200,
