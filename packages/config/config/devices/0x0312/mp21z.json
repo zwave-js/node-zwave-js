@@ -1,0 +1,62 @@
+// NIE Technology Co., Ltd. MP21Z
+// Zwave Plug 1 channel plugin outlet
+{
+  "manufacturer": "NIE Technology Co., Ltd.",
+  "manufacturerId": "0x0312",
+  "label": "MP21Z",
+  "description": "Zwave Mini Smart Plug",
+  "devices": [
+    {
+      "productType": "0xff00",
+      "productID": "0xff0c"
+    }
+  ],
+  "firmwareVersion":{
+    "min": "0.0",
+    "max": "255.255"
+  },
+  "supportsZWavePlus": true,
+  "paramInformation": {
+    "1": {
+      "label": "LED",
+      "description": "Status LED Configuration",
+      "valueSize": 1,
+      "minValue": 0,
+      "maxValue": 2,
+      "defaultValue": 0,
+      "readOnly": false,
+			"writeOnly": false,
+      "allowManualEntry": false,
+      "options": [
+      {
+        "label": "Outlet On, led on",
+        "value": 0
+      },
+      {
+        "label": "Outlet on, led off",
+        "value": 1
+      },
+      {
+        "label": "LED off",
+        "value": 2
+      }
+      ]
+    },
+    "2":{
+      "label": "Count Down Configuration",
+      "description": "Count Down Configuration",
+      "valueSize": "2",
+      "minValue": "0",
+      "maxValue": "32767",
+      "defaultValue": "0",
+      "readOnly": false,
+			"writeOnly": false,
+      "allowManualEntry": true
+    },
+  }
+  "metadata": {
+		"inclusion": "Refer to your primary controller instructions to process the inclusion \n exclusion setup procedure. When prompted by your primary controller, \n click the Up or Down button three times in one second. Include MP21Z to \n from a Z-Wave Gateway with supporting Security.",
+		"exclusion": "Refer to your primary controller instructions to process the inclusion \n exclusion setup procedure.",
+		"reset": "Power off MP21Z keep holding the PROG button Power on,Press and keep \n holding the PROG button for no less than 10 seconds. Please use this procedure \n only when the network primary controller is missing or otherwise inoperable."
+	}
+}
