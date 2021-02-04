@@ -8,7 +8,7 @@
 	"devices": [
 		{
 			"productType": "0xff00",
-			"productID": "0xff0c"
+			"productId": "0xff0c"
 		}
 	],
 	"firmwareVersion": {
@@ -44,10 +44,10 @@
 		},
 		"2": {
 			"label": "Count Down Configuration",
-			"valueSize": "2",
-			"minValue": "0",
-			"maxValue": "32767",
-			"defaultValue": "0",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
 			"unit": "seconds",
 			"readOnly": false,
 			"writeOnly": false,
