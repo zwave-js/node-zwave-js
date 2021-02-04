@@ -50,13 +50,8 @@
       "maxValue": "32767",
       "defaultValue": "0",
       "readOnly": false,
-			"writeOnly": false,
+      "writeOnly": false,
       "allowManualEntry": true
     },
   }
-  "metadata": {
-		"inclusion": "Refer to your primary controller instructions to process the inclusion \n exclusion setup procedure. When prompted by your primary controller, \n click the Up or Down button three times in one second. Include MP21Z to \n from a Z-Wave Gateway with supporting Security.",
-		"exclusion": "Refer to your primary controller instructions to process the inclusion \n exclusion setup procedure.",
-		"reset": "Power off MP21Z keep holding the PROG button Power on,Press and keep \n holding the PROG button for no less than 10 seconds. Please use this procedure \n only when the network primary controller is missing or otherwise inoperable."
-	}
 }
