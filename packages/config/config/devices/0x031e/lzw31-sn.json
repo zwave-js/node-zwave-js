@@ -148,7 +148,7 @@
 		},
 		"13": {
 			"label": "LED Indicator Color",
-			"valueSize": 1,
+			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
 			"defaultValue": 170,
