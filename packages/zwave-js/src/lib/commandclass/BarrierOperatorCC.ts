@@ -417,9 +417,10 @@ export class BarrierOperatorCCReport extends BarrierOperatorCC {
 
 	@ccValue()
 	@ccValueMetadata({
-		...ValueMetadata.ReadOnlyUInt8,
+		...ValueMetadata.UInt8,
 		label: "Barrier State",
 		states: enumValuesToMetadataStates(BarrierState),
+		// TODO: When written, this should only accept OPEN and CLOSE
 	})
 	public readonly state: BarrierState | undefined;
 
