@@ -1,15 +1,15 @@
-// Honeywell 39339 / 39446 / ZW3107
-// Z-Wave Plug-in Smart Dimmer
+// Resideo 39446 / ZW3107
+// Plug-in Dimmer (Dual Plug Simultaneous Control)
 {
-	"manufacturer": "Honeywell",
-	"manufacturerId": "0x0039",
-	"label": "39339 / 39446 / ZW3107",
-	"description": "Z-Wave Plug-in Smart Dimmer",
+	"manufacturer": "Resideo",
+	"manufacturerId": "0x041b",
+	"label": "39446 / ZW3107",
+	"description": "Plug-in Dimmer (Dual Plug Simultaneous Control)",
 	"devices": [
 		{
 			"productType": "0x5044",
 			"productId": "0x3033",
-			"zwaveAllianceId": [2728, 3739, 3830]
+			"zwaveAllianceId": 3825
 		}
 	],
 	"firmwareVersion": {
@@ -23,7 +23,7 @@
 			"isLifeline": true
 		},
 		"2": {
-			"label": "Local Load",
+			"label": "Single Press",
 			"maxNodes": 5
 		},
 		"3": {
@@ -39,7 +39,7 @@
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
-			"defaultValue": 0,
+			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -60,8 +60,8 @@
 			]
 		},
 		"6": {
-			"label": "Dim Rate",
-			"description": "Dim up/down the light to the specified level quickly or slowly.",
+			"label": "Dim up/down rate",
+			"description": "Adjust the speed at which the ramps to a specific value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -72,86 +72,85 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Dim Fast",
+					"label": "Dim up/down quickly",
 					"value": 0
 				},
 				{
-					"label": "Dim Slow",
+					"label": "Dim up/down slowly",
 					"value": 1
 				}
 			]
 		},
 		"7": {
-			"label": "Dim Rate Steps (Z-Wave Command)",
+			"label": "Dim Rate Steps (From Z-Wave Controller)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
-			"minValue": 0,
+			"minValue": 3,
 			"maxValue": 99,
-			"defaultValue": 1,
+			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "Dim Rate Timing (Z-Wave)",
-			"description": "Timing of steps or levels",
+			"label": "Dim Rate Timing (From Z-Wave Controller)",
+			"description": "Timing of steps",
 			"valueSize": 2,
-			"unit": "10ms",
+			"units": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
+			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"9": {
-			"label": "Dim Rate Steps (Manual)",
+			"label": "Dim Rate Steps (When Manually Controlled)",
 			"description": "Number of steps or levels",
 			"valueSize": 1,
-			"minValue": 1,
+			"minValue": 3,
 			"maxValue": 99,
-			"defaultValue": 1,
+			"defaultValue": 3,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
 		"10": {
-			"label": "Dim Rate Timing (Manual)",
+			"label": "Dim Rate Timing (When Manually Controlled)",
 			"description": "Timing of steps",
 			"valueSize": 2,
-			"unit": "10ms",
+			"units": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
-			"unsigned": true,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"11": {
-			"label": "Dim Rate Steps (All-On/All-Off)",
-			"description": "Number of steps or levels",
-			"valueSize": 1,
-			"unit": "10ms",
-			"minValue": 1,
-			"maxValue": 99,
 			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"11": {
+			"label": "Dim Rate Steps (When Receiving All-On/Off Commands)",
+			"description": "Number of steps or levels",
+			"valueSize": 1,
+			"minValue": 3,
+			"maxValue": 99,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
 		"12": {
-			"label": "Dim Rate Timing (All-On/All-Off)",
-			"description": "Timing of steps or levels",
+			"label": "Dim Rate Timing (All-On/Off Command)",
+			"description": "Timing of steps",
 			"valueSize": 2,
-			"unit": "10ms",
+			"units": "10ms",
 			"minValue": 1,
 			"maxValue": 255,
-			"defaultValue": 3,
+			"defaultValue": 1,
 			"unsigned": true,
 			"readOnly": false,
 			"writeOnly": false,
@@ -162,8 +161,8 @@
 		"treatBasicSetAsEvent": true
 	},
 	"metadata": {
-		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add\nthe smart dimmer to the Z-Wave network.\n2. Once the controller is ready to add your smart dimmer, single\npress and release the manual/program button on the smart\ndimmer to add it in the network.\nPlease reference the controller/gateway’s manual for instructions",
-		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\nremove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and\nrelease the manual/program button on the smart dimmer to\nremove it from the network",
-		"reset": "To return your dimmer to factory defaults:\n1. If plugged in, unplug the dimmer from the receptacle.\n2. Press and hold the top button for at least 3 seconds while you\nplug the dimmer into a receptacle.\nNote: This should only be used in the event your networks’ primary\ncontroller is missing or otherwise inoperable"
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press\nand release the manual/program button on the smart\ndimmer. Repeat as necessary to add the dimmer to\nthe network.\nYou have complete control",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press\nand release the manual/program button on the smart\ndimmer to remove it from the network",
+		"reset": "1. If plugged in, unplug the dimmer from the receptacle\n2. Press and hold the top button, plug the device in and\ncontinue to hold for at least 3 seconds.\nNOTE: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable"
 	}
 }

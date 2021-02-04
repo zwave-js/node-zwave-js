@@ -1,0 +1,71 @@
+// Domitech Products, LLC ZRKSW
+// Smart LED Light Bulb
+{
+	"manufacturer": "Domitech Products, LLC",
+	"manufacturerId": "0x020e",
+	"label": "ZRKSW",
+	"description": "Smart LED Light Bulb",
+	"devices": [
+		{
+			"productType": "0x4c42",
+			"productId": "0x3133",
+			"zwaveAllianceId": 1443
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"paramInformation": {
+		"1": {
+			"label": "Dim Level When Powered On",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Full brightness",
+					"value": 0
+				},
+				{
+					"label": "Last dim level",
+					"value": 1
+				}
+			]
+		},
+		"9": {
+			"label": "Dim Step Level",
+			"description": "Defines the number of steps necessary to reach full brightness.",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 99,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "Dim Step Timing",
+			"description": "Timing of steps",
+			"valueSize": 1,
+			"minValue": 1,
+			"maxValue": 10,
+			"defaultValue": 3,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	},
+	"metadata": {
+		"inclusion": "1. Turn Off power to the light bulb socket\n2. Screw in the light bulb\n3. Place your network controller into inclusion mode by following the controller manufacturer's instructions\n4. Turn On power to the light bulb. If successful, the LED light bulb will flash twice to indicate successful inclusion.\n5. If the controller/gateway shows it was a fail, repeat the procedure.\n\nNote: If Inclusion still fails after the 2nd attempt, you need to first RESET the dt Smart Bulb before repeating the above steps.",
+		"exclusion": "1. Turn off power to the light bulb socket\n2. Follow the network controller instruction to place your network controller into exclusion mode to remove the dt light bulb from the network.\n3. After being prompted by the network controller, turn On power to the light bulb. If successful, the LED light bulb will flash twice to indicate successful inclusion.",
+		"reset": "You may manually reset the light bulb as follows:\n1. Flick the wall switch “OFF-ON” 4 times within 4 seconds. \n2. The dt Smart Bulb will flash twice after Reset is successful. \n\nUse this procedure only in the event that the network primary controller is lost or otherwise inoperable"
+	}
+}

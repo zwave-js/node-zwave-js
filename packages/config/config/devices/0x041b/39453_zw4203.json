@@ -1,0 +1,96 @@
+// Resideo 39453 / ZW4203
+// Plug-in Outdoor Smart Switch
+{
+	"manufacturer": "Resideo",
+	"manufacturerId": "0x041b",
+	"label": "39453 / ZW4203",
+	"description": "Plug-in Outdoor Smart Switch",
+	"devices": [
+		{
+			"productType": "0x4f50",
+			"productId": "0x3035",
+			"zwaveAllianceId": 3833
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"associations": {
+		"1": {
+			"label": "Lifeline",
+			"maxNodes": 5,
+			"isLifeline": true
+		},
+		"2": {
+			"label": "Single Press",
+			"maxNodes": 5
+		},
+		"3": {
+			"label": "Double Tap",
+			"maxNodes": 5,
+			"isLifeline": true
+		}
+	},
+	"paramInformation": {
+		"3": {
+			"label": "LED Light",
+			"description": "LED status when device on or off.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 3,
+			"defaultValue": 1,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "LED on when load is off",
+					"value": 0
+				},
+				{
+					"label": "LED on when light is turned on",
+					"value": 1
+				},
+				{
+					"label": "LED always off",
+					"value": 2
+				},
+				{
+					"label": "LED Always on",
+					"value": 3
+				}
+			]
+		},
+		"19": {
+			"label": "Alternate Exclusion",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Press any button on the switch",
+					"value": 0
+				},
+				{
+					"label": "Press on two times, then off two times",
+					"value": 1
+				}
+			]
+		}
+	},
+	"compat": {
+		"treatBasicSetAsEvent": true
+	},
+	"metadata": {
+		"inclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press\nand release the manual/program button on the smart\nswitch to add it in the network.\n3. The controller’s app will indicate if it has discovered the\nswitch. If prompted by the controller to enter the S2\nsecurity code, refer to the QR code/security number on\nthe side of the box or the QR code label on the product\n(see Figure 1). Enter the 5-digit code",
+		"exclusion": "1. Follow the instructions for your Z-Wave certified\ncontroller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press\nand release the manual/program button on the smart\nswitch to remove it from the network",
+		"reset": "1. If plugged in, unplug the device from the receptacle.\n2. Press and hold the manual/program button, plug the\ndevice in and continue to hold for at least 3 seconds.\nNOTE: This should only be used in the event your network’s\nprimary controller is missing or otherwise inoperable"
+	}
+}
