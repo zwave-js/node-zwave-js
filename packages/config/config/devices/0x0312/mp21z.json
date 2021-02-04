@@ -1,0 +1,57 @@
+// NIE Technology Co., Ltd. MP21Z
+// Zwave Plug 1 channel plugin outlet
+{
+	"manufacturer": "NIE Technology Co., Ltd.",
+	"manufacturerId": "0x0312",
+	"label": "MP21Z",
+	"description": "Zwave Mini Smart Plug",
+	"devices": [
+		{
+			"productType": "0xff00",
+			"productId": "0xff0c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "LED",
+			"description": "Status LED Configuration",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Outlet on, LED on",
+					"value": 0
+				},
+				{
+					"label": "Outlet on, LED off",
+					"value": 1
+				},
+				{
+					"label": "LED off",
+					"value": 2
+				}
+			]
+		},
+		"2": {
+			"label": "Count Down Configuration",
+			"valueSize": 2,
+			"minValue": 0,
+			"maxValue": 32767,
+			"defaultValue": 0,
+			"unit": "seconds",
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		}
+	}
+}
