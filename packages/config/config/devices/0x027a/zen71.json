@@ -39,7 +39,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Upper paddle turns the light on, lower paddle turns it off (default)",
+					"label": "Upper paddle turns the light on, lower paddle turns it off",
 					"value": 0
 				},
 				{
@@ -64,7 +64,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "LED indicator is on when switch is off, otherwise off (default)",
+					"label": "LED indicator is on when switch is off, otherwise off",
 					"value": 0
 				},
 				{
@@ -91,7 +91,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"5": {
 			"label": "Auto Turn-On Timer (Minutes)",
@@ -102,7 +102,7 @@
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
-			"allowManualEntry": false
+			"allowManualEntry": true
 		},
 		"8": {
 			"label": "On Off Status After Power Failure",
@@ -124,7 +124,7 @@
 					"value": 1
 				},
 				{
-					"label": "Remembers and restores on/off status after power failure (default)",
+					"label": "Remembers and restores on/off status after power failure",
 					"value": 2
 				}
 			]
@@ -141,7 +141,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Scene control disabled (default)",
+					"label": "Scene control disabled",
 					"value": 0
 				},
 				{
@@ -166,7 +166,7 @@
 					"value": 0
 				},
 				{
-					"label": "Physical paddle control enabled (default)",
+					"label": "Physical paddle control enabled",
 					"value": 1
 				},
 				{
@@ -187,7 +187,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Regular mechanical 3-way on/off switch (default)",
+					"label": "Regular mechanical 3-way on/off switch",
 					"value": 0
 				},
 				{
@@ -208,7 +208,7 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch always reports status and changes LED state (default)",
+					"label": "Switch always reports status and changes LED state",
 					"value": 0
 				},
 				{
@@ -233,7 +233,7 @@
 					"value": 0
 				},
 				{
-					"label": "Blue (default)",
+					"label": "Blue",
 					"value": 1
 				},
 				{
@@ -262,7 +262,7 @@
 					"value": 0
 				},
 				{
-					"label": "Medium (60%) (default)",
+					"label": "Medium (60%)",
 					"value": 1
 				},
 				{
@@ -287,7 +287,7 @@
 					"value": 0
 				},
 				{
-					"label": "Z-Wave control and paddle control = binary (default)",
+					"label": "Z-Wave control and paddle control = binary",
 					"value": 1
 				}
 			]
