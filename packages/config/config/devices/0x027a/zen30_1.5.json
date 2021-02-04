@@ -400,15 +400,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Manual control disabled, z-wave enabled",
+					"label": "Manual control disabled, Z-Wave enabled",
 					"value": 0
 				},
 				{
-					"label": "Manual control enabled, z-wave enabled",
+					"label": "Manual control enabled, Z-Wave enabled",
 					"value": 1
 				},
 				{
-					"label": "Manual and z-wave control disabled",
+					"label": "Manual and Z-Wave control disabled",
 					"value": 2
 				}
 			]
@@ -424,15 +424,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Manual control disabled, z-wave enabled",
+					"label": "Manual control disabled, Z-Wave enabled",
 					"value": 0
 				},
 				{
-					"label": "Manual control enabled, z-wave enabled",
+					"label": "Manual control enabled, Z-Wave enabled",
 					"value": 1
 				},
 				{
-					"label": "Manual and z-wave control disabled",
+					"label": "Manual and Z-Wave control disabled",
 					"value": 2
 				}
 			]
