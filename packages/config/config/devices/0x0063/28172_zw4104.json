@@ -9,20 +9,12 @@
 		{
 			"productType": "0x5052",
 			"productId": "0x3039",
-			"zwaveAllianceId": [
-				1270,
-				1925,
-				2973
-			]
+			"zwaveAllianceId": [1270, 1925, 2973]
 		},
 		{
 			"productType": "0x5052",
 			"productId": "0x3130",
-			"zwaveAllianceId": [
-				1436,
-				2125,
-				2561
-			]
+			"zwaveAllianceId": [1436, 2125, 2561]
 		}
 	],
 	"firmwareVersion": {
