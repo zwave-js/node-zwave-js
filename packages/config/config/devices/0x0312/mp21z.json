@@ -29,7 +29,7 @@
       "allowManualEntry": false,
       "options": [
       {
-        "label": "Outlet On, led on",
+        "label": "Outlet on, led on",
         "value": 0
       },
       {
@@ -37,18 +37,18 @@
         "value": 1
       },
       {
-        "label": "LED off",
+        "label": "led off",
         "value": 2
       }
       ]
     },
     "2":{
       "label": "Count Down Configuration",
-      "description": "Count Down Configuration",
       "valueSize": "2",
       "minValue": "0",
       "maxValue": "32767",
       "defaultValue": "0",
+      "unit": "seconds",
       "readOnly": false,
       "writeOnly": false,
       "allowManualEntry": true
