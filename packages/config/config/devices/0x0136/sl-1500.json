@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "1. Click the customize button on the upper right-hand corner of the mashup. \n2. Click Select App.\n3. Select the proper application.\n4. As list of gateways appear on the Gateways mashup, click the Manage Gateways button. \n5. In the lower left-hand corner, press the Factory Reset button.\n6. Confirm the factory reset."
+		"reset": "1. Click the customize button on the upper right-hand corner of the mashup. \n2. Click Select App.\n3. Select the proper application.\n4. As list of gateways appear on the Gateways mashup, click the Manage Gateways button. \n5. In the lower left-hand corner, press the Factory Reset button.\n6. Confirm the factory reset.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1275/SysLINK%201000%20User%20Guide%20-%20Z-Wave%20Market%20Certification.docx"
 	}
 }

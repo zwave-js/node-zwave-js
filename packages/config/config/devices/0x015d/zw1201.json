@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.\n2. Once the controller is ready to include your device, triple click the micro switch to include it in the network",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.\n2. Once the controller is ready to Exclude your device, triple click the micro switch to exclude it from the network.",
-		"reset": "Press and hold the micro switch for at least 3 seconds while you insert the battery to reset the device.\n*Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "Press and hold the micro switch for at least 3 seconds while you insert the battery to reset the device.\n*Use this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2459/ZW1201_Manual170526.pdf"
 	}
 }

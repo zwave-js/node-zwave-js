@@ -1,4 +1,4 @@
-// Honeywell 39357/ZW3011
+// Honeywell 39357 / ZW3011
 // In-Wall Smart Toggle Dimmer
 {
 	"manufacturer": "Honeywell",
@@ -169,6 +169,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press up and release the toggle.\nIf prompted by the controller to enter the S2 security code, refer to the QR code/security number on the back of the box, or the QR code label on the product",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press up and release the toggle",
-		"reset": "Quickly press UP button three times, then, immediately press the DOWN button three times.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+		"reset": "Quickly press UP button three times, then, immediately press the DOWN button three times.\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3601/39357%20Binder.pdf"
 	}
 }

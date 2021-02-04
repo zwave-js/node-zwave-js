@@ -62,6 +62,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified hub to add a device tothe Z-Wave network.\n2. Once the hub is ready to add your device, press and hold either button for three seconds.\n3. The LED will flash two times when the remote sends add notification (NIF).\n4. The LED will keep lighting up for one minute if inclusion is successful.\n5. Following the instructions for your Z-Wave certified hub, assign actions for each button press. An action can be many combinations of scenes, groups or events, and is greatly dependent on the hub capabilities.",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified hub to remove a device from the Z-Wave network.\n2. Once the hub is ready to remove your device, press and hold either button for three seconds.\n3. The LED will flash two times when the remote sends remove notification (NIF)",
-		"reset": "1. Press and release button 1 10 times quickly. All button presses must be within six seconds.\n2. The LED will flash five times when completed successfully."
+		"reset": "1. Press and release button 1 10 times quickly. All button presses must be within six seconds.\n2. The LED will flash five times when completed successfully.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3959/53831-QSG-v1%20(3).pdf"
 	}
 }

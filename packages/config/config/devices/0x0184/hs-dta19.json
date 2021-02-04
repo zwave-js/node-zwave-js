@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Turn Off power to the light bulb socket\n2. Screw in the light bulb\n3. Place your network controller into inclusion mode by following the controller manufacturer's instructions\n4. Turn On power to the light bulb. If successful, the LED light bulb will flash twice to indicate successful inclusion.\n5. If the controller/gateway shows it was a fail, repeat the procedure.\n\nNote: If Inclusion still fails after the 2nd attempt, you need to first RESET the Smart Bulb before repeating the above steps.",
 		"exclusion": "1. Turn off power to the light bulb socket\n2. Follow the network controller instruction to place your network controller into exclusion mode to remove the light bulb from the network.\n3. After being prompted by the network controller, turn On power to the light bulb. If successful, the LED light bulb will flash twice to indicate successful inclusion.",
-		"reset": "You may manually reset the light bulb as follows:\n1. Flick the wall switch “OFF-ON” 4 times within 4 seconds. \n2. The Smart Bulb will flash twice after Reset is successful. \n\nUse this procedure only in the event that the network primary controller is lost or otherwise inoperable"
+		"reset": "You may manually reset the light bulb as follows:\n1. Flick the wall switch “OFF-ON” 4 times within 4 seconds. \n2. The Smart Bulb will flash twice after Reset is successful. \n\nUse this procedure only in the event that the network primary controller is lost or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1682/HomeSeer-HS-DTA19-Quick-Start.pdf"
 	}
 }

@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "In the Expert Web UI (http://IP-address:8083/expert): click \"Network\" item at the top of the screen, choose \"Control\" menu item, click \"Controller Factory Default\" button.\nNOTE: use the reset procedure with extreme care, only when the primary controller is missing or inoperable."
+		"reset": "In the Expert Web UI (http://IP-address:8083/expert): click \"Network\" item at the top of the screen, choose \"Control\" menu item, click \"Controller Factory Default\" button.\nNOTE: use the reset procedure with extreme care, only when the primary controller is missing or inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1716/dunehd_solo4k_zwave_controller_user_manual.2016_03_22.pdf"
 	}
 }

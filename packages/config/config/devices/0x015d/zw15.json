@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to \n the Z-Wave network.\n2. Once the controller is ready to include your device, triple click the ADD \n Button to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh the \n Z-Wave network to optimize performance.",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device \n from the Z-Wave network.\n2. Once the controller is ready to Exclude your device, triple click the ADD Button \n to exclude it from the network.",
-		"reset": "Press and hold ADD Button for at least 3 seconds while you insert batteries.\n\nPlease use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "Press and hold ADD Button for at least 3 seconds while you insert batteries.\n\nPlease use this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2006/ZW15-Manual1003.pdf"
 	}
 }

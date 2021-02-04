@@ -1,4 +1,4 @@
-// BRK Brands, Inc. ZCOMBO
+// First Alert (BRK Brands Inc) ZCOMBO
 // ZCombo-G Smoke/CO Alarm
 {
 	"manufacturer": "First Alert (BRK Brands Inc)",
@@ -9,7 +9,10 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0003",
-			"zwaveAllianceId": [3709, 3886]
+			"zwaveAllianceId": [
+				3709,
+				3886
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -27,8 +30,8 @@
 		"1": {
 			"label": "SuperVision report timeout",
 			"description": "ZCOMBO will send the message over SuperVision Command Class and it will wait for the SuperVision report from the Controller for the SuperVision report timeout time.",
-			"unit": "seconds",
 			"valueSize": 2,
+			"unit": "seconds",
 			"minValue": 500,
 			"maxValue": 5000,
 			"defaultValue": 1500,
@@ -52,8 +55,8 @@
 		"3": {
 			"label": "SuperVision wait time",
 			"description": "Before retrying the message, ZCOMBO will wait for the SuperVision wait time. Actual wait time is calculated using the formula: Wait Time = SuperVision wait time base-value + random-value + (attempt-count x 5 seconds). The random value will be between 100 and 1100 milliseconds.",
-			"unit": "s",
 			"valueSize": 2,
+			"unit": "s",
 			"minValue": 1,
 			"maxValue": 60,
 			"defaultValue": 5,
@@ -66,6 +69,7 @@
 	"metadata": {
 		"inclusion": "ADD\n1. Slide battery door open.\n2. Insert batteries checking the correct orientation.\n3. Press and hold the test button. Keep it held down as you slide the battery drawer closed. You may then release the button.\nNOTE: Use only your finger or thumb on the test button. The use of any other instrument is strictly prohibited",
 		"exclusion": "REMOVE\n1. Slide battery door open.\n2. Remove and re-insert batteries checking the correct orientation.\n3. Press and hold the test button. Keep it held down as you slide the battery drawer closed. You may then release the button.\nNOTE: Use only your finger or thumb on the test button. The use of any other instrument is strictly prohibited",
-		"reset": "RESET DEVICE\nIf the device is powered up with the test button held down for 10+ seconds, the device will reset all Z-Wave settings and leave the network.\nUpon completion of the Reset operation, the LED will glow and the horn will sound for ~1 second.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "RESET DEVICE\nIf the device is powered up with the test button held down for 10+ seconds, the device will reset all Z-Wave settings and leave the network.\nUpon completion of the Reset operation, the LED will glow and the horn will sound for ~1 second.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3886/User_Manual_M08-0456-173833_D2.pdf"
 	}
 }

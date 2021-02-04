@@ -9,7 +9,11 @@
 		{
 			"productType": "0x0100",
 			"productId": "0x0001",
-			"zwaveAllianceId": [1675, 1761, 1877]
+			"zwaveAllianceId": [
+				1675,
+				1761,
+				1877
+			]
 		},
 		{
 			"productType": "0x0100",
@@ -22,6 +26,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "You can login the WEB of LS1015 to set the product to the factory default state. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "You can login the WEB of LS1015 to set the product to the factory default state. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1877/31507632-Smart%20Home%20Gateway%20LS1015%20Quick%20Start%2002.pdf"
 	}
 }

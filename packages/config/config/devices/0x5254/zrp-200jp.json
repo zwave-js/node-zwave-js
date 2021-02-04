@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1 Refer to your primary controller to enter into the Inclusion Mode or Exclusion Mode \n2 When it is prompted to enter it, please triple click the “PROG” button within 1 second. Blue Indicator flashes TWICE then stay off",
 		"exclusion": "1 Refer to your primary controller to enter into the Inclusion Mode or Exclusion Mode \n2 When it is prompted to enter it, please triple click the “PROG” button within 1 second. Blue Indicator flashes TWICE then stay off",
-		"reset": "Press and Hold “PROG” button for 3 seconds on Z-Wave Slim Repeater, the indicator will light up Purple Color. DO NOT Release the “PROG” Button until indicator change back to Blue color and flashes TWICE.\n\nRemark : All the Setting and Data will be permanently deleted.\n \n*Please use this procedure only when the network primary controller is missing or otherwise inoperable."
+		"reset": "Press and Hold “PROG” button for 3 seconds on Z-Wave Slim Repeater, the indicator will light up Purple Color. DO NOT Release the “PROG” Button until indicator change back to Blue color and flashes TWICE.\n\nRemark : All the Setting and Data will be permanently deleted.\n \n*Please use this procedure only when the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2841/BW8180JP%20ZRP-200JP%20Installation%20Guide.pdf"
 	}
 }

@@ -9,7 +9,10 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0002",
-			"zwaveAllianceId": [1498, 790]
+			"zwaveAllianceId": [
+				1498,
+				790
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -76,6 +79,7 @@
 	"metadata": {
 		"inclusion": "Once the controller is in inclusion mode, either remove the battery isolation tab, OR insert the battery to power up the sensor",
 		"exclusion": "Once the controller is in exclusion mode, either remove the battery isolation tab, OR insert the battery to power up the sensor",
-		"reset": "To restore this sensor to factory default settings, follow the instructions in the manual to exclude this sensor from the Z-Wave network. Upon completion of removal from the network the sensor will restore itself to factory default settings automatically. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "To restore this sensor to factory default settings, follow the instructions in the manual to exclude this sensor from the Z-Wave network. Upon completion of removal from the network the sensor will restore itself to factory default settings automatically. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1498/D.W.%20Zwave%20Manual%20R1.04.docx"
 	}
 }

@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "Please proceed with the door lock open.\n1. Set the controller in inclusion mode.\n2. Open the battery cover of the indoor body and press the [R] button for 7 seconds.\n3. Press the [1][4][7] button after pressing the [R] button",
 		"exclusion": "Please proceed with the door lock open.\n1. Set the controller in exclusion mode.\n2. Open the battery cover of the indoor body and press the [R] button for 7 seconds.\n3. Press the [3][6][7] button after pressing the [R] button",
-		"reset": "Please proceed with the door lock open.\n1. Open the battery cover of the indoor body and press the [R] button for 9 seconds.\n2. Press the [1][2][3][6][5][4][7] button after pressing the [R] button.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "Please proceed with the door lock open.\n1. Open the battery cover of the indoor body and press the [R] button for 9 seconds.\n2. Press the [1][2][3][6][5][4][7] button after pressing the [R] button.\n\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2974/Manual.pdf"
 	}
 }

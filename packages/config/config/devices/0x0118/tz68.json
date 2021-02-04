@@ -9,7 +9,11 @@
 		{
 			"productType": "0x0003",
 			"productId": "0x0002",
-			"zwaveAllianceId": [1423, 1948, 1952]
+			"zwaveAllianceId": [
+				1423,
+				1948,
+				1952
+			]
 		},
 		{
 			"productType": "0x0101",
@@ -75,5 +79,8 @@
 				}
 			]
 		}
+	},
+	"metadata": {
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1952/TZ68%20User%20Manual.pdf"
 	}
 }

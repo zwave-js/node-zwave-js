@@ -9,7 +9,10 @@
 		{
 			"productType": "0x4944",
 			"productId": "0x3138",
-			"zwaveAllianceId": [1369, 1937]
+			"zwaveAllianceId": [
+				1369,
+				1937
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -66,6 +69,7 @@
 	"metadata": {
 		"inclusion": "Linking your device\n1. Follow the instructions for your Z-wave certified controller to include a device to\nthe Z-wave network.\n2. Once the controller is ready to include your device, press and release the top or\nbottom of the wireless smart switch(rocker) to include it in the network.\nNote: Your controller may need to be within 10 feet of the device to be included.\n3. Once your controller has confirmed that the device has been included, refresh the\nZ-wave network to optimize performance.\nPlease reference the controller’s manual for instructions",
 		"exclusion": "Note: To exclude and reset the device, follow the instructions provided by your\nZ-Wave controller",
-		"reset": "Quickly press ON (Top) button three (3) times and then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "Quickly press ON (Top) button three (3) times and then immediately press the OFF (Bottom) button three (3) times. The LED will flash ON/OFF 5 times when completed successfully. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1937/Binder1.pdf"
 	}
 }

@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "n/a"
+		"reset": "n/a",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1147/ZME_UZB1_Manual.pdf"
 	}
 }

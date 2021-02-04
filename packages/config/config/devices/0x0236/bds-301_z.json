@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Enter the application in the smart phone.\n2. Touch the\" Add New Device\" in the screen of the smart phone.\n3. Select\"Switch\".\n4. Press the top button gently on the switch for 3(three) seconds and then the status led will start to flash.\n5. Then stop pressing the top button.\n6. Then the status led will be turned off.",
 		"exclusion": "1. Enter the application in the smart phone.\n2. Touch the\" Remove New Device\" in the screen of the smart phone.\n3. Select\"Switch\".\n4. Press the top button gently on the switch for 3(three) seconds and then the status led will start to flash.\n5. Then stop pressing the top button.\n6. Then the status led will be turned on",
-		"reset": "1. Press the top button on the switch for 10(ten) seconds.\n2. Then the status led will be turned on.\n\n*Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+		"reset": "1. Press the top button on the switch for 10(ten) seconds.\n2. Then the status led will be turned on.\n\n*Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1538/User%20Manual%20BANDI%20COMM%20TECH%20Oct%2029%202015.pdf"
 	}
 }

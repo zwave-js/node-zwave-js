@@ -126,6 +126,7 @@
 		}
 	},
 	"metadata": {
-		"reset": "Use this procedure only in the event that the primary controller is missing or otherwise inoperable.\n\nPress and hold the Action Button on Z-Stick for 20 seconds and then release"
+		"reset": "Use this procedure only in the event that the primary controller is missing or otherwise inoperable.\n\nPress and hold the Action Button on Z-Stick for 20 seconds and then release",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1355/Z%20Stick%20Gen5%20manual%201.pdf"
 	}
 }

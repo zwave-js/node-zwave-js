@@ -9,7 +9,10 @@
 		{
 			"productType": "0x0005",
 			"productId": "0x0002",
-			"zwaveAllianceId": [1244, 1252]
+			"zwaveAllianceId": [
+				1244,
+				1252
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -17,6 +20,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Please do this only after removing all nodes from the network.\nFrom the Z-Wave Plug-In menu, choose \"Controller Management\". Under the options for the interface that is using the Z-Net controller, choose \"ERASE this Interface and Create A New Network\", and follow the system prompts"
+		"reset": "Please do this only after removing all nodes from the network.\nFrom the Z-Wave Plug-In menu, choose \"Controller Management\". Under the options for the interface that is using the Z-Net controller, choose \"ERASE this Interface and Create A New Network\", and follow the system prompts",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1252/Z-Net-Installation-Guide.pdf"
 	}
 }

@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "The host software controls how to reset it"
+		"reset": "The host software controls how to reset it",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2469/manual.pdf"
 	}
 }

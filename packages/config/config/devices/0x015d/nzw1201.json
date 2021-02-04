@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "First put your Z-Wave enabled HUB in inclusion mode. Next, insert the battery and it will automatically connect to your HUB. If it does not automatically connect after 30 seconds, press the manual button three (3) times",
 		"exclusion": "Put your HUB in exclusion mode and press the manual button three (3) times",
-		"reset": "Please use a certified controller to remove the device from your network to factory default. Or, to manually remove your device, hold down the button for 5 seconds. Only use this procedure in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "Please use a certified controller to remove the device from your network to factory default. Or, to manually remove your device, hold down the button for 5 seconds. Only use this procedure in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2658/NZW1201%20-%20Manual%20v1%20Compressed.pdf"
 	}
 }

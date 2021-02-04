@@ -9,7 +9,10 @@
 		{
 			"productType": "0x000b",
 			"productId": "0x010b",
-			"zwaveAllianceId": [3052, 3214]
+			"zwaveAllianceId": [
+				3052,
+				3214
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -17,6 +20,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\n\nNOTE: This function will forcibly clear the Alarm.com ADC-SG-100Z’s Z-Wave node identification and will also remove all network information from the ADC-SG-100Z. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable. If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.\n1. A Z-Wave factory reset must be triggered from the Alarm.com dealer site\n2. Navigate to the Equipment page. \n3. Click the “emPower Devices” tab.\n4. Open the “Advanced Z-Wave Commands” menu by clicking the button below the Equipment List. \n5. Towards the bottom next to the “Equipment List Label” text click on the “Reset To Factory Default” button\n6. Allow 3 minutes for the associated commands to go through and for the ADC-SG-100Z to act on them"
+		"reset": "Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.\n\nNOTE: This function will forcibly clear the Alarm.com ADC-SG-100Z’s Z-Wave node identification and will also remove all network information from the ADC-SG-100Z. Use this procedure only in the event that the network primary controller is missing or otherwise inoperable. If this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable.\n1. A Z-Wave factory reset must be triggered from the Alarm.com dealer site\n2. Navigate to the Equipment page. \n3. Click the “emPower Devices” tab.\n4. Open the “Advanced Z-Wave Commands” menu by clicking the button below the Equipment List. \n5. Towards the bottom next to the “Equipment List Label” text click on the “Reset To Factory Default” button\n6. Allow 3 minutes for the associated commands to go through and for the ADC-SG-100Z to act on them",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3214/Alarm.com%20ADC-SG-100Z%20Z-Wave%20Documentation%2001_24_19.pdf"
 	}
 }

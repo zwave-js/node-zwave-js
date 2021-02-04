@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Power up device, wait 7 minutes, press and hold reset button 10 seconds on the backside of the device"
+		"reset": "Power up device, wait 7 minutes, press and hold reset button 10 seconds on the backside of the device",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1823/Screenshots%20App.pdf"
 	}
 }

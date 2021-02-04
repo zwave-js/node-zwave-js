@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "- Click [Add] icon in Z-Wave Controller .\n - Press the Func_Button 3 times within 1.5s, Green LED is Blinking 4 times within 1 second.\n- If Inclusion Process is successful, Green led will turn off.",
 		"exclusion": "- Click [Remove] icon in Z-Wave Controller\n- Press the Func_Button 3 times within 1.5s \n- If Exclusion Process is successful, Green led is Blinking 6 times, then turn off.",
-		"reset": "Long press Func_Button while installing batteries in the Device \n-Device Reset Locally notification is Transmitted\n-Green LED Turns off after 2 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "Long press Func_Button while installing batteries in the Device \n-Device Reset Locally notification is Transmitted\n-Green LED Turns off after 2 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3026/HS3MS-Z-S2documentation.pdf"
 	}
 }

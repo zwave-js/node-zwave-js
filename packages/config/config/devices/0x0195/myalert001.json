@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "On the GUI, we need to go to the Advanced setting screen then on Zwave configuration then push the 'reset' button"
+		"reset": "On the GUI, we need to go to the Advanced setting screen then on Zwave configuration then push the 'reset' button",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1295/150401_Manual_Z-Wave_V15.pdf"
 	}
 }

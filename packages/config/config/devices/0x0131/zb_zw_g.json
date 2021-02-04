@@ -27,6 +27,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "* Navigate to Z-Wave network management tools\n* Click the “Z-WAVE RESET” button and follow onscreen instructions"
+		"reset": "* Navigate to Z-Wave network management tools\n* Click the “Z-WAVE RESET” button and follow onscreen instructions",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1409/Zipato%20Z-Wave%20User%20Manual%2021.07.2015%20-%20144DPI.pdf"
 	}
 }

@@ -7,6 +7,11 @@
 	"description": "USB Dongle",
 	"devices": [
 		{
+			"productType": "0x0000",
+			"productId": "0x0000",
+			"zwaveAllianceId": 1239
+		},
+		{
 			"productType": "0x1001",
 			"productId": "0x0101",
 			"zwaveAllianceId": 849
@@ -15,15 +20,13 @@
 			"productType": "0x1001",
 			"productId": "0x0102",
 			"zwaveAllianceId": 1068
-		},
-		{
-			"productType": "0x0000",
-			"productId": "0x0000",
-			"zwaveAllianceId": 1239
 		}
 	],
 	"firmwareVersion": {
 		"min": "0.0",
 		"max": "255.255"
+	},
+	"metadata": {
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1239/ZU1401-5%20USB%20Dongle.pdf"
 	}
 }

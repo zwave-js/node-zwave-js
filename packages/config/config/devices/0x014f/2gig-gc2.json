@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "using UI, \"Reset Controller\" under Z-Wave toolbox (Advanced)"
+		"reset": "using UI, \"Reset Controller\" under Z-Wave toolbox (Advanced)",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3687/10022313%20A%20-%202GIG-GC2E%20CONTORL%20PANEL%20USER%20GUIDE_WEB-compressed.pdf"
 	}
 }

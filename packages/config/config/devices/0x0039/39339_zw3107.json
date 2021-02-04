@@ -9,7 +9,11 @@
 		{
 			"productType": "0x5044",
 			"productId": "0x3033",
-			"zwaveAllianceId": [2728, 3739, 3830]
+			"zwaveAllianceId": [
+				2728,
+				3739,
+				3830
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -164,6 +168,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add\nthe smart dimmer to the Z-Wave network.\n2. Once the controller is ready to add your smart dimmer, single\npress and release the manual/program button on the smart\ndimmer to add it in the network.\nPlease reference the controller/gateway’s manual for instructions",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to\nremove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and\nrelease the manual/program button on the smart dimmer to\nremove it from the network",
-		"reset": "To return your dimmer to factory defaults:\n1. If plugged in, unplug the dimmer from the receptacle.\n2. Press and hold the top button for at least 3 seconds while you\nplug the dimmer into a receptacle.\nNote: This should only be used in the event your networks’ primary\ncontroller is missing or otherwise inoperable"
+		"reset": "To return your dimmer to factory defaults:\n1. If plugged in, unplug the dimmer from the receptacle.\n2. Press and hold the top button for at least 3 seconds while you\nplug the dimmer into a receptacle.\nNote: This should only be used in the event your networks’ primary\ncontroller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3830/39446-HQSG_v4.pdf"
 	}
 }

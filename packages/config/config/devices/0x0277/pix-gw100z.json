@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Push the hardware reset button.\n\n\"Please use this procedure only when the network primary controller is missing or otherwise inoperable.\""
+		"reset": "Push the hardware reset button.\n\n\"Please use this procedure only when the network primary controller is missing or otherwise inoperable.\"",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1759/Pixela%20manual.pdf"
 	}
 }

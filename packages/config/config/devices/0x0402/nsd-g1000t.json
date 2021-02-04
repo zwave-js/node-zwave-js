@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "To add a device to the Z-Wave network, press the “Inclusion” button in the Android Controller Application",
 		"exclusion": "To remove a device from the Z-Wave network, press the “Exclusion” button in the Android Controller Application",
-		"reset": "Press “RESET” in the Factory Default Reset dialog. This will reset the Z- Wave chip, and the gateway will show “DEVICE RESET LOCALLY NOTIFICATION” after the restart"
+		"reset": "Press “RESET” in the Factory Default Reset dialog. This will reset the Z- Wave chip, and the gateway will show “DEVICE RESET LOCALLY NOTIFICATION” after the restart",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/3748/ONUIntegratedServiceRouter_UsersGuide.pdf"
 	}
 }

@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "- Run ‘ZW_SET_DEFAULT’ in Setting, then click YES of UZB PoP UP\n- Use this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "- Run ‘ZW_SET_DEFAULT’ in Setting, then click YES of UZB PoP UP\n- Use this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1841/IoT%20허브%20설명서_20160629_review.pdf"
 	}
 }

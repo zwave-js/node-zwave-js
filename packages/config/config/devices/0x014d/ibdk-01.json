@@ -9,7 +9,10 @@
 		{
 			"productType": "0x0054",
 			"productId": "0x0001",
-			"zwaveAllianceId": [2605, 3209]
+			"zwaveAllianceId": [
+				2605,
+				3209
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -17,6 +20,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Please excute this reset procedure only when the primary controller is missing or inoperable.\n1. Open battery cover.\n2. Press and hold the button there\n3. LED is turned on after 5 seconds. Keep holding.\n4. LET starts blinking after 10 seconds.\n5. Release the button when the LED blinks"
+		"reset": "Please excute this reset procedure only when the primary controller is missing or inoperable.\n1. Open battery cover.\n2. Press and hold the button there\n3. LED is turned on after 5 seconds. Keep holding.\n4. LET starts blinking after 10 seconds.\n5. Release the button when the LED blinks",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3209/UVA01A_Manual_20190111.pdf"
 	}
 }

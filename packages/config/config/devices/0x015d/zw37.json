@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include\n a device to the Z-Wave network.\n2. Once the controller is ready to include your device, press up and \n release the toggle to include it in the network",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude \n a device from the Z-Wave network.\n2. Once the controller is ready to Exclude your device, press up and \n release the toggle to exclude it from the network",
-		"reset": "Press and hold the top button for at least 3 seconds while you plug the smart switch into a receptacle.\nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "Press and hold the top button for at least 3 seconds while you plug the smart switch into a receptacle.\nUse this procedure only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1588/ZW37-Manual0120.pdf"
 	}
 }

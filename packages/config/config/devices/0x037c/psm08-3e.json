@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "There is a button on PSM08.\n1. Have Z-Wave™ Controller entered inclusion mode.\n2. Pressing button once to enter the inclusion mode.\n3. After add successful, the device will wake to receive the setting command from Z-Wave™ Controller about 20 seconds",
 		"exclusion": "There is a button on PSM08.\n1. Have Z-Wave™ Controller entered exclusion mode.\n2. Pressing button once to enter the exclusion mode",
-		"reset": "There is a button on PSM08.\n1. Pressing button for about 5 seconds.\n2. IDs are excluded and all settings will reset to factory default.\nNotice: Use this procedure only in the event that the primary controller is lost or otherwise inoperable"
+		"reset": "There is a button on PSM08.\n1. Pressing button for about 5 seconds.\n2. IDs are excluded and all settings will reset to factory default.\nNotice: Use this procedure only in the event that the primary controller is lost or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2940/PSM08_manual-20161103.pdf"
 	}
 }

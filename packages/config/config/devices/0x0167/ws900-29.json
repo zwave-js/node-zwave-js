@@ -9,7 +9,12 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0001",
-			"zwaveAllianceId": [2262, 2475, 2476, 3313]
+			"zwaveAllianceId": [
+				2262,
+				2475,
+				2476,
+				3313
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -19,6 +24,7 @@
 	"metadata": {
 		"inclusion": "To add the panel as a secondary controller to another Z-Wave network, complete the following steps:\n1. Put the primary controller into Inclusion mode. Refer to the controller manual for more information.\n2. In the Smartlink web portal, under Home Control , click Device Control.\n3. Under Setup , click Tools , then click Add/Remove Z-Wave Controller.\n\nAdding a Device\nThe Smartlink user app main screen has different options to add and control Z-Wave devices.\nTo add a device on the app, tap the applicable option and complete the following steps:\n1. Power up your device per the manufacturer's instructions.\n2. From the Settings screen, tap Add Z-Wave Device to initialize learn mode.\n3. Follow the instructions onscreen to bind your device. Refer to the device instructions, if necessary.\n4. When enrollment completes, enter a device name and tap OK. Your device is ready to use.\nIf using a Z-Wave smart switch to control power to a light or appliance, such as a fan, simply, plug it into an AC power outlet.\nNote: Only use the dimmer function on supported devices to prevent damage to the device.",
 		"exclusion": "To remove the panel as a secondary controller and re-establish it as primary, repeat the steps, changing the primary controller in step 1 to Exclusion mode.\n\nEditing or Removing a Device\nTo edit or remove a device, complete the following steps:\n1. From the Settings screen, tap Edit Device , then select the device you want to edit or remove.\n2. Update the device name and tap Done to save your changes. Alternatively, tap Remove Device to remove it from your system",
-		"reset": "To remove all the Z-Wave devices and restore the Z-Wave controller to factory defaults, complete the following steps:\n1. In the Smartlink web portal, under Home Control , click Device Control.\n2. Under Setup, click Tools, then click Reset Z-Wave.\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable.\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable"
+		"reset": "To remove all the Z-Wave devices and restore the Z-Wave controller to factory defaults, complete the following steps:\n1. In the Smartlink web portal, under Home Control , click Device Control.\n2. Under Setup, click Tools, then click Reset Z-Wave.\nNote: Please use this procedure only when the network primary controller is missing or otherwise inoperable.\nIf this controller is the primary controller for your network, resetting it will result in the nodes in your network being orphaned and it will be necessary after the reset to exclude and re-include all of the nodes in the network. If this controller is being used as a secondary controller in the network, use this procedure to reset this controller only in the event that the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3313/WS912-28%20User%20Manual%2029010653R001%20-%20rev%2004172019.pdf"
 	}
 }

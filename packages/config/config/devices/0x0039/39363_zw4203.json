@@ -87,6 +87,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network. \n\n2. Once the controller is ready to add your device, press and the manual/program button on the smart switch.\n\nIf prompted by the controller to enter the S2 security code, refer to the QR code/security number on the box or the QR code label on the product. Enter the 5-digit code",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n\n2. Once the controller is ready to remove your device, press the manual/program button on the smart switch to remove it from the network",
-		"reset": "1. If plugged in, unplug the device from the receptacle.\n\n2. Press and hold the manual/program button, plug the device in, and continue to hold for at least 3 seconds.\n\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable"
+		"reset": "1. If plugged in, unplug the device from the receptacle.\n\n2. Press and hold the manual/program button, plug the device in, and continue to hold for at least 3 seconds.\n\nNote: This should only be used in the event your network’s primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3476/39363-QSG-1.pdf"
 	}
 }

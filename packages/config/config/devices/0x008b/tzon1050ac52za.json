@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "From the HOME Screen, press MENU on the control, then press NEXIA.\n\nPress ADVANCED, then FACTORY RESET.\n\nIf this bridge is being used as a secondary or inclusion controller in the network, please reset this bridge only in the event that the primary controller is missing or otherwise inoperable"
+		"reset": "From the HOME Screen, press MENU on the control, then press NEXIA.\n\nPress ADVANCED, then FACTORY RESET.\n\nIf this bridge is being used as a secondary or inclusion controller in the network, please reset this bridge only in the event that the primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1993/32-5093-01.pdf"
 	}
 }

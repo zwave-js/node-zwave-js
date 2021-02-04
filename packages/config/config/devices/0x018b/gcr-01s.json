@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "This must be done when the gas valve is closed. After doing inclusion action on controller, hold 5 seconds (-) button until hearing beep once and ‘P’ is blinking on LCD",
 		"exclusion": "This must be done when the gas valve is closed. After doing exclusion action on controller, hold 5 seconds (-) button until hearing beep once and ‘P’ is blinking on LCD",
-		"reset": "Please use this only when the primary controller is missing or otherwise disabled.\n\nThis must be done when the gas valve is closed. Hold 15 seconds (-) button till hearing beep once and ‘FS’ is displayed on LCD"
+		"reset": "Please use this only when the primary controller is missing or otherwise disabled.\n\nThis must be done when the gas valve is closed. Hold 15 seconds (-) button till hearing beep once and ‘FS’ is displayed on LCD",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1591/UPlus%20Gas%20Lock%20Manual.docx"
 	}
 }

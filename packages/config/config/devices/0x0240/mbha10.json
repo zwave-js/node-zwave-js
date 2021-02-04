@@ -17,6 +17,7 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\nClick on Advanced Network Settings\nUse “Controller Reset” button in gateway user interface\nReset Z-Wave module to default settings. This will effectively delete the current Z-Wave network and create a new one. All your devices will be deleted and it will be necessary to remove them prior to adding them to another Z-Wave network."
+		"reset": "Please use this procedure only when the network primary controller is missing or otherwise inoperable.\nClick on Advanced Network Settings\nUse “Controller Reset” button in gateway user interface\nReset Z-Wave module to default settings. This will effectively delete the current Z-Wave network and create a new one. All your devices will be deleted and it will be necessary to remove them prior to adding them to another Z-Wave network.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2325/MBHA10%20Gateway%20-%20Z-Wave%20user%20manual.pdf"
 	}
 }

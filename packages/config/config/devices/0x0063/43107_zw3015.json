@@ -9,7 +9,10 @@
 		{
 			"productType": "0x4944",
 			"productId": "0x3332",
-			"zwaveAllianceId": [4003, 4034]
+			"zwaveAllianceId": [
+				4003,
+				4034
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -172,6 +175,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press up and release the toggle.\n3. The controller’s app will indicate if it discovers the switch. If prompted by the controller to enter the S2 security code, refer to the QR code/security number on the side of the box or the QR code label on the product (see Figure 1). Enter the 5-digit code",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press up and release the toggle",
-		"reset": "Quickly press ON (up) button three times then immediately press the OFF (down) button three times."
+		"reset": "Quickly press ON (up) button three times then immediately press the OFF (down) button three times.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4034/43107%20QSG%20v1%20(1).pdf"
 	}
 }

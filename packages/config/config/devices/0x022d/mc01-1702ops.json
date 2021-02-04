@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1) Put the Z-Wave Controller into inclusion mode\n\n2) Press the Push button one time in door sensor",
 		"exclusion": "1) Put the Z-Wave Controller into exclusion mode\n\n2) Press the Push button three times in door sensor",
-		"reset": "1) Press the Push button for more than 10 seconds\n\n2) Verify that LED is blinking one time\n\n※ Please use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "1) Press the Push button for more than 10 seconds\n\n2) Verify that LED is blinking one time\n\n※ Please use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2713/DoorSensor_UserGuide_20171219.pdf"
 	}
 }

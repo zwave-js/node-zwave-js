@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "- Press the Net_Button 3 times within 1.5s, Green LED is Blinking 3 times within 1 second.\n- If Inclusion Process is successful, Green led will turn off.",
 		"exclusion": "- Press the Net_Button 3 times within 1.5s. \n- If Exclusion Process is successful, Green led is Blinking 6 times, then turn off.",
-		"reset": "- Long press Net_Button at least 10 seconds in the product. \n- Device Reset Locally notification is Transmitted.\n- Please use this procedure only when the network primary controller is missing or otherwise."
+		"reset": "- Long press Net_Button at least 10 seconds in the product. \n- Device Reset Locally notification is Transmitted.\n- Please use this procedure only when the network primary controller is missing or otherwise.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3365/51114%20user%20manual.pdf"
 	}
 }

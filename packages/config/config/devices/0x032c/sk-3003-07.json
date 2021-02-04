@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1) Make sure battery level is normally and the product is located within direct range of the Z‐Wave controller.\n2) Set the main controller into the inclusion/Add device mode (refer to main controller’s operating manual).\n3) Click the Add/Remove button on the left side of product triple times in 1.5 seconds.\n4) The product will be detected and included in the Z‐Wave network",
 		"exclusion": "1) Make sure battery level is normally and the product is located within direct range of the Z‐Wave controller.\n2) Set the main controller into the exclusion/Remove device mode (refer to main controller’s operating manual).\n3) Click the Add/Remove button on the bottom side of product triple times in 1.5 seconds.\n4) The product will be detected and excluded from the Z‐Wave network",
-		"reset": "The factory default settings are restored when the device is removed from the network or press and hold the Add/Remove button on\nthe left side of product excess 10 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "The factory default settings are restored when the device is removed from the network or press and hold the Add/Remove button on\nthe left side of product excess 10 seconds.\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/2711/Wireless_PIR_User_Manual_20171031.pdf"
 	}
 }

@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1）Set gateway in Inclusion.\n2）Set door lock in learn mode. \npress reset button -> input admin password + # -> press 0\n3）Wait until success",
 		"exclusion": "1）Set gateway in exclusion .\n2）Set door lock in learn mode. \npress reset button -> input admin password + # -> press 0\n3）Wait until success",
-		"reset": "User should reset device for safety when receiving lock first or if forget the password or if lost card. The reset way : hold the reset button about 7s, when hear “Di“ sound, then release the button, door lock will be reset. Factory default reset will reset all user (password and card) and home ID and device ID (about Z-Wave function), so be carefully to do reset. The default admin password is 123456 .\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable"
+		"reset": "User should reset device for safety when receiving lock first or if forget the password or if lost card. The reset way : hold the reset button about 7s, when hear “Di“ sound, then release the button, door lock will be reset. Factory default reset will reset all user (password and card) and home ID and device ID (about Z-Wave function), so be carefully to do reset. The default admin password is 123456 .\nPlease use this procedure only when the network primary controller is missing or otherwise inoperable",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/3048/User%20Manual-ilock15.pdf"
 	}
 }

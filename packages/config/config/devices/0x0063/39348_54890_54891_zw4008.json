@@ -1,4 +1,4 @@
-// GE/Jasco 39348 /54890 /54891/ ZW4008
+// GE/Jasco 39348 / 54890 / 54891 / ZW4008
 // In-Wall Smart Switch
 {
 	"manufacturer": "GE/Jasco",
@@ -92,6 +92,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to add a device to the Z-Wave network.\n2. Once the controller is ready to add your device, press and release the top or bottom of the smart switch (rocker)",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to remove a device from the Z-Wave network.\n2. Once the controller is ready to remove your device, press and release the top or bottom of the smart switch rocker)",
-		"reset": "Quickly press ON (top) button three times, then, immediately press the OFF (bottom) button three times. The LED will flash ON/OFF five times when completed successfully"
+		"reset": "Quickly press ON (top) button three times, then, immediately press the OFF (bottom) button three times. The LED will flash ON/OFF five times when completed successfully",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=product_documents/4004/39348%20QSG%20v3.pdf"
 	}
 }

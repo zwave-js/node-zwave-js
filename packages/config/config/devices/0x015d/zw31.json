@@ -19,6 +19,7 @@
 	"metadata": {
 		"inclusion": "1. Follow the instructions for your Z-Wave certified controller to include a device to the Z-Wave network.\n2. Once the controller is ready to include your device, triple press the Up/Down push button to include it in the network.\n3. Once your controller has confirmed that the device has been included, refresh the Z-Wave network to optimize performance.\n4. The device is associated in the same group when it included in setting process. \nNow you can control your Z-Wave device according to groups, scenes, schedules and automation programmed.",
 		"exclusion": "1. Follow the instructions for your Z-Wave certified controller to exclude a device from the Z-Wave network.\nOnce the controller is ready to Exclude your device, triple press the Up/Down push button to exclude it from the network.",
-		"reset": "Use controller to remove device from network will reset it to factory default. \n\n*Use this procedure only in the event that the network primary controller is missing or otherwise inoperable."
+		"reset": "Use controller to remove device from network will reset it to factory default. \n\n*Use this procedure only in the event that the network primary controller is missing or otherwise inoperable.",
+		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1712/ZW31manual0527.pdf"
 	}
 }
