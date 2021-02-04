@@ -7,7 +7,7 @@
 	"description": "Dimmer & Dry Contact Relay",
 	"devices": [
 		{
-			"productType": "0xa002",
+			"productType": "0xa008",
 			"productId": "0xa000"
 		}
 	],
