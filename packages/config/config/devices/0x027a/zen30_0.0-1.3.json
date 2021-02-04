@@ -335,7 +335,6 @@
 		},
 		"15": {
             "label": "Maximum Brightness",
-            "description": "Maximum brightness level for your dimmer. You won't be able to dim the light above the set value.",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 1,
