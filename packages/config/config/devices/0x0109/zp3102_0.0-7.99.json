@@ -9,18 +9,12 @@
 		{
 			"productType": "0x2002",
 			"productId": "0x0201",
-			"zwaveAllianceId": [
-				72,
-				84
-			]
+			"zwaveAllianceId": [72, 84]
 		},
 		{
 			"productType": "0x2002",
 			"productId": "0x0202",
-			"zwaveAllianceId": [
-				703,
-				728
-			]
+			"zwaveAllianceId": [703, 728]
 		},
 		{
 			"productType": "0x2002",
