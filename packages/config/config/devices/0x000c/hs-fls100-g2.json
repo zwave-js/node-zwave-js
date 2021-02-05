@@ -1,0 +1,151 @@
+// HomeSeer Technologies HS-FLS100-G2
+// Floodlight Sensor
+{
+	"manufacturer": "HomeSeer Technologies",
+	"manufacturerId": "0x000c",
+	"label": "HS-FLS100-G2",
+	"description": "Floodlight Sensor",
+	"devices": [
+		{
+			"productType": "0x0201",
+			"productId": "0x000c"
+		}
+	],
+	"firmwareVersion": {
+		"min": "0.0",
+		"max": "255.255"
+	},
+	"supportsZWavePlus": true,
+	"paramInformation": {
+		"1": {
+			"label": "PIR trigger off period",
+			"description": "Period to send Trigger Off command after PIR is triggered.",
+			"unit": "seconds",
+			"valueSize": 2,
+			"minValue": 8,
+			"maxValue": 720,
+			"defaultValue": 180,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"2": {
+			"label": "Illuminance sensor threshold",
+			"description": "Lux level to activate the PIR",
+			"unit": "lux",
+			"valueSize": 2,
+			"minValue": 10,
+			"maxValue": 900,
+			"defaultValue": 50,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"3": {
+			"label": "Auto Report luminance and temperature interval",
+			"unit": "minutes",
+			"valueSize": 2,
+			"minValue": 1,
+			"maxValue": 1440,
+			"defaultValue": 10,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"4": {
+			"label": "PIR trigger alert",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable alert",
+					"value": 0
+				},
+				{
+					"label": "Enable alert",
+					"value": 1
+				}
+			]
+		},
+		"5": {
+			"label": "Floodlight control mode",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Controlled by Z-Wave controller only",
+					"value": 0
+				},
+				{
+					"label": "Controlled by PIR trigger and Lux level, or by Z-Wave controller",
+					"value": 1
+				}
+			]
+		},
+		"6": {
+			"label": "Floodlight triggers",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Floodlight is controlled by Lux level and PIR trigger",
+					"value": 0
+				},
+				{
+					"label": "Floodlight is controlled by Lux level only, regardless of PIR trigger",
+					"value": 1
+				}
+			]
+		},
+		"7": {
+			"label": "Measured temperature offset",
+			"unit": "0.1 °C",
+			"valueSize": 1,
+			"minValue": -100,
+			"maxValue": 100,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"8": {
+			"label": "PIR Sensitivity Level",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 2,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Low level, approx. 6m distance",
+					"value": 0
+				},
+				{
+					"label": "Mid level, approx. 10m distance",
+					"value": 1
+				},
+				{
+					"label": "High level, approx. 20m distance",
+					"value": 2
+				}
+			]
+		}
+	}
+}
