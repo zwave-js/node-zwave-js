@@ -1,7 +1,6 @@
 // Zooz ZEN23
 // Z-Wave Plus On/Off Toggle Switch V3
 {
-	"revision": 10,
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN23",
@@ -35,7 +34,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "Toggle Control",
+			"label": "Switch behavior",
 			"description": "Determines whether up is on and down is off; or up is off, down is on",
 			"valueSize": 1,
 			"minValue": 0,
@@ -57,7 +56,6 @@
 		},
 		"3": {
 			"label": "Auto Turn-Off Timer",
-			"description": "Use this parameter to enable or disable the auto turn-off timer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -67,11 +65,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Auto Turn-Off Timer Disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Auto Turn-Off Timer Enabled",
+					"label": "Enabled",
 					"value": 1
 				}
 			]
@@ -90,7 +88,6 @@
 		},
 		"5": {
 			"label": "Auto Turn-On Timer",
-			"description": "Use this parameter to enable or disable the auto turn-on timer",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -100,11 +97,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Auto Turn-On Timer Disabled",
+					"label": "Disabled",
 					"value": 0
 				},
 				{
-					"label": "Auto Turn-On Timer Enabled",
+					"label": "Enabled",
 					"value": 1
 				}
 			]
@@ -122,8 +119,7 @@
 			"allowManualEntry": true
 		},
 		"8": {
-			"label": "On Off Status After Power Failure",
-			"description": "Set the on off status for the switch after power failure",
+			"label": "Status After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -133,11 +129,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "forced to OFF",
+					"label": "Forced to OFF",
 					"value": 0
 				},
 				{
-					"label": "forced to ON",
+					"label": "Forced to ON",
 					"value": 1
 				},
 				{
@@ -158,18 +154,18 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Disable Scene Control",
+					"label": "Disable",
 					"value": 0
 				},
 				{
-					"label": "Enable Scene Control",
+					"label": "Enable",
 					"value": 1
 				}
 			]
 		},
 		"13": {
-			"label": "Report for Disabled Toggle",
-			"description": "Set reporting behavior for disabled physical control.",
+			"label": "Report status when toggle is disabled",
+			"description": "Report light status when both physical and Z-Wave control are disabled.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -179,11 +175,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "Switch reports on/off status even if physical and Z-Wave control is disabled (default)",
+					"label": "Yes",
 					"value": 0
 				},
 				{
-					"label": "Switch doesn't report on/off status when physical (and Z-Wave) control is disabled",
+					"label": "No",
 					"value": 1
 				}
 			]
