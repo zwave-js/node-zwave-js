@@ -9,10 +9,7 @@
 		{
 			"productType": "0x0001",
 			"productId": "0x0001",
-			"zwaveAllianceId": [
-				1150,
-				1260
-			]
+			"zwaveAllianceId": [1150, 1260]
 		}
 	],
 	"firmwareVersion": {
@@ -20,7 +17,6 @@
 		"max": "255.255"
 	},
 	"metadata": {
-		"reset": "Web Interface; Network Tab, \"Reset Controller\"",
-		"manual": "https://products.z-wavealliance.org/ProductManual/File?folder=&filename=MarketCertificationFiles/1260/RaZberryEndUserManual.pdf"
+		"reset": "Web Interface; Network Tab, \"Reset Controller\""
 	}
 }
