@@ -1,4 +1,3 @@
-import { CommandClasses } from "@zwave-js/core";
 import { NoOperationCC } from "../commandclass/NoOperationCC";
 import { GetControllerVersionRequest } from "../controller/GetControllerVersionMessages";
 import { RemoveFailedNodeRequest } from "../controller/RemoveFailedNodeMessages";
@@ -191,10 +190,6 @@ describe("lib/driver/Transaction => ", () => {
 	});
 
 	it("Messages in the wakeup queue should be preferred over lesser priorities only if the node is awake", () => {
-		function supportsCC(cc: CommandClasses) {
-			return cc === CommandClasses["Wake Up"];
-		}
-
 		const driverMock = ({
 			controller: {
 				nodes: new Map<number, MockNode>([

@@ -978,14 +978,8 @@ function getLatestConfigVersion(
 	configs: DeviceConfigIndexEntry[],
 ): DeviceConfigIndexEntry | undefined {
 	configs.sort((a, b) => {
-		const vA =
-			typeof a.firmwareVersion === "boolean"
-				? "255.255.255"
-				: padVersion(a.firmwareVersion.max);
-		const vB =
-			typeof b.firmwareVersion === "boolean"
-				? "255.255.255"
-				: padVersion(b.firmwareVersion.max);
+		const vA = padVersion(a.firmwareVersion.max);
+		const vB = padVersion(b.firmwareVersion.max);
 
 		return compare(vA, vB);
 	});
