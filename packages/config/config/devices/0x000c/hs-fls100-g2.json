@@ -20,7 +20,7 @@
 		"1": {
 			"label": "PIR trigger off period",
 			"description": "Period to send Trigger Off command after PIR is triggered.",
-			"unit": "Seconds",
+			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 8,
 			"maxValue": 720,
@@ -30,8 +30,9 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "Lux sensor threshold",
+			"label": "Illuminance sensor threshold",
 			"description": "Lux level to activate the PIR",
+			"unit": "lux",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 900,
@@ -42,8 +43,7 @@
 		},
 		"3": {
 			"label": "Auto Report luminance and temperature interval",
-			"description": "set the interval of periodic lux level report and temperature report to the controller",
-			"unit": "min",
+			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 1440,
@@ -63,11 +63,11 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "disable alert",
+					"label": "Disable alert",
 					"value": 0
 				},
 				{
-					"label": "enable alert",
+					"label": "Enable alert",
 					"value": 1
 				}
 			]
@@ -83,17 +83,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "controlled by Z wave controller only",
+					"label": "Controlled by Z-wave controller only",
 					"value": 0
 				},
 				{
-					"label": "controlled by PIR trigger and Lux level, or by Z wave controller",
+					"label": "Controlled by PIR trigger and Lux level, or by Z-wave controller",
 					"value": 1
 				}
 			]
 		},
 		"6": {
-			"label": "Lux sensor",
+			"label": "Floodlight triggers",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -103,20 +103,21 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "floodlight is controlled by Lux level and PIR trigger",
+					"label": "Floodlight is controlled by Lux level and PIR trigger",
 					"value": 0
 				},
 				{
-					"label": "floodlight is controlled by Lux level only, regardless of PIR trigger",
+					"label": "Floodlight is controlled by Lux level only, regardless of PIR trigger",
 					"value": 1
 				}
 			]
 		},
 		"7": {
-			"label": "Mesured temperature offset",
+			"label": "Measured temperature offset",
+			"unit": "0.1 °C"
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
+			"minValue": -100,
+			"maxValue": 100,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -133,15 +134,15 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "low level, approx. 6m distance",
+					"label": "Low level, approx. 6m distance",
 					"value": 0
 				},
 				{
-					"label": "mid level, approx. 10m distance",
+					"label": "Mid level, approx. 10m distance",
 					"value": 1
 				},
 				{
-					"label": "high level, approx. 20m distance",
+					"label": "High level, approx. 20m distance",
 					"value": 2
 				}
 			]
