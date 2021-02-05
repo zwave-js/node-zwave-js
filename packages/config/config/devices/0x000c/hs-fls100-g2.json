@@ -1,4 +1,4 @@
-// HomeSeer Technologies HS-FLS100+
+// HomeSeer Technologies HS-FLS100-G2
 // Floodlight Sensor
 {
 	"manufacturer": "HomeSeer Technologies",
@@ -18,7 +18,7 @@
 	"supportsZWavePlus": true,
 	"paramInformation": {
 		"1": {
-			"label": "PIR Trigger Off Period",
+			"label": "PIR trigger off period",
 			"description": "Period to send Trigger Off command after PIR is triggered.",
 			"unit": "Seconds",
 			"valueSize": 2,
@@ -53,7 +53,7 @@
 			"allowManualEntry": true
 		},
 		"4": {
-			"label": "PIR Trigger alert",
+			"label": "PIR trigger alert",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -73,7 +73,7 @@
 			]
 		},
 		"5": {
-			"label": "Floodlight Control Mode",
+			"label": "Floodlight control mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -83,17 +83,17 @@
 			"allowManualEntry": false,
 			"options": [
 				{
-					"label": "floodlight is controlled by Z wave controller directly, regardless of PIR trigger or LUX level",
+					"label": "controlled by Z wave controller only",
 					"value": 0
 				},
 				{
-					"label": "floodlight is controlled by PIR trigger and Lux level, or by Z wave controller",
+					"label": "controlled by PIR trigger and Lux level, or by Z wave controller",
 					"value": 1
 				}
 			]
 		},
 		"6": {
-			"label": "Lux Sensor",
+			"label": "Lux sensor",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -107,13 +107,13 @@
 					"value": 0
 				},
 				{
-					"label": "lighting control via Lux level only, regardless of PIR trigger",
+					"label": "floodlight is controlled by Lux level only, regardless of PIR trigger",
 					"value": 1
 				}
 			]
 		},
 		"7": {
-			"label": "Mesured Temperature Offset",
+			"label": "Mesured temperature offset",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
