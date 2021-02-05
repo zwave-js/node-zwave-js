@@ -14,5 +14,13 @@ module.exports = {
 				printWidth: 120,
 			},
 		},
+		{
+			files: "*.yml",
+			options: {
+				useTabs: false,
+				tabWidth: 2,
+				singleQuote: true,
+			},
+		},
 	],
 };

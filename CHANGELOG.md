@@ -3,6 +3,25 @@
 	Placeholder for next release:
 	## __WORK IN PROGRESS__
 -->
+## 6.1.3 (2021-02-05)
+### Bugfixes
+* The config lint step now correctly fails when a device file cannot be parsed
+* If `preserveRootApplicationCCValueIDs` is set, reports are no longer mapped from the root endpoint to endpoint 1.
+
+### Config file changes
+* Add support for Zooz ZEN30
+* Add additional product type and id number for Shenzen Neo PD03Z
+* Add support for Linear/Nortek/GoControl WT00Z5-1
+* Add support for Zooz ZEN71
+* Add support for AU/NZ variant of Aeotec ZW111
+* Add support for MP21Z
+* import device configs from Z-Wave Alliance (Part 6: misc devices)
+* fix: change LZW31 indicator color value size to 2
+* Param descriptions are now auto-checked for unnecessary stuff
+
+### Changes under the hood
+* The Z-Wave specifications were moved out of this repo
+
 ## 6.1.2 (2021-02-03)
 ### Bugfixes
 * The driver now checks the `listening` flags of a node to determine whether a node can sleep instead of the `Wake Up CC`

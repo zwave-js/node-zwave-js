@@ -13,24 +13,31 @@ semanticSquash: true
 
 # Configure closing stale issues
 stale:
-  # Which job name to look for
+  # Which job name triggers the stale action
   jobName: stale
-  # Which labels mark an issue as closeable
-  labels:
-    - 'cannot fix ❌'
-    - 'duplicate'
-    - 'external'
-    - 'wontfix'
-    - 'working as intended ✔'
-    - 'waiting for info ⏳'
-  # How long issues with these labels may stay open
-  afterDays: 7
-  # What to comment when an issue gets closed
-  comment: |
-    This issue hasn't seen any recent activity and was marked as "${label}".
-    Closing for housekeeping purposes... 🧹
-    
-    Feel free to reopen if the issue persists.
+  actions:
+    - action: close
+      afterDays: 3 # How long issues with these labels may stay open
+      labels: # Which labels mark an issue as closeable
+        - 'cannot fix ❌'
+        - 'duplicate'
+        - 'external'
+        - 'wontfix'
+        - 'working as intended ✔'
+        - 'stale 💤'
+      # What to comment when an issue gets closed
+      comment: |
+        This issue has not seen any recent activity and was marked as "${label}".
+        Closing for housekeeping purposes... 🧹
+
+        Feel free to reopen if the issue persists.
+
+    # Wait 7 days for info, then mark as stale
+    - action: label
+      afterDays: 7
+      labels:
+        - 'waiting for info ⏳'
+      label: 'stale 💤'
 
 # Configure auto-labeling
 autoLabel:
