@@ -1,23 +1,19 @@
 // Zooz ZEN23
-// Z-Wave Plus On/Off Toggle Switch V3
+// Z-Wave Plus On/Off Toggle Switch v4
 {
 	"manufacturer": "Zooz",
 	"manufacturerId": "0x027a",
 	"label": "ZEN23",
-	"description": "Z-Wave Plus On/Off Toggle Switch V3",
+	"description": "Z-Wave Plus On/Off Toggle Switch v4",
 	"devices": [
-		{
-			"productType": "0x1111",
-			"productId": "0x1e1c"
-		},
 		{
 			"productType": "0xb111",
 			"productId": "0x251c"
 		}
 	],
 	"firmwareVersion": {
-		"min": "3.0",
-		"max": "3.255"
+		"min": "4.0",
+		"max": "255.255"
 	},
 	"supportsZWavePlus": true,
 	"associations": {
@@ -38,7 +34,7 @@
 			"description": "Determines whether up is on and down is off; or up is off, down is on",
 			"valueSize": 1,
 			"minValue": 0,
-			"maxValue": 1,
+			"maxValue": 2,
 			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
@@ -51,6 +47,10 @@
 				{
 					"label": "UP=Off, DOWN=On",
 					"value": 1
+				},
+				{
+					"label": "Toggle",
+					"value": 2
 				}
 			]
 		},
@@ -159,6 +159,52 @@
 				},
 				{
 					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"11": {
+			"label": "Smart Bulb Mode (Disable Physical Switch)",
+			"description": "Enable/Disable Toggle / Z-Wave Control. NOTE: tap the upper paddle 10 times quickly to change this mode.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 2,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Physical switch disabled",
+					"value": 0
+				},
+				{
+					"label": "Physical switch enabled",
+					"value": 1
+				},
+				{
+					"label": "Physical switch and Z-Wave control disabled",
+					"value": 2
+				}
+			]
+		},
+		"12": {
+			"label": "3-Way Switch Type",
+			"description": "Choose the type of 3-way switch you want to use with this dimmer in a 3-way set-up.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "3-way on/off switch",
+					"value": 0
+				},
+				{
+					"label": "Momentary switch",
 					"value": 1
 				}
 			]
