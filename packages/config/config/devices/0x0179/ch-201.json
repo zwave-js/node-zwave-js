@@ -45,7 +45,6 @@
 		},
 		"2": {
 			"label": "Temperature threshold",
-			"description": "Set temperature threshold",
 			"unit": "Δ°С",
 			"valueSize": 1,
 			"minValue": 1,
@@ -57,7 +56,6 @@
 		},
 		"3": {
 			"label": "Point mode",
-			"description": "Set point mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -115,7 +113,6 @@
 		},
 		"6": {
 			"label": "Minimum allowable temperature",
-			"description": "Set minimum allowable temperature",
 			"unit": "°С",
 			"valueSize": 2,
 			"minValue": -127,
@@ -127,7 +124,6 @@
 		},
 		"7": {
 			"label": "Maximum alowable temperature",
-			"description": "Set maximum alowable temperature",
 			"unit": "°С",
 			"valueSize": 2,
 			"minValue": -127,
@@ -139,7 +135,6 @@
 		},
 		"8": {
 			"label": "Time turbo mode",
-			"description": "Set time turbo mode",
 			"unit": "sec",
 			"valueSize": 2,
 			"minValue": 100,
@@ -151,7 +146,6 @@
 		},
 		"9": {
 			"label": "Power on turbo mode",
-			"description": "Set power on turbo mode",
 			"unit": "sec",
 			"valueSize": 1,
 			"minValue": 0,
@@ -163,7 +157,6 @@
 		},
 		"10": {
 			"label": "Temperature sensor mode",
-			"description": "Set temperature sensor mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -188,7 +181,6 @@
 		},
 		"11": {
 			"label": "Polling period of the room sensor",
-			"description": "Set polling period of the room sensor",
 			"unit": "sec",
 			"valueSize": 2,
 			"minValue": 15,
@@ -212,7 +204,6 @@
 		},
 		"13": {
 			"label": "Interval for forced sending data",
-			"description": "Set Interval for forced sending data",
 			"valueSize": 2,
 			"minValue": 100,
 			"maxValue": 600,

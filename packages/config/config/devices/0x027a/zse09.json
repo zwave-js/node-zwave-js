@@ -55,7 +55,6 @@
 		},
 		"4": {
 			"label": "Motion Detection",
-			"description": "255=Motion Detection Enabled",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

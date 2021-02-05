@@ -108,7 +108,6 @@
 		},
 		"5": {
 			"label": "Type of control frame transmitted for group 1",
-			"description": "Type of transmitted control frame for association group 1",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -158,7 +157,6 @@
 		},
 		"9": {
 			"label": "Enable/Disable cancelling alarm",
-			"description": "Enable/Disable transmission of frame cancelling alarm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

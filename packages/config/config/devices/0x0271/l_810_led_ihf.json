@@ -162,7 +162,6 @@
 		},
 		"15": {
 			"label": "Sequence_Time",
-			"description": "Sequence timing",
 			"valueSize": 1,
 			"minValue": 10,
 			"maxValue": 50,

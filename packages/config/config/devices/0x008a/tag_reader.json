@@ -62,7 +62,6 @@
 		},
 		"4": {
 			"label": "feedback beeps per second",
-			"description": "Amount of beeps a second",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,

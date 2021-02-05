@@ -84,7 +84,6 @@
 		},
 		"3": {
 			"label": "Night Light",
-			"description": "Night-light mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

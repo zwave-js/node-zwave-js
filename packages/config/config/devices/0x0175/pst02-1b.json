@@ -71,7 +71,6 @@
 		},
 		"6": {
 			"label": "Multi-Sensor Function Switch",
-			"description": "Configure Multi-Sensor Function Switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,

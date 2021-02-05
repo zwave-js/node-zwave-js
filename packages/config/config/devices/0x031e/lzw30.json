@@ -63,7 +63,6 @@
 		},
 		"3": {
 			"label": "Auto Off Timer",
-			"description": "Auto Off Timer (in seconds)",
 			"unit": "Seconds",
 			"valueSize": 2,
 			"minValue": 0,

@@ -173,8 +173,7 @@
 			]
 		},
 		"42": {
-			"label": "Humidity Threshold",
-			"description": "Humidity percent change threshold",
+			"label": "Humidity Change Threshold",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,
@@ -185,8 +184,7 @@
 			"allowManualEntry": true
 		},
 		"43": {
-			"label": "Luminance Threshold",
-			"description": "Luminance change threshold",
+			"label": "Luminance Change Threshold",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -196,8 +194,7 @@
 			"allowManualEntry": true
 		},
 		"44": {
-			"label": "Battery Threshold",
-			"description": "Battery level threshold",
+			"label": "Battery Level Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -207,8 +204,7 @@
 			"allowManualEntry": true
 		},
 		"45": {
-			"label": "Ultraviolet Threshold",
-			"description": "Ultraviolet change threshold",
+			"label": "Ultraviolet Change Threshold",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -252,7 +248,6 @@
 		},
 		"100": {
 			"label": "Set parameters 101-103 to default.",
-			"description": "Reset 101-103 to defaults",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -260,6 +255,117 @@
 			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true
+		},
+		"110": {
+			"label": "Set parameters 111-113 to default.",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": true
+		},
+		"111": {
+			"label": "Group 1 Report Interval",
+			"description": "How often to update Group 1",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"112": {
+			"label": "Group 2 Report Interval",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"113": {
+			"label": "Group 3 Report Interval",
+			"valueSize": 4,
+			"minValue": 5,
+			"maxValue": 2678400,
+			"defaultValue": 3600,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"202": {
+			"label": "Humidity Sensor Calibration",
+			"valueSize": 1,
+			"minValue": -50,
+			"maxValue": 50,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"203": {
+			"label": "Luminance Sensor Calibration",
+			"valueSize": 2,
+			"minValue": -1000,
+			"maxValue": 1000,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"204": {
+			"label": "Ultraviolet Sensor Calibration",
+			"valueSize": 1,
+			"minValue": -10,
+			"maxValue": 10,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"252": {
+			"label": "Disable/Enable Configuration Lock",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 1,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Disable",
+					"value": 0
+				},
+				{
+					"label": "Enable",
+					"value": 1
+				}
+			]
+		},
+		"255": {
+			"label": "Reset to default factory settings",
+			"valueSize": 4,
+			"minValue": 0,
+			"maxValue": 1431655765,
+			"defaultValue": 0,
+			"readOnly": false,
+			"writeOnly": true,
+			"allowManualEntry": false,
+			"options": [
+				{
+					"label": "Resets all configuration parameters to defaults",
+					"value": 1
+				},
+				{
+					"label": "Reset to default factory settings and be excluded",
+					"value": 1431655765
+				}
+			]
 		},
 		"101[0x1]": {
 			"label": "Group 1: Send battery reports",
@@ -425,118 +531,6 @@
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
-		},
-		"110": {
-			"label": "Set parameters 111-113 to default.",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": true
-		},
-		"111": {
-			"label": "Group 1 Report Interval",
-			"description": "How often to update Group 1",
-			"valueSize": 4,
-			"minValue": 5,
-			"maxValue": 2678400,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"112": {
-			"label": "Group 2 Report Interval",
-			"valueSize": 4,
-			"minValue": 5,
-			"maxValue": 2678400,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"113": {
-			"label": "Group 3 Report Interval",
-			"valueSize": 4,
-			"minValue": 5,
-			"maxValue": 2678400,
-			"defaultValue": 3600,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"202": {
-			"label": "Humidity Sensor Calibration",
-			"valueSize": 1,
-			"minValue": -50,
-			"maxValue": 50,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"203": {
-			"label": "Luminance Sensor Calibration",
-			"valueSize": 2,
-			"minValue": -1000,
-			"maxValue": 1000,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"204": {
-			"label": "Ultraviolet Sensor Calibration",
-			"valueSize": 1,
-			"minValue": -10,
-			"maxValue": 10,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"252": {
-			"label": "Disable/Enable Configuration Lock",
-			"description": "Disable/Enable Configuration Lock (0=Disable, 1=Enable)",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Disable",
-					"value": 0
-				},
-				{
-					"label": "Enable",
-					"value": 1
-				}
-			]
-		},
-		"255": {
-			"label": "Reset to default factory settings",
-			"valueSize": 4,
-			"minValue": 0,
-			"maxValue": 1431655765,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": true,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Resets all configuration parameters to defaults",
-					"value": 1
-				},
-				{
-					"label": "Reset to default factory settings and be excluded",
-					"value": 1431655765
-				}
-			]
 		},
 		"41[0x0f]": {
 			"label": "Temperature Threshold (Unit)",

@@ -53,8 +53,7 @@
 	},
 	"paramInformation": {
 		"1": {
-			"label": "IN1 Alarm Cancellation Delay",
-			"description": "Input I alarm cancellation delay.",
+			"label": "Input I alarm cancellation delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -65,8 +64,7 @@
 			"allowManualEntry": true
 		},
 		"2": {
-			"label": "IN2 Alarm Cancellation Delay",
-			"description": "Input 2 alarm cancellation delay.",
+			"label": "Input 2 alarm cancellation delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -138,7 +136,6 @@
 		},
 		"5": {
 			"label": "Type of control frame for association group 1",
-			"description": "Type of transmitted control frame for association group 1.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -180,7 +177,6 @@
 		},
 		"6": {
 			"label": "Type of control frame for association group 2",
-			"description": "Type of transmitted control frame for association group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -246,7 +242,6 @@
 		},
 		"9": {
 			"label": "Deactivate transmission of frame canceling alarm",
-			"description": "Deactivating transmission of the frame cancelling the alarm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -272,7 +267,6 @@
 		},
 		"10": {
 			"label": "Interval between readings of temperature sensors",
-			"description": "Interval between successive readings of temperature sensors",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -308,7 +302,6 @@
 		},
 		"13": {
 			"label": "Transmitting alarm/control frame broadcast mode",
-			"description": "Transmitting the alarm or control frame in 'broadcast' mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

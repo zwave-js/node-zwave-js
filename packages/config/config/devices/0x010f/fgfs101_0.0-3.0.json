@@ -138,7 +138,6 @@
 		},
 		"10": {
 			"label": "Interval betw. successive readings of temp sensors",
-			"description": "Interval betw. successive readings of temperature",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32767,
@@ -301,7 +300,6 @@
 		},
 		"75": {
 			"label": "Visual and audible alarms duration",
-			"description": "Visual and audible alarm duration",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 65535,

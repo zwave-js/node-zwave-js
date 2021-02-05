@@ -359,7 +359,6 @@
 		},
 		"50": {
 			"label": "Report which Pairing Button Mode is triggered",
-			"description": "Report which Pairing Button Mode is triggered ( Read Only)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -562,7 +561,6 @@
 		},
 		"2[0xff00]": {
 			"label": "Interval between 2 tones for EP 2 (Tampering)",
-			"description": "Interval between 2 tones for Endpoint 2 (Tampering)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -583,7 +581,6 @@
 		},
 		"2[0xff0000]": {
 			"label": "Intercepting tone duration for EP 2 (Tampering)",
-			"description": "Intercepting duration of a tone for Endpoint 2 (Tampering)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,
@@ -692,7 +689,6 @@
 		},
 		"3[0xff0000]": {
 			"label": "Intercepting duration of a tone EP 3(Doorbell 1)",
-			"description": "Intercepting duration of a tone Endpoint 3(Doorbell 1)",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 255,

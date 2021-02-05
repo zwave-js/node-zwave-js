@@ -41,7 +41,6 @@
 		},
 		"2": {
 			"label": "Send Sensor Binary Report",
-			"description": "Send Sensor Binary Report to Association Group 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

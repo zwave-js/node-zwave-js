@@ -40,7 +40,6 @@
 		},
 		"9": {
 			"label": "Dim / Bright Step Level",
-			"description": "Dimming/Brightening Step Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,

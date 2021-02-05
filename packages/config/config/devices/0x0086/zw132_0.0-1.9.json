@@ -231,7 +231,6 @@
 		},
 		"92": {
 			"label": "Set the threshold percent power",
-			"description": "Set the threshold value of wattage.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -314,7 +313,6 @@
 		},
 		"102": {
 			"label": "To set which reports will be sent in Report g2",
-			"description": "To set which reports will be sent in Report group 2.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1776399,
@@ -375,7 +373,6 @@
 		},
 		"103": {
 			"label": "To set which reports will be sent in Report g3",
-			"description": "To set which reports need to be sent in Report group 3.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 1776399,
@@ -446,7 +443,6 @@
 		},
 		"111": {
 			"label": "Set the interval of automatic report for Report G1",
-			"description": "Set the interval of automatic report for Report group 1.",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -457,7 +453,6 @@
 		},
 		"112": {
 			"label": "Set the interval of automatic report for Report G2",
-			"description": "Set the interval of automatic report for Report group 2.",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -468,7 +463,6 @@
 		},
 		"113": {
 			"label": "Set the interval of automatic report for Report G3",
-			"description": "Set the interval of automatic report for Report group 3.",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,

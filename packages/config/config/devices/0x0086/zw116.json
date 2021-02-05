@@ -71,7 +71,6 @@
 		},
 		"9": {
 			"label": "Instant Energy Autosend Interval",
-			"description": "Instant Energy Autosend Interval (SENSOR_MULTILEVEL_REPORT)",
 			"unit": "minutes",
 			"valueSize": 1,
 			"minValue": 0,
@@ -84,7 +83,6 @@
 		},
 		"20": {
 			"label": "Output status after re-power",
-			"description": "Configure the output status after re-power on it",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -180,7 +178,6 @@
 		},
 		"83": {
 			"label": "Configure the state of LED",
-			"description": "Configure the state of LED when it is in 3 modes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -390,7 +387,6 @@
 		},
 		"111": {
 			"label": "Interval for automatic report group 1.",
-			"description": "Set the interval of automatic report for Report group 1.",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -401,7 +397,6 @@
 		},
 		"112": {
 			"label": "Interval for automatic report group 2",
-			"description": "Set the interval of automatic report for Report group 2.",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 2147483647,
@@ -423,7 +418,6 @@
 		},
 		"120": {
 			"label": "External switch mode for S1",
-			"description": "Configure the external switch mode for S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -452,7 +446,6 @@
 		},
 		"121": {
 			"label": "External switch mode for S2",
-			"description": "Configure the external switch mode for S2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -481,7 +474,6 @@
 		},
 		"122": {
 			"label": "Control destination of external switch",
-			"description": "Set the control destination for external switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

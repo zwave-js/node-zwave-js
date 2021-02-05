@@ -47,7 +47,6 @@
 		},
 		"20": {
 			"label": "Output status after re-power",
-			"description": "Configure the output status after re-power on it",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -143,7 +142,6 @@
 		},
 		"83": {
 			"label": "Configure the state of LED",
-			"description": "Configure the state of LED when it is in 3 modes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -201,7 +199,6 @@
 		},
 		"120": {
 			"label": "External switch mode for S1",
-			"description": "Configure the external switch mode for S1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -230,7 +227,6 @@
 		},
 		"121": {
 			"label": "External switch mode for S2",
-			"description": "Configure the external switch mode for S2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,
@@ -259,7 +255,6 @@
 		},
 		"122": {
 			"label": "Control destination of external switch",
-			"description": "Set the control destination for external switch",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

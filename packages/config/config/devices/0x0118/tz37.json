@@ -107,7 +107,6 @@
 		},
 		"5": {
 			"label": "Don't transmit to Group 4",
-			"description": "Disables transmitting to Group 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

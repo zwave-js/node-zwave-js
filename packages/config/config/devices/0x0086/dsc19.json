@@ -9,7 +9,11 @@
 		{
 			"productType": "0x0003",
 			"productId": "0x0013",
-			"zwaveAllianceId": [707, 766, 774]
+			"zwaveAllianceId": [
+				707,
+				766,
+				774
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -65,7 +69,6 @@
 		},
 		"13": {
 			"label": "Enable/Disable CRC16 encapsulation",
-			"description": "Parameter to Enable/Disable CRC16 encapsulation",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -103,7 +106,6 @@
 		},
 		"90": {
 			"label": "Sending a Report triggered by min change of value",
-			"description": "Automated sending of a Report triggered by minimal change of value.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

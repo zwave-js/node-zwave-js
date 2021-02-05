@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Siren Alarm Duration",
-			"description": "Set the Siren Alarm Duration",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 10,
@@ -31,7 +30,6 @@
 		},
 		"2": {
 			"label": "temp & humidity reporting interval",
-			"description": "set temp & humidity reporting interval",
 			"unit": "minutes",
 			"valueSize": 2,
 			"minValue": 1,
@@ -43,7 +41,6 @@
 		},
 		"3": {
 			"label": "Custom Sound Selection for Audio Speaker",
-			"description": "Set Custom Sound Selection for Audio Speaker",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,

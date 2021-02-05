@@ -420,7 +420,6 @@
 		},
 		"80": {
 			"label": "LED - signalling mode",
-			"description": "LED signalling mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -542,7 +541,6 @@
 		},
 		"81": {
 			"label": "LED - brightness",
-			"description": "LED brightness",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,

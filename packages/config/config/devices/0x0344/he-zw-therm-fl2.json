@@ -174,7 +174,6 @@
 		},
 		"8": {
 			"label": "Time by controller",
-			"description": "Time correction by controller",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -284,7 +283,6 @@
 		},
 		"17": {
 			"label": "Floor sensor resistance",
-			"description": "Floor Sensor Resistance, kohm",
 			"unit": "kohm",
 			"valueSize": 1,
 			"minValue": 1,
@@ -340,7 +338,6 @@
 		},
 		"22": {
 			"label": "Active display brightness",
-			"description": "Active display brightness level.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
@@ -351,7 +348,6 @@
 		},
 		"23": {
 			"label": "Inactive display brightness",
-			"description": "Inactive display brightness level.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
@@ -362,7 +358,6 @@
 		},
 		"24": {
 			"label": "Auto LCD brightness",
-			"description": "Auto LCD brightness control",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -442,7 +437,6 @@
 		},
 		"51": {
 			"label": "Touch sensitivity",
-			"description": "Touch buttons sensitivity.",
 			"valueSize": 1,
 			"minValue": 20,
 			"maxValue": 70,

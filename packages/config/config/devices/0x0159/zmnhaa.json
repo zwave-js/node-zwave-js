@@ -103,7 +103,6 @@
 		},
 		"10": {
 			"label": "Activate / deactivate functions ALL ON/ALL OFF",
-			"description": "ctivate / deactivate functions ALL ON/ALL OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

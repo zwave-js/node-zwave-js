@@ -244,7 +244,6 @@
 		},
 		"111": {
 			"label": "Interval to send out reports to Group 1",
-			"description": "Time Interval to send reports to Group 1",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,
@@ -255,7 +254,6 @@
 		},
 		"112": {
 			"label": "Interval to send out reports of group 2",
-			"description": "Time interval to send reports of group 2",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 65535,

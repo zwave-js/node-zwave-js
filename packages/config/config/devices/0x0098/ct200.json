@@ -214,7 +214,6 @@
 		},
 		"11": {
 			"label": "Simple UI Mode",
-			"description": "Toggle Simple UI Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -277,7 +276,6 @@
 		},
 		"14": {
 			"label": "Save Energy Mode Type",
-			"description": "Save Energy Mode behavior",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -300,7 +298,6 @@
 		},
 		"17": {
 			"label": "Temperature Calibration",
-			"description": "Temperature Calibration / Offset",
 			"valueSize": 1,
 			"minValue": -6,
 			"maxValue": 6,

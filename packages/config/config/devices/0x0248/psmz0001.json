@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"31": {
 			"label": "Local Control",
-			"description": "Local Control ON/OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

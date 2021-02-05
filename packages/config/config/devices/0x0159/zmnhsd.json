@@ -169,7 +169,6 @@
 		},
 		"30": {
 			"label": "Save state of after a power failure",
-			"description": "Saving the state of the device after a power failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -203,7 +202,6 @@
 		},
 		"42": {
 			"label": "Power reporting in Watts by time interval",
-			"description": "Power reporting in Watts by time interval according to setpoint",
 			"unit": "s",
 			"valueSize": 2,
 			"minValue": 0,
@@ -215,7 +213,6 @@
 		},
 		"60": {
 			"label": "Minimum dimming value",
-			"description": "Minimum % dimming value of dimmer",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 1,
@@ -227,7 +224,6 @@
 		},
 		"61": {
 			"label": "Maximum dimming value",
-			"description": "Maximum % dimming value on dimmer",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 2,

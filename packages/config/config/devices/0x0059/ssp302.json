@@ -102,7 +102,6 @@
 		},
 		"8": {
 			"label": "Switch Status time",
-			"description": "Switch Status time interval based",
 			"unit": "sec",
 			"valueSize": 2,
 			"minValue": 0,
@@ -141,7 +140,6 @@
 		},
 		"11": {
 			"label": "Power Factor time",
-			"description": "Power Factor time interval based",
 			"unit": "sec",
 			"valueSize": 2,
 			"minValue": 0,
@@ -154,7 +152,6 @@
 		},
 		"12": {
 			"label": "Active Power time",
-			"description": "Active Power time interval based",
 			"unit": "sec",
 			"valueSize": 2,
 			"minValue": 0,
@@ -167,7 +164,6 @@
 		},
 		"13": {
 			"label": "Active Energy time",
-			"description": "Active Energy time interval based",
 			"unit": "sec",
 			"valueSize": 2,
 			"minValue": 0,
@@ -180,7 +176,6 @@
 		},
 		"14": {
 			"label": "Apparent Energy time",
-			"description": "Apparent Energy time interval based",
 			"unit": "sec",
 			"valueSize": 2,
 			"minValue": 0,

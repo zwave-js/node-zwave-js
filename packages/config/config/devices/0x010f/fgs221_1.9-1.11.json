@@ -69,7 +69,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Enable/Disable ALL ON/OFF",
-			"description": "Activate/Deactive ALL ON/OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -99,7 +98,6 @@
 		},
 		"3": {
 			"label": "Enable/Disable Manual Override",
-			"description": "Enable / Disable manual override for relay auto off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

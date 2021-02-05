@@ -36,7 +36,6 @@
 		},
 		"2": {
 			"label": "Delaying time Group 1",
-			"description": "The delaying time to report to Group 1",
 			"unit": "seconds",
 			"valueSize": 1,
 			"minValue": 3,

@@ -59,7 +59,6 @@
 		},
 		"42": {
 			"label": "Power reporting in Watts by time interval",
-			"description": "Power reporting in Watts by time interval for Q1 or Q2",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,

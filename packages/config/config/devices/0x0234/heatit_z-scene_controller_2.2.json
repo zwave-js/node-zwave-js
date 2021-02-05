@@ -1,10 +1,10 @@
-// Logic Group Heatit Z-Scene Controller
-// Push button 6-gang
+// Logic Group ZHC5002
+// Heatit Z-Scene Controller Push button 6-gang
 {
 	"manufacturer": "Logic Group",
 	"manufacturerId": "0x0234",
-	"label": "Heatit Z-Scene Controller ZHC5002",
-	"description": "Push button 6-gang",
+	"label": " ZHC5002",
+	"description": "Heatit Z-Scene Controller Push button 6-gang",
 	"devices": [
 		{
 			"productType": "0x0003",
@@ -421,7 +421,6 @@
 		},
 		"11": {
 			"label": "Disable Central Scene notification",
-			"description": "Disables or enables the sending of Central Scene notifications",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

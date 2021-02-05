@@ -44,7 +44,6 @@
 		},
 		"2": {
 			"label": "Auto relock",
-			"description": "Automatic relocking",
 			"unit": "Seconds",
 			"valueSize": 1,
 			"minValue": 0,
@@ -112,7 +111,6 @@
 		},
 		"7": {
 			"label": "Keypad lockout time",
-			"description": "Incorrect PINs lockout time",
 			"unit": "Seconds",
 			"valueSize": 1,
 			"minValue": 1,

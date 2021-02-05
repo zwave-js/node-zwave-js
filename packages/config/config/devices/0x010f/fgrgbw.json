@@ -140,7 +140,6 @@
 		},
 		"9": {
 			"label": "Step value (for MODE1)",
-			"description": "Step value (relevant for MODE1)",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -152,7 +151,6 @@
 		},
 		"10": {
 			"label": "Time between steps (relevant for MODE1)",
-			"description": "Time between steps (relevant for MODE1).",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 60000,
@@ -176,7 +174,6 @@
 		},
 		"12": {
 			"label": "Maximum Brightening level",
-			"description": "Maximum Brightening level.",
 			"valueSize": 1,
 			"minValue": 3,
 			"maxValue": 255,
@@ -188,7 +185,6 @@
 		},
 		"13": {
 			"label": "Minimum dim level",
-			"description": "Minimum dim level.",
 			"valueSize": 1,
 			"minValue": 2,
 			"maxValue": 255,
@@ -261,7 +257,6 @@
 		},
 		"38": {
 			"label": "Alarm sequence program",
-			"description": "Alarm sequence program.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 10,
@@ -272,7 +267,6 @@
 		},
 		"39": {
 			"label": "Active PROGRAM alarm time",
-			"description": "Active PROGRAM alarm time.",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65534,
@@ -284,7 +278,6 @@
 		},
 		"42": {
 			"label": "Command class reporting Outputs status change",
-			"description": "Command class reporting Outputs status change.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -343,7 +336,6 @@
 		},
 		"71": {
 			"label": "Response to BRIGHTNESS set to 0%",
-			"description": "Response to BRIGHTNESS set to 0%.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

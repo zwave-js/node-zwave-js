@@ -206,7 +206,6 @@
 		},
 		"12": {
 			"label": "Turn on delay",
-			"description": "Sets turn on delay",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1800,
@@ -249,7 +248,6 @@
 		},
 		"15": {
 			"label": "Load in Watts",
-			"description": "Lamps load in Watts",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 5000,
@@ -266,7 +264,6 @@
 		},
 		"16": {
 			"label": "S1 button mode",
-			"description": "S1 button operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -299,7 +296,6 @@
 		},
 		"17": {
 			"label": "S2 button mode",
-			"description": "S2 button operation mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

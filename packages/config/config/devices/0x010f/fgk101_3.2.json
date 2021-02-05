@@ -104,7 +104,6 @@
 		},
 		"11": {
 			"label": "Commands sent to 2nd association group",
-			"description": "Command frames sent to devices added to the 2nd association group.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -115,7 +114,6 @@
 		},
 		"12": {
 			"label": "ON command sent to 2nd assoc. group",
-			"description": "Value of ON command frame sent to 2nd association group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,

@@ -39,7 +39,6 @@
 		},
 		"10": {
 			"label": "First channel operating mode",
-			"description": "First channel - operating mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 5,
@@ -101,7 +100,6 @@
 		},
 		"12": {
 			"label": "time parameter for delay/auto ON/OFF modes",
-			"description": "First channel - time parameter for delay/auto ON/OFF modes",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 32000,
@@ -112,7 +110,6 @@
 		},
 		"13": {
 			"label": "1st ch. pulse time for flashing mode",
-			"description": "First channel - pulse time for flashing mode",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 32000,
@@ -267,7 +264,6 @@
 		},
 		"30": {
 			"label": "S1 assocs. sent to 2nd and 3rd group",
-			"description": "S1 switch - associations sent to 2nd and 3rd association groups",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -300,7 +296,6 @@
 		},
 		"31": {
 			"label": "S1 ON val sent to 2nd and 3rd groups",
-			"description": "S1 switch - Switch ON value sent to 2nd and 3rd association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -311,7 +306,6 @@
 		},
 		"32": {
 			"label": "S1 OFF val sent to 2nd and 3rd groups",
-			"description": "S1 switch - Switch ON value sent to 2nd and 3rd association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -322,7 +316,6 @@
 		},
 		"33": {
 			"label": "S1 DblClick val sent to 2nd and 3rd groups",
-			"description": "S1 switch - Double Click value sent to 2nd and 3rd association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -333,7 +326,6 @@
 		},
 		"35": {
 			"label": "S2 assocs. sent to 4th and 5th group",
-			"description": "S2 switch - associations sent to 4th and 5th association groups",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 15,
@@ -366,7 +358,6 @@
 		},
 		"36": {
 			"label": "S2 switch ON value sent to 4th and 5th ass. groups",
-			"description": "S2 switch - Switch ON value sent to 4th and 5th association groups",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -378,7 +369,6 @@
 		},
 		"37": {
 			"label": "S2 switch OFF sent to 4th and 5th groups",
-			"description": "S2 switch - Switch OFF value sent to 4th and 5th association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -389,7 +379,6 @@
 		},
 		"38": {
 			"label": "S2 double click sent to 4th and 5th ass. grps.",
-			"description": "S2 switch - Double Click value sent to 4th and 5th association groups",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -534,7 +523,6 @@
 		},
 		"51": {
 			"label": "Minimal time between power report",
-			"description": "Determines minimal time between power reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,

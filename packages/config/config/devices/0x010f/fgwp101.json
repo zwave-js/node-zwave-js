@@ -165,7 +165,6 @@
 		},
 		"45": {
 			"label": "Changes in energy consumed by controlled devices",
-			"description": "Reporting changes in energy consumed by controlled devices",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,
@@ -177,7 +176,6 @@
 		},
 		"47": {
 			"label": "Time between reports on power/energy consumption",
-			"description": "Time Period between reports on power and energy ...",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 65534,

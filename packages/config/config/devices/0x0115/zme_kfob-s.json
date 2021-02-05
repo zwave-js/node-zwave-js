@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Button 1 and 3 pair mode",
-			"description": "Set Button 1 and 3 pair mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -49,7 +48,6 @@
 		},
 		"2": {
 			"label": "Button 2 and 4 pair mode",
-			"description": "Set Button 2 and 4 pair mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -75,7 +73,6 @@
 		},
 		"11": {
 			"label": "Command to Control Group A",
-			"description": "Set Command to Control Group A",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -125,7 +122,6 @@
 		},
 		"12": {
 			"label": "Command to Control Group B",
-			"description": "Set Command to Control Group B",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -175,7 +171,6 @@
 		},
 		"13": {
 			"label": "Command to Control Group C",
-			"description": "Set Command to Control Group C",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -225,7 +220,6 @@
 		},
 		"14": {
 			"label": "Command to Control Group D",
-			"description": "Set Command to Control Group D",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -275,7 +269,6 @@
 		},
 		"21": {
 			"label": "Send the following Switch All commands",
-			"description": "Set Send the following Switch All commands",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -322,7 +315,6 @@
 		},
 		"25": {
 			"label": "Blocks wakeup even when wakeup interval is set",
-			"description": "Set Blocks wakeup even when wakeup interval is set",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -344,7 +336,6 @@
 		},
 		"30": {
 			"label": "Send unsolicited Battery Report on Wake Up",
-			"description": "Set Send unsolicited Battery Report on Wake Up",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

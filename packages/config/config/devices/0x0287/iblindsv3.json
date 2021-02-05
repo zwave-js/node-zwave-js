@@ -1,3 +1,5 @@
+// HAB Home Intelligence LLC iblinds V3
+// Window Blind Controller
 {
 	"manufacturer": "HAB Home Intelligence LLC",
 	"manufacturerId": "0x0287",
@@ -35,7 +37,6 @@
 		},
 		"2": {
 			"label": "Reverse Direction",
-			"description": "Reverse closing direction",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

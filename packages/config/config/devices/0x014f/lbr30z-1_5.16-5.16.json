@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Dim Level Memory",
-			"description": "Turn Dim Level Memory ON/OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

@@ -9,7 +9,10 @@
 		{
 			"productType": "0x201f",
 			"productId": "0x1f10",
-			"zwaveAllianceId": [1566, 2480]
+			"zwaveAllianceId": [
+				1566,
+				2480
+			]
 		}
 	],
 	"firmwareVersion": {
@@ -48,7 +51,6 @@
 		},
 		"2": {
 			"label": "Auto Temperature Report Interval",
-			"description": "Auto Temperature Report Interval from 0.1°C to 5°C",
 			"valueSize": 1,
 			"unit": "0.1 °C",
 			"minValue": 0,
@@ -61,7 +63,6 @@
 		},
 		"3": {
 			"label": "Auto Humidity Report Interval",
-			"description": "Auto Humidity Report Interval from 1% to 50%",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,
@@ -74,7 +75,6 @@
 		},
 		"4": {
 			"label": "Auto Light Report Interval",
-			"description": "Auto Light Report Interval from Off or 5% to 50%",
 			"valueSize": 1,
 			"unit": "%",
 			"minValue": 0,

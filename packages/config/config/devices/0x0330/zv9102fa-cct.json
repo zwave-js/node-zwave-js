@@ -30,7 +30,6 @@
 		},
 		"3": {
 			"label": "Enable/disable BASIC report",
-			"description": "Enable/disable sending of BASIC reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -87,7 +86,6 @@
 		},
 		"8": {
 			"label": "Stage mode hue",
-			"description": "Set stage mode hue 0-255",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

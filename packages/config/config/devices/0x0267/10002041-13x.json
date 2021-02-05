@@ -52,8 +52,7 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Beacon",
-			"description": "Beacon LEDs",
+			"label": "Beacon LEDs",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -70,7 +69,6 @@
 		},
 		"10": {
 			"label": "Delay ON",
-			"description": "Delay",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 254,
@@ -93,7 +91,6 @@
 		},
 		"12": {
 			"label": "LED in Repose",
-			"description": "Behavior of LED in Repose",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

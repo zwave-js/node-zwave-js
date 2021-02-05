@@ -93,7 +93,6 @@
 		},
 		"15": {
 			"label": "Close after time",
-			"description": "Close after time min",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 120,

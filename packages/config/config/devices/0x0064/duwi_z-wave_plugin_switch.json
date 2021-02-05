@@ -29,7 +29,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "LED indication mode",
-			"description": "Set LED indication mode.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

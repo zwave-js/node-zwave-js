@@ -135,7 +135,6 @@
 		},
 		"5": {
 			"label": "Level used to control association group 2 and 3",
-			"description": "Defines how to control the devices associated to group 2 and 3.",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 106,
@@ -146,7 +145,6 @@
 		},
 		"6": {
 			"label": "Level used to control association group 4 and 5.",
-			"description": "Defines how to control the devices associated to group 4 and 5.",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 106,

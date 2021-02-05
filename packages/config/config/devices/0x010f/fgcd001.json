@@ -153,7 +153,6 @@
 		},
 		"10": {
 			"label": "Commands sent to 2nd association group (CO Alarm)",
-			"description": "Commands sent to devices in 2nd association group",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -178,7 +177,6 @@
 		},
 		"11": {
 			"label": "Value of BASIC ON command sent to 2nd assoc group",
-			"description": "Define value of BASIC ON cmd sent to 2nd assoc group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -203,7 +201,6 @@
 		},
 		"12": {
 			"label": "Value of BASIC OFF cmd sent to 2nd assoc group",
-			"description": "Defines value of BASIC OFF cmd sent 2nd assoc group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -247,7 +244,6 @@
 		},
 		"16": {
 			"label": "Value of BASIC ON cmd sent to 4th assoc group",
-			"description": "Defines value of BASIC ON cmd to 4th assoc group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -258,7 +254,6 @@
 		},
 		"17": {
 			"label": "CO Level for sending BASIC OFF to 4th assoc group",
-			"description": "Defines level of CO concentration for BASIC OFF to 4th assoc group",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 400,
@@ -269,7 +264,6 @@
 		},
 		"19": {
 			"label": "Value of BASIC OFF cmd sent to 4th assoc group",
-			"description": "Defines value of BASIC OFF sent to 4th association group",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,

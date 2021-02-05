@@ -39,9 +39,6 @@
 			"isLifeline": true
 		}
 	},
-	"proprietary": {
-		"fibaroCCs": [38 /* 0x26 (Venetian Blinds) */]
-	},
 	"paramInformation": {
 		"1": {
 			"label": "Local protection",
@@ -156,7 +153,6 @@
 		},
 		"13": {
 			"label": "Lamellas positioning mode",
-			"description": "Lamellas positioning in venetian blind mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

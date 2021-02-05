@@ -31,7 +31,6 @@
 		},
 		"2": {
 			"label": "Low Battery Level",
-			"description": "Battery level",
 			"valueSize": 2,
 			"minValue": 1000,
 			"maxValue": 2500,

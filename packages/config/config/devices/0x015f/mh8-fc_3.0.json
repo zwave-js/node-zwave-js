@@ -42,7 +42,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Temperature Unit Setting",
-			"description": "Temperature Unit Setting. 0 = C, 1 = F",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -101,7 +100,6 @@
 		},
 		"4": {
 			"label": "Upload time interval",
-			"description": "Upload time interval in seconds",
 			"valueSize": 2,
 			"minValue": 10,
 			"maxValue": 65535,

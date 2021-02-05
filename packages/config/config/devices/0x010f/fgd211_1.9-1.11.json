@@ -53,7 +53,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Enable/Disable ALL ON/OFF",
-			"description": "Activate/Deactive ALL ON/OFF",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -308,7 +307,6 @@
 		},
 		"19": {
 			"label": "Change [On-Off] bi-stable keys",
-			"description": "Function to change [On-Off] bi-stable keys",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

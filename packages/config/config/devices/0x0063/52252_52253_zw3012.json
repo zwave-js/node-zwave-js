@@ -189,7 +189,6 @@
 		},
 		"84": {
 			"label": "Reset factory default",
-			"description": "Reset Switch to Factory Defaults",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"20": {
 			"label": "Overload Protection",
-			"description": "Overload protection.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -65,7 +64,6 @@
 		},
 		"24": {
 			"label": "On/Off Status Change Notifications",
-			"description": "Send On/Off Status Change Notifications",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

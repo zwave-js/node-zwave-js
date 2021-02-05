@@ -44,7 +44,6 @@
 		},
 		"15": {
 			"label": "Value of BASIC SET",
-			"description": "Value to send for BASIC SET",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

@@ -48,7 +48,6 @@
 		},
 		"2": {
 			"label": "Brightness of status LED.",
-			"description": "Determines the brightness of the status LED.",
 			"unit": "%",
 			"valueSize": 1,
 			"minValue": 0,

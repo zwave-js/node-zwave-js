@@ -81,7 +81,6 @@
 		},
 		"5": {
 			"label": "Key Mode",
-			"description": "Key Mode (0-4)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 4,
@@ -104,11 +103,10 @@
 		},
 		"255": {
 			"label": "Factory setting",
-			"description": "85 restore factory setting",
 			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 0,
-			"defaultValue": 0,
+			"minValue": 85,
+			"maxValue": 85,
+			"defaultValue": 85,
 			"readOnly": false,
 			"writeOnly": true,
 			"allowManualEntry": true

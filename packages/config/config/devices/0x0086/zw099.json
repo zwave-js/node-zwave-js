@@ -31,7 +31,6 @@
 	"paramInformation": {
 		"3": {
 			"label": "Current Overload Protection",
-			"description": "Toggle current overload protection",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -334,7 +333,6 @@
 		},
 		"252": {
 			"label": "Configuration Lock",
-			"description": "Enable/disable Configuration Lock",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

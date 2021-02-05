@@ -103,7 +103,6 @@
 		},
 		"14": {
 			"label": "Normal mode LED color",
-			"description": "Sets the Normal mode LED color",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 6,
@@ -143,8 +142,7 @@
 			]
 		},
 		"21": {
-			"label": "Status mode LED 1 Color",
-			"description": "Status mode LED 1 (bottom) color",
+			"label": "Status mode LED 1 Color (bottom)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,
@@ -358,8 +356,7 @@
 			]
 		},
 		"31[0x01]": {
-			"label": "LED 1 Blink Status",
-			"description": "LED 1 Blink Status (bottom)",
+			"label": "LED 1 Blink Status (bottom)",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

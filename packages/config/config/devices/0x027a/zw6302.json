@@ -50,7 +50,6 @@
 		},
 		"18": {
 			"label": "PIR Timeout Duration",
-			"description": "PIR Timeout Duration in Minutes",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 255,

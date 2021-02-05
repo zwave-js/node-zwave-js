@@ -23,7 +23,6 @@
 	"paramInformation": {
 		"80": {
 			"label": "Enable Notifications to Group 1",
-			"description": "what type of notification to send to Group 1",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Numbers of clicks to control the local load",
-			"description": "Define which sequences of click control the local load",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

@@ -59,7 +59,6 @@
 		},
 		"3": {
 			"label": "Switch Between Notification and Binary Sensor",
-			"description": "Switch Between Notification and Binary Sensor Command Classes",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

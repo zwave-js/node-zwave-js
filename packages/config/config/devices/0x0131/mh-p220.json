@@ -49,7 +49,6 @@
 		},
 		"1": {
 			"label": "Dimmer state after power down",
-			"description": "Dimmer state saved or not when power is down",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -280,7 +279,6 @@
 		},
 		"16": {
 			"label": "Operation report Switch1 to Association Group 2",
-			"description": "Operation report from Switch1 to Association Group 2",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -335,7 +333,6 @@
 		},
 		"18": {
 			"label": "Operation report Switch2 to Association Group 4",
-			"description": "Operation report from Switch2 to Association Group 4",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

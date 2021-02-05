@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "On/Off After Power",
-			"description": "On/Off Status After Power Failure",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -62,7 +61,6 @@
 		},
 		"3": {
 			"label": "Wattage Frequency",
-			"description": "Power Wattage Report Frequency",
 			"unit": "Seconds",
 			"valueSize": 4,
 			"minValue": 30,
@@ -74,7 +72,6 @@
 		},
 		"4": {
 			"label": "Energy Frequency",
-			"description": "Energy (kWh) Report Frequency",
 			"unit": "Seconds",
 			"valueSize": 4,
 			"minValue": 30,
@@ -86,7 +83,6 @@
 		},
 		"5": {
 			"label": "Voltage Frequency",
-			"description": "Voltage (V) Report Frequency",
 			"unit": "Seconds",
 			"valueSize": 4,
 			"minValue": 30,
@@ -142,7 +138,6 @@
 		},
 		"9": {
 			"label": "Turn-Off Time (Left)",
-			"description": "Auto Turn-Off Time for Left Outlet",
 			"unit": "Minutes",
 			"valueSize": 4,
 			"minValue": 1,
@@ -175,7 +170,6 @@
 		},
 		"11": {
 			"label": "Turn-On Time (Left)",
-			"description": "Auto Turn-On Time for Left Outlet",
 			"unit": "Minutes",
 			"valueSize": 4,
 			"minValue": 1,
@@ -208,7 +202,6 @@
 		},
 		"13": {
 			"label": "Turn-Off Time (Right)",
-			"description": "Auto Turn-Off Time for Right Outlet",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,
@@ -240,7 +233,6 @@
 		},
 		"15": {
 			"label": "Turn-On Time (Right)",
-			"description": "Auto Turn-On Time for Right Outlet",
 			"valueSize": 4,
 			"minValue": 1,
 			"maxValue": 65535,

@@ -1,4 +1,4 @@
-// ThermoFloor Heatit Z-TRM 3
+// ThermoFloor Heatit Z-TRM3
 // Floor thermostat
 {
 	"manufacturer": "ThermoFloor",
@@ -17,26 +17,6 @@
 	},
 	"supportsZWavePlus": true,
 	"paramInformation": {
-		/*"1": {
-			"label": "Operation mode",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 1,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": false,
-			"options": [
-				{
-					"label": "Off. (default)",
-					"value": 0
-				},
-				{
-					"label": "Heating mode",
-					"value": 1
-				}
-			]
-		},*/
 		"2": {
 			"label": "Sensor mode",
 			"valueSize": 1,
@@ -131,8 +111,12 @@
 		},
 		"6": {
 			"label": "Floor maximum temperature (FHi)",
+<<<<<<< HEAD
 			"description": "Floor maximum temperature (FHi), 1 equals 0.1 °C",
 			"unit": "°C",
+=======
+			"unit": ".1°C",
+>>>>>>> 73f2aa96... fix: remove similar descriptions
 			"valueSize": 2,
 			"minValue": 50,
 			"maxValue": 400,
@@ -165,17 +149,6 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
-		/*"9": {
-			"label": "Heating mode setpoint (CO)",
-			"unit": "°C/10",
-			"valueSize": 2,
-			"minValue": 50,
-			"maxValue": 400,
-			"defaultValue": 210,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},*/
 		"10": {
 			"label": "Room sensor calibration",
 			"unit": "°C/10",
@@ -324,7 +297,6 @@
 		"commandClasses": {
 			"add": {
 				"0x31": {
-					// Multilevel Sensor is exposed on endpoints 2-4, but not included in the NIF
 					"endpoints": {
 						"2": {
 							"isSupported": true
@@ -339,7 +311,6 @@
 				}
 			}
 		},
-		// This device only accepts Thermostat Setpoint Set commands with a size of 2
 		"overrideFloatEncoding": {
 			"size": 2
 		}

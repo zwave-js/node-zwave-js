@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"4": {
 			"label": "Safety Activate Delay",
-			"description": "Safety Activate Delay in seconds",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -31,7 +30,6 @@
 		},
 		"5": {
 			"label": "Safety OFF Period",
-			"description": "Safety OFF Period in seconds",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -43,7 +41,6 @@
 		},
 		"6": {
 			"label": "Safety ON Period",
-			"description": "Safety ON Period in seconds",
 			"unit": "seconds",
 			"valueSize": 2,
 			"minValue": 0,
@@ -78,7 +75,6 @@
 		},
 		"12": {
 			"label": "Maximum Level",
-			"description": "Maximum Dimmer Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -89,7 +85,6 @@
 		},
 		"13": {
 			"label": "Minimum Level",
-			"description": "Minimum Dimmer Level",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -121,7 +116,6 @@
 		},
 		"17": {
 			"label": "Back Unit Role",
-			"description": "Selected Back Unit Role",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -132,7 +126,6 @@
 		},
 		"18": {
 			"label": "Back Unit Light Zone",
-			"description": "Selected Back Unit Light Zone",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 4,
@@ -257,7 +250,6 @@
 		},
 		"80": {
 			"label": "Button LED Mode",
-			"description": "Selected LED Mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,

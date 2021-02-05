@@ -139,7 +139,6 @@
 		},
 		"33": {
 			"label": "first four most significant bytes of the SKU",
-			"description": "contains the first four most significant bytes of the SKU",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,
@@ -151,7 +150,6 @@
 		},
 		"34": {
 			"label": "four least significant bytes of the SKU",
-			"description": "the four least significant bytes of the SKU",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 4294967295,

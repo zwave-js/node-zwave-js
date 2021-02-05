@@ -34,7 +34,6 @@
 		},
 		"2": {
 			"label": "Memory Function",
-			"description": "Switch memory function",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

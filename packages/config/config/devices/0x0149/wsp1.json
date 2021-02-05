@@ -104,7 +104,6 @@
 		},
 		"7": {
 			"label": "Level used to control group 3",
-			"description": "Level used to control the devices associated to group 3",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,
@@ -155,7 +154,6 @@
 		},
 		"11": {
 			"label": "Level used to control group 2",
-			"description": "Level used to control the devices associated to group 2",
 			"valueSize": 1,
 			"minValue": -1,
 			"maxValue": 99,

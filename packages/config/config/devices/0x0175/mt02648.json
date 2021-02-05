@@ -30,7 +30,6 @@
 		},
 		"3": {
 			"label": "PIR Sensitivity",
-			"description": "PIR sensitivity settings.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -125,7 +124,6 @@
 		},
 		"8": {
 			"label": "PIR Re-Detect Interval Time",
-			"description": "Parameter to set the PIR Re-Detect Interval Time",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 127,
@@ -147,7 +145,6 @@
 		},
 		"10": {
 			"label": "Auto Report Battery Time",
-			"description": "Parameter to set the Auto Report Battery Time",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -203,7 +200,6 @@
 		},
 		"21": {
 			"label": "Temperature Differential Report",
-			"description": "The temperature differential to report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 127,
@@ -214,7 +210,6 @@
 		},
 		"22": {
 			"label": "Illumination Differential Report",
-			"description": "The illumination differential to report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,

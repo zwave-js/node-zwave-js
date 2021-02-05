@@ -64,7 +64,6 @@
 		},
 		"5": {
 			"label": "Temperature offset on input 1.",
-			"description": "Configures a temperature offset, input 1.",
 			"unit": "°C*10",
 			"valueSize": 1,
 			"minValue": -40,
@@ -76,7 +75,6 @@
 		},
 		"6": {
 			"label": "Temperature offset on input 2.",
-			"description": "Configures a temperature offset, input 2.",
 			"unit": "°C*10",
 			"valueSize": 1,
 			"minValue": -40,
@@ -133,8 +131,7 @@
 			"allowManualEntry": true
 		},
 		"11": {
-			"label": "Flood steady timer",
-			"description": "Input 3 steady time.",
+			"label": "Input 3 Flood steady timer",
 			"unit": "s",
 			"valueSize": 1,
 			"minValue": 0,

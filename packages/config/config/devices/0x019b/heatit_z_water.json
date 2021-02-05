@@ -153,7 +153,6 @@
 		},
 		"8": {
 			"label": "Input 2 calibration",
-			"description": "Input 1 calibratio2",
 			"valueSize": 1,
 			"minValue": -40,
 			"maxValue": 40,

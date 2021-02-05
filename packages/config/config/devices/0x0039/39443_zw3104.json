@@ -159,7 +159,6 @@
 		},
 		"16": {
 			"label": "Enable/disable switch mode",
-			"description": "Enable and disable switch mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

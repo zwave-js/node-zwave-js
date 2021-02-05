@@ -67,7 +67,6 @@
 		},
 		"2": {
 			"label": "Automatically open or close after",
-			"description": "Automatically open or close blind after time",
 			"unit": "Seconds",
 			"valueSize": 2,
 			"minValue": 0,

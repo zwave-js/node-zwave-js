@@ -63,7 +63,6 @@
 		},
 		"20": {
 			"label": "Output load after re-power",
-			"description": "Configure the output load status after re‐power",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -88,7 +87,6 @@
 		},
 		"33": {
 			"label": "RGB LED color testing",
-			"description": "Set the RGB LED color value for testing.",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 0,
@@ -124,7 +122,6 @@
 		},
 		"81": {
 			"label": "Configure LED state",
-			"description": "Configure the state of the LED",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 2,
@@ -149,7 +146,6 @@
 		},
 		"90": {
 			"label": "Enable items 91 and 92",
-			"description": "Enables/disables parameter 91 and 92",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

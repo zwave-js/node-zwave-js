@@ -41,7 +41,6 @@
 		},
 		"5": {
 			"label": "Cool light stage mode",
-			"description": "Choose a cool light stage mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 7,

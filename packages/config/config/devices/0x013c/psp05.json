@@ -31,7 +31,6 @@
 		},
 		"3": {
 			"label": "PIR Sensitivity",
-			"description": "Adjust the PIR Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 99,
@@ -120,7 +119,6 @@
 		},
 		"7[0x04]": {
 			"label": "Bit 2: Enable PIR super sensitivity mode.",
-			"description": "Enable PIR super sensitivity mode",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -162,7 +160,6 @@
 		},
 		"7[0x20]": {
 			"label": "Bit 5: Send Multi CC in auto report",
-			"description": "Send Multi CC in auto report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

@@ -19,7 +19,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Silent mode",
-			"description": "Silent mode on/off",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 3,
@@ -44,7 +43,6 @@
 		},
 		"2": {
 			"label": "Auto Relock",
-			"description": "Auto Relock on/off",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

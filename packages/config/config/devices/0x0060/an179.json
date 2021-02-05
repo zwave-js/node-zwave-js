@@ -27,7 +27,6 @@
 	"paramInformation": {
 		"1": {
 			"label": "Basic Set Command value",
-			"description": "Basic Set Command value. 0-99, 255",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -48,8 +47,7 @@
 			"allowManualEntry": true
 		},
 		"3": {
-			"label": "Remember last status",
-			"description": "Remember last status after power loss.",
+			"label": "Remember last status after power loss",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

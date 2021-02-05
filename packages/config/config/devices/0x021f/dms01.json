@@ -123,7 +123,6 @@
 		},
 		"5": {
 			"label": "Primary Notification Sound",
-			"description": "Set the siren primary notification sound.",
 			"valueSize": 2,
 			"minValue": 1,
 			"maxValue": 10,

@@ -102,7 +102,6 @@
 		},
 		"4": {
 			"label": "Lower_Threshold_High",
-			"description": "Lower Threshold, High",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -120,7 +119,6 @@
 		},
 		"5": {
 			"label": "Lower_Threshold_Low",
-			"description": "Lower Threshold, Low",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -138,7 +136,6 @@
 		},
 		"6": {
 			"label": "Upper_Threshold_High",
-			"description": "Upper Threshold, High",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -156,7 +153,6 @@
 		},
 		"7": {
 			"label": "Upper_Threshold_Low",
-			"description": "Upper Threshold, Low",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -203,7 +199,6 @@
 		},
 		"9": {
 			"label": "Multilevel_AutoReport_Interval",
-			"description": "Multilevel AutoReport Interval",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 3,

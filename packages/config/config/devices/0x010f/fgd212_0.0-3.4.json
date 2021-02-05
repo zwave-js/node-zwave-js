@@ -97,7 +97,6 @@
 		},
 		"5": {
 			"label": "Dimming Step at Automatic Control",
-			"description": "Percentage of a dimming step at automatic control.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -108,7 +107,6 @@
 		},
 		"6": {
 			"label": "Dimming Step Timing at Automatic Control",
-			"description": "Time of a dimming step at automatic control.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -119,7 +117,6 @@
 		},
 		"7": {
 			"label": "Dimming Step at Manual Control",
-			"description": "Percentage of a dimming step at manual control.",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 99,
@@ -130,7 +127,6 @@
 		},
 		"8": {
 			"label": "Dimming Step Timing at Manual Control",
-			"description": "Time of a dimming step at manual control.",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 255,
@@ -203,7 +199,6 @@
 		},
 		"13": {
 			"label": "Force auto-calibration",
-			"description": "Force the calibration process",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -309,7 +304,6 @@
 		},
 		"21": {
 			"label": "Value sent to associated devices on single click",
-			"description": "The value sent to associated devices on single click.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -331,7 +325,6 @@
 		},
 		"22": {
 			"label": "Change [On-Off] bi-stable keys",
-			"description": "Allow user to change [On-Off] bi-stable keys",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -580,8 +573,7 @@
 			]
 		},
 		"31": {
-			"label": "Load control mode recognized during auto-calibr.",
-			"description": "Load control mode recognized during auto-calibration",
+			"label": "Load control mode recognized during auto-calibration",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -1035,7 +1027,6 @@
 		},
 		"58": {
 			"label": "Method of calculating the active power",
-			"description": "How to calculate active power.",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -1061,7 +1052,6 @@
 		},
 		"59": {
 			"label": "Approximated power at the maximum brightness level",
-			"description": "Power reported by the device at its maximum brightness level",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 500,

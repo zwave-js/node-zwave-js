@@ -124,7 +124,6 @@
 		},
 		"8": {
 			"label": "Alarm Alert Sensitivity",
-			"description": "Lock Specific Alarm Alert Sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 5,
@@ -157,7 +156,6 @@
 		},
 		"9": {
 			"label": "Alarm Tamper Sensitivity",
-			"description": "Lock Specific Alarm Tamper Sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 5,
@@ -190,7 +188,6 @@
 		},
 		"10": {
 			"label": "Alarm Kick Sensitivity",
-			"description": "Lock Specific Alarm Kick Sensitivity",
 			"valueSize": 1,
 			"minValue": 1,
 			"maxValue": 5,
@@ -223,7 +220,6 @@
 		},
 		"11": {
 			"label": "Alarm Disable Local Controls",
-			"description": "Lock Specific Alarm Disable Local Controls",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -245,7 +241,6 @@
 		},
 		"12": {
 			"label": "Electronic Transition Count",
-			"description": "Get Electronic Transition Count",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 9999,
@@ -256,7 +251,6 @@
 		},
 		"13": {
 			"label": "Mechanical Transition Count",
-			"description": "Get Mechanical Transition Count",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 9999,
@@ -267,7 +261,6 @@
 		},
 		"14": {
 			"label": "Electronic Failed Count",
-			"description": "Get Electronic Failed Count",
 			"valueSize": 4,
 			"minValue": 0,
 			"maxValue": 9999,
@@ -322,7 +315,6 @@
 		},
 		"18": {
 			"label": "Get Bootloader Version",
-			"description": "Bootloader Version",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 0,

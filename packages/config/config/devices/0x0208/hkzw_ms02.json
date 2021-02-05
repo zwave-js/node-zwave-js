@@ -93,7 +93,6 @@
 		},
 		"15": {
 			"label": "value of basic set command",
-			"description": "assigned to send Basic Set Command",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

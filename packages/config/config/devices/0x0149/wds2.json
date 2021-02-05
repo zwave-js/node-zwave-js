@@ -117,7 +117,6 @@
 		},
 		"4": {
 			"label": "Value used for devices belonging to Group 2",
-			"description": "Value used for devices belonging to Group 2 when I1 button receive 1 Click",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -143,7 +142,6 @@
 		},
 		"5": {
 			"label": "Value used for devices belonging to Group 5",
-			"description": "Value used for devices belonging to Group 5 when I2 button receive 1 Click",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -169,7 +167,6 @@
 		},
 		"6": {
 			"label": "Value used for devices belonging to Group 3",
-			"description": "Value used for devices belonging to Group 3 when I1 button receive 2 Clicks",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -195,7 +192,6 @@
 		},
 		"7": {
 			"label": "Value used for devices belonging to Group 6",
-			"description": "Value used for devices belonging to Group 6 when I2 button receive 2 Clicks",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -221,7 +217,6 @@
 		},
 		"8": {
 			"label": "Value used for devices belonging to Group 4",
-			"description": "Value used for devices belonging to Group 4 when I1 button receive 3 Clicks",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,
@@ -247,7 +242,6 @@
 		},
 		"9": {
 			"label": "Value used for devices belonging to Group 7",
-			"description": "Value used for devices belonging to Group 7 when I2 button receive 3 Clicks",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 255,

@@ -107,7 +107,6 @@
 		},
 		"19": {
 			"label": "High Temperature Alarm",
-			"description": "Enable/Disable high temperature alarm",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,

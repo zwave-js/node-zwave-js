@@ -61,6 +61,73 @@
 			"writeOnly": false,
 			"allowManualEntry": true
 		},
+		"8": {
+			"label": "PIR motion re-trigger min interval",
+			"unit": "8s ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 3,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"9": {
+			"label": "Light on time hysteresis",
+			"description": "time to keep the light on without motion",
+			"unit": "8s ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 4,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"10": {
+			"label": "battery level auto-report interval",
+			"unit": "ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"11": {
+			"label": "door state report interval",
+			"unit": "ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"12": {
+			"label": "illumination auto report interval",
+			"unit": "ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"13": {
+			"label": "temperature report interval",
+			"unit": "ticks",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 12,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
 		"20": {
 			"label": "tick duration",
 			"description": "auto-reports tick duration",
@@ -70,6 +137,28 @@
 			"maxValue": 255,
 			"defaultValue": 30,
 			"unsigned": true,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"21": {
+			"label": "temperature differential to report",
+			"unit": "Fahrenheit",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 127,
+			"defaultValue": 1,
+			"readOnly": false,
+			"writeOnly": false,
+			"allowManualEntry": true
+		},
+		"22": {
+			"label": "min illumination differential",
+			"unit": "percent",
+			"valueSize": 1,
+			"minValue": 0,
+			"maxValue": 63,
+			"defaultValue": 0,
 			"readOnly": false,
 			"writeOnly": false,
 			"allowManualEntry": true
@@ -117,8 +206,7 @@
 			]
 		},
 		"5[0x08]": {
-			"label": "temperature unit",
-			"description": "set the temperature unit",
+			"label": "Temperature Unit",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -139,7 +227,6 @@
 		},
 		"5[0x10]": {
 			"label": "Disable illumination reports",
-			"description": "toggle illumination reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -160,7 +247,6 @@
 		},
 		"5[0x20]": {
 			"label": "Disable temperature reports",
-			"description": "Disable/enable temperature reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -326,8 +412,7 @@
 			]
 		},
 		"7[0x02]": {
-			"label": "motion off report",
-			"description": "enable motion OFF report",
+			"label": "Motion Off Report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -347,8 +432,7 @@
 			]
 		},
 		"7[0x04]": {
-			"label": "PIR super-sensitivity",
-			"description": "enable PIR super-sensitivity",
+			"label": "PIR Super-Sensitivity",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -432,7 +516,6 @@
 		},
 		"7[0x40]": {
 			"label": "Battery state reports",
-			"description": "disable/enable battery state reports",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 1,
@@ -450,96 +533,6 @@
 					"value": 1
 				}
 			]
-		},
-		"8": {
-			"label": "PIR motion re-trigger min interval",
-			"unit": "8s ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 3,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"9": {
-			"label": "Light on time hysteresis",
-			"description": "time to keep the light on without motion",
-			"unit": "8s ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 4,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"10": {
-			"label": "battery level auto-report interval",
-			"unit": "ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"11": {
-			"label": "door state report interval",
-			"unit": "ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"12": {
-			"label": "illumination auto report interval",
-			"unit": "ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"13": {
-			"label": "temperature report interval",
-			"unit": "ticks",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 12,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"21": {
-			"label": "temperature differential to report",
-			"unit": "Fahrenheit",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 127,
-			"defaultValue": 1,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
-		},
-		"22": {
-			"label": "min illumination differential",
-			"description": "min illumination differential to report",
-			"unit": "percent",
-			"valueSize": 1,
-			"minValue": 0,
-			"maxValue": 63,
-			"defaultValue": 0,
-			"readOnly": false,
-			"writeOnly": false,
-			"allowManualEntry": true
 		}
 	}
 }

@@ -36,7 +36,6 @@
 		},
 		"2": {
 			"label": "Min humidity change.",
-			"description": "Minimum humidity change to report",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 20,
@@ -70,7 +69,6 @@
 		},
 		"5": {
 			"label": "Temperature Upper Watermark",
-			"description": "Temperature Upper Watermark value",
 			"valueSize": 2,
 			"minValue": 0,
 			"maxValue": 1000,
@@ -87,7 +85,6 @@
 		},
 		"6": {
 			"label": "Temperature Lower Watermark",
-			"description": "Temperature Lower Watermark value",
 			"valueSize": 2,
 			"minValue": -200,
 			"maxValue": 1000,
@@ -98,7 +95,6 @@
 		},
 		"7": {
 			"label": "Humidity Upper Watermark",
-			"description": "Humidity Upper Watermark value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 100,
@@ -115,7 +111,6 @@
 		},
 		"8": {
 			"label": "Humidity Lower Watermark",
-			"description": "Humidity Lower Watermark value",
 			"valueSize": 1,
 			"minValue": 0,
 			"maxValue": 90,
